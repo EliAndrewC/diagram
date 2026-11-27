@@ -29,7 +29,7 @@
 //!   or a call of its own follows its last stop, and stopped at its last stop otherwise; its minutes are its turns and runs in every
 //!   span, the time it was stopped between them a wait and no turn. (Before, the reader kept one start and one stop an agent, and
 //!   such a builder's minutes were headed "at least".)
-//! - A pool tree's `Phase` lines can name another task (451 T332, open): each is booked here to the task the pool's log
+//! - A pool tree's `Phase` lines written before 451 T332 can name another task (the writer now reads the pool's registry, `event_log_hooks/filed.rs`): each is booked here to the task the pool's log
 //!   (`builder-pool.log`) says held its tree at that time ([`retask`]), and a builder's family reads only its own tree's lines.
 //!
 //! THE READ-BACK. Lines are read from the earliest held tree's take, or [`BACK_H`] hours, whichever is earlier (`--back <N>h`

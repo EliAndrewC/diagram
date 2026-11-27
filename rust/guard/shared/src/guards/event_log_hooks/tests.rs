@@ -746,6 +746,7 @@ mod background;
 mod booked;
 mod cost;
 mod misfiled;
+mod pool;
 mod renumbered;
 mod writes;
 

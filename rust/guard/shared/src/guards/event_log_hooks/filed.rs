@@ -16,8 +16,9 @@
 //!   description's head, else its own prompt's first line, else its dispatching builder's (451 T161, `set_down_hooks::agent_builder`);
 //!   else a page session's brief's (`L7R_PAGE_SESSION`, else the line's `session_id` listed in `page-sessions/index.txt`, 451 T167;
 //!   `set_down_hooks::page_session_brief`); else, for the main session's own line
-//!   alone, the task-start in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's) - an
-//!   agent's or page session's line naming no task carries none, never the clone's mark (451 T161).
+//!   alone - a gate tool's own row among them, a check's `Phase` line - the task the builder pool says holds the line's tree
+//!   ([`pool_task`], 451 T332), else the task-start in force for the line's feature (D2's last entry, now of the line's own feature,
+//!   not of feature.json's) - an agent's or page session's line naming no task carries none, never the clone's mark (451 T161).
 //!
 //! THE CORRECTION (451 T106): a builder the coordinator re-numbers keeps the task the correction names on every later line, its feature
 //! still the brief's. What says it, earliest first - the night's 136 builders, measured 2026-11-21 (a Python read of the session
@@ -328,6 +329,35 @@ pub fn in_force(starts: &[Start], feature: &str) -> Option<String> {
         .map(|(_, t, _)| t.clone())
 }
 
+/// The task the builder pool says holds the tree at `root` for `feature` (451 T332, T344): the first task of the registry's entry
+/// for this tree (`builder_pool`, `<git common dir>/builder-pool.json`), where its feature - `make builder-tree`'s key, the
+/// feature's number, or its directory's name - is the line's; None for a tree the pool does not list, a free one, and one held
+/// for another feature or for none, which leave the start in force to answer as before. A start the tree's builder made AFTER
+/// the handout (`since`) is its own later word and names the task instead - a bundle's member, `make task-start T=<b>` in a tree
+/// held for `a,b`; a start with no time is not one, and a handout whose time does not read is older than every timed start.
+/// WHY the pool and not the start log alone: a handout moves no start, and a builder that never runs `make task-start` (a
+/// measuring one; under two tiers, most) leaves the tree's last one in force - all 179 `Phase` lines of T315's check runs in
+/// `diagram-backlog-t269` carried T285, five handouts old, observed 2026-11-26 (method: the 451 log's `Phase` lines of that tree
+/// from 20:07 UTC counted by their task field, against `builder-pool.log`), so `make task-time` booked five tasks' build and
+/// test seconds to one. WHY read here and not written by the handout as a start: the start log has other readers a start nobody
+/// made would tell wrong - the landing's "was it started" (`land/ready.rs`), the stall check's (`set_down_hooks/stalls.rs`), the
+/// time breakdown's first start of a task (`measure/task_time.rs`) - and its undo at release (`marks::live_starts`) would erase
+/// the builder's own earlier starts of the task. One small file read a line that reaches this link.
+fn pool_task(root: &Path, feature: &str, starts: &[Start]) -> Option<String> {
+    let held = crate::builder_pool::read(&common_git_dir(root))
+        .into_iter()
+        .find(|t| crate::speckit::marks::same_tree(&t.tree, root))
+        .filter(|t| feature == t.feature || feature.starts_with(&format!("{}-", t.feature)))?;
+    let since = crate::iso::parse(&held.since);
+    starts
+        .iter()
+        .rev()
+        .find(|(f, _, _)| f == feature)
+        .filter(|(_, _, at)| at.is_some() && *at >= since)
+        .map(|(_, t, _)| t.clone())
+        .or_else(|| held.tasks.first().cloned())
+}
+
 /// The feature a task belongs to by the starts: the latest feature whose task in force it is, else the latest that started it at all -
 /// a start more than [`STALE_START_S`] before `now` counting for neither (a start or a `now` with no time is never stale). The re-file
 /// asks it with the starts made by a line's time and that time as `now`, so the two file a line alike (451 T56).
@@ -499,7 +529,7 @@ pub(super) fn filed(
         if feature.is_empty() || !aid.is_empty() || page().is_some() {
             None
         } else {
-            in_force(&starts, &feature)
+            pool_task(root, &feature, &starts).or_else(|| in_force(&starts, &feature))
         }
     });
     Filed {

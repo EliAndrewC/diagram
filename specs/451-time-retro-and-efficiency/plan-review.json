@@ -2322,6 +2322,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))": {
+   "sha256": "f51be1cdec31d35b1eefee9dcf8b66b8bedbe81ef5f7f3b2ebad1a16b3f8f017",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T332, T344 Approach (checklist part A)": {
+   "sha256": "a6906ba9e168f6f80c0c5397641c459178d610f6356adae80499b9bd56317b4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -29583,6 +29595,154 @@
      "why": "None is a wrong outcome under constitution XIV's definition: the pre-warm is doing its job, the comments' wording changes no outcome and lies outside the task's lines, and D4 is ruled above. T389's work is done by D6, so withdrawing it drops nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))",
+    "### T332, T344 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) and the build slot's lines that the breakdown counts. It serves the breakdown request and adds no new behavior beyond the defect's class. The search space is named: the append_row_with writers, reached through the one waist (filed's last link), not a census of names."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line asks only for the task to be read from the pool. The defect is not left unfixed. It is filed as T391 and ordered to land before T317, the next work that reads the line's task. T391 is measurement work, which the GM's 2026-11-20 words schedule first as performance work. The deferral states why, the filed id and the order, which is the form FR-009 gives (FR-009 comes from the GM's approval of 'briefs that default to fixing in the task'), and the plan does not claim the old tables are right. The source log lines are not rewritten, which keeps the raw record intact; the correction lives in the reader, as task-progress already does. A one-job builder per task follows from the GM's approved improvement 1 (small builder contexts) and his 2026-11-22 bundling words ('we can file new tasks just as fast'). The purpose (an accurate per-task breakdown) is not defeated, since the forward lines are fixed here and the historical reading is fixed before anything builds on it. If T391 slipped past T317, this ruling would no longer hold."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))",
+    "### T332, T344 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -46654,6 +46814,168 @@
      "summary": "Left unfiled: the pre-warm overlapping the first measurement, three Cargo.toml comments saying the lockfile is untracked, and l7r_shared's two feature sets (D4). T389 is to be withdrawn as mended by D6.",
      "class": "within",
      "why": "None is a wrong outcome under constitution XIV's definition: the pre-warm is doing its job, the comments' wording changes no outcome and lies outside the task's lines, and D4 is ruled above. T389's work is done by D6, so withdrawing it drops nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T332": {
+   "section_sha256": "60b59261a6f55b3176508b83386fdb03bdc27169d214a1e1ff420650092b743c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T344": {
+   "section_sha256": "60b59261a6f55b3176508b83386fdb03bdc27169d214a1e1ff420650092b743c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
     }
    ],
    "verdict": "CLEAR"

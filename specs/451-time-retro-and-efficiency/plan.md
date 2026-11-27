@@ -3769,31 +3769,43 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T332 (<why: the finding or measurement that files it>)
+### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a tool's own line written from a held pool tree takes its task from the pool's registry at the moment it is written.
+  - **Where the task is read (the finding).** A check's `Phase` line (`rust/gate/crates/rustc/src/rustc/phase.rs`, `wrote`) is appended with no payload and no task, so `filed` (`rust/guard/shared/src/guards/event_log_hooks/filed.rs`) reaches its last link: `in_force`, the last row of the START LOG (`<git common dir>/task-starts.jsonl`) that names the line's tree and feature. It is not the mark files (`task-marks/`): both features' mark directories in this clone were empty when read, 2026-11-27 (`ls` of the clone's `.git/task-marks/*/`), while this tree's lines still carried T271, the task of its last start row (2026-11-26T13:42:28Z).
+  - **The rule.** `pool_task` in `filed.rs`, asked just before `in_force` and only where `in_force` was asked (the main session's own line: no agent, no page session, no task named by the line): the first task of the registry's entry for the line's tree (`l7r_shared::builder_pool::read`, `builder-pool.json`), where the entry's feature - the pool's key, the feature's number, or its directory name - is the line's feature. A tree the pool does not list, a free one, and one held for another feature or for none are answered by `in_force` as before.
+  - **A start after the handout stands.** A `make task-start` the tree's builder ran after the entry's `since` is the builder's own later word and names the task: a bundle's builder in a tree held for `a,b` that starts `b` has its lines booked to `b`. A start with no time is not one; a handout whose time does not read is older than every timed start.
+  - **Why the registry is read and no start is written at the handout (the task lines' two routes).** T344's line asks that `make builder-tree T=` set the tree's mark; T332's that the task be read from the pool. A mark file written at the handout (`marks::write`) would move no `Phase` line, since the writer does not read marks. What would move it is a start ROW at the take and an undo row at the release, and the start log has readers a start nobody made would tell wrong: the landing's "was each task started in this clone" (`rust/gate/crates/land/src/land/ready.rs`), the stall check's start-since-the-last-landing (`rust/guard/shared/src/guards/set_down_hooks/stalls.rs`), the time breakdown's first start of a task (`rust/gate/crates/measure/src/measure/task_time.rs`), and the static-runs count, which reads the raw log on purpose (451 T359-D9b); and the undo at release would erase the builder's own earlier starts of that task (`marks::live_starts` drops every earlier start of the task in the tree). Reading the registry in the one link changes what one reader sees and nothing else.
+  - **Why in `filed.rs` and not in `phase.rs`.** The rustc crate's writer is one of several tools that append a row from a tree (`append_row_with`); the link in `filed` answers for every one of them, and a row that carries its own task (a landing's) never reaches it.
+  - **The re-file.** `make events-refile` (`rust/gate/crates/measure/src/measure/event_log/refile.rs`) moves a line between FEATURES and leaves a line whose task its feature has where it is, so it does not undo this; its one use of the start in force is for a line a brief moves to another feature, which a tool's own line has none of.
+  - **Cost.** One read of `builder-pool.json` for each line that reaches the last link - a tool's own rows and the main session's hook lines that name no task - a file of 39 lines in this clone, measured 2026-11-27 (`wc -l` of its `.git/builder-pool.json`); the read was not timed.
+  - **On the real machine.** In this tree, held for T332,T344 since 2026-11-27T00:23:54Z: the 1,060 `Phase` lines of 2026-11-26 and the 19 of this handout written before the change (its pre-warm's and the red run's) carry T271; every line after the rebuilt gate ran - `make builder-checks CRATE=rust/guard/shared` (6 lines) and `make rust-test CRATE=rust/gate/crates/plan` (3 lines: `slot-tell`, `build`, `test`) - carries T332, measured 2026-11-27 (the clone's `.git/l7r-events/451-time-retro-and-efficiency.jsonl`, its `Phase` lines whose clone is this tree, read by task and time).
+  - **The lines already written.** Not rewritten. 3,255 of the 451 log's 3,883 `Phase` lines from a pool tree name a task other than the first task of the tree's holder at their start, 385 minutes of spans (t269 1,197 lines, t270 1,107, t271 881, b1 70), measured 2026-11-27 (each such line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`; an upper figure: a bundle's second member and a builder's own later start count as differing). `make task-progress` re-tasks them at read time (`retask`, `task_time/progress.rs`, since T293); `make task-time` does not.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a handout's lines carry its first task, the second handout's the second | `a_second_handouts_phase_line_carries_the_second_task`, red on the old code (T236 where T300) | n/a: tooling | none | n/a |
+| no holder for the line's feature, and a later start | `the_start_in_force_stands_where_the_pool_names_no_holder_or_the_builder_started_later`, red on the old code (T316 where T320) | n/a: tooling | none | n/a |
 
-### T332 Approach (checklist part A)
+### T332, T344 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make task-time` books a builder's build, test, lint and pre-warm seconds to the task its tree was handed out for.
+2. **The constraints.** 451 T254 (a line is filed by its own tree's starts), T161 (an agent's or page session's line naming no task carries none), T359 (a start and its undo read as no start; the static-runs count reads the raw log), T285 (the pool's registry is the one record of who holds a tree); no guard message changes.
+3. **Where each comes from.** O: T332's and T344's observations of 2026-11-26 in the event log and the pool's log, and this section's readings of 2026-11-27. G: none new.
+4. **Do they describe the world here?** Yes: this tree's own lines carried T271 under a T332,T344 handout until the change, measured 2026-11-27 (the Approach's reading).
+5. **The order.** No dependency. T391 (the lines already written) and T317 (the pre-warm's category, booked by the line's task) come after it.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared rust/gate/crates/measure"` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`scripts/gates/l7r-gate.sh rust test --crate rust/guard/shared`): with the two tests on the old code 510 passed, 2 failed; after, 512 passed. This tree's `Phase` lines carry T332 from the first run of the rebuilt gate (the Approach's reading).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: T344's - five tasks' build and test seconds booked to one by `make task-time`. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make task-time` still books the pool trees' lines written before this change by their own task field - the 3,255 lines of the Approach, measured 2026-11-27 (its last item's method) - so its tables for 2026-11-26 stay wrong where `make task-progress` reads them right. Not fixed here: it is a change to the report's reader in another crate, a job of its own beside this one-job brief. Filed as T391; lands before T317.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 ### T320 (<why: the finding or measurement that files it>)
@@ -4379,33 +4391,6 @@ engine speed, so no checklist.
 5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
-
-### T344 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T344 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
 <!-- plan-archive: T347 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -5379,6 +5364,33 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T390 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T391 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T391 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
