@@ -1,10 +1,20 @@
 # Overnight summary, 2026-11-27 (feature 451's worktree and builder tooling)
 
-Written by the coordinating session about 08:30Z; the state at that time.
+Written by the coordinating session about 08:30Z and brought up to date about 10:40Z.
 
-**Landed on main overnight:** one batch, T367, T411 and T414 (2988fee630). **Nothing since.** Every later landing attempt was
-refused or red, so the built work below is committed in the session clone (`/diagram/.clones/diagram-backlog`) and not yet
-on main.
+**Landed on main overnight:** two batches - T367, T411 and T414 (2988fee630), then 63 tasks in one gate at about 10:30Z
+(9f4916b3d0): T419 T404 T417 T352 T403 T424 T409 T406 T313 (with T395, T416 and T421 built inside it) T413 T427 T428 T369 T364
+T341 T365 T373 T420 T425 T312 T275 T392 T426 T311 T143 T342 T288 T304 T296 T297 T294 T408 T397 T286 T306 T445 T449 T434 T454
+T435 T443 T433 T436 T457 T446 T455 T460 T450 T462 T458 T464 T437 T440 T441 T442 T438 T459 T466 T453 T444. It took four batch
+gates red before it (06:33Z, 09:06Z, 09:39Z and the attempts between), each ruled continue by the round arbiter, each repaired
+in the clone (45792d53b7, 5b2bf5b0d3, 7057dc718b, e1d2fe230d).
+
+**In the clone, waiting for the next landing (its plan review running):** T463 T452 T448 T451 T465 T474 T467 T468 T439.
+
+**Still building:** T431 with T432, T430, T412 with T418, T384.
+
+**The earlier text below (written 08:30Z) said nothing had landed since 2988fee630; that is no longer so. Its lists of what
+was waiting are the 63 above.**
 
 **Built and committed in the clone, waiting for one landing (46 tasks):** T419 T404 T417 T352 T403 T424 T409 T406 T313
 (with T395, T416 and T421 built inside it) T413 T427 T428 T369 T364 T341 T365 T373 T420 T425 T312 T275 T392 T426 T311 T143
