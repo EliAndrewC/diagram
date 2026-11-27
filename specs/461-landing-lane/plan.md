@@ -1909,14 +1909,88 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T54 (<why: the finding or measurement that files it>)
+### T54 (T51's Decision 2: a hand-in's runner start waits in `make builder-done`'s foreground for the lane tree's rebuild; filed at T51)
+
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs`: `run_batch`, right after `builder-tree lane` brings the lane's tree to
+  `origin/main` and before the changes to carry are read, runs T51's `prebuild` on the tree's own `scripts/gates/l7r-gate.sh` where
+  that file exists (the run tests' worlds have none), its result ignored. The hand-in path (`on_hand_in`, `start`) is unchanged.
+- **When a start can find the lane tree stale** (read from the code, 2026-11-27): the launcher's staleness is `find -newer` over the
+  sources (`scripts/gates/l7r-gate.sh`'s `stale`). Two writers move the lane tree's sources. The runner's `run_batch` resets it, then
+  carries (`make carry`, whose launcher builds) and lands (`make land`, whose `LAND_RUN` builds again after the carries).
+  `scripts/land-alone.sh`'s reset step resets the same tree (`<clone>-land`), and its landing step runs `make land` there, which builds. So after
+  either writer the binary is fresh, and the 2.2-112 s T51 measured (measured 2026-11-27, T51's scratch timing) reaches a start only
+  where a reset was followed by no `make`:
+  1. a batch whose every change `origin/main` already holds (`todo` empty: a resumed batch whose push went out, the Recovery case),
+     T50's re-made tree included - the whole move since the last build, up to the 112 s of a day's move and 102 s for a re-made tree, measured
+     2026-11-27 (T51's scratch timing). CLOSED HERE.
+  2. a runner killed between the reset and the build - the rest of that build. Accepted (below).
+  3. a stopped carry - the carried files' rebuild, up to the 15.02 s T51 measured for a 12-file commit (measured 2026-11-27, T51's scratch timing), but where the conflict is in
+     a file the gate builds from, a failed build and no runner at all (Found and left, T55).
+- **Decision 1 - the build at the reset (route B), not a background start (route A).** Priced 2026-11-27, by reading:
+  - Route A, the prebuild inside a detached child of the hand-in. It needs a new detached path in `start` and its tests. Its
+    failure must reach the coordinator as an `owed` line (data-model.md's event; T20's `make lane-wait` prints only `owed` lines).
+    The hand-in would lose its `started (pid N)` line, and T51 Decision 1's reason (a build failure the caller sees) would come back
+    as a deferred line. It covers cases 1-3's waits, but not case 3's failure.
+  - Route B: a call after the reset, in the lane crate. In the common batch (a carry follows) it adds no build: it makes, earlier, the
+    build `make carry`'s launcher would make, and the carry's moved files are rebuilt by `make land` as before. It closes case 1,
+    the only unbounded case on a live runner. Cases 2 and 3 are left.
+  - Chosen: B, the cheaper. It is sound for the hand-in's wait: the residual waits are bounded by one carry's files or one killed
+    build. No log line is written, so nothing is added to data-model.md's events.
+  - Label: the algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - a failed build at the reset stops no batch.** Where a carry follows, `make carry`'s own launcher fails on the same
+  build and the carry's error (the `carry` line, the runner's `error:`) says so, as before. Where none follows, the next start's
+  prebuild (T51) says why to its caller. Making it an error here would add a third route to the same report.
+- **Accepted limitation (case 2)**: a runner killed between the reset and its build leaves the next start the rest of that build in
+  the foreground, up to the 112 s above under the same load (measured 2026-11-27, T51's scratch timing). Its cost: one hand-in's wait, near the 2-minute tool timeout, after a
+  `make lane-stop NOW=1` or a crash in that instant. Alternatives priced: route A covers it at the cost above. Chosen by: this
+  builder, under T54's brief, which asks for the cheaper sound route.
+- Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`): the new test
+  `a_reset_with_nothing_to_carry_leaves_the_lane_tree_s_launcher_built_so_the_next_start_builds_nothing` against the old
+  `run_batch`, 7 passed, 1 failed (`left: None`, `right: Some("built <origin sha>")`: no build after the reset). After, measured
+  2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`): the lane crate 40 of 40, lint and format clean. The test commits
+  a stand-in launcher (it builds where the tree's HEAD moved since its last build, its marks in the git common directory, out of
+  the reset's `clean`) and moves `origin/main` past a landed batch. It then resumes a batch `origin/main` already holds: one build
+  at the new HEAD, and T51's `prebuild` after it builds nothing. Then, with the build failing, a further batch still lands.
+
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** A hand-in's runner start from T22's base finds the lane tree's `l7r-gate` built, so `make
+   builder-done` does not wait out a rebuild near a builder's tool timeout.
+2. **The constraints.** T51's start (its prebuild and its error words), T12's start and lock, T14's batch run (`run_batch`, steps
+   1-4), T50's re-made tree, data-model.md's events (none added), the crate's own-tests coverage (rust/gate/CLAUDE.md).
+3. **Where each comes from.** R: plan.md T51, T12, T14; tasks.md T54; `scripts/gates/l7r-gate.sh` (`stale`), `scripts/land-alone.sh`
+   (its reset and landing steps). O: T51's rebuild timings (2026-11-27).
+4. **Do they describe the world here?** The staleness cases are read from the code above. The timings are T51's, on the lane
+   tree's own commit and build cache. The test drives `step` and `resume` against a real bare `origin` and the pool's lane tree.
+5. **The order.** After T51 and T14; before T22, which makes every hand-in start the runner.
+6. **The exits.** Green: the new test, and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one call after the reset.
+8. **The budget.** One landing.
+9. **Done, measured.** The new test red then green, the lane crate 40 of 40, measured 2026-11-27 (make rust-test, make builder-checks).
+10. **Before moving a constant.** n/a: `START_WAIT_S` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. A hand-in after a batch that carried nothing now starts its runner at once, where it waited
+    out the whole move since the last build.
+
+**Found and left?**
+
+- A stopped carry leaves its cherry-pick in progress in the lane's tree (`rust/gate/crates/land/src/land/carry.rs`: "the stop leaves
+  the pick in progress"). Where the conflict is in a file the gate builds from, the next start's prebuild (T51) fails on the
+  conflict markers and starts no runner. Only the runner's resume resets that tree, so from T22's base every hand-in says "could
+  not be built" and the open batch is never resumed. Found by reading, not run. Not fixed here: it is the start's handling of an
+  open batch's tree, outside the build-at-reset this brief prices, and route B does not reach it. Filed as T55; lands before T22.
+
+**Performance work?** no - it removes a foreground wait that does not yet happen (dormant until T22's base), and it times nothing.
+
+
+### T55 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T54 Approach (checklist part A)
+### T55 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

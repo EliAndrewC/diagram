@@ -307,3 +307,83 @@ fn a_landing_that_pushed_with_other_edits_merged_is_landed_though_make_ends_two(
     assert_eq!(lines[4]["landed"], json!([one]));
     assert_eq!(w.refs(), "");
 }
+
+/// A stand-in for the lane tree's `scripts/gates/l7r-gate.sh`, committed into the world so the reset keeps it: it "builds" where the
+/// tree's HEAD is not the one it last built at (a line in `<common>/builds`), or fails as cargo does where `<common>/build-fails`
+/// exists - its marks in the git common directory, which the reset's `clean` does not reach.
+const LAUNCHER: &str = "#!/bin/sh\n\
+t=$(cd \"$(dirname \"$0\")/../..\" && pwd)\n\
+c=$(git -C \"$t\" rev-parse --path-format=absolute --git-common-dir)\n\
+[ -e \"$c/build-fails\" ] && { echo 'error[E0425]: cannot find value `x`' >&2; exit 1; }\n\
+h=$(git -C \"$t\" rev-parse HEAD)\n\
+[ \"$(cat \"$c/built\" 2>/dev/null)\" = \"$h\" ] || { echo \"$h\" > \"$c/built\"; echo \"built $h\" >> \"$c/builds\"; }\n\
+echo \"$0\"\n";
+
+impl World {
+    /// `origin/main` moved by a commit of `file` that no batch carries, as another landing moves it.
+    fn origin_moves(&self, file: &str) -> String {
+        git(&self.clone, &["fetch", "-q", "origin"]);
+        git(&self.clone, &["checkout", "-q", "--detach", "origin/main"]);
+        put(&self.clone, file, "moved\n");
+        git(&self.clone, &["add", "-A"]);
+        git(&self.clone, &["commit", "-qm", "landed elsewhere"]);
+        git(&self.clone, &["push", "-q", "origin", "HEAD:main"]);
+        git(&self.clone, &["rev-parse", "HEAD"])
+    }
+
+    fn builds(&self) -> Vec<String> {
+        std::fs::read_to_string(self.common.join("builds"))
+            .unwrap_or_default()
+            .lines()
+            .map(str::to_owned)
+            .collect()
+    }
+}
+
+#[test]
+fn a_reset_with_nothing_to_carry_leaves_the_lane_tree_s_launcher_built_so_the_next_start_builds_nothing(
+) {
+    let w = world("lane-run-prebuild");
+    let script = w.clone.join("scripts/gates/l7r-gate.sh");
+    std::fs::create_dir_all(script.parent().unwrap()).unwrap();
+    l7r_gate_core::write_executable(&script, LAUNCHER);
+    git(&w.clone, &["add", "-A"]);
+    git(&w.clone, &["commit", "-qm", "the launcher"]);
+    git(&w.clone, &["push", "-q", "origin", "main"]);
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let l = lane_of(&w);
+    assert_eq!(step(&l), Ok(true));
+    // a batch whose change origin/main already holds, after a landing elsewhere moved it: the reset moves the tree, nothing is carried
+    let moved = w.origin_moves("rust/x.rs");
+    log::append(
+        &w.common,
+        "t",
+        "batch",
+        &json!({"batch": "461-2", "changes": [one]}),
+    )
+    .unwrap();
+    resume(&l, &open(&w), &[one.clone()]).unwrap();
+    assert_eq!(&w.events()[6..], ["batch", "landed", "owed"]);
+    assert_eq!(w.builds().last().cloned(), Some(format!("built {moved}")));
+    // the next start's own build (461 T51) finds the launcher fresh: no build in a hand-in's foreground
+    let tree = builder_pool::read_all(&w.common)[0].tree.clone();
+    let before = w.builds().len();
+    assert_eq!(
+        crate::runner::prebuild(&tree.join("scripts/gates/l7r-gate.sh")),
+        Ok(())
+    );
+    assert_eq!(w.builds().len(), before);
+    // a build that fails at the reset stops no batch: the carry's own launcher, or the next start, says why
+    std::fs::write(w.common.join("build-fails"), "").unwrap();
+    w.origin_moves("rust/y.rs");
+    log::append(
+        &w.common,
+        "t",
+        "batch",
+        &json!({"batch": "461-3", "changes": [one]}),
+    )
+    .unwrap();
+    resume(&l, &open(&w), &[one]).unwrap();
+    assert_eq!(&w.events()[9..], ["batch", "landed", "owed"]);
+    assert_eq!(w.builds().len(), before);
+}

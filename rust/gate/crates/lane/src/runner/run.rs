@@ -2,7 +2,8 @@
 //! T12's loop ([`super::work`]). A step forms D5's batch ([`crate::batch::form`]) where no batch is open, writes its `batch` line
 //! (the changes' full shas, read once, so a later hand-in moves no batch - D14), and runs it:
 //!
-//! 1. the lane's tree brought to `origin/main` (`builder-tree lane`, T13's call through `builder_tree::cli`), and the changes
+//! 1. the lane's tree brought to `origin/main` (`builder-tree lane`, T13's call through `builder_tree::cli`), its launcher's
+//!    `l7r-gate` built there where stale (T54: so a batch that carries nothing leaves the next start no build), and the changes
 //!    `origin/main` already holds dropped (a resumed batch whose set was pushed: data-model.md, "Recovery");
 //! 2. each change carried onto the tree, oldest first, by `make carry COMMIT=<sha>` in the tree - the lane carries the batch's OWN
 //!    shas, where `make land`'s own carry (`carry_done`) would read the done refs afresh and take a hand-in that moved one after the
@@ -192,6 +193,14 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
         return Err(format!("lane: batch {id}: {}", brought.stderr.trim()));
     }
     let tree = PathBuf::from(brought.stdout.trim());
+    // THE BUILD AT THE RESET (461 T54): the reset moved the tree's sources; where nothing is carried after it, no `make` of the
+    // batch runs the launcher, and the next start's build (T51) waited out the whole move in a hand-in's foreground - up to 112 s
+    // measured 2026-11-27 (T51's scratch timing). With a carry it is the build `make carry`'s launcher would make; a failure stops
+    // nothing here: the carry's launcher, or the next start, says why.
+    let launcher = tree.join("scripts/gates").join(super::LAUNCHER);
+    if launcher.is_file() {
+        let _ = super::prebuild(&launcher);
+    }
     let shas: Vec<String> = changes.iter().map(|h| h.commit.clone()).collect();
     let on_main = held_by(&tree, "HEAD", &shas);
     let todo: Vec<&HandIn> = changes

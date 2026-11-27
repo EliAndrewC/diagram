@@ -558,6 +558,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T54 (T51's Decision 2: a hand-in's runner start waits in `make builder-done`'s foreground for the lane tree's rebuild; filed at T51)": {
+   "sha256": "86be78f194d94ee728ee2775246cc151ea87c7544b55236525cd20ad274578bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T54 Approach (checklist part A)": {
+   "sha256": "7326335d727124db9278b40d4eb565efa6d1ad6df381fb20ef60ecc0ff95cdc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3365,6 +3377,46 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It narrows this task's fix to the start path and leaves a foreground wait that, live, would run against the request's purpose (the second tier's work should not block anything) and could break builder-done (FR-002) at the tool timeout. It is legitimate because the effect is dormant until T22 flips the base, and the deferral is in the required form - filed as an open task T54 that lands before T22 - so no builder ever meets it; the feature's scope is not narrowed, only the order of its work. Were T54 not to land before T22 this would be a defect carried into a live path."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T54 (T51's Decision 2: a hand-in's runner start waits in `make builder-done`'s foreground for the lane tree's rebuild; filed at T51)",
+    "### T54 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T54 Decision 1",
+     "summary": "Build the lane tree's l7r-gate right after run_batch's reset to origin/main (route B), not in a detached child of the hand-in (route A); the hand-in path is unchanged.",
+     "class": "within",
+     "why": "A choice of mechanism for removing a foreground wait from make builder-done. It serves the request's purpose (the second tier, and the landing it feeds, should not block the work in front of it; the sketch's item 2 hand-in) and narrows nothing the GM asked or the spec requires. No check is dropped: the build it makes earlier is the one make carry's launcher would make, and make land's gate is untouched (FR-008)."
+    },
+    {
+     "id": "T54 Decision 2",
+     "summary": "A failed build at the reset is ignored and stops no batch; the failure is reported by make carry's launcher where a carry follows, or by the next start's T51 prebuild where none does.",
+     "class": "within",
+     "why": "No failure is hidden and no landing check is removed: the same build still fails, and is reported to a caller, on both routes that follow, and every change still lands only through make land's gate and push (FR-008). It is a choice of which existing route reports the failure, not a carve-out from anything requested."
+    },
+    {
+     "id": "T54 Accepted limitation (case 2)",
+     "summary": "A runner killed between the reset and its build leaves the next start the rest of that build in the foreground, up to T51's measured 112 s.",
+     "class": "within",
+     "why": "Neither the request nor any requirement in the spec index says a hand-in never waits on a build; the wait it leaves is the behavior before this task, kept only after a crash or make lane-stop NOW=1 at that instant, and bounded. It is not a defect as XIV v2.36.0 defines one: no wrong outcome, no check dropped, and the whole path is dormant until T22. Route A was priced and recorded as the alternative."
+    },
+    {
+     "id": "T54 case 3 left",
+     "summary": "A stopped carry's rebuild of its carried files (up to T51's 15.02 s for a 12-file commit) is left as a foreground wait.",
+     "class": "within",
+     "why": "A bounded residual of the pre-existing behavior, not a narrowing of anything requested; its failure case is split out as T55 (below)."
+    },
+    {
+     "id": "T54 Found and left -> T55",
+     "summary": "A stopped carry whose conflict is in a file the gate builds from makes every later start's prebuild fail and the open batch never resume; filed as T55, ordered to land before T22.",
+     "class": "within",
+     "why": "The defect is real and known, and it is not carried past the step in which it becomes live: it is dormant until T22 makes every hand-in start the runner, and T55 is ordered before T22, so it is fixed before the next step depends on it (the GM's 2026-11-18 fix-as-we-go rule). Splitting it into its own task is scheduling, not a narrowing."
     }
    ]
   }
