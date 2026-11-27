@@ -91,9 +91,79 @@ fn each_tree_keeps_its_own_mark() {
     std::fs::write(common.join(super::DIR).join("7-z"), "").unwrap();
     let blocked = json!({"feature": "7-z", "task": "T1"});
     assert!(write(&common, &at, blocked, "x").is_err());
-    std::fs::create_dir_all(common.join(super::DIR).join("6-w/T1.json")).unwrap();
+    let key = super::tree_key(&at);
+    std::fs::create_dir_all(common.join(super::DIR).join("6-w/T1").join(&key)).unwrap();
     let blocked = json!({"feature": "6-w", "task": "T1"});
     assert!(write(&common, &at, blocked, "x").is_err());
+}
+
+/// 451 T369 (its red is the task crate's `a_task_started_in_two_trees_keeps_each_tree_s_mark`): a task started in two trees keeps a mark in each - the second start moves no other tree's, a tree's own
+/// next start replaces its own (in the layout of before T369 too), the landing's sweep removes every tree's, and a mark that cannot
+/// be replaced is the start's error.
+#[test]
+fn a_task_started_in_two_trees_keeps_a_mark_in_each() {
+    let d = TempDir::new("guard-marks-two");
+    let at = d.canonicalize().unwrap();
+    let common = at.join(".git");
+    let other = at.join("other");
+    std::fs::create_dir_all(&other).unwrap();
+    let mark = || json!({"feature": "9-x", "task": "T01"});
+    let trees = || -> Vec<String> {
+        let all = all(&common);
+        all.iter()
+            .map(|m| m["tree"].as_str().unwrap_or_default().to_owned())
+            .collect()
+    };
+    // this tree's mark in the layout of before T369, which its next start replaces
+    let old = common.join(super::DIR).join("9-x/T01.json");
+    std::fs::create_dir_all(old.parent().unwrap()).unwrap();
+    let text = format!(
+        r#"{{"feature": "9-x", "task": "T01", "tree": "{}", "utc": "2026-11-24T00:00:00Z"}}"#,
+        at.display()
+    );
+    std::fs::write(&old, text).unwrap();
+    assert_eq!(
+        super::own_file(&common, "9-x", "T01", &at),
+        Some(old.clone())
+    );
+    assert_eq!(super::own_file(&common, "9-x", "T01", &other), None);
+    write(&common, &other, mark(), "2026-11-25T10:00:00Z").unwrap();
+    write(&common, &at, mark(), "2026-11-25T10:00:01Z").unwrap();
+    assert!(!old.exists());
+    let both = vec![
+        other.to_string_lossy().into_owned(),
+        at.to_string_lossy().into_owned(),
+    ];
+    assert_eq!(trees(), both);
+    // started again here: still one mark a tree
+    write(&common, &at, mark(), "2026-11-25T10:00:02Z").unwrap();
+    assert_eq!(trees(), both);
+    assert_eq!(all(&common)[1]["utc"], "2026-11-25T10:00:02Z");
+    // the set-down of one tree clears its own file alone
+    assert_eq!(clear(&common, &at, "9-x").as_deref(), Some("T01"));
+    assert_eq!(trees(), [other.to_string_lossy().into_owned()]);
+    write(&common, &at, mark(), "2026-11-25T10:00:03Z").unwrap();
+    // an empty id removes nothing; the landing's sweep removes every tree's mark of the task
+    remove(&common, "9", &[String::new()]);
+    assert_eq!(all(&common).len(), 2);
+    remove(&common, "9", &["T01".to_owned()]);
+    assert!(all(&common).is_empty());
+    // this tree's earlier mark that cannot be removed is the start's error
+    write(&common, &at, mark(), "2026-11-25T10:00:04Z").unwrap();
+    let task = common.join(super::DIR).join("9-x/T01");
+    let mode = |m: &str| {
+        let chmod = std::process::Command::new("chmod")
+            .args([m, &task.to_string_lossy()])
+            .status();
+        assert!(chmod.unwrap().success());
+    };
+    mode("555");
+    let refused = write(&common, &at, mark(), "2026-11-25T10:00:05Z");
+    mode("755");
+    assert!(refused.is_err());
+    // a tree that cannot be resolved is keyed by its path as written
+    write(&common, Path::new("/no/such/tree"), mark(), "x").unwrap();
+    assert!(task.join("_no_such_tree.json").is_file());
 }
 
 /// RED FIRST (451 T359): a start and the `unstart` row after it read as no start - EVERY earlier start of that feature and task in

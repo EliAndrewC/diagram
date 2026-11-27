@@ -1,8 +1,13 @@
 //! A STARTED-TASK MARK PER TASK (feature 451 T254; the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md`
 //! item 1: `make task-start` wrote ONE `active-task` in the git common directory, so a second worktree's builder's start overwrote
 //! the first's, and a push of one task was refused while the other was started - worked around by moving the mark by hand for every
-//! landing). Each start writes its own mark, `<git common dir>/task-marks/<feature>/<task>.json` - `{"feature", "task", "tasks"
-//! (a bundle's members, 451 T141), "tree" (the worktree's top that started it), "utc"}` - and no start moves another's.
+//! landing). Each start writes its own mark, `<git common dir>/task-marks/<feature>/<task>/<tree key>.json` - `{"feature", "task",
+//! "tasks" (a bundle's members, 451 T141), "tree" (the worktree's top that started it), "utc"}` - and no start moves another's.
+//! ONE MARK A TASK A TREE (451 T369): a task started in two trees - a builder's pool tree, then the clone that carries its work -
+//! keeps both marks, so one tree's `make task-unstart` leaves the other's mark beside its live start row, as the start log
+//! ([`live_starts`], filtered per tree) already read it; with one file a task, the second start overwrote the first tree's mark and
+//! the unstart left the first tree's row live with no mark behind it. A mark in the layout of before T369 (`<task>.json`) is read
+//! as written and replaced by its own tree's next start.
 //!
 //! - A TREE'S TASK ([`of_tree`]), the one task a reader asks "what is this session working" of (decide, the review-round guard, the
 //!   reviews' declared placement): the newest mark the tree itself wrote. The main worktree also reads the one-mark file of before
@@ -108,19 +113,53 @@ fn tree_of(mark: &Value) -> &Path {
     Path::new(mark["tree"].as_str().unwrap_or(""))
 }
 
-/// `make task-start`'s mark of `value` (`feature`, `task`, perhaps `tasks`), started in `tree` at `utc`; the main worktree's
-/// legacy mark removed, as this start replaces it.
+/// The file name of `tree`'s mark in a task's directory: the tree's path, resolved where it can be, each character but a letter, a
+/// digit, `.`, `-` and `_` written `_` - one name a tree, and no hash a later build could spell otherwise. No reader derives it: a
+/// tree's mark is found by the `tree` it names ([`own_file`]).
+fn tree_key(tree: &Path) -> String {
+    let resolved = std::fs::canonicalize(tree).unwrap_or_else(|_| tree.to_path_buf());
+    let keep = |c: char| c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_');
+    let key: String = resolved
+        .to_string_lossy()
+        .chars()
+        .map(|c| if keep(c) { c } else { '_' })
+        .collect();
+    format!("{key}.json")
+}
+
+/// The file of `tree`'s own mark of `task` of `feature`: in the task's directory, else the layout of before 451 T369
+/// (`<feature>/<task>.json`) where that file names `tree`; none where `tree` holds no mark of it in either.
+#[must_use]
+pub fn own_file(common: &Path, feature: &str, task: &str, tree: &Path) -> Option<PathBuf> {
+    let dir = common.join(DIR).join(feature);
+    let mine = |p: &PathBuf| matches!(read(p), Ok(Some(v)) if same_tree(tree_of(&v), tree));
+    let nested = std::fs::read_dir(dir.join(task))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.path());
+    nested
+        .chain(std::iter::once(dir.join(format!("{task}.json"))))
+        .find(mine)
+}
+
+/// `make task-start`'s mark of `value` (`feature`, `task`, perhaps `tasks`), started in `tree` at `utc`: THIS TREE'S file of the task
+/// (`task-marks/<feature>/<task>/<tree key>.json`, 451 T369), which replaces the tree's earlier mark of it - in the layout of before
+/// T369 too - and moves no other tree's; the main worktree's legacy mark removed, as this start replaces it.
 ///
 /// # Errors
-/// The directory cannot be made or the file written.
+/// The tree's earlier mark cannot be removed, the directory made or the file written.
 pub fn write(common: &Path, tree: &Path, mut value: Value, utc: &str) -> Result<(), String> {
     let feature = value["feature"].as_str().unwrap_or_default().to_owned();
     let task = value["task"].as_str().unwrap_or_default().to_owned();
     value["tree"] = Value::from(tree.to_string_lossy().into_owned());
     value["utc"] = Value::from(utc);
-    let dir = common.join(DIR).join(&feature);
+    while let Some(earlier) = own_file(common, &feature, &task, tree) {
+        std::fs::remove_file(&earlier).map_err(|e| format!("{}: {e}", earlier.display()))?;
+    }
+    let dir = common.join(DIR).join(&feature).join(&task);
     std::fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
-    let path = dir.join(format!("{task}.json"));
+    let path = dir.join(tree_key(tree));
     std::fs::write(
         &path,
         format!("{}\n", crate::pyjson::dumps(&value, None, true)),
@@ -151,22 +190,30 @@ pub fn all(common: &Path) -> Vec<Value> {
             out.push(v);
         }
     }
-    let mut files: Vec<PathBuf> = std::fs::read_dir(common.join(DIR))
-        .into_iter()
-        .flatten()
-        .flatten()
-        .flat_map(|f| std::fs::read_dir(f.path()).into_iter().flatten().flatten())
-        .map(|e| e.path())
-        .collect();
-    files.sort();
-    let mut marks: Vec<Value> = files
-        .iter()
-        .filter_map(|p| read(p).ok().flatten())
-        .filter(Value::is_object)
-        .collect();
-    marks.sort_by(|a, b| a["utc"].as_str().cmp(&b["utc"].as_str()));
-    out.extend(marks);
+    out.extend(files(common).into_iter().map(|(_, m)| m));
     out
+}
+
+/// Every mark file under `common` and its mark, oldest first (by `utc`, then path): a task's directory's files, one a tree (451
+/// T369), and a feature's own `<task>.json` files of before T369 alike. A file that cannot be read, or is not an object, is skipped.
+fn files(common: &Path) -> Vec<(PathBuf, Value)> {
+    let listed = |d: &Path| -> Vec<PathBuf> {
+        let entries = std::fs::read_dir(d).into_iter().flatten().flatten();
+        entries.map(|e| e.path()).collect()
+    };
+    let mut paths: Vec<PathBuf> = listed(&common.join(DIR))
+        .iter()
+        .flat_map(|f| listed(f))
+        .flat_map(|p| if p.is_dir() { listed(&p) } else { vec![p] })
+        .collect();
+    paths.sort();
+    let mut marks: Vec<(PathBuf, Value)> = paths
+        .into_iter()
+        .filter_map(|p| read(&p).ok().flatten().map(|v| (p, v)))
+        .filter(|(_, v)| v.is_object())
+        .collect();
+    marks.sort_by(|(_, a), (_, b)| a["utc"].as_str().cmp(&b["utc"].as_str()));
+    marks
 }
 
 /// Every task a mark names: its `task` and a bundle's `tasks`, each once.
@@ -224,21 +271,19 @@ pub fn clear(common: &Path, top: &Path, feature: &str) -> Option<String> {
             }
         }
     }
-    let own = all(common).into_iter().filter(|m| {
+    let own = files(common).into_iter().filter(|(_, m)| {
         m["utc"].is_string() && m["feature"].as_str() == Some(feature) && same_tree(tree_of(m), top)
     });
-    for m in own {
-        let task = m["task"].as_str().unwrap_or_default().to_owned();
-        if std::fs::remove_file(common.join(DIR).join(feature).join(format!("{task}.json"))).is_ok()
-        {
-            named = Some(task);
+    for (path, m) in own {
+        if std::fs::remove_file(path).is_ok() {
+            named = Some(m["task"].as_str().unwrap_or_default().to_owned());
         }
     }
     named
 }
 
 /// The marks of `tasks` of `feature` - its directory name, or its number as `make land`'s `F=` gives it - removed once they land
-/// (`make land`'s sweep); a mark that is not there is no error.
+/// (`make land`'s sweep): every tree's (451 T369); a mark that is not there is no error.
 pub fn remove(common: &Path, feature: &str, tasks: &[String]) {
     let dirs = std::fs::read_dir(common.join(DIR))
         .into_iter()
@@ -253,8 +298,10 @@ pub fn remove(common: &Path, feature: &str, tasks: &[String]) {
         if name != feature && !name.starts_with(&format!("{feature}-")) {
             continue;
         }
-        for t in tasks {
+        // an empty id would name the feature's own directory
+        for t in tasks.iter().filter(|t| !t.is_empty()) {
             let _ = std::fs::remove_file(dir.join(format!("{t}.json")));
+            let _ = std::fs::remove_dir_all(dir.join(t));
         }
     }
 }

@@ -46,7 +46,7 @@
 # pool tree, took 449's start of 2026-11-22 (the only T281 row then), set all 6 of its own files apart as "T281@451-..." and said GREEN
 # over its own lint and format red. The feature is now, in order: F=; SPECIFY_FEATURE; the pool registry's holder of this tree
 # (<git common dir>/builder-pool.json, 451 T285) where it holds one of the tasks; this tree's own started-task mark of one of the tasks
-# (task-marks/<feature>/<task>.json, 451 T254, the newest). None: REFUSED, exit 2, the command printed, before any check runs - never
+# (task-marks/<feature>/<task>/<tree key>.json, one a tree, 451 T369; <task>.json before it; 451 T254, the newest). None: REFUSED, exit 2, the command printed, before any check runs - never
 # another feature's or another tree's start. And a run that sets files apart while NO uncommitted file is one the task's own edits name
 # is REFUSED the same way (the wrong feature given, or the wrong task): it would judge none of the task's work, and its GREEN would read
 # as the task's. The verdict line repeats how many files were judged, how many of them the task's own edits name, and how many set apart.
@@ -91,7 +91,7 @@ pool = os.path.join(common, 'builder-pool.json')
 trees = load(pool).get('trees')
 held = next((t['feature'] for t in (trees if isinstance(trees, list) else []) if isinstance(t, dict) and same(t.get('tree'))
              and isinstance(t.get('feature'), str) and t['feature'] and tasks & set(names(t, 'tasks'))), '')
-marks = [d for d in map(load, sorted(glob.glob(os.path.join(common, 'task-marks', '*', '*.json')))) if same(d.get('tree'))
+marks = [d for d in map(load, sorted(glob.glob(os.path.join(common, 'task-marks', '*', '*.json')) + glob.glob(os.path.join(common, 'task-marks', '*', '*', '*.json')))) if same(d.get('tree'))
          and isinstance(d.get('feature'), str) and d['feature'] and tasks & set(names(d, 'task', 'tasks'))]
 marked = max(marks, key=lambda d: str(d.get('utc', '')))['feature'] if marks else ''
 feature, source = next(((f, s) for f, s in ((feature, 'F='), (exported, 'SPECIFY_FEATURE'), (held, "the pool registry's holder of this tree"),

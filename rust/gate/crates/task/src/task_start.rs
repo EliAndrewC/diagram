@@ -1,5 +1,5 @@
 //! `l7r-gate task-start <feature> <task>` - `make task-start` (feature 375; `scripts/task_start.py`, ported by feature 449 T131 with what
-//! it read, `ask:449-T066-scope`'s phase-3 placement): the task's own mark (`task-marks/<feature>/<task>.json`, 451 T254, beside
+//! it read, `ask:449-T066-scope`'s phase-3 placement): the task's own mark in this tree (`task-marks/<feature>/<task>/<tree key>.json`, 451 T254, T369, beside
 //! `task-starts.jsonl`, in the git common directory), its feature named in `.specify/feature.json`, its start logged - unless its feature is held (feature 417, [`plan_hold`]) -
 //! and a phase task's old code held from reading (feature 444, [`phase_sources`]). The usage text names `task_start.py` byte for byte.
 //!

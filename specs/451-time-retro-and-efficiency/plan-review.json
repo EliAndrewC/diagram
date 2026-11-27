@@ -3241,14 +3241,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T369 (<why: the finding or measurement that files it>)": {
-   "sha256": "4fba0169136184107191d09a4732be3fc46f9dadfc2df0707ca1a6151c827ce9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T369 Approach (checklist part A)": {
-   "sha256": "a045203911ae55e16982b7639305a7df9abe48f102493974d26a805f09c4c09d",
+   "sha256": "8049105ee3099f3ccc7ac9153ae80f61b4c5ae51717e9153048fb688a1939ac2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3747,6 +3741,24 @@
   },
   "### T436 Approach (checklist part A)": {
    "sha256": "e89ce4deb20115251b0929c9ed6c379e1c5f3a97b5fedccf8cff84642c965467",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T369 (found by 451 T359's closing half, 2026-11-26, by reading: a task started in a second tree overwrote the first tree's mark, so the second tree's `make task-unstart` left the first tree's start row live in the log with no mark behind it)": {
+   "sha256": "b879389d289b45d609c412c8a053cfce09ac86ff9633fde55fc7675acc5ed7c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T437 (<why: the finding or measurement that files it>)": {
+   "sha256": "07332f6949557efd5cc7984eb027771a696a7d4e37c238df8c37def0c9f3dd7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T437 Approach (checklist part A)": {
+   "sha256": "6be9012b663b8e82e3ba75c9d4b79a013e43e940c99a68a3ac452cc2d4ffc71f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34008,6 +34020,77 @@
      "summary": "T436's section and its checklist part A are the unfilled template.",
      "class": "within",
      "why": "A placeholder decides nothing; its approach is decided when T436 itself is started and goes through make decide."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T369 (found by 451 T359's closing half, 2026-11-26, by reading: a task started in a second tree overwrote the first tree's mark, so the second tree's `make task-unstart` left the first tree's start row live in the log with no mark behind it)",
+    "### T369 Approach (checklist part A)",
+    "(removed) ### T369 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T369-D1",
+     "summary": "Per-tree started-task marks (task-marks/<feature>/<task>/<tree key>.json) instead of refusing a second tree's start",
+     "class": "within",
+     "why": "The GM's request names no form for this fix; the refusal is the coordinating session's task line, and the brief left the choice to the reading. The chosen form closes the defect the task files (marks and the start log disagree after one tree's unstart) in every case, including the common builder-then-clone path (14 of 103 starts, dated and method-labeled), where the refusal would reopen it through the stale-pool-tree exception. It keeps one mark a task in its own tree (T254) and the start log's per-tree filter (T359-D9). It narrows nothing asked; it fixes a defect fully (fix as we go)."
+    },
+    {
+     "id": "T369-D2",
+     "summary": "Tree key is the resolved path with characters outside [A-Za-z0-9._-] written as _; marks found by the tree their file names",
+     "class": "within",
+     "why": "Naming convention inside the D1 form; touches no request clause or requirement."
+    },
+    {
+     "id": "T369-D3",
+     "summary": "Pre-T369 layout (<task>.json) read as written by every reader and replaced by its own tree's next start; six existing old-layout marks left to go at their landing",
+     "class": "within",
+     "why": "Backward-compatible reading, so no existing mark is lost; leaving the six old files is not a defect left (they are read correctly and swept at landing by D4)."
+    },
+    {
+     "id": "T369-D4",
+     "summary": "Landing sweep removes every tree's mark of a landed task (both layouts); an empty task id removes nothing; set-down clears only its own tree's files, found by what each names",
+     "class": "within",
+     "why": "Completes the D1 form for the sweep and set-down; the empty-id guard prevents deleting a feature directory. No narrowing."
+    },
+    {
+     "id": "T369-readers",
+     "summary": "Reader census from grep of marks:: and task-marks over rust/, scripts/, tests/hooks/ and the Makefile; changed readers task_unstart, marks::clear/remove, closing-checks.sh; the start-log readers unchanged as already per tree",
+     "class": "within",
+     "why": "Enumeration with its search space stated, covering the shell script and Makefile string forms as well as the Rust API; no guard message changed (the brief's constraint)."
+    },
+    {
+     "id": "(removed) T369 template heading",
+     "summary": "The unfilled template block for T369 removed, superseded by the filled-in T369 block",
+     "class": "within",
+     "why": "Replacing a placeholder with its filled-in content; nothing that was approved is removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T369 Approach (checklist part A)",
+    "### T437 (<why: the finding or measurement that files it>)",
+    "### T437 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T369-own-mark-per-tree",
+     "summary": "Readers (the mark, the live start row, the landing hold) agree by keeping each tree's own mark (marks::own_file) and filtering the start log by it, so a task started in two trees and unstarted in one reads as started in the other alone, which can unstart it too.",
+     "class": "within",
+     "why": "Unchanged from the block's earlier CLEAR text: the fix of T369's own defect, held to T254's one mark a task per tree, T141's bundle mark and T359-D9's filter; no guard message changed. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T369-found-stale-dead-tree-mark",
+     "summary": "A mark whose tree no longer exists (a dropped pool tree, a removed worktree) stays until its task lands, so make task-unstart names a make -C that cannot run and make task-withdraw refuses the task as started; deferred to T437, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a tool refusing valid input, naming a command that cannot run), not a difference, so it is a narrowing of T369's fix and is ruled. The GM approved briefs that 'default to fixing in the task' (2026-11-19 approval, improvement 4) and FR-009's deferral form (why, a filed open task, an order); the default is a default, and the GM's standard is per step ('fix all known bugs in each step before moving on to porting the next step', 2026-11-18; 'fix all of this as part of our tasking ... before resuming our port', 2026-11-26), which a filed open task of this feature ordered before T302 meets. Purpose test: the block says a clone's start used to take the mark over, so T369's per-tree marks are what keep a dead tree's mark, and item 1's 'that tree can unstart it too' fails when that tree is gone; with T394 releasing pool trees as soon as their work is committed this path is routine, not rare. But before T369 the same path was already broken (the marks named no tree while the log named the first tree, T369's own defect), so this does not regress a working path, and which marks are stale (no tree at all versus a tree the pool released and handed to another builder, whose mark may be live) is a decision of its own across unstart, withdrawal and hold, not merely more code. The ruling rests on the order holding: where T302 sits against the port's next step was not verified from this bundle (D15 makes both ids open tasks of this feature, checked by make decide)."
     }
    ]
   }

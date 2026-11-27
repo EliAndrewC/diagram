@@ -247,6 +247,13 @@ rm -rf "$C/.git/task-marks"; mark 449-y T86 "$T/elsewhere" 2026-11-22T00:00:00Z;
 c6 env CLOSING_TASK=T86
 has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 451-x (from this tree's start mark)" \
   && ok "a bundle's mark names its members; another tree's mark of the task is passed over" || no "the bundle's mark (exit $RC)" "$OUT"
+# a mark a tree (451 T369): task-marks/<feature>/<task>/<tree key>.json, this tree's read beside another tree's of the same task
+rm -rf "$C/.git/task-marks"; mkdir -p "$C/.git/task-marks/451-x/T86"
+printf '{"feature": "449-y", "task": "T86", "tree": "%s", "utc": "2026-11-25T00:00:00Z"}\n' "$T/elsewhere" > "$C/.git/task-marks/451-x/T86/elsewhere.json"
+printf '{"feature": "451-x", "task": "T86", "tree": "%s", "utc": "2026-11-21T00:00:00Z"}\n' "$C" > "$C/.git/task-marks/451-x/T86/here.json"
+c6 env CLOSING_TASK=T86
+has rust/mine/src/lib.rs && seen OUT -q "the task's feature: 451-x (from this tree's start mark)" \
+  && ok "a mark in a task's directory, one a tree, is read; another tree's file beside it passed over (451 T369)" || no "the per-tree mark (exit $RC)" "$OUT"
 # THE WRONG-FEATURE CASE (451 T303): nothing names the feature but another feature's start row and another tree's mark - refused, no check run
 rm -rf "$C/.git/task-marks"; mark 449-y T86 "$T/elsewhere" 2026-11-22T00:00:00Z
 c6 env CLOSING_TASK=T86

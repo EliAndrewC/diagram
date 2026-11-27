@@ -363,7 +363,8 @@ fn a_set_down_clears_its_feature_s_started_task_mark_and_a_later_start_sets_it_a
         0
     );
     // ...as the task's own mark (451 T254), which a set-down of its feature in this tree clears again
-    let own = root.join(".git/task-marks/9001-x/T01.json");
+    let own =
+        l7r_shared::speckit::marks::own_file(&root.join(".git"), "9001-x", "T01", &root).unwrap();
     assert!(std::fs::read_to_string(&own)
         .unwrap()
         .starts_with("{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": "));

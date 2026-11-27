@@ -27,7 +27,10 @@ fn a_task_started_is_marked_named_and_logged() {
     assert_eq!(said.code, 0, "{}", said.stderr);
     assert_eq!(said.stdout, "task-start: 9001-x T01 is the active task - its checks need its decisions ruled first (make decide)\n");
     // the task's own mark, naming its tree (451 T254)
-    let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
+    let mark = std::fs::read_to_string(
+        l7r_shared::speckit::marks::own_file(&root.join(".git"), "9001-x", "T01", &root).unwrap(),
+    )
+    .unwrap();
     let tree = root.to_string_lossy();
     let head = format!(
         "{{\"feature\": \"9001-x\", \"task\": \"T01\", \"tree\": \"{tree}\", \"utc\": \"20"

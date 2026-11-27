@@ -27,7 +27,10 @@ fn a_bundle_is_marked_under_its_first_task_with_every_member_logged() {
         && first.contains("make decide F=9001 T=T01,T02,T03");
     let lands = first.contains("make land F=9001 T=T01,T02,T03");
     assert!(opens && names && lands, "{first}");
-    let mark = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T01.json")).unwrap();
+    let mark = std::fs::read_to_string(
+        l7r_shared::speckit::marks::own_file(&root.join(".git"), "9001-x", "T01", &root).unwrap(),
+    )
+    .unwrap();
     let head = "{\"feature\": \"9001-x\", \"task\": \"T01\", \"tasks\": [\"T01\", \"T02\", \"T03\"], \"tree\": ";
     assert_eq!(mark.get(..head.len()), Some(head));
     let starts = std::fs::read_to_string(root.join(".git/task-starts.jsonl")).unwrap();
@@ -39,7 +42,10 @@ fn a_bundle_is_marked_under_its_first_task_with_every_member_logged() {
     // the space form, as `make land` takes it
     let spaced = cli_with(&words(&["9001", "T02 T01"]), &root, &env);
     assert_eq!(spaced.code, 0, "{}", spaced.stderr);
-    let again = std::fs::read_to_string(root.join(".git/task-marks/9001-x/T02.json")).unwrap();
+    let again = std::fs::read_to_string(
+        l7r_shared::speckit::marks::own_file(&root.join(".git"), "9001-x", "T02", &root).unwrap(),
+    )
+    .unwrap();
     let listed = again.contains("\"task\": \"T02\", \"tasks\": [\"T02\", \"T01\"]");
     assert!(listed, "{again}");
 }

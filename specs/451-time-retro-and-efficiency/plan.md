@@ -5252,31 +5252,54 @@ Built here: T421 - an open performance task the queue has no line for
 
 
 
-### T369 (<why: the finding or measurement that files it>)
+### T369 (found by 451 T359's closing half, 2026-11-26, by reading: a task started in a second tree overwrote the first tree's mark, so the second tree's `make task-unstart` left the first tree's start row live in the log with no mark behind it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: marks became per tree. `marks::write` (`rust/guard/shared/src/speckit/marks.rs`) writes `task-marks/<feature>/<task>/<tree key>.json`, one file a tree, and replaces only the starting tree's earlier mark of the task; every reader of the marks reads the new layout and the layout of before beside it, and `make task-unstart` removes this tree's file alone. Measured red first, 2026-11-26 (below).
+  - **T369-D1, built: one mark a task A TREE, not a refusal at the second start.** Label: CONVENTION (a form of the tooling; no research claim). The task's line names the refusal; the brief left the choice to the reading. Reason: the clone's start of a task a builder started in a pool tree is the landing's ordinary path - 14 of the 103 tasks started since 2026-11-25 were started in two trees, each a builder's tree first and the clone after, observed 2026-11-26, method: the real clone's `task-starts.jsonl` read (read only) and its start rows grouped by feature, task and tree. Under the refusal, that path goes through the "a released pool tree's mark is stale" exception, and the takeover meets the defect again: the clone's start overwrites the builder's mark, the clone's unstart removes it, and the builder's row stays live with no mark. Closing it takes an unstart row written for the builder's tree, which erases the builder's own starts from the time breakdown. `event_log_hooks/filed.rs` `pool_task` records the same cost for a release. Per tree, the second start moves nothing, and each tree's unstart cancels that tree's own rows (`live_starts` is already per tree, T359-D9) and its own mark. The mark and the log then say the same thing in every case, the pool's state aside. The alternative priced: the refusal (`task_start.rs` and `bundle.rs`, the pool registry read to tell a stale mark), with the takeover's unstart row and its cost above. Chosen by this builder from the reading below.
+  - **T369-D2, built: the tree key is the tree's resolved path, every character but `[A-Za-z0-9._-]` written `_`.** Label: CONVENTION. Reason: one name a tree, readable, and no hash a later build could spell otherwise. No reader derives it: a tree's mark is found by the `tree` its file names (`marks::own_file`), so a tree spelled two ways (a symlink) still has one mark, which its next start replaces.
+  - **T369-D3, built: the layout of before T369 is read as written and replaced by its own tree's next start.** `marks::all` (through `files`) lists a task directory's files and a feature's own `<task>.json` files alike. `own_file` answers the old file where it names the tree, so `write`, `make task-unstart` and `clear` treat it as that tree's mark. Label: CONVENTION. Reason: the real clone holds six marks in the old layout (451 T352, T403, T404, T417, T419, T424), observed 2026-11-26, method: `ls` of `task-marks/451-time-retro-and-efficiency/`. They hold as before and go at their landing.
+  - **T369-D4, built: the landing's sweep removes every tree's mark of a landed task** (`marks::remove`: `<task>.json` and the `<task>/` directory), and an empty task id removes nothing (it would name the feature's directory). A set-down's `clear` removes its own tree's FILES, found by what each names, where before it rebuilt the path from the task's name. Label: CONVENTION.
+  - **The readers, every one** (found 2026-11-26 by `grep` of `marks::` and `task-marks` over `rust/`, `scripts/`, `tests/hooks/` and the Makefile):
+
+    | reader | what it reads | after T369 |
+    |---|---|---|
+    | `marks::all`, `of_tree` (decide, the review-round guard, `plan/task.rs`) | every mark, a tree's newest | both layouts; a tree's newest own mark unchanged |
+    | `speckit::holding_with` | every mark, own or another tree's | a task marked in two trees: own if this tree's is one, else another's (deduped as before) |
+    | `set_down_hooks/stalls.rs` `in_progress` | any mark naming the task | unchanged: any tree's |
+    | `task_withdraw.rs` | any mark naming the task refuses | unchanged |
+    | `task_unstart.rs` | THIS tree's mark first, else another tree's (its refusal), else a bundle's | changed: found by tree; its file by `own_file`; no message changes |
+    | `marks::clear` (`make set-down`), `marks::remove` (`make land`'s sweep, `scratch_sweep_hooks/disk.rs`) | the files | changed: D4 |
+    | `scripts/gates/closing-checks.sh` | this tree's marks of the task, a glob | changed: both layouts' globs |
+    | `land/ready.rs` `started_tasks`, `others_in_delta`; `filed.rs`; `core/logs.rs`; `plan/approach.rs`; `measure` (`task_time`, `where_time`, `feature_report/sources`); `task/wording.rs`, `set_down.rs`; `builder_stop_hooks`, `context_cap_hooks`, `sweep/tmp.rs` | the start log through `live_starts` | unchanged: already per tree (T359-D9) |
+    | `static_runs_hooks` | the raw start log (T359-D9b) | unchanged |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| start in tree A, start in tree B, unstart in B: the readers agree (D1) | `task_unstart::tests::a_task_started_in_two_trees_keeps_each_tree_s_mark` | n/a: tooling | none | n/a |
+| a released pool tree's start and the clone's undo, then the landing's sweep (D1, D4) | `task_unstart::tests::a_released_pool_tree_s_start_outlives_the_clone_s_undo_until_the_landing` | n/a: tooling | none | n/a |
+| the marks' layout, the old one replaced, the sweep and the set-down (D2 to D4) | `speckit::marks::tests::a_task_started_in_two_trees_keeps_a_mark_in_each` | n/a: tooling | none | n/a |
+| the closing check's mark read in the new layout | `tests/hooks/test-closing-checks.sh`, "a mark in a task's directory, one a tree, is read" | n/a: tooling | none | n/a |
 
 ### T369 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task started in two trees (a builder's pool tree, then the clone that carries its work) and unstarted in one reads, to every reader, as started in the other alone: its mark, its live start row and the hold on that tree's landings agree, and that tree can unstart it too.
+2. **The constraints.** The task's line; one mark a task in its own tree (451 T254) and a bundle's one mark (451 T141); the start log's filter (451 T359-D9) and the static count's raw read (T359-D9b); the landing's `make task-start` of a carried task kept working (the brief); no guard message changed (the brief).
+3. **Where each comes from.** O: T359's closing half's reading (the task's line); the real clone's start log (D1) and marks directory (D3), both read 2026-11-26. The GM's words name neither form; the choice is this builder's, from the brief.
+4. **Do they describe the world here?** Yes: the defect was reproduced in the crate's tests on the old code (item 9). No real case was observed (the task's line: "no case observed"). The two-tree path is the common one (D1).
+5. **The order.** After T359 (the unstart and the filter). No task waits on it.
+6. **The exits.** Green: the first tier's checks on the three changed crates and the closing check's suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the readers were found by one search for `marks::` and `task-marks` over the tree, listed in the table above.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-26, method: `make rust-test CRATE=rust/gate/crates/task` with the two new tests on the code before the change: 122 passed, 2 failed. Both failed on the readers disagreeing: after the second tree's unstart, the marks named no tree and the log named the first tree. After, observed 2026-11-27, method: `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/gate/crates/land"`: green (shared 522 passed, task 124, land 155; lint and format clean). The tests that read the mark file at its old path were restated to find it with `marks::own_file`: four in the task crate and one in the land crate, observed 2026-11-27, method: `grep -rn task-marks rust`. `bash tests/hooks/test-closing-checks.sh`: 74 passed, 0 failed.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: after a tree's `make task-unstart` of a task another tree also started, `make land`'s "was it started" and the push's hold no longer disagree with the marks, and the other tree can still run its own `make task-unstart` (before, it was refused "no start mark in any tree").
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- A mark whose tree no longer exists (a pool tree dropped, a worktree removed) stays until its task lands: `make task-unstart` refuses it with a `make -C <tree>` that cannot run, and `make task-withdraw` refuses the task as started. Before T369, a start in the clone took such a mark over. Found by reading, no case observed. Not fixed here: which marks are stale (no tree, a tree the pool has released) is a rule of its own across the unstart, the withdrawal and the hold, outside this defect. Filed as T437; lands before T302.
+
+**Performance work?** no - a defect.
 
 ### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)
 
@@ -6462,6 +6485,59 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T435 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T437 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T437 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T438 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T438 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

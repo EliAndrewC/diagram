@@ -2,8 +2,8 @@
 //! of `make task-start`. On 2026-11-26 a task started by mistake in a tree held every landing that carried its edits, and the only
 //! way out was moving its mark file by hand.
 //!
-//! It removes THIS TREE'S mark of the task (`task-marks/<feature>/<task>.json`, or the main worktree's one-mark file of before 451
-//! T254 where that names it) and appends one `unstart` row a task the mark names to `task-starts.jsonl` -
+//! It removes THIS TREE'S mark of the task (`task-marks/<feature>/<task>/<tree key>.json`, one a tree, 451 T369 - another tree's
+//! mark of the same task stays; or the main worktree's one-mark file of before 451 T254 where that names it) and appends one `unstart` row a task the mark names to `task-starts.jsonl` -
 //! `{"unstart": {"feature", "task"}, "tree", "utc"}` - which every reader of that file reads, with every earlier start of that task
 //! in that tree, as no start (`l7r_shared::speckit::marks::live_starts`, the one filter: a task started twice here and unstarted
 //! once has no mark, and reads as not started). The row names its feature and task under `unstart`, never at its top:
@@ -45,11 +45,12 @@ fn unstart(cwd: &Path, feature: &str, task: &str) -> Raise<Result<String, String
     let common = PathBuf::from(common_text(cwd));
     let all = marks::all(&common);
     let ours = |m: &&Value| m["feature"].as_str() == Some(name.as_str());
-    let Some(mark) = all
-        .iter()
-        .filter(ours)
-        .find(|m| m["task"].as_str() == Some(task))
-    else {
+    // THIS TREE'S mark of the task first: a task started in two trees has a mark in each (451 T369)
+    let here =
+        |m: &&Value| marks::same_tree(Path::new(m["tree"].as_str().unwrap_or_default()), &root);
+    let exact = |m: &&Value| m["task"].as_str() == Some(task);
+    let found = all.iter().filter(ours).filter(exact).find(here);
+    let Some(mark) = found.or_else(|| all.iter().filter(ours).find(exact)) else {
         let bundle = all
             .iter()
             .filter(ours)
@@ -66,16 +67,9 @@ fn unstart(cwd: &Path, feature: &str, task: &str) -> Raise<Result<String, String
     if !marks::same_tree(Path::new(tree), &root) {
         return Ok(Err(format!("task-unstart: refused - {name} {task} was started in {tree}, not in this tree ({}): its mark is that tree's to remove - make -C {tree} task-unstart F={number} T={task}\n", root.display())));
     }
-    // the task's own mark, else the one-mark file of before T254, which `marks::all` reads as the main worktree's
-    let own = common
-        .join(marks::DIR)
-        .join(&name)
-        .join(format!("{task}.json"));
-    let file = if own.is_file() {
-        own
-    } else {
-        common.join(marks::LEGACY)
-    };
+    // this tree's own mark of the task, else the one-mark file of before T254, which `marks::all` reads as the main worktree's
+    let file =
+        marks::own_file(&common, &name, task, &root).unwrap_or_else(|| common.join(marks::LEGACY));
     std::fs::remove_file(&file).map_err(|e| format!("{}: {e}", file.display()))?;
     let utc = utc_text(now_secs());
     let members = marks::tasks_of(mark);

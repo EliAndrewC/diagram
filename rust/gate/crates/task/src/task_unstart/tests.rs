@@ -46,15 +46,16 @@ fn a_start_is_undone_and_the_log_s_pair_reads_as_no_start() {
         all.iter().any(|h| h.starts_with("T01 "))
     };
     assert!(holds_it());
+    let file = marks::own_file(&common, "9001-x", "T01", &root).unwrap();
     let said = cli(&words(&["9001", "T01"]), &root);
     assert_eq!(said.code, 0, "{}", said.stderr);
     // unstarted once: it holds no landing, and both of its rows read as no start
     assert!(!holds_it());
     let tree = root.to_string_lossy();
-    let want = format!("task-unstart: 9001-x T01 is no longer started in {tree} - its mark removed ({tree}/.git/task-marks/9001-x/T01.json), an unstart row in {tree}/.git/task-starts.jsonl\n");
+    let want = format!("task-unstart: 9001-x T01 is no longer started in {tree} - its mark removed ({}), an unstart row in {tree}/.git/task-starts.jsonl\n", file.display());
     assert_eq!(said.stdout, want);
-    assert!(!common.join("task-marks/9001-x/T01.json").exists());
-    assert!(common.join("task-marks/9001-x/T02.json").exists());
+    assert!(!file.exists());
+    assert!(marks::own_file(&common, "9001-x", "T02", &root).is_some());
     let log = std::fs::read_to_string(common.join(marks::STARTS)).unwrap();
     let last = log.lines().last().unwrap();
     let head = format!("{{\"unstart\": {{\"feature\": \"9001-x\", \"task\": \"T01\"}}, \"tree\": \"{tree}\", \"utc\": \"20");
@@ -136,4 +137,111 @@ fn another_tree_s_mark_is_refused_and_a_phase_hold_is_lifted() {
     std::fs::remove_file(common.join("task-starts.jsonl")).unwrap();
     std::fs::create_dir_all(common.join("task-starts.jsonl")).unwrap();
     assert_eq!(cli(&words(&["9001", "T01"]), &root).code, 1);
+}
+
+/// The trees that hold `task` of 9001-x, each reader asked: its marks' trees, and its live start rows' trees - each resolved, sorted
+/// and once.
+fn holders(common: &std::path::Path, task: &str) -> (Vec<String>, Vec<String>) {
+    let resolved = |t: &str| {
+        std::fs::canonicalize(t).map_or_else(|_| t.to_owned(), |p| p.to_string_lossy().into_owned())
+    };
+    let mut marked: Vec<String> = marks::all(common)
+        .iter()
+        .filter(|m| m["feature"] == "9001-x" && m["task"] == task)
+        .map(|m| resolved(m["tree"].as_str().unwrap_or_default()))
+        .collect();
+    let mut logged: Vec<String> = marks::starts_text(common)
+        .lines()
+        .filter_map(|l| serde_json::from_str::<serde_json::Value>(l).ok())
+        .filter(|r| r["feature"] == "9001-x" && r["task"] == task)
+        .map(|r| resolved(r["tree"].as_str().unwrap_or_default()))
+        .collect();
+    for list in [&mut marked, &mut logged] {
+        list.sort();
+        list.dedup();
+    }
+    (marked, logged)
+}
+
+/// A worktree of the fixture's repository beside it, `<dir>/other`, and its resolved path.
+fn other_tree(dir: &std::path::Path, root: &std::path::Path) -> (std::path::PathBuf, String) {
+    let other = dir.join("other");
+    let (code, _) = crate::git(
+        root,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
+    );
+    assert_eq!(code, Some(0));
+    let shown = std::fs::canonicalize(&other).unwrap();
+    (other, shown.to_string_lossy().into_owned())
+}
+
+/// RED FIRST (451 T369): a task started in two trees keeps each tree's mark, so the second tree's unstart leaves the first tree's start
+/// true in every reader - its mark, its row of the log and the hold on its own landings - and the first tree unstarts it there.
+#[test]
+fn a_task_started_in_two_trees_keeps_each_tree_s_mark() {
+    let dir = repo("unstart-two-trees");
+    let root = root_of(&dir);
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    let common = root.join(".git");
+    let (other, theirs) = other_tree(&dir, &root);
+    let ours = std::fs::canonicalize(&root)
+        .unwrap()
+        .to_string_lossy()
+        .into_owned();
+    assert_eq!(start(&words(&["9001", "T01"]), &other, &env).code, 0);
+    assert_eq!(start(&words(&["9001", "T01"]), &root, &env).code, 0);
+    let both = vec![ours.clone(), theirs.clone()];
+    let mut both = both;
+    both.sort();
+    assert_eq!(holders(&common, "T01"), (both.clone(), both));
+    let said = cli(&words(&["9001", "T01"]), &root);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let first = vec![theirs.clone()];
+    assert_eq!(holders(&common, "T01"), (first.clone(), first));
+    let holds = |tree: &std::path::Path| {
+        let all = l7r_shared::speckit::holding(&tree.join("specs/9001-x")).unwrap();
+        all.iter()
+            .any(|h| h.starts_with("T01 ") && h.contains("<- the active task"))
+    };
+    assert_eq!((holds(&other), holds(&root)), (true, false));
+    let undone = cli(&words(&["9001", "T01"]), &other);
+    assert_eq!(undone.code, 0, "{}", undone.stderr);
+    assert_eq!(holders(&common, "T01"), (vec![], vec![]));
+}
+
+/// RED FIRST (451 T369): the landing's way - a builder's pool tree started the task and was released, and the clone starts the
+/// carried task: an unstart in the clone leaves the builder's start, mark and row alike, and the landing's sweep removes every tree's.
+#[test]
+fn a_released_pool_tree_s_start_outlives_the_clone_s_undo_until_the_landing() {
+    let dir = repo("unstart-pool");
+    let root = root_of(&dir);
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    let common = root.join(".git");
+    let (other, theirs) = other_tree(&dir, &root);
+    let pool = |tasks: &[&str]| {
+        let tree = l7r_shared::builder_pool::Tree {
+            tree: other.clone(),
+            feature: "9001".to_owned(),
+            tasks: tasks.iter().map(|t| (*t).to_owned()).collect(),
+            since: "2026-11-26T00:00:00Z".to_owned(),
+        };
+        l7r_shared::builder_pool::write(&common, &[tree]).unwrap();
+    };
+    pool(&["T01"]);
+    assert_eq!(start(&words(&["9001", "T01"]), &other, &env).code, 0);
+    pool(&[]);
+    assert_eq!(start(&words(&["9001", "T01"]), &root, &env).code, 0);
+    assert_eq!(cli(&words(&["9001", "T01"]), &root).code, 0);
+    let first = vec![theirs];
+    assert_eq!(holders(&common, "T01"), (first.clone(), first));
+    assert_eq!(start(&words(&["9001", "T01"]), &root, &env).code, 0);
+    assert_eq!(marks::all(&common).len(), 2);
+    marks::remove(&common, "9001", &["T01".to_owned()]);
+    assert!(marks::all(&common).is_empty());
 }
