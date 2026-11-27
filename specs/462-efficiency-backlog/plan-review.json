@@ -1,0 +1,268 @@
+{
+ "feature": "462-efficiency-backlog",
+ "blocks": {
+  "preamble": {
+   "sha256": "51f816063afd2ad5c7ca18d22a514e53cab1cbc93e1d0ebb465220afeb410df3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "ccdb46a80839074ce84609c8ff821144a482ea622b94d188c9ffcc9588e396f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "## Task sections": {
+   "sha256": "4235c91434b7d7d87cdb6e7b21147772bee35b1882d1189eb1ab7412e0a6cc45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)": {
+   "sha256": "86cf246b0a27df7c373b501ac44d3789ce5cf25d16cbfe47794b8aa01d03448d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "c83610922af15378b293188f7bc651abd83b244e3d2604bd51cb27e646f9d4c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))": {
+   "sha256": "27ae24c8f1008b5c0b799333a863cb96b8c834713490302a17a721ccfafba2b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T49 Approach (checklist part A)": {
+   "sha256": "fe03cbdfe3090ed64e5550da16021860d94ec977ada9d3507d2e74ca8b76e01a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)": {
+   "sha256": "5979bc86ce6a4d5f0cab55938ae8ee820c23c251d47c17ac3c5fabac6aa903fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T51 Approach (checklist part A)": {
+   "sha256": "e6a4a5bd964ba05616165d4b6ce221138a7d3893ab9398630c0636ad2fb3ba83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)": {
+   "sha256": "35ca7bb5fce70daf0fcfbf9b5593a88568e91d1008dcfcc4ad06b0216ad6d086",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 Approach (checklist part A)": {
+   "sha256": "4ec66f4961f41f3d5d432c533e09f499a3f09f503bbd3a159cfbe1683aa3fa90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)": {
+   "sha256": "ffa3468e1f6514c0dde991f44ba6d64595e8a58c14bd5c7166eb5888726c7e5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 part 2 Approach (checklist part A)": {
+   "sha256": "4cdcfe31c46b3e4d1806cb2dd5f6510057f8d7da4619bac0b02949c379ab152b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)": {
+   "sha256": "5ff4032a01c410a2f8ad5263e410fa54739f92946b6ff3992e85a662d500b841",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T301 Approach (checklist part A)": {
+   "sha256": "4a0802c2c8e5dd7c9fbfbf4ab17b6b1c11d8691936206c352c5199b5a66177a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T541 (left by 451 T531: the gate-write guard still holds as a commit a `git commit` only in a heredoc's text where the heredoc's target is a variable, 18 of the 149 commands still held in the log at T531's review)": {
+   "sha256": "e82dcd85f1be26bd4c4827f4b1b9c94463d298c22225a04684bf15276e264d0b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T541 Approach (checklist part A)": {
+   "sha256": "4fd82a5795267b9e8cc3bd5aff2b130efa893b745da0dfe005fac17da1f996da",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "## Summary",
+    "## Task sections",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)",
+    "### T300 Approach (checklist part A)",
+    "### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)",
+    "### T300 part 2 Approach (checklist part A)",
+    "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "### T301 Approach (checklist part A)",
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)",
+    "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+    "### T51 Approach (checklist part A)",
+    "### T541 (left by 451 T531: the gate-write guard still holds as a commit a `git commit` only in a heredoc's text where the heredoc's target is a variable, 18 of the 149 commands still held in the log at T531's review)",
+    "### T541 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-1",
+     "summary": "462 is a placeholder with no design of its own; each task's plan is its 451 section, moved unchanged; D1-D17, FRs and SCs cited in moved text are 451's; a bare T<n> is 451's task",
+     "class": "within",
+     "why": "FR-002: each task's plan section moves with it, keeping its 451 number, no meaning changed. The naming rule keeps moved text meaning what it meant in 451. Aside: 'moved unchanged' is not literally true after the two lint edits, though neither changes meaning."
+    },
+    {
+     "id": "Summary-2",
+     "summary": "a moved section's 451 review verdict stays in 451's record and each is reviewed afresh here before its tick",
+     "class": "within",
+     "why": "Enforcement of the plan-stage gate on moved work; drops nothing and narrows nothing of FR-002."
+    },
+    {
+     "id": "Edit-451-prefixes",
+     "summary": "five found-and-left items now say 451 T118, 451 T119, 451 T399, 451 T392, 451 T325",
+     "class": "within",
+     "why": "The Summary already makes a bare T<n> mean 451's task, so the prefix states what the text already meant. FR-002 ('none changes its meaning in the move') is kept."
+    },
+    {
+     "id": "Edit-paraphrase-T301",
+     "summary": "T301's 'Performance work?' line: the GM's 2026-11-26 words on disk work, formerly a quote, restated as a paraphrase 'recorded in 451's request.md'",
+     "class": "within",
+     "why": "Turning a quotation no request.md holds into a paraphrase removes a false attribution and keeps the claim, so FR-002 is kept. Limits: the bundle excludes 451's request.md, so the paraphrase's substance was not checked against it. The line still says 'in `request.md`', which in 462 reads as 462's file; 462's file holds nothing dated 2026-11-26, and the parenthetical repairs this. The ordering this sentence states is ruled separately in T301-order."
+    },
+    {
+     "id": "T301-order",
+     "summary": "T301 parts 2 to 4 (what to evict, the scratch sweep's patterns, the loose profraw files) are classed as disk work, not performance work. Disk work 'begins later' (constraint 2), 'begins after the talk on parallelizing and is ordered by time saved, never by disk freed'.",
+     "class": "narrowing",
+     "why": "462's request.md, the GM 2026-11-27: 'I would still like the disk cleanup tasks to be a higher priority than most of the rest of that new feature ... I want to make sure we get to that sooner than some of the other tasks in that feature, which are more long term in nature.' Across features, he puts orchestration first and then the disk tasks. The block cites FR-013, under which a task that is not performance work is refused at task-start while ANY open performance task exists in any active feature. Classing parts 2 to 4 as not-perf and ordering them 'by time saved, never by disk freed' therefore puts T301's disk cleanup behind the efficiency backlog's performance tasks, the reverse of the GM's order for 462. Nothing in the bundle limits the sentence to ordering disk tasks among themselves. Neither spec-cited.md nor spec-index.md carries the GM's 2026-11-27 order (spec prose outside the bundle was not seen). MODE 1 grounds: the GM's order is not impossible to follow; his words do not imply the exception, since his later 2026-11-27 words for 462 supersede the 2026-11-26 principle the sentence restates; and following his order defeats nothing. 'FR-002 says move it unchanged' is preservation, not a ground. Remedy within FR-002, leaving the moved text as it is: 462's own Summary block states that the GM's 2026-11-27 order (orchestration first, then 462's disk cleanup tasks, T301 parts 2 to 4 among them, ahead of most of the rest of 462) governs over any order a moved section states. Also, the tooling ordering FR-013 applies must let those tasks go ahead of 462's other performance tasks.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T22",
+     "summary": "451's close measurement (SC-001, SC-002, SC-005 of 451 on a full day of work; make feature-report F=451 WRITE=1) carried as moved",
+     "class": "within",
+     "why": "Moved verbatim under FR-002. Which tasks move is the accepted spec's to settle, not this review's."
+    },
+    {
+     "id": "T49",
+     "summary": "gate-write's own_args fix waits on 451 T96, then T110's shared reading in shared::tree::program; red first on window#170 and #172 shapes; f-string and computed roots fail open; docs/guards.md row written in this task",
+     "class": "within",
+     "why": "451-era design moved verbatim (FR-002); nothing newly decided in the move."
+    },
+    {
+     "id": "T51",
+     "summary": "the script route is measured, not built; T51 waits on 451 T118; make-only's unread script route is an accepted limitation until a replay shows a correction; T119 filed for the guard-edit stray file",
+     "class": "within",
+     "why": "451-era design and limitation, moved verbatim (FR-002); the move adds none. Aside: the Approach still says 'T118 (filed here)', where 'here' meant 451."
+    },
+    {
+     "id": "T300-part1",
+     "summary": "make carry resolves plan.md by section, tasks.md's bare boxes, and request.md's dated sections by rule; 451 T399 and T400 filed and left",
+     "class": "within",
+     "why": "Moved verbatim (FR-002); the task stays open for its registry tables, as in 451."
+    },
+    {
+     "id": "T300-part2",
+     "summary": "make carry regenerates docs/make-targets.html, merges prose by words, keeps two added blocks, and merges .jsonl by record; code is never merged by words",
+     "class": "within",
+     "why": "Moved verbatim (FR-002)."
+    },
+    {
+     "id": "T301-part1",
+     "summary": "part 1 is a measurement of why the cargo hashes multiply; no code changed, nothing deleted; 451 T325 filed and lands before T278; part 1 counted as performance work by FR-013's measurement clause",
+     "class": "within",
+     "why": "Moved verbatim (FR-002); part 1's facts and its perf classification for measurement match 451 FR-013 as cited. Only the ordering of parts 2 to 4 is ruled, in T301-order."
+    },
+    {
+     "id": "T541",
+     "summary": "new stub left by 451 T531: in gate_write_hooks/inert.rs, expand a variable the same command assigned a literal before deciding whether a heredoc's reader runs its body; anything else stays held (fail closed); re-measured over the guard log at the build",
+     "class": "within",
+     "why": "A found-and-left follow-up of a closing-set task. It lands in the backlog FR-002 makes 462, fixes a guard that refuses correct work (a defect), and keeps 451 T530's fail-closed purpose. Aside: its step table has no rows yet."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "## Summary",
+    "## Task sections",
+    "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "### T22 Approach (checklist part A)",
+    "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)",
+    "### T300 Approach (checklist part A)",
+    "### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)",
+    "### T300 part 2 Approach (checklist part A)",
+    "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "### T301 Approach (checklist part A)",
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)",
+    "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+    "### T51 Approach (checklist part A)",
+    "### T541 (left by 451 T531: the gate-write guard still holds as a commit a `git commit` only in a heredoc's text where the heredoc's target is a variable, 18 of the 149 commands still held in the log at T531's review)",
+    "### T541 Approach (checklist part A)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-order",
+     "summary": "462's work is ordered by the GM's 2026-11-27 words: orchestration (461) first, then 462's disk cleanup tasks (T533, T301 parts 2-4, T374, T278, T371) at the head of queue.txt, ahead of most of the rest; a moved section's own words on order (T301's 'disk work begins later, ordered by time saved') are history and yield to it",
+     "class": "within",
+     "why": "This is the GM's own order verbatim in substance (request.md, 2026-11-27: disk cleanup 'a higher priority than most of the rest of that new feature'; 'prioritize the orchestration work'); it answers round 1's one required change in the Summary and leaves the moved text unchanged as FR-002 requires."
+    },
+    {
+     "id": "Summary-T549",
+     "summary": "Where 451 FR-013's performance-first rule would hold a disk task behind another 462 task, the queue's order governs; tooling filed as 462 T549 (make builder-next and make task-start honoring the queue for the disk tasks)",
+     "class": "within",
+     "why": "Carries out the GM's 2026-11-27 order mechanically, as round 1 asked. The override is scoped to other 462 tasks only, not to other features' performance tasks; that matches the GM's words, which rank disk work above 'most of the rest of that new feature' and put orchestration first, and never rank it above other features' work. T549's task line and queue.txt are outside the bundle: confirmed as the plan states them, not as files."
+    },
+    {
+     "id": "Summary-lint-edits",
+     "summary": "Two post-move lint edits declared as meaning-preserving: five found-and-left items say '451 T<n>' (T118, T119, T399, T392, T325), and one quotation no request.md holds restated as a paraphrase",
+     "class": "within",
+     "why": "Each named id reads '451 T<n>' in the blocks (T51 'Filed as 451 T118', T51 'Filed as 451 T119', T300 'Filed as 451 T399' and 'lands before 451 T392', T301 'Filed as 451 T325'); the edits were already in the text round 1 judged and change no task's meaning (FR-002)."
+    },
+    {
+     "id": "Summary-placeholder",
+     "summary": "The plan is a placeholder: each task's plan is its 451 section moved unchanged, decisions D1-D17 and FRs/SCs are 451's, a bare T<n> is 451's, moved review verdicts stay in 451 and each section is reviewed afresh before its tick",
+     "class": "within",
+     "why": "FR-002: sections move with their tasks, none changing meaning. Byte-identical to round 1's text apart from the added order paragraph."
+    },
+    {
+     "id": "T301-order-words",
+     "summary": "T301's moved section keeps its 2026-11-26 words (disk work later, ordered by time saved) and the order T325 before T278",
+     "class": "within",
+     "why": "Left unchanged as FR-002 requires; the Summary now governs over its ordering words. T325 before T278 is a technical dependency (it changes how many hashes are live), not a priority claim, and fits the GM's 'most of the rest'."
+    },
+    {
+     "id": "T22,T49,T51,T300,T300-part2,T301-part1,T541,preamble,Task-sections",
+     "summary": "The moved task sections and their checklists",
+     "class": "within",
+     "why": "Byte-identical to the text round 1 judged (diff of earlier.md against blocks.md, block markers aside: the only change is the Summary paragraph); round 1 required nothing of these blocks, and they move unchanged under FR-002."
+    }
+   ]
+  }
+ ]
+}

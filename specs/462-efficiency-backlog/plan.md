@@ -12,6 +12,14 @@ there). The decisions those sections cite (D1-D17), and the FRs and SCs they nam
 and `spec.md`. A bare `T<n>` in a section means 451's task of that number (`tasks.md`, its head). A moved section's review verdict, where
 451's `plan-review.json` holds one (451 T49, T51, T300), stays in 451's record: each is reviewed afresh here before its tick.
 
+**The order of 462's work is the GM's of 2026-11-27, not any a moved section states** (462's `request.md`): orchestration (feature
+461) first; then 462's disk cleanup tasks - its queue opens with them (T533, T301 with its parts 2 to 4, T374, T278, T371) - ahead of
+most of the rest of 462; then the rest. A moved section's own words on order (T301's "disk work ... begins later, ordered by time
+saved", written under 451 FR-013 on 2026-11-26) are history and yield to it: the builders' queue (`queue.txt`) carries the GM's order,
+and where 451 FR-013's performance-first rule would hold a disk task behind another 462 task, the queue's order governs (462 T549).
+After the move two edits were made to satisfy the plan lint, neither changing a meaning: five found-and-left items now say `451 T<n>`
+(T118, T119, T399, T392, T325), and one quotation no request.md holds is restated as a paraphrase.
+
 ## Task sections
 
 ### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)
@@ -255,11 +263,11 @@ and `spec.md`. A bare `T<n>` in a section means 451's task of that number (`task
   argv list bound to a name and run (t67's `corpus.py`), a directory literal and a dotted word under a running gate (t79's
   `stream.py`, t46's `resid.py`), each refused at once, measured 2026-11-21 (`/tmp/t51/probe-stdin.jsonl`). Not fixed here: the
   reader is `shared::tree::program`, outside this task's files, and gate-write's file test moves HEAD's stdin and `-c` verdicts
-  uncounted. Filed as T118; lands before T51.
+  uncounted. Filed as 451 T118; lands before T51.
 - `make guard-edit FILE=<a path outside the tree>` wrote `l7r-guard-permits.jsonl` into the clone's root, an untracked file, and
   its permit did not take: the Write of that path was refused again at once, observed 2026-11-21, method: T51's guard-edit of
   `/tmp/t51/m/rust/guard/src/guards/make_only_hooks/script.rs`, then the Write, then `git status`; the stray file removed.
-  Not fixed here: the guard-edit route is outside this task's files. Filed as T119; lands before T22.
+  Not fixed here: the guard-edit route is outside this task's files. Filed as 451 T119; lands before T22.
 
 **Performance work?** no.
 
@@ -1619,8 +1627,8 @@ and `spec.md`. A bare `T<n>` in a section means 451's task of that number (`task
 12. **Before any fix.** The session at a stopped carry resolves nothing by hand for a plan.md, a tasks.md or a request.md; a builder waits that much less for its tree's release.
 
 **Found and left?**
-- A carry still stops on a line-per-record file both sides appended to or pruned (`dev/claims-triage-skips.jsonl`, `dev/gm-attribution-baseline.jsonl`; 2 of the 30 replayed carries), resolved by hand. Not fixed here: a third file class with its own rule, outside the brief's cases. Filed as T399; lands before T400.
-- A pick git merges wholly cleanly is committed before the box check runs, so a bare box the builder's tree has lines for stays bare there (0 of the 30 replays; the step beside a conflict caught the 1 that would have). Not fixed here: it needs the pick made without committing, a change to the carry's whole flow. Filed as T400; lands before T392.
+- A carry still stops on a line-per-record file both sides appended to or pruned (`dev/claims-triage-skips.jsonl`, `dev/gm-attribution-baseline.jsonl`; 2 of the 30 replayed carries), resolved by hand. Not fixed here: a third file class with its own rule, outside the brief's cases. Filed as 451 T399; lands before T400.
+- A pick git merges wholly cleanly is committed before the box check runs, so a bare box the builder's tree has lines for stays bare there (0 of the 30 replays; the step beside a conflict caught the 1 that would have). Not fixed here: it needs the pick made without committing, a change to the carry's whole flow. Filed as T400; lands before 451 T392.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's turns at a stopped carry are builder-idle time, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
 
@@ -1727,13 +1735,13 @@ and `spec.md`. A bare `T<n>` in a section means 451's task of that number (`task
 12. **Before any fix.** Nothing is fixed here: no call rebuilds what it built, so there is no flipping setting to fix. The one cost found - a library compiled 2 to 4 times, once a feature combination - is a design choice between two forms that each need measuring, filed as T325. No map changes.
 
 **Found and left?**
-- A crate below a `testkit` crate is compiled once for each feature combination the selected packages ask for: 17 of 75 rustc runs after a touch of `core` across the 28 gate test builds, measured 2026-11-26 (`gate-call.sh`), and in the coverage build a `-p` set never asked before must compile its downstream crates instrumented from nothing - inferred from the fingerprints and `cargo tree`, no coverage build was run to time it (67 of `diagram-backlog/cover-gate`'s 128 current-profile hashes differ from another only in a dependency's hash); visible effect: seconds of every test and coverage build below `core`, `research`, `registry`, `owed` or `archive`, and the sibling hashes the sweeps then keep. `rust/Cargo.toml`'s "ONE FEATURE SET FOR EVERY GATE CRATE" comment says testing one crate never rebuilds what another built with other features, which holds for outside crates only. Not fixed here: the fix is a choice between naming the whole family in every test and coverage build and compiling the test helpers always, each to be measured, and it changes `kept.rs`, `side.rs` and `cover.rs` - a builder of its own by the sizing rule. Filed as T325; lands before T278.
+- A crate below a `testkit` crate is compiled once for each feature combination the selected packages ask for: 17 of 75 rustc runs after a touch of `core` across the 28 gate test builds, measured 2026-11-26 (`gate-call.sh`), and in the coverage build a `-p` set never asked before must compile its downstream crates instrumented from nothing - inferred from the fingerprints and `cargo tree`, no coverage build was run to time it (67 of `diagram-backlog/cover-gate`'s 128 current-profile hashes differ from another only in a dependency's hash); visible effect: seconds of every test and coverage build below `core`, `research`, `registry`, `owed` or `archive`, and the sibling hashes the sweeps then keep. `rust/Cargo.toml`'s "ONE FEATURE SET FOR EVERY GATE CRATE" comment says testing one crate never rebuilds what another built with other features, which holds for outside crates only. Not fixed here: the fix is a choice between naming the whole family in every test and coverage build and compiling the test helpers always, each to be measured, and it changes `kept.rs`, `side.rs` and `cover.rs` - a builder of its own by the sizing rule. Filed as 451 T325; lands before T278.
 
 - A pool tree handed out WARM compiles from nothing each configuration its earlier tasks never built: 58 first builds, 246 s for all 28 gate manifests' plain test builds in `diagram-backlog-t271`, measured 2026-11-26 (`gate-call.sh`). Not a defect and not filed: nothing is built twice, the cost is paid once a tree and a crate, and the builds are kept, and it is recorded here because it is one reading of the test runs the GM asked about.
 
 **Performance work?** yes for part 1: a measurement task, counted as performance work for ordering by the GM's words of
 2026-11-20 (it makes nothing faster itself; what it found to make faster is T325's, a `[perf]` task). Parts 2 to 4 are disk work,
-which by the GM's words of 2026-11-26 in `request.md` ("the disk work and the principle behind it") begins after the talk on
+which by the GM's words of 2026-11-26 in `request.md` (on the disk work and the principle behind it, recorded in 451's request.md) begins after the talk on
 parallelizing and is ordered by time saved, never by disk freed.
 
 
@@ -3350,6 +3358,33 @@ parallelizing and is ordered by time saved, never by disk freed.
 |---|---|---|---|---|
 
 ### T548 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T549 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T549 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
