@@ -596,6 +596,57 @@ fn next_performance_in(
     Ok(None)
 }
 
+/// EVERY OPEN PERFORMANCE TASK OF EVERY ACTIVE FEATURE (451 T313's round-3 ruling, `ask:451-T313-plan-round3`; T421): the walk of
+/// [`next_performance`] - `prefer` first, then each active feature by its last task-start, a held feature (not `prefer`) and a parked
+/// stage's task skipped - collecting every [`performance`] box, and WITHOUT its wait skip: the builders' queue names one with no
+/// `queue.txt` line until its line is written, and a line with `waits=` is what quiets a task that waits. The plan is cut once to its
+/// checklist headings, the only lines [`performance`] reads of it, so an open box does not search the whole plan (451's: 140 open boxes, 679,113 bytes, measured 2026-11-27).
+///
+/// # Errors
+/// A start or set-down log, a tasks.md or a plan.md that cannot be read.
+pub fn open_performance(
+    root: &Path,
+    git_dir: &Path,
+    prefer: &str,
+) -> Result<Vec<OpenTask>, String> {
+    let downs = rows(&git_dir.join("set-downs.jsonl"))?;
+    let mut order = started(git_dir)?;
+    if !prefer.is_empty() {
+        order.retain(|(f, _)| f != prefer);
+        order.insert(0, (prefer.to_owned(), String::new()));
+    }
+    let mut out = Vec::new();
+    for (feature, since) in order {
+        if feature != prefer && holds::held(root, &feature).is_some() {
+            continue;
+        }
+        let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
+        let plan_path = root.join("specs").join(&feature).join("plan.md");
+        let plan = if boxes.is_empty() || !plan_path.is_file() {
+            String::new()
+        } else {
+            read(&plan_path)?
+        };
+        let headings: String = plan
+            .lines()
+            .filter(|l| l.starts_with("### ") && l.contains(" Performance checklist"))
+            .flat_map(|l| [l, "\n"])
+            .collect();
+        for (id, title) in boxes {
+            if performance(&id, &title, &headings)
+                && crate::parked::held_task(root, git_dir, &title).is_none()
+            {
+                out.push(OpenTask {
+                    feature: feature.clone(),
+                    id,
+                    title,
+                });
+            }
+        }
+    }
+    Ok(out)
+}
+
 /// None to let the turn end, else the refusal; an Err is a read error, which lets it end too.
 /// `listed_idle`: the Stop's own `background_tasks` (the harness's list of what it runs, 451 T183) was given and empty, so the
 /// transcript's reading of what runs is not asked.

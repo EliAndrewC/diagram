@@ -104,6 +104,8 @@ pub mod no_branch_hooks;
 pub mod no_poll_hooks;
 pub mod pair_hooks;
 pub mod phase_source_hooks;
+// GUARD_EDIT_OK: feature 451 T313 - adding a guard, the pool-idle Stop check
+pub mod pool_idle_hooks;
 pub mod readme_hooks;
 pub mod record_edit_gate;
 pub mod record_edit_hooks;

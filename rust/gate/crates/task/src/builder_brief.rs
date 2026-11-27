@@ -15,26 +15,26 @@
 //! REFUSED, each printing the command to run instead, BEFORE any tree is taken:
 //! - `JOBS` past three (`JOBS_MAX`);
 //! - `KIND=measurement` with no `MEASURES`, or with more than `MEASURES_MAX` things measured (a GUESS knob: 451 T315);
-//! - `KIND=fix` for a task whose line names a new mechanism ([`mechanism`]): two builders, `build-half` then `closing-half`.
+//! - `KIND=fix` for a task whose line names a new mechanism (`l7r_shared::builder_brief::mechanism`, shared with the queue since 451 T313's round 3): two builders, `build-half` then `closing-half`.
 //!   `SIZING_OK="<reason>"` passes this one refusal alone, for a line that names a guard or a command it only repairs.
 //!
 //! THE BLOCK IS SHORT ON PURPOSE: `agent-prefix-hooks` refuses a prompt that repeats 2,000 characters of an earlier dispatch of its
 //! type, and every builder is one type - so the whole block stays under that, and the rules a prompt cannot show stay in the file
 //! it names. It keeps a line opening `STOP POINT`, which `context_cap_hooks/split.rs` knows a code builder by.
 
-use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::Reply;
-use l7r_shared::builder_brief::{Marker, JOBS_MAX, KINDS, MEASURES_MAX};
+use l7r_shared::builder_brief::{mechanism, targets, Marker, JOBS_MAX, KINDS, MEASURES_MAX};
 use l7r_shared::builder_pool;
 use l7r_shared::speckit::{marks, tasks};
+use serde_json::json;
 
 use crate::builder_tree::{self, Env};
 use crate::reply;
 
-const USAGE: &str = "usage: make builder-brief T=<task(s)> F=<feature> KIND=fix|measurement|build-half|closing-half [JOBS=<1-3>] [MEASURES=<things measured>] [CRATE=\"<crate dirs>\"] [BLOCKS=\"<feature> T<n>\"] [LOAD=1]\n";
+const USAGE: &str = "usage: make builder-brief T=<task(s)> F=<feature> KIND=fix|measurement|build-half|closing-half [JOBS=<1-3>] [MEASURES=<things measured>] [CRATE=\"<crate dirs>\"] [BLOCKS=\"<feature> T<n>\"] [LOAD=1] [ENTRY=<the queue entry, as make builder-next prints it>]\n";
 
 /// What a caller says of the brief it is writing.
 struct Ask<'a> {
@@ -48,43 +48,8 @@ struct Ask<'a> {
     crates: &'a str,
     blocks: &'a str,
     load: bool,
-}
-
-/// The make targets a Makefile defines: each `name:` that opens a line.
-fn targets(makefile: &str) -> BTreeSet<String> {
-    let name = |c: char| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.');
-    makefile
-        .lines()
-        .filter_map(|l| l.split_once(':'))
-        .filter(|(head, rest)| !head.is_empty() && head.chars().all(name) && !rest.starts_with('='))
-        .map(|(head, _)| head.to_owned())
-        .collect()
-}
-
-/// What in a task's line names a NEW MECHANISM - a command or a guard, which is two builders from the start - or none. Kept simple:
-/// one of four phrases (`a new command`, `a new guard`, `a guard refuses`, `a PreToolUse check`), or a `make <target>` whose target
-/// has a hyphen and is no target of the Makefile yet. It MISSES a new command with no hyphen in its name (the hyphen is what tells a
-/// target from "make sure"), a guard described in other words ("a hook that stops"), a background step measured before and after,
-/// and a new verb of an existing target; it WRONGLY takes a line that names a target a sibling task has not landed yet.
-pub(crate) fn mechanism(line: &str, known: &BTreeSet<String>) -> Option<String> {
-    let lower = line.to_lowercase();
-    let phrase = [
-        "a new command",
-        "a new guard",
-        "a guard refuses",
-        "a pretooluse check",
-    ]
-    .into_iter()
-    .find(|p| lower.contains(p));
-    if let Some(p) = phrase {
-        return Some(format!("\"{p}\""));
-    }
-    let name = |c: char| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-';
-    line.split("make ")
-        .skip(1)
-        .map(|rest| rest.split(|c: char| !name(c)).next().unwrap_or(""))
-        .find(|t| t.contains('-') && !known.contains(*t))
-        .map(|t| format!("`make {t}`, no target of the Makefile yet"))
+    /// The queue entry it serves, `ENTRY=` as `make builder-next` prints it (451 T313): its ordinal among its first task's lines.
+    entry: &'a str,
 }
 
 /// The line of `task` in a feature's tasks, open or archived.
@@ -122,7 +87,26 @@ fn command(a: &Ask, key: &str, kind: &str) -> String {
 }
 
 /// The sizing refusal `a` earns from its own words, before any file is read; none where it is sized.
+/// `ENTRY=` as the queue entry's ordinal; none where it is not given or is no number above 0.
+fn entry(a: &Ask) -> Option<u64> {
+    a.entry.parse::<u64>().ok().filter(|k| *k > 0)
+}
+
+/// The brief's line of the pool's log, beside the take: the entry it serves, for `make builder-done`'s done line (451 T313); a
+/// brief with none names none.
+fn logged(a: &Ask, common: &Path, env: &Env, tree: &Path, holder: &str) {
+    let mut line =
+        json!({"utc": env.now, "event": "brief", "tree": tree, "detail": holder, "kind": a.kind});
+    if let Some(k) = entry(a) {
+        line["entry"] = json!(k);
+    }
+    builder_tree::log_in(common, &line);
+}
+
 fn sizing(a: &Ask, key: &str) -> Option<String> {
+    if !a.entry.is_empty() && entry(a).is_none() {
+        return Some(format!("builder-brief: refused - ENTRY={} is no entry's number: give it as make builder-next prints it (ENTRY=1 is the task's first line of the queue), or leave it out\n{USAGE}", a.entry));
+    }
     if !KINDS.contains(&a.kind) {
         return Some(format!(
             "builder-brief: refused - KIND={} is none of {}\n{USAGE}",
@@ -248,6 +232,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
         crates: arg(5),
         blocks: arg(6),
         load: !arg(7).is_empty(),
+        entry: arg(8),
     };
     let key = builder_tree::feature_key(a.feature);
     if a.task.is_empty() || key.is_empty() || a.kind.is_empty() {
@@ -317,6 +302,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
             a.kind
         ));
     }
+    logged(&a, &common, env, &tree, &holder);
     let handoff = common
         .join("l7r-handoffs")
         .join(format!("{}-build.md", bundle.join("-")));

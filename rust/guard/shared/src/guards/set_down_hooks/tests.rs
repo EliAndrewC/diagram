@@ -503,6 +503,54 @@ fn another_active_feature_s_performance_task_is_named_until_it_is_set_down_or_cl
     assert_eq!(next_performance(&c, &git, "999-gone").unwrap(), None);
 }
 
+/// 451 T313's round-3 ruling (T421): every open performance task of every active feature, the waiting ones too, a held feature and
+/// a parked stage's task left out, the preferred feature first; PERF=1's heading read from the plan's headings alone.
+#[test]
+fn every_open_performance_task_of_every_active_feature_is_listed() {
+    let (_dir, c, _tr) = world("perf-all", "no");
+    let git = c.join(".git");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 [perf] (waits: a full day after T03 lands) the close\n- [ ] T03 later\n- [ ] T05 [perf] phase: homesteads, parked\n- [ ] T06 the checklist one\n",
+    )
+    .unwrap();
+    std::fs::write(
+        c.join("specs/385-x/plan.md"),
+        "## a\n### T06 Performance checklist (prompts)\ntext ### T03 Performance checklist\n",
+    )
+    .unwrap();
+    std::fs::create_dir_all(c.join("rust/parked/src")).unwrap();
+    std::fs::write(c.join("rust/parked/src/homesteads.rs"), "").unwrap();
+    second(
+        &c,
+        "- [ ] T04 [perf] split the suite\n",
+        "2026-10-18T22:00:00Z",
+        "Draft",
+    );
+    let ids = |prefer: &str| -> Vec<String> {
+        super::open_performance(&c, &git, prefer)
+            .unwrap()
+            .iter()
+            .map(|t| format!("{} {}", t.feature, t.id))
+            .collect()
+    };
+    // the latest start first (385-x at 23:00), its waiting T02 listed; 386-y's after
+    assert_eq!(ids(""), vec!["385-x T02", "385-x T06", "386-y T04"]);
+    assert_eq!(ids("386-y"), vec!["386-y T04", "385-x T02", "385-x T06"]);
+    // a held feature offers none unless preferred
+    let hold = r#"{"trigger": "ask:set-down-386-talk", "ruling": "continue", "what": "386 starts no new task.", "utc": "2026-11-23T14:42:15Z"}"#;
+    std::fs::write(c.join("specs/386-y/arbiter.jsonl"), format!("{hold}\n")).unwrap();
+    assert_eq!(ids(""), vec!["385-x T02", "385-x T06"]);
+    assert_eq!(ids("386-y"), vec!["386-y T04", "385-x T02", "385-x T06"]);
+    // no plan, and a feature with no open box
+    std::fs::remove_file(c.join("specs/385-x/plan.md")).unwrap();
+    std::fs::write(c.join("specs/385-x/tasks.md"), "- [x] T01 done\n").unwrap();
+    assert!(ids("").is_empty());
+    assert!(ids("999-gone").is_empty());
+    std::fs::write(git.join("task-starts.jsonl"), [0xff_u8]).unwrap();
+    assert!(super::open_performance(&c, &git, "").is_err());
+}
+
 #[test]
 fn the_performance_reader_s_read_errors_are_errors() {
     let (_dir, c, _tr) = world("perf-error", "no");

@@ -1,0 +1,62 @@
+# The builders' queue of this feature: one entry a line, in the order to hand out. make queue lists it with each entry's state
+# computed (landed, built, in flight, waiting, READY); make builder-next names the next; make queue-add appends, and a plain edit
+# does as well. A line STAYS until its task is landed; a task that needs another builder gets another line. The format and the
+# rules: rust/guard/shared/src/builder_queue.rs.
+# <task[,task]> <kind> [jobs=<1-3>] [measures=<n>] [load=1] crates=<dir,dir|-> files=<path,prefix|-> [waits=<T<n>,GM,alone>] [note=<the rest of the line>]
+#
+# Converted 2026-11-27 from queue.md (stale since 2026-11-26 20:10 UTC) by 451 T313's build half, then made true the same day by
+# its closing half from the clone's tasks.md (open boxes only), its pool registry and its pool log, for the worktree and
+# parallel-building group the coordinating session named. queue.md named no kind and few files: each KIND here is inferred from
+# the task's line, and `-` says the line names no crate or file, not that none will change. The order is queue.md's (the GM's,
+# 2026-11-26: measurements first, then throughput, then correctness and hygiene) with the tasks filed since appended in the
+# order the session named them: the session's to reorder. waits= has no word for "a window of use must pass first": GM stands
+# in for it on T401 and T354, each saying so in its note, and is edited out when the window has passed.
+T321 build-half crates=- files=- waits=GM note=queue.md 6b: the bounded load helper (a new command, so two builders); the session recommends restating it: make the race certain, never load the machine
+T321 closing-half crates=- files=-
+T308 fix crates=rust/gate/crates/plan,rust/guard files=- note=queue.md 7, its remainder, in flight 2026-11-27: the second review round's mechanical causes at make decide, the review's wait put to use, the one-tier order nudge retired
+T313 closing-half crates=rust/gate/crates/task,rust/guard files=Makefile,docs/guards.md,tests/hooks,scripts/container/builder-brief.md,dev/audits note=queue.md 8: the tooling keeps the pool full, with T395 and the first half of T297 built in it. ONE line for both halves and the round-2 fix: the tree was kept throughout and briefed before ENTRY= existed, so its one make builder-done names no entry and is counted once - two lines would leave the second READY after the carry. It stays one line (T416, built here, needs ENTRY= from the brief)
+T297 measurement measures=1 crates=- files=scripts/container/builder-brief.md waits=T313 note=queue.md 9, its second half: how a message sent to a builder in mid-work is delivered, recorded in the builder brief (the first half, the overlap named, is built in T313; the handout by hand is T408)
+T307 fix crates=rust/guard,rust/gate/crates/land files=- note=queue.md 10, part 1 (the gate-write guard holds only the gated tree): built and carried 2026-11-27 with the task open - the line stays until the task lands, so the next two count right
+T307 fix crates=rust/guard,rust/gate/crates/land files=- note=part 2: a refusal the push makes after the gate has run is also in the landing's first pass
+T307 fix crates=rust/gate/crates/land files=- waits=GM note=part 3: one gate run a task when several are ready
+T300 fix crates=- files=docs/guards.md,rust/guard/CLAUDE.md,rust/gate/CLAUDE.md,Makefile waits=alone note=queue.md 11: shared registry files one entry a line - it rewrites the files every other task appends to (part 1, the carry's merges, is landed with the task open)
+T314 fix load=1 crates=rust/guard files=tests/hooks note=queue.md 12: the state-sync suite under load, in flight 2026-11-27 (queue.md put it behind T321's helper; it was handed out before it)
+T304 fix crates=rust/guard files=tests/hooks note=queue.md 12: T304's remainder - the suite stamps and the gate-green stamps trees overwrite, the guards' work-tree git diff calls (two parts are landed with the task open)
+T302 build-half crates=- files=- waits=GM note=queue.md 13: every writer has one tree and a landing needs a clean clone - where the gate runs is to be discussed with the GM first; four steps, a builder each, in order: a line for each further step
+T302 closing-half crates=- files=-
+T310 fix crates=rust/guard/shared,rust/gate/crates/task files=- note=queue.md 14: the event log books a pool builder's check dispatch to no task; make builder-tree writes the start row and mark
+T306 fix crates=rust/guard files=- note=queue.md 15: the program spellings the tree guards still miss
+T275 fix crates=rust/gate/crates/reviews files=- note=queue.md 15: the state paths joined onto .git (measure each in a worktree)
+T312 fix crates=rust/gate/crates/bundle files=- note=queue.md 16: tests that default to the machine's live state
+T311 fix crates=rust/gate/crates/task files=scripts/gates/closing-checks.sh note=queue.md 16: left from T303 and T305
+T143 fix crates=- files=- note=queue.md 16: other crates' tests read a session escape or write the live guard log
+T288 fix crates=- files=- note=queue.md 16: the per-task plan bundle shared between the clone and a builder's worktree
+T296 build-half crates=rust/gate/crates/task files=- note=queue.md 16: the builder pool's follow-ups (make builder-tree-hold is a new command, so two builders)
+T296 closing-half crates=rust/gate/crates/task files=-
+T286 fix crates=- files=- note=queue.md 17: mostly moot with the pool
+T294 fix crates=rust/gate/crates/land files=- note=queue.md 17: its unstaged-file part superseded by T302
+T278 fix crates=- files=- waits=GM note=queue.md 18: disk work, after the parallelization talk, by the GM's word
+T301 fix crates=rust/gate/crates/rustc files=- waits=GM note=queue.md 18: T301's other parts (disk), after the parallelization talk; part 1 is landed with the task open
+T367 measurement measures=1 crates=- files=- note=how many of a builder's slot-tell lines are code 1 against code 0 over a day; the pre-warm keeping the alone key (rust/gate/crates/rustc) is a fix line added after it, if the first builds are most of the wide waits left
+T397 fix crates=rust/gate/crates/land files=- note=part (c), what remains: make land carries the done commits of the tasks it lands
+T401 measurement measures=1 crates=- files=dev/measurements/2026-11-27/tree-idle,dev/audits waits=T313,GM note=the tree-idle table over a like window, T313's after-measurement too. It waits on eight hours of make builder-done and the queue in use, not on the GM: no waits= word says so - edit GM out when the window has passed
+T403 fix crates=rust/gate/crates/measure files=- note=make task-time books waiting-on-the-GM minutes apart from a batch's second-tier span
+T404 fix crates=rust/gate/crates/land files=- note=make carry outside the clone deletes a done ref the clone still waits on
+T405 fix crates=rust/gate/crates/measure,rust/gate/crates/land files=- waits=GM note=the gate's tree check voids a gate for a write it never read: the safe version changes what make land commits and pushes
+T406 fix crates=rust/guard files=- note=the gate-write guard: a commit sent into the gated tree from another tree. make builder-brief reads this line's "make -C" as a target and refuses KIND=fix: SIZING_OK="<reason>" (451 T412)
+T408 fix crates=rust/gate/crates/task files=- note=a handout made outside make builder-next names its overlap (T297's literal first half)
+T409 fix crates=rust/guard files=- note=the tree walk reads no make -C; overlaps T406. make builder-brief reads this line's "make -C" as a target and refuses KIND=fix: SIZING_OK="<reason>" (451 T412)
+T410 fix crates=rust/gate/crates/plan files=- note=the plan template's Performance work? prompt names the measurement clause
+T412 fix crates=rust/gate/crates/task files=- note=make queue flags a fix entry whose task line names a mechanism. Its own line quotes the rule's phrase, so make builder-brief refuses KIND=fix: SIZING_OK="<reason>"
+T369 fix crates=rust/guard/shared,rust/gate/crates/task files=- note=a task started in a second tree overwrites the first tree's mark. make builder-brief reads this line's "make -C" as a target and refuses KIND=fix: SIZING_OK="<reason>" (451 T412)
+T353 measurement measures=1 crates=- files=- note=how many ad-hoc dispatches naming the clone edit source; holding them to the marker (rust/guard) is a fix line added after it
+T352 fix crates=rust/guard,rust/gate/crates/task files=- note=the context cap's one exit lets a build-half builder write its named handoff (the task's line names two ways, one in each crate)
+T354 measurement measures=1 crates=- files=- waits=GM note=what the brief's sizing misses, decided from a week of briefs made by make builder-brief (from 2026-11-26). It waits on that week, not on the GM: edit GM out on 2026-12-03
+T360 fix crates=rust/guard files=- note=a builder dispatched from a Workflow script's agent() call is held to the brief's marker
+T341 fix crates=rust/gate/crates/rustc files=- note=[perf] the checks' tool spends 2.0 s before an edited guard crate's build; its line names kept.rs and kept/code.rs. Written 2026-11-27 under T313's round-3 ruling: the tool named it unlisted, KIND=fix (no mechanism in its line)
+T342 measurement measures=1 crates=- files=dev/measurements note=[perf] FIRST its line's measurement, a filtered test run beside two working builders; the tool's KIND=fix is overruled by the line's "FIRST measure", which the sizing rules split off
+T342 fix crates=rust/gate/crates/rustc files=scripts/container/builder-brief.md note=[perf] then, if it holds, make rust-test CRATE= ONLY=<filter>, its result never kept
+T364 fix crates=rust/gate/crates/rustc files=- note=[perf] the gate's test phase waits on the output pipe, not the test binary's exit (run_in of rustc.rs)
+T365 measurement measures=2 crates=- files=dev/measurements note=[perf] rust/guard's test binary 5.3-6.0 s under /tmp against 2.0 s fresh: measure which of TempDir's sweep or the fixtures' scans; its fix is a line added after it
+T22 measurement measures=6 crates=- files=dev/measurements,docs/guards.md waits=GM note=[perf] the feature's close. It waits on a full day of work after T02-T21 land, not on the GM: no waits= word says so (T401's stand-in) - edit GM out when that day has passed
+T394 fix crates=- files=- waits=T401 note=[perf] built (make builder-done, the next dispatch first, T313's Stop guard); what is left is its line's re-measure over a like window, which is T401's line: it closes on T401's figures

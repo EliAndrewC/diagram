@@ -1,5 +1,9 @@
 # The builders' queue (feature 451, before the port resumes)
 
+**THE ORDER NOW LIVES IN `queue.txt`** (451 T313, T395, 2026-11-27): one entry a line, read by `make queue` (each state computed),
+`make builder-next`, `make builder-done` and the pool-idle Stop guard. This file is kept for its reasoning - the GM's ordering, the
+rules learned - and is no longer the list a session edits.
+
 The order tasks are handed to pool trees, written down so it is not kept in a session's head (451 T313 will read a queue like
 this one). The GM's ordering, 2026-11-26: *"putting the ones most likely to give us better measurements at the front of the
 line, followed by the ones most likely to increase our task throughput"*. A task is taken from the top whose files do not

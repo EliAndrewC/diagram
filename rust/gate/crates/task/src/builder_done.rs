@@ -29,8 +29,10 @@
 //! (`rust/guard/src/guards/guard_file_hooks.rs`, `named`), which lives in the guard's binary crate where no gate crate may read it
 //! (`check guard-deps`); moving it to `l7r_shared` is an edit of the guard's own sources and its suites, left to a task of its own.
 //!
-//! THE QUEUE'S NEXT TASK IS A PLACEHOLDER: `specs/<feature>/queue.md` is prose a session edits (numbered items naming several
-//! tasks, "after T316", "LANDED"), which no code can read without guessing; 451 T313 is the machine-readable queue's home.
+//! THE NEXT DISPATCH IS THE QUEUE'S (451 T313, T395): step 1 is `specs/<feature>/queue.txt`'s next READY entry (performance work first, FR-013) that overlaps no task
+//! holding a tree, with its exact `make builder-brief` command ([`crate::builder_queue::dispatch`]); with none to hand out, or no
+//! queue to read, it says why and the command still ends 0 - the tree is committed. A placeholder stood here while the queue was
+//! prose (`queue.md`: numbered items naming several tasks, "after T316", "LANDED"), which no code could read without guessing.
 //!
 //! WHAT IS CARRIED ([`uncarried`], which `make builder-trees` lists after the trees): a done commit waits while its ref stands
 //! and the clone's HEAD holds no commit of its AUTHOR'S TIME and SUBJECT. `make carry` in the clone (one in a linked worktree keeps it,
@@ -58,7 +60,7 @@ const USAGE: &str = "usage: make builder-done T=<task(s)> F=<n> MSG=\"<the commi
 pub(crate) const TRAILER: &str = "Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>";
 /// Where a done commit is kept: `refs/l7r/done/<feature>-<task>`. The carry deletes the ref at its verified end (the land crate's
 /// `carry.rs`, `spent`).
-pub const REFS: &str = "refs/l7r/done/";
+pub const REFS: &str = l7r_shared::builder_queue::DONE_REFS;
 /// The file of the tree's own git directory the commit's message is written to.
 const MESSAGE: &str = "builder-done-message";
 /// What git leaves in a tree's git directory while an operation stands unfinished, and its name.
@@ -168,6 +170,26 @@ fn tree_of(p: &Pool, sha: &str) -> PathBuf {
         .filter_map(|e| e["tree"].as_str().map(PathBuf::from))
         .next_back()
         .unwrap_or_else(|| p.clone.clone())
+}
+
+/// THE QUEUE ENTRY THE TREE'S BUILDER SERVED (451 T313's review, round 1): the last `brief` line naming an entry that the pool's log
+/// holds for `tree` and `holder` since the tree was last taken, made or adopted. A successor briefed on the tree it already held
+/// writes a `brief` line and no take, so it inherits the entry its tree was briefed for; a tree briefed for none names none, and
+/// the queue counts its done line as before.
+fn entry_of(p: &Pool, tree: &Path, holder: &str) -> Option<u64> {
+    let log = std::fs::read_to_string(p.common.join("builder-pool.log")).unwrap_or_default();
+    let ours: Vec<Value> = log
+        .lines()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(|e| e["tree"].as_str() == Some(&*tree.to_string_lossy()))
+        .collect();
+    let held = |e: &&Value| matches!(e["event"].as_str(), Some("take" | "make" | "adopt"));
+    let from = ours.iter().rposition(|e| held(&e)).unwrap_or(0);
+    ours[from..]
+        .iter()
+        .filter(|e| e["event"] == "brief" && e["detail"] == holder)
+        .filter_map(|e| e["entry"].as_u64())
+        .next_back()
 }
 
 fn carry_command(p: &Pool, sha: &str) -> String {
@@ -340,30 +362,23 @@ fn commit(p: &Pool, tree: &Path, a: &Ask, dones: &[Done], env: &Env) -> Reply {
         kept.push(name);
     }
     let holder = format!("{} {}", a.feature, a.tasks.join(","));
-    builder_tree::log_line(
-        p,
-        &json!({"utc": env.now, "event": "done", "tree": tree, "detail": holder, "commit": sha}),
-    );
+    let mut line =
+        json!({"utc": env.now, "event": "done", "tree": tree, "detail": holder, "commit": sha});
+    if let Some(k) = entry_of(p, tree, &holder) {
+        line["entry"] = json!(k);
+    }
+    builder_tree::log_line(p, &line);
     let freed = builder_tree::release(p, a.tasks, a.feature, env);
-    let queue = queue_path(p, a.feature);
+    let next = crate::builder_queue::dispatch(p, a.feature);
     let out = format!(
-        "builder-done: {at} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the carry after it (the tree is free now; the carry and the landing can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the carry - its tree starts at the clone's HEAD):\n  1. make builder-brief T=<the first task of {queue} no tree holds> F={} KIND=<fix|measurement|build-half|closing-half>\n  2. {}\n",
+        "builder-done: {at} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the carry after it (the tree is free now; the carry and the landing can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the carry - its tree starts at the clone's HEAD):\n  1. {next}  2. {}\n",
         sha.get(..10).unwrap_or(&sha),
         a.subject,
         kept.join(", "),
         freed.stdout,
-        a.feature,
         carry_command(p, &sha)
     );
     reply(out, freed.stderr, freed.code)
-}
-
-/// Where the feature's queue is: `specs/<its directory>/queue.md`, the directory as a pattern where the clone holds none.
-fn queue_path(p: &Pool, feature: &str) -> String {
-    let dir = crate::builder_brief::feature_dir(&p.clone, feature)
-        .and_then(|d| Some(d.file_name()?.to_string_lossy().into_owned()))
-        .unwrap_or_else(|| format!("{feature}-*"));
-    format!("specs/{dir}/queue.md")
 }
 
 /// `l7r-gate builder-done <tasks> <feature>` from `cwd`, `MSG` and `GUARD` read from the environment.

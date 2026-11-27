@@ -65,6 +65,8 @@ pub fn guards() -> Vec<Guard> {
         guards::builder_stop_hooks::GUARD,
         guards::static_runs_hooks::GUARD,
         guards::research_switch_hooks::GUARD,
+        // GUARD_EDIT_OK: feature 451 T313 - adding a guard, the pool-idle Stop check
+        guards::pool_idle_hooks::GUARD,
         // last, so no guard reads its rewrite of a commit message (T035 decision (d)): a guard ported later goes before it
         guards::shell_check_hooks::GUARD,
     ]
@@ -305,6 +307,8 @@ mod tests {
         "builder-stop-hooks",
         "static-runs-hooks",
         "research-switch-hooks",
+        // GUARD_EDIT_OK: feature 451 T313 - adding a guard, the pool-idle Stop check
+        "pool-idle-hooks",
         "shell-check-hooks",
     ];
 

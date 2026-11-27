@@ -10,6 +10,7 @@
 //! task's own brief did) carries no block.
 // GUARD_EDIT_OK: feature 451 T334 - a new operation, the builder brief's marker, which the gate writes and the new guard reads
 
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 
 /// The marker line's first word.
@@ -62,6 +63,46 @@ fn of_line(line: &str) -> Option<Marker> {
     })
 }
 
+/// The make targets a Makefile defines: each `name:` that opens a line (moved here from the gate's `builder_brief` by 451 T313's
+/// round 3, so the builders' queue chooses an unlisted task's KIND by this same test, in the gate and in the pool-idle guard).
+#[must_use]
+pub fn targets(makefile: &str) -> BTreeSet<String> {
+    let name = |c: char| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.');
+    makefile
+        .lines()
+        .filter_map(|l| l.split_once(':'))
+        .filter(|(head, rest)| !head.is_empty() && head.chars().all(name) && !rest.starts_with('='))
+        .map(|(head, _)| head.to_owned())
+        .collect()
+}
+
+/// What in a task's line names a NEW MECHANISM - a command or a guard, which is two builders from the start - or none. Kept simple:
+/// one of four phrases (`a new command`, `a new guard`, `a guard refuses`, `a PreToolUse check`), or a `make <target>` whose target
+/// has a hyphen and is no target of the Makefile yet. It MISSES a new command with no hyphen in its name (the hyphen is what tells a
+/// target from "make sure"), a guard described in other words ("a hook that stops"), a background step measured before and after,
+/// and a new verb of an existing target; it WRONGLY takes a line that names a target a sibling task has not landed yet.
+#[must_use]
+pub fn mechanism(line: &str, known: &BTreeSet<String>) -> Option<String> {
+    let lower = line.to_lowercase();
+    let phrase = [
+        "a new command",
+        "a new guard",
+        "a guard refuses",
+        "a pretooluse check",
+    ]
+    .into_iter()
+    .find(|p| lower.contains(p));
+    if let Some(p) = phrase {
+        return Some(format!("\"{p}\""));
+    }
+    let name = |c: char| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-';
+    line.split("make ")
+        .skip(1)
+        .map(|rest| rest.split(|c: char| !name(c)).next().unwrap_or(""))
+        .find(|t| t.contains('-') && !known.contains(*t))
+        .map(|t| format!("`make {t}`, no target of the Makefile yet"))
+}
+
 /// The first marker `prompt` holds on a line of its own; none where it only mentions one, or the line is not a whole marker.
 #[must_use]
 pub fn parse(prompt: &str) -> Option<Marker> {
@@ -98,6 +139,29 @@ mod tests {
             "",
         ] {
             assert_eq!(parse(text), None, "{text}");
+        }
+    }
+
+    #[test]
+    fn a_task_s_line_names_a_new_mechanism_by_a_phrase_or_an_unknown_target() {
+        let known: BTreeSet<String> = targets("X := 1\nA:=2\nbuilder-tree: export D := 1\nbuilder-tree:\n\t@echo a: b\nland:\n: odd\n# a note: x\n");
+        assert_eq!(
+            known.into_iter().collect::<Vec<_>>(),
+            ["builder-tree", "land"]
+        );
+        let known = targets("builder-tree:\nland:\n");
+        for (line, what) in [
+            ("- [ ] T1 Build: make builder-brief T=<task> prints the block", Some("`make builder-brief`, no target of the Makefile yet")),
+            ("- [ ] T1 and A PreToolUse check on the Agent tool", Some("\"a pretooluse check\"")),
+            ("- [ ] T1 a guard refuses git worktree add", Some("\"a guard refuses\"")),
+            ("- [ ] T1 a new command for the pool", Some("\"a new command\"")),
+            ("- [ ] T1 a new guard on rm", Some("\"a new guard\"")),
+            // what it misses, and what is no mechanism
+            ("- [ ] T1 make builder-tree hands out a cold tree; I want to make sure it does not, and make land frees it", None),
+            ("- [ ] T1 a hook that stops a hand dispatch; make newtarget prints it; make ", None),
+            ("- [ ] T1 the guard misreads a quoted path", None),
+        ] {
+            assert_eq!(mechanism(line, &known).as_deref(), what, "{line}");
         }
     }
 }

@@ -449,3 +449,23 @@ The GM, 2026-11-27, on the context cap refusing a builder everything but its han
 builder, who did not hear them):
 
 > Does it make sense to enforce such an abrupt cutoff?  Like I understand wanting to hand off to a new builder, but if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?
+## 2026-11-26: the tooling keeps the builder pool full (451 T313)
+
+On the session running three builders rolling by hand, a freed pool tree handed straight to the next task, the coordinating
+session recorded his words on T313's line in `tasks.md` (copied here from that line by T313's closing builder, who did not hear
+them):
+
+> what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight
+
+The rest of T313's line is the coordinating session's: the ordered queue, the check at each builder's end and at the session's
+Stop, the refusal's escape, the count it keeps, and the second tier's gate proposed at the threshold (trial 458). On 2026-11-27
+the coordinating session's brief to T313's closing builder said that he is weighing whether the primary session becomes a pure
+orchestrator (the session's report of it, not his words), so the Stop rule is kept thin.
+
+## 2026-11-26: the order of the builders' queue (451 T313)
+
+The GM's ordering of the builders' queue, 2026-11-26, as the coordinating session recorded it in
+`specs/451-time-retro-and-efficiency/queue.md` (copied here from that file by T313's round-2 builder, who did not hear it). The
+queue's file order expresses it within each class, an open performance task's entry first (FR-013):
+
+> putting the ones most likely to give us better measurements at the front of the line, followed by the ones most likely to increase our task throughput

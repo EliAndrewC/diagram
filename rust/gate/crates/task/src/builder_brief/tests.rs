@@ -1,7 +1,6 @@
 //! `make builder-brief` on a real repository and its pool (feature 451 T334): each sizing refusal before any tree is taken, the block
 //! of each kind with its marker and its STOP POINT line, shorter than the prefix guard's block, and the pool's refusals passed on.
 
-use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::ci::fixtures::{git, put};
@@ -9,7 +8,7 @@ use l7r_gate_core::write_executable;
 use l7r_shared::builder_brief::{parse, Marker};
 use l7r_shared::builder_pool;
 
-use super::{mechanism, run, targets, task_line};
+use super::{run, task_line};
 use crate::builder_tree::Env;
 use crate::tests::{repo, root_of};
 
@@ -224,26 +223,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
 }
 
 #[test]
-fn a_task_s_line_names_a_new_mechanism_by_a_phrase_or_an_unknown_target() {
-    let known: BTreeSet<String> = targets("X := 1\nA:=2\nbuilder-tree: export D := 1\nbuilder-tree:\n\t@echo a: b\nland:\n: odd\n# a note: x\n");
-    assert_eq!(
-        known.into_iter().collect::<Vec<_>>(),
-        ["builder-tree", "land"]
-    );
-    let known = targets("builder-tree:\nland:\n");
-    for (line, what) in [
-        ("- [ ] T1 Build: make builder-brief T=<task> prints the block", Some("`make builder-brief`, no target of the Makefile yet")),
-        ("- [ ] T1 and A PreToolUse check on the Agent tool", Some("\"a pretooluse check\"")),
-        ("- [ ] T1 a guard refuses git worktree add", Some("\"a guard refuses\"")),
-        ("- [ ] T1 a new command for the pool", Some("\"a new command\"")),
-        ("- [ ] T1 a new guard on rm", Some("\"a new guard\"")),
-        // what it misses, and what is no mechanism
-        ("- [ ] T1 make builder-tree hands out a cold tree; I want to make sure it does not, and make land frees it", None),
-        ("- [ ] T1 a hook that stops a hand dispatch; make newtarget prints it; make ", None),
-        ("- [ ] T1 the guard misreads a quoted path", None),
-    ] {
-        assert_eq!(mechanism(line, &known).as_deref(), what, "{line}");
-    }
+fn a_task_s_line_is_found_open_or_archived() {
     let all = "# Tasks\n- [ ] T1 one\n  - [x] T2 two\n- [ ] T10 ten\nT3 loose\n- [\n";
     assert_eq!(task_line(all, "T2").as_deref(), Some("  - [x] T2 two"));
     assert_eq!(task_line(all, "T10").as_deref(), Some("- [ ] T10 ten"));
@@ -304,4 +284,64 @@ fn a_bundle_is_briefed_as_one_builder_on_the_tree_held_for_it() {
     let said = format!("builder-brief: refused - {} is held by 9001 T01,T09, which does not hold T08: a bundle is one hold, taken whole. Brief what holds it, and T08 in a tree of its own:\n  make builder-brief T=T01,T09 F=9001 KIND=fix\n  make builder-brief T=T08 F=9001 KIND=fix\n", tree.display());
     assert_eq!(wider.stderr, said);
     assert_eq!(pool_of(&root).len(), 1);
+}
+
+/// THE ENTRY A BUILDER SERVES IS NAMED (451 T313's review, round 1, the T416 case): `ENTRY=` is written on a `brief` line of the
+/// pool's log beside the take, a successor briefed by hand without it inherits the entry its tree was briefed for, and `make
+/// builder-done` writes that entry on its `done` line; a word that is no entry's number is refused before any tree is taken.
+#[test]
+fn the_entry_a_brief_serves_is_on_the_log_and_on_its_done_line() {
+    let (dir, root) = world("brief-entry");
+    let e = env(&dir);
+    let at = |entry: &str| words(&["T01", "9001", "closing-half", "", "", "", "", "", entry]);
+    let bad = run(&at("two"), &root, &e, "");
+    assert_eq!(bad.code, 2);
+    assert!(
+        bad.stderr.contains("ENTRY=two is no entry's number"),
+        "{}",
+        bad.stderr
+    );
+    assert!(pool_of(&root).iter().all(builder_pool::Tree::free));
+    let took = run(&at("2"), &root, &e, "");
+    assert_eq!(took.code, 0, "{}", took.stderr);
+    let tree = dir.join("repo-b1");
+    let log = || std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
+    let brief = format!("{{\"utc\":\"2026-11-26T12:00:00Z\",\"event\":\"brief\",\"tree\":\"{}\",\"detail\":\"9001 T01\",\"kind\":\"closing-half\",\"entry\":2}}", tree.display());
+    assert!(log().contains(&brief), "{}", log());
+    // the successor at its cap, briefed by hand with no ENTRY=: its brief line names none, and its done line still names 2
+    let again = run(&at(""), &root, &e, "");
+    assert_eq!(again.code, 0, "{}", again.stderr);
+    put(&tree, "notes/a.md", "one\n");
+    let done = crate::builder_done::run(
+        &words(&["T01", "9001"]),
+        &root,
+        &e,
+        "9001 T01: the closing half",
+        "",
+    );
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    let last = log()
+        .lines()
+        .rfind(|l| l.contains("\"event\":\"done\""))
+        .unwrap()
+        .to_owned();
+    assert!(last.contains("\"entry\":2"), "{last}");
+    // the next take of the tree, briefed for no entry at all: its done line names none (T01's entry is not inherited past the
+    // take), and the count reads it, as before
+    let plain = run(
+        &words(&["T02", "9001", "build-half", "", "", "", "", "", ""]),
+        &root,
+        &e,
+        "",
+    );
+    assert_eq!(plain.code, 0, "{}", plain.stderr);
+    put(&tree, "notes/b.md", "two\n");
+    let done = crate::builder_done::run(&words(&["T02", "9001"]), &root, &e, "9001 T02: plain", "");
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    let last = log()
+        .lines()
+        .rfind(|l| l.contains("\"event\":\"done\""))
+        .unwrap()
+        .to_owned();
+    assert!(!last.contains("\"entry\""), "{last}");
 }

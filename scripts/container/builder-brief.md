@@ -90,6 +90,17 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   a handout brings the tree to the clone's HEAD, so before the carry it would start without the build half's work: `make builder-tree`
   (and so `make builder-brief`) refuses that handout with the carry to run (451 T398), and a task's second `make builder-done`
   is refused until its first commit is carried. A done commit is also carried by `make carry COMMIT=<sha>` alone (451 T397).
+- THE QUEUE IS A FILE, AND THE TOOLING NAMES THE NEXT TASK (451 T313, T395, T297): `specs/<feature>/queue.txt` holds one entry a
+  line, in the order to hand out - `<task[,task]> <kind> [jobs=] [measures=] [load=1] crates=<dirs|-> files=<paths|-> [waits=<T<n>,GM,alone>]
+  [note=...]` - written by `make queue-add` or a plain edit. `make queue` lists it with each state computed (landed, built, in
+  flight, waiting, READY); `make builder-next`, and `make builder-done`'s first step, print the next READY entry (performance work of any queue first, FR-013; an open performance task with no line named before it, with its `make queue-add`) whose crates and
+  files overlap no task holding a tree, with its exact `make builder-brief` command and each entry passed over. Paste that command whole: its `ENTRY=<k>` is
+  logged beside the take, so the `make builder-done` line names the entry it ends (a successor on the same tree inherits it). An entry is ONE
+  dispatch: a mechanism is two lines (its build half, its closing half), a line stays until its task is landed, and a task that
+  needs another builder gets another line. A turn that ends with a pool tree free, fewer than `L7R_BUILDERS` (3) held and a READY
+  entry is refused (`rust/guard/src/guards/pool_idle_hooks.rs`); where the tree should stay free, a line of the final message STARTS
+  `POOL_IDLE_OK: <reason>` (the next entries wait on the GM; the count is held for a measurement) - at the line's start, not after
+  a bullet or in backticks.
 - A builder's commit reaches the clone by `make carry FROM=<its worktree> [COMMIT=<sha>]` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
 - TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).

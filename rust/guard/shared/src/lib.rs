@@ -8,6 +8,8 @@ pub mod blocked;
 pub mod builder_brief;
 // GUARD_EDIT_OK: feature 451 T285 - adding an operation, the builder pool's registry
 pub mod builder_pool;
+// GUARD_EDIT_OK: feature 451 T313 - adding an operation, the builders' queue
+pub mod builder_queue;
 pub mod checks;
 pub mod cited_url;
 pub mod consulted;

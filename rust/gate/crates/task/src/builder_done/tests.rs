@@ -101,7 +101,7 @@ fn a_tree_is_committed_kept_and_released_in_one_call_and_its_commit_outlives_the
     );
     let brief = said
         .stdout
-        .find("make builder-brief T=<the first task of specs/9001-x/queue.md no tree holds> F=9001 KIND=")
+        .find("  1. no next dispatch named: specs/9001-x/queue.txt: ")
         .unwrap();
     assert!(brief < said.stdout.find(&carry).unwrap());
     assert!(said.stdout.ends_with(&format!("  2. {carry}\n")));
@@ -316,10 +316,9 @@ fn a_bundle_is_one_commit_under_a_ref_for_each_task() {
     assert!(pool_of(&root)[0].free());
     let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
     assert!(log.contains("\"detail\":\"77 T01,T02\"") && log.contains("\"event\":\"done\""));
-    // no feature directory to name: the queue's place as a pattern
-    assert!(said.stdout.contains(
-        "make builder-brief T=<the first task of specs/77-*/queue.md no tree holds> F=77 KIND="
-    ));
+    // no feature directory to name: no queue to read
+    let unnamed = format!("  1. no next dispatch named: no specs/77-* directory in {} - make queue-add T=<task(s)> KIND=<kind> F=77 starts the queue\n", root.display());
+    assert!(said.stdout.contains(&unnamed), "{}", said.stdout);
     let listed = list(&root, &e);
     assert!(listed.contains(&format!(
         "  {}  77-T01, 77-T02  77 T01 T02: both\n",
@@ -453,4 +452,85 @@ fn a_commit_git_refuses_leaves_nothing_staged_and_the_tree_held() {
     assert_eq!(git(&b1, &["status", "--porcelain"]), "?? scripts/n.py");
     assert!(!pool_of(&root)[0].free());
     assert_eq!(refs(&root), "");
+}
+
+/// THE NEXT DISPATCH IS THE QUEUE'S (451 T313, T395): the first READY entry that overlaps no task in flight, with its command;
+/// the task just done reads as built and is never named again; no entry to hand out says why.
+#[test]
+fn the_next_dispatch_is_the_queue_s_next_entry() {
+    let (_dir, root, e, b1) = held("done-queue", "T01");
+    put(&root, "specs/9001-x/queue.txt", "T01 fix files=scripts/a.py\nT02 fix files=scripts/a.py\nT03 fix jobs=2 crates=rust/x files=-\n");
+    builder_tree::run(&words(&["take", "T02", "9001"]), &root, &e);
+    put(&b1, "scripts/a.py", "x = 2\n");
+    let said = done(&b1, &e, "T01", "9001 T01: one", "");
+    assert_eq!(said.code, 0);
+    let sha = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    let want = format!("  1. make builder-brief T=T03 F=9001 KIND=fix JOBS=2 CRATE=\"rust/x\" ENTRY=1   (9001 T03, line 3 of specs/9001-x/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make carry FROM={} COMMIT={sha}\n", b1.display());
+    assert!(said.stdout.ends_with(&want), "{}", said.stdout);
+    // T03 handed out and T02 done: nothing is left to hand out, and T01, built, is not offered again
+    builder_tree::run(&words(&["take", "T03", "9001"]), &root, &e);
+    let b2 = pool_of(&root)[1].tree.clone();
+    put(&b2, "scripts/b.py", "y = 2\n");
+    let said = done(&b2, &e, "T02", "9001 T02: two", "");
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let none = "  1. no next dispatch: the queue is empty: each entry is landed, built or in flight (make queue F=9001)\n";
+    assert!(said.stdout.contains(none), "{}", said.stdout);
+}
+
+/// 451 T313's round-3 ruling: step 1 takes `idle`'s any-queue preference - a READY performance entry of another active feature's
+/// queue before the done task's own feature's first pick - and names an open performance task no queue line names first.
+#[test]
+fn the_next_dispatch_prefers_performance_work_of_any_queue() {
+    let (_dir, root, e, b1) = held("done-any-queue", "T01");
+    put(
+        &root,
+        "specs/9001-x/queue.txt",
+        "T01 fix files=scripts/a.py\nT02 fix files=docs/a.md\n",
+    );
+    put(&root, "specs/9002-y/spec.md", "**Status**: In progress\n");
+    put(
+        &root,
+        "specs/9002-y/tasks.md",
+        "- [ ] T05 [perf] split the suite\n- [ ] T06 [perf] the faster gate\n",
+    );
+    put(&root, "specs/9002-y/queue.txt", "T05 fix files=docs/b.md\n");
+    put(
+        &root,
+        ".git/task-starts.jsonl",
+        "{\"feature\": \"9002-y\", \"task\": \"T05\", \"utc\": \"2026-11-27T01:00:00Z\"}\n",
+    );
+    put(&b1, "scripts/a.py", "x = 2\n");
+    let said = done(&b1, &e, "T01", "9001 T01: one", "");
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let want = "  1. FIRST, open performance work (FR-013) no queue line names - write each one's line (CRATE= and FILES= as its task line names them, WAITS= where it waits, which quiets it):\n     make queue-add F=9002 T=T06 KIND=fix   (9002 T06, KIND by make builder-brief's mechanism test)\n     make builder-brief T=T05 F=9002 KIND=fix ENTRY=1   (9002 T05, line 1 of specs/9002-y/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make carry";
+    assert!(said.stdout.contains(want), "{}", said.stdout);
+    // the other queue's performance entry lined and waiting, T06's too: the done task's own feature's pick
+    put(
+        &root,
+        "specs/9002-y/queue.txt",
+        "T05 fix files=docs/b.md waits=GM\nT06 fix files=- waits=GM\n",
+    );
+    let p = crate::builder_tree::pool(&root).unwrap();
+    let next = crate::builder_queue::dispatch(&p, "9001");
+    let own =
+        next.starts_with("make builder-brief T=T02 F=9001 KIND=fix ENTRY=1   (9001 T02, line 2 of");
+    assert!(own, "{next}");
+    // the done task's feature holds no queue: said, and another queue's pick still named
+    put(
+        &root,
+        "specs/9002-y/queue.txt",
+        "T05 fix files=docs/b.md\nT06 fix files=- waits=GM\n",
+    );
+    let next = crate::builder_queue::dispatch(&p, "77");
+    let named = next.starts_with("no next dispatch named: no specs/77-* directory in ")
+        && next.contains("\n     make builder-brief T=T05 F=9002 KIND=fix ENTRY=1   (9002 T05");
+    assert!(named, "{next}");
+    // nothing to hand out anywhere, and the feature's queue missing: the one line
+    std::fs::remove_file(root.join("specs/9002-y/queue.txt")).unwrap();
+    std::fs::remove_file(root.join("specs/9001-x/queue.txt")).unwrap();
+    let next = crate::builder_queue::dispatch(&p, "9001");
+    let first =
+        next.starts_with("FIRST, ") && next.contains("make queue-add F=9002 T=T05 KIND=fix");
+    assert!(first, "{next}");
+    assert!(next.ends_with("\n     no next dispatch named: specs/9001-x/queue.txt: No such file or directory (os error 2) - make queue-add T=<task(s)> KIND=<kind> F=9001 starts the queue\n"), "{next}");
 }

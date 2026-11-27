@@ -51,7 +51,7 @@ use crate::{git, reply};
 
 const USAGE: &str = "usage: l7r-gate builder-tree take <tasks> <feature> | release <tasks> [feature] | landed <feature> <tasks...> | list | drop <tree> | adopt <tree> [<tasks> <feature>]\n";
 const NO_FEATURE: &str = "builder-tree: refused - a hold names its feature (F=<feature>, or SPECIFY_FEATURE): a tree is freed when that feature's tasks.md shows its tasks ticked, and a hold naming none would never be\n";
-const LOG: &str = "builder-pool.log";
+const LOG: &str = l7r_shared::builder_queue::LOG;
 const LOCK: &str = "builder-pool.lock";
 
 /// What a run reads of the world outside the repository.
@@ -172,10 +172,15 @@ fn note(p: &Pool, env: &Env, event: &str, tree: &Path, detail: &str) {
 
 /// `line` appended to the pool's log.
 pub(crate) fn log_line(p: &Pool, line: &serde_json::Value) {
+    log_in(&p.common, line);
+}
+
+/// `line` appended to the pool's log under the git common directory `common`.
+pub(crate) fn log_in(common: &Path, line: &serde_json::Value) {
     if let Ok(mut f) = std::fs::OpenOptions::new()
         .create(true)
         .append(true)
-        .open(p.common.join(LOG))
+        .open(common.join(LOG))
     {
         let _ = writeln!(f, "{line}");
     }

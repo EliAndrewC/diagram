@@ -142,6 +142,8 @@ fn the_binary_s_three_verbs_are_dispatched() {
     assert!(crate::cli("builder-done", &[], &root)
         .stderr
         .starts_with("usage: make builder-done"));
+    let queue = crate::cli("queue-add", &[], &root);
+    assert!(queue.stderr.starts_with("queue-add: refused - "));
 }
 
 #[test]

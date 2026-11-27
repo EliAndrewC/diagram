@@ -510,3 +510,55 @@ landed per wall hour at or under 1.71, or a later closing-checks run over 1.5x i
 run of six or more compile tasks at three landing more per wall hour than at two, pace per 10k output tokens within 15% of the
 pace at two, and anonymous memory's peak at or under 7 GiB of the 10; three or four on non-compiling work - the next such
 batch, sampled (451 T274), passing 7 GiB anonymous or landing no more per wall hour than two at once.
+
+### A free pool tree is not left idle: the builders' queue is a file code reads, and a Stop over a free tree and a READY task is refused (decided 2026-11-27)
+
+**Question.** The session kept three builders rolling by hand, a freed tree handed straight to the next task from a prose
+queue (`queue.md`). Should the tooling keep the pool full, and how, when a Stop-time nudge of exactly this kind was retired
+four days earlier (451 T183)?
+
+**Decided** - built as 451 T313 with T395 and the first half of T297 (audited as `dev/audits/pool-idle-queue.md`). The GM,
+2026-11-26: *"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you
+just have to remember to keep our tasks in flight"*. The queue is `specs/<feature>/queue.txt`, one dispatch a line, each
+state computed and never typed (`rust/guard/shared/src/builder_queue.rs`); `make queue` lists it, `make builder-next` and
+`make builder-done`'s first step name the next READY entry (performance work first, FR-013) whose crates and files overlap no task holding a tree, with its
+`make builder-brief` command; and the coordinating session's Stop is refused while a pool tree stands free, fewer than
+`L7R_BUILDERS` trees are held and such an entry exists (`rust/guard/src/guards/pool_idle_hooks.rs`), its escape a line of the
+final message that starts `POOL_IDLE_OK: <reason>`.
+
+**Measurement** (2026-11-27, read-only over the session's transcript and the 451 event log;
+`dev/measurements/2026-11-27/tree-idle/results.md`, `tree-idle.py` the method): from 2026-11-26T17:00Z to 2026-11-27T01:00Z
+the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) with the queue never short - 170 with the session in
+its own turn, 105 with a landing running, 46 with the session stopped, its turn ended. This is the BEFORE figure only: the
+mechanism is not measured running, and the same table over a like window is 451 T401's.
+
+**This reverses a retirement, and why the later words govern.** 451 T88's rolling-dispatch Stop block ("a builder slot is
+free") was retired by 451 T183 (D10) on the GM's 2026-11-23 question whether such hooks were the right approach against a
+check that "does nothing and adds nothing to the context if we are still active", after 23 of the session's turns since 14:42
+that day were spent only answering such blocks. The GM's words on T313 are three days later and ask for the enforcement by
+name. What is different this time: T88's block read the transcript and fired whenever a slot was free and a task was open,
+which under a ruling that held new work was every Stop; this one fires only where a tree is free AND the written queue holds
+an entry that is READY (waiting on no task, no carry and not on the GM - a held queue is written `waits=GM`, once, in the
+file) AND that entry overlaps nothing in flight, and it names the one command that ends the block. Where the session means
+the tree to stay free it says so in one line, recorded.
+
+**Deliberately thin.** The GM is weighing whether the primary session becomes a pure orchestrator. The guard therefore holds
+no state and reads nothing of its own: all it judges is one function of the queue module, which the gate's commands read too,
+so where the coordination moves the rule moves with the queue.
+
+**The count.** `L7R_BUILDERS` defaults to 3, the three warm trees the session ran on 2026-11-26 - a GUESS knob, not a ruling
+on "Two code builders at once" above, which stands as decided and "to be re-measured" at three and four. The guard keeps
+whatever count is set; it settles none.
+
+**Accepted limitations**, chosen by T313's builders (the audit entry has each with its cost): an entry is told built by the
+`make builder-done` line that NAMES it (`ENTRY=` from `make builder-next`, logged by `make builder-brief`), a done line naming
+none counted as before - T416's misfires, built here after the plan review's first round; the next entry is an open performance
+task's first (FR-013), then the queue's order; a carry finished by hand
+reads as waiting until the next `make builder-done`; a held tree whose task the queue does not list is named and holds
+nothing back. Unbuilt of T313's line: the second tier's gate proposed at trial 458's threshold (451 T415), and the overlap
+named at a handout made by hand (451 T408).
+
+**Falsifiers** (GUESS knobs, both; either reopens it): the tree-idle table over a like window still showing the three warm
+trees idle more than 15%; or `POOL_IDLE_OK` written on more than 1 in 5 of the coordinating session's Stops of a day
+(`make guard-log GUARD=pool-idle` against the day's Stops) - the sign that the block is being answered and not acted on,
+which is what retired T88's. A decision that the primary session only orchestrates reopens where the rule lives, not the queue.
