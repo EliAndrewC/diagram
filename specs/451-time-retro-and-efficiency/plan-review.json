@@ -493,12 +493,6 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T139 (<why: the finding or measurement that files it>)": {
-   "sha256": "b4d0b64dd703f7e848c63f3d50d273d7f625192d312fee556a67d416fcddcca4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T139 Approach (checklist part A)": {
    "sha256": "b07b0f02fb33c17f00acba1f2417bec85c1e7aaf15a884ead006a3f83216454b",
    "verdict": "CLEAR",
@@ -2635,12 +2629,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T307 (<why: the finding or measurement that files it>)": {
-   "sha256": "2ca1dffc8840626bb24ea88b96e7109badfe1c30d4f4c9f77563372fcafd761a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T307 Approach (checklist part A)": {
    "sha256": "3b8b1569f4c0897f19165aff798acccb9ed291dcb8fa73ed932b18036149d67d",
    "verdict": "CLEAR",
@@ -2983,12 +2971,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T355 (<why: the finding or measurement that files it>)": {
-   "sha256": "2002d3058e4823121c02b17120974fdda21269cf311c04a09270be1b980cb134",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T355 Approach (checklist part A)": {
    "sha256": "96fa7f5149f2fc19272d0a0f327a066c449e4e46f4d66a793dc7290c5259d777",
    "verdict": "CLEAR",
@@ -3253,18 +3235,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T367 (<why: the finding or measurement that files it>)": {
-   "sha256": "36a2321a78b6730d0a6e010426d4e088948583a8b2d4f726ac7c873f414f3cd2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T367 Approach (checklist part A)": {
-   "sha256": "b205562e5336558c0c591ff74e5fd4498fdd708c75cb4cc6bd35e978026379b2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T368 (<why: the finding or measurement that files it>)": {
    "sha256": "e28fb3242556fd7d0b4a0da1cf0a4e391ddf554aa60e0a7284920608b49aaa0f",
    "verdict": "CLEAR",
@@ -3345,18 +3315,6 @@
   },
   "### T388 Approach (checklist part A)": {
    "sha256": "c32a8dc46edc5bf2d083a0afddba897e84a37c9f7b0b234ae5992611f2ba3695",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T393 (<why: the finding or measurement that files it>)": {
-   "sha256": "80ba6d9479bae72d6d736c7f0e3985b49056721b897a3a83aa5cc4fc61b3fc6a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T393 Approach (checklist part A)": {
-   "sha256": "36d46f7df4201ee7768043de3cebd047e3ac65dd4b79a8f908633da31b1b976e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3561,6 +3519,66 @@
   },
   "### T307 part 2 Approach (checklist part A)": {
    "sha256": "e1503de0e2da9b36a253ad659f5a2e26cc50c1ec5d2c82ad9c6f4602b0255f0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367, T411 (bundle) (found by 451 T347 and T355: the small lane's key of a test build and of each lint pass is written only by a passing wide build of the checks, and the pre-warm built `cargo test --no-run` only, keeping no key and running no clippy, so a builder's first test build and first lint of each crate after a handout took a wide build slot; measured 2026-11-27 from the clone's event log, 00:20Z to 03:30Z: 28 of 29 first test builds after a handout told wide (`dev/measurements/2026-11-27/prewarm-keys/tellings.py`))": {
+   "sha256": "3433643fc6e1f83aa4d66bd49ba386f75786a9b22bde8e8ed70a1c712d8dbdec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367, T411 Approach (checklist part A)": {
+   "sha256": "22f9aa240e8ad9314116f272c494305577ae1465db2b4b500b544e50c63d71ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T407 (<why: the finding or measurement that files it>)": {
+   "sha256": "a81f97e952ba63ade6f9fad766a9adf14c178a788ac822f9f0f446b66c292379",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T407 Approach (checklist part A)": {
+   "sha256": "ec3901d1970e79ad98c00520f0c6bb0f54a85c48ff61328ff7abc7ebb9bc2618",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T405 (<why: the finding or measurement that files it>)": {
+   "sha256": "2a91d225f9d11808cd4cf3342d13f07fe87ed4fdb85641977c68ef7ed1d6ebfe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T405 Approach (checklist part A)": {
+   "sha256": "ff7b64c71bcd7637d8462ddc701efe069ea21cfdbb3e412b7ea835b655201d3c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T406 (<why: the finding or measurement that files it>)": {
+   "sha256": "15a18945cffe287c9d0252281ccb575eb0a27dd7601e0ec55be2876318302f26",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T406 Approach (checklist part A)": {
+   "sha256": "5cbc66b3497d62831fa6530bcf11c9f207436621a06e06cd22e8be40502e9c34",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T409 (<why: the finding or measurement that files it>)": {
+   "sha256": "9bb0235979b6b8800e0c6178643a0c3b01d6340b514ba3935b6e20e834a0c64f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T409 Approach (checklist part A)": {
+   "sha256": "0a0a6d002ea0353353c05656690ef2f23da3277a402a4f70f631bb1130909098",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32797,6 +32815,98 @@
      "why": "Pre-existing, and it refuses earlier rather than later, so it does not defeat part (2)'s purpose (the landing told before its gate every refusal the push would make). No wrong outcome is shown."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T367, T411 (bundle) (found by 451 T347 and T355: the small lane's key of a test build and of each lint pass is written only by a passing wide build of the checks, and the pre-warm built `cargo test --no-run` only, keeping no key and running no clippy, so a builder's first test build and first lint of each crate after a handout took a wide build slot; measured 2026-11-27 from the clone's event log, 00:20Z to 03:30Z: 28 of 29 first test builds after a handout told wide (`dev/measurements/2026-11-27/prewarm-keys/tellings.py`))",
+    "### T367, T411 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T367-A",
+     "summary": "The pre-warm keeps the small lane's key of each passing build it runs, and after the test builds runs each lint pass of each moved crate, so a builder's first builder-checks of a crate after a handout is told alone at its test build and every lint pass (T367, T411 jointly).",
+     "class": "within",
+     "why": "Completes what the GM asked about on T316 ('would it make sense to begin compiling immediately within a work tree builder?') on the lane T347's section records; the section heading, the only statement of the two tasks in the bundle, names exactly the test build and the lint passes. Performance work, FR-013."
+    },
+    {
+     "id": "T367-reuse",
+     "summary": "Told gains keeping (cargo_with's key-keeping half, which cargo_with now calls); lint.rs exposes passes, DENY and told; kept.rs binary_args pub(super).",
+     "class": "within",
+     "why": "Implementation shape; reuses the checks' own key writing rather than copying it. Decides nothing about scope."
+    },
+    {
+     "id": "T367-D1",
+     "summary": "The pre-warm tells its test build by binary_args('test') words under the name test, its passes by lint::told, reading content ids as a test run reads them; moved still asks reads_any with prewarm.",
+     "class": "within",
+     "why": "Measured: a key only stands if it holds the words and reads the builder's own build is told by; otherwise the warm key would never match. What is built does not change."
+    },
+    {
+     "id": "T367-D2",
+     "summary": "Pre-warm writes beside the key under its own suffix (.prewarm vs the checks' .new), joining no run lock.",
+     "class": "within",
+     "why": "Concurrency correctness of the key write; no scope effect."
+    },
+    {
+     "id": "T367-D3",
+     "summary": "Lint after every test build, passes in lint::passes order, each its own job under the test builds' rules (slot only while another is spare, never cut); a red pass drops the crate's later passes and keeps no key.",
+     "class": "within",
+     "why": "Follows T336's never-cut rule and T316's yield-between-crates as built; a red pass keeping no key is T355-D3's rule. Nothing asked is left out."
+    },
+    {
+     "id": "T367-knob",
+     "summary": "L7R_PREWARM_LINT=0 warms test builds alone; default on (GUESS).",
+     "class": "within",
+     "why": "Default is the full behavior the section names; the knob adds an off switch, narrowing nothing by default."
+    },
+    {
+     "id": "T367-D4",
+     "summary": "Log lines per lint pass and ending-line counts; slot-tell lines the pre-warm writes carry make target prewarm so a count of a builder's tellings excludes them.",
+     "class": "within",
+     "why": "Keeps the measurement honest (the GM's 2026-11-22 'we want everything measured so we know where our time goes'); no behavior beyond the task."
+    },
+    {
+     "id": "T367-gate",
+     "summary": "Built although the plan's own measurement does not meet the gate it attributes to the task lines (first builds 42% of wide test tellings by count, 1.4% of seconds waited), because the brief orders it.",
+     "class": "within",
+     "why": "The gate is attributed to the task lines, which are the coordinating session's (the plan's checklist item 3: 'G: none'); neither the task lines nor the brief is in the bundle, so what they say is taken from the plan only. No GM words in request.md and no accepted requirement in spec-index carry such a gate; the GM's words reached (T316's pre-warm question, FR-013's performance priority) ask for the warming, not for it to be withheld. Building it adds nothing beyond the section heading's scope, and the weak benefit is disclosed in full in the Performance line. Cost-benefit is not a fidelity finding."
+    },
+    {
+     "id": "T367-notwarmed",
+     "summary": "The counting build (test-counters) and the coverage build are not warmed, as before.",
+     "class": "within",
+     "why": "Neither is named by the section heading (test build and lint passes only); the line restates T316's existing boundary and changes nothing, so it narrows nothing these two tasks ask."
+    },
+    {
+     "id": "T367-tests",
+     "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T405 (<why: the finding or measurement that files it>)",
+    "### T405 Approach (checklist part A)",
+    "### T406 (<why: the finding or measurement that files it>)",
+    "### T406 Approach (checklist part A)",
+    "### T407 (<why: the finding or measurement that files it>)",
+    "### T407 Approach (checklist part A)",
+    "### T409 (<why: the finding or measurement that files it>)",
+    "### T409 Approach (checklist part A)",
+    "(removed) ### T139 (<why: the finding or measurement that files it>)",
+    "(removed) ### T307 (<why: the finding or measurement that files it>)",
+    "(removed) ### T355 (<why: the finding or measurement that files it>)",
+    "(removed) ### T367 (<why: the finding or measurement that files it>)",
+    "(removed) ### T367 Approach (checklist part A)",
+    "(removed) ### T393 (<why: the finding or measurement that files it>)",
+    "(removed) ### T393 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
   }
  ],
  "tasks": {
@@ -50844,6 +50954,142 @@
      "summary": "Classed as a flaky-check defect, nothing made faster.",
      "class": "within",
      "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T367": {
+   "section_sha256": "ac7ef5e9ba807080e0b07fa37b6504fd516cc7ac107d8d05640395514b2eccae",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T367-A",
+     "summary": "The pre-warm keeps the small lane's key of each passing build it runs, and after the test builds runs each lint pass of each moved crate, so a builder's first builder-checks of a crate after a handout is told alone at its test build and every lint pass (T367, T411 jointly).",
+     "class": "within",
+     "why": "Completes what the GM asked about on T316 ('would it make sense to begin compiling immediately within a work tree builder?') on the lane T347's section records; the section heading, the only statement of the two tasks in the bundle, names exactly the test build and the lint passes. Performance work, FR-013."
+    },
+    {
+     "id": "T367-reuse",
+     "summary": "Told gains keeping (cargo_with's key-keeping half, which cargo_with now calls); lint.rs exposes passes, DENY and told; kept.rs binary_args pub(super).",
+     "class": "within",
+     "why": "Implementation shape; reuses the checks' own key writing rather than copying it. Decides nothing about scope."
+    },
+    {
+     "id": "T367-D1",
+     "summary": "The pre-warm tells its test build by binary_args('test') words under the name test, its passes by lint::told, reading content ids as a test run reads them; moved still asks reads_any with prewarm.",
+     "class": "within",
+     "why": "Measured: a key only stands if it holds the words and reads the builder's own build is told by; otherwise the warm key would never match. What is built does not change."
+    },
+    {
+     "id": "T367-D2",
+     "summary": "Pre-warm writes beside the key under its own suffix (.prewarm vs the checks' .new), joining no run lock.",
+     "class": "within",
+     "why": "Concurrency correctness of the key write; no scope effect."
+    },
+    {
+     "id": "T367-D3",
+     "summary": "Lint after every test build, passes in lint::passes order, each its own job under the test builds' rules (slot only while another is spare, never cut); a red pass drops the crate's later passes and keeps no key.",
+     "class": "within",
+     "why": "Follows T336's never-cut rule and T316's yield-between-crates as built; a red pass keeping no key is T355-D3's rule. Nothing asked is left out."
+    },
+    {
+     "id": "T367-knob",
+     "summary": "L7R_PREWARM_LINT=0 warms test builds alone; default on (GUESS).",
+     "class": "within",
+     "why": "Default is the full behavior the section names; the knob adds an off switch, narrowing nothing by default."
+    },
+    {
+     "id": "T367-D4",
+     "summary": "Log lines per lint pass and ending-line counts; slot-tell lines the pre-warm writes carry make target prewarm so a count of a builder's tellings excludes them.",
+     "class": "within",
+     "why": "Keeps the measurement honest (the GM's 2026-11-22 'we want everything measured so we know where our time goes'); no behavior beyond the task."
+    },
+    {
+     "id": "T367-gate",
+     "summary": "Built although the plan's own measurement does not meet the gate it attributes to the task lines (first builds 42% of wide test tellings by count, 1.4% of seconds waited), because the brief orders it.",
+     "class": "within",
+     "why": "The gate is attributed to the task lines, which are the coordinating session's (the plan's checklist item 3: 'G: none'); neither the task lines nor the brief is in the bundle, so what they say is taken from the plan only. No GM words in request.md and no accepted requirement in spec-index carry such a gate; the GM's words reached (T316's pre-warm question, FR-013's performance priority) ask for the warming, not for it to be withheld. Building it adds nothing beyond the section heading's scope, and the weak benefit is disclosed in full in the Performance line. Cost-benefit is not a fidelity finding."
+    },
+    {
+     "id": "T367-notwarmed",
+     "summary": "The counting build (test-counters) and the coverage build are not warmed, as before.",
+     "class": "within",
+     "why": "Neither is named by the section heading (test build and lint passes only); the line restates T316's existing boundary and changes nothing, so it narrows nothing these two tasks ask."
+    },
+    {
+     "id": "T367-tests",
+     "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T411": {
+   "section_sha256": "ac7ef5e9ba807080e0b07fa37b6504fd516cc7ac107d8d05640395514b2eccae",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T367-A",
+     "summary": "The pre-warm keeps the small lane's key of each passing build it runs, and after the test builds runs each lint pass of each moved crate, so a builder's first builder-checks of a crate after a handout is told alone at its test build and every lint pass (T367, T411 jointly).",
+     "class": "within",
+     "why": "Completes what the GM asked about on T316 ('would it make sense to begin compiling immediately within a work tree builder?') on the lane T347's section records; the section heading, the only statement of the two tasks in the bundle, names exactly the test build and the lint passes. Performance work, FR-013."
+    },
+    {
+     "id": "T367-reuse",
+     "summary": "Told gains keeping (cargo_with's key-keeping half, which cargo_with now calls); lint.rs exposes passes, DENY and told; kept.rs binary_args pub(super).",
+     "class": "within",
+     "why": "Implementation shape; reuses the checks' own key writing rather than copying it. Decides nothing about scope."
+    },
+    {
+     "id": "T367-D1",
+     "summary": "The pre-warm tells its test build by binary_args('test') words under the name test, its passes by lint::told, reading content ids as a test run reads them; moved still asks reads_any with prewarm.",
+     "class": "within",
+     "why": "Measured: a key only stands if it holds the words and reads the builder's own build is told by; otherwise the warm key would never match. What is built does not change."
+    },
+    {
+     "id": "T367-D2",
+     "summary": "Pre-warm writes beside the key under its own suffix (.prewarm vs the checks' .new), joining no run lock.",
+     "class": "within",
+     "why": "Concurrency correctness of the key write; no scope effect."
+    },
+    {
+     "id": "T367-D3",
+     "summary": "Lint after every test build, passes in lint::passes order, each its own job under the test builds' rules (slot only while another is spare, never cut); a red pass drops the crate's later passes and keeps no key.",
+     "class": "within",
+     "why": "Follows T336's never-cut rule and T316's yield-between-crates as built; a red pass keeping no key is T355-D3's rule. Nothing asked is left out."
+    },
+    {
+     "id": "T367-knob",
+     "summary": "L7R_PREWARM_LINT=0 warms test builds alone; default on (GUESS).",
+     "class": "within",
+     "why": "Default is the full behavior the section names; the knob adds an off switch, narrowing nothing by default."
+    },
+    {
+     "id": "T367-D4",
+     "summary": "Log lines per lint pass and ending-line counts; slot-tell lines the pre-warm writes carry make target prewarm so a count of a builder's tellings excludes them.",
+     "class": "within",
+     "why": "Keeps the measurement honest (the GM's 2026-11-22 'we want everything measured so we know where our time goes'); no behavior beyond the task."
+    },
+    {
+     "id": "T367-gate",
+     "summary": "Built although the plan's own measurement does not meet the gate it attributes to the task lines (first builds 42% of wide test tellings by count, 1.4% of seconds waited), because the brief orders it.",
+     "class": "within",
+     "why": "The gate is attributed to the task lines, which are the coordinating session's (the plan's checklist item 3: 'G: none'); neither the task lines nor the brief is in the bundle, so what they say is taken from the plan only. No GM words in request.md and no accepted requirement in spec-index carry such a gate; the GM's words reached (T316's pre-warm question, FR-013's performance priority) ask for the warming, not for it to be withheld. Building it adds nothing beyond the section heading's scope, and the weak benefit is disclosed in full in the Performance line. Cost-benefit is not a fidelity finding."
+    },
+    {
+     "id": "T367-notwarmed",
+     "summary": "The counting build (test-counters) and the coverage build are not warmed, as before.",
+     "class": "within",
+     "why": "Neither is named by the section heading (test build and lint passes only); the line restates T316's existing boundary and changes nothing, so it narrows nothing these two tasks ask."
+    },
+    {
+     "id": "T367-tests",
+     "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
     }
    ],
    "verdict": "CLEAR"

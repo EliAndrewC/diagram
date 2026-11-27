@@ -7,10 +7,13 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{Duration, Instant};
 
+use super::alone::{fixture, lane_world, put, since as slot_lines};
+use super::lint::{both_held, lint, passes_of, SMALL};
 use super::phases::phases;
 use super::runlock::{me, stage};
-use super::{calls, kept_crates, world_with, World};
+use super::{answer, calls, kept_crates, world_with, World};
 use crate::checks::scratch;
+use crate::rustc::kept::alone::DIR;
 use crate::rustc::prewarm::{run, Knobs, STEP};
 use crate::rustc::runlock::RECORD;
 use crate::rustc::slot::{spare, take, Slots};
@@ -105,9 +108,10 @@ fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before
     let b = root.join("rust/b/Cargo.toml");
     let asked = format!("test --no-run --quiet --manifest-path {}", b.display());
     assert_eq!(builds(&world), [asked.clone()]);
-    // one phase line a build, its step and crate named: never a `build`, which the readers book as the task's compile
+    // one phase line a build - the test build's, then each lint pass's (451 T411) - its step and crate named: never a `build`,
+    // which the readers book as the task's compile
     let lines = phases(&root);
-    assert_eq!(lines.len(), 1, "{lines:?}");
+    assert_eq!(lines.len(), 3, "{lines:?}");
     assert_eq!(
         (&lines[0]["step"], &lines[0]["crates"][0], &lines[0]["code"]),
         (&STEP.into(), &"rust/b".into(), &0.into())
@@ -153,7 +157,7 @@ fn a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done() {
     });
     assert_eq!(done.code, 0);
     let said = &done.stdout;
-    let after = " s of it finishing after a run started, no slot was spare or the ceiling passed)\nprewarm: a run of the checks started in this tree and has the build from here - 1 crate(s) left to it\n";
+    let after = " s of it finishing after a run started, no slot was spare or the ceiling passed)\nprewarm: a run of the checks started in this tree and has the build from here - 1 crate(s) left to it, and 4 lint pass(es) with them\n";
     assert!(
         said.contains("prewarm: rust/a - its test build is warm ("),
         "{said}"
@@ -211,7 +215,8 @@ fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
         "{said}"
     );
     assert_eq!(builds(&world).len(), 2);
-    assert_eq!(codes(&root), [0, 0]);
+    // each crate's test build, then its two lint passes
+    assert_eq!(codes(&root), [0; 6]);
 }
 
 #[test]
@@ -292,7 +297,8 @@ fn it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothin
     let failed = run(&world, &since(&from), &knobs(60_000));
     assert_eq!(failed.code, 0);
     assert!(failed.stdout.contains("prewarm: rust/a - cargo test --no-run exited 1; left to the builder's own run, which says why\nprewarm: rust/b - cargo test --no-run exited 1"), "{}", failed.stdout);
-    assert_eq!(codes(&root), [1, 1]);
+    // and each crate's first lint pass, red, its last (451 T411)
+    assert_eq!(codes(&root), [1, 1, 1, 1]);
     // a cargo that cannot start is the same
     let cargo = std::mem::replace(&mut world.cargo, "/nonexistent/cargo".to_owned());
     let none = run(&world, &since(&from), &knobs(60_000));
@@ -319,4 +325,155 @@ fn it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothin
     // the command line: no run lock taken, a usage error its own
     let usage = crate::rustc::cli(&[STEP.to_owned()]);
     assert_eq!(usage.code, 2);
+}
+
+/// `fixture`'s crates committed, then `a`'s code edited and committed: the first commit comes back, as a handout names it.
+fn handed_out(root: &Path) -> String {
+    git(root, &["add", "-A"]);
+    git(root, &["commit", "-qm", "one"]);
+    let since = git(root, &["rev-parse", "HEAD"]);
+    put(root, "rust/a/src/lib.rs", "pub const A: u8 = 1;\n");
+    git(root, &["add", "-A"]);
+    git(root, &["commit", "-qm", "two"]);
+    since
+}
+
+/// The cargo calls of a world's fake cargo but its `--version`, which a key reads.
+fn asked(world: &World) -> Vec<String> {
+    let mut all = calls(world);
+    all.retain(|c| c != "--version");
+    all
+}
+
+/// The keys kept under a world's target directory, by name.
+fn keys(world: &World) -> Vec<String> {
+    let mut names: Vec<String> = std::fs::read_dir(world.target.join(DIR))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .collect();
+    names.sort();
+    names
+}
+
+/// A builder's first test run of `a`: the telling and lane of its binary key's build (its run's own `cargo test` after it left out).
+fn first_test(world: &World, root: &Path) -> Vec<String> {
+    let before = phases(root).len();
+    assert_eq!(answer(world, "test", &["rust/a".to_owned()], false).code, 0);
+    slot_lines(root, before)[..2].to_vec()
+}
+
+/// A fake cargo whose test builds fail while `fail-test` lies beside it, and whose clippy calls fail while `fail-clippy` does.
+const FAILS: &str = "[ -f \"$(dirname \"$0\")/fail-$1\" ] && exit 101\nexit 0";
+
+#[test]
+fn the_pre_warm_keeps_the_keys_a_builders_first_test_build_and_lint_are_told_alone_by() {
+    let (root, _) = fixture();
+    let from = handed_out(&root);
+    let dir = scratch("prewarm-keys");
+    let world = lane_world(&root, "exit 0", &dir);
+    let done = run(&world, &since(&from), &knobs(60_000));
+    let warmed = asked(&world);
+    // with both wide slots held, the builder's first test build takes the lane (451 T367) and so does each pass of its first
+    // lint (451 T411)
+    let _held = both_held(&dir);
+    assert_eq!(first_test(&world, &root), SMALL);
+    assert_eq!(lint(&world, &root, "one"), (0, passes_of(2, SMALL)));
+    // the pre-warm asked the test build, then each pass of the lint in the words the lint asks
+    let m = root.join("rust/a/Cargo.toml").display().to_string();
+    let lint_of = |pass: &str| format!("clippy --quiet {pass} --manifest-path {m} -- -D warnings");
+    assert_eq!(
+        warmed,
+        [
+            format!("test --no-run --quiet --manifest-path {m}"),
+            lint_of("--all-targets"),
+            lint_of("--all-targets --all-features")
+        ]
+    );
+    let said = &done.stdout;
+    assert!(
+        said.contains("prewarm: rust/a - its test build is warm ("),
+        "{said}"
+    );
+    assert!(
+        said.contains("prewarm: rust/a - its lint pass --all-targets --all-features is warm ("),
+        "{said}"
+    );
+    assert_eq!(codes(&root), [0, 0, 0]);
+}
+
+#[test]
+fn a_red_build_or_pass_keeps_no_key_and_a_pre_warm_told_alone_leaves_its_key_as_it_was() {
+    let (root, _) = fixture();
+    let from = handed_out(&root);
+    let dir = scratch("prewarm-red");
+    let world = lane_world(&root, FAILS, &dir);
+    for red in ["fail-test", "fail-clippy"] {
+        std::fs::write(world.target.join(red), "").unwrap();
+    }
+    let done = run(&world, &since(&from), &knobs(60_000));
+    let said = &done.stdout;
+    let stopped = "prewarm: rust/a - cargo clippy --all-targets exited 101; its later passes left to the builder's own lint, which says why\n";
+    assert!(said.contains(stopped), "{said}");
+    // a red pass is the lint's last: no later pass is asked, and nothing is kept, nor left beside a key
+    assert_eq!(asked(&world).len(), 2);
+    assert!(keys(&world).is_empty(), "{:?}", keys(&world));
+    for red in ["fail-test", "fail-clippy"] {
+        std::fs::remove_file(world.target.join(red)).unwrap();
+    }
+    run(&world, &since(&from), &knobs(60_000));
+    let all = [
+        "rust_a-lint--all-targets",
+        "rust_a-lint--all-targets--all-features",
+        "rust_a-test",
+    ];
+    assert_eq!(keys(&world), all);
+    // a pre-warm told alone builds, and leaves each key as it was: its time is the build's that kept it
+    let test_key = world.target.join(DIR).join("rust_a-test");
+    let when = std::fs::metadata(&test_key).unwrap().modified().unwrap();
+    run(&world, &since(&from), &knobs(60_000));
+    assert_eq!(asked(&world).len(), 8);
+    assert_eq!(
+        std::fs::metadata(&test_key).unwrap().modified().unwrap(),
+        when
+    );
+    assert_eq!(keys(&world), all);
+}
+
+#[test]
+fn a_crate_that_names_itself_is_warmed_at_all_three_passes_and_the_lint_is_off_at_its_knob() {
+    let (root, _) = fixture();
+    let itself = format!(
+        "{}\n[dev-dependencies]\na = {{ path = \".\", features = [\"kit\"] }}\n",
+        super::alone::A_BUILDS_FROM_B
+    );
+    put(&root, "rust/a/Cargo.toml", &itself);
+    let from = handed_out(&root);
+    // no lane: each pass is asked, and no key is kept
+    let mut world = world_with(&root, "exit 0");
+    run(&world, &since(&from), &knobs(60_000));
+    let passes: Vec<String> = asked(&world)
+        .iter()
+        .map(|c| {
+            c.split(" --manifest-path")
+                .next()
+                .unwrap_or_default()
+                .to_owned()
+        })
+        .collect();
+    assert_eq!(
+        passes[1..],
+        [
+            "clippy --quiet --all-targets",
+            "clippy --quiet --all-targets --all-features",
+            "clippy --quiet --lib"
+        ]
+    );
+    assert!(!world.target.join(DIR).exists());
+    // `L7R_PREWARM_LINT=0`: the test builds alone
+    world.root = l7r_shared::env::Rooted::with(&*root, &[("L7R_PREWARM_LINT", "0")]);
+    let off = run(&world, &since(&from), &knobs(60_000));
+    assert_eq!(asked(&world).len(), 5);
+    assert!(!off.stdout.contains("lint pass"), "{}", off.stdout);
 }

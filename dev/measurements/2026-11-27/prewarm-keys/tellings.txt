@@ -1,0 +1,26 @@
+slot-tell lines 2026-11-27T00:20Z to 2026-11-27T03:30:03Z, handouts 14
+  ('lint', 'clone or before its handout', 1, 'later') 4
+  ('lint', 'pool tree', 0, 'first after handout') 5
+  ('lint', 'pool tree', 0, 'later') 10
+  ('lint', 'pool tree', 1, 'first after handout') 4
+  ('lint', 'pool tree', 1, 'later') 6
+  ('test', 'clone or before its handout', 0, 'later') 9
+  ('test', 'clone or before its handout', 1, 'later') 22
+  ('test', 'pool tree', 0, 'first after handout') 1
+  ('test', 'pool tree', 0, 'later') 90
+  ('test', 'pool tree', 1, 'first after handout') 28
+  ('test', 'pool tree', 1, 'later') 39
+slot-wait lines 13, 283.5 s:
+  2026-11-27T00:27:34.478Z  18.8 s build ['rust/gate/crates/checks']
+  2026-11-27T00:28:03.674Z   1.5 s lint ['rust/guard/shared']
+  2026-11-27T01:16:03.301Z   0.5 s build ['rust/gate/crates/task']
+  2026-11-27T01:30:19.618Z   0.5 s build ['rust/gate/crates/land']
+  2026-11-27T01:30:20.729Z   5.0 s build ['rust/gate/crates/measure']
+  2026-11-27T01:45:33.196Z   1.5 s build ['rust/gate']
+  2026-11-27T01:47:08.088Z  17.7 s build ['rust/gate/crates/task']
+  2026-11-27T01:49:21.458Z  55.5 s lint ['rust/gate/crates/reviews']
+  2026-11-27T01:50:40.862Z  49.9 s lint ['rust/gate/crates/reviews']
+  2026-11-27T01:51:41.494Z  12.1 s build ['rust/guard']
+  2026-11-27T01:58:49.196Z  56.4 s build ['rust/gate/crates/reviews']
+  2026-11-27T02:00:17.149Z  60.0 s build ['rust/gate/crates/reviews']
+  2026-11-27T03:19:22.464Z   4.0 s build ['rust/gate/crates/plan'] FIRST AFTER HANDOUT

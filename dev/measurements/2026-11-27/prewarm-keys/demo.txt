@@ -1,0 +1,45 @@
+# the hand pre-warm, 2026-11-27, diagram-backlog-t271: env -u L7R_GATE_TREE -u CARGO_TARGET_DIR -u MAKEFLAGS -u MFLAGS -u MAKELEVEL scripts/gates/l7r-gate.sh rust prewarm --since cdac6355 (the handout's base), after the three l7r-alone keys of rust/gate/crates/rustc were removed and a code edit made to it (POLL 500 -> 501 ms, put back after)
+prewarm: 3 crate(s) whose build moved since cdac635559e58e61f56d6e64e7e08d797fd93b68
+prewarm: rust/guard - its test build is warm (0.5 s)
+prewarm: rust/gate/crates/rustc - its test build is warm (1.5 s)
+prewarm: rust/gate - its test build is warm (1.0 s)
+prewarm: rust/guard - its lint pass --all-targets is warm (6.1 s)
+prewarm: rust/guard - its lint pass --all-targets --all-features is warm (0.5 s)
+prewarm: rust/gate/crates/rustc - its lint pass --all-targets is warm (1.5 s)
+prewarm: rust/gate/crates/rustc - its lint pass --all-targets --all-features is warm (0.5 s)
+prewarm: rust/gate - its lint pass --all-targets is warm (7.6 s)
+prewarm: rust/gate - its lint pass --all-targets --all-features is warm (1.1 s)
+
+real	0m23.703s
+user	0m33.563s
+sys	0m5.211s
+
+# then make builder-checks CRATE=rust/gate/crates/rustc - the tree's Phase lines from the pre-warm's start (t0 t1 make step code crates)
+03:42:50.884 03:42:50.890 prewarm slot-tell 0 ['rust/guard']
+03:42:50.893 03:42:51.396 prewarm prewarm 0 ['rust/guard']
+03:42:51.405 03:42:51.413 prewarm slot-tell 1 ['rust/gate/crates/rustc']
+03:42:51.415 03:42:52.929 prewarm prewarm 0 ['rust/gate/crates/rustc']
+03:42:52.937 03:42:52.949 prewarm slot-tell 1 ['rust/gate']
+03:42:52.951 03:42:53.960 prewarm prewarm 0 ['rust/gate']
+03:42:53.967 03:42:53.974 prewarm slot-tell 1 ['rust/guard']
+03:42:53.976 03:43:00.026 prewarm prewarm 0 ['rust/guard']
+03:43:00.034 03:43:00.040 prewarm slot-tell 1 ['rust/guard']
+03:43:00.042 03:43:00.545 prewarm prewarm 0 ['rust/guard']
+03:43:00.552 03:43:00.559 prewarm slot-tell 1 ['rust/gate/crates/rustc']
+03:43:00.561 03:43:02.074 prewarm prewarm 0 ['rust/gate/crates/rustc']
+03:43:02.080 03:43:02.087 prewarm slot-tell 1 ['rust/gate/crates/rustc']
+03:43:02.089 03:43:02.593 prewarm prewarm 0 ['rust/gate/crates/rustc']
+03:43:02.603 03:43:02.616 prewarm slot-tell 1 ['rust/gate']
+03:43:02.619 03:43:10.186 prewarm prewarm 0 ['rust/gate']
+03:43:10.205 03:43:10.230 prewarm slot-tell 1 ['rust/gate']
+03:43:10.236 03:43:11.269 prewarm prewarm 0 ['rust/gate']
+03:43:21.783 03:43:21.790 builder-checks slot-tell 0 ['rust/gate/crates/rustc']
+03:43:21.792 03:43:21.793 builder-checks slot-small 0 ['rust/gate/crates/rustc']
+03:43:21.792 03:43:21.925 builder-checks build 0 ['rust/gate/crates/rustc']
+03:43:22.009 03:43:23.524 builder-checks test 0 ['rust/gate/crates/rustc']
+03:43:23.817 03:43:24.133 builder-checks lint 0 ['rust/gate/crates/rustc']
+03:43:23.818 03:43:23.824 builder-checks slot-tell 0 ['rust/gate/crates/rustc']
+03:43:23.826 03:43:23.827 builder-checks slot-small 0 ['rust/gate/crates/rustc']
+03:43:24.000 03:43:24.007 builder-checks slot-tell 0 ['rust/gate/crates/rustc']
+03:43:24.009 03:43:24.011 builder-checks slot-small 0 ['rust/gate/crates/rustc']
+03:43:24.439 03:43:24.665 builder-checks format 0 ['rust/gate/crates/rustc']

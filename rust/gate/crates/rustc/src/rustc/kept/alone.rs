@@ -22,11 +22,12 @@
 //! ONE TELLING A CRATE A RUN, asked beside the binary key's build (`Verdict::ask`) and kept on the verdict, so the second asking
 //! of a red build (`stepped`) runs in the same lane by construction. A build told alone leaves the key as it is, pass or fail: no
 //! dependency moved, so it is still true, and a red build's next run is told alone again. A wide build that passes keeps its key;
-//! one that fails keeps none of its own.
+//! one that fails keeps none of its own. The pre-warm's passing test build keeps the same key (`keeping`, feature 451 T367), so
+//! a builder's first test build after a handout is told alone.
 //!
 //! A LINT PASS IS TOLD THE SAME WAY, BY A KEY OF ITS OWN (feature 451 T355, `lint.rs`): clippy's check units have their own
 //! fingerprints, which a test build does not freshen, and one pass's are not another's, so each pass keeps a key named by its words
-//! (`<crate>-lint--all-targets`) and is told alone only by what that pass last built.
+//! (`<crate>-lint--all-targets`) and is told alone only by what that pass last built - a checks' lint or the pre-warm's (451 T411).
 //!
 //! Each telling writes a `Phase` line, `slot-tell`: its span is the telling's cost (some milliseconds: one `stat` a dependency's
 //! file), its code 0 where the build was told alone and 1 where not. With no lane (`L7R_BUILD_SLOTS_SMALL=0`, no wide slots)
@@ -180,22 +181,31 @@ impl Told {
         if self.alone {
             return cargo_small(world, args, manifest, after);
         }
-        let new = self
-            .at
-            .as_ref()
-            .map(|at| PathBuf::from(format!("{}.new", at.display())));
-        if let Some(new) = &new {
-            let _ = std::fs::create_dir_all(new.parent().unwrap_or(new));
-            let _ = std::fs::write(new, &self.key);
-        }
-        let ran = cargo(world, args, manifest, after);
-        if let (Some(at), Some(new)) = (&self.at, &new) {
-            let _ = if ran.code == 0 {
-                std::fs::rename(new, at)
-            } else {
-                std::fs::remove_file(new)
-            };
-        }
-        ran
+        self.keeping("new", || {
+            let ran = cargo(world, args, manifest, after);
+            let passed = ran.code == 0;
+            (ran, passed)
+        })
+    }
+
+    /// The build `go` runs, which says whether it passed, its key kept as a wide build keeps it: written beside itself
+    /// (`<key>.<beside>`) before `go` starts and moved into place where it passed, so the key's time is the build's start. Told
+    /// alone, or told nothing, it keeps nothing. The checks' own builds (`cargo_with`) and the pre-warm's (`prewarm.rs`, feature 451
+    /// T367, T411: so a builder's first test build and lint after a handout are told alone) - each beside the key by its own name,
+    /// since the pre-warm joins no run lock and a run's build of the same crate can start while its own is in flight.
+    pub(in crate::rustc) fn keeping<T>(&self, beside: &str, go: impl FnOnce() -> (T, bool)) -> T {
+        let Some(at) = self.at.as_ref().filter(|_| !self.alone) else {
+            return go().0;
+        };
+        let new = PathBuf::from(format!("{}.{beside}", at.display()));
+        let _ = std::fs::create_dir_all(new.parent().unwrap_or(&new));
+        let _ = std::fs::write(&new, &self.key);
+        let (done, passed) = go();
+        let _ = if passed {
+            std::fs::rename(&new, at)
+        } else {
+            std::fs::remove_file(&new)
+        };
+        done
     }
 }

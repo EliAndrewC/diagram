@@ -16,11 +16,11 @@ use crate::rustc::World;
 
 /// A fake cargo whose clippy calls fail while a file `fail` lies beside it.
 const FAILS: &str = "[ \"$1\" = clippy ] && [ -f \"$(dirname \"$0\")/fail\" ] && exit 101\nexit 0";
-const WIDE: [&str; 2] = ["slot-tell 1", "slot-wait 1"];
-const SMALL: [&str; 2] = ["slot-tell 0", "slot-small 0"];
+pub(super) const WIDE: [&str; 2] = ["slot-tell 1", "slot-wait 1"];
+pub(super) const SMALL: [&str; 2] = ["slot-tell 0", "slot-small 0"];
 
 /// Both wide slots under `dir`, held: a wide call of a lane world then runs without one at its ceiling, a `slot-wait 1` line.
-fn both_held(dir: &Path) -> [Taken; 2] {
+pub(super) fn both_held(dir: &Path) -> [Taken; 2] {
     let held = [(); 2].map(|()| take(&quick(dir, 2), "held\n", &mut quiet));
     assert!(held.iter().all(|t| t.hold.is_some()));
     held
@@ -28,7 +28,7 @@ fn both_held(dir: &Path) -> [Taken; 2] {
 
 /// One lint of crate `a` after an edit of its own source (`text` makes its code new, so no kept result stands): how it ended and
 /// the slot lines it wrote, a moment's wait in the lane left out (a slot just let go may read held, `slot.rs`).
-fn lint(world: &World, root: &Path, text: &str) -> (i32, Vec<String>) {
+pub(super) fn lint(world: &World, root: &Path, text: &str) -> (i32, Vec<String>) {
     let before = phases(root).len();
     let code = format!("pub const N: &str = \"{text}\";\n");
     std::fs::write(root.join("rust/a/src/lib.rs"), code).unwrap();
@@ -46,7 +46,7 @@ fn clippy(world: &World) -> Vec<String> {
 }
 
 /// `n` passes, each with the slot lines `each`.
-fn passes_of(n: usize, each: [&str; 2]) -> Vec<String> {
+pub(super) fn passes_of(n: usize, each: [&str; 2]) -> Vec<String> {
     each.repeat(n).iter().map(|l| (*l).to_owned()).collect()
 }
 

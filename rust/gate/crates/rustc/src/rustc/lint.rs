@@ -15,7 +15,9 @@
 //! (`<crate>-lint--all-targets`, `...--all-features`, `...--lib`) and holds them with `-D warnings`, beside what every such key
 //! holds - the dependencies' content ids (dev-dependencies too), the workspace's files (`clippy.toml` among them), the crate's
 //! manifest (its `[lints]`), the compiler - and the times. A pass told alone leaves its key as it is, red or green; a wide pass
-//! keeps its key where it passes, so a red wide pass and each pass after it are wide at the next lint too.
+//! keeps its key where it passes, so a red wide pass and each pass after it are wide at the next lint too. A pool tree's pre-warm
+//! runs each pass of each crate it warms and keeps its key where it passes (`prewarm.rs`, feature 451 T411), so a builder's first
+//! lint after a handout is told alone.
 //!
 //! Outside a repository no content id is read, so a key would hold no file and stand whatever moved: nothing is told there.
 //! A fresh run's lint (`FRESH=1`) is told like any other: cargo's fingerprints know nothing of it.
@@ -27,7 +29,7 @@ use std::path::Path;
 use super::{names_itself, Kept, Ran, Told, World};
 
 /// What every pass denies.
-const DENY: [&str; 2] = ["-D", "warnings"];
+pub(super) const DENY: [&str; 2] = ["-D", "warnings"];
 
 /// The clippy calls of `manifest`'s crate, in order.
 ///
@@ -36,7 +38,7 @@ const DENY: [&str; 2] = ["-D", "warnings"];
 /// linted by nothing. `--lib` reads no dev-dependency. Measured 2026-11-26 over the six such crates after a touch of `core` and
 /// `l7r_shared`: 7 check compiles and 12.8 s beside the two passes' 14 and 23.9 s
 /// (`dev/measurements/2026-11-26/feature-unify/lint-pass.sh`).
-fn passes(manifest: &Path) -> Vec<&'static [&'static str]> {
+pub(super) fn passes(manifest: &Path) -> Vec<&'static [&'static str]> {
     let mut passes: Vec<&[&str]> = vec![
         &["clippy", "--quiet", "--all-targets"],
         &["clippy", "--quiet", "--all-targets", "--all-features"],
@@ -47,15 +49,19 @@ fn passes(manifest: &Path) -> Vec<&'static [&'static str]> {
     passes
 }
 
+/// The telling of one pass by its own key: named by its words, holding them with `-D warnings`. The pre-warm tells its passes by
+/// this too (`prewarm.rs`, feature 451 T411), so the key its passing pass keeps is the one the builder's lint is told by.
+pub(super) fn told(world: &World, words: &[&str], manifest: &Path, kept: &Kept) -> Told {
+    let name = format!("lint{}", words[2..].concat());
+    let keyed = [words, &["--"], &DENY].concat();
+    Told::of(world, &name, manifest, kept, &keyed)
+}
+
 /// One pass, in the lane it is told by its own key (`inputs`: the run's content ids; none, or none read, is a wide slot).
 fn pass(world: &World, words: &[&str], manifest: &Path, inputs: Option<&Kept>) -> Ran {
     let told = inputs
         .filter(|k| !k.git_dir.is_empty())
-        .map_or_else(Told::wide, |k| {
-            let name = format!("lint{}", words[2..].concat());
-            let keyed = [words, &["--"], &DENY].concat();
-            Told::of(world, &name, manifest, k, &keyed)
-        });
+        .map_or_else(Told::wide, |k| told(world, words, manifest, k));
     told.cargo_with(world, words, manifest, &DENY)
 }
 

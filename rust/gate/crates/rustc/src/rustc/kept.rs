@@ -583,8 +583,9 @@ fn binary_key(
     Some((sha256::hex(&hash), order))
 }
 
-/// The binary key's build: the crate's test build, its binaries named as JSON; the counting build's with every feature.
-fn binary_args(cmd: &str) -> Vec<&'static str> {
+/// The binary key's build: the crate's test build, its binaries named as JSON; the counting build's with every feature. The pre-warm
+/// tells its test build by these words (`prewarm.rs`, feature 451 T367), so its key is the one this build is told by.
+pub(super) fn binary_args(cmd: &str) -> Vec<&'static str> {
     let mut args = vec!["test", "--no-run", "--message-format=json", "--quiet"];
     if cmd == "test-counters" {
         args.push("--all-features");
