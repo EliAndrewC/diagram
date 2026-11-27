@@ -7079,31 +7079,37 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T521 (<why: the finding or measurement that files it>)
+### T521 (the GM 2026-11-27, request.md: no percentage beside a count, and the same day, of the line classes, shares only of time and tokens)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make task-time` prints a share only of TIME and of TOKENS. A count and a line class print raw, and test runs and compiles print their minutes per run (`rust/gate/crates/measure/src/measure/task_time/beside.rs`, `task_time.rs`, `task_time/turns.rs`).
+  - **T521-D1, counts.** The size table's test runs and compiles print `2, 1.3 min each`: the count, then its own category's minutes (`tests`, `compile`, the task's machine minutes as its category table books them) over the count. With no run it prints the count alone (`0`). The task's line reads `tests` 2.7 min in 2 test runs, 1.3 min each, and the same for compiles, measured 2026-11-27 (the output of the `sized_tests` fixture). Make runs and the three turn columns print the count alone. `Turns::calls`, which only the turn share read, is removed.
+  - **T521-D2, the target table.** Its last column, `% of runs` (a target's runs over the table's runs), becomes `minutes per run`: the row's own minutes over its runs, `-` for a row with no run (`beside::per_run`, the one helper both tables use).
+  - **T521-D3, the line classes.** Test, non-test and prose lines print `+add -del` with no share. This follows the GM's second message of 2026-11-27, which the session relayed mid-task and is adding to request.md: he cares about shares only for time and tokens, not for lines added against lines removed.
+  - **T521-D4, what is kept.** Every time percentage is kept: the category and target tables' `% of task` and `% of window` for minutes and blocking, the grouped tables, and the own-path table. Also kept are the token shares: each kind's % of the task's tokens (output, fresh input, cache read, cache write) and each actor's share (builders / review agents / session). The size table's footnote and heading now say "a share only of time and of tokens", and the module's doc carries both of the GM's messages.
+  - **T521-D5, the overnight run**, measured 2026-11-27 (`make task-time SINCE=2026-11-27T04:30:00Z`, read-only): 125 tasks landed to 16:43:03Z; of the size table's 125 rows, no cell from commits to session turns carries a %, 0 `% of runs` in the report and 0 task lines with a share beside a count. T417 reads `+831 -445 | +369 -29 | +412 -56 | 28, 0.2 min each | 19, 0.2 min each | 33 | 123 | 4 | 1`, and T419 `15, 0.2 min each | 12, 0.1 min each`. The window's `make land` row reads 50 runs, 348.4 min, 7.0 min per run, measured 2026-11-27 (the same run).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| counts with minutes per run, no share beside a count or a line class, the target table's minutes per run | `sized_tests::a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares`: 5 passed and 1 failed on the old code, 300 passed after, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure ONLY="measure::task_time::sized_tests"`, then `make builder-checks`); it pins the size row, the task's line (a zero-run task's too) and the target row `\| make static \| tests \| 1 \| 1.0 \| ... \| 1.0 \|` | n/a, a report's text | none | n/a |
 
 ### T521 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make task-time` sees a percentage only where it is of time or of tokens. Beside a count of test runs or compiles they see the minutes each took.
+2. **The constraints.** The GM's two messages of 2026-11-27 (D3, and request.md's last entry). T512's figures and their sources are unchanged; only how they print changes.
+3. **Where each comes from.** G: *"Overall, I don't know that it's useful to see percentages for counts the way that it is to see percentages for time, if that makes sense."* G: his second message the same day, on T417's line shares (D3), which the session is adding to request.md. The minutes per run are the task line's own wording.
+4. **Do they describe the world here?** Yes: the overnight run prints them (D5).
+5. **The order.** After T512, whose table it changes. Before the process review reads the report.
+6. **The exits.** Green: the test above and the overnight run. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The overnight report's size table, task lines and target tables carry no share but of time and tokens (D5).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect: it is the GM's change to what the report shows. The reader no longer sees T419's test runs as a share of its runs and compiles together, or T417's test lines as a share of its changed lines. They see `15, 0.2 min each` and `+831 -445`, measured 2026-11-27 (D5's run).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a report of where the time goes, counted as performance work by the GM's words of 2026-11-20
 
 
 ### T522 (<why: the finding or measurement that files it>)

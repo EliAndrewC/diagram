@@ -4632,6 +4632,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T509 (<why: the finding or measurement that files it>)": {
+   "sha256": "6049f8bb0568e5a3a6484af3db690fe5e75f69cd9f368c2d4d465625e8cd6386",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T509 Approach (checklist part A)": {
+   "sha256": "6226d84ea01021e5222385f1a3d870f2ae997da25aaffd873d0f3a37a8a01887",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T511 (<why: the finding or measurement that files it>)": {
+   "sha256": "c21b6ae560cb3bf2ace360a502400aa26db710e42f93e9b9b9d47de605438d1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T511 Approach (checklist part A)": {
+   "sha256": "11cb6f21f24dc45174a74a0d939cf42d18cbba158c7801a3ffe2cbecbfbdf903",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T521 (the GM 2026-11-27, request.md: no percentage beside a count, and the same day, of the line classes, shares only of time and tokens)": {
+   "sha256": "0bc906f844d1b65301368882c1c512b6520f111d7752fcb9134e9c8ccdf64c1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T521 Approach (checklist part A)": {
+   "sha256": "26528e88cce1366eb9a000d85981eb765ea16fc5fa75d719676e5a61bbd94fdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -42655,6 +42691,101 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This leaves part of the over-budget cache in place, which narrows line 501's 'leaving things around'. The ground is that the GM's own words already imply it. Line 413: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit ... we definitely don't want to clean things up if it is going to cost us time later.' Taking an idle pool profile without first pricing what its rebuild costs is exactly what that forbids. The 100 GB figure is the session's build (line 229), not the GM's. The residual is filed and ordered (FR-009 form). This ruling covers only the pricing-first deferral: T518 must still decide on the measured cost, and no ruling here exempts the residual permanently."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T509 (<why: the finding or measurement that files it>)",
+    "### T509 Approach (checklist part A)",
+    "### T511 (<why: the finding or measurement that files it>)",
+    "### T511 Approach (checklist part A)",
+    "### T521 (the GM 2026-11-27, request.md: no percentage beside a count, and the same day, of the line classes, shares only of time and tokens)",
+    "### T521 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T509/T511 blocks",
+     "summary": "T509 and T511 sections and Approach checklists are the unfilled task-add template (placeholders only).",
+     "class": "within",
+     "why": "A placeholder decides nothing the spec leaves open; there is nothing to rule. Once filled, each block changes and is owed review again."
+    },
+    {
+     "id": "T521-D1",
+     "summary": "Size table's test-run and compile counts print raw with their own category's minutes per run ('2, 1.3 min each'), the count alone at zero; make runs and turn columns print the count alone; Turns::calls (read only by the turn share) removed.",
+     "class": "within",
+     "why": "The GM 2026-11-27, 'I don't know that it's useful to see percentages for counts the way that it is to see percentages for time', removes the count shares. The minutes-per-run figure is the plan's own addition (its checklist item 3 credits the task line, not the GM). It sits beside the count, which his T512 words ask to see 'next to the amount of time we spent recompiling', and it removes nothing he asked for, so it is no narrowing. Turns::calls was read only by the share being removed, so dropping it is internal."
+    },
+    {
+     "id": "T521-D2",
+     "summary": "Target table's '% of runs' column becomes 'minutes per run' (row minutes over runs, '-' with no run), one helper for both tables.",
+     "class": "within",
+     "why": "'% of runs' is a percentage of a count, which the GM's 2026-11-27 words withdraw; its replacement pairs the count with its time as his T512 words ask."
+    },
+    {
+     "id": "T521-D3",
+     "summary": "Test, non-test and prose line classes print '+add -del' with no share.",
+     "class": "within",
+     "why": "Lines are counts in the GM's own words: T512 asks for 'the total number of lines added / deleted / modified' in the same breath as 'the number of times that the tests were run' and 'the number of turns'. His recorded 2026-11-27 words on counts therefore reach them. The block cites a second GM message of 2026-11-27 that the bundle's request.md does not hold. It was not weighed, and this decision does not need it."
+    },
+    {
+     "id": "T521-D4",
+     "summary": "All time percentages kept (category, target, grouped, own-path tables; minutes and blocking); token shares kept (each kind's share of the task's tokens, each actor's share); heading, footnote and module doc say 'a share only of time and of tokens'.",
+     "class": "within",
+     "why": "Keeping these shares keeps what the GM asked for on this report: T243, 'make sure to include percentages ... so that I don't have to do the percentage math in my head', and T512, 'includes percentages as well'. His recorded 2026-11-27 words withdraw only percentages of counts. His example was a share of runs, '15 (55.6%)' test runs of test runs and compiles together, and time is kept in so many words. Tokens are not a count of events in his words but a resource spent, like time: 'efficient use of tokens is a huge project goal' and 'the real limit on throughput is often tokens'. Nothing recorded withdraws the token shares, so keeping them is the request, not a carve-out from it. The block's relayed second message of 2026-11-27 ('shares only for time and tokens') is not in the bundle's request.md and was not weighed. It must reach request.md, as the block says it will."
+    },
+    {
+     "id": "T521-D5",
+     "summary": "Done measured on the overnight window: no share beside a count or line class in the size table, task lines or target table.",
+     "class": "within",
+     "why": "The GM asked to see the report over the overnight window (T512 words); this measures exactly the requested change there."
+    },
+    {
+     "id": "T521 checklist",
+     "summary": "Order after T512 and before the process review; T512's figures and their sources unchanged, only their printing; item 12 'not a defect: the GM's change'; Found and left: none.",
+     "class": "within",
+     "why": "The block orders the change after the work it amends and changes only what the GM's words change. A requested presentation change is not a defect fix. None of these leaves anything asked for undone."
+    },
+    {
+     "id": "T521 perf",
+     "summary": "Filed as performance work.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 count measuring where time goes as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T521 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T521-1 shares only of time and tokens",
+     "summary": "make task-time prints a percentage only where it is a share of time or of tokens; counts (test runs, compiles) carry no share.",
+     "class": "within",
+     "why": "The GM, 2026-11-27 (request.md's last entry): 'I don't know that it's useful to see percentages for counts the way that it is to see percentages for time'. Token shares are a share of a consumed resource the GM ranks with throughput ('just as important as task throughput'), not of a count of events, and the T512 request for percentages stands for them. Unchanged from the block's CLEAR version."
+    },
+    {
+     "id": "T521-2 minutes each beside a count",
+     "summary": "Beside a count of test runs or compiles the reader sees the minutes each took (e.g. '15, 0.2 min each').",
+     "class": "within",
+     "why": "The GM asked to see 'the number of times that the tests were run ... next to the amount of time we spent'; minutes per run replaces the struck share and serves that clause. The figure moved from 1.2 to 0.2 min each since the last verdict and now carries a one-shot label (measured 2026-11-27, D5's run); a corrected figure, not a new decision."
+    },
+    {
+     "id": "T521-3 line counts without a share",
+     "summary": "T417's changed lines print as '+831 -445' with no share of the task's changed lines.",
+     "class": "within",
+     "why": "Lines added/deleted are counts, inside the GM's words on percentages for counts; no line figure is removed, only its share."
+    },
+    {
+     "id": "T521-4 not a defect, figures unchanged",
+     "summary": "Item 12 classes the change as the GM's change to what the report shows, not a defect fix; T512's figures and sources unchanged, only their printing.",
+     "class": "within",
+     "why": "Matches the request: the GM changed what the report should show; nothing the GM asked for is narrowed."
     }
    ]
   }

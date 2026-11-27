@@ -1,8 +1,11 @@
 //! What the report prints BESIDE a landed task's minutes (feature 451 T512): its size, its counts, its turns and its tokens
-//! ([`super::sized`], [`super::turns`]), each figure with its share of the task's own whole beside it (the GM 2026-11-27: "Can you
-//! also make it so that the report that we generate includes percentages as well?"), and a table of each task's minutes in seven
-//! groups of the report's own categories, each its % of the task, the window's tasks' side in a last row. Raw figures and shares
-//! only - no ratio of lines to minutes, no ranking (the GM's Goodhart caution, the same day).
+//! ([`super::sized`], [`super::turns`]), and a table of each task's minutes in seven groups of the report's own categories, each
+//! its % of the task, the window's tasks' side in a last row. A share is printed only of TIME and of TOKENS - a task's tokens by
+//! kind and by actor (the GM 2026-11-27: "Can you also make it so that the report that we generate includes percentages as
+//! well?"); a COUNT and a line class carry none, and test runs and compiles carry the minutes per run of their own category
+//! instead (451 T521, the GM the same day: "I don't know that it's useful to see percentages for counts the way that it is to see
+//! percentages for time", and of the line classes: "I think I only really care about that for time and tokens"). Raw figures
+//! only - no ratio of lines to minutes, no ranking (the GM's Goodhart caution).
 
 use std::collections::HashMap;
 use std::fmt::Write as _;
@@ -25,16 +28,37 @@ pub struct Extra {
     pub unbooked: (usize, Tok),
 }
 
-/// A count with its share of `of`.
-fn share(x: f64, of: f64) -> String {
-    format!("{x} ({})", pct(x, of))
+/// The minutes per run of `n` runs that held `secs` seconds, `-` for no run (451 T521).
+#[must_use]
+pub fn per_run(n: usize, secs: f64) -> String {
+    if n == 0 {
+        return "-".to_owned();
+    }
+    #[expect(clippy::cast_precision_loss, reason = "a run count")]
+    let per = secs / n as f64;
+    m(per)
 }
 
-/// Lines added and deleted, and their share of the task's changed lines.
-fn lines(l: Lines, of: u64) -> String {
-    #[expect(clippy::cast_precision_loss, reason = "a diff's line count")]
-    let (x, of) = ((l.add + l.del) as f64, of as f64);
-    format!("+{} -{} ({})", l.add, l.del, pct(x, of))
+/// What a count of runs prints after it: the minutes per run of `secs`, its category's seconds, nothing for no run (451 T521).
+fn each(n: usize, secs: f64) -> String {
+    let per = per_run(n, secs);
+    if n == 0 {
+        String::new()
+    } else {
+        format!(", {per} min each")
+    }
+}
+
+/// The seconds of category `cat` in category rows, none where it is absent.
+fn secs(cats: &[(String, Cell)], cat: &str) -> f64 {
+    cats.iter()
+        .find(|(n, _)| n == cat)
+        .map_or(0.0, |(_, v)| v.min)
+}
+
+/// Lines added and deleted, no share (451 T521).
+fn lines(l: Lines) -> String {
+    format!("+{} -{}", l.add, l.del)
 }
 
 /// Tokens in thousands with their share of `of`.
@@ -79,16 +103,7 @@ fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
     let s = x.sizes.get(k).cloned().unwrap_or_default();
     let t = x.turns.get(k).copied().unwrap_or_default();
     let (tests, compiles, makes) = counts(whole, k);
-    let changed = s.test.add + s.test.del + s.code.add + s.code.del + s.prose.add + s.prose.del;
-    #[expect(clippy::cast_precision_loss, reason = "counts")]
-    let (tests, compiles, makes, calls) = (
-        tests as f64,
-        compiles as f64,
-        makes as f64,
-        t.calls() as f64,
-    );
-    #[expect(clippy::cast_precision_loss, reason = "counts")]
-    let turn = |n: usize| share(n as f64, calls);
+    let cats = super::sums(whole, &|x| x == k).0;
     let tok = t.tok();
     let every = all(&tok);
     let shared = if s.shared.is_empty() {
@@ -98,15 +113,15 @@ fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
     };
     vec![
         format!("{}{shared}", s.commits),
-        lines(s.test, changed),
-        lines(s.code, changed),
-        lines(s.prose, changed),
-        share(tests, tests + compiles),
-        share(compiles, tests + compiles),
+        lines(s.test),
+        lines(s.code),
+        lines(s.prose),
+        format!("{tests}{}", each(tests, secs(&cats, "tests"))),
+        format!("{compiles}{}", each(compiles, secs(&cats, "compile"))),
         makes.to_string(),
-        turn(t.builders),
-        turn(t.agents),
-        turn(t.session),
+        t.builders.to_string(),
+        t.agents.to_string(),
+        t.session.to_string(),
         tokens(tok.out, every),
         tokens(tok.fresh, every),
         tokens(tok.cached, every),
@@ -123,7 +138,7 @@ fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
 /// The summary table: one row a landed task, then the one line naming each figure's source and what it cannot see.
 pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra) {
     out.push_str(
-        "## The landed tasks' size, counts, turns and tokens (451 T512: raw figures, each with its share of the task's own whole, for \
+        "## The landed tasks' size, counts, turns and tokens (451 T512: raw figures, a share only of tokens, for \
          the process review to read beside the minutes, never a target)\n\n\
          | task | commits | test lines | non-test lines | prose lines | test runs | compiles | make runs | builder turns | review-agent \
          turns | session turns | output | fresh input | cache read | cache write | tokens: builders / review agents / session |\n\
@@ -140,9 +155,10 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
     }
     let _ = writeln!(
         out,
-        "\n(each line class's % is of the task's changed lines, added and deleted; test runs' and compiles' of the two together; a \
-         make target's runs' share is in the task's target table; each turn's of the task's turns; each token kind's of the task's \
-         tokens, and the last column each actor's share of them) {SOURCES} The main session's calls booked to no task: {}, their tokens {} (output {}, cache read {}).\n",
+        "\n(a share only of time and of tokens: each token kind's % is of the task's tokens, and the last column each actor's share \
+         of them; a count and a line class carry none (451 T521): test runs and compiles carry the minutes per run of the task's \
+         `tests` and `compile` minutes, a make target's runs its own row's minutes per run in the task's target table, lines and \
+         turns are counts alone) {SOURCES} The main session's calls booked to no task: {}, their tokens {} (output {}, cache read {}).\n",
         x.unbooked.0,
         kilo(all(&x.unbooked.1)),
         kilo(x.unbooked.1.out),
@@ -355,25 +371,23 @@ pub fn own_table(out: &mut String, whole: &Ledger, key: &Key) {
     out.push('\n');
 }
 
-/// The task's line beside its tables: its counts beside the `tests` and `compile` minutes, its size, turns and tokens, with shares.
+/// The task's line beside its tables: its counts beside the `tests` and `compile` minutes with the minutes per run, its size, its
+/// turns and its tokens, a share only of its tokens (451 T521).
 #[must_use]
 pub fn line(whole: &Ledger, key: &Key, cats: &[(String, Cell)], x: &Extra) -> String {
-    let min = |c: &str| {
-        cats.iter()
-            .find(|(n, _)| n == c)
-            .map_or(0.0, |(_, v)| v.min)
-    };
+    let (tests, compiles, _) = counts(whole, key);
+    let (t, cm) = (secs(cats, "tests"), secs(cats, "compile"));
     let c = cells(whole, key, x);
     let inline = x.sizes.get(key).map_or(0, |s| s.inline);
     format!(
-        "Beside its minutes (451 T512): `tests` {} min in {} test runs, `compile` {} min in {} compiles, {} make runs (each target's \
-         in the runs column below, with its share); {} commits: test {}, non-test {}, prose {}, {inline} of its non-test `.rs` files \
+        "Beside its minutes (451 T512): `tests` {} min in {tests} test runs{}; `compile` {} min in {compiles} compiles{}; {} make runs \
+         (each target's in the runs column below, with its minutes per run); {} commits: test {}, non-test {}, prose {}, {inline} of its non-test `.rs` files \
          holding an inline test block; turns: builders {}, review agents {}, session {}; tokens: output {}, fresh input {}, cache \
          read {}, cache write {}; by actor (builders / review agents / session) {}.\n",
-        m(min("tests")),
-        c[4],
-        m(min("compile")),
-        c[5],
+        m(t),
+        each(tests, t),
+        m(cm),
+        each(compiles, cm),
         c[6],
         c[0],
         c[1],

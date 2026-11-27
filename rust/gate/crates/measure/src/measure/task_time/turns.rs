@@ -35,12 +35,6 @@ pub struct Turns {
 }
 
 impl Turns {
-    /// Every call.
-    #[must_use]
-    pub fn calls(&self) -> usize {
-        self.builders + self.agents + self.session
-    }
-
     /// Every call's tokens.
     #[must_use]
     pub fn tok(&self) -> Tok {

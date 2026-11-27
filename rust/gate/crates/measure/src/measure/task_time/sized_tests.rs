@@ -270,19 +270,25 @@ fn a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares() {
     let out = got.stdout;
     for want in [
         // 9 changed lines: test 2, non-test 6 (the inline block's among them), prose 1; the tick left out, the bundle shared
-        "| 451-x T1 | 2 (shared with T9) | +2 -0 (22.2%) | +6 -0 (66.7%) | +1 -0 (11.1%) | 2 (66.7%) | 1 (33.3%) | 2 | 2 (50.0%) | \
-         1 (25.0%) | 1 (25.0%) | 0.3k (10.9%) | 0.0k (0.4%) | 2.4k (87.3%) | 0.0k (1.5%) | 80.4% / 17.8% / 1.8% |",
+        "| 451-x T1 | 2 (shared with T9) | +2 -0 | +6 -0 | +1 -0 | 2, 1.3 min each | 1, 0.3 min each | 2 | 2 | 1 | 1 | 0.3k (10.9%) | 0.0k (0.4%) | 2.4k (87.3%) | 0.0k (1.5%) | 80.4% / 17.8% / 1.8% |",
         // the other feature's T1: its repair only
-        "| 449-z T1 | 1 | +2 -0 (100.0%) | +0 -0 (0.0%) | +0 -0 (0.0%) |",
+        "| 449-z T1 | 1 | +2 -0 | +0 -0 | +0 -0 |",
         "The main session's calls booked to no task: 2, their tokens 0.0k (output 0.0k, cache read 0.0k).",
         super::beside::SOURCES,
         "## Each landed task's minutes by group, each its % of the task (451 T512)",
         super::beside::GROUPING,
         "| the window, the tasks' side | ",
         "Beside its minutes (451 T512): `tests` ",
-        "in 2 (66.7%) test runs, `compile` ",
-        "1 of its non-test `.rs` files holding an inline test block",
+        "in 2 test runs, 1.3 min each; `compile` 0.3 min in 1 compiles, 0.3 min each; 2 make runs (each target's in the runs column below, with its minutes per run);",
+        // a line class carries no share (451 T521)
+        "commits: test +2 -0, non-test +6 -0, prose +1 -0, 1 of its non-test `.rs` files holding an inline test block; turns: builders \
+         2, review agents 1, session 1; tokens: output 0.3k (10.9%)",
+        // no run, no minutes per run
+        "`tests` 0.0 min in 0 test runs; `compile` 0.0 min in 0 compiles; 0 make runs",
         "| make static | tests | 1 | 1.0 | ",
+        // a target's runs beside its own row's minutes per run, no share of the table's runs (451 T521)
+        "| blocking | % of task | % of window | minutes per run |\n",
+        "| make static | tests | 1 | 1.0 | 12.3% | 10.6% | 1.0 | 16.7% | 15.4% | 1.0 |\n",
         // the builder's own clock, 10:01:41 to 10:06:00, each second once (451 T512's own path)
         "Its own path (451 T512): 4.3 min.",
         "| task | own-path minutes | builder thinking |",

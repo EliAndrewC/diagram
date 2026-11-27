@@ -457,16 +457,13 @@ fn tables(
         m(me_w.block),
         pct(mine.block, work.block)
     );
-    out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | % of runs |\n|---|---|---|---|---|---|---|---|---|---|\n");
-    // each target's runs as a share of the table's runs (451 T512)
-    #[expect(clippy::cast_precision_loss, reason = "run counts")]
-    let runs = targets.iter().map(|x| x.2).sum::<usize>() as f64;
+    out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | minutes per run |\n|---|---|---|---|---|---|---|---|---|---|\n");
+    // each target's runs beside its own minutes per run, no share of the table's runs: a count carries none (451 T521)
     for (t, cat, n, c) in targets {
-        #[expect(clippy::cast_precision_loss, reason = "a run count")]
-        let of_runs = pct(*n as f64, runs);
+        let per = beside::per_run(*n, c.min);
         let _ = writeln!(
             out,
-            "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} | {of_runs} |",
+            "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} | {per} |",
             m(c.min),
             pct(c.min, me_w.min),
             pct(c.min, side(cat).min),
