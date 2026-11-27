@@ -109,3 +109,16 @@ design): `make review-cost` and `dev/review-ledger.md` record each review pass's
 own report carries `subagent_tokens` at its end, but nothing books it to a task; 451's request (item 4) notes an agent's token cost
 is "Not logged today"; `make task-time` books minutes by category, never tokens. 451 T499 (in flight) measures one slice: how
 many bytes of the plan builders read into context.
+
+## His sixth message (2026-11-27, the afternoon after): the MACHINE's resources as metrics - CPU, memory, disk space, disk writes and the file-system journal
+
+<!-- SOURCE: GM NOTES -->
+> Okay, that sounds good. And then I guess we should probably also add on to our process reviewer something about how the metrics that it is monitoring to see how the system is doing should include things like CPU usage, disk space usage, memory usage, and also probably something disk writes, we have had periods of time in which the thing that is the bottleneck that we're in contention for is the file system journal. That's actually not something that I have made any attempt to optimize just yet, but literally might be something that I could imagine speeding things up if we made some tweaks. So it feels like a thing that we want to make sure that we are able to keep an eye on. So please add this message to our running list of my messages about the design of the process reviewer. So that this is something that we will take into account when we design and implement that. Thank you.
+<!-- END SOURCE -->
+
+What the session knows today of where these are and are not recorded (2026-11-27; a starting point, not a design): the clone's
+memory and load sampler (451 T274, `make sampler-start` / `make sampler-report`) writes a JSON line every `L7R_SAMPLE_S` seconds to
+`l7r-events/samples/mem-samples.jsonl` in the git common directory - the cgroup's memory and the load average, nothing per process
+and no disk; `make disk-audit` reports disk SPACE by area against its budgets when run, keeping no history (it found the build
+cache at 246.8 GB against 100 GB that day, filed as 451 T515); nothing records disk WRITES, I/O wait or the journal's contention
+(jbd2), though the journal was the contended resource on earlier days; CPU is seen only as the load average.
