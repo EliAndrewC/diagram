@@ -877,31 +877,124 @@ phase 5, not by this task.
 
 **Performance work?** no
 
-### T12 (<why: the finding or measurement that files it>)
+### T12 (D2: phase 2's runner, the process the lane's later tasks run their batches in; lands after T11)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/runner.rs` (new, with `runner/tests.rs`): `start` probes the lock, spawns `setsid
+  <exe> lane --work <common>` from the common directory with stdio on /dev/null and every inherited fd past 2 marked CLOEXEC
+  (`pages`' runner's measured reason), and waits `START_WAIT_S` for the RUNNER to hold `l7r-lane/lane.lock`, printing its pid; a
+  held lock is a no-op naming the holder's pid (the pid read only while the lock is held, so a killed runner's stale pid names
+  nothing). `stop` writes `l7r-lane/stop-request` keyed by the runner's pid and waits `STOP_WAIT_S`; `NOW=1` sends TERM to the
+  runner's process group, KILL past the wait, and the stopper writes the `stop` line. `work` is the loop with every seam injected
+  (clock, sleep, hand-ins, resume, step): its own stop request, a hand-in commit not seen before or a batch run resetting the idle
+  clock, `LANE_IDLE_S` ending it with `stop why "idle"`, a failing step or resume with `stop why "error: <e>"`; at start it writes
+  `start {pid, why}` and resumes the log's last open batch (data-model.md, "Recovery"). `work_cli` is the detached runner with the
+  production seams (hand-ins as `make lane` reads them; `step` and `resume` stand-ins T14 fills). `lane.rs` gains the verbs
+  `start`, `stop`, `stop --now`, `--work <common>` (`make lane-start`, `make lane-stop [NOW=1]`); the binary's `land` arm calls
+  `on_hand_in`. The stall watchdog (`stall_watchdog_hooks/pass.rs`) learns the runner's exact argv. `dev/audits/lane-runner.md`
+  covers the knobs.
+- **Decision 1 - the lock is the truth, the pid secondary.** The starter never holds the lock across the spawn: it probes, spawns
+  and waits for the runner to take it; a racing second runner loses `flock -n` and leaves with exit 0. Label: convention (the
+  project's runner pattern, `make page-session`'s).
+- **Decision 2 - the runner's `start` and `stop` lines name no batch.** T11's `state_of` reads a `stop` naming a batch as
+  `stopped`, which Recovery skips; a `NOW=1` kill mid-batch must leave the batch resumable. Pinned in two tests (observed 2026-11-27, method: the build half's `runner::tests`, read in the tree). Label: the easier
+  route (T11's mapping kept, nothing moved in `state_of`).
+- **Decision 3 - a stop request is keyed by pid**, and one naming another pid is dropped by the next runner at its start (a request
+  a killed runner never read must not stop its successor). Label: convention.
+- **Decision 4 - the idle clock runs from the newest NEW hand-in (or a batch run), never from "nothing waiting".** Before T14 a
+  waiting hand-in would otherwise keep the runner up for ever. Hand-ins present at the start count as the first arrival. Label:
+  GUESS beside `LANE_IDLE_S` (D2's knob, 3600 s).
+- **Decision 5 - recovery names the open batch and hands `resume` the batch's own reading** (`remaining`: its changes less its
+  own ejections and what `origin/main` holds); bringing the tree to `origin/main` and running the rest is T14's seam. Until T14 the
+  open batch is named on the start line (`why: "resume <batch>"`) and left open. Label: the easier route (D2, data-model.md's
+  Recovery, split at T14's seam).
+- **Decision 6 - a hand-in starts the runner only from phase 2's base, `HAND_IN_BASE=origin`.** D2 says "every hand-in,
+  idempotently"; read by phase, because in phase 1 the coordinator lands by hand and, once T14 lands, a runner batching the same
+  hand-ins would race it. `on_hand_in` (wired in the binary's `land` arm, `land_or_hand_in` in `rust/gate/src/lib.rs`, not in
+  `builder_done.rs` or `hand_in.rs`: `task` cannot depend on `lane`) passes through any verb but `--hand-in`, a refused hand-in and
+  any base but `origin`; the start's failure never changes the hand-in's exit. T22 flips the base, which switches this on with no
+  further edit. Label: deliberate deviation from D2's literal "every hand-in", for phase 1 only (the plan's own phase split, D3's
+  base by phase).
+- **Decision 7 - the stall watchdog leaves unjudged only the session that waits on the lane.** The plan says only that the
+  watchdog "learns its argv"; the use made of it (`stall_watchdog_hooks/pass.rs`, `lane_works`): a session is not judged a stall
+  while BOTH hold - the clone's runner lives (`runs_lane`, the EXACT argv `<dir>/l7r-gate lane --work <common>`, canonicalized,
+  `<clone>/.git` as the common directory); and a `l7r-gate lane wait` (`waits_on_lane`, exactly that argv) that THIS session
+  started runs with its working directory in the clone - the wait descends from the session's registry pid by its parents' `stat`
+  (`descends`, bounded at 64 steps, a GUESS well past any shell's nesting). Why: D9 has the coordinator end its turn on a
+  backgrounded `make lane-wait` while a batch runs, and a stall nudge is a wake FR-005 does not list. Another session of the same
+  clone, whose process the wait does not descend from, is judged as before (tested: a second session of the clone judged while the
+  first waits; an entry with no pid, a chain reaching init, a missing parent and a cycle exempt nothing). The wait is T20's command,
+  so until T20 the exemption holds for no session; after it, it lasts while the session's wait runs, not while the runner idles.
+  The build half's form (the runner alone exempting every session claiming the clone) was ruled NOT LEGITIMATE at this section's
+  first plan review, and a clone-wide wait with page sessions left out at its second (2026-11-27: nothing tied the wait to the
+  session judged); narrowed here to the session's own wait. Label: the easier route (the page-session retry exemption's form,
+  `in_retry_wait`, beside it).
+- **Decision 8 - the timing knobs** `POLL_S` 5 s, `START_WAIT_S` 5 s, `STOP_WAIT_S` 10 s and `TAKE_S` 1 s: GUESS, each beside its
+  constant and in `dev/audits/lane-runner.md`; `LANE_IDLE_S` and `LANE_POLL_S` read from the environment, a non-number refused
+  (exit 2).
+- **Decision 9 - the runner takes its lock with a bounded retry, `flock_within(.., TAKE_S)`, not one try.** `held()`'s probe takes
+  the lock for an instant when it is free, so a start polling `holder()` could beat the runner's single try and leave no runner.
+  Measured after (2026-11-27, a scratch repository, 200 `lane start` / `lane stop --now` cycles in a loop): 200 started, 0 runners
+  left. Label: GUESS (`TAKE_S`).
+- **For T22 - the base must flip in one place.** `land_or_hand_in` reads the raw environment (`std::env::var("HAND_IN_BASE")`)
+  while the land crate's `hand_in.rs` treats unset as `clone`; they agree today (unset is phase 1 in both). If T22 flips the base by
+  changing `hand_in.rs`'s DEFAULT rather than setting the variable, the land crate hands in on `origin/main` while `on_hand_in`
+  still sees unset and never starts the runner. T22 therefore flips both together - one public reading of the knob in the land
+  crate that `land_or_hand_in` asks too - and its test asserts a hand-in with `HAND_IN_BASE` unset starts the runner. Written on
+  T22's line in tasks.md.
+- **For T14 - a runner started by a hand-in inherits that call.** It runs `current_exe()`, the POOL TREE's build of `l7r-gate`
+  (rebuilt or recycled under it with the tree), and keeps `make builder-done`'s environment for its life (`MSG`, `GUARD`, `T`, `F`,
+  `L7R_GATE_TREE`, which `gate_tree()` reads); T14 is the first task to run `make land` from the runner, where `T` and `F` from the
+  environment would reach make's variables and `L7R_GATE_TREE` would point the gate at the pool tree. T14 clears it: `start`'s
+  spawn removes those variables, and the runner runs the binary of the lane tree's `scripts/gates/l7r-gate.sh` rather than the
+  caller's. Dormant until then: `make lane-start` from a session is the only start before T22's base (Decision 6). Written on T14's
+  line in tasks.md.
+- Red first (2026-11-27): the lane crate's `runner::tests` against signature stubs, 0 passed, 11 failed; after, 13 of 13 (with the
+  later stop-hard and real-lane tests), the lane crate 25 of 25, the binary 10 of 10. The watchdog's `pass::tests` with
+  `lane_works` stubbed false, 16 passed, 1 failed; after, 17 of 17 (the guard crate 627 of 627). Its narrowed form (Decision 7)
+  against a wait not tied to the session (`descends` bypassed), 16 passed, 1 failed, at the second session's judgment; after, 17
+  of 17, the guard crate 629 of 629. The lane verb test
+  (`lane::tests::the_runner_s_verbs_are_asked_of_the_clone_s_common_directory`) with T11's refusals put back (the four verbs
+  unmatched), 0 passed, 1 failed. Not run red: the binary's `land` arm (`land_or_hand_in`), which only reads the variable and calls
+  `on_hand_in`, tested whole by `a_hand_in_starts_the_runner_only_from_phase_two_s_base_and_only_when_it_succeeded`; the stall
+  watchdog's hook suite gained no shell case (an exact four-word argv ending in `l7r-gate` needs a compiled stand-in), the Rust
+  unit test covering the matcher over a fake `/proc`. Live (2026-11-27, a scratch repository, the tree's binary through
+  `scripts/gates/l7r-gate.sh`): a start read through a pipe returned at once (pid = process group = session); a second start named
+  it; `LANE_IDLE_S=3` stopped it `idle` within one poll; a soft stop and `NOW=1` each ended one with its line; an open batch line
+  made the next start's line `why: "resume 461-1"`, the batch still `carrying` in `make lane`. Nothing was run against the real
+  clone's lane.
 
 ### T12 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** One runner a clone, started by `make lane-start` (and, from phase 2's base, by each hand-in),
+   that outlives the turn that started it, ends itself when idle or asked, survives a kill by its log, and is never mistaken by
+   the stall watchdog for a stalled session; T14 fills its batch step.
+2. **The constraints.** D2 (the detached runner, its lock, its idle stop, `make lane-stop`), D3 (the base by phase), D8 (a JSON
+   line a transition), D9 (the coordinator waits in the background), FR-005 (the wakes allowed), data-model.md ("Recovery", the
+   `start` and `stop` events), contracts/lane-cli.md (the verbs), rust/gate/CLAUDE.md (a crate's wiring, every line covered by its
+   own tests).
+3. **Where each comes from.** R: plan.md D2, D3, D8, D9; data-model.md; contracts/lane-cli.md; spec FR-005. O: the 200-cycle
+   start/stop loop and the live scratch-repository runs above (2026-11-27); `pages`' runner's measured fd leak (the CLOEXEC).
+4. **Do they describe the world here?** Yes: the common directory is the one `make lane` reads (T11), the hand-ins are read as it
+   reads them, and the live runs above wrote and read `l7r-lane/` in a scratch clone's common directory.
+5. **The order.** After T11 (the crate and its log); before T14 (the batch step and resume), T20 (the wake-up, `make lane-wait`)
+   and T22 (the base flipped to `origin`, which switches Decision 6 on).
+6. **The exits.** Green: the lane crate's tests (a second start a no-op, the idle stop, a killed runner's batch resumed from its
+   log), the watchdog's tests, `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one runner, one lock; the start race found by the advisor was measured closed (Decision 9); the watchdog's exemption narrowed at review rounds 1 and 2 (Decision 7).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green and the live start/stop/idle/resume runs above, 2026-11-27.
+10. **Before moving a constant.** n/a: new knobs, each labeled GUESS beside its constant and audited.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new code, no defect fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- The stall watchdog's long-run warning (`LONG_RUN`, 1800 s, its GUESS knob in `pass.rs`) would still nudge the coordinator over
+  its own backgrounded `make lane-wait` past 30 minutes, a wake FR-005 does not list, each one 540k-966k tokens (measured 2026-11-27 (the transcript's usage fields), D9; spec.md's night). Not fixed here: `make lane-wait` is
+  T20's command and does not exist yet. Filed as T47; lands before T22 (with T20, whose `make lane-wait` it exempts, so no
+  coordinator waits on the lane without it).
+
+**Performance work?** no
 
 
 <!-- plan-archive: T13 to T13 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->

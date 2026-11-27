@@ -546,9 +546,11 @@ fn a_long_make_with_no_pane_is_logged_and_a_dry_run_only_says_so() {
 }
 
 #[test]
-fn a_live_lane_runner_of_the_clone_exempts_its_session_and_nothing_else_does() {
+fn the_session_waiting_on_its_clone_s_live_lane_runner_is_exempt_and_nothing_else_is() {
     let mut w = world("lane");
     let e = w.session("s", &json!({}), 7200);
+    // a second session of the same clone, another process: the coordinator's wait never exempts it
+    let other = w.session("o", &json!({"pid": 999_999}), 7200);
     w.dirty();
     let proc = w.root.join("proc");
     let at = proc.join("4343");
@@ -556,9 +558,19 @@ fn a_live_lane_runner_of_the_clone_exempts_its_session_and_nothing_else_does() {
     std::fs::create_dir_all(proc.join("self")).unwrap();
     w.p.proc = proc;
     let t = now();
+    let me = u64::from(std::process::id());
     let common = w.clone.join(".git");
     let c = w.clone.to_string_lossy().into_owned();
-    assert!(!lane_works(&w.p, &c));
+    assert!(!lane_works(&w.p, &c, Some(me)));
+    // the session's `make lane-wait` (T20's): the wait 4344, its shell 4345, the session's own process above them
+    let waits = w.p.proc.join("4344");
+    let shell = w.p.proc.join("4345");
+    std::fs::create_dir_all(&waits).unwrap();
+    std::fs::create_dir_all(&shell).unwrap();
+    std::fs::write(waits.join("cmdline"), "/x/l7r-gate\0lane\0wait\0").unwrap();
+    std::fs::write(waits.join("stat"), "4344 (l7r-gate (x)) S 4345 1 1\n").unwrap();
+    std::fs::write(shell.join("stat"), format!("4345 (bash) S {me} 1 1\n")).unwrap();
+    std::os::unix::fs::symlink(w.clone.join("sub"), waits.join("cwd")).unwrap();
     // the runner of another clone, a process that only names the directory, and a runner with words after its own exempt nothing
     for loose in [
         "/x/l7r-gate\0lane\0--work\0/elsewhere/.git\0".to_owned(),
@@ -567,7 +579,7 @@ fn a_live_lane_runner_of_the_clone_exempts_its_session_and_nothing_else_does() {
         format!("/x/l7r-gate\0lane\0--work\0{}\0more\0", common.display()),
     ] {
         std::fs::write(at.join("cmdline"), loose).unwrap();
-        assert!(!lane_works(&w.p, &c));
+        assert!(!lane_works(&w.p, &c, Some(me)));
         assert!(judge(&w.p, &e, t).is_some());
     }
     let argv = format!(
@@ -575,6 +587,30 @@ fn a_live_lane_runner_of_the_clone_exempts_its_session_and_nothing_else_does() {
         common.display()
     );
     std::fs::write(at.join("cmdline"), argv).unwrap();
-    assert!(lane_works(&w.p, &c));
+    assert!(lane_works(&w.p, &c, Some(me)));
     assert!(judge(&w.p, &e, t).is_none());
+    // the other session of the clone, and an entry with no pid, are judged while the coordinator waits
+    assert!(judge(&w.p, &other, t).is_some());
+    assert!(!lane_works(&w.p, &c, None));
+    // a chain that reaches init, a parent with no stat, and a cycle never reach the session
+    for parent in ["1", "4346", "4344"] {
+        let line = format!("4345 (bash) S {parent} 1 1\n");
+        std::fs::write(shell.join("stat"), line).unwrap();
+        assert!(!lane_works(&w.p, &c, Some(me)), "{parent}");
+    }
+    std::fs::write(shell.join("stat"), format!("4345 (bash) S {me} 1 1\n")).unwrap();
+    // a wait elsewhere, or with other words, exempts nothing; nor the runner alone (before T20, or between batches)
+    for (wait, cwd) in [
+        ("/x/l7r-gate\0lane\0wait\0", Path::new("/elsewhere")),
+        ("/x/l7r-gate\0lane\0wait\0more\0", w.clone.as_path()),
+        ("/x/l7r-gate\0lane\0status\0", w.clone.as_path()),
+    ] {
+        std::fs::write(waits.join("cmdline"), wait).unwrap();
+        std::fs::remove_file(waits.join("cwd")).unwrap();
+        std::os::unix::fs::symlink(cwd, waits.join("cwd")).unwrap();
+        assert!(!lane_works(&w.p, &c, Some(me)));
+    }
+    std::fs::remove_dir_all(&waits).unwrap();
+    assert!(!lane_works(&w.p, &c, Some(me)));
+    assert!(judge(&w.p, &e, t).is_some());
 }

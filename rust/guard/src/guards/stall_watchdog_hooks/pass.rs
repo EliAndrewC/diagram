@@ -5,8 +5,8 @@
 //! (uncommitted changes, commits not on main, or a live make - the mirror is never a workspace and never counts); and not one of a
 //! page-session queue's own sessions while that queue is in its usage-limit retry wait, which holds only while the queue's runner lives
 //! and its retry line is younger than the wait it states (plan review round 1 found three stale retry lines that must exempt nothing);
-//! nor a session whose clone's landing-lane runner lives (feature 461 T12: [`lane_works`], by the runner's exact argv), which waits on
-//! the lane by design until the runner idles out.
+//! nor the session that waits on its clone's landing lane by design (feature 461 T12: [`lane_works`] - the runner's exact argv live,
+//! and a `l7r-gate lane wait` in the clone that the session itself started).
 //!
 //! WHAT IT DOES (the GM, 2026-09-30: "Tab title + bell"; "Nudge if prompt empty"; plan D6). The stalled session's tab is retitled and
 //! the bell rung, once per stall; in the session's OWN pane, when the input line is empty, one nudge is typed, once per stall. A
@@ -320,12 +320,53 @@ pub(crate) fn runs_lane(argv: &[String], common: &Path) -> bool {
         if exe.rsplit('/').next() == Some("l7r-gate") && verb == "lane" && work == "--work" && real(Path::new(at)) == real(common))
 }
 
-/// Does the landing lane's runner live for `clone` (461 T12)? While it does, the clone's session waits on the lane by design (D9: it
-/// ends its turn on a backgrounded `make lane-wait` while a batch runs), so silence there is not a stall. The exemption ends with the
-/// runner, which stops `LANE_IDLE_S` (an hour) after the last hand-in it saw, so a session left idle past that is judged again.
-pub(crate) fn lane_works(p: &Paths, clone: &str) -> bool {
+/// Is `argv` the landing lane's wake-up, exactly `<dir>/l7r-gate lane wait` (feature 461 T20's command, D9)?
+pub(crate) fn waits_on_lane(argv: &[String]) -> bool {
+    let argv = argv.strip_suffix(&[String::new()]).unwrap_or(argv);
+    matches!(argv, [exe, verb, wait] if exe.rsplit('/').next() == Some("l7r-gate") && verb == "lane" && wait == "wait")
+}
+
+/// Does the session whose process is `session` wait on `clone`'s landing lane by design (461 T12, narrowed at its plan review)?
+/// D9: the coordinator ends its turn on a backgrounded `make lane-wait` while a batch runs, so its silence is not a stall. Both hold:
+/// the clone's runner lives (its exact argv, [`runs_lane`]); and a `l7r-gate lane wait` THIS session started (a descendant of its
+/// registry pid, [`descends`]) runs with its working directory in the clone - T20's command, so before T20 this exempts no one, and
+/// another session of the clone, whose process the wait does not descend from, is judged as before. It ends with the wait or the runner.
+pub(crate) fn lane_works(p: &Paths, clone: &str, session: Option<u64>) -> bool {
+    let Some(session) = session else {
+        return false;
+    };
     let common = Path::new(clone).join(".git");
     cmdlines(p).iter().any(|argv| runs_lane(argv, &common))
+        && listed(&p.proc).iter().any(|d| {
+            let bytes = std::fs::read(d.join("cmdline")).unwrap_or_default();
+            let argv: Vec<String> = bytes
+                .split(|c| *c == 0)
+                .map(|a| String::from_utf8_lossy(a).into_owned())
+                .collect();
+            waits_on_lane(&argv)
+                && std::fs::read_link(d.join("cwd")).is_ok_and(|c| c.starts_with(clone))
+                && descends(p, d, session)
+        })
+}
+
+/// Does the process at `dir` (a `/proc/<pid>`) descend from `ancestor`, by its parents' `stat` (the field after the state)? Bounded
+/// at 64 steps, a GUESS well past any shell's nesting, so a cycle in a fake or racing `/proc` ends.
+fn descends(p: &Paths, dir: &Path, ancestor: u64) -> bool {
+    let mut at = dir.to_path_buf();
+    for _ in 0..64 {
+        let stat = std::fs::read_to_string(at.join("stat")).unwrap_or_default();
+        let parent = stat
+            .rsplit(')')
+            .next()
+            .and_then(|rest| rest.split_whitespace().nth(1))
+            .and_then(|f| f.parse::<u64>().ok());
+        match parent {
+            Some(pid) if pid == ancestor => return true,
+            Some(pid) if pid > 1 => at = p.proc.join(pid.to_string()),
+            _ => return false,
+        }
+    }
+    false
 }
 
 fn dispatcher_of(p: &Paths, pid: Option<&Value>) -> String {
@@ -413,7 +454,10 @@ pub(crate) fn judge(p: &Paths, entry: &Value, now: f64) -> Option<Stall> {
     } else {
         unfinished(p, &clone)
     };
-    if what.is_empty() || in_retry_wait(p, &clone, sid, now) || lane_works(p, &clone) {
+    if what.is_empty()
+        || in_retry_wait(p, &clone, sid, now)
+        || lane_works(p, &clone, entry.get("pid").and_then(Value::as_u64))
+    {
         return None;
     }
     Some(Stall {

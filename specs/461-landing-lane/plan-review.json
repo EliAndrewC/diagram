@@ -428,7 +428,7 @@
    "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "f04d7237d2d7a231d379628003251be70ee1a7e17ee28dbba93b14b59274462b",
+   "sha256": "4204bcc8569fef95abdba1c3b38029cc50798fbfc6416205c794456a97ea2e39",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -441,6 +441,12 @@
   },
   "### T17 Approach (checklist part A)": {
    "sha256": "9ac6a0a488cfb4bae4ab48a02c19a13af8de9037a5570e2bf86b8da1f0abe71b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T12 (D2: phase 2's runner, the process the lane's later tasks run their batches in; lands after T11)": {
+   "sha256": "eff8ce850b9da6a08aae3994a9fd1164ca7b2a3cda02fdec77bef3c0949bd2f7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2478,6 +2484,281 @@
      "why": "Sequencing and exits within the plan; nothing the request asked is deferred or dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T12 (D2: phase 2's runner, the process the lane's later tasks run their batches in; lands after T11)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The lane lock is the truth and the pid is secondary. The starter probes, spawns and waits, and a racing second runner exits 0.",
+     "class": "within",
+     "why": "This is how the lane runner FR-003 asks for gets built. It narrows nothing in the request or the spec."
+    },
+    {
+     "id": "D2",
+     "summary": "The runner's start and stop lines name no batch, so a NOW=1 kill mid-batch leaves the batch resumable.",
+     "class": "within",
+     "why": "It keeps a killed batch recoverable (FR-004's red-batch handling, US4). It narrows nothing."
+    },
+    {
+     "id": "D3",
+     "summary": "A stop request is keyed by pid. A stale request is dropped by the next runner.",
+     "class": "within",
+     "why": "An implementation detail of a stop that cannot reach a successor. It narrows nothing."
+    },
+    {
+     "id": "D4",
+     "summary": "The idle clock runs from the newest new hand-in or batch run. LANE_IDLE_S is 3600 s (GUESS).",
+     "class": "within",
+     "why": "It decides when the runner ends itself. Neither the request nor the spec says anything that this narrows."
+    },
+    {
+     "id": "D5",
+     "summary": "Recovery names the open batch and hands resume the batch's remaining changes. Bringing the tree to origin/main and running the rest is T14's seam, and until then the batch is left open.",
+     "class": "within",
+     "why": "The work is split across tasks, and T14 carries the rest. Nothing asked is dropped."
+    },
+    {
+     "id": "D6",
+     "summary": "A hand-in starts the runner only when HAND_IN_BASE=origin (phase 2). In phase 1 hand-ins do not start it, and T22 flips the base.",
+     "class": "within",
+     "why": "This departs from the plan's own D2 ('every hand-in'), not from the request or the spec. FR-003 does not say what starts the runner. The coordinator lands by hand in phase 1, and a runner batching the same hand-ins would race it. The end state after T22 is every hand-in, so this holds only if T22 flips the base as the For-T22 note binds it to."
+    },
+    {
+     "id": "D7a",
+     "summary": "The stall watchdog does not judge the coordinator's session while the clone's lane runner lives.",
+     "class": "within",
+     "why": "It serves FR-005: a stall nudge is a wake the lane's wake list does not include, and SC-004/FR-005 keep the coordinator's wakes to one per batch plus US5."
+    },
+    {
+     "id": "D7b",
+     "summary": "The same exemption covers every other session claiming that clone, for example a page session, while the runner lives.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Nothing in request.md or the spec asks to switch off the stall watchdog for sessions other than the coordinator. Each legitimacy test fails on the block's own text. (1) Not impossible: the block names the alternative, matching the session's own backgrounded make lane-wait, and turns it down only because it is not built until T20. That is an ordering and cost reason. (2) The reason does not exist yet: the wait being protected (D9's backgrounded make lane-wait) does not exist until T20, so at T12 the exemption protects no wait at all and only removes coverage. (3) The bound is not a bound while work is going on: by D4 every new hand-in resets the idle clock, so on a working night the runner, and with it the exemption, lasts all night. (4) It does not reach its own purpose: the block's Found-and-left says LONG_RUN still nudges the coordinator anyway (T47). Two things would clear it. One is to narrow the exemption to the session that waits on the lane, which can be built with T20's make lane-wait and so is not needed before then. The other is a measured showing that the watchdog cannot tell that session apart."
+    },
+    {
+     "id": "D8",
+     "summary": "Timing knobs POLL_S, START_WAIT_S, STOP_WAIT_S and TAKE_S, each labeled GUESS. LANE_IDLE_S and LANE_POLL_S are read from the environment, and a non-number is refused.",
+     "class": "within",
+     "why": "Constants of the runner. They narrow nothing."
+    },
+    {
+     "id": "D9",
+     "summary": "The runner takes its lock with a bounded retry (TAKE_S) so that a start's probe cannot leave no runner. Measured: 200 of 200 cycles.",
+     "class": "within",
+     "why": "Keeps the runner reliable. It narrows nothing."
+    },
+    {
+     "id": "ForT22",
+     "summary": "T22 must flip HAND_IN_BASE in one place that both land_or_hand_in and hand_in.rs read, with a test for the unset case.",
+     "class": "within",
+     "why": "Binds a later task so that D6's phase-2 behavior actually comes on. It enforces what is asked."
+    },
+    {
+     "id": "ForT14",
+     "summary": "A runner started by a hand-in inherits the pool tree's binary and its environment (T, F, L7R_GATE_TREE). It is dormant until T22, and T14 clears it at the spawn.",
+     "class": "within",
+     "why": "A known hazard that cannot show up before T14 or T22 runs make land from the runner. It is bound onto T14's line, not carried forward unaddressed."
+    },
+    {
+     "id": "StubsT14",
+     "summary": "work_cli's step and resume are stand-ins that T14 fills.",
+     "class": "within",
+     "why": "The work is split across tasks. Nothing asked is dropped."
+    },
+    {
+     "id": "FoundLeft-LONG_RUN",
+     "summary": "The watchdog's LONG_RUN warning would still nudge the coordinator past 30 minutes on make lane-wait. It is left here and filed as T47, which lands before T23.",
+     "class": "within",
+     "why": "make lane-wait does not exist until T20, so the wrong wake cannot happen at T12. It is filed and ordered to land before the lane is in use (T23)."
+    }
+   ],
+   "tasks": [
+    "T12"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T12 (D2: phase 2's runner, the process the lane's later tasks run their batches in; lands after T11)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "the lock is the truth, the pid secondary; the starter probes, spawns and waits; a racing second runner loses flock -n and exits 0",
+     "class": "within",
+     "why": "Mechanism of FR-003's one lane runner; narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "D2",
+     "summary": "the runner's start and stop lines name no batch, so a NOW=1 kill mid-batch leaves the batch resumable",
+     "class": "within",
+     "why": "Keeps a killed batch recoverable (FR-004's batch is not lost); an implementation choice inside the spec."
+    },
+    {
+     "id": "D3",
+     "summary": "a stop request is keyed by pid and one naming another pid is dropped by the next runner",
+     "class": "within",
+     "why": "Correctness of the stop verb; no scope change."
+    },
+    {
+     "id": "D4",
+     "summary": "the idle clock runs from the newest new hand-in or batch run; LANE_IDLE_S 3600 s GUESS",
+     "class": "within",
+     "why": "Implements the idle stop; labeled GUESS beside its knob."
+    },
+    {
+     "id": "D5",
+     "summary": "recovery names the open batch and hands resume its remaining changes; until T14 the batch is named on the start line and left open",
+     "class": "within",
+     "why": "Splits recovery at T14's seam (the step is T14's); sequencing, not a narrowing - the batch is left open and resumable, nothing is dropped."
+    },
+    {
+     "id": "D6",
+     "summary": "a hand-in starts the runner only from phase 2's base HAND_IN_BASE=origin; in phase 1 no hand-in starts it; the start's failure never changes the hand-in's exit",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on the block's own quotation of plan D2 ('every hand-in, idempotently') and D3 (base by phase); their full text is not in the bundle. Neither the GM's request nor the spec's FR-003 says every hand-in starts a runner, so this narrows the plan's D2, not the request. Applying D2 literally in phase 1 would, once T14 lands, have a runner batching the same hand-ins the coordinator is landing by hand - two landers of one change, against FR-008's single landing route - which defeats the lane's own purpose; and before T14 the runner's step is a stand-in, so a start would do nothing. It is temporary and lifted by T22's base flip with no further edit (and the 'For T22' note closes the one way that flip could fail to switch it on)."
+    },
+    {
+     "id": "D7",
+     "summary": "the stall watchdog leaves a session unjudged while the clone's runner lives, a 'l7r-gate lane wait' runs with its working directory in the clone, and the session is not a page-session queue's",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The exemption itself serves FR-005 (a stall nudge on a coordinator waiting on its batch is a wake FR-005 does not list), and two of round one's three grounds are answered: before T20 no 'lane wait' exists so it exempts nothing, and it lasts while the wait runs, not while the runner idles. The third is not. The heading says it leaves unjudged 'only the session that waits on the lane', but the mechanism does not reach that: all three conditions are clone-scoped and nothing binds the running wait to the session being judged, so any session claiming the clone that is not a page-session queue's goes unjudged while ANY wait runs there. Round one objected that the first form covered 'sessions D9 never has waiting'; the narrowing excludes one named class (page-sessions) and rests on an unstated, unmeasured premise that the coordinator and page-sessions are the only sessions that claim a clone. The block should say instead EITHER (a) the wait is tied to the judged session (e.g. the 'lane wait' process is a descendant of that session's process, or carries its session id), with a test that a second non-page session in the same clone is still judged while the coordinator waits; OR (b) records the census of the session kinds that claim a clone, with the command that produced it, so the scope is measured rather than assumed."
+    },
+    {
+     "id": "D8",
+     "summary": "timing knobs POLL_S 5 s, START_WAIT_S 5 s, STOP_WAIT_S 10 s, TAKE_S 1 s GUESS; LANE_IDLE_S and LANE_POLL_S from the environment, a non-number refused",
+     "class": "within",
+     "why": "Knob values labeled GUESS and audited; no scope change."
+    },
+    {
+     "id": "D9",
+     "summary": "the runner takes its lock with a bounded retry flock_within(.., TAKE_S) rather than one try",
+     "class": "within",
+     "why": "Closes a start race, measured (200 cycles, 0 runners left, 2026-11-27, scratch repository); correctness."
+    },
+    {
+     "id": "For-T22",
+     "summary": "T22 flips the hand-in base in one place, both land_or_hand_in and hand_in.rs reading one knob, with a test that unset starts the runner",
+     "class": "within",
+     "why": "Forward obligation that makes D6's switch-on actually happen; enforcement of what was asked."
+    },
+    {
+     "id": "For-T14",
+     "summary": "a runner started by a hand-in inherits the pool tree's binary and builder-done's environment; T14 clears those variables and runs the lane tree's binary; dormant until T22",
+     "class": "within",
+     "why": "A hazard dormant in T12 (step is a stand-in; only make lane-start starts a runner before T22) handed to the task that first makes it live, and written on T14's line. Not a known defect carried past the step that activates it."
+    },
+    {
+     "id": "Found-and-left-T47",
+     "summary": "the watchdog's LONG_RUN warning would still nudge a coordinator over its backgrounded make lane-wait past 30 minutes; deferred to T47, landing before T23",
+     "class": "within",
+     "why": "Not a defect today: make lane-wait is T20's command and does not exist yet. Gap noted: the bundle does not show that T47 lands before the coordinator first waits on the lane (T20, and T22's base flip) rather than merely before T23; if the coordinator can wait on the lane between T20/T22 and T23, the extra wakes FR-005 forbids occur in that interval, and T47's ordering should then be before that point."
+    }
+   ],
+   "tasks": [
+    "T12"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T12 (D2: phase 2's runner, the process the lane's later tasks run their batches in; lands after T11)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T12 Decision 1",
+     "summary": "The lock is the truth, the pid secondary: the starter probes, spawns and waits for the runner to take the lock; a racing second runner loses flock -n and exits 0.",
+     "class": "within",
+     "why": "Mechanism of FR-003's lane running in its own process; settles nothing the request or spec decides and narrows nothing."
+    },
+    {
+     "id": "T12 Decision 2",
+     "summary": "The runner's start and stop lines name no batch, so a NOW=1 kill mid-batch leaves the batch resumable under T11's state_of.",
+     "class": "within",
+     "why": "Implementation of resumability (survive a kill by its log); keeps a batch from being lost, which serves FR-003/FR-004 rather than narrowing them."
+    },
+    {
+     "id": "T12 Decision 3",
+     "summary": "A stop request is keyed by pid; one naming another pid is dropped at the next runner's start.",
+     "class": "within",
+     "why": "Correctness of the stop verb; no requested behavior is narrowed."
+    },
+    {
+     "id": "T12 Decision 4",
+     "summary": "The idle clock runs from the newest NEW hand-in or batch run, never from 'nothing waiting'; LANE_IDLE_S 3600 s labeled GUESS.",
+     "class": "within",
+     "why": "Implementation detail of the runner's idle stop; the request and spec set no idle rule, and the knob is labeled as a guess."
+    },
+    {
+     "id": "T12 Decision 5",
+     "summary": "Recovery names the open batch and hands resume its remaining changes; bringing the tree to origin/main and running the rest is T14's seam, the batch left open until then.",
+     "class": "within",
+     "why": "A task split within the plan; the open batch is left open (not dropped or landed differently), so nothing of FR-003/FR-004 is cut, only sequenced to T14."
+    },
+    {
+     "id": "T12 Decision 6",
+     "summary": "A hand-in starts the runner only from phase 2's base (HAND_IN_BASE=origin); in phase 1 on_hand_in passes through, T22 flips the base and switches it on.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In phase 1 it defers part of what was asked: FR-003's lane taking hand-ins from the done refs, and SC-001's batch run with no coordinator turn between the hand-ins and the push, do not start from a hand-in until T22 flips the base (it also narrows the plan's D2, 'every hand-in'). LEGITIMATE on the purpose ground: in phase 1 the coordinator lands by hand, so a runner started by each hand-in and batching the same hand-ins would race it - two landers of one change, which defeats FR-003/FR-008's single route through the same gate and push rather than serving them. The deferral is bounded: T22 switches it on with no further edit, and the 'For T22' note pins the single-point flip and a test with the variable unset. The start's failure never changes the hand-in's exit, so no existing check is touched. (D2 and D3 are not in the bundle; their content is taken from this block's own account.)"
+    },
+    {
+     "id": "T12 Decision 7",
+     "summary": "The stall watchdog exempts only a session whose own backgrounded 'l7r-gate lane wait' (descending from its registry pid) runs while the clone's runner lives; other sessions of the clone are judged as before; inert until T20 adds the wait.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows an existing guard's reach, which the request did not ask to preserve; it is implied by the request itself - the GM approved a thin coordinator that dispatches and reads short reports, and FR-005 lets the lane wake the coordinator once per landed batch and otherwise only for US5's cases, so a stall nudge on a coordinator deliberately waiting on the lane (D9, per this block's account; D9 is not in the bundle) is a wake the spec forbids. By the block's own account, the earlier forms (the runner alone exempting every session; a clone-wide wait) were ruled NOT LEGITIMATE; this form exempts exactly the session doing the waiting, for exactly the life of its wait while the runner lives, and is tested to judge a second session of the clone. Bound if the lane hangs while the session waits: the LONG_RUN warning still fires in this block, so a hung wait is not silent; T47's removal of that warning is T47's to justify at its own review. FR-008 is not touched: the watchdog is not a gate or push check."
+    },
+    {
+     "id": "T12 Decision 8",
+     "summary": "Timing knobs POLL_S 5 s, START_WAIT_S 5 s, STOP_WAIT_S 10 s, TAKE_S 1 s labeled GUESS and audited; LANE_IDLE_S and LANE_POLL_S read from the environment, a non-number refused.",
+     "class": "within",
+     "why": "Implementation constants, each labeled as a guess; nothing requested is narrowed."
+    },
+    {
+     "id": "T12 Approach - the work loop's endings",
+     "summary": "The work loop ends on its own stop request, on LANE_IDLE_S idle ('stop why idle'), or on a failing step or resume ('stop why error: <e>'); at start it writes 'start {pid, why}' and resumes the log's last open batch.",
+     "class": "within",
+     "why": "How the detached runner (D2) ends and records it; an error stop leaves the batch's log for Recovery rather than landing or dropping work, so nothing of FR-003/FR-004 is narrowed."
+    },
+    {
+     "id": "T12 Decision 9",
+     "summary": "The runner takes its lock with a bounded retry (flock_within TAKE_S), closing a start race; measured 200 of 200 cycles started, 0 runners left.",
+     "class": "within",
+     "why": "A correctness fix inside the runner's mechanism; carries a dated, method-labeled measurement."
+    },
+    {
+     "id": "T12 For T22",
+     "summary": "T22 must flip HAND_IN_BASE in one place (one public reading in the land crate that land_or_hand_in asks), tested with the variable unset; written on T22's line.",
+     "class": "within",
+     "why": "A constraint placed on a later task so that Decision 6's phase-1 limit cannot outlive phase 1; it protects the requested end state rather than narrowing it."
+    },
+    {
+     "id": "T12 For T14",
+     "summary": "A hand-in-started runner inherits the caller's binary and environment (T, F, L7R_GATE_TREE); T14, the first to run make land from the runner, clears them and runs the lane tree's l7r-gate; dormant until then.",
+     "class": "within",
+     "why": "A latent issue that cannot occur before T14 (the runner runs no make land yet and is started only by make lane-start before T22), assigned to the task where it would first matter; this keeps FR-003's 'existing make land checks there' honest rather than narrowing it."
+    },
+    {
+     "id": "T12 Found and left (LONG_RUN, T47)",
+     "summary": "The watchdog's 1800 s long-run warning would nudge a coordinator waiting on make lane-wait past 30 minutes; not fixed here, filed as T47 to land with T20 and before T22.",
+     "class": "within",
+     "why": "Not a defect carried forward: make lane-wait is T20's command and does not exist, so the wake FR-005 forbids cannot happen until T20, and T47 is scheduled to land with T20 and before T22 so no coordinator waits on the lane without it. Leaving it to that task neither narrows FR-005 nor carries a live defect into a step where it manifests."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2740,6 +3021,94 @@
      "summary": "Ten state tests, red first against a stub lane_run (3 failed, 7 passed as the unchanged cases must), then 10 of 10 green and builder-checks clean.",
      "class": "within",
      "why": "Tests that enforce the requested stand-down and that every other run is still stopped; enforcement of what was asked, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T12": {
+   "section_sha256": "7297899021c20b56c2c35805a886fc8c4849ed4bd7c104f19d6b7cc2f024d0d8",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T12 Decision 1",
+     "summary": "The lock is the truth, the pid secondary: the starter probes, spawns and waits for the runner to take the lock; a racing second runner loses flock -n and exits 0.",
+     "class": "within",
+     "why": "Mechanism of FR-003's lane running in its own process; settles nothing the request or spec decides and narrows nothing."
+    },
+    {
+     "id": "T12 Decision 2",
+     "summary": "The runner's start and stop lines name no batch, so a NOW=1 kill mid-batch leaves the batch resumable under T11's state_of.",
+     "class": "within",
+     "why": "Implementation of resumability (survive a kill by its log); keeps a batch from being lost, which serves FR-003/FR-004 rather than narrowing them."
+    },
+    {
+     "id": "T12 Decision 3",
+     "summary": "A stop request is keyed by pid; one naming another pid is dropped at the next runner's start.",
+     "class": "within",
+     "why": "Correctness of the stop verb; no requested behavior is narrowed."
+    },
+    {
+     "id": "T12 Decision 4",
+     "summary": "The idle clock runs from the newest NEW hand-in or batch run, never from 'nothing waiting'; LANE_IDLE_S 3600 s labeled GUESS.",
+     "class": "within",
+     "why": "Implementation detail of the runner's idle stop; the request and spec set no idle rule, and the knob is labeled as a guess."
+    },
+    {
+     "id": "T12 Decision 5",
+     "summary": "Recovery names the open batch and hands resume its remaining changes; bringing the tree to origin/main and running the rest is T14's seam, the batch left open until then.",
+     "class": "within",
+     "why": "A task split within the plan; the open batch is left open (not dropped or landed differently), so nothing of FR-003/FR-004 is cut, only sequenced to T14."
+    },
+    {
+     "id": "T12 Decision 6",
+     "summary": "A hand-in starts the runner only from phase 2's base (HAND_IN_BASE=origin); in phase 1 on_hand_in passes through, T22 flips the base and switches it on.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In phase 1 it defers part of what was asked: FR-003's lane taking hand-ins from the done refs, and SC-001's batch run with no coordinator turn between the hand-ins and the push, do not start from a hand-in until T22 flips the base (it also narrows the plan's D2, 'every hand-in'). LEGITIMATE on the purpose ground: in phase 1 the coordinator lands by hand, so a runner started by each hand-in and batching the same hand-ins would race it - two landers of one change, which defeats FR-003/FR-008's single route through the same gate and push rather than serving them. The deferral is bounded: T22 switches it on with no further edit, and the 'For T22' note pins the single-point flip and a test with the variable unset. The start's failure never changes the hand-in's exit, so no existing check is touched. (D2 and D3 are not in the bundle; their content is taken from this block's own account.)"
+    },
+    {
+     "id": "T12 Decision 7",
+     "summary": "The stall watchdog exempts only a session whose own backgrounded 'l7r-gate lane wait' (descending from its registry pid) runs while the clone's runner lives; other sessions of the clone are judged as before; inert until T20 adds the wait.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows an existing guard's reach, which the request did not ask to preserve; it is implied by the request itself - the GM approved a thin coordinator that dispatches and reads short reports, and FR-005 lets the lane wake the coordinator once per landed batch and otherwise only for US5's cases, so a stall nudge on a coordinator deliberately waiting on the lane (D9, per this block's account; D9 is not in the bundle) is a wake the spec forbids. By the block's own account, the earlier forms (the runner alone exempting every session; a clone-wide wait) were ruled NOT LEGITIMATE; this form exempts exactly the session doing the waiting, for exactly the life of its wait while the runner lives, and is tested to judge a second session of the clone. Bound if the lane hangs while the session waits: the LONG_RUN warning still fires in this block, so a hung wait is not silent; T47's removal of that warning is T47's to justify at its own review. FR-008 is not touched: the watchdog is not a gate or push check."
+    },
+    {
+     "id": "T12 Decision 8",
+     "summary": "Timing knobs POLL_S 5 s, START_WAIT_S 5 s, STOP_WAIT_S 10 s, TAKE_S 1 s labeled GUESS and audited; LANE_IDLE_S and LANE_POLL_S read from the environment, a non-number refused.",
+     "class": "within",
+     "why": "Implementation constants, each labeled as a guess; nothing requested is narrowed."
+    },
+    {
+     "id": "T12 Approach - the work loop's endings",
+     "summary": "The work loop ends on its own stop request, on LANE_IDLE_S idle ('stop why idle'), or on a failing step or resume ('stop why error: <e>'); at start it writes 'start {pid, why}' and resumes the log's last open batch.",
+     "class": "within",
+     "why": "How the detached runner (D2) ends and records it; an error stop leaves the batch's log for Recovery rather than landing or dropping work, so nothing of FR-003/FR-004 is narrowed."
+    },
+    {
+     "id": "T12 Decision 9",
+     "summary": "The runner takes its lock with a bounded retry (flock_within TAKE_S), closing a start race; measured 200 of 200 cycles started, 0 runners left.",
+     "class": "within",
+     "why": "A correctness fix inside the runner's mechanism; carries a dated, method-labeled measurement."
+    },
+    {
+     "id": "T12 For T22",
+     "summary": "T22 must flip HAND_IN_BASE in one place (one public reading in the land crate that land_or_hand_in asks), tested with the variable unset; written on T22's line.",
+     "class": "within",
+     "why": "A constraint placed on a later task so that Decision 6's phase-1 limit cannot outlive phase 1; it protects the requested end state rather than narrowing it."
+    },
+    {
+     "id": "T12 For T14",
+     "summary": "A hand-in-started runner inherits the caller's binary and environment (T, F, L7R_GATE_TREE); T14, the first to run make land from the runner, clears them and runs the lane tree's l7r-gate; dormant until then.",
+     "class": "within",
+     "why": "A latent issue that cannot occur before T14 (the runner runs no make land yet and is started only by make lane-start before T22), assigned to the task where it would first matter; this keeps FR-003's 'existing make land checks there' honest rather than narrowing it."
+    },
+    {
+     "id": "T12 Found and left (LONG_RUN, T47)",
+     "summary": "The watchdog's 1800 s long-run warning would nudge a coordinator waiting on make lane-wait past 30 minutes; not fixed here, filed as T47 to land with T20 and before T22.",
+     "class": "within",
+     "why": "Not a defect carried forward: make lane-wait is T20's command and does not exist, so the wake FR-005 forbids cannot happen until T20, and T47 is scheduled to land with T20 and before T22 so no coordinator waits on the lane without it. Leaving it to that task neither narrows FR-005 nor carries a live defect into a step where it manifests."
     }
    ],
    "verdict": "CLEAR"
