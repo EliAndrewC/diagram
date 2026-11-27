@@ -469,3 +469,11 @@ The GM's ordering of the builders' queue, 2026-11-26, as the coordinating sessio
 queue's file order expresses it within each class, an open performance task's entry first (FR-013):
 
 > putting the ones most likely to give us better measurements at the front of the line, followed by the ones most likely to increase our task throughput
+
+The GM's question behind 451 T499, 2026-11-27 (the morning after), as the session recorded it:
+
+> Was the plan history re-parsing costing us only time, or also a lot of tokens?  I.e. was it beng parsed mechanically or re-read by builders as well?
+
+And his words the same morning on token cost, which weigh T499's finding (kept whole in `specs/449-rust-codebase/port-talk-gm-goal.md`):
+
+> That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens.
