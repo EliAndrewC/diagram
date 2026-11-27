@@ -519,3 +519,7 @@ And, on the same row's percentages:
 The GM, 2026-11-27, on the cache's remaining options (T520, T526):
 
 > I agree that time continues to be more important than disk space, thanks.  Glad to hear that things are still in progress, I just wanted to make sure.
+
+The GM, 2026-11-27, approving the close of 451 (the "now" tasks finished, the rest moved to a new placeholder feature, the large records split):
+
+> In the meantime, it seems like you have a good amount of work to do with both the tasks that you are closing out and moving everything new feature, afterwards, and then doing the split that we discussed which is all on top of the orchestrator feature that you are working in parallel to that, so I'm going to try to keep an eye on what you're doing for the next few hours, but I will probably be preparing for a dinner and then doing work in the kitchen and such, so let me know if you need anything. But I will probably leave you to it for a while, if you agree that this is a good time to do that. And that you don't need anything else from me beforehand.
