@@ -19761,3 +19761,78 @@ transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t3
 
 <!-- plan-archive: T365 to T340 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
+<!-- plan-archive: archived 2026-11-27 -->
+### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))
+
+- **Approach**: a wave row waits for an agent only for `WAVE_WAIT_S` after its dispatch (`rust/guard/shared/src/checks/rounds.rs`, `wave_waits`). Both readers of the wait ask it: `handle::concerns`, which decides whether a return is booked, and `rounds::pair_wave`, which pairs a return with a row. `Row` (`handle/part.rs`) now keeps the row's `t` for `concerns`, read as `t_of` reads it. Measured 2026-11-27 (`dev/measurements/2026-11-27/t505-wave-wait/results.md`).
+  - **T505-D1, the knob.** `WAVE_WAIT_S` is 6 hours, a GUESS knob labeled in its doc comment, as `HOLD_MAX_S` is (`make tunables` walks no tooling crate, by its own rule). It covers the 30-minute queue (`WAVE_PENDING_S`) plus the longest wave agent's run many times over: 585 s, the longest of 362 wave agents' wall cells, measured 2026-11-27 (`check-passes.jsonl` joined to the state's wave rows by agent id). It is timed from the dispatch (`t`), because a row keeps no return time. A pending wave row past it stops waiting too. A pending row's own liveness, `WAVE_PENDING_S` in `live`, is unchanged. Chosen by the builder, on the brief's "an age limit (as planhold's `HOLD_MAX_S`)".
+  - **What a late reply loses.** An agent paired after the wait would have booked its row's reply, counted its round, and written its EDIT blocks into `edits` and `own_edits`. Past the wait it is treated as any agent no row names: none of that is booked, and nothing is saved. The row stays `returned` with no reply, as it stood before the late agent: `running` and `open_round` read it as they did. The wait is a wave's whole run, so only a unit retried hours later meets this. Said in `WAVE_WAIT_S`'s doc comment.
+  - **Why the age and not a save only where a booking changed a row.** A save-only-on-change needs the whole parse to compare, the 55 ms clone and compare T387 replaced, measured 2026-11-27 (T387's `t387-time.py`). The age keeps a stop that concerns nothing from parsing any row (T490's `Part`).
+  - **Red first.** `handle/hold_writes.rs` `a_wave_row_past_its_wait_is_not_booked` failed on the old code: 1 failed of 9, the state's inode moved (`left: 16393625, right: 16393621`), measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::handle::hold_writes"`). Green after. Two tests were extended, observed 2026-11-27, method: this tree's diff. `a_return_concerns_a_wave_row_that_waits_for_its_reply` now pins a pending row and a reply-less row past the wait. `rounds/tests.rs`'s pairing test now pins a reply-less row past the wait left unpaired. `part/tests.rs` reads `t` over its 19 values. `make builder-checks CRATE="rust/guard/shared rust/guard"`: 595 and 606 passed, measured 2026-11-27.
+  - **Before and after**, CPU median ms, the clone's guard at 495a852db9 against this tree, on a copy of the clone's state (2,618,222 bytes), measured 2026-11-27 (`t490-time.py`, 20 interleaved runs, load 4.4 to 4.6 and 2.5 to 2.6):
+    - checks-hooks SubagentStop of an agent no row names: 89.6 -> 14.1, and 94.3 -> 14.3. Writes went from 22 of 22 to 0 of 22.
+    - the other four cases (a Bash call's two hooks under a hold, an Agent's two): unchanged, within 2 ms, writes unchanged, measured 2026-11-27 (`t490-time.py`, 20 runs).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a wave row's wait for an agent bounded at `WAVE_WAIT_S` (`checks/rounds.rs` `wave_waits`, `pair_wave`; `checks/handle.rs` `concerns`; `checks/handle/part.rs` `Row.t`), red first 1 of 9, measured 2026-11-27 | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T505 Approach (checklist part A)
+
+1. **The goal, in the world.** A subagent's stop that no row names writes nothing to the check state, and a wave unit's own return inside its wave's run is still paired and booked.
+2. **The constraints.** The brief: an age limit on a waiting wave row, a GUESS knob, with what a late reply would still need said; red first; a SubagentStop measured before and after on a copy of the clone's state; no guard message changed. 451 T387 (`concerns`), T489 (`HOLD_MAX_S`'s pattern), T490 (`Part`). The two tiers.
+3. **Where each comes from.** O: T490's agent-stop arm; the 14 rows counted on a copy of the state, observed 2026-11-27, method: Python's `json` over the copy; the wave agents' wall cells; the timings above. R: `checks/rounds.rs` (`pair_wave`, `returned`, `live`), `checks/handle.rs` (`concerns`, `book_keep`).
+4. **Do they describe the world here?** Yes. The timing runs the real binaries on a copy of the clone's own state, with its 14 reply-less wave rows, measured 2026-11-27 (`t490-time.py`, 20 runs).
+5. **The order.** After T490, which found it. Before T302.
+6. **The exits.** Green: the red test passing, and the stop's writes 0 of 22. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** A SubagentStop no row names went from 89.6 and 94.3 ms of CPU to 14.1 and 14.3, writes 22 of 22 to 0, measured 2026-11-27 (`t490-time.py`, 20 runs, two runs).
+10. **Before moving a constant.** n/a: `WAVE_WAIT_S` is new. `WAVE_PENDING_S` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. A check-wave unit retried more than 6 hours after its wave's dispatch is no longer paired with its reply-less row (above).
+
+**Found and left?** none.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it takes about 75 to 80 ms of CPU and a 2.6 MB write off every subagent's stop that no row names, measured 2026-11-27 (`t490-time.py`, 20 runs). Not an engine-speed task: no checklist answers owed.
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))
+
+- **Approach**: measured and NOT BUILT. The exact scan (`Skip`, `rust/guard/shared/src/checks/handle/part.rs`) stays. Its doc comment now says `IgnoredAny` was measured and left. Measured 2026-11-27 (`dev/measurements/2026-11-27/t505-wave-wait/results.md`).
+  - **T506-D1, the cheaper scan saves about 1 ms, not 5 to 8, measured 2026-11-27 (`t490-time.py`, 20 runs).** `IgnoredAny` was built in place of `Skip` for the skipped top-level rows and each row's other fields, timed, and reverted. CPU median ms, T505's build against it, on a copy of the clone's state (2,618,222 bytes), measured 2026-11-27 (`t490-time.py`, 20 interleaved runs, load 2.7 to 2.8 and 2.5), run 1 then run 2:
+    - bash-pre: 17.7 -> 17.0, and 18.6 -> 17.4;
+    - bash-post: 14.9 -> 13.7, and 15.7 -> 15.3;
+    - agent-post: 27.2 -> 29.3, and 30.7 -> 31.0;
+    - agent-pre: 9.8 -> 8.7, and 9.2 -> 9.5;
+    - agent-stop: 12.3 -> 11.5, and 11.3 -> 10.5.
+
+    That is -2.1 to 1.2 ms a hook, inside the noise (agent-post moved the other way, by 2.1 and 0.3), measured 2026-11-27 (`t490-time.py`, 20 runs). It agrees with T490's own in-process bench: the exact scan 2.38 ms against `IgnoredAny`'s 1.67, measured 2026-11-27 (`t490-part-read/t490-bench.txt`, load 14). The task line's "5.6 ms against 13.7" is not in that file, observed 2026-11-27, method: reading `t490-bench.txt`. The 5 to 8 ms the line priced is the gap between the partial read and the arm with no `dispatches` at all, and the scan's exactness is about 1 ms of it, measured 2026-11-27 (`t490-time.py`, 20 runs). The brief's bar, "if it saves what T490 measured", is not met, so the exactness (a skipped number past f64 or a lone surrogate read as the whole parse reads it) is kept at no measurable cost. Chosen by the builder on the brief. No answer moved, so no differential was owed.
+  - **No red test.** Nothing was built.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `IgnoredAny` for the partial read's skipped rows priced and left (`checks/handle/part.rs`, doc comment only), measured 2026-11-27 | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T506 Approach (checklist part A)
+
+1. **The goal, in the world.** The hot hooks' partial read costs no more than it must, and every text reads as the whole parse reads it.
+2. **The constraints.** The brief: build it if it saves what T490 measured and every answer on the clone's state is unchanged, else record why not. T490-D3 (the exact scan). The two tiers.
+3. **Where each comes from.** O: T490's bench and pricing arms; the two timing runs above. R: `checks/handle/part.rs`.
+4. **Do they describe the world here?** Yes. The timing runs the real binaries on a copy of the clone's own state.
+5. **The order.** After T490 and T505, whose build it was timed against. Before T302.
+6. **The exits.** Green: the saving measured. The scan is built where it saves what T490 priced, and recorded and left where it does not. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `IgnoredAny` saved -2.1 to 1.2 ms of CPU a hook over five cases and two runs, measured 2026-11-27 (`t490-time.py`, 20 runs). Left.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: not a defect. No code moved but a doc comment.
+
+**Found and left?**
+- The partial read still costs a hot hook 5 to 8 ms of CPU over the arm with no `dispatches` at all: bash-pre 17.0 to 18.6 ms against T490's 10.9, measured 2026-11-27 (`t490-time.py`, 20 runs). The visible effect is that time on every hot hook. The scan is not it (above). Not fixed here: the cause is unpriced (the 2.6 MB read, measured 2026-11-27 (`wc -c` of the copy), its page faults, or the other keys' values), and finding it is a profile, a measurement beyond this brief. Filed as T507; lands before T302.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it measured where a hot hook's time goes and found the cheaper scan worth about 1 ms, measured 2026-11-27 (`t490-time.py`, 20 runs). Not an engine-speed task: no checklist answers owed.
+
+
