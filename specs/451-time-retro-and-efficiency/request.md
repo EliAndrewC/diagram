@@ -529,3 +529,11 @@ The GM, 2026-11-27, approving the close of 451 (the "now" tasks finished, the re
 The GM, 2026-11-27, his ninth process-reviewer message (recorded whole in `specs/449-rust-codebase/port-talk-gm-goal.md`), the words T527's line quotes:
 
 > I haven't looked into what you're actually talking about when you mention the upfront bookkeeping problem again. But if you keep running into the same problem, then is that something where a process fix is reasonable?
+
+## 2026-11-27: the tokens split by model (451 T532)
+
+The GM, 2026-11-27, his fifteenth process-reviewer message (recorded whole in `specs/449-rust-codebase/port-talk-gm-goal.md`, with the
+session's answer: the counts are raw usage, never dollars or quota-weighted, but not split by model, so the model in use is one more
+dimension of a like window beside concurrency), the words T532's line answers:
+
+> Great. Quick question about tokens. First, we are storing token usage rather than dollar usage, right? Because I don't want to have to go back when prices change to grab historical token prices in order to do apples-to-apples comparisons over time. Second, I know that some models have different token costs in terms of like against your weekly usage. You know, like sometimes I use Fable and sometimes I use Opus, and I think Fable has like a 2 times or a 2.5 times token cost, but I wouldn't want that to throw off our numbers, you know? Like if I switch to Fable for a day and then switch back because I have a Fable reset, and so I want my usage to be all Fable so that I can reset it back down and reclaim that usage within my weekly window, then I really don't want that to make it look like everything was twice as expensive that day in terms of tokens in a way that throws off our metrics. Do you think this will be a problem that will require some adjustments to our tooling? Do you think it's something that we should add to our notes for the process reviewer? Or is this actually just fine and it always automatically works the way I would expect and I don't even need to worry about it?

@@ -270,7 +270,7 @@ day on another model does not multiply the counts. But the counts are not split 
 (its own transcript: 16,248 calls on `claude-opus-5-5`, 2,583 on `claude-fable-5-2`, each call's `message.model`): a different model
 may do the same work in more or fewer tokens, or more or fewer turns, which is a real difference that would read as a process
 change if windows are compared without it. So the model in use is one more dimension of a like window (his seventh message), beside
-concurrency; any quota or dollar view is computed at read time from a rate table, never stored. Filed as 451 T531: the tokens split
+concurrency; any quota or dollar view is computed at read time from a rate table, never stored. Filed as 451 T532: the tokens split
 by model in `make task-time`.
 
 ## His sixteenth message (2026-11-27, the afternoon after): THE NUMBER OF BUILDERS - a knob the reviewer watches, but settled sooner, in feature 461

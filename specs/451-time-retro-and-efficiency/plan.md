@@ -2496,58 +2496,60 @@ that batch; the red was not in its change.
 <!-- plan-archive: T523 to T520 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T528 to T522 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T529 to T522 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T531 (<why: the finding or measurement that files it>)
+### T531 (left by 451 T530: a `git commit` only in a heredoc's TEXT held as a commit while a gate runs and the tree has moved, a false refusal; T530's round 2 plan review ruled a strip of every body but a shell's unbounded)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `research: rendering` - tooling, no map drawn. A new module, `rust/guard/src/guards/gate_write_hooks/inert.rs`, gives the commit pattern (`GIT_WRITE`) the command with each heredoc body blanked whose reader is KNOWN not to run it; `placed`, `stands_here` and `shell_write` still read the raw command, and `shape::strip_heredocs`, which every guard shares, is untouched. THE METHOD is a closed allowlist, the whole command left unstripped where any part fails: (1) every heredoc parses as bash reads one - `<<`/`<<-`, a delimiter bare, quoted or `\`-escaped, the body to the first line that is the delimiter EXACTLY (tabs stripped for `<<-`), a here-string, an unclosed quote, a second opener on one line or a missing terminator strips nothing; (2) each opener stands outside quotes (the text before it, bodies removed: even quote counts, no backslash); (3) the command less its bodies holds no substitution (`$(`, a backtick, `<(`, `>(`) and no variable, and every segment opens with a command of `QUIET` (`cat cd mkdir echo printf wc ls head tail grep true git`), git only with a read or commit subcommand and no `-c`/`--config`, or `make` - quiet only beside a `cat` whose file is DATA (`.md .json .jsonl .txt .tsv .csv .html .log`, a GUESS knob) named nowhere else in the command; (4) a body is blanked only where its reader is `cat` alone with one plain output file (no `$`, glob, `&`, `/dev/`, `/proc/`, `.git`, `hooks`), or `git commit -F -`/`--file=-`; neither fed from nor into a pipe; an unquoted delimiter's body holding no `$(` or backtick. Measured 2026-11-27 over the `-diagram*` transcripts of the last four days (a Python scan of each unique Bash command holding `<<`, `t531-scan.py`, and the method itself in Python, `t531-rule.py`): 23,311 commands, 153 whose only commit match is in a body; the method frees 4 (a `cat` note or a plan append, then `make` or nothing) and holds 149 - every `python3 -` body (about 80), each `cat` whose command also runs an interpreter (`python3 -c` reading the file it wrote, about 30), names a variable (`cat > $S/f`, 18) or writes a program `make` then runs (`cat >> tests.rs`, then `make rust-test`). Those stay held as at HEAD: telling a program that only reads a file from one that runs it is the unbounded class T530's round 2 ruled out.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
 ### T531 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** While a tree's `make done` runs, a command whose only `git commit` is text a `cat` writes to a file nothing in the command runs (or a commit's own `-F -` message) is let through; every form that runs a body stays held as a commit.
+2. **The constraints.** T530's round 2 ruling (a strip bounded by a stated method, each executed form pinned held); T530's eight held shapes; 451 T307/T406 (where a commit stands decided by the walk, unchanged here).
+3. **Where each comes from.** O: T530's plan section (the task line); O: the transcript scan above; O: the red-first runs below.
+4. **Do they describe the world here?** Yes: the shell suite's section 3 runs the REAL tree check with the tree moved, and its new case lets a `cat` note through and holds the same text piped into `sh` as a commit, measured 2026-11-27 (`bash tests/hooks/test-gate-write-hooks.sh`).
+5. **The order.** Alone; no task waits on it.
+6. **The exits.** Green: `a_commit_only_in_a_heredocs_text_passes`, `the_inert_method_blanks_only_what_it_can_read` and T530's `a_commit_in_a_heredoc_body_or_spelled_in_quotes_is_held` pass with the guard crate's 628 tests, and the suite's 40 cases (measured 2026-11-27, `make builder-checks CRATE=rust/guard`, `bash tests/hooks/test-gate-write-hooks.sh`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red-first, 2026-11-27: the module's tests, 18 passed and 1 failed on the old code (`a_commit_only_in_a_heredocs_text_passes`, its first case `cat > /tmp/t531-note.md <<'EOF'` held), 20 passed after; the shell suite 37 cases before, 40 after (the three new). Pinned held besides T530's eight: an unquoted body's `$(...)` and backtick, `cat <<'EOF' > >(sh)`, `( cat <<'EOF' ) | sh`, `. /dev/stdin <<'EOF'`, `cat > /dev/stdout`, `cat >&2`, `cat - f > g`, a written file then `. f`, `chmod +x f && ./f`, a glob loop running it, `cat > $F` then `bash $F`, a `<<` inside quotes (two forms), a terminator the shell would not take; at the method, a here-string, an unclosed delimiter quote, a missing terminator, two openers on a line, git with `-c`, an option before its subcommand, no subcommand, `push`, `commit -c`, `log`, a pipe before or after `cat`, two operands, no target, a target under `.git` or `hooks` or holding `${`, a bare `make` reader, `make` after a `.rs` append, `make` handed the file by name, and `python3 -c` after a note. Pinned passing: `git -C <another tree> commit -F -` with commit text in its message (it passed at HEAD too: the walk places it in the other tree).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, a wrong outcome: correct work (writing a note or a plan section that quotes a commit) refused while a gate ran.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none. The guard's message is unchanged.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T532 (<why: the finding or measurement that files it>)
+### T532 (the GM's fifteenth process-reviewer message, 2026-11-27, in specs/449-rust-codebase/port-talk-gm-goal.md: a day on Fable must not read as the process costing more)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `research: rendering` - tooling, no map drawn. Each transcript usage row's `message.model` is read beside its usage (`where_time/columns/spent.rs`: `usage_rows`, `Tokens` keeping it per message id, `Tokens::models` an agent's calls and tokens by model, a session row `(time, tokens, model)`; `Models`, `add_call`, `add_models`, `NO_MODEL` for a row naming none), carried by `Subagents.models` and `turns::Read.models`, and booked by `turns::of` exactly where the unsplit figures are booked - a builder's and a review agent's under its task, a session call under the task its next own line names - into a `ByModel` (builders, review agents, session) per landed key and one for the window, every agent's and every session call's, booked or not. A new module, `task_time/models.rs`, prints after the summary table a table of each landed task's actors by model and the window's (calls, output, fresh input, cache read, cache write, tokens with their share of the task's or the window's) and one line, the window's model mix: each model's calls and tokens, the most first, with the window's CONCURRENCY - pool trees held, time-weighted over the window, the tree-seconds `cross::measure` now counts (`Cross.held`) over the window's seconds - so feature 461's like window (FR-010) holds both. The existing rows and lines are unchanged; no rate, weight or dollar figure is stored or printed. Real data (measured 2026-11-27, `make task-time SINCE=3h` in this tree): claude-opus-5-5 16,679 calls, 67.8% of the window's tokens, claude-fable-5-2 6,206, 31.7%, claude-sonnet-5-5 280, 0.5%, `<synthetic>` 5 calls, none, at 2.49 pool trees held, time-weighted.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
 ### T532 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make task-time` shows every token figure by model - each landed task's by actor, each actor's over the window - and the window's model mix beside its concurrency, so a window on another model is compared model by model with a like one, never read as a process change.
+2. **The constraints.** The GM's fifteenth message (tokens, never dollars; a model switch must not throw off the numbers); 461 FR-010 (a figure stated with its concurrency); 451 T512 (the turns' and tokens' booking, unchanged).
+3. **Where each comes from.** G: the GM's fifteenth message, in port-talk-gm-goal.md; R: 461's spec, FR-010; O: the model counts in the task line and the real run above.
+4. **Do they describe the world here?** Yes: the session transcript holds more than one model and its subagents others, measured 2026-11-27 (counting `"model"` values with grep) in this session's transcript (claude-opus-5-5 25,422 rows, claude-fable-5-2 4,251, `<synthetic>` 4) and in 200 subagent transcripts (claude-opus-5-5, claude-fable-5-1, claude-sonnet-5-5).
+5. **The order.** Alone; no task waits on it.
+6. **The exits.** Green: `every_token_figure_is_split_by_model` and `the_split_sums_to_the_unsplit_figures_and_the_concurrency_is_time_weighted` pass with the measure crate's 305 tests, measured 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/measure rust/guard"`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red-first, 2026-11-27: `every_token_figure_is_split_by_model` (one session on two models, a builder on a third and a row naming none), 0 passed and 1 failed on the old code (no `## Tokens by model` section), passed after; the split's sums equal the unsplit figures actor by actor, the window's every call (booked and unbooked) in it, and two holds over 100 s read 1.5 trees, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure ONLY=task_time`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect but the GM's request: a window's tokens could not be read by model, so a day on another model read as the process's change.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- specs/449-rust-codebase/port-talk-gm-goal.md's note under his fifteenth message said "Filed as 451 T531" for this task, T532 (a reader following it reached the gate-write task): fixed here, outside the SOURCE block.
+
+**Performance work?** yes, a measurement of where tokens go (451 FR-013: it measures the builders' loop); not an engine-speed task.
 
 
 <!-- plan-archive: T535 to T364 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->

@@ -141,6 +141,7 @@ fn an_untasked_agent_a_page_session_and_the_unbooked_calls_tokens() {
         at,
         tok,
         uses: Vec::new(),
+        model: String::new(),
     };
     let session = HashMap::from([
         ("s".to_owned(), vec![call(tok(10.0, 1000.0))]),
@@ -150,9 +151,10 @@ fn an_untasked_agent_a_page_session_and_the_unbooked_calls_tokens() {
         calls: &HashMap::from([("A".to_owned(), 3)]),
         tokens: &HashMap::new(),
         session: &session,
+        models: &HashMap::new(),
         paged: &std::collections::HashSet::from(["p".to_owned()]),
     };
-    let (got, unbooked) = turns::of(&stream, &agents, &read, (&HashMap::new(), 0.0));
+    let (got, unbooked, _) = turns::of(&stream, &agents, &read, (&HashMap::new(), 0.0));
     assert_eq!(got[&("451-x".to_owned(), "-".to_owned())].builders, 3);
     assert_eq!(
         (unbooked.calls, unbooked.tok, unbooked.replies),

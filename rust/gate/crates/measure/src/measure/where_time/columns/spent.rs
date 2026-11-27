@@ -38,7 +38,7 @@
 //! routing of a later `spec-fidelity` dispatch, logged under the name dispatched: the 451 log holds no `spec-fidelity-verify` dispatch
 //! among its 108 `spec-fidelity` ones, measured 2026-11-21 (its `PreToolUse` Agent lines counted by `agent`).
 
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::path::Path;
 
 use l7r_shared::guards::event_log_hooks::session_names;
@@ -151,8 +151,36 @@ impl Tok {
 /// 451 T512); and a main session's own transcript's rows (`<sid>.jsonl`), each with its time (451 T512).
 #[derive(Debug, Default)]
 pub struct Tokens {
-    by_aid: HashMap<String, HashMap<String, Tok>>,
+    by_aid: HashMap<String, HashMap<String, (Tok, String)>>,
     by_sid: HashMap<String, HashMap<String, Call>>,
+}
+
+/// Calls and their tokens by model (451 T532): the model each call's `message.model` names, [`NO_MODEL`] where it names none.
+pub type Models = BTreeMap<String, (usize, Tok)>;
+
+/// The model of a call whose row names none (451 T532).
+pub const NO_MODEL: &str = "(no model named)";
+
+/// `tok`, one call on `model`, added to `m`.
+pub fn add_call(m: &mut Models, model: &str, tok: Tok) {
+    let e = m.entry(model.to_owned()).or_default();
+    *e = (e.0 + 1, e.1.plus(tok));
+}
+
+/// `b` added to `a`, model by model.
+pub fn add_models(a: &mut Models, b: &Models) {
+    for (model, (n, tok)) in b {
+        let e = a.entry(model.clone()).or_default();
+        *e = (e.0 + n, e.1.plus(*tok));
+    }
+}
+
+/// The model a transcript row's call ran on (451 T532), [`NO_MODEL`] where it names none.
+fn model_of(row: &Value) -> String {
+    row.pointer("/message/model")
+        .and_then(Value::as_str)
+        .unwrap_or(NO_MODEL)
+        .to_owned()
 }
 
 /// One of a main session's model calls (451 T512, T513): its time, its tokens, and each tool call it made - its tool-use id and the
@@ -166,6 +194,8 @@ pub struct Call {
     pub tok: Tok,
     /// Its tool calls, in order: (tool-use id, the tasks its input names).
     pub uses: Vec<(String, Vec<String>)>,
+    /// The model its first row names (451 T532).
+    pub model: String,
 }
 
 /// A transcript row's tool calls: (tool-use id, the tasks its input names), in order.
@@ -219,16 +249,17 @@ impl Tokens {
         };
         if let Some(aid) = stem.strip_prefix("agent-") {
             let msgs = self.by_aid.entry(aid.to_owned()).or_default();
-            for (id, _, tok, _) in usage_rows(text, window) {
-                msgs.entry(id).or_insert(tok);
+            for (id, _, tok, row) in usage_rows(text, window) {
+                msgs.entry(id).or_insert_with(|| (tok, model_of(&row)));
             }
         } else {
             let msgs = self.by_sid.entry(stem.to_owned()).or_default();
             for (id, at, tok, row) in usage_rows(text, window) {
-                let call = msgs.entry(id).or_insert(Call {
+                let call = msgs.entry(id).or_insert_with(|| Call {
                     at,
                     tok,
                     uses: Vec::new(),
+                    model: model_of(&row),
                 });
                 call.uses.extend(uses_of(&row));
             }
@@ -241,6 +272,21 @@ impl Tokens {
         self.by_aid
             .iter()
             .map(|(aid, m)| (aid.clone(), m.len()))
+            .collect()
+    }
+
+    /// agent id -> its model calls and their tokens by model (451 T532).
+    #[must_use]
+    pub fn models(&self) -> HashMap<String, Models> {
+        self.by_aid
+            .iter()
+            .map(|(aid, m)| {
+                let mut by = Models::new();
+                for (tok, model) in m.values() {
+                    add_call(&mut by, model, *tok);
+                }
+                (aid.clone(), by)
+            })
             .collect()
     }
 
@@ -263,7 +309,12 @@ impl Tokens {
         self.by_aid
             .into_iter()
             .filter(|(_, m)| !m.is_empty())
-            .map(|(aid, m)| (aid, m.into_values().fold(Tok::default(), Tok::plus)))
+            .map(|(aid, m)| {
+                (
+                    aid,
+                    m.into_values().fold(Tok::default(), |a, (t, _)| a.plus(t)),
+                )
+            })
             .collect()
     }
 }

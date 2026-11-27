@@ -31,6 +31,7 @@ fn call(at: f64, uses: &[(&str, &[&str])]) -> Call {
                 )
             })
             .collect(),
+        model: String::new(),
     }
 }
 
@@ -75,10 +76,11 @@ fn a_session_call_books_to_the_task_its_own_tool_calls_name() {
         calls: &HashMap::new(),
         tokens: &HashMap::new(),
         session: &session,
+        models: &HashMap::new(),
         paged: &HashSet::new(),
     };
     let ends = HashMap::from([(key("T8"), 15.5)]);
-    let (got, unbooked) = turns::of(&stream, &[], &read, (&ends, 2.0));
+    let (got, unbooked, _) = turns::of(&stream, &[], &read, (&ends, 2.0));
     assert_eq!(got[&key("T5")].session, 3);
     assert_eq!(got[&key("T5")].session_tok, tok(3.0));
     for k in ["T99", "T7", "T1", "T6", "T8"] {

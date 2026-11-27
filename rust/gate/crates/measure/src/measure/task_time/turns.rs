@@ -19,7 +19,7 @@
 use std::collections::{HashMap, HashSet};
 
 use super::super::events::{get, is, or_s, Event};
-use super::super::where_time::columns::spent::{Call, Tok};
+use super::super::where_time::columns::spent::{add_call, add_models, Call, Models, Tok};
 use super::super::where_time::columns::Agent;
 use super::book::{review_cat, Key};
 
@@ -63,6 +63,21 @@ impl Turns {
     }
 }
 
+/// Each actor's calls and tokens by model (451 T532), a task's or the window's: builders, review agents, the main session.
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct ByModel {
+    /// The builders'.
+    pub builders: Models,
+    /// The review agents'.
+    pub agents: Models,
+    /// The main session's.
+    pub session: Models,
+}
+
+/// Each key's [`ByModel`], booked as its [`Turns`] are, and the window's: every agent's, and every main session call from the
+/// window's start, booked to a task or not.
+pub type Split = (HashMap<Key, ByModel>, ByModel);
+
 /// What the transcripts gave: agent id -> calls, agent id -> tokens, session id -> its calls.
 pub struct Read<'a> {
     /// Each agent's calls.
@@ -71,6 +86,8 @@ pub struct Read<'a> {
     pub tokens: &'a HashMap<String, Tok>,
     /// Each session's own calls.
     pub session: &'a HashMap<String, Vec<Call>>,
+    /// Each agent's calls by model (451 T532).
+    pub models: &'a HashMap<String, Models>,
     /// The page sessions' ids, whose transcripts are no main session's.
     pub paged: &'a HashSet<String>,
 }
@@ -92,7 +109,8 @@ pub struct Unbooked {
     pub carried: usize,
 }
 
-/// Each key's turns, and the session's calls booked to no task from `lo` on: `ends` is where a landed task's own table ends.
+/// Each key's turns, the session's calls booked to no task from `lo` on, and every figure by model ([`Split`], 451 T532): `ends`
+/// is where a landed task's own table ends.
 #[must_use]
 #[expect(clippy::implicit_hasher, reason = "the report's own maps, one hasher")]
 pub fn of(
@@ -100,8 +118,9 @@ pub fn of(
     agents: &[Agent],
     read: &Read,
     (ends, lo): (&HashMap<Key, f64>, f64),
-) -> (HashMap<Key, Turns>, Unbooked) {
+) -> (HashMap<Key, Turns>, Unbooked, Split) {
     let mut out: HashMap<Key, Turns> = HashMap::new();
+    let (mut split, mut window): Split = (HashMap::new(), ByModel::default());
     let mut feature: HashMap<String, String> = HashMap::new();
     // the session's own tool lines by tool-use id: (the line's feature, the tasks it names, none for a line before the field)
     let mut own: HashMap<String, (String, Option<Vec<String>>)> = HashMap::new();
@@ -128,17 +147,23 @@ pub fn of(
                 a.task.clone()
             },
         );
-        let t = out.entry(key).or_default();
+        let t = out.entry(key.clone()).or_default();
         let (n, tok) = (
             read.calls.get(&a.aid).copied().unwrap_or(0),
             read.tokens.get(&a.aid).copied().unwrap_or_default(),
         );
+        let by = read.models.get(&a.aid).cloned().unwrap_or_default();
+        let s = split.entry(key).or_default();
         if review_cat(&a.kind).is_none() {
             t.builders += n;
             t.builders_tok = t.builders_tok.plus(tok);
+            add_models(&mut s.builders, &by);
+            add_models(&mut window.builders, &by);
         } else {
             t.agents += n;
             t.agents_tok = t.agents_tok.plus(tok);
+            add_models(&mut s.agents, &by);
+            add_models(&mut window.agents, &by);
         }
     }
     let mut unbooked = Unbooked::default();
@@ -148,6 +173,9 @@ pub fn of(
         .filter(|(sid, _)| !read.paged.contains(*sid))
         .flat_map(|(_, calls)| calls)
     {
+        if call.at >= lo {
+            add_call(&mut window.session, &call.model, call.tok);
+        }
         // the first tool call naming a task: its line's names, else (a line before the field) the transcript's
         let named = call.uses.iter().find_map(|(id, said)| {
             let line = own.get(id);
@@ -157,6 +185,11 @@ pub fn of(
         });
         let why = match named {
             Some(Some(k)) if ends.get(&k).is_none_or(|end| call.at <= *end) => {
+                add_call(
+                    &mut split.entry(k.clone()).or_default().session,
+                    &call.model,
+                    call.tok,
+                );
                 let t = out.entry(k).or_default();
                 t.session += 1;
                 t.session_tok = t.session_tok.plus(call.tok);
@@ -173,5 +206,5 @@ pub fn of(
             unbooked.tok = unbooked.tok.plus(call.tok);
         }
     }
-    (out, unbooked)
+    (out, unbooked, (split, window))
 }

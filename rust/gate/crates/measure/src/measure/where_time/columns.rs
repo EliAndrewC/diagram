@@ -220,6 +220,8 @@ pub struct Subagents {
     pub calls: HashMap<String, usize>,
     /// session id -> its own model calls inside the window, each its time, tokens and tool calls, in time order (451 T512, T513).
     pub session: HashMap<String, Vec<spent::Call>>,
+    /// agent id -> its model calls and their tokens by model (451 T532).
+    pub models: HashMap<String, spent::Models>,
     /// tool-use id -> a Bash call's command, the session's and its subagents': the program a call running no make target is listed by
     /// (451 T243, the task time breakdown - the event log keeps no command).
     pub commands: HashMap<String, String>,
@@ -295,6 +297,7 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
         queued,
         calls: tokens.calls(),
         session: tokens.session(),
+        models: tokens.models(),
         tokens: tokens.sums(),
         commands,
     }

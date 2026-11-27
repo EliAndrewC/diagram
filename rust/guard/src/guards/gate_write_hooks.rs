@@ -306,10 +306,12 @@ fn gate_refusal(event: &Event, c: &Gate) -> Option<String> {
     // read as a commit of nothing, and the guard returned there without judging the append - which reached the clone's HEAD while
     // its gate ran (2026-11-27 about 17:40Z). The pattern reads the whole text, heredoc bodies too: a body may be run (`bash
     // <<'EOF'`, `cat <<'EOF' | sh`, `cat > f.sh <<'EOF'; bash f.sh`), so a commit only in one is held, failing closed (451 T530's
-    // round 2 ruled a strip unbounded; the text-only case is T531's). A commit the walk places is one however git is spelled
-    // (`"git" commit`), which `shell_write` leaves to this check.
+    // round 2 ruled a strip unbounded). A commit the walk places is one however git is spelled (`"git" commit`), which `shell_write`
+    // leaves to this check. GUARD_EDIT_OK: 451 T531 - a body whose reader is known not to run it (`cat` to a file nothing in the
+    // command runs, a commit's `-F -` message) is blanked by `inert`'s closed method before the pattern reads the text.
     let commit = |head: &str, sub: &str| head == "git" && matches!(sub, "commit" | "add");
-    if (GIT_WRITE.is_match(cmd).unwrap_or(false) || placed(event, cmd, c, &commit))
+    if (GIT_WRITE.is_match(&inert::text_read(cmd)).unwrap_or(false)
+        || placed(event, cmd, c, &commit))
         && stands_here(event, cmd, c, &commit)
         && !unseen(c, &["--quiet"])
     {
@@ -538,6 +540,8 @@ Wait for it: `make verify-wait`, run_in_background, then make the change.\n\
 (escape: GATE_WRITE_OK=\"<reason>\", two words or more)"
     ))]
 }
+
+mod inert;
 
 #[cfg(test)]
 mod tests;

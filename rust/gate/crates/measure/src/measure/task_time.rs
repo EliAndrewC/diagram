@@ -38,6 +38,7 @@ pub mod book;
 pub mod cross;
 pub mod held;
 mod listed;
+pub mod models;
 pub mod program;
 pub mod progress;
 pub mod sized;
@@ -543,6 +544,7 @@ pub fn render(
     top::window_table(&mut out, l, &d, cross);
     top::task_lines(&mut out, whole, landed, batches);
     beside::table(&mut out, whole, landed, more);
+    models::table(&mut out, landed, more);
     beside::groups(&mut out, (whole, l), landed);
     top::second_tier(&mut out, l, batches, window, &d);
     out.push_str(
@@ -746,13 +748,14 @@ pub fn run(
     let cap = cross::cap_of(std::env::var("L7R_BUILDERS").ok().as_deref());
     let waited = cross::measure(&holds, &batches, &refused, window, cap);
     let landed = landed(&got.aside, window, only)?;
-    let x = extra(
+    let mut x = extra(
         root,
         (&got, &flight.agents, &pages),
         &subs,
         (&landed, &batches, window.0),
         &holds,
     );
+    x.trees = models::trees(&waited, window);
     let text = render(
         (&l, &whole),
         (&landed, &batches),
@@ -781,16 +784,19 @@ fn extra(
         calls: &subs.calls,
         tokens: &subs.tokens,
         session: &subs.session,
+        models: &subs.models,
         // a page session's own transcript is no main session's calls, as `book` leaves its lines out
         paged: &pages.iter().map(|p| p.sid.clone()).collect(),
     };
-    let (turns, unbooked) = turns::of(&got.stream, agents, &read, (&ends, lo));
+    let (turns, unbooked, models) = turns::of(&got.stream, agents, &read, (&ends, lo));
     let sizes = sized::sizes(root, &iso_of(got.window.0), &keys);
     beside::Extra {
         bundles: beside::bundles(holds, landed, (&sizes, &turns)),
         sizes,
         turns,
         unbooked,
+        models,
+        trees: 0.0,
     }
 }
 
@@ -863,6 +869,8 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
 
 #[cfg(test)]
 mod cross_tests;
+#[cfg(test)]
+mod models_tests;
 #[cfg(test)]
 mod pool_tests;
 #[cfg(test)]

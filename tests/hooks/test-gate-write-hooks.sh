@@ -104,6 +104,13 @@ check "...and the gate's tree check reads the run as unmoved" 0 "$("$S/scripts/g
 sed -i 's/x + 1/x + 2/' "$S/rust/x/m.rs"
 check "a commit holding code: refused" 2 "$(run "$S" "$COMMIT")"
 check "...and the tree check names it" 1 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
+# 451 T531: with the tree moved, a commit only in the text `cat` writes to a file outside the tree is no commit; the same text piped
+# into a shell runs, and is held as one
+NOTE='{"tool_name":"Bash","tool_input":{"command":"cat > /tmp/t531-suite-note.md <<'"'"'EOF'"'"'\ngit add -A && git commit -qm x\nEOF"}}'
+PIPED='{"tool_name":"Bash","tool_input":{"command":"cat <<'"'"'EOF'"'"' | sh\ngit add -A && git commit -qm x\nEOF"}}'
+check "a commit only in a cat heredoc's text: let through (451 T531)" 0 "$(run "$S" "$NOTE")"
+check "the same text piped into sh: refused (451 T531)" 2 "$(run "$S" "$PIPED")"
+check "...as a commit" yes "$(grep -q 'a git commit or add' "$R/err" && echo yes || echo no)"
 pkill -f "sleep $NAP" 2>/dev/null
 rm -rf "$S"
 

@@ -4674,6 +4674,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T531 (left by 451 T530: a `git commit` only in a heredoc's TEXT held as a commit while a gate runs and the tree has moved, a false refusal; T530's round 2 plan review ruled a strip of every body but a shell's unbounded)": {
+   "sha256": "23e545e917090c0c019edd4c997a3d9ef5f8b0f03f67882a86847b5c86de1bbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T531 Approach (checklist part A)": {
+   "sha256": "6e15dbacae174c67df67fbe668e38f9bc26364dedac8fa59cea878e203997544",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 (the GM's fifteenth process-reviewer message, 2026-11-27, in specs/449-rust-codebase/port-talk-gm-goal.md: a day on Fable must not read as the process costing more)": {
+   "sha256": "c8dee7e46957bbd51f4d32965c6429c3c0e14ea80b35b7fbfcfaffbcfc8f4ce6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 Approach (checklist part A)": {
+   "sha256": "56d26a4fcc5bf8e254edacdbcb32fdfa862706da30a8633302141a513288fc50",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43982,6 +44006,112 @@
      "why": "This is a placeholder replaced by its content, and nothing the GM asked for is dropped. Within."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T531 (left by 451 T530: a `git commit` only in a heredoc's TEXT held as a commit while a gate runs and the tree has moved, a false refusal; T530's round 2 plan review ruled a strip of every body but a shell's unbounded)",
+    "### T531 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T531-scope",
+     "summary": "A new module inert.rs feeds only the commit pattern (GIT_WRITE) a command with known-inert heredoc bodies blanked; placed, stands_here and shell_write still read the raw command; the shared shape::strip_heredocs is untouched.",
+     "class": "within",
+     "why": "It confines the fix to the defect the task names (a commit present only as heredoc text, held as a commit while a gate runs) and changes no other guard. That is the task's own scope, not a narrowing of anything asked."
+    },
+    {
+     "id": "T531-allowlist",
+     "summary": "The method is a closed allowlist (steps 1-4: bash heredoc grammar, opener outside quotes, no substitution or variable, QUIET command set, cat-only or git commit -F - readers, a DATA-extension knob labeled GUESS). Where any part fails, nothing is stripped and the command is held as at HEAD.",
+     "class": "within",
+     "why": "This is how the defect is fixed, and it fails safe: an unreadable command keeps HEAD's behavior and never loosens the guard. The extension list is labeled a GUESS knob. Design quality is not a fidelity question."
+    },
+    {
+     "id": "T531-held-python-stdin",
+     "summary": "Of the 153 measured commands whose only commit match is in a body, the `python3 -` bodies (about 80) stay held.",
+     "class": "within",
+     "why": "Those bodies are executed by the interpreter, so they are not text that nothing runs. They are outside the defect the task defines (commit text that is only TEXT), and holding them is the guard working."
+    },
+    {
+     "id": "T531-held-written-then-run",
+     "summary": "A body that a later program in the same command compiles or runs (cat >> tests.rs then make rust-test, a file then `. f`, chmod +x and ./f, cat > $F then bash $F) stays held.",
+     "class": "within",
+     "why": "The written text is executed in the same command, so it is not inert. Holding it is correct, and it is outside the defect class."
+    },
+    {
+     "id": "T531-held-interpreter-reads",
+     "summary": "A cat whose command also runs an interpreter on the file it wrote (python3 -c reading it, about 30) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'let a text-only commit through', because some of these programs only read the file. But a static hook cannot tell a program that reads a file from one that runs it. That is the unbounded class T530's round 2 ruled out, and in general it cannot be decided without running the program, so applying the rule here is impossible rather than merely awkward. Holding means HEAD's existing behavior, a wait while a gate runs, with the escape still available. No new wrong outcome is introduced."
+    },
+    {
+     "id": "T531-held-variable-target",
+     "summary": "A command that names a shell variable anywhere (cat > $S/f, 18) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hook sees only the command text, not the environment the variable expands in. Whether $S/f is a plain data file, a hooks or .git path, or a file the same command later runs under another spelling cannot be known from the text. Rule (4)'s own exclusions (.git, hooks, /dev/) would be unenforceable on an unexpanded target, so stripping here would defeat the guard's purpose. The held state is HEAD's behavior, not a new refusal."
+    },
+    {
+     "id": "T531-other-tree",
+     "summary": "`git -C <another tree> commit -F -` with commit text in its message is pinned passing.",
+     "class": "within",
+     "why": "This is unchanged from HEAD (the 451 T307/T406 walk places it in the other tree). The pin records existing behavior and adds none."
+    },
+    {
+     "id": "T531-message-unchanged",
+     "summary": "The guard's refusal message is unchanged, and Found-and-left is none.",
+     "class": "within",
+     "why": "The task fixes which commands the guard holds, not what it says. The residual held forms are stated openly in the Approach with their counts, so nothing is hidden. The two undecidable classes are ruled above."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (the GM's fifteenth process-reviewer message, 2026-11-27, in specs/449-rust-codebase/port-talk-gm-goal.md: a day on Fable must not read as the process costing more)",
+    "### T532 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T532-D1",
+     "summary": "Read each transcript usage row's message.model beside its usage and keep tokens per message id by model (Tokens::models, Models, add_call, add_models; NO_MODEL for a row naming none, e.g. <synthetic>).",
+     "class": "within",
+     "why": "The GM's fifteenth message (request.md 2026-11-27, T532): a switch to Fable for a day must not 'make it look like everything was twice as expensive that day'; splitting the raw counts by model is how a day on another model is told apart. FR-005 already names a 'model' column. A row naming no model is still counted, not dropped, so the split sums to the unsplit figures."
+    },
+    {
+     "id": "T532-D2",
+     "summary": "Book the by-model figures exactly where turns::of books the unsplit ones - builders, review agents and session per landed task, plus a window ByModel holding every agent's and session call's, booked or not - leaving the existing rows and lines unchanged.",
+     "class": "within",
+     "why": "Adds a dimension to the existing booking (451 T512) without changing it; nothing the GM asked to change is preserved and nothing he asked for is narrowed. The window total including unbooked calls makes the mix cover all usage, which serves 'our metrics' as a whole."
+    },
+    {
+     "id": "T532-D3",
+     "summary": "New module task_time/models.rs prints, after the summary table, a per-landed-task table of actors by model (calls, output, fresh input, cache read, cache write, tokens and share) and one window model-mix line beside the window's time-weighted concurrency (Cross.held tree-seconds over window seconds).",
+     "class": "within",
+     "why": "The GM's message asks that a model switch not throw off the numbers; the session's recorded answer makes the model one more dimension of a like window beside concurrency, and 461 FR-010 requires every before-and-after figure stated with its concurrency. Printing them together is the requested comparison, not new scope."
+    },
+    {
+     "id": "T532-D4",
+     "summary": "No rate, weight or dollar figure is stored or printed; tokens stay raw counts.",
+     "class": "within",
+     "why": "The GM: 'we are storing token usage rather than dollar usage, right? ... I don't want to have to go back when prices change'. Not applying a quota weight is what keeps a Fable day from reading as 'twice as expensive in terms of tokens'; the split by model (D1-D3) is what lets a reader compare like with like. Nothing asked for is left out."
+    },
+    {
+     "id": "T532-D5",
+     "summary": "Found and left: fix port-talk-gm-goal.md's note under the fifteenth message, which said 'Filed as 451 T531' for this task, to T532, outside the SOURCE block.",
+     "class": "within",
+     "why": "A wrong pointer sends a reader to the wrong task - a wrong outcome, fixed here as the fix-as-we-go rule asks; the GM's verbatim words in the SOURCE block are untouched."
+    },
+    {
+     "id": "T532-D6",
+     "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -64690,6 +64820,108 @@
      "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
      "class": "within",
      "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T531": {
+   "section_sha256": "bf03a16290b32e7fb0bad4598d8f60ca5e3e43a2281cf6680f8f884921f01709",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T531-scope",
+     "summary": "A new module inert.rs feeds only the commit pattern (GIT_WRITE) a command with known-inert heredoc bodies blanked; placed, stands_here and shell_write still read the raw command; the shared shape::strip_heredocs is untouched.",
+     "class": "within",
+     "why": "It confines the fix to the defect the task names (a commit present only as heredoc text, held as a commit while a gate runs) and changes no other guard. That is the task's own scope, not a narrowing of anything asked."
+    },
+    {
+     "id": "T531-allowlist",
+     "summary": "The method is a closed allowlist (steps 1-4: bash heredoc grammar, opener outside quotes, no substitution or variable, QUIET command set, cat-only or git commit -F - readers, a DATA-extension knob labeled GUESS). Where any part fails, nothing is stripped and the command is held as at HEAD.",
+     "class": "within",
+     "why": "This is how the defect is fixed, and it fails safe: an unreadable command keeps HEAD's behavior and never loosens the guard. The extension list is labeled a GUESS knob. Design quality is not a fidelity question."
+    },
+    {
+     "id": "T531-held-python-stdin",
+     "summary": "Of the 153 measured commands whose only commit match is in a body, the `python3 -` bodies (about 80) stay held.",
+     "class": "within",
+     "why": "Those bodies are executed by the interpreter, so they are not text that nothing runs. They are outside the defect the task defines (commit text that is only TEXT), and holding them is the guard working."
+    },
+    {
+     "id": "T531-held-written-then-run",
+     "summary": "A body that a later program in the same command compiles or runs (cat >> tests.rs then make rust-test, a file then `. f`, chmod +x and ./f, cat > $F then bash $F) stays held.",
+     "class": "within",
+     "why": "The written text is executed in the same command, so it is not inert. Holding it is correct, and it is outside the defect class."
+    },
+    {
+     "id": "T531-held-interpreter-reads",
+     "summary": "A cat whose command also runs an interpreter on the file it wrote (python3 -c reading it, about 30) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'let a text-only commit through', because some of these programs only read the file. But a static hook cannot tell a program that reads a file from one that runs it. That is the unbounded class T530's round 2 ruled out, and in general it cannot be decided without running the program, so applying the rule here is impossible rather than merely awkward. Holding means HEAD's existing behavior, a wait while a gate runs, with the escape still available. No new wrong outcome is introduced."
+    },
+    {
+     "id": "T531-held-variable-target",
+     "summary": "A command that names a shell variable anywhere (cat > $S/f, 18) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hook sees only the command text, not the environment the variable expands in. Whether $S/f is a plain data file, a hooks or .git path, or a file the same command later runs under another spelling cannot be known from the text. Rule (4)'s own exclusions (.git, hooks, /dev/) would be unenforceable on an unexpanded target, so stripping here would defeat the guard's purpose. The held state is HEAD's behavior, not a new refusal."
+    },
+    {
+     "id": "T531-other-tree",
+     "summary": "`git -C <another tree> commit -F -` with commit text in its message is pinned passing.",
+     "class": "within",
+     "why": "This is unchanged from HEAD (the 451 T307/T406 walk places it in the other tree). The pin records existing behavior and adds none."
+    },
+    {
+     "id": "T531-message-unchanged",
+     "summary": "The guard's refusal message is unchanged, and Found-and-left is none.",
+     "class": "within",
+     "why": "The task fixes which commands the guard holds, not what it says. The residual held forms are stated openly in the Approach with their counts, so nothing is hidden. The two undecidable classes are ruled above."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T532": {
+   "section_sha256": "a3becbac6aad1b656f9f99db28e0a0a9b270539d59ee76389c22339a7ccf8b08",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T532-D1",
+     "summary": "Read each transcript usage row's message.model beside its usage and keep tokens per message id by model (Tokens::models, Models, add_call, add_models; NO_MODEL for a row naming none, e.g. <synthetic>).",
+     "class": "within",
+     "why": "The GM's fifteenth message (request.md 2026-11-27, T532): a switch to Fable for a day must not 'make it look like everything was twice as expensive that day'; splitting the raw counts by model is how a day on another model is told apart. FR-005 already names a 'model' column. A row naming no model is still counted, not dropped, so the split sums to the unsplit figures."
+    },
+    {
+     "id": "T532-D2",
+     "summary": "Book the by-model figures exactly where turns::of books the unsplit ones - builders, review agents and session per landed task, plus a window ByModel holding every agent's and session call's, booked or not - leaving the existing rows and lines unchanged.",
+     "class": "within",
+     "why": "Adds a dimension to the existing booking (451 T512) without changing it; nothing the GM asked to change is preserved and nothing he asked for is narrowed. The window total including unbooked calls makes the mix cover all usage, which serves 'our metrics' as a whole."
+    },
+    {
+     "id": "T532-D3",
+     "summary": "New module task_time/models.rs prints, after the summary table, a per-landed-task table of actors by model (calls, output, fresh input, cache read, cache write, tokens and share) and one window model-mix line beside the window's time-weighted concurrency (Cross.held tree-seconds over window seconds).",
+     "class": "within",
+     "why": "The GM's message asks that a model switch not throw off the numbers; the session's recorded answer makes the model one more dimension of a like window beside concurrency, and 461 FR-010 requires every before-and-after figure stated with its concurrency. Printing them together is the requested comparison, not new scope."
+    },
+    {
+     "id": "T532-D4",
+     "summary": "No rate, weight or dollar figure is stored or printed; tokens stay raw counts.",
+     "class": "within",
+     "why": "The GM: 'we are storing token usage rather than dollar usage, right? ... I don't want to have to go back when prices change'. Not applying a quota weight is what keeps a Fable day from reading as 'twice as expensive in terms of tokens'; the split by model (D1-D3) is what lets a reader compare like with like. Nothing asked for is left out."
+    },
+    {
+     "id": "T532-D5",
+     "summary": "Found and left: fix port-talk-gm-goal.md's note under the fifteenth message, which said 'Filed as 451 T531' for this task, to T532, outside the SOURCE block.",
+     "class": "within",
+     "why": "A wrong pointer sends a reader to the wrong task - a wrong outcome, fixed here as the fix-as-we-go rule asks; the GM's verbatim words in the SOURCE block are untouched."
+    },
+    {
+     "id": "T532-D6",
+     "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
     }
    ],
    "verdict": "CLEAR"

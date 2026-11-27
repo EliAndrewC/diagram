@@ -3142,3 +3142,30 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T541 (left by 451 T531: the gate-write guard still holds as a commit a `git commit` only in a heredoc's text where the heredoc's target is a variable, 18 of the 149 commands still held in the log at T531's review)
+
+- **Approach**: in `rust/guard/src/guards/gate_write_hooks/inert.rs`, expand a variable the same command assigned a literal earlier (`S=/tmp/x; cat > $S/f <<EOF`) before deciding whether the heredoc's reader runs its body; a variable assigned anything else stays undecidable and held. The 18 of 149: T531's review aside over the guard log, 2026-11-27.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T541 Approach (checklist part A)
+
+1. **The goal, in the world.** a heredoc whose reader is known not to run it is never held as a commit, a variable assigned a literal read as that literal
+2. **The constraints.** 451 T530's purpose: no commit moves a clone under its gate, so anything undecidable stays held (fail closed)
+3. **Where each comes from.** O: the guard log, 18 of 149 held commands
+4. **Do they describe the world here?** to be re-measured over the guard log at the build
+5. **The order.** after 451 T531; before none
+6. **The exits.** Green: the held count over the same log drops by the commands this frees, with no command that runs a body newly passed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** the red-first test of a `S=...; cat > $S/f` heredoc naming a commit passes, and the guard's suite stays green
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** a guard that refuses correct work: a false hold while a gate runs
+
+**Found and left?** none
+
+**Performance work?** no
+

@@ -476,6 +476,98 @@ fn a_commit_in_a_heredoc_body_or_spelled_in_quotes_is_held() {
     }
 }
 
+/// 451 T531: a `git commit` only in the TEXT of a heredoc `cat` writes to a file no part of the command runs, or of a commit's
+/// `-F -` message, is no commit (the tree moved, the stand-in's default): T530 held it, a false refusal. Every form whose body runs,
+/// or whose shape the reader cannot tell, stays held.
+#[test]
+fn a_commit_only_in_a_heredocs_text_passes() {
+    let w = world("heredoc-text");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    for cmd in [
+        "cd /tmp && git -C /tmp/t531-elsewhere commit -q -F - <<'EOF'\nmsg: git add -A && git commit\nEOF",
+        "cat > /tmp/t531-note.md <<'EOF'\ngit add -A && git commit -qm x\nEOF",
+        "mkdir -p /tmp/t531 && cat >> /tmp/t531/n.md <<\"EOF\"\ngit commit -qm x\nEOF\necho done",
+        "cd /tmp && cat <<'EOF' > t531-n.md && wc -l t531-n.md\ngit commit -qm x\nEOF",
+        "cat >/tmp/t531-n.md <<-EOF\n\tgit commit -qm x $HOME\n\tEOF",
+    ] {
+        assert!(w.bash(cmd).is_empty(), "{cmd}");
+    }
+    for cmd in [
+        // a body the shell expands runs its substitutions
+        "cat > /tmp/t531-n.md <<EOF\n$(git commit -qm x)\nEOF",
+        "cat > /tmp/t531-n.md <<EOF\n`git commit -qm x`\nEOF",
+        // read by something that runs it, or fed on
+        "cat <<'EOF' > >(sh)\ngit commit -qm x\nEOF",
+        "( cat <<'EOF' ) | sh\ngit commit -qm x\nEOF",
+        "cat <<'EOF' | sh\ngit commit -qm x\nEOF",
+        ". /dev/stdin <<'EOF'\ngit commit -qm x\nEOF",
+        "cat > /dev/stdout <<'EOF'\ngit commit -qm x\nEOF",
+        "cat >&2 <<'EOF'\ngit commit -qm x\nEOF",
+        "cat - /tmp/a > /tmp/t531-r.sh <<'EOF'\ngit commit -qm x\nEOF",
+        // the file it writes, run later in the command
+        "cat > /tmp/t531-r.sh <<'EOF'\ngit commit -qm x\nEOF\n. /tmp/t531-r.sh",
+        "cd /tmp && cat > t531-r.sh <<'EOF'\ngit commit -qm x\nEOF\nchmod +x t531-r.sh && ./t531-r.sh",
+        "cat > /tmp/t531-r.sh <<'EOF'\ngit commit -qm x\nEOF\nfor f in /tmp/t531-*.sh; do bash $f; done",
+        "F=/tmp/t531-r.sh; cat > $F <<'EOF'\ngit commit -qm x\nEOF\nbash $F",
+        // a `<<` inside quotes opens no heredoc: the next line is a command
+        "echo \"cat > /tmp/n <<EOF\"\ngit commit -qm x\nEOF",
+        "echo \\\" \"cat > /tmp/n <<EOF\ngit commit -qm x\nEOF\n\"",
+        // a terminator the shell would not take ends no body
+        "cat > /tmp/t531-n.md <<'EOF'\ngit commit -qm x\n EOF\ngit commit -qm y",
+    ] {
+        assert!(refused(&w.bash(cmd), "a git commit or add"), "{cmd}");
+    }
+}
+
+/// 451 T531: `inert`'s method form by form - each body it blanks, and each shape it leaves the command whole for.
+#[test]
+fn the_inert_method_blanks_only_what_it_can_read() {
+    let read = super::inert::text_read;
+    assert_eq!(
+        read("cat >> /tmp/n <<'EOF'\ngit commit\nEOF\ngit log || true"),
+        "cat >> /tmp/n <<'EOF'\nEOF\ngit log || true"
+    );
+    for cmd in [
+        "cat >/tmp/n <<\\EOF\ngit commit\nEOF",
+        "git commit -F- <<'EOF'\ngit add\nEOF",
+        "git commit --file=- <<'EOF'\ngit add\nEOF",
+        "git -C /tmp/x commit --file - <<'EOF'\ngit add\nEOF",
+        "cat > /tmp/a <<'A'\nx\nA\ncat > /tmp/b <<'B'\ngit add\nB",
+        // `make` beside a data file it is not handed (a plan append, then its decide), a `>&` no separator
+        "cat >> specs/451-x/plan.md <<'EOF'\ngit commit\nEOF\nmake decide F=451 T=T1 2>&1 | tail -3",
+    ] {
+        assert_ne!(read(cmd), cmd, "{cmd}");
+    }
+    for cmd in [
+        "git commit -qm x",
+        "cat <<< 'git commit'",
+        "cat << \nx",
+        "cat > /tmp/n <<'EOF\ngit commit\nEOF",
+        "cat > /tmp/n <<'EOF'",
+        "cat > /tmp/a <<A; cat > /tmp/b <<B\nx\nA\ny\nB",
+        "git -c x=y commit -F - <<'EOF'\ngit add\nEOF",
+        "git --no-pager log <<'EOF'\ngit add\nEOF",
+        "git <<'EOF'\ngit add\nEOF",
+        "git push <<'EOF'\ngit add\nEOF",
+        "git commit -m x -c HEAD <<'EOF'\ngit add\nEOF",
+        "git log <<'EOF'\ngit add\nEOF",
+        "echo x | cat > /tmp/n <<'EOF'\ngit add\nEOF",
+        "cat > /tmp/n <<'EOF' | grep x\ngit add\nEOF",
+        "cat > /tmp/n /tmp/m <<'EOF'\ngit add\nEOF",
+        "cat > <<'EOF'\ngit add\nEOF",
+        "cat >> .git/info/x <<'EOF'\ngit add\nEOF",
+        "cat > /tmp/hooks/x <<'EOF'\ngit add\nEOF",
+        "cat > /tmp/${n} <<'EOF'\ngit add\nEOF",
+        "make <<'EOF'\ngit add\nEOF",
+        // `make` runs the program a `cat` wrote, or is handed the file by name
+        "cat >> rust/x/tests.rs <<'EOF'\ngit add\nEOF\nmake rust-test CRATE=rust/x",
+        "cat > /tmp/n.md <<'EOF'\ngit add\nEOF\nmake x FILE=/tmp/n.md",
+        "cat > /tmp/n.md <<'EOF'\ngit add\nEOF\npython3 -c 'print(1)'",
+    ] {
+        assert_eq!(read(cmd), cmd, "{cmd}");
+    }
+}
+
 /// 451 T33: a SHELL write into the tree is refused while its gate runs, as an Edit and a commit are - on 2026-11-20 a builder's
 /// `git apply` and `cp` of guard files under T34's `make land` put unfinished code under its gate - asked of the same tree check;
 /// a write outside the tree, into `.git` or a path git ignores, and every read, pass.

@@ -29,6 +29,10 @@ pub struct Extra {
     pub unbooked: Unbooked,
     /// A bundle's task -> every task of its bundle, itself among them, in the handout's order (451 T514, [`bundles`]).
     pub bundles: HashMap<Key, Vec<Key>>,
+    /// Every token figure by model, each landed task's and the window's (451 T532).
+    pub models: super::turns::Split,
+    /// The pool trees held over the window, time-weighted (461 FR-010's concurrency, 451 T532).
+    pub trees: f64,
 }
 
 /// THE BUNDLES (451 T514): each landed task a pool tree was handed out for together with another (`make builder-tree T=a,b`, the

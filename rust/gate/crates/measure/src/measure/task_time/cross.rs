@@ -60,6 +60,8 @@ pub struct Cross {
     pub both: f64,
     /// The builder places read.
     pub cap: usize,
+    /// Pool trees held, each second once a tree: the window's tree-seconds (451 T532).
+    pub held: f64,
 }
 
 /// One task's done commits: when, and the tasks the `done` row names.
@@ -227,6 +229,9 @@ pub fn measure(
         out.idle += trees * span;
         out.refused += tasks * span;
         out.both += most * span;
+        #[expect(clippy::cast_precision_loss, reason = "a count of trees")]
+        let trees = held as f64;
+        out.held += trees * span;
     }
     out
 }
