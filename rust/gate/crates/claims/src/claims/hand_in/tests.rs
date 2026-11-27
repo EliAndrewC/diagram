@@ -110,3 +110,88 @@ fn at_a_hand_in_the_engine_and_the_form_problems_are_the_work_s() {
     let work = l7r_gate_core::delta_base::with(&base, || delta_form_problems(&root, &pairs));
     assert_eq!(file(&work), ["b.rs"]);
 }
+
+/// A section's `fix: code` drift owed because the engine moved (451 T220): the landing's where the work leaves the engine as the base
+/// held it, the builder's where the work moved it; the engine is compared once for every such claim, and a claim owed for another
+/// reason is split without it.
+#[test]
+fn a_claim_owed_because_the_engine_moved_is_the_builder_s_only_where_the_work_moved_it() {
+    use std::rc::Rc;
+
+    use super::{split, Base};
+    use crate::claims::drawn::DRAWN;
+    use crate::claims::grammar::parse_claim;
+    use crate::claims::index::{Cur, Index, Row};
+
+    let claim = parse_claim("porch - GUESS: drawn 8 by 6 ft").unwrap();
+    let unit = Unit {
+        path: "docs/buildings.md".into(),
+        qualname: "Genkan".into(),
+        kind: "section".into(),
+        lineno: 1,
+        end_lineno: 2,
+        claims: Vec::new(),
+        inherited: false,
+        core: "core".into(),
+        errors: Vec::new(),
+        names: Vec::new(),
+        blocks: Vec::new(),
+        reads: String::new(),
+    };
+    let mut cur = Cur::default();
+    for key in [
+        "docs/buildings.md::Genkan#porch",
+        "docs/buildings.md::Genkan#other",
+    ] {
+        cur.insert(Row {
+            key: key.into(),
+            code: unit.code(&claim),
+            unit: Rc::new(unit.clone()),
+            claim: claim.clone(),
+            research: String::new(),
+        });
+    }
+    let index = Index::new();
+    let tree = |tag: &str, genkan: &str| {
+        let root = crate::checks::scratch(tag);
+        put(
+            &root,
+            "rust/mode_a/src/compound/layout.rs",
+            &format!("const GENKAN: (f64, f64) = {genkan};\n"),
+        );
+        root
+    };
+    let at_base = tree("claims-hand-in-drawn-base", "(8.0, 6.0)");
+    let base = Base {
+        rows: &cur,
+        index: &index,
+        tree: &at_base,
+    };
+    let due = || {
+        vec![
+            (
+                "docs/buildings.md::Genkan#porch".to_owned(),
+                DRAWN.to_owned(),
+            ),
+            (
+                "docs/buildings.md::Genkan#other".to_owned(),
+                DRAWN.to_owned(),
+            ),
+            (
+                "docs/buildings.md::Genkan#gone".to_owned(),
+                "code changed".to_owned(),
+            ),
+        ]
+    };
+    let gone = vec![due().remove(2)];
+    let kept = tree("claims-hand-in-drawn-kept", "(8.0, 6.0)");
+    assert_eq!(
+        split(&kept, due(), &cur, &index, &base),
+        (gone.clone(), due()[..2].to_vec())
+    );
+    let moved = tree("claims-hand-in-drawn-moved", "(12.0, 9.0)");
+    assert_eq!(
+        split(&moved, due(), &cur, &index, &base),
+        (due(), Vec::new())
+    );
+}
