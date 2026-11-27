@@ -274,18 +274,12 @@ fn check_7_a_task_id_taken_twice() {
     .unwrap();
     let split = lint(&dir, &dir);
     let part = "archive/tasks-done/001-T95-T95.md:3: ";
-    assert!(
-        split
-            .iter()
-            .any(|b| b.contains(&format!("{part}cites FR-404"))),
-        "{split:?}"
-    );
-    assert!(
-        split
-            .iter()
-            .any(|b| b.contains(&format!("{part}task id T95 is taken"))),
-        "{split:?}"
-    );
+    assert!(split
+        .iter()
+        .any(|b| b.contains(&format!("{part}cites FR-404"))));
+    assert!(split
+        .iter()
+        .any(|b| b.contains(&format!("{part}task id T95 is taken"))));
     std::fs::remove_dir_all(dir.join("archive")).unwrap();
     std::fs::write(
         dir.join("tasks.md"),

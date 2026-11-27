@@ -74,11 +74,7 @@ fn a_split_moves_every_task_whole_and_a_reader_of_one_task_opens_only_its_part()
             .as_array()
             .unwrap()
             .len();
-        assert!(
-            opened.len() <= parts * (BOUND + 200),
-            "{task} opened {} bytes",
-            opened.len()
-        );
+        assert!(opened.len() <= parts * (BOUND + 200), "{task}");
     }
     // the heading with no id stays with the piece before it, the first marker with the first piece
     assert!(task_text(&read, PLAN_DONE, "T3").contains("### Notes kept with T3's bundle"));
@@ -117,6 +113,20 @@ fn a_split_moves_every_task_whole_and_a_reader_of_one_task_opens_only_its_part()
             && note.contains("WHY: these records grew to megabytes")
     );
     assert!(plan_done_is(&d, &before));
+}
+
+#[test]
+fn a_piece_whose_lead_continues_the_run_before_it_joins_that_run() {
+    // a bundle heading followed by its member's part B (as 451 T352's were): one run, so one part though together over the bound
+    let mut t = section("### T3, T4 (bundle)", 40_000);
+    t += &section("### T4 Approach (checklist part B)", 40_000);
+    t += &section("### T5 (the fifth)", 100);
+    let parts = cut(PLAN_DONE, &t);
+    assert_eq!(parts.len(), 2);
+    assert_eq!(parts[0].2, ["T3", "T4", "T4"]);
+    assert_eq!((parts[0].0.as_str(), parts[0].1.as_str()), ("T3", "T4"));
+    assert!(parts[0].3.find("### T3, T4") < parts[0].3.find("### T4 Approach"));
+    assert_eq!(parts[1].2, ["T5"]);
 }
 
 fn plan_done_is(d: &Path, before: &[(String, String)]) -> bool {
