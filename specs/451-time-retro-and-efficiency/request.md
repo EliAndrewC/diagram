@@ -477,3 +477,8 @@ The GM's question behind 451 T499, 2026-11-27 (the morning after), as the sessio
 And his words the same morning on token cost, which weigh T499's finding (kept whole in `specs/449-rust-codebase/port-talk-gm-goal.md`):
 
 > That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens.
+
+The GM on the task time breakdown's blocking, 2026-11-27 (the afternoon after), when its window table put the second tier at 568 of
+680 blocking minutes (84%) while the builders' trees were busy 83 to 98% of the same window:
+
+> Okay, so it sounds as if while the number is technically correct ("The best kind of correct!") it is misleading in that it sounds like that you're saying that the implementation of our tasks in the builders was not blocked on this to the degree indicated by those figures. And so I guess when we're computing time spent blocking, then the landing should just be in its own separate category where its percentages should not really factor into the time that our tasks spend blocking, if that makes sense. Like the denominators should just be totally separate except to the degree that things in one category actually are blocking things in the other category.
