@@ -328,7 +328,9 @@ fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
     let edit = json!({"cwd": root, "tool_name": "Edit", "tool_use_id": "e1", "tool_input": {"file_path": root.join("specs/900-a/plan.md"), "old_string": "body long", "new_string": "z"}});
     let held = handle("edit", &edit, Some(1000.0));
     assert!(held.contains("plan review"));
-    assert!(state(&root)["plan_snaps"].get("e1").is_some());
+    assert!(state(&root)["plan_snaps"]
+        .as_object()
+        .is_some_and(|m| m.keys().any(|k| k.starts_with("tree:"))));
     std::fs::write(
         root.join("specs/900-a/plan.md"),
         "# p\n\n## T01 x\n\nchanged\n",

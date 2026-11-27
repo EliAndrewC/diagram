@@ -829,6 +829,8 @@ fn barracks_round(state: &mut Value, root: &Path, tid: &str, reply: &str) -> Str
     ask.manifest = "/tmp/l7r-check/modal-sheet-barracks-modal-form/MANIFEST.md";
     let said = dispatch(state, &ask);
     if said.is_empty() {
+        // what the dispatch counted, kept for the test: its return prunes it from a rounded row (451 T387)
+        state["counted_at_dispatch"][tid] = state["dispatches"][tid]["counted"].clone();
         launched(state, tid, &format!("ag-{tid}"), true, "", None);
         returned(state, &format!("ag-{tid}"), reply, None);
         state["dispatches"][tid]["state"] = json!("answered");
@@ -862,7 +864,7 @@ fn a_session_s_own_fixes_between_rounds_count_the_next_round() {
     );
     // the round after the session's own fixes is a repeat
     assert_eq!(
-        state["dispatches"]["r2"]["counted"],
+        state["counted_at_dispatch"]["r2"],
         json!(["modal-form|modal:sheet/barracks"])
     );
     std::fs::write(&modal, by_hand.replace("- {0097#row-of-48-ft}\n", "")).unwrap();
@@ -903,5 +905,26 @@ fn a_session_s_own_fixes_between_rounds_count_the_next_round() {
         ""
     );
     // a sentence only another check's EDIT added is still a first look
-    assert_eq!(state["dispatches"]["r2"]["counted"], json!([]));
+    assert_eq!(state["counted_at_dispatch"]["r2"], json!([]));
+}
+
+/// A rounded dispatch keeps no `counted` or `quote_notes` (451 T387): both are read only by its own return, before it rounds; an
+/// unrounded one keeps both, for the return still to come.
+#[test]
+fn a_rounded_dispatch_drops_what_only_its_return_read() {
+    let row = |rounded: bool, aid: &str| {
+        json!({"aid": aid, "check": "quote-check", "state": "running", "subjects": ["q:0105"],
+        "counted": ["quote-check|q:0105"], "quote_notes": {"0105.drawing#bath": "abc"}, "rounded": rounded, "t": 1.0})
+    };
+    let mut state = json!({"dispatches": {"old": row(true, "a0"), "new": row(false, "a1"), "wait": row(false, "a2")}});
+    returned(&mut state, "a1", "VERDICT: PASS", None);
+    for (tid, kept) in [("old", false), ("new", false), ("wait", true)] {
+        let d = &state["dispatches"][tid];
+        assert_eq!(
+            (d.get("counted").is_some(), d.get("quote_notes").is_some()),
+            (kept, kept),
+            "{tid}"
+        );
+    }
+    assert_eq!(state["rounds"]["quote-check|q:0105"], json!(1));
 }

@@ -778,6 +778,12 @@ pub fn returned(state: &mut Value, agent_id: &str, reply_text: &str, keep: Optio
                 }
             }
         }
+        // a rounded dispatch's `counted` and `quote_notes` are read only above, before it rounds: pruned (451 T387, 281 KB of the
+        // 3.0 MB state on 2026-11-27; every other field has a reader - the arbiter's and the bundles' rounds, `settled`, the counts)
+        if let Some(m) = d.as_object_mut().filter(|m| !falsy(m.get("rounded"))) {
+            m.shift_remove("counted");
+            m.shift_remove("quote_notes");
+        }
         state["dispatches"][&tid] = d;
     }
 }

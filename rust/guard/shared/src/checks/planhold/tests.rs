@@ -2,7 +2,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::{hold, launched, live, purge, refusal, restore, returned, snapshot};
+use super::{hold, launched, live, purge, refusal, restore, returned, snapshot, tree_key};
 use crate::checks::testkit::{clone_at, dir};
 
 const PLAN: &str = "# plan\n\n## T01 the bath\n\nheld body of the section stands here\n\n## T02 other\n\nother text\n";
@@ -92,21 +92,23 @@ fn a_snapshot_is_written_back_when_held_text_changes() {
     let root = clone_at("restore");
     feature(&root);
     let mut state = json!({"plan_holds": {"h1": running("T01", &[], 900.0), "dead": running("T01", &[], 0.0), "p": {"feature": "x", "state": "pending", "t": 999.0}}});
-    snapshot(&mut state, None, "call", 1000.0);
+    snapshot(&mut state, None, 1000.0);
     assert!(state.get("plan_snaps").is_none());
-    snapshot(&mut state, Some(&root), "call", 1000.0);
-    assert!(state["plan_snaps"]["call"]["h1"][0]
+    snapshot(&mut state, Some(&root), 1000.0);
+    assert!(state["plan_snaps"][tree_key(&root)]["h1"][0]
         .as_str()
         .unwrap()
         .contains("held body"));
     assert_eq!(state["plan_holds"].as_object().unwrap().len(), 3);
-    snapshot(&mut state, Some(&root), "empty", 100_000.0);
-    assert!(state["plan_snaps"].get("empty").is_none());
+    // kept once a hold and tree (451 T387): a later call's start takes nothing, and an unchanged end keeps it while the hold is open
+    let kept = state["plan_snaps"].clone();
+    snapshot(&mut state, Some(&root), 100_000.0);
+    assert_eq!(state["plan_snaps"], kept);
     assert_eq!(restore(&mut state, Some(&root), "unrelated"), "");
     let unchanged = restore(&mut state, Some(&root), "call");
     assert_eq!(unchanged, "");
-    assert!(state.get("plan_snaps").is_none());
-    snapshot(&mut state, Some(&root), "again", 1000.0);
+    assert_eq!(state["plan_snaps"], kept);
+    snapshot(&mut state, Some(&root), 1000.0);
     std::fs::write(
         root.join("specs/900-a/plan.md"),
         PLAN.replace("held body", "CHANGED body"),
@@ -137,7 +139,7 @@ fn a_held_block_is_written_back() {
     feature(&root);
     let mut state =
         json!({"plan_holds": {"h": running("", &["## T01 the bath", "## T02 other"], 900.0)}});
-    snapshot(&mut state, Some(&root), "c", 1000.0);
+    snapshot(&mut state, Some(&root), 1000.0);
     let edited = PLAN
         .replace("held body", "X body")
         .replace("other text", "Y text");
@@ -150,7 +152,7 @@ fn a_held_block_is_written_back() {
     );
     let mut one_same =
         json!({"plan_holds": {"h": running("", &["## T01 the bath", "## T02 other"], 900.0)}});
-    snapshot(&mut one_same, Some(&root), "c", 1000.0);
+    snapshot(&mut one_same, Some(&root), 1000.0);
     std::fs::write(
         root.join("specs/900-a/plan.md"),
         PLAN.replace("other text", "Y text"),
@@ -164,7 +166,7 @@ fn a_held_block_is_written_back() {
     // a held block's heading renamed (451 T80): HEAD paired the blocks left by order and wrote T01's old text over T02's block
     let mut renamed =
         json!({"plan_holds": {"h": running("", &["## T01 the bath", "## T02 other"], 900.0)}});
-    snapshot(&mut renamed, Some(&root), "c", 1000.0);
+    snapshot(&mut renamed, Some(&root), 1000.0);
     let tub = PLAN.replace("## T01 the bath", "## T01 the tub");
     std::fs::write(
         root.join("specs/900-a/plan.md"),
@@ -524,9 +526,9 @@ fn split_after(
     let plan = root.join("specs/900-a/plan.md");
     std::fs::write(&plan, SPLIT).unwrap();
     let mut state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
-    snapshot(&mut state, Some(&root), "c", 1000.0);
+    snapshot(&mut state, Some(&root), 1000.0);
     if let Some(b) = before {
-        state["plan_snaps"]["c"]["h"] = b;
+        state["plan_snaps"][tree_key(&root)]["h"] = b;
     }
     std::fs::write(&plan, edit(SPLIT)).unwrap();
     let msg = restore(&mut state, Some(&root), "c");
@@ -626,11 +628,11 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
     let legacy = running("T01", &[], 900.0);
     // the snapshot: none in the other tree, one in the clone
     let mut state = json!({"plan_holds": {"h": rooted}});
-    snapshot(&mut state, Some(&other), "o", 1000.0);
+    snapshot(&mut state, Some(&other), 1000.0);
     let none_there = state.get("plan_snaps").is_none();
     assert!(none_there, "{state}");
-    snapshot(&mut state, Some(&clone), "", 1000.0);
-    let taken = state["plan_snaps"][""]["h"][0]
+    snapshot(&mut state, Some(&clone), 1000.0);
+    let taken = state["plan_snaps"][tree_key(&clone)]["h"][0]
         .as_str()
         .unwrap_or("")
         .contains("held body");
@@ -650,7 +652,7 @@ fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
     assert!(restored, "{said}");
     // a hold with no root, today's: snapshotted and written back in the other tree
     let mut old = json!({"plan_holds": {"h": legacy}});
-    snapshot(&mut old, Some(&other), "l", 1000.0);
+    snapshot(&mut old, Some(&other), 1000.0);
     std::fs::write(
         other.join("specs/900-a/plan.md"),
         theirs.replace("the other", "CHANGED other"),
@@ -749,7 +751,7 @@ fn a_hold_is_the_tree_its_bundle_was_built_from() {
         .shift_remove("n");
     launched(&mut state, "h", "ag");
     // a call in the clone that changes the clone's own section: nothing snapshotted, nothing blamed, nothing written back
-    snapshot(&mut state, Some(&clone), "c", 1000.0);
+    snapshot(&mut state, Some(&clone), 1000.0);
     assert!(state.get("plan_snaps").is_none(), "{state}");
     let changed = ours.replace("held body", "the clone's own edit");
     std::fs::write(clone.join("specs/900-a/plan.md"), &changed).unwrap();
@@ -757,7 +759,7 @@ fn a_hold_is_the_tree_its_bundle_was_built_from() {
     let kept = std::fs::read_to_string(clone.join("specs/900-a/plan.md")).unwrap();
     assert!(said.is_empty() && kept == changed, "{said}");
     // a call in the worktree that changes the reviewed section is written back there
-    snapshot(&mut state, Some(&tree), "w", 1000.0);
+    snapshot(&mut state, Some(&tree), 1000.0);
     std::fs::write(
         tree.join("specs/900-a/plan.md"),
         theirs.replace("the worktree's body", "CHANGED"),

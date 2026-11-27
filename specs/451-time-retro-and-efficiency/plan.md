@@ -5005,31 +5005,45 @@ that batch; the red was not in its change.
 <!-- plan-archive: T384 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T386 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T387 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)
+
+- **Approach**: the check state is saved only where a call changed it, and a rounded dispatch drops the two fields no reader needs, in `rust/guard/shared/src/checks/` (`planhold.rs`, `handle.rs`, `rounds.rs`). Measured 2026-11-27, before and after interleaved, 20 runs each, on a copy of the clone's state (2,994,673 bytes, 3,054 dispatches), load 14 to 16 (`dev/measurements/2026-11-27/t387-hold-writes/results.md`).
+  - **(1) The held text is kept once a hold and tree.** `planhold::snapshot` keeps a live hold's places under `plan_snaps["tree:<root>"][<hold id>]` at the first call in that tree, and takes nothing at a later call's start; `restore` compares the tree's kept text (and a call-keyed snapshot an earlier build wrote, read first and removed) and, after a write-back, retakes it, so a place no write-back could find is named once. `prune_snaps` drops the kept text of a hold gone, at a return, a purge and a restore. `handle` saves at the PreToolUse and the PostToolUse only where `plan_holds` or `plan_snaps` moved (or the feature switched). `checks-hooks`' prefilter (`"plan_snaps"` in the file) is unchanged and still finds the kept text.
+  - **(2) A launch or return no row names is not booked.** `handle::concerns`: an Agent launch whose call id is no dispatch's or hold's, or a return whose agent is none's and that no waiting wave row could pair, returns before `book_keep` and saves nothing; a `TaskStop` is always booked. A first cut compared a clone of the whole state around `book_keep` - 95.5 ms of CPU on the Agent case, 55 ms of it the clone and compare, measured 2026-11-27 (`t387-time.py`) - and was replaced.
+  - **(3) The prune.** `rounds::returned` drops `counted` and `quote_notes` from every rounded row: both are read only by that row's own return, before it rounds (`rounds::returned`, `fixloop::returned`). Every other field has a reader, inventoried first (the results file's table): `owed` and `manifest` the arbiter's bundle, `reply` apply-edits' `settled.rs` (all time) and the earlier-rounds bundles, `marks` the launch (left while T488 is open). 281 KB, 9.7% of the state, measured 2026-11-27 (`json.dumps` of the clone's state with and without them).
+  - **(4) Red first**, 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::handle::hold_writes"`, the tests only added): 3 failed of 5 - `a_bash_true_during_a_hold_writes_nothing` (the state rewritten on every call), `an_agent_launch_no_check_or_hold_names_writes_nothing`, and `a_command_that_overwrote_held_text_is_still_written_back`, a DEFECT of HEAD: a call begun while another call's change stood snapshotted the changed text, so its end wrote that change back over the first call's restore. Green after: 579 of 579 in `rust/guard/shared`, 592 of 592 in `rust/guard`, with `a_rounded_dispatch_drops_what_only_its_return_read` and, through both guards, `a_hold_kept_by_record_edit_is_written_back_by_checks_hooks`; the hook suites checks-hooks 22, record-edit-gate 9, record-edit-hooks 14 passed.
+  - **(5) The figures.** CPU medians, before against after: a Bash `true`'s PreToolUse under a hold 98.8 against 42.6 ms, its PostToolUse 92.6 against 38.2, a non-check Agent's PostToolUse 108.1 against 52.6, and writes 22 of 22 against 0 of 22 each, measured 2026-11-27 (`t387-time.py`). A Bash call under a hold paid 191 ms of CPU, now 81, measured 2026-11-27 (`t387-time.py`), and at T373's 1,176 such calls and 212 Agent ends a day about 130 s plus 12 s a day, an estimate from T373's counts, measured 2026-11-26 (`t373-holds.py`; an upper bound: T373's hold count is one). The prune: 36.0 / 33.4 / 48.4 ms on the pruned copy, about 4 to 6 ms a call at a lower load, measured 2026-11-27 (`t387-time.py`). What is left is the parse of the 3.0 MB state, measured 2026-11-27 (`t387-time.py`, the after build), filed as T490.
+
+**T387-D1 - Kept once a hold, not retaken at each call's start.** The brief: "save only where the snapshot changed". Retaking the text at each start where it changed would keep the HEAD defect of (4): a concurrent call's start would take the other call's change as the held text. Kept once, a change a hooked call made is written back at that call's end and blamed on it; a change no hooked call made (an editor, a command past its one PostToolUse) is written back at the next call's end, where HEAD took it as held at the next start - the hold's purpose, the text the review reads standing still. The write-back's message is unchanged, its "since the call began" read as since the hold's first call. Chosen by the builder.
+
+**T387-D2 - A call-keyed snapshot is still read.** A session running a build from before this one writes `plan_snaps[<call id>]` at its PreToolUse; its PostToolUse may run this build after a rebuild, so `restore` reads and removes that snapshot first. Retiring the read is one line once no older build runs. Chosen by the builder.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the hold's text kept once a hold and tree, the state saved only where it moved, a launch or return no row names unbooked, a rounded row's `counted` and `quote_notes` pruned (`checks/planhold.rs`, `handle.rs`, `rounds.rs`; tests `handle/hold_writes.rs`, `planhold/tests.rs`, `rounds/tests.rs`, `checks_hooks/tests.rs`), red first 3 of 5, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T387 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A Bash call while a plan review holds text, and an Agent call's end, cost the hook its read of the check state and no write; the hold still puts back held text a command overwrote.
+2. **The constraints.** T387's line and the brief (save only where the snapshot changed, red first on a Bash `true` writing nothing; every reader of the kept dispatches found before any field is dropped; the write-back pinned; no guard message changed); feature 385 T85 and 451 T78, T80, T123 (the hold, its write-back, its tree); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: T373's figures, measured 2026-11-26; this task's red-first run and its interleaved timing, measured 2026-11-27; the reader inventory by grep over `rust/`, 2026-11-27.
+4. **Do they describe the world here?** Yes: the timing runs the real binaries' `--only record-edit-hooks` and `--only checks-hooks` on a copy of the clone's own state, and the two-guard test drives both guards' `decide` on one call.
+5. **The order.** After T373, which measured it; before T302 (T373's section); T488, T489 and T490 after it.
+6. **The exits.** Green: the red-first tests passing, both crates' first-tier checks and the two guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A Bash `true` under a hold writes the state 0 of 22 times (22 of 22 before), its two hooks 81 ms of CPU against 191, measured 2026-11-27; `make builder-checks CRATE="rust/guard rust/guard/shared"` clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The check it breaks at HEAD: the hold's write-back, which a concurrent call's end undid (4); fixed here.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A check-wave dispatch never applies its reading marks (`rounds::pair_wave` sets a wave row running without `apply_marks`; 362 of the 3,054 rows carry unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state): a wave round's sentences are read as a first look at the next round, so its round count is wrong. Not fixed here: it changes how rounds are counted, outside this task's saving of the state. Filed as T488; lands before T490.
+- A running hold past `HOLD_MAX_S` is never purged (`planhold::purge` drops only pending holds): a review whose return never came keeps every Bash call of the clone on the state's load, about 40 ms each now, measured 2026-11-27 (`t387-time.py`), and keeps refusing held text without `PLAN_EDIT_OK`. Not fixed here: purging it changes that refusal and needs its own ruling. Filed as T489; lands before T490.
+- The state's parse floor, 36 to 43 ms of CPU on every hook that reads it, measured 2026-11-27 (`t387-time.py`): whole old rows are held by `settled.rs`, which reads every reply. Not fixed here: a new store, several readers. Filed as T490; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it makes the guards' hooks faster - a Bash call under a plan hold 191 to 81 ms of CPU, an Agent call's end 108 to 53, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
 
 
 ### T388 (<why: the finding or measurement that files it>)
@@ -6965,6 +6979,86 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T487 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T488 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T488 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T489 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T489 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T490 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T490 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

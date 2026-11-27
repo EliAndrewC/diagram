@@ -3109,14 +3109,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T387 (<why: the finding or measurement that files it>)": {
-   "sha256": "67eddbe6f2434230eba64c6dcc03da5f601033c6690217a42e63865ea2bf4943",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T387 Approach (checklist part A)": {
-   "sha256": "79fad0337f3e8cd4d6fc02a00384aa36756cb48083e06740f52e0e467e2750a3",
+   "sha256": "ef481cdbaab176983027d3f87fe3ad612b8dddb6eaedb590b20a0df3a641d964",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4293,6 +4287,12 @@
   },
   "### T485 Approach (checklist part A)": {
    "sha256": "7b88ba1400022db5e54e90c4df4a82ea44eb9ec3adfccf98425cf06b8dfb2250",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)": {
+   "sha256": "cc6c7b78b7efbf7e63e43b6d7f0e9fa7822e0830d4b4ccb48a91462297dfac3d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40403,6 +40403,74 @@
      "summary": "The unfilled T475 template block (placeholders only) removed from the plan.",
      "class": "within",
      "why": "The earlier text holds no approach, no decision and no figure - only the template's angle-bracket prompts - so removing it drops no decision about what the GM asked. Whether T475 still needs a filled section before its own work is a tooling matter (task-add/plan-lint), not a fidelity one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)",
+    "### T387 Approach (checklist part A)",
+    "(removed) ### T387 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T387-D1",
+     "summary": "The held text is kept once per hold and tree at its first call, not retaken at every call's start; a change no hooked call made is written back at the next call's end.",
+     "class": "within",
+     "why": "A performance task under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'. Taking the text once is how the saving is had, and it also fixes a wrong outcome at HEAD found red-first (a concurrent call's end wrote its change back over the first call's restore). The hold's purpose, text the review reads standing still, is kept and made stricter, not narrowed. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T387-D2",
+     "summary": "restore still reads and removes a call-keyed snapshot written by an older build.",
+     "class": "within",
+     "why": "Compatibility so a session mid-rebuild does not lose a write-back. It narrows nothing asked."
+    },
+    {
+     "id": "T387-A2",
+     "summary": "An Agent launch or return that no dispatch, hold or waiting wave row names is not booked and saves nothing; a TaskStop is always booked.",
+     "class": "within",
+     "why": "The saving the task exists for (T373 lever E). Nothing any reader needs is dropped: a row that names the call is still booked. The first cut was a clone-and-compare, measured slower and replaced."
+    },
+    {
+     "id": "T387-A3",
+     "summary": "A rounded dispatch row's counted and quote_notes are pruned; every other field is kept because it has a reader; marks is left while T488 is open.",
+     "class": "within",
+     "why": "Shrinks the state every hook parses. Every field's readers were inventoried first by grep over rust/ (the brief's constraint), and only fields read solely by the row's own pre-round return are dropped. Nothing requested is removed."
+    },
+    {
+     "id": "T387-A4",
+     "summary": "Red first on the 5 hold_writes tests (3 failed at HEAD), then green across both guard crates and the hook suites.",
+     "class": "within",
+     "why": "Verification that only fails when the requested saving or the write-back is missing, so it enforces the request (FR-012's practice, GM 2026-09-20). Not unrequested scope."
+    },
+    {
+     "id": "T387-F1",
+     "summary": "Defect left: a check-wave dispatch never applies its reading marks, so a wave round's count is wrong. Deferred to T488, which lands before T490.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a wrong outcome that is found and not fixed in this task. The GM's rule is 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18). That binds at a step boundary, not inside one task. T488 is filed in this feature, has an order, and lands before T490 and before any port resumes. It carries FR-009's why, id and order. It is a separate mechanism (how rounds are counted), and fixing it here would change round counting inside a state-saving task. The GM's purpose is still met because the defect is fixed before the next step."
+    },
+    {
+     "id": "T387-F2",
+     "summary": "Defect left: a running hold past HOLD_MAX_S is never purged, so it keeps loading the state on every Bash call and keeps refusing held text. Deferred to T489, which lands before T490.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same footing as F1. It is filed and ordered in this feature before the next step, with FR-009's why, id and order. Purging a running hold changes a guard's refusal, which is not part of this task's saving of the state. The GM's fix-before-moving-on rule is kept."
+    },
+    {
+     "id": "T387-F3",
+     "summary": "The 36 to 43 ms parse floor of the 3.0 MB state is left and filed as T490, which lands before T302.",
+     "class": "within",
+     "why": "This is not a defect, because nothing reads wrong or fails; it is a remaining cost. Filing it as further performance work follows FR-013 and is not a narrowing."
+    },
+    {
+     "id": "removed-stubs",
+     "summary": "Two unfilled template stubs are removed: the T387 placeholder, replaced by the filled block, and a stray T475 placeholder.",
+     "class": "within",
+     "why": "Placeholders decide nothing. Their removal narrows nothing."
     }
    ]
   }

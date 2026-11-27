@@ -142,3 +142,40 @@ fn a_failed_call_is_written_back_and_a_failed_launch_keeps_its_hold() {
     assert_eq!(holds["plan_holds"]["h"]["state"], "pending");
     assert_eq!(holds["plan_holds"]["r"]["aid"], "ag");
 }
+
+/// The hold through both guards (451 T387): record-edit's `PreToolUse` keeps the held text once, a Bash call's later start and end
+/// save nothing, and checks-hooks' `PostToolUse` still finds the kept text through its prefilter and writes a change back.
+#[test]
+fn a_hold_kept_by_record_edit_is_written_back_by_checks_hooks() {
+    use std::os::unix::fs::MetadataExt;
+    let root = clone_at("two-guards");
+    let state_file = root.join(".git/checks-open.json");
+    let plan = root.join("specs/900-a/plan.md");
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    std::fs::write(&plan, "# p\n\n## T01 x\n\nbefore\n").unwrap();
+    let now = crate::shared::checks::now();
+    std::fs::write(&state_file, json!({"feature": "999-x", "plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": now,
+        "state": "running", "aid": "ag", "root": root.to_string_lossy()}}}).to_string()).unwrap();
+    let call = |tid: &str| json!({"cwd": root, "tool_name": "Bash", "tool_use_id": tid, "tool_input": {"command": "true"}});
+    let pre = |tid: &str| {
+        let input = call(tid);
+        (crate::guards::record_edit_hooks::GUARD.decide)(
+            &Event {
+                name: "PreToolUse".to_owned(),
+                input: input.clone(),
+            },
+            &Session::from_input(&input),
+        )
+    };
+    assert!(pre("a").is_empty() && run("PostToolUse", &call("a")).is_empty());
+    let kept = std::fs::metadata(&state_file).unwrap().ino();
+    assert!(pre("b").is_empty());
+    std::fs::write(&plan, "# p\n\n## T01 x\n\nCHANGED\n").unwrap();
+    let got = run("PostToolUse", &call("b"));
+    assert!(
+        matches!(&got[..], [Answer::Refuse(t)] if t.contains("written back")),
+        "{got:?}"
+    );
+    assert!(std::fs::read_to_string(&plan).unwrap().contains("before"));
+    assert_eq!(std::fs::metadata(&state_file).unwrap().ino(), kept);
+}

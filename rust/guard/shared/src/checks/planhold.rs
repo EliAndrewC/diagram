@@ -130,10 +130,34 @@ pub fn launched(state: &mut Value, tid: &str, agent_id: &str) {
     }
 }
 
-/// A review's return: its holds go.
+/// A review's return: its holds go, and the text kept for them.
 pub fn returned(state: &mut Value, agent_id: &str) {
     if let Some(holds) = state.get_mut("plan_holds").and_then(Value::as_object_mut) {
         holds.retain(|_, h| h.get("aid").and_then(Value::as_str) != Some(agent_id));
+    }
+    prune_snaps(state);
+}
+
+/// The key a tree's held text is kept under in `plan_snaps` (451 T387), beside the call-keyed snapshots an earlier build wrote:
+/// `tree:` and the tree's path, which no `tool_use_id` begins with.
+fn tree_key(root: &Path) -> String {
+    format!("tree:{}", resolved(root).display())
+}
+
+/// Each kept snapshot of a hold no longer open goes, and `plan_snaps` with the last of them: a stale entry kept `checks-hooks`
+/// loading the state on every call's end.
+fn prune_snaps(state: &mut Value) {
+    let open: BTreeSet<String> = state.get("plan_holds").map_or_else(BTreeSet::new, set_of);
+    if let Some(all) = state.get_mut("plan_snaps").and_then(Value::as_object_mut) {
+        for s in all.values_mut().filter_map(Value::as_object_mut) {
+            s.retain(|hid, _| open.contains(hid));
+        }
+        all.retain(|_, s| !set_of(s).is_empty());
+        if all.is_empty() {
+            state
+                .as_object_mut()
+                .and_then(|m| m.shift_remove("plan_snaps"));
+        }
     }
 }
 
@@ -162,29 +186,45 @@ pub fn live(h: &Value, now: f64) -> bool {
     text(h, "state") == "running" && !dead(h, now)
 }
 
-/// A pending hold past `PENDING_S` never launched and never will: it goes, so an empty state starts nothing.
+/// A pending hold past `PENDING_S` never launched and never will: it goes, so an empty state starts nothing; and the text kept for a
+/// hold gone.
 pub fn purge(state: &mut Value, now: f64) {
     if let Some(holds) = state.get_mut("plan_holds").and_then(Value::as_object_mut) {
         holds.retain(|_, h| !(text(h, "state") == "pending" && now - t_of(h) > PENDING_S));
     }
+    prune_snaps(state);
 }
 
-/// Before a write: the texts each live hold holds, kept under the call's id.
-pub fn snapshot(state: &mut Value, root: Option<&Path>, tid: &str, now: f64) {
+/// Before a write: the texts each live hold holds, kept ONCE a hold and tree (451 T387), at the first call there - never retaken at a
+/// later call's start. WHY: a snapshot under each call's id made every Bash call under a hold save the whole check state twice (3.0 MB,
+/// 97 to 118 ms of CPU, T373's lever E); and a call begun while another's change stood took the changed text as its own, so its end
+/// wrote that change back over the first call's restore (red on HEAD: `a_command_that_overwrote_held_text_is_still_written_back`).
+/// A change no hooked call made (an editor, a command past its one `PostToolUse`) is written back at the next call's end, where it
+/// was taken as held before.
+pub fn snapshot(state: &mut Value, root: Option<&Path>, now: f64) {
     purge(state, now);
     let Some(root) = root else {
         return;
     };
-    let snaps: Map<String, Value> = state
+    let key = tree_key(root);
+    let kept = state.get("plan_snaps").and_then(|m| m.get(&key));
+    let fresh: Map<String, Value> = state
         .get("plan_holds")
         .and_then(Value::as_object)
         .into_iter()
         .flatten()
-        .filter(|(_, h)| live(h, now) && reaches(h, root))
+        .filter(|(id, h)| {
+            live(h, now) && reaches(h, root) && kept.and_then(|k| k.get(*id)).is_none()
+        })
         .map(|(id, h)| (id.clone(), json!(held_places(root, h))))
         .collect();
-    if !snaps.is_empty() {
-        map_mut(state, "plan_snaps").insert(tid.to_owned(), Value::Object(snaps));
+    if !fresh.is_empty() {
+        let entry = map_mut(state, "plan_snaps")
+            .entry(key)
+            .or_insert_with(|| json!({}));
+        if let Some(m) = entry.as_object_mut() {
+            m.extend(fresh);
+        }
     }
 }
 
@@ -370,25 +410,26 @@ fn write_back(root: &Path, h: &Value, before: &[String]) -> Option<String> {
 }
 
 /// After the write: any held text it changed is written back and the change refused, naming the review; or "".
+/// A call's own snapshot (an earlier build's, under its id) is read first, then its tree's kept text; after a write-back the tree's
+/// kept text is retaken, so a place no write-back could find is named once, not at every later call (451 T387).
 pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
-    let snaps = state
+    let own = state
         .get_mut("plan_snaps")
         .and_then(Value::as_object_mut)
         .and_then(|m| m.shift_remove(tid));
-    let open: BTreeSet<String> = state.get("plan_holds").map_or_else(BTreeSet::new, set_of);
-    if let Some(all) = state.get_mut("plan_snaps").and_then(Value::as_object_mut) {
-        all.retain(|_, s| !set_of(s).is_disjoint(&open));
-        if all.is_empty() {
-            state
-                .as_object_mut()
-                .and_then(|m| m.shift_remove("plan_snaps"));
-        }
-    }
-    let (Some(root), Some(snaps)) = (root, snaps) else {
+    prune_snaps(state);
+    let Some(root) = root else {
         return String::new();
     };
+    let key = tree_key(root);
+    let kept = state.get("plan_snaps").and_then(|m| m.get(&key)).cloned();
     let holds = state.get("plan_holds").cloned().unwrap_or(Value::Null);
-    for (hid, before) in snaps.as_object().into_iter().flatten() {
+    for (hid, before) in own
+        .iter()
+        .chain(&kept)
+        .filter_map(Value::as_object)
+        .flatten()
+    {
         // a snapshot under a call's id is its own tree's; one under no id (a test's call) is any tree's, so the tree is asked here too
         let Some(h) = holds.get(hid).filter(|h| !h.is_null() && reaches(h, root)) else {
             continue;
@@ -407,6 +448,15 @@ pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
             continue;
         }
         if let Some(msg) = write_back(root, h, &before) {
+            let after = json!(held_places(root, h));
+            if let Some(k) = state
+                .get_mut("plan_snaps")
+                .and_then(|m| m.get_mut(&key))
+                .and_then(Value::as_object_mut)
+                .filter(|k| k.contains_key(hid))
+            {
+                k.insert(hid.clone(), after);
+            }
             return msg;
         }
     }
