@@ -651,6 +651,23 @@ engine speed, so the performance checklist does not apply.
 
 
 
+### T01 part B (2026-11-27T18:07Z)
+
+1. **What exactly is refusing?** The landing gate's `hooks-test`: an unreviewed guard message, gate-write-hooks refuse (key
+   07af561d8fed9177), rendered by 451 T530's new test case. The same rule both times: the two reds at 18:02:27Z and 18:03:02Z
+   came 35 seconds apart on one fault (the round arbiter's ruling, red-gate@2026-11-27T18:03:02Z).
+2. **A3 again, for that rule.** O: the gate's own output, read; the rule is the guard-message check (451 T170), every rendered
+   message held to a recorded verdict.
+3. **A4 again.** Yes: the message was new, and unreviewed - the rule describes the case.
+4. **Is the next fix moving something placed earlier to suit something placed later?** No: the fix was the message's wording and
+   its review, not T01's measurement.
+5. **Tuning or changing?** Neither: one wording change at message-check's BREVITY finding, then ten renderings checked PASS.
+6. **The one-sentence test.** "A new guard message is reviewed before it lands" - the GM would not ask why.
+7. **The next step is a measurement.** `make hooks-test` over every suite with the new wording, green, before the next landing.
+8. **Before offering routes.** None offered: the arbiter ruled `continue`.
+9. **After a ruling.** The next step is the one it names: land once more with the shortened wording in place, and read any red
+   before starting another landing; 461 T01 and T05 not queued behind an unread red.
+
 ### T02 (D12's other figures, the night's concurrency and the likeness test, completing phase 0's baseline)
 
 - **Approach**: A sibling script, `dev/measurements/2026-11-27/461-t01-night-tokens/night-figures.py`, sits beside T01's
