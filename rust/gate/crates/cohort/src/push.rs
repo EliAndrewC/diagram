@@ -4,6 +4,7 @@
 //! run as their own processes until their tasks port them (`ask:449-T067-scope`); a passing self-test is kept per version of `scripts/`, and a
 //! Rust one per gate binary too (T109).
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
@@ -377,7 +378,19 @@ fn run_row(tools: &Tools, row: &Row, root: &Path) -> Option<std::process::Output
     command.output().ok()
 }
 
+/// The push's run, which ends at its first refusal (the tests' form; the command asks [`run_every`]).
+#[cfg(test)]
 fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Reply {
+    run_every(tools, rows, root, skips, false)
+}
+
+/// The landing's word for every refusal in one run (`push-checks <root> --every`, feature 451 T307 part 2).
+const EVERY: &str = "--every";
+
+/// [`run_checks`], and with `every` the run that does not end at its first refusal: each refusing row's line, in the table's order.
+/// WHY: `make land`'s first pass asks the push's own table before its gate, so no row is met only at the push, and a landing is told
+/// every refusal together (451 T307: the ledger rows of 2026-11-26 refused a landing once up front and once at the push, after its gate).
+fn run_every(tools: &Tools, rows: &[Row], root: &Path, skips: &[String], every: bool) -> Reply {
     let at = stamps_file(root, tools.off);
     let mut stamps: Value = at
         .as_ref()
@@ -415,7 +428,7 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
             o.status.success()
         });
         if !passed {
-            failed = format!("sync-with-main: {}\n", row.3);
+            let _ = writeln!(failed, "sync-with-main: {}", row.3);
             if row.0 == "closing" {
                 let _ = log_write(&Entry {
                     guard: "sync-with-main",
@@ -426,6 +439,9 @@ fn run_checks(tools: &Tools, rows: &[Row], root: &Path, skips: &[String]) -> Rep
                     input: &Value::Null,
                     session_name: "",
                 });
+            }
+            if every {
+                continue;
             }
             break;
         }
@@ -469,7 +485,7 @@ fn parse_skips(rest: &[String]) -> Result<Vec<String>, String> {
     }
 }
 
-/// `l7r-gate push-checks <root> [--skip <name> ...] [--list]`.
+/// `l7r-gate push-checks <root> [--skip <name> ...] [--every] [--list]`.
 pub fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
     let usage = |text: String| Reply {
         stdout: String::new(),
@@ -482,23 +498,30 @@ pub fn checks_cli(args: &[String], tree: &Path, off: bool) -> Reply {
             stderr: String::new(),
             code: 0,
         },
-        None => usage("usage: push-checks <root> [--skip <name> ...] [--list]\n".to_owned()),
-        Some(root) => match parse_skips(&args[1..]) {
-            Err(why) => usage(why),
-            Ok(skips) => {
-                let top = std::fs::canonicalize(root).unwrap_or_default();
-                run_checks(
-                    &Tools {
-                        tree: tree.to_owned(),
-                        off,
-                        binary: std::env::current_exe().ok(),
-                    },
-                    &CHECKS,
-                    &top,
-                    &skips,
-                )
+        None => {
+            usage("usage: push-checks <root> [--skip <name> ...] [--every] [--list]\n".to_owned())
+        }
+        Some(root) => {
+            let every = args[1..].iter().any(|a| a == EVERY);
+            let rest: Vec<String> = args[1..].iter().filter(|a| *a != EVERY).cloned().collect();
+            match parse_skips(&rest) {
+                Err(why) => usage(why),
+                Ok(skips) => {
+                    let top = std::fs::canonicalize(root).unwrap_or_default();
+                    run_every(
+                        &Tools {
+                            tree: tree.to_owned(),
+                            off,
+                            binary: std::env::current_exe().ok(),
+                        },
+                        &CHECKS,
+                        &top,
+                        &skips,
+                        every,
+                    )
+                }
             }
-        },
+        }
     }
 }
 

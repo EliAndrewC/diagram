@@ -88,9 +88,51 @@ pub fn stub_block(task: &str, block: &str) -> bool {
     theirs.any(|(key, body, _)| key != "preamble" && bare(&body) == bare(block))
 }
 
+/// `plan` without the task's unfilled stub: `Ok(None)` where the plan holds no section of it, `Err` where what it holds is not the
+/// stub alone (filled in, or more than the template under the task's headings). THE ONE COPY (451 T307 part 2): `make task-withdraw`
+/// removes a stub by it, and the tick of a task built inside another task's section ([`crate::plan::built_inside`]) asks it and removes
+/// one by it; here, beside [`stubs`], since the plan crate cannot read the task crate.
+///
+/// # Errors
+/// `Err(())` where the task's section is not its unfilled stub alone.
+#[expect(
+    clippy::result_unit_err,
+    reason = "the one answer its callers read is whether the section is the stub alone; there is nothing more to say"
+)]
+pub fn without_stub(plan: &str, task: &str) -> Result<Option<String>, ()> {
+    let heading = l7r_shared::regex::build(&format!(
+        r"(?m)^#{{2,6}} (?:T[0-9]+[a-z]?, )*{}\b",
+        fancy_regex::escape(task)
+    ))
+    .unwrap_or_else(|e| unreachable!("{e}"));
+    let headed = |text: &str| heading.is_match(text).unwrap_or(false);
+    if !headed(plan) {
+        return Ok(None);
+    }
+    // the one stub test, which the plan gate asks of a withdrawn task's removed block too (`template::stub_block`, T359-D15b)
+    for stub in stubs(task) {
+        let stub = stub.trim_end_matches('\n');
+        let Some(at) = plan.find(stub) else {
+            continue;
+        };
+        // the blank line `make task-add` put after it goes with it
+        let end = at + stub.len();
+        let gap = plan[end..]
+            .bytes()
+            .take(2)
+            .take_while(|b| *b == b'\n')
+            .count();
+        let left = format!("{}{}", &plan[..at], &plan[end + gap..]);
+        if !headed(&left) {
+            return Ok(Some(left));
+        }
+    }
+    Err(())
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{stub_block, stubs, PERFORMANCE, TEMPLATE};
+    use super::{stub_block, stubs, without_stub, PERFORMANCE, TEMPLATE};
 
     #[test]
     fn a_stub_s_blocks_are_the_template_s_with_the_id_filled() {
@@ -134,5 +176,28 @@ mod tests {
             &block.replace("<the place as it should be>", "the wells drawn")
         ));
         assert!(!stub_block("T07", head) && !stub_block("T07", ""));
+    }
+
+    /// The one stub test (451 T307 part 2: moved here from `make task-withdraw`, which the tick of a task built inside another asks too).
+    #[test]
+    fn a_plan_without_a_stub_is_the_plan_with_the_template_alone_removed() {
+        let [perf, plain] = stubs("T07");
+        assert_eq!(without_stub("### T08 (names T07)\n\nx\n", "T07"), Ok(None));
+        let whole = format!("### T06 (a)\n\nx\n\n{plain}\n### T08 (b)\n\ny\n");
+        assert_eq!(
+            without_stub(&whole, "T07"),
+            Ok(Some("### T06 (a)\n\nx\n\n### T08 (b)\n\ny\n".to_owned()))
+        );
+        assert_eq!(
+            without_stub(perf.trim_end(), "T07"),
+            Ok(Some(String::new()))
+        );
+        let filled = plain.replace("<the place as it should be>", "the wells drawn");
+        assert_eq!(without_stub(&filled, "T07"), Err(()));
+        // the template's text with a second heading of the task left after it is not the stub alone
+        assert_eq!(
+            without_stub(&format!("{plain}\n### T07 part B\n\nz\n"), "T07"),
+            Err(())
+        );
     }
 }

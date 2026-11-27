@@ -152,7 +152,25 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
     assert!(refused
         .stderr
         .contains("this tick would close the feature, and:\n  9001-x has no report.md"));
+    // ...and `make land`'s first pass is told so before its gate (451 T307 part 2): where the tasks asked are every open box, the
+    // closing check's reasons join the last one's refusal; a task that would not tick, or a box left open, asks nothing
+    let env = env_of(&[
+        ("PLAN_REVIEW_OK", REASON),
+        ("L7R_GATE_TREE", &root.to_string_lossy()),
+    ]);
+    let first = |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env).unwrap();
+    let said = first(&["T02"]).remove(0).refusal;
+    let why = "tick: refused - this tick would close the feature, and:\n  9001-x has no report.md";
+    assert!(said.contains(why), "{said}");
+    assert_eq!(first(&["T09"])[0].refusal, "");
+    std::fs::write(d.join("tasks.md"), "- [ ] T01 a\n- [ ] T02 b\n").unwrap();
+    assert_eq!(first(&["T02"])[0].refusal, "");
+    assert!(first(&["T01", "T02"])[1]
+        .refusal
+        .contains("would close the feature"));
+    std::fs::write(d.join("tasks.md"), "- [x] T01 a\n- [ ] T02 b\n").unwrap();
     put(&d, "report.md", "# r\n");
+    assert_eq!(first(&["T02"])[0].refusal, "");
     let closed = tick(&ask(&root, &d, "T02", "n"), false, false);
     assert_eq!(closed.code, 0, "{}", closed.stderr);
     assert!(closed.stdout.contains("0 task(s) still open"));
@@ -397,4 +415,82 @@ fn a_fix_landing_with_its_task_holds_that_landing_s_first_pass_no_longer() {
         "{}",
         plain.stderr
     );
+}
+
+/// RED FIRST (451 T307 part 2): a task whose work was built inside another task's reviewed section closes with it - `Built here:`
+/// in the host's section, the host CLEAR and in the landing or ticked, its own section the unfilled stub - and is refused otherwise,
+/// in the first pass (`checks`) as at the tick.
+#[test]
+fn a_task_built_inside_another_s_section_closes_with_it() {
+    let dir = repo("built-inside");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    let host = "## T01 the task\n\n### T01 Approach (checklist part A)\n\n1. **one** answered\n\nBuilt here: T05 - the half it absorbed\n\n";
+    let stub = l7r_gate_plan::plan::template::stubs("T05")[1].clone();
+    let plan = format!("{host}{stub}\n## T06 the task\n\n### T06 Approach (checklist part A)\n\n1. **one** answered\n\n");
+    put(&root, "specs/9001-x/plan.md", &plan);
+    let tasks = "- [ ] T01 host\n- [ ] T05 absorbed\n- [ ] T06 left open\n";
+    put(&root, "specs/9001-x/tasks.md", tasks);
+    let sec = l7r_shared::plan_text::task_sections(&plan)
+        .remove("T01")
+        .unwrap();
+    let digest = l7r_shared::sha256::hex(sec.as_bytes());
+    let review = format!(
+        "{{\"tasks\": {{\"T01\": {{\"verdict\": \"CLEAR\", \"section_sha256\": \"{digest}\"}}}}}}"
+    );
+    put(&root, "specs/9001-x/plan-review.json", &review);
+    let env = env_of(&[
+        ("PLAN_REVIEW_OK", REASON),
+        ("L7R_GATE_TREE", &root.to_string_lossy()),
+    ]);
+    let first = |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env).unwrap();
+    // alone, its host neither landing nor ticked; beside it, in either order, nothing
+    let alone = first(&["T05"]).remove(0).refusal;
+    assert!(alone.contains("T05 is named built inside T01's section (`Built here: T05 - the half it absorbed`), but T01 is neither in this landing nor ticked - make land F=9001 T=\"T01 T05\""), "{alone}");
+    assert!(first(&["T05", "T01"])
+        .iter()
+        .all(|c| c.refusal.is_empty() && c.tick.is_empty()));
+    assert!(first(&["T01", "T05"]).iter().all(|c| c.refusal.is_empty()));
+    // the tick: its box says so, its stub is gone, the event written
+    let mut b = ask(&root, &d, "T05", "landed in batch");
+    b.landing = words(&["T05", "T01"]);
+    let ticked = tick(&b, false, true);
+    assert_eq!(ticked.code, 0, "{}", ticked.stderr);
+    assert!(ticked.stdout.contains("tick: T05 closed built inside T01's section, its unfilled plan stub removed from 9001-x/plan.md; recorded in"), "{}", ticked.stdout);
+    let now = std::fs::read_to_string(d.join("plan.md")).unwrap();
+    assert!(!now.contains("### T05") && now.contains("Built here: T05"));
+    let done = std::fs::read_to_string(d.join("tasks-done.md")).unwrap_or_default()
+        + &std::fs::read_to_string(d.join("tasks.md")).unwrap();
+    assert!(
+        done.contains("- [x] T05 absorbed built inside T01\n"),
+        "{done}"
+    );
+    // ...its host already ticked: alone, nothing; its host not CLEAR, or its own section filled: refused, each said
+    put(&root, "specs/9001-x/plan.md", &plan);
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [x] T01 host\n- [ ] T05 absorbed\n- [ ] T06 left open\n",
+    );
+    assert_eq!(first(&["T05"])[0].refusal, "");
+    put(&root, "specs/9001-x/plan-review.json", "{}");
+    let filled = plan.replace("<the place as it should be>", "the wells drawn");
+    put(&root, "specs/9001-x/plan.md", &filled);
+    let both = first(&["T05"]).remove(0).refusal;
+    assert!(
+        both.contains("but its own plan section has been filled in (9001-x/plan.md)")
+            && both.contains(
+                "; and T01's section carries no current CLEAR verdict - make decide F=9001 T=T01"
+            ),
+        "{both}"
+    );
+    let refused = tick(&ask(&root, &d, "T05", "n"), false, true);
+    assert_eq!(refused.code, 2);
+    // a task no section names is asked as before: its own Approach block
+    put(
+        &root,
+        "specs/9001-x/plan.md",
+        &plan.replace("Built here: T05 - the half it absorbed\n\n", ""),
+    );
+    assert!(!first(&["T05"])[0].refusal.contains("built inside"));
 }

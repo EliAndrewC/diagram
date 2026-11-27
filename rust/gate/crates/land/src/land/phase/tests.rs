@@ -271,6 +271,10 @@ fn a_push_that_merged_is_a_landing_whatever_its_code() {
 #[test]
 fn a_landing_of_two_tasks_names_both_in_its_end() {
     let fx = fx("phase-two");
+    super::super::tests::after_first_pass(
+        &fx,
+        "git rm -q specs/449-x/report.md; git commit -qm 'the report gone'\n",
+    );
     assert_eq!(landing(&fx, &["T1", "T2"]), Ok(2));
     assert_eq!(steps(&fx.root).last(), Some(&s("end", 2)));
     assert_eq!(steps(&fx.root)[3], s("push", 2));

@@ -394,3 +394,80 @@ fn a_phase_task_s_refusals_and_a_stale_exempt_entry_join_the_first_pass() {
     assert!(stops[0].starts_with("T1: phase seat: no checklist at specs/444-x/phases/seat.md"));
     assert!(stops[1].contains("1 stale entry (a.py)"));
 }
+
+/// THE PUSH'S OWN CHECKS BEFORE THE GATE (451 T307 part 2): a row of the push's table and the record gate each refused a landing only
+/// after its gate had run; the first pass asks both, told what the push is told, and says every refusal with the rest.
+#[test]
+fn the_push_s_table_and_the_record_gate_are_asked_in_the_first_pass() {
+    let mut fx = fx("cheap-push-table");
+    let d = fx.root.join("specs/449-x");
+    let call = format!(
+        "{} push-checks {} --every --skip gate-stamp selftest --skip gate-stamp --skip ledger-owed",
+        tool("gates/l7r-gate.sh"),
+        fx.root.display()
+    );
+    fx.answer(&call, "rc", "1");
+    fx.answer(
+        &call,
+        "sh",
+        "echo \"told $L7R_LAND_TICKS $SPECIFY_FEATURE\"\n",
+    );
+    fx.answer(
+        &call,
+        "err",
+        "sync-with-main: a Rust file is past the bar\n",
+    );
+    fx.answer(&tool("gates/entry-gate.sh"), "rc", "1");
+    fx.answer(&tool("gates/entry-gate.sh"), "out", "an entry drifted\n");
+    let stops = fx
+        .land
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .unwrap();
+    assert_eq!(stops.len(), 2, "{stops:?}");
+    assert_eq!(stops[0], "entry-gate.sh: an entry drifted");
+    assert_eq!(
+        stops[1],
+        "push-checks: told T1 449-x | sync-with-main: a Rust file is past the bar"
+    );
+    // a CLOSE_OK that states a reason skips the closing row, as the push skips it
+    let escaped = [("CLOSE_OK", "its report is carried by 450")];
+    fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &escaped);
+    fx.land
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, None)
+        .unwrap();
+    assert!(fx.log().contains("--skip ledger-owed --skip closing\n"));
+    // the rows left to the push are rows of its table, and only the gate's own stamp and the ledger's
+    let listed = l7r_gate_cohort::push::checks_cli(&["--list".to_owned()], &fx.root, true).stdout;
+    let skipped: Vec<&str> = super::AFTER_GATE
+        .iter()
+        .chain(&super::OWN_FORM)
+        .copied()
+        .collect();
+    assert_eq!(
+        skipped,
+        ["gate-stamp selftest", "gate-stamp", "ledger-owed"]
+    );
+    assert!(skipped.iter().all(|s| listed.lines().any(|l| l == *s)));
+}
+
+/// `--every`'s rows each said whole, however long the rows' own output before them (451 T307 part 2: one tail of the whole cut the
+/// earliest refusals where several refused).
+#[test]
+fn every_refusing_row_of_the_push_s_table_is_said_whole() {
+    let rows: String = (1..=30)
+        .flat_map(|i| {
+            [
+                "sync-with-main: row ".to_owned(),
+                format!("{i:02} refused, its fix named at length here\n"),
+            ]
+        })
+        .collect();
+    let out = format!("{}\n{rows}", "x".repeat(2000));
+    let said = super::every_row_said(&out);
+    assert!(said.contains("row 01 refused") && said.contains("row 30 refused"));
+    assert!(said.starts_with(&"x".repeat(600)) && !said.starts_with(&"x".repeat(601)));
+    assert_eq!(
+        super::every_row_said("sync-with-main: one\n"),
+        "sync-with-main: one"
+    );
+}

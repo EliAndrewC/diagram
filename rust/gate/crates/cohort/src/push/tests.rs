@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use super::{
-    binary_id, checks_cli, gate_cli, holds, judged, judges, parse_skips, run_checks,
+    binary_id, checks_cli, gate_cli, holds, judged, judges, parse_skips, run_checks, run_every,
     scripts_version, skip, Row, Tool, Tools, CHECKS,
 };
 use crate::checks::scratch;
@@ -226,6 +226,34 @@ fn lines(path: &Path) -> usize {
         .unwrap_or_default()
         .lines()
         .count()
+}
+
+/// The landing's first pass (451 T307 part 2): every refusing row said, in the table's order, and a self-test past a refusal kept.
+#[test]
+fn a_run_of_every_row_says_each_refusal_and_keeps_what_passed() {
+    let root = tree();
+    let rows = [OK, BAD, CLOSING, KEPT];
+    let got = run_every(&tools(&root, false), &rows, &root, &[], true);
+    assert_eq!(got.code, 1);
+    assert_eq!(
+        got.stderr,
+        "sync-with-main: no refused\nsync-with-main: closing refused\n"
+    );
+    let stamps =
+        std::fs::read_to_string(super::stamps_file(&root, false).unwrap()).unwrap_or_default();
+    assert!(stamps.contains("\"kept\""));
+    // the command's word for it, beside a skip: every row skipped, the run passes; one left, it is run
+    let cli = |words: &[&str]| {
+        let words: Vec<String> = words.iter().map(|w| (*w).to_owned()).collect();
+        checks_cli(&words, &root, true)
+    };
+    let top = root.display().to_string();
+    assert_eq!(cli(&[&top, "--every", "--skip", "nothing"]).code, 2);
+    let mut words = vec![top.as_str(), "--every"];
+    for row in &CHECKS {
+        words.extend(["--skip", row.0]);
+    }
+    assert_eq!(cli(&words).code, 0);
 }
 
 #[test]

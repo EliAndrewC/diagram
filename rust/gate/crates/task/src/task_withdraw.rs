@@ -23,7 +23,7 @@
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_gate_plan::plan::template::stubs;
+use l7r_gate_plan::plan::template::without_stub;
 use l7r_shared::builder_pool;
 use l7r_shared::escape::enough;
 use l7r_shared::guards::event_log_hooks::append_row_with;
@@ -31,7 +31,7 @@ use l7r_shared::py_text::strip;
 use l7r_shared::speckit::{marks, tasks as archive};
 use serde_json::{json, Value};
 
-use crate::tick::text::{re, task_line};
+use crate::tick::text::task_line;
 use crate::tick::{repo_root, spec_dir, Env, Raise};
 use crate::{common_text, git, now_secs, raised, read_strict, reply, utc_text, write_file, Reply};
 
@@ -56,38 +56,6 @@ fn names(subject: &str, number: &str, task: &str) -> bool {
     let head = subject.split(':').next().unwrap_or_default();
     let mut words = head.split(|c: char| !c.is_ascii_alphanumeric());
     words.next() == Some(number) && words.any(|w| w == task)
-}
-
-/// `plan` without the task's unfilled stub: `Ok(None)` where the plan holds no section of it, `Err` where what it holds is not the
-/// stub alone (filled in, or more than the template under the task's headings).
-fn without_stub(plan: &str, task: &str) -> Result<Option<String>, ()> {
-    let heading = re(&format!(
-        r"(?m)^#{{2,6}} (?:T[0-9]+[a-z]?, )*{}\b",
-        fancy_regex::escape(task)
-    ));
-    let headed = |text: &str| heading.is_match(text).unwrap_or(false);
-    if !headed(plan) {
-        return Ok(None);
-    }
-    // the one stub test, which the plan gate asks of a withdrawn task's removed block too (`template::stub_block`, T359-D15b)
-    for stub in stubs(task) {
-        let stub = stub.trim_end_matches('\n');
-        let Some(at) = plan.find(stub) else {
-            continue;
-        };
-        // the blank line `make task-add` put after it goes with it
-        let end = at + stub.len();
-        let gap = plan[end..]
-            .bytes()
-            .take(2)
-            .take_while(|b| *b == b'\n')
-            .count();
-        let left = format!("{}{}", &plan[..at], &plan[end + gap..]);
-        if !headed(&left) {
-            return Ok(Some(left));
-        }
-    }
-    Err(())
 }
 
 /// Why `task` is not withdrawn, or none.

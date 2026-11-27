@@ -29,7 +29,8 @@ fn the_plan_gate_unescaped_refuses_and_its_message_is_kept_only_when_it_passes()
         (from.escaped.as_deref(), from.tree.to_str()),
         (Some("x"), Some("/t"))
     );
-    let cwd = Ask::with_env(&root, &d, "T01", "n", &env_of(&[]));
+    let none = env_of(&[]);
+    let cwd = Ask::with_env(&root, &d, "T01", "n", &none);
     assert_eq!(cwd.tree, std::env::current_dir().unwrap());
 }
 

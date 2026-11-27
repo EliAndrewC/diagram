@@ -93,6 +93,11 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
 - The memory sampler starts with a handout: `make builder-tree` starts the clone's sampler where none runs, and the hand-started
   shell loop of 2026-11-26 is retired - `make sampler` says whether it runs, `make sampler-report` reads a batch's window (451 T274).
+- A builder that ABSORBS a filed task - builds its work inside its own task's section - writes, in that section, a line of its own
+  `Built here: T<n> - <what was built>` (451 T307 part 2), leaves T<n>'s plan stub unfilled and names T<n> in its report's FOR THE
+  SESSION; `make decide` holds the line to an open box with an unfilled stub, the plan review rules on it, and the session lands both
+  (`make land T="<own task> T<n>"`), which ticks T<n> `built inside` it. Without the line, T<n>'s tick is refused for its stub and
+  `make task-withdraw` for its carried code (T393 in T391, T398 in T394, T366 in T359, T395 in T313, T410 in T308).
 - A builder FILES what it found, from its own tree (451 T289; the block's `FILE what you find` line, and this file's last paragraph): `make task-add` allots the
   id under the feature's lock from the reservations every worktree of the clone shares (451 T255), and `make carry` keeps both
   sides where two trees each appended a task's box and its plan stub. Measured 2026-11-26: four candidates left unfiled until the

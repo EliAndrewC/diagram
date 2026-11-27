@@ -187,6 +187,22 @@ impl Fx {
     }
 }
 
+/// The first pass's call of the push's table, as the stub logs it (451 T307 part 2).
+pub(super) fn push_call(fx: &Fx) -> String {
+    format!(
+        "{} push-checks {} --every --skip gate-stamp selftest --skip gate-stamp --skip ledger-owed",
+        tool("gates/l7r-gate.sh"),
+        fx.root.display()
+    )
+}
+
+/// The feature's report committed, and `after` run in the clone once the first pass has asked everything (its last call's stub):
+/// what a tick meets only at the tick, the closing check being asked with the first pass since 451 T307 part 2.
+pub(super) fn after_first_pass(fx: &Fx, after: &str) {
+    fx.in_delta("specs/449-x/report.md", "# r\n");
+    fx.answer(&push_call(fx), "sh", after);
+}
+
 /// The landing as the landing worktree's own run (451 T88, `L7R_LAND_ALONE`): a dirty tree is refused there, never sent to land alone.
 pub(super) fn inner(fx: &mut Fx) {
     fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &[(super::alone::INNER, "1")]);
@@ -203,8 +219,9 @@ const PLAN_SHA: &str = "8c79c7a920ecbecd5310903d3d791bb5aa08b592d49e976db64a1860
 pub(super) const TASKS: &str = "# Tasks\n\n- [ ] T1 one\n      verify: \n- [ ] T2 two\n";
 
 /// The stub tools every landing runs, each a hard link to the one stub `install` wrote: its name is the link's (`basename "$0"`).
-const TOOLS: [&str; 7] = [
+const TOOLS: [&str; 8] = [
     "tree/scripts/gates/l7r-gate.sh",
+    "tree/scripts/gates/entry-gate.sh",
     "tree/scripts/gates/claims-gate.sh",
     "tree/scripts/gates/review-gate.sh",
     "tree/scripts/gates/plan-gate.sh",
@@ -504,8 +521,12 @@ fn a_red_long_run_stops_before_the_ticks() {
 
 #[test]
 fn a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing() {
-    // T2's tick would close the feature, and the closing check, asked at the tick alone, refuses it: no report
+    // T2's tick would close the feature, and the closing check refuses it at the tick: its report gone since the first pass asked
     let fx = fx("land-tick");
+    after_first_pass(
+        &fx,
+        "git rm -q specs/449-x/report.md; git commit -qm 'the report gone'\n",
+    );
     let two = tasks(&["T1", "T2"]);
     let d = fx.root.join("specs/449-x");
     assert_eq!(fx.land.land(&d, &two, NOTE), Ok(2));
@@ -526,13 +547,10 @@ fn a_closing_check_that_raises_ends_the_landing() {
     let fx = fx("land-tick-raise");
     let two = tasks(&["T1", "T2"]);
     let d = fx.root.join("specs/449-x");
-    // a closing check that raises ends the landing
-    put(&d, "report.md", "# r\n");
-    put(&d, "measurements.json", "5");
-    git(&fx.root, &["add", "-A"]);
-    git(
-        &fx.root,
-        &["commit", "-qm", "a record the closing check cannot read"],
+    // a closing check that raises at the tick ends the landing: a record it cannot read, committed since the first pass asked
+    after_first_pass(
+        &fx,
+        "echo 5 > specs/449-x/measurements.json; git add -A; git commit -qm 'a record the closing check cannot read'\n",
     );
     let raised = fx.land.land(&d, &two, NOTE).unwrap_err();
     assert!(raised.contains("the tick raised on T2"));

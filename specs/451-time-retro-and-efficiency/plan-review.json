@@ -3552,6 +3552,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T307 part 2 (the landing's first pass asks the push's own checks, and a task built inside another task's section closes with it: a push check met only after the gate costs the gate's minutes, and five filed tasks built inside other tasks' reviewed sections had no way out)": {
+   "sha256": "50c4cd336901dcd0b34a16e544166b8b6211f10397a9900659b249178dbbc156",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 part 2 Approach (checklist part A)": {
+   "sha256": "e1503de0e2da9b36a253ad659f5a2e26cc50c1ec5d2c82ad9c6f4602b0255f0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -32694,6 +32706,97 @@
      "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))",
+    "### T307 Approach (checklist part A)",
+    "### T307 part 2 (the landing's first pass asks the push's own checks, and a task built inside another task's section closes with it: a push check met only after the gate costs the gate's minutes, and five filed tasks built inside other tasks' reviewed sections had no way out)",
+    "### T307 part 2 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part1 (D1-D3, tests, Found and left T405/T406/T409)",
+     "summary": "Part (1)'s section, unchanged from its CLEAR verdict (compared line by line with earlier.md).",
+     "class": "within",
+     "why": "Text identical to the block judged CLEAR; nothing new to rule on."
+    },
+    {
+     "id": "part2 scope",
+     "summary": "This section is part (2) of T307; T307 is not ticked from it; part (3) remains open on the box.",
+     "class": "within",
+     "why": "Matches the remainder part (1)'s CLEAR section promised for part (2): every check of the push asked in the first pass, with the parity table, and the way out for a task built inside another's reviewed section."
+    },
+    {
+     "id": "part2 D1",
+     "summary": "The first pass calls push-checks --every (the push's own table, run without stopping), told L7R_LAND_TICKS and SPECIFY_FEATURE as the push is; entry-gate.sh joins the first pass.",
+     "class": "within",
+     "why": "Directly implements 'every check of the push also in the landing's first pass', by construction (one call of the same table, so a row added later is asked too)."
+    },
+    {
+     "id": "part2 D1 skips / parity rows that cannot precede the gate",
+     "summary": "Not asked up front: the gate's stamp rows, make gated-check (its condition is the green gate), and the cohort gate (its record is written by the second pass, which rolls the cohort before the gate where it would refuse).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible before the gate: each one checks something only the gate or the second pass writes, so asking it in the first pass could only ever refuse. The cohort gate is still settled before the gate's minutes are spent, so the part's purpose holds."
+    },
+    {
+     "id": "part2 D1 ledger row / CLOSE_OK / work-budget-review",
+     "summary": "The ledger's row is asked in the landing's own form naming its tasks; the closing row is skipped under a CLOSE_OK that states a reason, as the push skips it; work-budget-review stays in the second pass before the gate.",
+     "class": "within",
+     "why": "Each is still asked before the gate's minutes are spent, or skipped exactly where the push skips it. That is parity, not a carve-out."
+    },
+    {
+     "id": "part2 D2",
+     "summary": "tick::checks asks the closing check in the first pass where the landing's tasks are every open box of the feature; a tooling fix the landing carries is no reason there.",
+     "class": "within",
+     "why": "Moves the push's closing row ahead of the gate, as asked."
+    },
+    {
+     "id": "part2 D3",
+     "summary": "Defect fixed in passing: each refusing row's sync-with-main line is kept whole, and only each row's own output is cut (to 600 characters, a stated convention).",
+     "class": "within",
+     "why": "A wrong outcome (the earliest refusals were cut from the list --every exists to give), fixed within the asked mechanism."
+    },
+    {
+     "id": "part2 D4",
+     "summary": "The first pass's closing row writes a closing-owes guard-log line when it refuses, as the push's does.",
+     "class": "within",
+     "why": "Records a real refusal of the push's own check. This is a bookkeeping choice inside the asked mechanism and narrows nothing."
+    },
+    {
+     "id": "part2 D5",
+     "summary": "A 'Built here: T<n>' line in the host's section; T<n>'s tick asks the host's plan gate in its place and refuses when its own section is filled, the host has no current CLEAR (no escape), or the host is neither in this landing nor ticked; the accepted tick marks the box ' built inside T<host>', removes the unfilled stub and logs TaskBuiltInside; make land hands the tick its tasks.",
+     "class": "within",
+     "why": "This is the requested way out for a task built inside another task's reviewed section. The refusals keep feature 243's rule that the host's review stands for the absorbed task's, never none."
+    },
+    {
+     "id": "part2 D6",
+     "summary": "make decide's lint gains BuiltHere: each Built here line must name an open box with an unfilled stub or none, or one already ticked built inside a task the section decides.",
+     "class": "within",
+     "why": "Enforcement of D5: the host's plan review sees, and rules on, what it absorbs. It serves the request and adds no behavior beyond it."
+    },
+    {
+     "id": "part2 D7",
+     "summary": "status::scope_of and push_held read a box ending ' built inside T<n>' as a withdrawn box: its removed unfilled stub owes no review, and a filled block removed beside it still does.",
+     "class": "within",
+     "why": "Needed so the way out actually closes without a review owed on a stub; T359-D15b is kept (the form alone exempts nothing filled)."
+    },
+    {
+     "id": "part2 T413 deferral",
+     "summary": "The unrelated-history refusal, the in-progress rule over the other touched spec directories and the feature pointer, and fixtures for the late ledger-row and changed-block cases are not asked or pinned here; they are filed as T413, which lands before T307's tick.",
+     "class": "within",
+     "why": "Sequenced, not dropped: T307's box stays open and T413 lands before its tick, the same pattern part (1)'s CLEAR section used for T405/T406/T409. The requested scope for the task as a whole is unchanged."
+    },
+    {
+     "id": "part2 LEDGER_ROWS_OK",
+     "summary": "The first pass's own ledger refusal stays stricter than the push and does not honor LEDGER_ROWS_OK, as before this part.",
+     "class": "within",
+     "why": "Pre-existing, and it refuses earlier rather than later, so it does not defeat part (2)'s purpose (the landing told before its gate every refusal the push would make). No wrong outcome is shown."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -50485,63 +50588,88 @@
    "verdict": "CLEAR"
   },
   "T307": {
-   "section_sha256": "8598bd59ef2e959aefce2e300efb583bb03878458efb6149dd8779bca9d6e15a",
+   "section_sha256": "44c3f2fd50551803ecdb358e9f9ba49eea299b9f0ccc71e761ff2a5283f4ef36",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "part-split",
-     "summary": "This section builds only part (1) of T307; parts (2) and (3) remain open on the task's box and the task is not ticked from this landing.",
+     "id": "part1 (D1-D3, tests, Found and left T405/T406/T409)",
+     "summary": "Part (1)'s section, unchanged from its CLEAR verdict (compared line by line with earlier.md).",
      "class": "within",
-     "why": "Sequencing inside one task. Nothing T307 asks for is dropped, because the task stays open and its tick is the point where the whole of it is owed."
+     "why": "Text identical to the block judged CLEAR; nothing new to rule on."
     },
     {
-     "id": "D1-release",
-     "summary": "A git commit/add or record-writing make is held only when the guard's shared walk (cd, git -C) places it in the gated tree. One placed in another tree (a builder's worktree) is let through.",
+     "id": "part2 scope",
+     "summary": "This section is part (2) of T307; T307 is not ticked from it; part (3) remains open on the box.",
      "class": "within",
-     "why": "This is the behavior the block states part (1) asks for: hold only writes to the tree being gated. It also keeps feature 385 D13's purpose, which is to refuse what moves HEAD or git diff of the gated tree, since a commit in another worktree moves neither."
+     "why": "Matches the remainder part (1)'s CLEAR section promised for part (2): every check of the push asked in the first pass, with the parity table, and the way out for a task built inside another's reviewed section."
     },
     {
-     "id": "D1-fail-closed",
-     "summary": "Where the walk cannot place a command (cd \"$VAR\"), or the pattern matches but the walk places nothing (a quoted git commit), the command is held as before.",
+     "id": "part2 D1",
+     "summary": "The first pass calls push-checks --every (the push's own table, run without stopping), told L7R_LAND_TICKS and SPECIFY_FEATURE as the push is; entry-gate.sh joins the first pass.",
      "class": "within",
-     "why": "This is the conservative side of the rule and keeps D13 and 375 FR-004. It narrows nothing the GM asked to have released, as far as the request and spec in the bundle show."
+     "why": "Directly implements 'every check of the push also in the landing's first pass', by construction (one call of the same table, so a row added later is asked too)."
     },
     {
-     "id": "D1-message",
-     "summary": "The refusal's text is unchanged, so no message check is owed.",
-     "class": "within",
-     "why": "Nothing new is refused, so there is no new message to check against FR-012."
+     "id": "part2 D1 skips / parity rows that cannot precede the gate",
+     "summary": "Not asked up front: the gate's stamp rows, make gated-check (its condition is the green gate), and the cohort gate (its record is written by the second pass, which rolls the cohort before the gate where it would refuse).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible before the gate: each one checks something only the gate or the second pass writes, so asking it in the first pass could only ever refuse. The cohort gate is still settled before the gate's minutes are spent, so the part's purpose holds."
     },
     {
-     "id": "D2-dotgit",
-     "summary": "The Edit/Write rule no longer refuses a file under the gated tree's .git (a builder's handoff under .git/l7r-handoffs), matching the shell-write rule.",
+     "id": "part2 D1 ledger row / CLOSE_OK / work-budget-review",
+     "summary": "The ledger's row is asked in the landing's own form naming its tasks; the closing row is skipped under a CLOSE_OK that states a reason, as the push skips it; work-budget-review stays in the second pass before the gate.",
      "class": "within",
-     "why": "The 01:22 firing that T307's heading names is this refusal. D13 itself leaves writes that land only under .git unrefused (make modal-triaged). The premise 'no file of the tree' is loose for .git/HEAD and refs, but a Write there would still be caught by 375 FR-004's comparison of HEAD at the gate's end, so the worst case is a voided gate, never a false green."
+     "why": "Each is still asked before the gate's minutes are spent, or skipped exactly where the push skips it. That is parity, not a carve-out."
     },
     {
-     "id": "D3-1b-deferred",
-     "summary": "Part (1b) is measured and not built: the tree check voids a gate for moved paths it never reads, and the landing's up-front check refuses a log appended between its two readings. It is filed as T405 with the options table, ordered to land before T307.",
+     "id": "part2 D2",
+     "summary": "tick::checks asks the closing check in the first pass where the landing's tasks are every open box of the feature; a tooling fix the landing carries is no reason there.",
      "class": "within",
-     "why": "The deferral meets 451 FR-009: it gives why (each option changes what a landing commits, pushes or where it runs), a filed id (T405) and an order (lands before T307). T307 is not ticked here, so the ask is not narrowed but sequenced. 'Chosen: none built' binds this section only. T405 inherits the defect and must decide an option and build it, because a brief's 'no change to what a landing commits' is the session's words, not the GM's. Option (C) changes where a landing runs, not what it commits."
+     "why": "Moves the push's closing row ahead of the gate, as asked."
     },
     {
-     "id": "T406-deferred",
-     "summary": "A commit sent into the gated tree from a session standing in another tree is not held. The gap predates this change, and it is filed as T406 to land before T307.",
+     "id": "part2 D3",
+     "summary": "Defect fixed in passing: each refusing row's sync-with-main line is kept whole, and only each row's own output is cut (to 600 characters, a stated convention).",
      "class": "within",
-     "why": "D1 does not cause or widen this gap. It meets FR-009 (why, id, order), and its worst case is a gate voided by FR-004's end check, not a false green. It is owed before T307's tick."
+     "why": "A wrong outcome (the earliest refusals were cut from the list --every exists to give), fixed within the asked mechanism."
     },
     {
-     "id": "T409-deferred",
-     "summary": "make -C <another tree> tick is still held as the gated tree's write, because the shared walk does not read make's -C. A held case of the new test pins this, and it is filed as T409 to land before T307.",
+     "id": "part2 D4",
+     "summary": "The first pass's closing row writes a closing-owes guard-log line when it refuses, as the push's does.",
      "class": "within",
-     "why": "This is a false refusal that stays, so the built part (1a) falls short of 'only writes to the tree being gated are held' for this one form. It is within only because T307 is not ticked here and T409 is ordered before that tick, which meets FR-009's why, id and order. The test that pins the held case must be inverted when T409 lands."
+     "why": "Records a real refusal of the push's own check. This is a bookkeeping choice inside the asked mechanism and narrows nothing."
     },
     {
-     "id": "perf-class",
-     "summary": "T307 is classed [perf] (it removes a wait from landings and builders), not engine speed, so the performance checklist's questions do not apply.",
+     "id": "part2 D5",
+     "summary": "A 'Built here: T<n>' line in the host's section; T<n>'s tick asks the host's plan gate in its place and refuses when its own section is filled, the host has no current CLEAR (no escape), or the host is neither in this landing nor ticked; the accepted tick marks the box ' built inside T<host>', removes the unfilled stub and logs TaskBuiltInside; make land hands the tick its tasks.",
      "class": "within",
-     "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
+     "why": "This is the requested way out for a task built inside another task's reviewed section. The refusals keep feature 243's rule that the host's review stands for the absorbed task's, never none."
+    },
+    {
+     "id": "part2 D6",
+     "summary": "make decide's lint gains BuiltHere: each Built here line must name an open box with an unfilled stub or none, or one already ticked built inside a task the section decides.",
+     "class": "within",
+     "why": "Enforcement of D5: the host's plan review sees, and rules on, what it absorbs. It serves the request and adds no behavior beyond it."
+    },
+    {
+     "id": "part2 D7",
+     "summary": "status::scope_of and push_held read a box ending ' built inside T<n>' as a withdrawn box: its removed unfilled stub owes no review, and a filled block removed beside it still does.",
+     "class": "within",
+     "why": "Needed so the way out actually closes without a review owed on a stub; T359-D15b is kept (the form alone exempts nothing filled)."
+    },
+    {
+     "id": "part2 T413 deferral",
+     "summary": "The unrelated-history refusal, the in-progress rule over the other touched spec directories and the feature pointer, and fixtures for the late ledger-row and changed-block cases are not asked or pinned here; they are filed as T413, which lands before T307's tick.",
+     "class": "within",
+     "why": "Sequenced, not dropped: T307's box stays open and T413 lands before its tick, the same pattern part (1)'s CLEAR section used for T405/T406/T409. The requested scope for the task as a whole is unchanged."
+    },
+    {
+     "id": "part2 LEDGER_ROWS_OK",
+     "summary": "The first pass's own ledger refusal stays stricter than the push and does not honor LEDGER_ROWS_OK, as before this part.",
+     "class": "within",
+     "why": "Pre-existing, and it refuses earlier rather than later, so it does not defeat part (2)'s purpose (the landing told before its gate every refusal the push would make). No wrong outcome is shown."
     }
    ],
    "verdict": "CLEAR"

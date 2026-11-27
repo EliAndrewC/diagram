@@ -3372,6 +3372,64 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** yes (a `[perf]` task: it removes a wait from the landings and the builders' loop); not an engine-speed task, so the performance checklist's questions do not apply.
 
 
+### T307 part 2 (the landing's first pass asks the push's own checks, and a task built inside another task's section closes with it: a push check met only after the gate costs the gate's minutes, and five filed tasks built inside other tasks' reviewed sections had no way out)
+
+- **Approach**: this section is ONE PART of T307, its part (2); the task is not ticked from this landing, and part (1)'s section above is unchanged.
+  - **T307's remainder, not built here and still open on the task's box**: part (3), one gate run for several finished and carried tasks.
+  - **D1, built (by the first builder of this part, closed here): the first pass asks the push's own table.** `make land`'s first pass (`rust/gate/crates/land/src/land/cheap.rs`, `push_refusal`) calls `l7r-gate push-checks <root> --every`, the push's table run without stopping at its first refusal (`rust/gate/crates/cohort/src/push.rs`, `run_every`), told `L7R_LAND_TICKS` and `SPECIFY_FEATURE` as the push is told them, its refusal one entry of the first pass's list. Skipped: the gate's own stamp rows, which the gate writes and the landing's second pass reads, and the ledger's row, which the first pass asks in its own form naming the landing's tasks; the closing row too under a `CLOSE_OK` that states a reason, as the push skips it. One call of the same table, so a row added to the push is asked here by construction. `entry-gate.sh` joins the three gates the first pass already ran.
+  - **D2, built: the closing check with the first pass.** `tick::checks` (`rust/gate/crates/task/src/tick.rs`, `close_owed`) asks the closing check where the tasks the landing would tick are every open box of the feature, its reasons joined to the last task's refusal in the tick's own words; a tooling fix the landing carries (451 T182) is no reason there.
+  - **D3, a defect fixed in passing: every refusing row said whole.** The first builder showed the call's output as one tail of its last 1200 characters, as a gate's refusal is shown; with several rows refusing the earliest rows' lines were cut, the very list `--every` exists to give. `every_row_said` keeps each `sync-with-main:` line whole and cuts only the rows' own output before them, to its last 600 characters (a CONVENTION, the length of a gate's shown refusal in the same pass).
+  - **D4, the first pass's closing row logs a firing.** The push's closing row writes a `closing-owes` line to the guard log when it refuses; asked by the first pass it writes one too. Kept: it records a real refusal of the push's check, and the record is what `make guard-log` counts; a landing refused there says so once, before its gate.
+  - **D5, built: a task built inside another task's section.** The host's section names it on a line of its own, `Built here: T<n> - <what>` (or as a list item), read by `rust/gate/crates/plan/src/plan/inside.rs` (`built_inside`: the host found in plan.md, or in plan-done.md where its tick archived it before this task's, its verdict read as the archive reads one, `task_current` or `section_clear`). The tick of T<n> (`rust/gate/crates/task/src/tick/refusal.rs`) asks the plan gate of the HOST in its place and no Approach block of its own, and refuses, every reason together and in the first pass as at the tick: its own section filled in (a decision of its own, which its landing would remove), the host's section without a current CLEAR verdict (no escape: the host's review is the only one its work gets), or the host neither in this landing nor ticked. Accepted, the tick appends ` built inside T<host>` to its box, removes its unfilled stub (`plan::template::without_stub`, moved there from `make task-withdraw` as the one stub test) and writes a `TaskBuiltInside` line to the feature's event log. `make land` now hands the tick its landing's tasks as the first pass handed `tick::checks` them, so `T="B A"` ticks B with its host open in the same landing. `make task-withdraw` keeps refusing carried code.
+  - **D6, built: `make decide` holds the line.** Its lint gains `BuiltHere` (`lint.rs`, `inside::decide_findings`): each `Built here:` line must name an OPEN box whose plan section is its unfilled stub or none, or - the section decided again after - a box already ticked built inside a task the section decides; a task the section itself decides, one no box files, a filled section and a box ticked another way are each a finding. So the host's plan review sees the line and rules on it.
+  - **D7, built: the removed stub owes nothing.** `status::scope_of` reads a box ending ` built inside T<n>` (`inside::built_inside_box`, the one rule of the form, anchored at the line's end so a title saying the words is none) as it reads a withdrawn box: its removed block owes no review where it was a block of the unfilled stub, and a filled block removed beside such a box is still owed (T359-D15b). The push's reading at HEAD (`task::push_held`) asks the same `scope_of`.
+  - **The parity table: each check of the push (`scripts/sync-with-main.sh` push_cmd, in its order) and whether the first pass asks it.** The table's figures, where a cell states one, are labeled in the line after it.
+
+    | push check | before this part | now |
+    |---|---|---|
+    | `land --unfinished` | asked, alone, before the first pass | unchanged |
+    | the dirty-tree line | asked (`writers.rs`; a dirty clone lands alone) | unchanged |
+    | unrelated history | not asked | not asked: filed as T413 |
+    | the plan reviews' ledger rows written | written (`write_ledger`) | unchanged |
+    | the in-progress rule | asked for the landed feature alone (`ready.rs`) | the other touched spec directories and the feature pointer not asked: filed as T413 |
+    | `review-gate.sh`, `plan-gate.sh` | asked | unchanged |
+    | `push-checks`, every row of its table | the ledger's row asked in its own form, and the make-targets page regenerated; no other row | one `--every` call asks every row but the gate's stamp rows, which cannot precede the gate, and the ledger's, asked in the landing's form |
+    | the closing row | asked only at the last tick, after the gate | asked in `tick::checks` as if ticked |
+    | `entry-gate.sh` | not asked | asked |
+    | `claims-gate.sh` | asked, deferred to the wait where a round is in flight | unchanged |
+    | `cohort-gate.sh` (gated route) | the second pass rolls the cohort where it would refuse (`long_runs.rs`) | unchanged: its record is the second pass's |
+    | `make work-budget-review` | asked in the second pass before the gate on an engine delta | unchanged |
+    | `make gated-check` (gated route) | cannot precede: its condition is the green gate | unchanged; its other conditions (the `ci` crate) not read here |
+
+    The table's counts: the push's table holds 26 rows (observed 2026-11-27, method: `scripts/gates/l7r-gate.sh push-checks --list | wc -l`), of which the first pass asks all but 3 (observed 2026-11-27, method: `AFTER_GATE` and `OWN_FORM` in `cheap.rs`, pinned by its test against the same `--list`).
+  - **What the call costs.** One run on this pool tree with this part's delta took 14.27 s wall and refused one row, the audit register's, owed an entry for the new landing refusal (measured 2026-11-27 (`/usr/bin/time scripts/gates/l7r-gate.sh push-checks "$PWD" --every --skip "gate-stamp selftest" --skip gate-stamp --skip ledger-owed`)). With the entry written, a second run took 7.01 s and refused nothing (measured 2026-11-27 (the same command, run again)). The push asks the same table after the gate anyway, its stamped rows kept; the entry is `dev/audits/landing-first-pass-push-table.md`.
+  - **Not verified here, and filed.** A ledger row owed for a check dispatched after the landing's last write (the second `write_ledger` after the claims wait writes and never refuses), and the plan gate's "block(s) changed since their review" in a batch landing, have no fixture yet; each is in T413. `LEDGER_ROWS_OK` is honored by the push and not by the first pass's own ledger refusal, which is stricter up front, as before this part.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| D1-D4, the first pass | n/a: no map step | n/a: tooling | none: tooling | `make land` as before, the push refusing after the gate |
+| D5-D7, a task built inside another | n/a: no map step | n/a: tooling | none: tooling | `make task-withdraw` refuses as before; the task waits for a section of its own |
+
+### T307 part 2 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing is told before its gate every refusal its push would make, and a filed task whose work was built inside another task's reviewed section is closed by that task's landing, its box saying where.
+2. **The constraints.** Feature 405 D23 (the first pass prints every refusal together), feature 243 (a plan's decisions reviewed before its tasks are ticked: the host's review stands for the absorbed task's, never none), 451 T359-D15b (a box's form alone exempts nothing).
+3. **Where each comes from.** G: T307's line in tasks.md, talked through with the GM 2026-11-26, part (2): every check of the push also in the landing's first pass, proved by a fixture the first pass lets through today. O: the five tasks built inside other sections named in this part's brief; the tree-idle measurement of 2026-11-27.
+4. **Do they describe the world here?** Yes: the push's table was read from `scripts/sync-with-main.sh` and `push-checks --list` on 2026-11-27, and the five tasks' boxes and sections were read from tasks.md, plan.md and plan-done.md on 2026-11-27.
+5. **The order.** After part (1); before part (3) and T307's tick; T413 lands before T307's tick.
+6. **The exits.** Green: the new tests pass, each failing on the code without its mechanism, and the first-tier checks are green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks` over the land, task, plan and cohort crates green; red first, measured 2026-11-27 (`make rust-test` with each mechanism disabled and its tests kept): the plan crate's decide test, the plan crate's withdrawn-scope test and the task crate's built-inside test each fail.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome, not a difference: a landing refused after its whole gate for a check its first pass could have asked, and a finished task that no command could close.
+
+**Found and left?**
+- The unrelated-history refusal, the in-progress rule over every touched spec directory, and fixtures for the ledger-row and changed-block cases above are not yet asked by the first pass. Visible effect: a landing refused after its gate on them. Not fixed here: each is its own reading of the push's shell and its own fixture, past this part's two jobs. Filed as T413; lands before T307.
+
+**Performance work?** yes (a `[perf]` task: a landing refused after its gate costs the gate's minutes, dev/measurements/2026-11-27/tree-idle/results.md); not an engine-speed task, so the performance checklist's questions do not apply.
+
 ### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))
 
 - **Approach**: this section is ONE PART of T308, its ALSO on the plan review's rounds; the task is not ticked from this landing.
@@ -5999,4 +6057,31 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T413 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T413 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 

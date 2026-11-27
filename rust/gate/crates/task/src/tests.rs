@@ -102,7 +102,13 @@ pub(crate) fn ask<'a>(root: &'a Path, dir: &'a Path, task: &'a str, note: &'a st
         escaped: Some(REASON.to_owned()),
         tree: root.to_path_buf(),
         landing: Vec::new(),
+        env: &no_env,
     }
+}
+
+/// No name set: the fixture's own event log, never a session's.
+fn no_env(_: &str) -> Option<String> {
+    None
 }
 
 /// An environment of the given names alone.

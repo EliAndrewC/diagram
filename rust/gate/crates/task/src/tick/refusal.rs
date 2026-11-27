@@ -36,11 +36,19 @@ pub struct Ask<'a> {
     /// The tasks the land's first pass asks about (451 T182): a round-arbiter tooling fix pending on one of them (`make arbiter-fix-done
     /// ... LANDING=`) holds none of them, its done row going out in their tick commit; empty for a plain `make tick`, which it holds.
     pub landing: Vec<String>,
+    /// What the process's environment says, kept for the event log's line of a task built inside another (451 T307 part 2).
+    pub env: Env<'a>,
 }
 
 impl<'a> Ask<'a> {
     /// The ask with what `env` says of the process.
-    pub fn with_env(root: &'a Path, dir: &'a Path, task: &'a str, note: &'a str, env: Env) -> Self {
+    pub fn with_env(
+        root: &'a Path,
+        dir: &'a Path,
+        task: &'a str,
+        note: &'a str,
+        env: Env<'a>,
+    ) -> Self {
         let tree = env("L7R_GATE_TREE").map_or_else(
             || std::env::current_dir().unwrap_or_default(),
             PathBuf::from,
@@ -53,6 +61,7 @@ impl<'a> Ask<'a> {
             escaped: env("PLAN_REVIEW_OK"),
             tree,
             landing: Vec::new(),
+            env,
         }
     }
 }
@@ -226,6 +235,45 @@ fn landed_refusal(root: &Path, feature: &str, task: &str, note: &str) -> Raise<S
     }))
 }
 
+/// Why `ask`'s task may not close BUILT INSIDE `host`'s section (451 T307 part 2), or "": its own section filled in (a decision of
+/// its own, never removed), the host's section without a current CLEAR verdict, or the host neither in this landing nor ticked.
+fn inside_refusal(
+    ask: &Ask,
+    host: &l7r_gate_plan::plan::Host,
+    tasks: &str,
+    plan: &str,
+) -> Raise<String> {
+    let (task, h) = (ask.task, host.task.as_str());
+    let name = ask.dir.file_name().unwrap_or_default().to_string_lossy();
+    let number = name.split('-').next().unwrap_or_default();
+    let mut whys = Vec::new();
+    if l7r_gate_plan::plan::template::without_stub(plan, task).is_err() {
+        whys.push(format!("its own plan section has been filled in ({name}/plan.md), and a section somebody filled is a decision its landing would remove - decide it on its own and drop the `Built here: {task}` line from {h}'s section, or empty it back to its template"));
+    }
+    if !host.clear {
+        whys.push(format!("{h}'s section carries no current CLEAR verdict - make decide F={number} T={h}, then its plan review"));
+    }
+    let line = super::text::task_line("[xX]", h);
+    let ticked = tasks.lines().any(|l| line.is_match(l).unwrap_or(false))
+        || l7r_shared::speckit::tasks::archived(
+            &l7r_shared::speckit::tasks::done_text(ask.dir)?,
+            h,
+        );
+    if !ticked && !ask.landing.iter().any(|t| t == h) {
+        whys.push(format!(
+            "{h} is neither in this landing nor ticked - make land F={number} T=\"{h} {task}\""
+        ));
+    }
+    if whys.is_empty() {
+        return Ok(String::new());
+    }
+    Ok(format!(
+        "{task} is named built inside {h}'s section (`Built here: {task} - {}`), but {}",
+        host.what,
+        whys.join("; and ")
+    ))
+}
+
 /// `(refusal, message)`: every reason `make tick` refuses the task, together (feature 444 T20, D2: an `or`-chain showed a landing only
 /// the first, and T19 took four landing rounds), and what the plan gate says to print. `landed` false leaves out the landed check, which
 /// `make land` asks of each task before it lands them (feature 385 T117, D135; feature 405 T33). A PLAN'S DECISIONS ARE REVIEWED BEFORE
@@ -241,14 +289,19 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         note,
         ..
     } = *ask;
+    // A TASK BUILT INSIDE ANOTHER'S SECTION (451 T307 part 2) is judged by its host's: the plan gate asked of the host, no Approach
+    // block of its own asked, and [`inside_refusal`] beside the rest
+    let host = l7r_gate_plan::plan::built_inside(dir, task);
+    let gated = host.as_ref().map_or(task, |h| h.task.as_str());
     let (permitted, message) =
-        l7r_gate_plan::plan::tick_gate(dir, root, ask.escaped.as_deref(), task);
+        l7r_gate_plan::plan::tick_gate(dir, root, ask.escaped.as_deref(), gated);
     let plan = dir.join("plan.md");
-    let section = if plan.is_file() {
-        task_sections(&read_strict(&plan)?).remove(task)
+    let plan_text = if plan.is_file() {
+        read_strict(&plan)?
     } else {
-        None
+        String::new()
     };
+    let section = task_sections(&plan_text).remove(task);
     let mut whys: Vec<String> = if permitted {
         Vec::new()
     } else {
@@ -271,7 +324,10 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         // 379: an open tooling fix, but one landing with this landing's tasks (451 T182); 383: the hour
         l7r_gate_reviews::reviews::closing::landing::fix_hold_landing(dir, root, &ask.landing),
         l7r_gate_reviews::reviews::checkpoint::hold(root, None),
-        l7r_gate_plan::plan::approach_refusal(dir, root, task).unwrap_or_default(),
+        match &host {
+            Some(h) => inside_refusal(ask, h, &text, &plan_text)?,
+            None => l7r_gate_plan::plan::approach_refusal(dir, root, task).unwrap_or_default(),
+        },
         wording::refusal(root, dir, task, section.as_deref())?,
     ];
     whys.extend(asked.into_iter().filter(|w| !w.is_empty()));

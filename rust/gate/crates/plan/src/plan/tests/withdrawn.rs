@@ -54,10 +54,18 @@ fn a_withdrawn_task_s_removed_stub_holds_no_later_tick() {
     let (ok, why) = ask("T05");
     assert!(!ok && why.contains("## Notes (T06)"), "{why}");
     std::fs::write(dir.join("plan.md"), &template[..at]).unwrap();
+    // ...and a box closed BUILT INSIDE another task's section (451 T307 part 2, `inside::built_inside_box`): the same exemption
+    std::fs::write(
+        dir.join("tasks.md"),
+        ticked("- [x] T06 the wells built inside T05"),
+    )
+    .unwrap();
+    assert_eq!(ask("T05"), (true, String::new()));
     // ticked by a landing, or with the word and no date (T359's own line quotes that form): its removed block is answered for
     for other in [
         "- [x] T06 the wells",
         "- [x] T06 the wells, ticked with 'Withdrawn: <why>'",
+        "- [x] T06 the wells built inside T05 and more words",
     ] {
         std::fs::write(dir.join("tasks.md"), ticked(other)).unwrap();
         let (ok, why) = ask("T05");

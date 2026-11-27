@@ -135,7 +135,49 @@ pub fn checks(
         };
         out.push(row);
     }
+    close_owed(root, dir, &text, note, env, &mut out)?;
     Ok(out)
+}
+
+/// THE CLOSING CHECK, ASKED WITH THE FIRST PASS (feature 451 T307 part 2). WHY: [`tick`] asks it only at the tick that leaves no open
+/// box, which `make land` writes after its gate - so a landing of a feature's last tasks ran its whole gate and was then refused for a
+/// missing report. Where the tasks that would tick are every open box of `text`, the closing check's reasons join the last one's
+/// refusal, in the tick's own words.
+fn close_owed(
+    root: &Path,
+    dir: &Path,
+    text: &str,
+    note: &str,
+    env: Env,
+    rows: &mut [Checked],
+) -> Raise<()> {
+    let open = l7r_shared::speckit::splitlines(text)
+        .iter()
+        .filter(|l| l.starts_with("- [ ] "))
+        .count();
+    let ticking = rows.iter().filter(|r| r.tick.is_empty()).count();
+    let Some(last) = rows.iter().rfind(|r| r.tick.is_empty()) else {
+        return Ok(());
+    };
+    if open != ticking {
+        return Ok(());
+    }
+    let mut reasons = closing_reasons(&Ask::with_env(root, dir, &last.task, note, env))?;
+    // a tooling fix pending on one of these tasks is settled before the ticks and carried by them (451 T182): no reason here
+    let landing: Vec<String> = rows.iter().map(|r| r.task.clone()).collect();
+    let carried =
+        l7r_gate_reviews::reviews::closing::landing::fix_hold_landing(dir, root, &landing)
+            .is_empty();
+    reasons.retain(|r| !(carried && r.contains("tooling fix is open")));
+    if let Some(last) = rows
+        .iter_mut()
+        .rfind(|r| r.tick.is_empty())
+        .filter(|_| !reasons.is_empty())
+    {
+        let sep = if last.refusal.is_empty() { "" } else { "\n" };
+        last.refusal = format!("{}{sep}{}", last.refusal, closing_said(&reasons));
+    }
+    Ok(())
 }
 
 /// [`text::tick`] over tasks.md, a task archived in tasks-done.md read as "already ticked" where tasks.md no longer holds it (feature
@@ -205,6 +247,16 @@ fn no_dir(feature: &str, root: &Path) -> Reply {
 /// --reasons-json`), its implementation check `claims::impl_check` in process too (feature 449 T132): may it close? The refusal goes
 /// to `err`.
 fn closing(ask: &Ask, err: &mut String) -> Raise<bool> {
+    let reasons = closing_reasons(ask)?;
+    if reasons.is_empty() {
+        return Ok(true);
+    }
+    let _ = writeln!(err, "{}", closing_said(&reasons));
+    Ok(false)
+}
+
+/// The closing check's reasons for the feature of `ask`, none where it may close.
+fn closing_reasons(ask: &Ask) -> Raise<Vec<String>> {
     let tools = l7r_gate_reviews::reviews::closing::Tools {
         tree: &ask.tree,
         impl_check: l7r_gate_claims::claims::impl_check::missing_each,
@@ -214,22 +266,25 @@ fn closing(ask: &Ask, err: &mut String) -> Raise<bool> {
         &ask.root.join("specs"),
         &[ask.dir.to_path_buf()],
     )?;
-    let reasons = found.each.pop().unwrap_or_default();
-    if reasons.is_empty() {
-        return Ok(true);
-    }
-    let _ = writeln!(
-        err,
+    Ok(found.each.pop().unwrap_or_default())
+}
+
+/// The tick's refusal for the closing check's `reasons`.
+fn closing_said(reasons: &[String]) -> String {
+    format!(
         "tick: refused - this tick would close the feature, and:\n  {}",
         reasons.join("\n  ")
-    );
-    Ok(false)
+    )
 }
 
 /// One task ticked in `dir` of `root` - every refusal asked first (the landed check left out when `landing`), the closing check at the
 /// last tick, the plan's finished sections archived after; the reply `make tick` prints. `make land` ticks its tasks through this in
 /// process, its `L7R_LAND_TICKS` its own list.
 #[must_use]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one tick's steps in their order, each a call; a task built inside another's (451 T307 part 2) added two of them"
+)]
 pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
     let Ask {
         root,
@@ -265,6 +320,8 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
         }
         Err(Refused::Exit(why)) => return reply(out, format!("{why}\n"), 1),
     };
+    // A TASK BUILT INSIDE ANOTHER'S SECTION (451 T307 part 2), its refusals asked above: its box says so, its stub goes
+    let (new, host) = inside_box(dir, task, new, &line);
     let remaining = l7r_shared::speckit::splitlines(&new)
         .iter()
         .filter(|l| l.starts_with("- [ ] "))
@@ -299,6 +356,12 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
         "ticked {shown}\n{remaining} task(s) still open in {}",
         rel.display()
     );
+    if let Some(h) = &host {
+        match inside_written(ask, h) {
+            Ok(said) => out.push_str(&said),
+            Err(why) => return raised("tick", out, &err, &why),
+        }
+    }
     // THE PLAN ARCHIVED AT THE TICK (feature 385 T63, the GM 2026-10-18: "perhaps that should be something that is run automatically
     // when certain actions are taken"): 385's plan.md reached 168 KB with 54 finished sections, every review reading them, because
     // `make plan-archive` was a step to remember. Recorded by the one usage-log writer as an automatic step (feature 406 T03, D162).
@@ -339,6 +402,50 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
     };
     l7r_shared::usage::record(root, USAGE_LOG_TOOL, "step", outcome);
     reply(out, err, 0)
+}
+
+/// `new`, the tasks' text with `task` ticked on `line`, with ` built inside T<host>` appended to that line where a section names the
+/// task built inside it ([`l7r_gate_plan::plan::built_inside`]); and that host.
+fn inside_box(
+    dir: &Path,
+    task: &str,
+    new: String,
+    line: &str,
+) -> (String, Option<l7r_gate_plan::plan::Host>) {
+    let Some(host) = l7r_gate_plan::plan::built_inside(dir, task) else {
+        return (new, None);
+    };
+    let suffix = l7r_gate_plan::plan::box_suffix(&host.task);
+    (
+        new.replacen(line, &format!("{line}{suffix}"), 1),
+        Some(host),
+    )
+}
+
+/// The tick of a task built inside `host`'s section, after its box (451 T307 part 2): its unfilled stub removed from plan.md, where
+/// one stands, and a `TaskBuiltInside` line written to the feature's event log; what it says.
+fn inside_written(ask: &Ask, host: &l7r_gate_plan::plan::Host) -> Raise<String> {
+    let (dir, task) = (ask.dir, ask.task);
+    let path = dir.join("plan.md");
+    let plan = if path.is_file() {
+        read_strict(&path)?
+    } else {
+        String::new()
+    };
+    let name = dir.file_name().unwrap_or_default().to_string_lossy();
+    let mut said = format!("tick: {task} closed built inside {}'s section", host.task);
+    if let Ok(Some(left)) = l7r_gate_plan::plan::template::without_stub(&plan, task) {
+        crate::write_file(&path, left.as_bytes())?;
+        let _ = write!(said, ", its unfilled plan stub removed from {name}/plan.md");
+    }
+    let row = json!({"ev": "TaskBuiltInside", "src": "tick", "task": task, "host": host.task, "what": host.what});
+    let row = row.as_object().cloned().unwrap_or_default();
+    if let Some(log) =
+        l7r_shared::guards::event_log_hooks::append_row_with(ask.root, Some(&name), row, ask.env)
+    {
+        let _ = write!(said, "; recorded in {}", log.display());
+    }
+    Ok(said + "\n")
 }
 
 /// `--resolve <feature>`: `[root, dir or null]`, the root and the feature's directory as the tick finds them.

@@ -300,7 +300,10 @@ pub(super) fn scope_of(tasks: &str, asked: &[&str]) -> Scope {
     let boxes = tasks.lines().filter_map(|l| ticked(l).map(|t| (t, l)));
     let (mut all, mut withdrawn) = (BTreeSet::new(), BTreeSet::new());
     for (task, line) in boxes {
-        if l7r_shared::speckit::withdrawn_box(line) {
+        // ...and a box ticked built inside another task's section (451 T307 part 2): its own section was never decided either
+        if l7r_shared::speckit::withdrawn_box(line)
+            || super::inside::built_inside_box(line).is_some()
+        {
             withdrawn.insert(task.clone());
         }
         all.insert(task);

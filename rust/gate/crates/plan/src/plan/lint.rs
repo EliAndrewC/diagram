@@ -189,6 +189,8 @@ enum Kind {
     ClassFix,
     /// A "Performance work?" line that answers no and names a measurement (feature 451 T410: FR-013's measurement clause).
     PerfLine,
+    /// A `Built here:` line naming no open task with an unfilled stub (feature 451 T307 part 2).
+    BuiltHere,
 }
 
 impl Finding {
@@ -557,6 +559,7 @@ fn told(kind: Kind) -> String {
         Kind::RedExit => format!("an approach block's item 6 routes no red result through `make arbiter-ask` - give it D35's red exit, as `make task-add`'s template words it (feature 430 D5): \"{RED_EXIT_HINT}\" The unit: item 6 of each `### Txx Approach` block, to the next numbered item or heading; the task of each block"),
         Kind::Deferral => "a found-and-left item defers a defect without its form - fix it in this task by default; an item fixed here says `fixed here`, one that is not a defect says `not a defect` (constitution XIV); a deferral states `Not fixed here: <why>`, `filed as T<n>` (a box of tasks.md, `make task-add`) and `lands before T<m>` (another open task), as \"Not fixed here: it is in the wells stage, outside this task's files. Filed as T32; lands before T22.\" (feature 451 T17, D15). The unit: each `- ` item of the `**Found and left?**` answer, to the next item or bold line; an answer with no list is one item. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
         Kind::DeferralClosed => "a found-and-left deferral names a task that is not open - a ticked box or an entry of tasks-done.md defers to nothing: file it as an open task (`make task-add`) and order it before an open one (feature 451 T17, D15). Judged once, at `make decide`; `make plan-delta` asks only that the ids are filed. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
+        Kind::BuiltHere => "a `Built here: T<n> - <what>` line names a task that cannot close as built inside this section (feature 451 T307 part 2): its landing ticks T<n> `built inside` this task and removes T<n>'s plan stub, so the line must name an OPEN box of tasks.md whose plan section is its unfilled stub (or none) - or, decided again, a box already ticked built inside this task. The unit: each line opening `Built here: ` (or `- Built here: `) followed by a task id, ` - ` and what was built".to_owned(),
         Kind::ClassFix => "a fix of a class of defect (every writer, every form, every file of a kind, each of the ..., all the ...) with no line on how every instance was found - add `observed <YYYY-MM-DD>, method: <how every instance was found>` (or `measured <YYYY-MM-DD> (<method>)`) to it (feature 451 T17, D15). The unit: each `**Found and left?**` item, and item 12 (`Before any fix`) of each Approach block. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
         Kind::PerfLine => format!("the section's `**Performance work?**` line answers no and names a measurement - a task that measures where time goes IS performance work for the ordering (451 FR-013's measurement clause: a measurement task counts, the GM 2026-11-20), and a plan review blocks a round on the no (five did, 2026-11-26/27; feature 451 T410). Write: \"{}\" - and tag the task's box `[perf]`. The unit: each line that opens `**Performance work?**`, refused where its answer's first word is `no` and the line holds the word `measurement`; a task that measures nothing about where time goes says so without that word", perf_line::WRITE),
     }
@@ -590,6 +593,7 @@ pub(super) fn render(
         Kind::DeferralClosed,
         Kind::ClassFix,
         Kind::PerfLine,
+        Kind::BuiltHere,
     ] {
         let mut of: Vec<&Finding> = found.iter().filter(|f| f.kind == kind).collect();
         if of.is_empty() {
@@ -682,6 +686,16 @@ pub(super) fn decide_findings(spec_dir: &Path, section: &str, tasks: &[String]) 
             .into_iter()
             .map(|((start, end), text)| Finding {
                 kind: Kind::DeferralClosed,
+                start,
+                end,
+                text,
+            }),
+    );
+    out.extend(
+        super::inside::decide_findings(spec_dir, section, tasks)
+            .into_iter()
+            .map(|((start, end), text)| Finding {
+                kind: Kind::BuiltHere,
                 start,
                 end,
                 text,

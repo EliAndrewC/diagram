@@ -519,7 +519,10 @@ impl Land {
     fn tick(&self, d: &Path, task: &str, note: &str) -> Result<i32, String> {
         let boxes = self.boxes && self.box_open.borrow().iter().any(|t| t == task);
         let env = self.tick_env();
-        let ask = l7r_gate_task::tick::Ask::with_env(&self.root, d, task, note, &env);
+        let mut ask = l7r_gate_task::tick::Ask::with_env(&self.root, d, task, note, &env);
+        // the landing's tasks, as the first pass told `tick::checks` them: a task built inside another (451 T307 part 2) ticks first
+        // in `T="B A"` with its host still open in this landing
+        ask.landing.clone_from(&self.landing_tasks.borrow());
         let said = l7r_gate_task::tick::tick(&ask, boxes, true);
         self.pass_through(&said);
         match said.code {

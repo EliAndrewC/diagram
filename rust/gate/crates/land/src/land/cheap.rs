@@ -27,8 +27,20 @@ fn said(r: Reply) -> (i32, String) {
     (r.code, r.stdout + &r.stderr)
 }
 
-/// The gates the first pass asks, in its order.
-const GATES: [&str; 3] = ["claims-gate.sh", "review-gate.sh", "plan-gate.sh"];
+/// The gates the first pass asks, in its order: the push's own, the record gate among them since 451 T307 part 2 (the push ran
+/// `entry-gate.sh` beside the claims gate and the first pass never asked it).
+const GATES: [&str; 4] = [
+    "claims-gate.sh",
+    "review-gate.sh",
+    "plan-gate.sh",
+    "entry-gate.sh",
+];
+
+/// The rows of the push's table (`cohort`'s `push::CHECKS`) the first pass cannot ask before its gate: the green-gate stamp, which
+/// the gate itself writes (and the landing's second pass reads, `long_runs`).
+pub(super) const AFTER_GATE: [&str; 2] = ["gate-stamp selftest", "gate-stamp"];
+/// ...and the row it asks in its own form, naming the tasks it lands as the push will find them ticked (`--landing --tasks`).
+pub(super) const OWN_FORM: [&str; 1] = ["ledger-owed"];
 
 impl Land {
     /// `l7r-gate claims --root <root> <args>`, in process (`ask:449-T83-scope`).
@@ -306,7 +318,34 @@ impl Land {
                 _ => stops.push(why),
             }
         }
+        let pushed = self.push_refusal(d, &ticks)?;
+        if !pushed.is_empty() {
+            stops.push(pushed);
+        }
         Ok(stops)
+    }
+
+    /// THE PUSH'S OWN TABLE, ASKED BEFORE THE GATE (451 T307 part 2). WHY: the push ran `l7r-gate push-checks` after the landing's
+    /// gate, and the first pass asked two of its 26 rows (the ledger's and the make-targets page's), so a file past the line bar, a
+    /// research pointer, a spec-lint finding or an unresolved conflict was a refusal met after a whole gate run. One call of the same
+    /// table, every refusing row said (`--every`), so a row added to the push is asked here by construction; skipped are the rows
+    /// that cannot precede the gate ([`AFTER_GATE`]), the row asked above in the landing's form ([`OWN_FORM`]) and, as the push
+    /// skips it, the closing row under a `CLOSE_OK` that states a reason. Run with what the push is told: the tasks and the feature.
+    fn push_refusal(&self, d: &Path, ticks: &str) -> Result<String, String> {
+        let (gate, root) = (self.gate(), self.root.to_string_lossy().into_owned());
+        let mut cmd = vec![gate.as_str(), "push-checks", root.as_str(), "--every"];
+        for row in AFTER_GATE.iter().chain(&OWN_FORM) {
+            cmd.extend(["--skip", row]);
+        }
+        if l7r_shared::escape::enough(strip(&self.root.var("CLOSE_OK"))) {
+            cmd.extend(["--skip", "closing"]);
+        }
+        let told = [("L7R_LAND_TICKS", ticks), ("SPECIFY_FEATURE", &name_of(d))];
+        let (rc, out) = self.run(&cmd, &told)?;
+        if rc == 0 {
+            return Ok(String::new());
+        }
+        Ok(format!("push-checks: {}", every_row_said(&out)))
     }
 
     /// The records the first pass writes and commits for itself: the ledger, the make-targets page, the claims' moved rows, the
@@ -442,6 +481,21 @@ pub(super) fn kept_lines(out: &str) -> String {
         .filter(|l| !l.is_empty() && !l.contains("pre-existing"))
         .collect::<Vec<_>>()
         .join(" | ")
+}
+
+/// What `push-checks --every` said, as the first pass shows it: the rows' own output cut to its last 600 characters, then EVERY
+/// refusing row's `sync-with-main:` line whole (451 T307 part 2: one tail of the whole output, as a gate's refusal is shown, cut the
+/// earliest rows' lines where several refused - the very list `--every` exists to give).
+fn every_row_said(out: &str) -> String {
+    let (rows, rest): (Vec<&str>, Vec<&str>) = splitlines(out)
+        .into_iter()
+        .partition(|l| l.starts_with("sync-with-main: "));
+    let detail = tail(&kept_lines(&rest.join("\n")), 600);
+    let said: Vec<String> = std::iter::once(detail)
+        .filter(|d| !d.is_empty())
+        .chain(rows.into_iter().map(|r| strip(r).to_owned()))
+        .collect();
+    said.join(" | ")
 }
 
 /// The stage a feature-444 phase task names (`phase: <stage>` in its lines), or None.

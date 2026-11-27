@@ -12,6 +12,8 @@ mod defer;
 mod elsewhere;
 mod engine_edit;
 mod history;
+mod inside;
+pub use inside::{box_suffix, built_inside, built_inside_box, Host};
 mod lint;
 mod merge;
 pub use merge::merge_files;

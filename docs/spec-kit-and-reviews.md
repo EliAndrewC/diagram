@@ -185,6 +185,14 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
+- **A task built inside another task's section** (feature 451 T307 part 2; T393 in T391, T398 in T394, T366 in T359, T395 and
+  half of T297 in T313, T410 in T308 had no way out: their stubs refused the tick, their carried code the withdrawal). The host's
+  section says so on a line of its own, `Built here: T<n> - <what>`, which `make decide` holds to an OPEN box whose plan section is
+  its unfilled stub (or none) and the host's plan review therefore rules on. `make land F= T="<host> T<n>"` (either order; or
+  `T=T<n>` alone once the host is ticked) then ticks T<n> with ` built inside T<host>` appended to its box, removes its stub and
+  writes a `TaskBuiltInside` event line; T<n> is judged by the host's plan gate and its current CLEAR verdict, not an Approach block of
+  its own. Refused, in the first pass as at the tick: its own section filled in, the host's section not CLEAR, the host neither in
+  the landing nor ticked. `make task-withdraw` still refuses a task whose code is carried.
 - **The two ways back out of a task** (feature 451 T359; 2026-11-26: `make land` refused T322, T323, T356 and T358 for their
   unfilled plan stubs, and a task started by mistake held every landing that carried its edits until its mark was moved by hand).
   `make task-withdraw F= T="<task(s)>" WHY="<two words or more>"` closes a FILED task found to be a duplicate or no defect, with no
