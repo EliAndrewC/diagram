@@ -20212,3 +20212,71 @@ The brief's check of the guard's other matchers for the same newline gap, observ
 
 **Performance work?** no.
 
+<!-- plan-archive: archived 2026-11-27 -->
+### T526 (451 T520's option (b), the GM's 2026-11-26 rule "we definitely don't want to clean things up if it is going to cost us time later" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)
+
+- **Approach**: `rust/guard/src/guards/scratch_sweep_hooks/sweep/evict.rs`'s pool-tree exemption is narrowed from every pool tree to the KEPT ones (`kept`): in each clone's own registry, a held tree, the landing lane's tree, and the first `L7R_BUILDERS` (3, the pool-idle guard's GUESS knob, read through `Config::builders` with `builder_queue::builders()`'s parse and default) trees on disk, in the registry's order. A free tree past them is an ordinary idle tree to the budget and the low-disk trigger (both reach `evict::choose`: `sweep/cargo.rs`'s budget step, observed 2026-11-27, method: grep for `choose(`), all its profiles, coverage included. A tree a live cargo uses stays out through `cargo::in_use`, unchanged.
+  - **Why by position.** `builder_tree::take` hands out the first free tree in the registry's order, so at the knob's count no handout reaches a tree past the first three, observed 2026-11-27, method: reading `take` in `rust/gate/crates/task/src/builder_tree.rs`. Kept by "the count less the held trees" instead, a tree early in the order would be chilled while a later one is held, and the next handout would take it cold. A tree gone from disk is skipped by `take` and is not counted. Counted per clone, since `builder_pool::pools` flattens every clone's registry.
+  - **The lane's tree (feature 461 D1).** Kept and not counted, by EITHER mark: its name ends `-land` (`<clone>-land`, D1's tree), or its holder is the reserved `lane` (the feature or a task named `lane`). 461 T13 writes the holder, and `make builder-tree-adopt` refuses a `-land` tree today (`builder_tree.rs`'s `adopt`), so this tree has no mark to read yet. The name covers D1's tree whatever form T13's holder takes. A tree `L7R_LANE_TREE` names elsewhere is kept only by the holder, so T13 must write it.
+  - **What it frees and costs.** b1 held 15 GiB besides its coverage and 1.9 GB of `cover-*`, idle since 10:04Z while three builders ran, so 0 min lost at 3 builders, observed 2026-11-27, method: T520's `du -sh`, `c-third-party.py` and the pool log. Taken, a fourth builder's first `builder-checks` runs cold: 165.9 s on the guard and 197.8 s on measure, against 5.9 s and 3.1 s warm, observed 2026-11-27, method: T520's `b-cold-warm.sh`. That is the price of raising the knob without a warm fourth tree. Nothing is taken before `L7R_CACHE_IDLE_HOURS` (12, unchanged) and before the cache is past its budget or the disk below its free share.
+  - **Declined.** T520's option (a), the kept trees' coverage profiles (23.2 GB, observed 2026-11-27, method: T520's `c-third-party.py`): coverage-repair builders build in them, 1.5 to 10 min cold, observed 2026-11-26/27, method: T520's census. Chosen by the T526 builder under the GM's words. The knob is `L7R_BUILDERS`.
+  - Tests (`sweep/evict/tests.rs`): red first, `a_free_pool_tree_past_the_builder_count_has_its_profiles_taken` failed on the old code (taken `[]`, expected `["p4"]`; 3 passed, 1 failed). Added: past the count, a held or busy tree is kept, and the knob moves the line (`builders = 2`). The lane's tree is kept and not counted under either mark, and a gone tree is not counted. Each clone's pool is counted apart, and a nameless entry is passed over. T285's `a_pool_tree_s_profiles_are_never_taken` is green unchanged.
+  - Records restated: the module's header and the inline T285 comment, `dev/audits/builder-pool.md` (its cost line and the budget sentence, which said "never evicts"), and `rust/guard/CLAUDE.md`'s index line for `sweep/evict.rs`. No guard message changed: the reason strings are as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the exemption narrowed, tests red first | n/a: tooling, no map | n/a: tooling | none | n/a |
+
+### T526 Approach (checklist part A)
+
+1. **The goal, in the world.** A free pool tree that no handout reaches at the settled builder count gives its build cache back when the disk needs it. The trees a handout takes stay warm, and the lane's tree is never taken.
+2. **The constraints.** The GM's 2026-11-26 rule (*"we definitely don't want to clean things up if it is going to cost us time later"*) and his 2026-11-27 word that time stays before disk. T285's reason for the exemption (a free tree is idle by the ranking). T520's option (a) declined. Feature 461 D1 (the `-land` tree adopted as the lane's).
+3. **Where each comes from.** G: the GM's two rulings. R: T520's section and `results.md`; 461's plan D1 and its T13 line; `builder_tree::take`. O: T520's measurements.
+4. **Do they describe the world here?** Yes. The live registry holds t269, t270, t271 and b1 in that order, observed 2026-11-27, method: reading `.git/builder-pool.json`, so b1 is the tree this rule takes once it is free and idle.
+5. **The order.** After T520 (its measurement) and T285 (the exemption). Before 461 T13, which must write the `lane` holder for a tree not named `-land`.
+6. **The exits.** Green: the evict tests, red first, and `make builder-checks CRATE="rust/guard"` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/guard ONLY="guards::scratch_sweep_hooks::sweep::evict"`, 8 tests green; `make builder-checks CRATE="rust/guard"`, 622 passed, lint and format clean, observed 2026-11-27, method: those commands. The disk freed in the real world is read by the next `make cache-clean DRY=1` once b1 has been idle past the knob.
+10. **Before moving a constant.** n/a: no constant moved. `L7R_BUILDERS` (3) gains a reader; its value is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. Not a defect: a deliberate narrowing of a rule under the GM's words.
+
+**Found and left?** none
+
+**Performance work?** yes, a `[perf]` task (451 FR-013): it keeps the builders' warm trees while freeing disk the builders' loop does not use. It is no engine-speed task, so the performance checklist does not apply.
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T517 (T515's second half, the session's scratch at 21.8 GB, observed 2026-11-27, method: `make disk-audit`)
+
+- **Approach**: `make land`'s sweep (`--scratch-sweep landed`, `disk.rs`) now also takes the landed tasks' scratch worlds in the LANDING SESSION'S scratchpad, as it takes their `.git/t<N>` scratch (451 T246): `sweep/leftovers.rs`'s `scratchpad` lists each entry of `<root>/<any slug>/<CLAUDE_CODE_SESSION_ID>/scratchpad/` whose name is `t` then the task's whole number then anything but a digit (`t373/`, `t386-bench/`, `t517-sizes.txt`; `t51` never matches `t515`, the `number` rule `landed` already uses), a file or a directory, holding no registered worktree's tree (`tmp.rs`'s filter); `sweep.rs`'s `landed_scratchpad` drops what a live process holds (`items`) and takes nothing where `/proc` cannot be read. The session is the one landing, found under whichever slug holds it, since builders write into their coordinator's scratchpad (451 T271) and its slug is the tree the session started in (`-diagram` today), not the clone it lands from; with no session id, nothing. Another session's scratchpad stays with the age rule. A number another feature shares: the `/tmp` rule's day (`tmp::landed`) is kept, and on top of it `open_elsewhere` leaves a number another feature started (a live start in `task-starts.jsonl`) and has not ticked in its `specs/<feature>/tasks.md`, whatever the start's age, since a live scratchpad has no age rule behind it; a start whose `tasks.md` cannot be read holds its number too (chosen by the T517 builder: the conservative branch). Today that holds 11 numbers (405 T106 T127, 417 T06 T11 T12 T55, 427 T11, 444 T27 T34 T36 T42, 449 T158), observed 2026-11-27, method: the clone's `task-starts.jsonl` against each feature's `tasks.md`. On today's scratchpad (21.8 GB, 3,078 `t<N>` entries of 244 numbers), 451's open tasks' entries are 0.57 GB in 273, never taken, and landed tasks' 17.86 GB in 2,792 (`t373` 3.86, `t388` 3.26, `t386-bench` 1.10, `t457-clone` 1.04, both scratch clones and no worktree), none held by another feature's open start, observed 2026-11-27, method: `du -s` of each entry (`scratchpad/t517-sizes.txt`) against `tasks-done.md` and `tasks.md`, read only. Those tasks landed before this rule, so no landing takes them: the backlog is filed as T533. `m14` (2.4 GB, observed 2026-11-27, method: `make disk-audit`) has no task prefix and is left to the age rule.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a landing takes its tasks' scratch worlds in its own session's scratchpad; a held file, a shared or open-elsewhere number, another session's and no session's kept | red first: `a_landing_takes_its_tasks_scratch_worlds_in_the_landing_session_s_scratchpad` (`disk/tests.rs`; 1 failed, 8 passed on the old code) | n/a: tooling | none | n/a |
+| whole numbers (`t51` against `t515`), a worktree-holding entry kept, no session, no numbers | `a_landing_takes_its_tasks_scratch_worlds_in_its_own_session_s_scratchpad_by_whole_number` (`sweep/leftovers/tests.rs`) | n/a: tooling | none | n/a |
+| another feature's start holds its number while its task is open, ticked or unstarted not, unreadable held | `another_feature_s_start_holds_the_number_while_its_task_is_open_whatever_its_age` (`sweep/leftovers/tests.rs`) | n/a: tooling | none | n/a |
+
+### T517 Approach (checklist part A)
+
+1. **The goal, in the world.** A landed task's measurement worlds leave the session's scratchpad when it lands, so a long-lived coordinating session no longer holds tens of GB of finished tasks' scratch; nothing an open task or a live process uses goes.
+2. **The constraints.** T517's line (t51 not t515; shared numbers as `tmp::landed`); T515's and T520's sections; never a task still open, never a file a live process holds; nothing deleted outside a fixture.
+3. **Where each comes from.** G: the GM 2026-11-27 on the disk (request.md); R: T158, T246, T271 (one shared scratchpad, the `t<N>-` prefix), T515, T520; O: the measurements above.
+4. **Do they describe the world here?** Yes: the real scratchpad listed and sized read only, the real `task-starts.jsonl` and `tasks.md` read, `make land`'s call read (`Makefile`, the `landed` line, run in the session's Bash, where `CLAUDE_CODE_SESSION_ID` is set).
+5. **The order.** After T515 and T520 (landed); before T518; T533 (the backlog) after it.
+6. **The exits.** Green: the red-first test green and the two unit tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The landed tasks' entries a landing would take, 17.86 GB in 2,792 on today's scratchpad, the open tasks' 0.57 GB kept, observed 2026-11-27, method: `du -s` against the task files, read only.
+10. **Before moving a constant.** n/a: no constant or knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; the disk keeps a landed task's scratchpad bytes free from its landing on.
+
+**Found and left?**
+- The 17.86 GB of tasks landed before this rule stay in the session's scratchpad until the session ends and the age rule takes it (observed 2026-11-27, method: `du -s` against `tasks-done.md`). Not fixed here: a one-off take of a live session's files is the session's call, not a landing's. Filed as T533; lands before T525 (no dependency either way).
+
+**Performance work?** no
+
+
+
