@@ -264,6 +264,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T07 (phase 1: the hand-in's apply, its conflict stop and its resume, D3 steps 1-3, 5, 6)": {
+   "sha256": "a1e7f0d432d2269548c8b8a866530410be94bc909d95c600d539674d66cca221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T07 Approach (checklist part A)": {
+   "sha256": "79d1d8687f12779118dfdac5287b83b0ce06c5155bab4457595af910f1f6c18d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1620,6 +1632,76 @@
      "summary": "The T04 block, an unfilled template stub (placeholders only), is deleted.",
      "class": "within",
      "why": "Its earlier text holds no approach, step or requirement - only template placeholders - so removing it drops no work the request or spec asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T07 (phase 1: the hand-in's apply, its conflict stop and its resume, D3 steps 1-3, 5, 6)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-base-before-scratch",
+     "summary": "The base is found before the scratch commit, reversing D3's step 2/3 order, so a failed fetch refuses with nothing done.",
+     "class": "within",
+     "why": "An ordering of internal steps that yields the same base sha (read from outside the tree) and strengthens FR-002's refusal (nothing committed). The GM's sketch item 2 and FR-002 are unaffected; nothing asked is narrowed."
+    },
+    {
+     "id": "T07-fetch-only-for-origin",
+     "summary": "git fetch origin runs only where HAND_IN_BASE=origin; in phase 1 (clone, the default) no fetch runs.",
+     "class": "within",
+     "why": "The fetch decides nothing in phase 1: the base there is the clone's HEAD (D3's 'The base by phase', where work actually lands while the coordinator carries into its clone), already in the pool tree's object store, and origin/main is not read. FR-002's 'rebases onto current main' is served identically with or without the fetch, so dropping a no-effect step narrows neither the request nor the spec. It departs from the plan's own task line, not from what was asked; the literal reading would change no outcome but add a network round and a refusal for a remote not used."
+    },
+    {
+     "id": "T07-first-pass-not-wired",
+     "summary": "The commit's first pass is a hook that cli passes as none; T08 wires T06's hand-in mode there.",
+     "class": "within",
+     "why": "Staging, not omission: make builder-done is not pointed at --hand-in until T08 (Approach item 1), and T08 is where FR-002's first pass is joined. FR-002 is still carried by the plan as a whole."
+    },
+    {
+     "id": "T07-make-land-line-kept",
+     "summary": "Phase 1 keeps the 'make land' next-command line; the session lands by hand until T08/the lane.",
+     "class": "within",
+     "why": "Phase ordering of the lane (FR-003) already settled by the plan's phases; nothing removed from what was asked."
+    },
+    {
+     "id": "T07-conflict-in-builder-tree-and-resume",
+     "summary": "A conflict stops with the tree left holding it, names only the paths no rule resolves, and resumes only where HEAD equals the recorded base (else a stale-ref refusal).",
+     "class": "within",
+     "why": "Directly the GM's sketch item 2: conflicts fixed by the builder that has the context, in its own tree."
+    },
+    {
+     "id": "T07-commit-C-scratch",
+     "summary": "The final commit reuses the scratch commit's message and author so MSG and GUARD are not re-read and the guard check is not asked twice at a resume.",
+     "class": "within",
+     "why": "Implementation detail; no check is dropped (FR-008) - the guard check is asked once, at the first run."
+    },
+    {
+     "id": "T07-T39-resolved-list-on-notverified",
+     "summary": "T39 fixed: NotVerified keeps the rules' resolved list and the hand-in writes it, so a resume can reach its commit.",
+     "class": "within",
+     "why": "A defect fix (a hand-in that could never be resumed to its commit), shown red first; fixes a wrong outcome, inside FR-002."
+    },
+    {
+     "id": "T07-undo-after-scratch-failure",
+     "summary": "Any git step failing past the scratch commit undoes it as a Refused apply is undone, leaving the work uncommitted on its old base.",
+     "class": "within",
+     "why": "A defect fix (a stuck hand-in with work committed and no ref), shown red first; serves 'nothing committed or rewritten on a refusal'."
+    },
+    {
+     "id": "T07-no-coverage-at-hand-in",
+     "summary": "Exits: coverage is the gate's, at the landing; the hand-in runs none.",
+     "class": "within",
+     "why": "FR-002 states 'It runs no coverage', and the request notes the sketch's 'coverage for its own crates' was struck against the 2026-11-26 reversal."
+    },
+    {
+     "id": "T07-apply-told-to-T09",
+     "summary": "apply::told's wording is left for T09's command door; the hand-in uses its own words for a conflict.",
+     "class": "within",
+     "why": "Deferral of wording to a later task; nothing asked is narrowed."
     }
    ]
   }

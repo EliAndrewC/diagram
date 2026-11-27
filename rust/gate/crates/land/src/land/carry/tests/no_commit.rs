@@ -343,8 +343,14 @@ fn a_not_verified_apply_exits_1_and_says_what_failed() {
     };
     // an end that does not verify is NotVerified: no apply in a scratch repository reaches it (a -n pick that exits 0 leaves its
     // files in the working tree), so the end's answer is handed in
-    let fails = super::super::apply::ended(Err(vec!["a reason".to_owned()]), Vec::new());
-    assert_eq!(fails, Applied::NotVerified(vec!["a reason".to_owned()]));
+    // and keeps the rules' resolved list (461 T39): the resume asks the end again with it
+    let ruled = vec!["docs/a.md (both sides' words)".to_owned()];
+    let fails = super::super::apply::ended(Err(vec!["a reason".to_owned()]), ruled.clone());
+    let want = Applied::NotVerified {
+        fails: vec!["a reason".to_owned()],
+        resolved: ruled,
+    };
+    assert_eq!(fails, want);
     assert_eq!(
         super::super::apply::told(&root, &head(&builder), &fails, &mut said),
         1

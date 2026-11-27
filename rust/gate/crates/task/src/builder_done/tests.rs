@@ -587,3 +587,58 @@ fn the_commits_a_landing_carries_are_its_tasks_uncarried_ones_once_and_oldest_fi
     );
     assert!(super::to_carry(&root, "9001", &["T09".to_owned()]).is_empty());
 }
+
+/// 461 T07: the hand-in's door in - the tree found as `make builder-done` finds it, its refusals asked, and a commit made elsewhere
+/// than the tree's HEAD kept under the done ref with `"handed_in": true` on its `done` line, the tree released.
+#[test]
+fn a_found_tree_s_commit_made_elsewhere_is_kept_as_a_hand_in() {
+    let (_dir, root, _e, b1) = held("done-found", "T01");
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    let refusal = super::found(&words(&["T01"]), &root, "m", "")
+        .err()
+        .unwrap();
+    assert!(refusal.stderr.contains("F=<feature>"));
+    let f = super::found(
+        &words(&["T01", "9001"]),
+        &root,
+        " the subject ",
+        "the reason given",
+    )
+    .unwrap();
+    assert_eq!(
+        (f.tree(), f.clone_head(), f.feature()),
+        (b1.as_path(), head.as_str(), "9001")
+    );
+    assert_eq!(f.tasks(), ["T01".to_owned()]);
+    assert_eq!(
+        f.command(),
+        "make builder-done T=T01 F=9001 MSG='the subject'"
+    );
+    assert_eq!(
+        f.message(),
+        format!("the subject\nGUARD_EDIT_OK: the reason given\n\n{TRAILER}\n")
+    );
+    assert!(f.unready().unwrap().contains("nothing to commit"));
+    put(&b1, "default_3.profraw", "");
+    f.sweep();
+    assert!(!b1.join("default_3.profraw").exists());
+    put(&b1, "scripts/a.py", "x = 3\n");
+    assert_eq!(f.unready(), None);
+    git(&b1, &["add", "-A"]);
+    git(&b1, &["commit", "-qm", "the hand-in"]);
+    let sha = git(&b1, &["rev-parse", "HEAD"]);
+    let said = f.kept(&sha, true);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]), sha);
+    let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
+    let done = log
+        .lines()
+        .map(|l| serde_json::from_str::<serde_json::Value>(l).unwrap())
+        .rfind(|l| l["event"] == "done")
+        .unwrap();
+    assert_eq!(
+        (&done["commit"], &done["handed_in"]),
+        (&serde_json::json!(sha), &serde_json::json!(true))
+    );
+    assert!(pool_of(&root)[0].free());
+}

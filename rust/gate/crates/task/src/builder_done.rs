@@ -350,60 +350,152 @@ fn sweep(tree: &Path) {
 }
 
 /// The tree committed, kept and released (the module's doc, steps 2 to 6).
-fn commit(p: &Pool, tree: &Path, a: &Ask, dones: &[Done], env: &Env) -> Reply {
-    let at = tree.display();
-    sweep(tree);
-    let guard = if a.guard.is_empty() {
-        String::new()
-    } else {
-        format!("GUARD_EDIT_OK: {}\n", a.guard)
-    };
+fn commit(f: &Found, env: &Env) -> Reply {
+    let tree = &f.tree;
+    f.sweep();
     let file = builder_tree::tree_git_dir(tree).join(MESSAGE);
-    let _ = std::fs::write(&file, format!("{}\n{guard}\n{TRAILER}\n", a.subject));
+    let _ = std::fs::write(&file, f.message());
     git(tree, &["add", "-A"]);
     let (ok, _, why) = git(tree, &["commit", "-q", "-F", &file.to_string_lossy()]);
     if !ok {
         git(tree, &["reset", "-q"]);
-        return reply(String::new(), format!("builder-done: git commit failed in {at} - nothing committed, nothing left staged, the tree still held:\n{why}"), 1);
+        return reply(String::new(), format!("builder-done: git commit failed in {} - nothing committed, nothing left staged, the tree still held:\n{why}", tree.display()), 1);
     }
     let sha = text(git(tree, &["rev-parse", "HEAD"]).1.as_bytes());
-    // a carried commit's ref has done its job; the refs left are the commits that wait
-    let waiting: Vec<&str> = uncarried(&p.clone, dones)
-        .iter()
-        .map(|d| d.name.as_str())
-        .collect();
-    for d in dones.iter().filter(|d| !waiting.contains(&d.name.as_str())) {
-        git(
-            &p.clone,
-            &["update-ref", "-d", &format!("{REFS}{}", d.name)],
+    f.kept_in(&sha, false, env)
+}
+
+/// A BUILDER'S TREE FOUND FOR ITS END (feature 461 T07): the arguments checked and the pool tree the tasks hold found, as
+/// `make builder-done` finds it, with what its refusals, its commit and its keeping need - so the land crate's hand-in
+/// (`land/hand_in.rs`, plan D3), which commits the tree on a base other than the HEAD it was handed out at, asks today's refusals
+/// ([`Found::unready`]) and keeps its commit ([`Found::kept`]) as this command does, in process (`land` builds on `task`).
+pub struct Found {
+    p: Pool,
+    tree: PathBuf,
+    tasks: Vec<String>,
+    feature: String,
+    subject: String,
+    guard: String,
+    dones: Vec<Done>,
+}
+
+impl Found {
+    fn ask(&self) -> Ask<'_> {
+        Ask {
+            tasks: &self.tasks,
+            feature: &self.feature,
+            subject: &self.subject,
+            guard: &self.guard,
+        }
+    }
+
+    /// The pool tree the tasks hold.
+    #[must_use]
+    pub fn tree(&self) -> &Path {
+        &self.tree
+    }
+
+    /// The clone's HEAD when the tree was found: where a hand-in applies the work in phase 1 (`HAND_IN_BASE` = `clone`).
+    #[must_use]
+    pub fn clone_head(&self) -> &str {
+        &self.p.head
+    }
+
+    /// The tasks, in the hold's order: the first names a hand-in's own files.
+    #[must_use]
+    pub fn tasks(&self) -> &[String] {
+        &self.tasks
+    }
+
+    /// The feature's key.
+    #[must_use]
+    pub fn feature(&self) -> &str {
+        &self.feature
+    }
+
+    /// The command as it was run, to print as a re-run.
+    #[must_use]
+    pub fn command(&self) -> String {
+        self.ask().command()
+    }
+
+    /// Why the tree is not committed, nothing done (the module's doc, step 1); none where it is ready.
+    #[must_use]
+    pub fn unready(&self) -> Option<String> {
+        unready(&self.p, &self.tree, &self.ask(), &self.dones)
+    }
+
+    /// The commit's message: the subject, the `GUARD_EDIT_OK:` line where `GUARD=` was given, the co-author trailer.
+    #[must_use]
+    pub fn message(&self) -> String {
+        let guard = if self.guard.is_empty() {
+            String::new()
+        } else {
+            format!("GUARD_EDIT_OK: {}\n", self.guard)
+        };
+        format!("{}\n{guard}\n{TRAILER}\n", self.subject)
+    }
+
+    /// The stray profile files removed (step 2).
+    pub fn sweep(&self) {
+        sweep(&self.tree);
+    }
+
+    /// `sha`, the tree's commit, kept under the tasks' done refs, its `done` line logged (with `"handed_in": true` for a hand-in),
+    /// the tree released and the next two commands printed (steps 4 to 6).
+    #[must_use]
+    pub fn kept(&self, sha: &str, handed_in: bool) -> Reply {
+        self.kept_in(sha, handed_in, &Env::live())
+    }
+
+    fn kept_in(&self, sha: &str, handed_in: bool, env: &Env) -> Reply {
+        let (p, tree, a) = (&self.p, &self.tree, self.ask());
+        // a carried commit's ref has done its job; the refs left are the commits that wait
+        let waiting: Vec<&str> = uncarried(&p.clone, &self.dones)
+            .iter()
+            .map(|d| d.name.as_str())
+            .collect();
+        for d in self
+            .dones
+            .iter()
+            .filter(|d| !waiting.contains(&d.name.as_str()))
+        {
+            git(
+                &p.clone,
+                &["update-ref", "-d", &format!("{REFS}{}", d.name)],
+            );
+        }
+        let mut kept = Vec::new();
+        for task in a.tasks {
+            let name = format!("{REFS}{}", a.ref_of(task));
+            git(&p.clone, &["update-ref", &name, sha]);
+            kept.push(name);
+        }
+        let holder = format!("{} {}", a.feature, a.tasks.join(","));
+        let mut line =
+            json!({"utc": env.now, "event": "done", "tree": tree, "detail": holder, "commit": sha});
+        if let Some(k) = entry_of(p, tree, &holder) {
+            line["entry"] = json!(k);
+        }
+        if handed_in {
+            line["handed_in"] = json!(true);
+        }
+        builder_tree::log_line(p, &line);
+        let freed = builder_tree::release(p, a.tasks, a.feature, env);
+        let next = crate::builder_queue::dispatch(p, a.feature);
+        let out = format!(
+            "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the commit is carried by `make carry`, before any landing - its tree starts at the clone's HEAD):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
+            tree.display(),
+            sha.get(..10).unwrap_or(sha),
+            a.subject,
+            kept.join(", "),
+            freed.stdout,
+            a.feature,
+            a.tasks.join(" "),
+            carry_command(p, sha)
         );
+        reply(out, freed.stderr, freed.code)
     }
-    let mut kept = Vec::new();
-    for task in a.tasks {
-        let name = format!("{REFS}{}", a.ref_of(task));
-        git(&p.clone, &["update-ref", &name, &sha]);
-        kept.push(name);
-    }
-    let holder = format!("{} {}", a.feature, a.tasks.join(","));
-    let mut line =
-        json!({"utc": env.now, "event": "done", "tree": tree, "detail": holder, "commit": sha});
-    if let Some(k) = entry_of(p, tree, &holder) {
-        line["entry"] = json!(k);
-    }
-    builder_tree::log_line(p, &line);
-    let freed = builder_tree::release(p, a.tasks, a.feature, env);
-    let next = crate::builder_queue::dispatch(p, a.feature);
-    let out = format!(
-        "builder-done: {at} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the commit is carried by `make carry`, before any landing - its tree starts at the clone's HEAD):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
-        sha.get(..10).unwrap_or(&sha),
-        a.subject,
-        kept.join(", "),
-        freed.stdout,
-        a.feature,
-        a.tasks.join(" "),
-        carry_command(p, &sha)
-    );
-    reply(out, freed.stderr, freed.code)
 }
 
 /// `l7r-gate builder-done <tasks> <feature>` from `cwd`, `MSG` and `GUARD` read from the environment.
@@ -421,67 +513,84 @@ pub fn cli_with(args: &[String], cwd: &Path, msg: &str, guard: &str) -> Reply {
 }
 
 pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, msg: &str, guard: &str) -> Reply {
+    let f = match found(args, cwd, msg, guard) {
+        Ok(f) => f,
+        Err(refusal) => return refusal,
+    };
+    if let Some(why) = f.unready() {
+        return refused(why);
+    }
+    commit(&f, env)
+}
+
+/// `make builder-done`'s arguments checked and the pool tree its tasks hold found ([`Found`]); the refusal where either fails.
+///
+/// # Errors
+/// The command's refusal, nothing done: no tasks, feature or subject, a guard reason too short, no repository, no tree held by
+/// exactly these tasks, or that tree gone from disk.
+pub fn found(args: &[String], cwd: &Path, msg: &str, guard: &str) -> Result<Found, Reply> {
     let arg = |i: usize| args.get(i).map_or("", String::as_str);
     let tasks = task_list(arg(0));
     let feature = feature_key(arg(1));
     if tasks.is_empty() {
-        return refused(USAGE.to_owned());
+        return Err(refused(USAGE.to_owned()));
     }
     if feature.is_empty() {
-        return refused(format!(
+        return Err(refused(format!(
             "builder-done: refused - F=<feature> (or SPECIFY_FEATURE) names the feature whose tasks hold the tree\n{USAGE}"
-        ));
+        )));
     }
     let subject = msg.trim();
     if subject.is_empty() || subject.contains('\n') {
-        return refused(format!(
+        return Err(refused(format!(
             "builder-done: refused - MSG is the commit's subject, one line\n{USAGE}"
-        ));
+        )));
     }
     let guard = guard.trim();
     if !guard.is_empty() && !l7r_shared::escape::enough(guard) {
-        return refused("builder-done: refused - GUARD needs a reason of two words or more: it is the commit's GUARD_EDIT_OK: line\n".to_owned());
+        return Err(refused("builder-done: refused - GUARD needs a reason of two words or more: it is the commit's GUARD_EDIT_OK: line\n".to_owned()));
     }
     let Some(p) = builder_tree::pool(cwd) else {
-        return refused("builder-done: not in a git repository\n".to_owned());
+        return Err(refused(
+            "builder-done: not in a git repository\n".to_owned(),
+        ));
     };
     let trees = builder_pool::read(&p.common);
     let Some(held) = trees
         .iter()
         .find(|t| builder_tree::holds(t, &tasks, &feature))
     else {
-        return refused(format!(
+        return Err(refused(format!(
             "builder-done: refused - {feature} {} holds no pool tree (make builder-trees lists them)\n",
             tasks.join(",")
-        ));
+        )));
     };
     let all = |a: &[String]| a.iter().cloned().collect::<BTreeSet<String>>();
     if all(&held.tasks) != all(&tasks) {
-        return refused(format!(
+        return Err(refused(format!(
             "builder-done: refused - {} is held by {}: make builder-done T={} F={feature} MSG=...\n",
             held.tree.display(),
             held.holder(),
             held.tasks.join(",")
-        ));
+        )));
     }
     if !held.tree.is_dir() {
-        return refused(format!(
+        return Err(refused(format!(
             "builder-done: refused - {} is gone from disk: make builder-tree-release T={} F={feature}, then make builder-tree-drop\n",
             held.tree.display(),
             held.tasks.join(",")
-        ));
+        )));
     }
-    let ask = Ask {
-        tasks: &held.tasks,
-        feature: &feature,
-        subject,
-        guard,
-    };
     let dones = dones(&p.clone);
-    if let Some(why) = unready(&p, &held.tree, &ask, &dones) {
-        return refused(why);
-    }
-    commit(&p, &held.tree, &ask, &dones, env)
+    Ok(Found {
+        tree: held.tree.clone(),
+        tasks: held.tasks.clone(),
+        feature,
+        subject: subject.to_owned(),
+        guard: guard.to_owned(),
+        dones,
+        p,
+    })
 }
 
 #[cfg(test)]

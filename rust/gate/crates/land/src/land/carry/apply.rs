@@ -34,8 +34,12 @@ pub(crate) enum Applied {
     Conflict(Vec<String>),
     /// Refused before anything was applied: why (unfinished work in the tree, no such commit, a pick that did not start).
     Refused(String),
-    /// Applied, but its end did not verify: what failed.
-    NotVerified(Vec<String>),
+    /// Applied, but its end did not verify: what failed, and each file a rule resolved with the rule's name - kept, since a resume
+    /// asks the end again and only this list tells a file a rule resolved back to the base's own text from one missing (461 T39).
+    NotVerified {
+        fails: Vec<String>,
+        resolved: Vec<String>,
+    },
 }
 
 /// The no-commit form's verified end, asked on its own too (a hand-in resumed after a hand resolution): the commit's non-spec file
@@ -129,10 +133,10 @@ fn left(unmerged: &[String], stops: &[String]) -> Vec<String> {
 }
 
 /// An apply's verified end as what it came to.
-pub(super) fn ended(end: Result<usize, Vec<String>>, resolved: Vec<String>) -> Applied {
+pub(crate) fn ended(end: Result<usize, Vec<String>>, resolved: Vec<String>) -> Applied {
     match end {
         Ok(files) => Applied::Verified { files, resolved },
-        Err(fails) => Applied::NotVerified(fails),
+        Err(fails) => Applied::NotVerified { fails, resolved },
     }
 }
 
@@ -168,7 +172,7 @@ pub(super) fn told(root: &Path, commit: &str, applied: &Applied, said: &mut Said
             said.warn(&format!("carry: refused - nothing applied: {why}\n"));
             2
         }
-        Applied::NotVerified(fails) => {
+        Applied::NotVerified { fails, .. } => {
             said.warn(&format!(
                 "carry: NOT VERIFIED - {short} applied onto {tree} uncommitted:\n  {}\n",
                 fails.join("\n  ")

@@ -32,6 +32,7 @@ mod carry;
 mod carry_done;
 mod cheap;
 mod claims_wait;
+mod hand_in;
 mod inproc;
 mod long_runs;
 mod memory;
@@ -812,6 +813,7 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
             return unfinished::cli(&l7r_gate_task::tick::repo_root(tree));
         }
         Some("--carry") => return carry::cli(&args[1..], &l7r_gate_task::tick::repo_root(cwd)),
+        Some("--hand-in") => return hand_in::cli(&args[1..], cwd),
         _ => {}
     }
     let done = if args == ["--stop"] {

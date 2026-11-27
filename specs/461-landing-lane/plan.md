@@ -725,31 +725,123 @@ engine speed, so the performance checklist does not apply.
 
 **Performance work?** no.
 
-### T07 (<why: the finding or measurement that files it>)
+### T07 (phase 1: the hand-in's apply, its conflict stop and its resume, D3 steps 1-3, 5, 6)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in two builders (a build half and this closing half), in pool tree `diagram-backlog-t269`.
+  - **What is built** (`rust/gate/crates/land/src/land/hand_in.rs`, new, its tests `land/hand_in/tests.rs`; the module doc lists
+    the steps as built): `l7r-gate land --hand-in <tasks> <feature>`, `MSG`, `GUARD` and `HAND_IN_BASE` from the environment. In the
+    builder's pool tree: the knob checked; `task`'s `builder_done::found` (the arguments, the pool tree) - a new `pub struct Found`
+    in `rust/gate/crates/task/src/builder_done.rs` that `run` and `commit` are now rebuilt on, behavior unchanged (its 12 old tests
+    pass, one new, 13 in all: observed 2026-11-27, method: `#[test]` counted in `builder_done/tests.rs` at HEAD and in the tree, the
+    crate's run in item 9); the resume test (does `refs/l7r/hand-in/<feature>-<first task>` stand?); on a first run today's refusals
+    (`Found::unready`), the base found, the sweep, `git add -A` and the SCRATCH commit, a scratch ref a task (a bundle `T=a,b` gets
+    one each, as the done refs), `<git dir>/l7r-hand-in/<key>.base` written, the tree detached at the base, and T05's
+    `carry::apply::apply`. Each outcome: Verified writes the rules' resolved list (`<key>.resolved`, one `path (rule)` line each)
+    and goes on to commit; a Conflict leaves the tree with it, in the hand-in's own words (resolve only the paths not marked "its
+    rule would resolve it"; `apply::told` is left for T09's command door); Refused puts the work back uncommitted on its old base,
+    the refs and files deleted; NotVerified says so and leaves the tree for a resume. The RESUME reads the base file and requires
+    the tree's HEAD to equal it (else a stale-ref refusal naming `git show` and `git update-ref -d` - another tree's ref, or a tree
+    moved off its base, is never resumed), puts the still-unmerged paths through `resolve_all(.., Form::NoCommit)` (only the paths
+    no rule resolves are named again; what the rules resolve is added to the list), and asks `verified` with the list as `kept`.
+    The commit: `git add -A` (T05's note: the end reads the working tree), a conflict's markers in a staged file refused, the first
+    pass (`FirstPass = &dyn Fn(&Path) -> Vec<String>`, `cli` passes none: T08 wires T06's hand-in mode there), `git add -A` again so
+    the records a clear first pass writes go in with the work (D4), an empty staged delta "nothing to hand in" with the release
+    named, else `git commit -C <scratch>` (its message and author, so MSG and GUARD given at a resume are not re-read and the guard
+    check not asked twice), `Found::kept(sha, true)` (the done ref, the `done` line with `"handed_in": true`, the tree released, the
+    next two commands - the `make land` line kept, since in phase 1 the session lands by hand; T08 replaces it), and the scratch
+    refs and files deleted. `land.rs` gains the arm only (`mod hand_in;` and `Some("--hand-in")`, 873 to 875 lines, observed 2026-11-27, method: `wc -l`; D15).
+    Visibility: `carry::Form` and `carry::resolve_all` `pub(super)`, `carry::apply::ended` `pub(crate)`. The knob's audit entry
+    `dev/audits/hand-in-base.md` (`covers: HAND_IN_BASE`). `rust/gate/CLAUDE.md`'s land row names `hand_in.rs` and `--hand-in`.
+  - **Decision: the base is found BEFORE the scratch commit** (the session's ruling (1), accepted). D3's step order makes the
+    scratch commit (step 2) before the fetch (step 3). Finding the base first means a `git fetch origin` that fails refuses with
+    nothing done - no scratch commit or ref to undo, the work still uncommitted in the tree
+    (`a_fetch_that_fails_refuses_with_nothing_done`) - and changes nothing else: the base is read from outside the tree, so
+    finding it before or after the tree's own commit gives the same sha. Label: deliberate deviation from the plan's step order,
+    for a refusal that leaves nothing behind.
+  - **Decision: `git fetch origin` runs only where `HAND_IN_BASE=origin`** (the session's ruling (2), for the plan review to rule
+    on). The task line says "`git fetch origin`" with no condition. In phase 1 (`clone`, the default) the base is the clone's HEAD,
+    nothing reads `origin/main`, and the clone's HEAD is already in the tree's object store (a pool tree is a linked worktree of the
+    clone, observed 2026-11-27, method: `git worktree list` in the clone, as T05 found): a fetch there would cost a network round a
+    hand-in and could only refuse a hand-in for a remote it does not use. D3's "The base by phase" reads the fetch as phase 2's,
+    where `origin/main` is the base (`the_base_is_origin_main_after_a_fetch_where_the_knob_says_origin`); its words: "in phase 1 the
+    coordinator still carries into its clone, so the clone's HEAD is where work lands ... the hand-in applies onto the clone's HEAD
+    then (`clone`). From phase 2, when landings leave the clone, it is `origin/main` (`origin`)". Label: the literal line
+    read through D3's phases; if the review holds to the literal reading, the fetch moves outside the `if`, nothing else changes.
+  - **T39, red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"`):
+    T05's test comment holds that no scratch apply reaches NotVerified on a FIRST apply (a `-n` pick that exits 0 leaves its files
+    in the tree), but a resume drives the same `ended` line: `a_file_a_rule_resolved_back_to_the_base_s_text_stays_resolved_past_a_failed_end`
+    conflicts on `rust/lib.rs` (no rule) and `docs/a.md` (the words rule, which merges the builder's "ONE two three" and the
+    clone's "ONE TWO three" to the clone's own text); the builder takes the base's side on lib.rs, so the resume resolves docs/a.md
+    by its rule and its end fails on lib.rs (NOT VERIFIED); mended, the third run must land. Before the fix: 15 passed, 1 failed -
+    no `.resolved` after the NOT VERIFIED; with that assertion set aside, the third run itself red, `hand-in: NOT VERIFIED ... the
+    working tree does not hold the applied commit's docs/a.md` (the visible effect: a hand-in that could never be resumed to its
+    commit). After: green, with T07's other tests (the counts in item 9). `carry::tests::no_commit`'s `ended` test now asserts the list survives NotVerified;
+    `apply::told`'s wording is unchanged.
+  - **`handed()`'s Err path, driven** (the build half's untested branch): `a_git_step_that_fails_is_said_with_nothing_done` - an
+    origin that fetches but holds no `main` (its branch renamed `trunk`), so `git rev-parse origin/main` fails before the scratch
+    commit: `hand-in: git rev-parse origin/main failed in ...`, exit 2, no scratch ref, the work uncommitted. It passed on first
+    write; shown red by breaking its line (`run`'s Err exit 2 changed to 0): 16 passed, 1 failed, that test, then restored
+    (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"` on the broken line). A `git` step
+    failing AFTER the scratch commit CAN be staged, and it was a defect, fixed here: a `reference-transaction` hook aborts
+    `update-ref` (probed 2026-11-27, method: a vetoing hook in a scratch repository, git 2.53.0: `fatal: ref updates aborted by
+    hook`, exit 128), and the scratch commit then stood on the tree's HEAD with no ref, so the next run found nothing to commit and
+    the hand-in could not go on. Now every step past the scratch commit (`placed`: the refs, the base file, the detach, the apply)
+    undoes it on failure as an apply Refused is undone (`Hand::undo`: the tree at the scratch commit's content, HEAD at its old
+    base, the work uncommitted, the refs and files deleted). Red first:
+    `a_git_step_that_fails_after_the_scratch_commit_puts_the_work_back_uncommitted` (a hook vetoing `refs/l7r/hand-in/`), 17 passed,
+    1 failed on the code before (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land
+    ONLY="land::hand_in::tests"`); green after, the hook removed and the next run landing the work.
+  - **Red first, the build half** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land
+    ONLY="land::hand_in::tests"`): with `run` a stub returning "not built", 0 passed, 13 failed; built, 13 and 0. Written after the
+    build and each shown red: the markers refusal; the clear first pass's records committed with the work (14 passed, 1 failed -
+    the done commit held only `rust/held.rs` - until the second `git add -A`). Two mutations each shown red, then restored: the
+    resume's `resolve_all` replaced by a bare Conflict (12 passed, 1 failed, the conflict-and-resume test); the `git add -A` before
+    the commit removed (12 passed, 1 failed, the unadded `rust/extra.rs` left out), observed 2026-11-27, method: the same command on
+    each broken line.
+  - **The tests** (`land/hand_in/tests.rs`, 18, observed 2026-11-27, method: `#[test]` counted): a clean hand-in onto a clone HEAD that moved on (one commit, parent the clone's
+    HEAD, `handed_in: true`, the scratch ref and files gone, the tree free); a conflict with the base refused naming rust/lib.rs and
+    marking tasks.md rule-resolvable, re-run unresolved naming only lib.rs, resolved and resumed with tasks.md resolved by its rule
+    and an unadded file committed; a first-pass refusal committing nothing and its resume reading the `.resolved` list; a
+    resolution that drops the work NOT VERIFIED; T39's above; a scratch commit a pre-commit hook refuses; the final commit refused
+    and resumed; an apply Refused put back; a base already holding the work; a stale scratch ref; `origin`; a failed fetch; the
+    two Err paths above; the knob, the arm's usage and today's guard-file refusal; `must()`'s error; markers in an added resolution; a
+    clear first pass's records committed.
+
+Built here: T39 - the no-commit apply's NotVerified keeps the rules' resolved list (`Applied::NotVerified { fails, resolved }`, `carry::apply::ended`), and the hand-in writes it to `<key>.resolved` on NotVerified as on Verified (`Hand::ruled`), so a resume's end still holds a file a rule resolved back to the base's own text
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the hand-in's apply, stop and resume; T39 | n/a - no map | n/a | none | n/a |
 
 ### T07 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's `make builder-done` (once T08 points it here) lands the work as one commit on where
+   work lands - the clone's HEAD in phase 1 - with the conflicts against work landed since answered in the builder's own tree,
+   resumable after a stop, and nothing committed or rewritten on a refusal.
+2. **The constraints.** D3 steps 1-3, 5, 6 and "The base by phase"; D15 (the arm only in `land.rs`); FR-002; T05's no-commit form
+   and its notes for T07 (everything staged before the commit; the rules' list kept for the resume, shapes (a) and (b)); no
+   history rewritten.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md); R: D3, T05's section; O: the scratch-clone tests above
+   (2026-11-27).
+4. **Do they describe the world here?** Yes: the tests build a clone with a pool tree as a linked worktree held in the pool's
+   registry, as `make builder-tree` leaves one (observed 2026-11-27, method: `git worktree list` in the clone).
+5. **The order.** After T05; beside T06; before T08 and T09.
+6. **The exits.** Green: the land and task crates' tests and `make builder-checks` as below; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/land rust/gate/crates/task"` green, the land crate
+   203 (185 before T07, +18) passed and the task crate 148 (147 + 1), 0 failed (observed 2026-11-27, method: that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T39: a hand-in whose resume follows a NOT VERIFIED could never commit - its end named a file a rule had
+    resolved as missing (the red above); and a hand-in whose scratch ref git refused was left stuck with its work committed on the
+    tree's HEAD and no ref, the next run finding nothing to commit (the red above).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - T39, filed by the build half, is fixed here (the `Built here:` line above); the failed step past the
+scratch commit, fixed here.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - it moves the landing's conflict turns from the session to the builder (D3's cost line) but makes no
+step faster and measures no time.
 
 
 ### T08 (<why: the finding or measurement that files it>)
@@ -1744,6 +1836,32 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T39 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T39 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -75,7 +75,7 @@ const CONTINUE: &str = "-c core.editor=true cherry-pick --continue";
 
 /// The carry's two forms: the pick committed (`make carry`), or applied and left uncommitted ([`apply`], 461 T05).
 #[derive(Clone, Copy, PartialEq, Eq)]
-enum Form {
+pub(super) enum Form {
     Commit,
     NoCommit,
 }
@@ -353,7 +353,7 @@ fn resolved(
 /// The stopped pick's conflicts resolved where each has a rule that resolves it - all of them, or none: each path resolved with its
 /// rule's name, or each path with why it stops. `sha` is the commit picked: the side a cleanly merged tasks.md's boxes are restored
 /// from, named by its sha because a no-commit pick writes no `CHERRY_PICK_HEAD` (461 T05).
-fn resolve_all(
+pub(super) fn resolve_all(
     root: &Path,
     unmerged: &[String],
     sha: &str,
