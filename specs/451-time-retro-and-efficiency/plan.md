@@ -7013,31 +7013,40 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T435 (<why: the finding or measurement that files it>)
+### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make rust-test CRATE=<dir> ONLY="<module::path> ..."` is `l7r-gate rust test --crate <dir> --only "<words>"` (`rust/gate/crates/rustc/src/rustc/only.rs`, new; `rustc.rs`'s `parse`, `cli`, `check`, `keep_green`, `test_line`, `answer`; `rustc/side.rs`'s `run_built`; `rustc/phase.rs`'s `wrote`; the Makefile's `rust-test`). The words go to every test binary of the crate and its doctest pass, after cargo's `--`, as libtest's name filters. Built by the build half (handoff `T435-build.md`), closed here.
+  - **DECISION, a filtered run is no crate's green** (label: tooling convention; the task line's own clause, "a part of a suite is no green for the crate"). `keep_green` returns early when the run is filtered - the one place a run's key and the shared `binary-<crate>` passed line are written - so the next `make builder-checks`, unfiltered `make rust-test` or `test-counters` runs the whole crate and never reads "unchanged" from a part. It may READ a whole green: where the crate's whole green stands on this code, its part passed too and nothing runs. Pinned by `rustc::tests::only`.
+  - **DECISION, a filter that runs no test of a crate is that crate's failure** (label: tooling convention). libtest exits 0 on zero matches, so a mistyped module would otherwise read as a pass; the failure names the fix (`name a module path its tests hold ... or drop ONLY=`).
+  - **DECISION, `ONLY=` with no `CRATE=` is refused, with the command to run** (label: tooling convention; ruled by this closing half on the build half's open choice). The build half allowed it, but with the zero-match rule every crate the filter misses turns red, so the line can only fail; the handoff names no use for it. Refused in `parse` (`only::uncrated`), exit 2, before the run lock is taken, its message `rust-checks: test ONLY "<words>" names no crate - every crate the filter misses would fail; add CRATE=<dir>, as in make rust-test CRATE=rust/gate/crates/land ONLY="<words>"`; the usage line now reads `l7r-gate rust test --crate DIR... --only "FILTER ..."`. Red first: `a_filter_with_no_crate_is_refused_with_the_command_to_run`.
+  - **DECISION, only `test` takes the flag** (label: tooling convention): `test-counters`, `cover`, `lint` and the rest keep results a part would stand in for, and `test-times` already times each test alone - each refused with the usage. A word opening `-` is refused (libtest would read it as its own flag).
+  - **DECISION, the filter is read from the arguments alone, never the environment** (label: tooling convention): make exports a command-line `ONLY=` to every recipe, so reading the environment would filter `make builder-checks ONLY=x` silently; only `make rust-test`'s recipe hands it on.
+  - **DECISION, the filtered `test` Phase line carries `"only": "<words>"`; build lines are never marked** (label: tooling convention): a reader tells a part from a crate's run; the build is the same build a whole run makes, so the next whole run finds it fresh.
+  - **The measurement**, measured 2026-11-27 about 07:34Z (the build half, `make rust-test CRATE=rust/gate/crates/land [ONLY=land::carry] FRESH=1`, alternated over rounds 0 to 3, `/usr/bin/time` around make, `/proc/loadavg` before each, in the pool tree `diagram-backlog-t271` beside the other builders, 22 cores, no load generator; raw lines kept in `dev/measurements/2026-11-27/test-selection/t435-filtered.txt`): the whole crate, 169 tests, took 7.94 to 9.54 s of make wall and 47.9 to 50.2 s of processor at `load1` 30.6 to 31.5 (rounds 1 to 3, measured 2026-11-27, the same runs), round 0's whole run carrying a 35.1 s first build left out, measured 2026-11-27 (the same runs), and `ONLY=land::carry`, 39 tests, took 1.55 to 4.02 s of make wall and 8.0 to 10.9 s of processor at `load1` 32.2 to 33.6 (rounds 0 to 3), measured 2026-11-27 (the same runs). Filtered over whole: wall 0.16 to 0.51, processor about 0.17 to 0.23, against a test-count share of 0.23, measured 2026-11-27 (the same runs).
+  - **Where the time moves**: the saving is in a builder's ITERATION runs alone. `make builder-checks` still runs each crate whole at the builder's end, and the batch gate (`make land`'s `make done`, its coverage) is unchanged, so no test run moves to the gate and the gate's time does not grow; T342's estimate (13.8 to 32.4 builder-minutes in the 11.6 h window, measured 2026-11-27, the record's section 4) is the expected saving, realized only as builders use `ONLY=`, which `scripts/container/builder-brief.md`'s TWO TIERS bullet now says.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the filter, kept as no green, zero-match red, no-crate refused, Phase mark | n/a: tooling, pinned by `rustc::tests::only` (7 tests, observed 2026-11-27, method: the filtered run's count) | n/a: tooling | none | n/a |
 
 ### T435 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder iterating on a crate runs only the tests its change reaches, in a fifth of the processor time on a loaded machine, and nothing it runs that way can stand in for the crate's green.
+2. **The constraints.** 451 FR-013 (performance work first); T342's DECISION (builder-checks stays the whole crate); the task line (the result never kept, the Phase line marked, said in `scripts/container/builder-brief.md`); `rust/gate/CLAUDE.md`'s kept-result rule.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting builder-loop speed as performance work. O: T342's record and this task's timings, measured 2026-11-27.
+4. **Do they describe the world here?** Yes: timed on the real land crate in a pool tree beside working builders at `load1` 30.6 to 33.6, measured 2026-11-27 (`t435-filtered.txt`).
+5. **The order.** After T342 (its measurement). T342's section says T445 (the three hung `rustc` test runs, a measurement) lands before T435; the session orders the landing.
+6. **The exits.** Green: `rustc::tests::only` green and the crate whole green under `make builder-checks`, the timings recorded. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: `ONLY=land::carry` ran in 0.16 to 0.51 of the whole crate's wall and about a fifth of its processor (`t435-filtered.txt`); `rustc::tests::only`, 7 tests, green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: tooling, no map changes, no defect.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a `[perf]` task, 451 FR-013 - it makes the builders' loop faster (their iteration test runs), not the gate.
 
 ### T437 (<why: the finding or measurement that files it>)
 

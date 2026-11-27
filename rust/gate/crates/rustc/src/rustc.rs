@@ -27,6 +27,7 @@ mod drain;
 mod fmtfile;
 mod kept;
 mod lint;
+mod only;
 mod phase;
 mod prewarm;
 mod runlock;
@@ -73,6 +74,9 @@ pub struct World {
     slots: slot::Slots,
     /// The small lane beside them, for a test build of one crate alone (feature 451 T347, `slot.rs`, `kept/alone.rs`).
     small: slot::Slots,
+    /// A `test` run's filter words (`--only`, `make rust-test ONLY=`, feature 451 T435, `only.rs`): handed to each test binary, the
+    /// run kept as no crate's green and its `test` Phase line marked; empty for every other run.
+    only: Vec<String>,
 }
 
 struct Ran {
@@ -445,8 +449,10 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
         "test" | "test-counters" | "test-no-counters" => {
             let words = test_args(cmd, manifest, false);
             let args: Vec<&str> = words.iter().map(String::as_str).collect();
+            // a filtered run's words after cargo's `--`, to every test binary (`only.rs`, feature 451 T435)
+            let only: Vec<&str> = world.only.iter().map(String::as_str).collect();
             leak_checked(manifest, |tmp| {
-                cargo_in(world, &args, manifest, &[], Some(tmp))
+                cargo_in(world, &args, manifest, &only, Some(tmp))
             })
         }
         "hamlet" => {
@@ -598,7 +604,7 @@ fn shown(world: &World, manifest: &Path) -> String {
 }
 
 /// A green result kept: `make format` rewrites the files its key was read from, so only a check's is; a coverage pass keeps the crate's
-/// tests' too where they are all its `cargo test` runs (T111).
+/// tests' too where they are all its `cargo test` runs (T111); a filtered test run keeps none (451 T435).
 fn keep_green(
     world: &World,
     cmd: &str,
@@ -607,7 +613,8 @@ fn keep_green(
     inputs: Option<&Kept>,
     formatting_check: bool,
 ) {
-    if cmd == "format" && !formatting_check {
+    // a filtered run is a part of the crate's tests: no green kept, so the next whole run runs it (`only.rs`, 451 T435)
+    if (cmd == "format" && !formatting_check) || !world.only.is_empty() {
         return;
     }
     verdict.keep();
@@ -671,6 +678,18 @@ fn caller_reads(world: &World, cmd: &str, manifest: &Path, inputs: Option<&Kept>
     kept.reads_any(&world.root, cmd, manifest, &files)
 }
 
+/// A green test run's line for its crate: the first binary's summary, or a filtered run's count, a filter that ran no test made
+/// its crate's failure (`only.rs`, feature 451 T435).
+fn test_line(world: &World, cmd: &str, shown: &str, done: &mut Ran, stdout: &mut String) {
+    if !world.only.is_empty() {
+        only::judge(world, shown, done, stdout);
+    } else if done.code == 0 && cmd.starts_with("test") {
+        if let Some(summary) = done.stdout.lines().find(|l| l.starts_with("test result:")) {
+            let _ = writeln!(stdout, "rust-checks: {cmd} on {shown}: {summary}");
+        }
+    }
+}
+
 fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) -> Reply {
     let found = crates(&world.root, named);
     let (mut stdout, mut stderr) = (String::new(), String::new());
@@ -722,17 +741,13 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             continue;
         }
         let (lane, ids) = ((verdict.built, &verdict.told), inputs.as_ref());
-        let done = together
+        let mut done = together
             .remove(manifest)
             .unwrap_or_else(|| stepped(world, cmd, manifest, formatting_check, lane, ids));
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }
-        if done.code == 0 && cmd.starts_with("test") {
-            if let Some(summary) = done.stdout.lines().find(|l| l.starts_with("test result:")) {
-                let _ = writeln!(stdout, "rust-checks: {cmd} on {shown}: {summary}");
-            }
-        }
+        test_line(world, cmd, &shown, &mut done, &mut stdout);
         if done.code != 0 {
             let counted = caller_reads(world, cmd, manifest, inputs.as_ref());
             *if counted { &mut bad } else { &mut apart } += 1;
@@ -772,6 +787,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
         0 => writeln!(stdout, "rust-checks: {cmd} clean on {clean} crate(s)"),
         _ => writeln!(stdout, "rust-checks: {cmd} clean on {clean} crate(s) of this task's; {apart} red on another task's files alone, reported apart"),
     };
+    stdout.push_str(&only::noted(world));
     Reply {
         stdout,
         stderr,
@@ -815,10 +831,15 @@ fn parse(args: &[String]) -> Option<(&str, Vec<String>, bool)> {
         match word.as_str() {
             "--check" => flag = true,
             "--crate" => named.push(rest.next()?.clone()),
+            // a filtered run is a `test` run's alone (`only.rs`, feature 451 T435): the rest keep results a part would stand in for
+            only::FLAG if cmd == "test" => {
+                only::words(rest.next()?)?;
+            }
             _ => return None,
         }
     }
-    Some((cmd, named, flag))
+    // a filter with no crate is refused, its message `only::uncrated`'s (feature 451 T435)
+    only::uncrated(args).is_none().then_some((cmd, named, flag))
 }
 
 fn cargo_exe(installed: &Path) -> String {
@@ -860,6 +881,7 @@ fn world_here(make: String) -> World {
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),
         make,
         root,
+        only: Vec::new(),
     }
 }
 
@@ -872,17 +894,17 @@ fn dispatch(world: &World, args: &[String]) -> Reply {
     if args.first().map(String::as_str) == Some("test-times") {
         let mut rest = args.to_vec();
         "test".clone_into(&mut rest[0]);
-        if let Some((_, named, false)) = parse(&rest) {
+        if let Some((_, named, false)) = parse(&rest).filter(|_| only::of(&rest).is_empty()) {
             return times::test_times(world, &named, times::BAR, times::RUNS);
         }
     }
     let Some((cmd, named, flag)) = parse(args) else {
         return Reply {
             stdout: String::new(),
-            stderr: format!(
-                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n       l7r-gate rust format --file PATH... [--check]\n       l7r-gate rust test-times --crate DIR...\n",
+            stderr: only::uncrated(args).unwrap_or_else(|| format!(
+                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n       l7r-gate rust test --crate DIR... --only \"FILTER ...\"\n       l7r-gate rust format --file PATH... [--check]\n       l7r-gate rust test-times --crate DIR...\n",
                 COMMANDS.join(",")
-            ),
+            )),
             code: 2,
         };
     };
@@ -928,7 +950,12 @@ pub fn cli(args: &[String]) -> Reply {
         return prewarm::run(&world, &args[1..], &prewarm::Knobs::of(&world));
     }
     let taker = runlock::Taker::here();
-    let world = world_here(phase::run_target(&taker.run_what, cmd));
+    // the filter is read from the arguments alone, never the environment: make exports `ONLY=` to every recipe, and only
+    // `make rust-test` hands it on (feature 451 T435)
+    let world = World {
+        only: only::of(args),
+        ..world_here(phase::run_target(&taker.run_what, cmd))
+    };
     let reply = locked_dispatch(&world, args, &taker);
     crate::stamp::record_for(
         &world.root,

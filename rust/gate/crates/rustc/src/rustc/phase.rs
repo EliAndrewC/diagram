@@ -65,6 +65,10 @@ pub(super) fn wrote<P: AsRef<Path>>(
         &world.root,
     );
     row.insert("crates".into(), json!(crates));
+    // a filtered test run is a part of its crates' tests, kept as no green (feature 451 T435, `only.rs`): its words said
+    if step == "test" && !world.only.is_empty() {
+        row.insert("only".into(), json!(world.only.join(" ")));
+    }
     // a wait on a scratch slot directory is a measurement's own (feature 451 T426, `slot.rs`): marked, so the readers leave it out
     if world.slots.scratch && (step == slot::STEP || step == slot::USE) {
         row.insert("scratch".into(), json!(true));

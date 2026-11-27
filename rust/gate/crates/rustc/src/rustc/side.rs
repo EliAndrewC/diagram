@@ -83,8 +83,12 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
             stdout: String::new(),
             stderr: String::new(),
         };
+        // a filtered run's words after the binary's own `-q` (`only.rs`, feature 451 T435)
+        let mut words = own(&["-q"]);
+        words.extend(world.only.iter().cloned());
+        let only: Vec<&str> = world.only.iter().map(String::as_str).collect();
         for exe in exes {
-            let ran = run_in(Some(dir), exe, &own(&["-q"]), &env);
+            let ran = run_in(Some(dir), exe, &words, &env);
             all.stdout.push_str(&ran.stdout);
             all.stderr.push_str(&ran.stderr);
             if ran.code != 0 {
@@ -97,7 +101,7 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
             if cmd == "test-counters" {
                 args.push("--all-features");
             }
-            let doc = cargo_in(world, &args, manifest, &[], Some(tmp));
+            let doc = cargo_in(world, &args, manifest, &only, Some(tmp));
             all.stdout.push_str(&doc.stdout);
             all.stderr.push_str(&doc.stderr);
             all.code = doc.code;

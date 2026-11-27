@@ -1275,9 +1275,9 @@ static:        ## [static] the static checks: file-scale, the Rust crates' check
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" make-docs . --check
 	bash scripts/reviews/layout_carry.sh --selftest
 
-rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17); only the crates whose sources, test binary or declared reads moved since their last green run, the rest's result reused (449 T93)   [CRATE=tests/fixtures/rust/fixture] [FRESH=1 REASON="..."]
+rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17); only the crates whose sources, test binary or declared reads moved since their last green run, the rest's result reused (449 T93); ONLY= hands its words to the test binaries as name filters, a builder's run of the tests its change reaches, kept as no crate's green (451 T435)   [CRATE=tests/fixtures/rust/fixture] [ONLY="<module::path> ..."] [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
-	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",)
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",) $(if $(ONLY),--only "$$ONLY",)
 
 # THE EDIT LOOP OF A TASK'S CRATES IN ONE COMMAND (451 T170): static-runs' refusal (451 FR-007) names this with the delta's crates
 # said once, where it named four commands a crate and reached builders at up to 7,909 characters; each step runs every crate at once.

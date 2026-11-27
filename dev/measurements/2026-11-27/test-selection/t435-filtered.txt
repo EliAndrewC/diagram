@@ -1,0 +1,29 @@
+# 451 T435: make rust-test CRATE=rust/gate/crates/land [ONLY=land::carry] FRESH=1, whole against filtered, measured 2026-11-27 ~07:34Z
+# in the pool tree diagram-backlog-t271 beside the other builders (22 cores, no load generator, feature 460), by T435's build half.
+# Method: alternated, rounds 0-3, /usr/bin/time around make, /proc/loadavg before each; both FRESH so both take the stepped path
+# (--no-run build, then cargo test). Round 0's whole run carried the crate's first build after the edit (35.1 s) and is left out
+# of the figures. Raw lines as written (copied from the build half's handoff, T435-measure.txt):
+round 0 filter=[] load=27.95 19.57 18.43
+41.26 wall 183.38 user 32.02 sys
+rust-checks: test on rust/gate/crates/land: test result: ok. 169 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.80s
+round 0 filter=[land::carry] load=32.78 22.10 19.34
+1.60 wall 1.85 user 6.17 sys
+rust-checks: test ONLY "land::carry" on rust/gate/crates/land: 39 ran, 130 filtered out - a part, not kept as the crate's green
+round 1 filter=[] load=30.56 21.81 19.27
+9.54 wall 18.19 user 32.04 sys
+rust-checks: test on rust/gate/crates/land: test result: ok. 169 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.50s
+round 1 filter=[land::carry] load=33.63 22.60 19.53
+4.02 wall 2.47 user 7.86 sys
+rust-checks: test ONLY "land::carry" on rust/gate/crates/land: 39 ran, 130 filtered out - a part, not kept as the crate's green
+round 2 filter=[] load=31.50 22.34 19.47
+8.64 wall 17.36 user 30.54 sys
+rust-checks: test on rust/gate/crates/land: test result: ok. 169 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.22s
+round 2 filter=[land::carry] load=32.17 22.77 19.64
+3.13 wall 2.71 user 8.20 sys
+rust-checks: test ONLY "land::carry" on rust/gate/crates/land: 39 ran, 130 filtered out - a part, not kept as the crate's green
+round 3 filter=[] load=31.52 22.79 19.66
+7.94 wall 17.70 user 30.48 sys
+rust-checks: test on rust/gate/crates/land: test result: ok. 169 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.80s
+round 3 filter=[land::carry] load=33.08 23.26 19.83
+1.55 wall 1.80 user 6.46 sys
+rust-checks: test ONLY "land::carry" on rust/gate/crates/land: 39 ran, 130 filtered out - a part, not kept as the crate's green

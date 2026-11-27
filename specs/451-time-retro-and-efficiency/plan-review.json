@@ -3721,14 +3721,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T435 (<why: the finding or measurement that files it>)": {
-   "sha256": "cc1f855ac1eddceccf987d73cd0c9c16ef3fb05fca3d5e41b43f4b4564724b36",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T435 Approach (checklist part A)": {
-   "sha256": "26711309cfd9f433e8213e0f6083d237939f65f133548b2701201e5a04a11f4f",
+   "sha256": "b3ecefa489bcffe141d4fbb4c68cf0ca8cfa8a33dec2bfebee06357291f3b23c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4053,6 +4047,12 @@
   },
   "### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)": {
    "sha256": "e13ebfe1254bbd7e1b356e265f45bd40de134436ff8d04f3f17a23f425d439db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))": {
+   "sha256": "c4ade1867fbb93e4576f42feb68d4ef2c3adf89de2cad95a2526b420990d3493",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36259,6 +36259,83 @@
      "summary": "Found and left: none; no map changes",
      "class": "within",
      "why": "No defect is deferred. The grep census of \"slow\" and /slow over rust/gate/crates/rustc/src (its search space stated) finds no other test that lays the file."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))",
+    "### T435 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T435 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T435-filtered-no-green",
+     "summary": "A run under ONLY= writes no kept result and no binary-<crate> passed line (keep_green returns early); it may read a whole green that stands on the same code.",
+     "class": "within",
+     "why": "The task line's own clause ('a part of a suite is no green for the crate') and T342's DECISION that builder-checks stays the whole crate; it enforces that the iteration shortcut cannot stand in for the whole run the two-tier process keeps. Reading a standing whole green is no narrowing: the part is contained in the whole that passed on this code."
+    },
+    {
+     "id": "T435-zero-match-red",
+     "summary": "A filter that runs no test of a named crate fails that crate, naming the fix.",
+     "class": "within",
+     "why": "Makes the requested filter honest (libtest exits 0 on zero matches, so a mistyped module would read as a pass); it narrows nothing the request or FR-013 asks, and only refuses a run that tested nothing."
+    },
+    {
+     "id": "T435-only-without-crate-refused",
+     "summary": "ONLY= with no CRATE= is refused at parse, exit 2, with the command to run (make rust-test CRATE=<dir> ONLY=...).",
+     "class": "within",
+     "why": "What was asked (T342's measurement, the request's improvement 2 'a crate-scoped check while iterating', FR-013's builders' loop) is a builder running the tests a change reaches in the crate it is iterating on; the crated form carries that whole. The uncrated form names no use in the handoff and, under the zero-match rule, fails on any crate the filter misses; refusing it with the crated command removes no requested capability."
+    },
+    {
+     "id": "T435-only-test-takes-flag",
+     "summary": "Only `test` accepts --only; test-counters, cover, lint and the rest refuse it with the usage; a word opening '-' is refused.",
+     "class": "within",
+     "why": "The request's improvement 2 and T342 concern the iteration test run; the counters, coverage and lint keep results a part would stand in for (the same no-green purpose), test-times already isolates each test, and a leading '-' would be read by libtest as its own flag. Nothing the GM asked for is withheld."
+    },
+    {
+     "id": "T435-args-not-env",
+     "summary": "The filter is read from the arguments alone; only make rust-test's recipe hands ONLY= on, so make builder-checks ONLY=x is not filtered silently.",
+     "class": "within",
+     "why": "Keeps builder-checks and the gate whole (T342's DECISION, the two tiers), which is the no-green purpose; an implementation convention that narrows nothing asked."
+    },
+    {
+     "id": "T435-phase-line-marked",
+     "summary": "The filtered test Phase line carries \"only\": \"<words>\"; build lines are not marked.",
+     "class": "within",
+     "why": "The task line asks the Phase line marked; the GM's 2026-11-22 'we want everything measured so we know where our time goes' is served by telling a part's run from a crate's. The build is the same build a whole run makes, so leaving it unmarked misstates nothing."
+    },
+    {
+     "id": "T435-where-time-moves",
+     "summary": "The saving is in builders' iteration runs alone; builder-checks and the batch gate stay whole, so no test time moves to the gate; the brief's TWO TIERS bullet says to use ONLY= while iterating.",
+     "class": "within",
+     "why": "Matches the request's improvement 2 verbatim in shape ('a crate-scoped check while iterating, with make static once at the end') and the GM's two-tier rulings of 2026-11-26; the brief line is the task line's 'said in scripts/container/builder-brief.md'."
+    },
+    {
+     "id": "T435-approach-checklist",
+     "summary": "Part A filled: goal, constraints (FR-013, T342's DECISION, the task line, kept-result rule), order after T342 with T445 landing first, exits, done measured, found and left none, [perf].",
+     "class": "within",
+     "why": "Restates the decisions above and their measurements (each dated with its method, t435-filtered.txt); it decides nothing further and leaves no defect."
+    },
+    {
+     "id": "T443-T449-templates",
+     "summary": "T443 and T449 sections and Part A checklists added as unfilled templates.",
+     "class": "within",
+     "why": "Placeholders only; they make no decision."
+    },
+    {
+     "id": "removed-T311-T392-T435-templates",
+     "summary": "The unfilled template sections of T311, T392 and T435 removed (T435's replaced by its filled heading above).",
+     "class": "within",
+     "why": "Each removed block was an empty template when last judged CLEAR (earlier.md); removing it drops no decision and narrows nothing."
     }
    ]
   }

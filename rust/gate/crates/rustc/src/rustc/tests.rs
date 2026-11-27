@@ -21,6 +21,7 @@ mod drain;
 mod fmtfile;
 mod kept;
 mod lint;
+mod only;
 mod overflow;
 mod phases;
 mod prewarm;
@@ -65,6 +66,7 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         slots: super::slot::Slots::off(),
         small: super::slot::Slots::off(),
         target: target.to_path_buf(),
+        only: Vec::new(),
     };
     target.hold(world)
 }
@@ -592,6 +594,7 @@ fn the_real_cargo_tests_a_real_crate() {
         slots: super::slot::Slots::off(),
         small: super::slot::Slots::off(),
         target: target.to_path_buf(),
+        only: Vec::new(),
     };
     let got = answer(&world, "test", &[], false);
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);

@@ -66,7 +66,8 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   never reached while the assertion holds, and the batch gate's coverage refuses it (three gates in a row, 2026-11-26; 451 T343).
 - TWO TIERS (a trial from 2026-11-26; `docs/process-decisions.md`, "Two tiers of checking"): a builder's tree runs the FIRST
   tier only - `make builder-checks CRATE="<the crates it changed>"` (tests, lint, format) and a changed guard's own hook suite
-  - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
+  - while ITERATING, `make rust-test CRATE=<dir> ONLY="<module::path> ..."` runs only the changed modules' tests, kept as no
+  crate's green, and `make builder-checks` still runs each crate whole at the builder's end (451 T435) - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
   over the batch (`make land T="<tasks>"`), after `make carry` and `scripts/sync-with-main.sh backup` for each. The block's
   CHECKS line says so, for every kind. A BUILDER RUNS NO COVERAGE (the GM's ruling of 2026-11-26, the same record's "REVERSED
   the same night": the goal is tasks through, not gates passed, and a red batch gate holds no builder back): on the session's own
