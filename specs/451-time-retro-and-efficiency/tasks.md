@@ -368,3 +368,11 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T477 make arbiter-bundle TRIGGER= builds a bundle for a trigger id no guard owes, and the ruling recorded under it discharges nothing: the session derived red-gate@2026-11-27T09:39:16Z from the gate's Phase line where the landing's tripwire named red-gate@2026-11-27T09:39:13Z, the round arbiter ruled on the mis-keyed id (its bundle said '(not in arbiter-owed.json)'), and the next landing was refused for the real one - a 3-minute first pass and a second arbiter dispatch lost (2026-11-27); rust/gate/crates/arbiter/src/arbiter/bundle.rs: refuse a red-gate trigger that is not owed, naming the owed ones (make arbiter-bundle BATCH=1's list), or let the landing print the exact command
       research: rendering
+- [ ] T469 land::stop::tests::a_running_landing_is_sent_term waits unbounded on the sleep 30 it TERMs (rust/gate/crates/land/src/land/stop/tests.rs): started with TERM ignored the test is green at 30.0 s against 0.03 s plain, measured 2026-11-27 by T463 (the land test binary run --exact under bash trap '' TERM); fix: after stop's assertion poll child.try_wait() for at most 5 s, then child.kill() and assert the sleep ended by signal 15 (ExitStatusExt::signal), so a TERM that misses is red in seconds, not a silent 30 s
+      research: rendering
+- [ ] T470 T463's line also asks for libtest's per-test times (--report-time --format json under RUSTC_BOOTSTRAP=1) on a slow land test run, not built by T463 (rust/gate/crates/rustc/src/rustc/side.rs run_built, rustc.rs tested): measure first whether the flags change cargo's fingerprint of the test build (a rebuild a run) or only the binary's words, then add them to the watched runs where they do not
+      research: rendering
+- [x] T471 x Withdrawn 2026-11-27: filed by mistake: a builder's probe of task-add's output, no task
+      research: rendering
+- [ ] T473 nothing prunes the event-log directory's alive/ records that T463 writes (rust/gate/crates/rustc/src/rustc/alive.rs, at most 64 KiB each): a loaded run of any crate's tests past 30 s writes one, so the directory grows without bound; keep the newest N or those under M days, a GUESS knob, pruned where a record is written
+      research: rendering

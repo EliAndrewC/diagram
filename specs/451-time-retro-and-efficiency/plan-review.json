@@ -4146,6 +4146,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T463 (found by 451 T455, dev/measurements/2026-11-27/land-test-time/results.md sections 1 and 4: six green land test runs of 61 to 102 s, 58 to 93 s over same-time controls, not reproduced in 70 runs, measured 2026-11-27 - the next one is to be caught alive)": {
+   "sha256": "7b57ee686a35515d26cd49dea3a793d483e30ed84e6636f5bc87a5078550c168",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T463 Approach (checklist part A)": {
+   "sha256": "7456e04037d9e1dfdc4ac61981cdf834e5a29a883f15921bf812a299cab07f9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -38088,6 +38100,93 @@
      "why": "Same as T441: the earlier text is an empty skeleton with no decision in it, so its removal decides nothing the spec left open and narrows nothing asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T463 (found by 451 T455, dev/measurements/2026-11-27/land-test-time/results.md sections 1 and 4: six green land test runs of 61 to 102 s, 58 to 93 s over same-time controls, not reproduced in 70 runs, measured 2026-11-27 - the next one is to be caught alive)",
+    "### T463 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 alive record",
+     "summary": "A test program run past a bound has its live process/thread state (pid, parent, age, state, wait channel, cwd, cmdline, SigIgn/SigCgt, threads) written once to the event-log directory's alive/, for any crate",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for ... running tests' and his 2026-11-20 words counting measurement as performance work (FR-013): it explains where six slow green land test runs' 60-100 s went. Nothing the GM asked is removed."
+    },
+    {
+     "id": "D2 bound and cap knobs",
+     "summary": "AFTER 30 s and CAP 64 KiB as GUESS knobs with their why beside them; AFTER movable by L7R_RUST_ALIVE_MS through the tree's reader",
+     "class": "within",
+     "why": "Design parameters of the instrument; labeled GUESS with a measured why (green 1.9-12.3 s, slow 61-102 s). No request text bears on the values."
+    },
+    {
+     "id": "D3 non-blocking watch",
+     "summary": "A thread on recv_timeout beside child.wait(), ended by dropping the sender; nothing signalled, polled or waited on; a run inside its bound writes nothing",
+     "class": "within",
+     "why": "Keeps the run no slower (the performance purpose); mechanism choice, not scope."
+    },
+    {
+     "id": "D4 paths watched",
+     "summary": "Built binaries run directly (run_built) and a crate's cargo test (tested) are watched; doctests and builds are not",
+     "class": "within",
+     "why": "The GM's request names no live-state record and no set of runs it must cover; build and test seconds per crate are already FR-003's phase lines. Leaving doctests and builds unwatched drops nothing the GM or the spec asked for, and no defect is left."
+    },
+    {
+     "id": "D5 Phase line field",
+     "summary": "The crate's test Phase line takes \"alive\": \"<path>\" only where a record was written",
+     "class": "within",
+     "why": "Extends FR-003's per-crate test event line so the readers can find the record; additive."
+    },
+    {
+     "id": "D6 run.rs split",
+     "summary": "Program runs moved from rustc.rs to rustc/run.rs to keep rustc.rs under the 1,000-line bar",
+     "class": "within",
+     "why": "Required by constitution X clause 13 for a change this task makes; a move, no behavior change."
+    },
+    {
+     "id": "D7 lead test left, T469",
+     "summary": "land::stop::tests::a_running_landing_is_sent_term's unbounded wait on its sleep 30 is not fixed here; filed T469, lands before T435, after the record can catch the next slow run",
+     "class": "within",
+     "why": "The fix is not dropped: it is filed with its id, its reason and its order (FR-009's form), and lands before T435, so it is fixed within the step, not carried past it. The lead read shows an ignored TERM makes the binary red, so it is not shown to be the six slow runs' cause; ordering the instrument first so the fix does not mask what the record would show serves the GM's 'see where the time goes'."
+    },
+    {
+     "id": "D8 per-test times, T470",
+     "summary": "libtest per-test times (--report-time under RUSTC_BOOTSTRAP=1) asked by T463's line are not built here; filed T470, lands before T435, after measuring whether the flags rebuild the test build every run",
+     "class": "within",
+     "why": "The per-test times are on T463's line, which is the session's, not the GM's request or the accepted spec, and they are filed and ordered rather than dropped. Measuring the rebuild cost first is consistent with performance work going first. Nothing the GM asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T437-stub",
+     "summary": "Deletes an unfilled plan-section template headed T437 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "The block held only template placeholders and decided nothing; removing it drops no approach, step or scope the request or spec asked for."
+    },
+    {
+     "id": "remove-T440-stub",
+     "summary": "Deletes an unfilled plan-section template headed T440 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "Template placeholders only; its removal narrows nothing the GM asked for."
+    },
+    {
+     "id": "remove-T464-stub",
+     "summary": "Deletes an unfilled plan-section template headed T464 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "Template placeholders only; its removal narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -57962,6 +58061,62 @@
      "summary": "The section's own possessives (the section's/the task's/the block's D4, and the owner's T369's D1) are taken out too, where the possessive rule would read them as the spec's.",
      "class": "within",
      "why": "The same defect in another written form: these name the section's own decisions, so carrying the spec's same-numbered text is the wrong outcome D1 fixes. It completes the fix and widens nothing beyond it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T463": {
+   "section_sha256": "4024ac3d377e92b6f1128ccefcd456a9c69233909716cf7c8a5dc97248d8ae95",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 alive record",
+     "summary": "A test program run past a bound has its live process/thread state (pid, parent, age, state, wait channel, cwd, cmdline, SigIgn/SigCgt, threads) written once to the event-log directory's alive/, for any crate",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for ... running tests' and his 2026-11-20 words counting measurement as performance work (FR-013): it explains where six slow green land test runs' 60-100 s went. Nothing the GM asked is removed."
+    },
+    {
+     "id": "D2 bound and cap knobs",
+     "summary": "AFTER 30 s and CAP 64 KiB as GUESS knobs with their why beside them; AFTER movable by L7R_RUST_ALIVE_MS through the tree's reader",
+     "class": "within",
+     "why": "Design parameters of the instrument; labeled GUESS with a measured why (green 1.9-12.3 s, slow 61-102 s). No request text bears on the values."
+    },
+    {
+     "id": "D3 non-blocking watch",
+     "summary": "A thread on recv_timeout beside child.wait(), ended by dropping the sender; nothing signalled, polled or waited on; a run inside its bound writes nothing",
+     "class": "within",
+     "why": "Keeps the run no slower (the performance purpose); mechanism choice, not scope."
+    },
+    {
+     "id": "D4 paths watched",
+     "summary": "Built binaries run directly (run_built) and a crate's cargo test (tested) are watched; doctests and builds are not",
+     "class": "within",
+     "why": "The GM's request names no live-state record and no set of runs it must cover; build and test seconds per crate are already FR-003's phase lines. Leaving doctests and builds unwatched drops nothing the GM or the spec asked for, and no defect is left."
+    },
+    {
+     "id": "D5 Phase line field",
+     "summary": "The crate's test Phase line takes \"alive\": \"<path>\" only where a record was written",
+     "class": "within",
+     "why": "Extends FR-003's per-crate test event line so the readers can find the record; additive."
+    },
+    {
+     "id": "D6 run.rs split",
+     "summary": "Program runs moved from rustc.rs to rustc/run.rs to keep rustc.rs under the 1,000-line bar",
+     "class": "within",
+     "why": "Required by constitution X clause 13 for a change this task makes; a move, no behavior change."
+    },
+    {
+     "id": "D7 lead test left, T469",
+     "summary": "land::stop::tests::a_running_landing_is_sent_term's unbounded wait on its sleep 30 is not fixed here; filed T469, lands before T435, after the record can catch the next slow run",
+     "class": "within",
+     "why": "The fix is not dropped: it is filed with its id, its reason and its order (FR-009's form), and lands before T435, so it is fixed within the step, not carried past it. The lead read shows an ignored TERM makes the binary red, so it is not shown to be the six slow runs' cause; ordering the instrument first so the fix does not mask what the record would show serves the GM's 'see where the time goes'."
+    },
+    {
+     "id": "D8 per-test times, T470",
+     "summary": "libtest per-test times (--report-time under RUSTC_BOOTSTRAP=1) asked by T463's line are not built here; filed T470, lands before T435, after measuring whether the flags rebuild the test build every run",
+     "class": "within",
+     "why": "The per-test times are on T463's line, which is the session's, not the GM's request or the accepted spec, and they are filed and ordered rather than dropped. Measuring the rebuild cost first is consistent with performance work going first. Nothing the GM asked is narrowed."
     }
    ],
    "verdict": "CLEAR"

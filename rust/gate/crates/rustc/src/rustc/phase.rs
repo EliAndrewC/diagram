@@ -55,6 +55,18 @@ pub(super) fn wrote<P: AsRef<Path>>(
     began: SystemTime,
     code: i32,
 ) {
+    wrote_alive(world, step, manifests, began, code, None);
+}
+
+/// `wrote`, naming the record of a test run caught past its bound (`alive`, feature 451 T463, `alive.rs`) where there is one.
+pub(super) fn wrote_alive<P: AsRef<Path>>(
+    world: &World,
+    step: &str,
+    manifests: &[P],
+    began: SystemTime,
+    code: i32,
+    alive: Option<&Path>,
+) {
     let crates: Vec<String> = manifests.iter().map(|m| shown(world, m.as_ref())).collect();
     let mut row = phase_row(
         "rust",
@@ -72,6 +84,9 @@ pub(super) fn wrote<P: AsRef<Path>>(
     // a wait on a scratch slot directory is a measurement's own (feature 451 T426, `slot.rs`): marked, so the readers leave it out
     if world.slots.scratch && (step == slot::STEP || step == slot::USE) {
         row.insert("scratch".into(), json!(true));
+    }
+    if let Some(alive) = alive {
+        row.insert("alive".into(), json!(alive.display().to_string()));
     }
     let _ = append_row_with(&world.root, None, row, world.root.reader());
 }

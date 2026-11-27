@@ -13,6 +13,7 @@ use super::{
 use crate::checks::scratch;
 use l7r_shared::tempdir::{Held, TempDir};
 
+mod alive;
 mod alone;
 mod assertline;
 mod caller;

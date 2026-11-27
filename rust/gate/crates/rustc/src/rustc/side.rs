@@ -12,7 +12,7 @@ use std::path::{Path, PathBuf};
 
 use super::cover::{next, package_name, side_by_side};
 use super::kept::{has_doctests, Verdict};
-use super::{cargo_in, leak_checked, own, run_in, Ran, World};
+use super::{alive, cargo_in, leak_checked, own, run_seen, Ran, World};
 
 /// Each owed crate's test run, by manifest: the crates whose kept result does not stand and whose binaries the key's build named, run
 /// side by side.
@@ -55,6 +55,9 @@ pub(super) fn tests_side_by_side(
 fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran {
     let dir = manifest.parent().unwrap_or(Path::new("."));
     let began = std::time::SystemTime::now();
+    // each binary watched: one run past its bound recorded alive, the first record named on the line (`alive.rs`, feature 451 T463)
+    let bound = alive::Bound::of(world, manifest);
+    let mut caught = None;
     let ran = leak_checked(manifest, |tmp| {
         let target = world
             .target_override
@@ -88,7 +91,8 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
         words.extend(world.only.iter().cloned());
         let only: Vec<&str> = world.only.iter().map(String::as_str).collect();
         for exe in exes {
-            let ran = run_in(Some(dir), exe, &words, &env);
+            let (ran, got) = run_seen(Some(dir), exe, &words, &env, Some(&bound));
+            caught = caught.take().or(got);
             all.stdout.push_str(&ran.stdout);
             all.stderr.push_str(&ran.stderr);
             if ran.code != 0 {
@@ -108,6 +112,13 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
         }
         all
     });
-    super::phase::wrote(world, "test", &[manifest], began, ran.code);
+    super::phase::wrote_alive(
+        world,
+        "test",
+        &[manifest],
+        began,
+        ran.code,
+        caught.as_deref(),
+    );
     ran
 }

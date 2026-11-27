@@ -13,14 +13,13 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_shared::tempdir::TempDir;
 
 use crate::Reply;
 
+mod alive;
 mod assertline;
 mod cover;
 mod drain;
@@ -30,6 +29,7 @@ mod lint;
 mod only;
 mod phase;
 mod prewarm;
+mod run;
 mod runlock;
 mod side;
 mod slot;
@@ -40,6 +40,9 @@ use cover::uncovered_each;
 use kept::{content_ids, declared_reads, relative, verdict_key};
 use kept::{
     kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Reads, Told, Verdict,
+};
+use run::{
+    cargo, cargo_call, cargo_in, cargo_small, leak_checked, run, run_in, run_seen, tested, Ran,
 };
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
@@ -77,60 +80,6 @@ pub struct World {
     /// A `test` run's filter words (`--only`, `make rust-test ONLY=`, feature 451 T435, `only.rs`): handed to each test binary, the
     /// run kept as no crate's green and its `test` Phase line marked; empty for every other run.
     only: Vec<String>,
-}
-
-struct Ran {
-    code: i32,
-    stdout: String,
-    stderr: String,
-}
-
-fn run(program: &str, args: &[String], env: &BTreeMap<String, String>) -> Ran {
-    run_in(None, program, args, env)
-}
-
-/// `run`, from `dir` when one is given: cargo reads `.cargo/config.toml` (rust-lld, feature 449 T96) from its working directory up, so
-/// every cargo call runs from the tree's root, whatever directory started `l7r-gate rust`.
-fn run_in(
-    dir: Option<&Path>,
-    program: &str,
-    args: &[String],
-    env: &BTreeMap<String, String>,
-) -> Ran {
-    let mut command = Command::new(program);
-    if let Some(dir) = dir {
-        command.current_dir(dir);
-    }
-    // a crate's own tests read this tree-from-wrapper variable, and it is this run's, not theirs; the run ends at the program's exit,
-    // not at its pipes' end, which a process it left behind can hold (451 T364, `drain.rs`)
-    let started = command
-        .args(args)
-        .envs(env)
-        .env_remove("L7R_GATE_TREE")
-        .stdin(Stdio::null())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn();
-    match started {
-        Ok(mut child) => {
-            let out =
-                drain::Reader::start(child.stdout.take().unwrap_or_else(|| unreachable!("piped")));
-            let err =
-                drain::Reader::start(child.stderr.take().unwrap_or_else(|| unreachable!("piped")));
-            let status = child.wait();
-            let (stdout, stderr) = drain::ended(program, &out, &err);
-            Ran {
-                code: status.ok().and_then(|s| s.code()).unwrap_or(1),
-                stdout,
-                stderr,
-            }
-        }
-        Err(e) => Ran {
-            code: 127,
-            stdout: String::new(),
-            stderr: format!("cannot start {program}: {e}\n"),
-        },
-    }
 }
 
 fn own(words: &[&str]) -> Vec<String> {
@@ -171,101 +120,6 @@ fn crates(root: &Path, named: &[String]) -> Vec<PathBuf> {
     });
     found.sort();
     found
-}
-
-fn cargo(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
-    cargo_in(world, args, manifest, after, None)
-}
-
-/// A cargo call's words and its environment, as every cargo call of the checks has them: the manifest named, the tree's own target
-/// directory, its tests' `TMPDIR` set to `tmp` where one is given. One builder of both (feature 451 T316), so the pre-warm's test build
-/// (`prewarm.rs`) is the build a real run then finds fresh: a word or a variable apart and cargo would build the crate twice.
-fn cargo_call(
-    world: &World,
-    args: &[&str],
-    manifest: &Path,
-    after: &[&str],
-    tmp: Option<&Path>,
-) -> (Vec<String>, BTreeMap<String, String>) {
-    let mut all = own(args);
-    all.push("--manifest-path".to_owned());
-    all.push(manifest.display().to_string());
-    if !after.is_empty() {
-        all.push("--".to_owned());
-        all.extend(own(after));
-    }
-    let target = world
-        .target_override
-        .clone()
-        .unwrap_or_else(|| world.target.display().to_string());
-    let mut env = BTreeMap::from([("CARGO_TARGET_DIR".to_owned(), target)]);
-    if let Some(tmp) = tmp {
-        env.insert("TMPDIR".to_owned(), tmp.display().to_string());
-    }
-    (all, env)
-}
-
-/// `cargo`, its tests' `TMPDIR` set to `tmp` where one is given (`leak_checked`).
-fn cargo_in(
-    world: &World,
-    args: &[&str],
-    manifest: &Path,
-    after: &[&str],
-    tmp: Option<&Path>,
-) -> Ran {
-    let (all, mut env) = cargo_call(world, args, manifest, after, tmp);
-    // every cargo call that compiles holds a build slot for its length (feature 451 T284); `cargo fmt` compiles nothing
-    let _slot = (args.first() != Some(&"fmt")).then(|| slot::around(world, &all, &mut env));
-    run_in(Some(&world.root), &world.cargo, &all, &env)
-}
-
-/// `cargo`, for a test build or a lint pass told to compile its crate alone (feature 451 T347 and T355, `kept/alone.rs`): the small
-/// lane, or a wide slot free at that instant where the lane is held (feature 451 T425, `slot.rs`'s `around_small`), never a place
-/// in the wide queue.
-fn cargo_small(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
-    let (all, mut env) = cargo_call(world, args, manifest, after, None);
-    let _slot = slot::around_small(world, manifest, &all, &mut env);
-    run_in(Some(&world.root), &world.cargo, &all, &env)
-}
-
-/// THE LEAK PIN (feature 449 T101): a crate's tests run with their own `TMPDIR`, a fresh directory of this run, and anything a test
-/// leaves in it fails the crate, by name, with the fix. The checks and tests that never removed their scratch directories left about
-/// 329,000 of them, roughly 126 GB, in the GM's `/tmp` (2026-11-11).
-///
-/// The directory is under the temp directory itself, so a fixture check that knows a test by its `/tmp/` path still does. A SIGKILL
-/// cannot be caught, so a killed test's `Drop` never runs: this runner holds the directory in a `TempDir` and removes it whole after
-/// every run, so a killed test's leftovers go too (only a SIGKILL of the runner itself leaves its one directory).
-fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
-    let name = manifest
-        .parent()
-        .and_then(Path::file_name)
-        .unwrap_or_default();
-    let tmp = TempDir::new(&format!("rust-tests-{}", name.to_string_lossy()));
-    let mut done = go(&tmp);
-    let mut left: Vec<String> = std::fs::read_dir(&tmp)
-        .into_iter()
-        .flatten()
-        .flatten()
-        .map(|e| e.file_name().to_string_lossy().into_owned())
-        // the one directory a whole test process shares (`beside_binary`), which nothing in the process outlives to remove: it goes
-        // with this run's directory on the next line
-        .filter(|n| n != l7r_shared::tempdir::SHARED)
-        .collect();
-    drop(tmp);
-    if !left.is_empty() {
-        left.sort();
-        done.code = 1;
-        let _ = writeln!(
-            done.stderr,
-            "rust-checks: the tests left {} entr{} in their TMPDIR, which they must remove: {}\n  fix: hold the directory in an \
-             `l7r_shared::tempdir::TempDir` (`TempDir::new(tag)`, or `checks::scratch(tag)`) for as long as the test uses it, so \
-             its Drop removes it on a return, a `?` or a panic",
-            left.len(),
-            if left.len() == 1 { "y" } else { "ies" },
-            left.join(", ")
-        );
-    }
-    done
 }
 
 /// The cargo feature flags naming every feature of the crate but `left_out` (none when that leaves none).
@@ -446,15 +300,7 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
     match cmd {
         // told nothing, so each pass a wide slot: a run's lint is `stepped`'s, which hands the run's content ids on (`lint.rs`)
         "lint" => lint::linted(world, manifest, None),
-        "test" | "test-counters" | "test-no-counters" => {
-            let words = test_args(cmd, manifest, false);
-            let args: Vec<&str> = words.iter().map(String::as_str).collect();
-            // a filtered run's words after cargo's `--`, to every test binary (`only.rs`, feature 451 T435)
-            let only: Vec<&str> = world.only.iter().map(String::as_str).collect();
-            leak_checked(manifest, |tmp| {
-                cargo_in(world, &args, manifest, &only, Some(tmp))
-            })
-        }
+        "test" | "test-counters" | "test-no-counters" => tested(world, cmd, manifest).0,
         "hamlet" => {
             // `HAMLET_BIN` runs another of the crate's binaries, `HAMLET_DEV` it in the dev profile (feature 449 T224: the work-budget
             // review's Mode A counts, `l7r-mode-a` with its counters, whose dev build shares the test builds' dependencies - 19 s
@@ -552,13 +398,21 @@ fn stepped(
         }
     }
     let began = std::time::SystemTime::now();
-    let done = if cmd == "lint" {
-        lint::linted(world, manifest, inputs)
-    } else {
-        check(world, cmd, manifest, formatting_check)
+    let (done, caught) = match phase::step_of(cmd) {
+        _ if cmd == "lint" => (lint::linted(world, manifest, inputs), None),
+        // a test run past its bound is recorded alive, its record named on its line (`alive.rs`, feature 451 T463)
+        Some("test") => tested(world, cmd, manifest),
+        _ => (check(world, cmd, manifest, formatting_check), None),
     };
     if let Some(step) = phase::step_of(cmd) {
-        phase::wrote(world, step, &[manifest], began, done.code);
+        phase::wrote_alive(
+            world,
+            step,
+            &[manifest],
+            began,
+            done.code,
+            caught.as_deref(),
+        );
     }
     done
 }
