@@ -1678,29 +1678,56 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T52 (<why: the finding or measurement that files it>)
+### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `carry_done` (`rust/gate/crates/land/src/land/carry_done.rs`) still reads the done refs live
+  (`builder_done::to_carry`), but under `L7R_LANE_BATCH` (read through the landing's `Rooted`, so a test's own environment) it keeps
+  only the commits whose sha starts with a change the batch's `batch` line in `l7r-lane/lane.jsonl` (the git common directory)
+  names - the lane writes full shas, a short one matches too - and says the rest on one line, `land: lane batch <b>: left <n> done
+  commit(s) its batch line does not name, for a later batch (461 T52, D14): <shas>`, their refs kept for the lane's next batch. The
+  line is the LAST `batch` line naming the batch (a later `batch` line of the same id a new batch, as T49's reading and the lane's
+  `log::batches` take it); a torn line is skipped, as the lane skips it. A `landed` line of the batch after it ends it: a by-hand
+  `make land` with a done batch's id exported carries as before, never leaving its tasks' commits uncarried (round 2, the
+  advisor's probe of "a landing outside the lane is unchanged"); a `stop` naming the batch ends nothing, since the lane resumes it
+  - so T17's `"landed" | "stop"` rule is not copied, which would reopen the unbounded window on a resumed batch. Read in the land crate, not through the lane crate (which
+  builds on `task`), as `tree`'s `state::batch_open` (461 T17) reads it - a fourth small reader of the log, kept private rather than
+  making T17's helper public, which answers another question (open or not) and would put a second crate in this task. Of the
+  brief's two fixes ("carries nothing" or "only the batch line's shas") the second: it holds D14 whether or not the lane carried
+  first, and leaves `make land`'s carry the one that verifies a batch's commit is in HEAD. A batch no line names, or one a `landed` line
+  ended (the variable exported by hand, no log), is no lane batch and carries as before; a landing outside the lane is unchanged (the variable unset,
+  `batch_named` None before any read).
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/land ONLY="land::carry_done::tests"` on the old code): 5 passed,
+  1 failed - `a_lane_batch_carries_only_the_commits_its_batch_line_names` carried both T1's named commit and T2's unnamed one
+  (`notes/later.txt` in HEAD). Green: `land::carry_done::tests` 6 of 6; `make builder-checks CRATE="rust/gate/crates/land"` clean, the crate 221 of 221. The tests cover a short named sha carried beside an
+  unnamed one left (its ref kept, the line said), a log holding another batch's line and a torn line, a batch whose every waiting
+  commit is named (nothing said), and a batch no line names (both carried, nothing said). Round 2 (2026-11-27, the same
+  command with the `landed` arm made a no-op): 5 passed, 1 failed - `a_batch_no_line_names_carries_as_before`'s landed batch
+  carried only the named commit; after, 6 of 6, the batch line followed by a `stop` of it still filtering.
 
 ### T52 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A lane batch's landing lands exactly the hand-ins its `batch` line named; a task's later hand-in
+   waits for the next batch with its done ref, whatever window a resumed batch spans.
+2. **The constraints.** D14 (a batch takes its changes' shas when it forms; a later hand-in changes no open batch), D5 (the
+   batch's changes), data-model.md's batch and log line, T17's rule (the log read in the land crate without the lane crate), the
+   brief: a landing outside the lane unchanged; the land crate only (T14's closing half works in the lane crate).
+3. **Where each comes from.** R: tasks.md T52's line, data-model.md ("A batch takes its changes' shas when it forms"), T14's
+   build-half handoff decision 1; O: `carry_done` and `to_carry` read 2026-11-27, the red test.
+4. **Do they describe the world here?** Yes: the red test shows the old landing carrying an unnamed done commit under the
+   variable.
+5. **The order.** After T14's build half; before T22 (as the task's line says).
+6. **The exits.** Green: the carry_done tests and `make builder-checks CRATE="rust/gate/crates/land"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `carry_done` is `to_carry`'s one caller in the land crate; the lane's `runner/run.rs` sets
+   `L7R_LANE_BATCH` and writes the `batch` line before `make land`, read 2026-11-27.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red test green; in use, the lane's first real batch (T23) with a later hand-in of a batched task left
+   waiting, its `left` line in the attempt file.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A later hand-in landed under a batch that never named it, against D14: its gate run and NOTE are the
+    batch's, and the lane's ref deletion keeps its ref, so the lane would carry it again as an empty pick in the next batch.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 

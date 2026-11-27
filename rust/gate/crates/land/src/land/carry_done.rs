@@ -17,6 +17,15 @@
 //! lands in the landing worktree checked out at the clone's HEAD, which must already hold the carried commits (a carry run in that
 //! linked worktree would keep the ref, 451 T404); before the first pass, so its refusals - each task's tick check, 451 T294's named
 //! files - read the carried HEAD, every one of them asking git afresh (nothing of HEAD is read or cached before this step).
+//!
+//! A LANE BATCH CARRIES ONLY WHAT ITS BATCH LINE NAMED (461 T52, plan D14): under `L7R_LANE_BATCH` the done refs are still read live,
+//! but a commit is carried only where the batch's `batch` line in `l7r-lane/lane.jsonl` (the git common directory) names its sha,
+//! in full or shortened; the rest - a task's ref a later hand-in moved after the batch formed - are left, their refs kept, for a later
+//! batch, and said. WHY: the lane carries the batch's shas itself before `make land` (its `runner/run.rs`), so the live read carried
+//! the moved ref's NEW sha on top - a hand-in landed inside a batch that never named it, unbounded on a resumed batch. The line is
+//! read here, not through the lane crate, which builds on this one's neighbor `task` (as the `tree` crate's T17 reads it). A batch no
+//! line names, or one a `landed` line ended (the variable exported by hand, or no log), is no lane batch: the landing carries as
+//! before.
 
 use std::path::Path;
 
@@ -26,7 +35,27 @@ impl Land {
     /// Each done commit of `tasks` the landing tree's HEAD lacks, carried oldest first; 0 where all carried (or none waits), else 2
     /// with the stop said.
     pub(super) fn carry_done(&self, d: &Path, tasks: &[String]) -> Result<i32, String> {
-        let waiting = l7r_gate_task::builder_done::to_carry(&self.root, &name_of(d), tasks);
+        let mut waiting = l7r_gate_task::builder_done::to_carry(&self.root, &name_of(d), tasks);
+        let batch = self.root.var("L7R_LANE_BATCH");
+        if let Some(named) = batch_named(&self.root, &batch) {
+            let (kept, left): (Vec<_>, Vec<_>) = waiting.into_iter().partition(|(sha, _)| {
+                named
+                    .iter()
+                    .any(|n| !n.is_empty() && sha.starts_with(n.as_str()))
+            });
+            if !left.is_empty() {
+                let shorts: Vec<String> = left
+                    .iter()
+                    .map(|(sha, _)| sha.chars().take(10).collect())
+                    .collect();
+                self.say(&format!(
+                    "land: lane batch {batch}: left {} done commit(s) its batch line does not name, for a later batch (461 T52, D14): {}",
+                    left.len(),
+                    shorts.join(", ")
+                ));
+            }
+            waiting = kept;
+        }
         if waiting.is_empty() {
             return Ok(0);
         }
@@ -56,6 +85,41 @@ impl Land {
             Ok(0)
         })
     }
+}
+
+/// The changes the last `batch` line of `batch` in `l7r-lane/lane.jsonl` names, None where `batch` is empty, no line names it or a
+/// `landed` line of it follows (a batch done is no lane batch: a by-hand run naming it carries as before; a `stop` ends no batch, which
+/// the lane resumes); a line that does not parse is skipped, as the lane skips it.
+fn batch_named(root: &Path, batch: &str) -> Option<Vec<String>> {
+    if batch.is_empty() {
+        return None;
+    }
+    let common = l7r_shared::checks::common_dir(root);
+    let text = std::fs::read_to_string(common.join("l7r-lane/lane.jsonl")).unwrap_or_default();
+    let mut named = None;
+    for l in text
+        .lines()
+        .filter_map(|l| serde_json::from_str::<serde_json::Value>(l).ok())
+        .filter(|l| l["batch"] == batch)
+    {
+        match l["event"].as_str().unwrap_or_default() {
+            "batch" => {
+                named = Some(
+                    l["changes"]
+                        .as_array()
+                        .map(|c| {
+                            c.iter()
+                                .filter_map(|s| s.as_str().map(str::to_owned))
+                                .collect()
+                        })
+                        .unwrap_or_default(),
+                );
+            }
+            "landed" => named = None,
+            _ => {}
+        }
+    }
+    named
 }
 
 #[cfg(test)]

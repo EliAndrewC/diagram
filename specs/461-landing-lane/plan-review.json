@@ -486,6 +486,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)": {
+   "sha256": "0889cce0b209db2ac37ac5b8578a9789cec38978378d8f7a2d37a4c4ee6a0021",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T52 Approach (checklist part A)": {
+   "sha256": "089f0e6560d4aa826bf6a598b7555506efcbc066cd64af8aacb2f35a1ad4aa8f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3026,6 +3038,110 @@
      "why": "A free builder tree is one the drop takes. T49's refusal covers only the lane tree while the runner lives or a batch is open, so the builders' note is not the dead end and leaving it unchanged leaves no defect. Not touching the lane crate leaves nothing of the request undone."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)",
+    "### T52 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T52-1",
+     "summary": "Under L7R_LANE_BATCH, carry_done carries only the done commits whose sha the batch's `batch` line in l7r-lane/lane.jsonl names (short sha matches), leaves the rest with their refs kept for a later batch, and says them on one line.",
+     "class": "within",
+     "why": "Makes a lane batch land exactly the hand-ins it formed with (D14), which is what FR-003's lane taking hand-ins from the done refs in order requires; it drops no check (FR-008) and keeps make land's carry as the step that verifies a batch's commit reaches HEAD."
+    },
+    {
+     "id": "T52-2",
+     "summary": "The batch line read is the LAST `batch` line naming the batch; a torn line is skipped, as the lane's own reader does.",
+     "class": "within",
+     "why": "Matches the lane's own reading of its log (T49, log::batches), so the land crate and the lane agree on a batch's changes. Implementation detail inside what was asked."
+    },
+    {
+     "id": "T52-3",
+     "summary": "The log is read by a private reader in the land crate, not through the lane crate and not by making T17's batch_open helper public.",
+     "class": "within",
+     "why": "Code structure (T17's rule that the land crate reads the log without the lane crate). Narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T52-4",
+     "summary": "Of the brief's two fixes ('carries nothing' or 'only the batch line's shas'), take the second.",
+     "class": "within",
+     "why": "Both answer D14. The chosen one keeps make land's existing carry-and-verify in the path (FR-008), so it is no narrowing."
+    },
+    {
+     "id": "T52-5",
+     "summary": "A batch no line names (variable exported by hand, no log) carries as before; a landing outside the lane (variable unset) is unchanged.",
+     "class": "within",
+     "why": "Not an exception to D14. D14 governs batches the lane formed and logged, and a batch with no logged line has no named set to hold to. Leaving landings outside the lane as they are is FR-003/FR-008's 'existing make land checks ... unchanged', and is not behavior the GM asked to change."
+    },
+    {
+     "id": "T52-6",
+     "summary": "Exits and done: red-then-green carry_done tests and builder-checks for the land crate, with in-use confirmation at the lane's first real batch (T23).",
+     "class": "within",
+     "why": "Verification of the requested behavior only. Figures (5 passed / 1 failed, 6 of 6, 221 of 221) carry their date and command."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)",
+    "### T52 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T52-1 filter",
+     "summary": "Under L7R_LANE_BATCH, carry_done keeps only done commits whose sha matches a change the batch's batch line names (full or short prefix); the rest are left with their refs kept and named on one 'left' line for a later batch.",
+     "class": "within",
+     "why": "Carries D14 (a batch takes its changes' shas when it forms; a later hand-in changes no open batch) for FR-003's lane, which takes hand-ins from the done refs; nothing is dropped - the left commits keep their refs and land in the next batch through the same gate (FR-008)."
+    },
+    {
+     "id": "T52-2 which line",
+     "summary": "The LAST batch line naming the batch is read; a torn line is skipped, as the lane's log::batches does.",
+     "class": "within",
+     "why": "Reads the batch the same way the lane writes and reads it; settles nothing the request or spec asked otherwise."
+    },
+    {
+     "id": "T52-3 landed ends it",
+     "summary": "A landed line for the batch after its batch line ends the filter: a by-hand make land with a finished batch's id exported carries as before.",
+     "class": "within",
+     "why": "Keeps a landing outside the lane unchanged and never leaves a task's commits uncarried; FR-008 (nothing of the existing landing dropped). Restores existing behavior only where no lane batch is open, so it narrows no requested behavior."
+    },
+    {
+     "id": "T52-4 stop does not end it",
+     "summary": "A stop line naming the batch does not end the filter (the lane resumes the batch), so T17's landed|stop rule is not copied.",
+     "class": "within",
+     "why": "Keeps D14 holding over a resumed batch's whole window; widens, not narrows, the requirement's reach."
+    },
+    {
+     "id": "T52-5 private reader in land crate",
+     "summary": "The log is read by a small private reader in the land crate, not through the lane crate and not by making T17's state::batch_open public.",
+     "class": "within",
+     "why": "A placement and structure choice inside T17's rule (log read in the land crate without the lane crate); not a fidelity matter."
+    },
+    {
+     "id": "T52-6 fix chosen",
+     "summary": "Of the brief's two fixes ('carries nothing' or 'only the batch line's shas'), the second.",
+     "class": "within",
+     "why": "Both options were the brief's; the chosen one holds D14 whether or not the lane carried first and keeps make land's carry verifying a batch's commit is in HEAD, so no existing check is dropped (FR-008)."
+    },
+    {
+     "id": "T52-7 unnamed batch / unset variable",
+     "summary": "A batch id no batch line names, or the variable unset, carries as before.",
+     "class": "within",
+     "why": "The lane writes the batch line before make land (runner/run.rs, read 2026-11-27), so inside the lane every batch is named; the fallback is the unchanged landing outside the lane, which the brief and FR-008 require."
+    },
+    {
+     "id": "T52-8 done in use",
+     "summary": "Measured done is the red-then-green tests now; in use, the lane's first real batch (T23) with a later hand-in left waiting and its left line in the attempt file.",
+     "class": "within",
+     "why": "A verification schedule for the requested behavior; defers no requested part and leaves no known defect (Found and left: none)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3490,6 +3606,62 @@
      "summary": "The builders' own gone-from-disk note (take's, naming the drop) is left as it is, as is the drop (T49), and no lane-crate edit is made.",
      "class": "within",
      "why": "A free builder tree is one the drop takes. T49's refusal covers only the lane tree while the runner lives or a batch is open, so the builders' note is not the dead end and leaving it unchanged leaves no defect. Not touching the lane crate leaves nothing of the request undone."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T52": {
+   "section_sha256": "7c38192087f7b21293f34f5f4a08ddcab2f1f4dba332f1e70ddd917b6d4582c1",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T52-1 filter",
+     "summary": "Under L7R_LANE_BATCH, carry_done keeps only done commits whose sha matches a change the batch's batch line names (full or short prefix); the rest are left with their refs kept and named on one 'left' line for a later batch.",
+     "class": "within",
+     "why": "Carries D14 (a batch takes its changes' shas when it forms; a later hand-in changes no open batch) for FR-003's lane, which takes hand-ins from the done refs; nothing is dropped - the left commits keep their refs and land in the next batch through the same gate (FR-008)."
+    },
+    {
+     "id": "T52-2 which line",
+     "summary": "The LAST batch line naming the batch is read; a torn line is skipped, as the lane's log::batches does.",
+     "class": "within",
+     "why": "Reads the batch the same way the lane writes and reads it; settles nothing the request or spec asked otherwise."
+    },
+    {
+     "id": "T52-3 landed ends it",
+     "summary": "A landed line for the batch after its batch line ends the filter: a by-hand make land with a finished batch's id exported carries as before.",
+     "class": "within",
+     "why": "Keeps a landing outside the lane unchanged and never leaves a task's commits uncarried; FR-008 (nothing of the existing landing dropped). Restores existing behavior only where no lane batch is open, so it narrows no requested behavior."
+    },
+    {
+     "id": "T52-4 stop does not end it",
+     "summary": "A stop line naming the batch does not end the filter (the lane resumes the batch), so T17's landed|stop rule is not copied.",
+     "class": "within",
+     "why": "Keeps D14 holding over a resumed batch's whole window; widens, not narrows, the requirement's reach."
+    },
+    {
+     "id": "T52-5 private reader in land crate",
+     "summary": "The log is read by a small private reader in the land crate, not through the lane crate and not by making T17's state::batch_open public.",
+     "class": "within",
+     "why": "A placement and structure choice inside T17's rule (log read in the land crate without the lane crate); not a fidelity matter."
+    },
+    {
+     "id": "T52-6 fix chosen",
+     "summary": "Of the brief's two fixes ('carries nothing' or 'only the batch line's shas'), the second.",
+     "class": "within",
+     "why": "Both options were the brief's; the chosen one holds D14 whether or not the lane carried first and keeps make land's carry verifying a batch's commit is in HEAD, so no existing check is dropped (FR-008)."
+    },
+    {
+     "id": "T52-7 unnamed batch / unset variable",
+     "summary": "A batch id no batch line names, or the variable unset, carries as before.",
+     "class": "within",
+     "why": "The lane writes the batch line before make land (runner/run.rs, read 2026-11-27), so inside the lane every batch is named; the fallback is the unchanged landing outside the lane, which the brief and FR-008 require."
+    },
+    {
+     "id": "T52-8 done in use",
+     "summary": "Measured done is the red-then-green tests now; in use, the lane's first real batch (T23) with a later hand-in left waiting and its left line in the attempt file.",
+     "class": "within",
+     "why": "A verification schedule for the requested behavior; defers no requested part and leaves no known defect (Found and left: none)."
     }
    ],
    "verdict": "CLEAR"

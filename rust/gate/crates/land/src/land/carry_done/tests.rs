@@ -141,3 +141,82 @@ fn a_dirty_clone_carries_before_it_lands_alone() {
     assert!(carried < alone);
     assert!(fx.root.join("notes/built.txt").is_file());
 }
+
+/// The lane's batch line `449-1` naming `changes`, in the clone's `l7r-lane/lane.jsonl`, after a line of another batch and a torn
+/// line, and followed by a `stop` of it, which ends no batch (the lane resumes it).
+fn batch_line(fx: &Fx, changes: &[&str]) {
+    let dir = fx.root.join(".git/l7r-lane");
+    std::fs::create_dir_all(&dir).unwrap();
+    let lines = [
+        serde_json::json!({"event": "batch", "batch": "449-0", "changes": ["0000000000"]})
+            .to_string(),
+        "not json".to_owned(),
+        serde_json::json!({"event": "batch", "batch": "449-1", "changes": changes}).to_string(),
+        serde_json::json!({"event": "stop", "batch": "449-1", "why": "red"}).to_string(),
+    ];
+    std::fs::write(dir.join("lane.jsonl"), lines.join("\n") + "\n").unwrap();
+}
+
+/// RED FIRST (461 T52, D14): a lane batch's landing carries only the shas its batch line named - T1's, named short, is carried; T2's
+/// ref, moved by a hand-in after the batch formed, is left waiting for the next batch, its commit never in this one.
+#[test]
+fn a_lane_batch_carries_only_the_commits_its_batch_line_names() {
+    let mut fx = fx("carry-done-lane");
+    let tree = side(&fx);
+    let named = kept(&fx, &tree, "T1", "notes/named.txt", 1_600_000_000);
+    let later = kept(&fx, &tree, "T2", "notes/later.txt", 1_700_000_000);
+    batch_line(&fx, &[&named[..10]]);
+    fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &[("L7R_LANE_BATCH", "449-1")]);
+    *fx.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
+    assert_eq!(landed(&fx, &["T1", "T2"]), Ok(2));
+    assert_eq!(fx.subjects(), "notes/named.txt");
+    let out = fx.said().0;
+    has(&out, &format!("land: lane batch 449-1: left 1 done commit(s) its batch line does not name, for a later batch (461 T52, D14): {}\n", &later[..10]));
+    has(&out, "land: carrying 1 done commit(s) of T1 T2");
+    assert_eq!(waiting(&fx.root), "refs/l7r/done/449-T2");
+    // every waiting commit named: nothing left, nothing said of it
+    let mut all = super::super::tests::fx("carry-done-lane-all");
+    let tree = side(&all);
+    let one = kept(&all, &tree, "T1", "notes/one.txt", 1_600_000_000);
+    batch_line(&all, &[&one]);
+    all.land.root = l7r_shared::env::Rooted::with(all.root.clone(), &[("L7R_LANE_BATCH", "449-1")]);
+    *all.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
+    assert_eq!(landed(&all, &["T1"]), Ok(2));
+    assert!(!all.said().0.contains("lane batch"));
+    assert_eq!(all.subjects(), "notes/one.txt");
+}
+
+/// A batch no line of `lane.jsonl` names (the variable exported by hand, or no log), or one a `landed` line ended, is no lane batch:
+/// the landing carries as before.
+#[test]
+fn a_batch_no_line_names_carries_as_before() {
+    let mut fx = fx("carry-done-lane-none");
+    let tree = side(&fx);
+    kept(&fx, &tree, "T1", "notes/a.txt", 1_600_000_000);
+    kept(&fx, &tree, "T2", "notes/b.txt", 1_700_000_000);
+    fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &[("L7R_LANE_BATCH", "449-9")]);
+    *fx.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
+    assert_eq!(landed(&fx, &["T1", "T2"]), Ok(2));
+    assert_eq!(fx.subjects(), "notes/b.txt\nnotes/a.txt");
+    assert!(!fx.said().0.contains("lane batch"));
+    // a batch a `landed` line ended is no lane batch either: a by-hand run naming it carries every waiting commit
+    let mut done = super::super::tests::fx("carry-done-lane-landed");
+    let tree = side(&done);
+    let one = kept(&done, &tree, "T1", "notes/one.txt", 1_600_000_000);
+    kept(&done, &tree, "T2", "notes/two.txt", 1_700_000_000);
+    batch_line(&done, &[&one]);
+    let log = done.root.join(".git/l7r-lane/lane.jsonl");
+    let landed_line =
+        serde_json::json!({"event": "landed", "batch": "449-1", "landed": [&one]}).to_string();
+    std::fs::write(
+        &log,
+        std::fs::read_to_string(&log).unwrap() + &landed_line + "\n",
+    )
+    .unwrap();
+    done.land.root =
+        l7r_shared::env::Rooted::with(done.root.clone(), &[("L7R_LANE_BATCH", "449-1")]);
+    *done.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
+    assert_eq!(landed(&done, &["T1", "T2"]), Ok(2));
+    assert_eq!(done.subjects(), "notes/two.txt\nnotes/one.txt");
+    assert!(!done.said().0.contains("lane batch"));
+}
