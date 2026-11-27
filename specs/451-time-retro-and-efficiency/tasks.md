@@ -369,3 +369,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T482 make arbiter-ruled records a ruling on a red-gate trigger no guard owes (rust/gate/crates/arbiter/src/arbiter.rs ruling_at reads core::owed only for the row's fields): red-gate@2026-11-27T09:39:16Z was ruled at 09:45:54Z though arbiter-owed.json held only 09:39:13Z, so the ruling discharged nothing (451 arbiter.jsonl row 73); make arbiter-bundle refuses such an id since T477, the ruling's own door does not - refuse it there too, naming the owed red-gate keys; the arbiter tests' ruled-batch of an unowed red-gate@2 (arbiter/tests.rs) changes with it
       research: rendering
+- [ ] T483 the gate-write refusal's wording failed message-check BREVITY (key 0f7f266f923e6e4f, 453 characters, 2026-11-27): '(feature 385, plan D13; escape GATE_WRITE_OK="<reason>")' to '(escape: GATE_WRITE_OK="<reason>", two words or more)' and 'its exit is the notification' cut, in rust/guard/src/guards/gate_write_hooks.rs - every rendering of it is BASELINE in dev/guard-messages.tsv (9 keys), so the cut re-renders and reviews them all
+      research: rendering

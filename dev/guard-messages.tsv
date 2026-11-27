@@ -25,6 +25,7 @@ key	verdict	chars	guard	kind	by	over	head
 0deb8d12a57742e1	BASELINE	381	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an override supplied on the command line, which skips the prompt
 0e945bc2441b0107	BASELINE	204	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new question file takes a RESERVED prefix, so parallel queues
 0ed550b91a5e9ee2	BASELINE	855	static-runs-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (static-runs, the closing step's order - feature N TN): `make static`
+0f7f266f923e6e4f	BASELINE	453	gate-write-hooks	refuse	unreviewed - message-check a02ac623b053dacd2: FAIL on brevity, the wording every other gate-write rendering carries as BASELINE; the cut filed		BLOCKED (gate-write): a shell write of a.txt (`cp <path> <path>`) while this
 0f85a32f3267ad53	PASS	626	workflow-hooks	refuse	ac1df8d661090ad85		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a'})
 0fc9a30737267a71	BASELINE	158	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: unit a: verify step N needs a prompt and an agentType
 100e4b5341077d8e	BASELINE	305	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an ad-hoc agent() call names no model: agent('summarize the file', {label:
