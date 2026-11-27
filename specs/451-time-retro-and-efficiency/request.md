@@ -415,3 +415,19 @@ are in `docs/process-decisions.md`, "Declined so far", THE PRINCIPLE.
 > we should make sure to fix all of this as part of our tasking that we are doing before resuming our port. But after we talk about the most efficient way to parallelize.
 
 <!-- END SOURCE -->
+
+## 2026-11-27: the go-ahead for the worktree and parallel-building tasks, and usage
+
+Recorded by the coordinating session from the GM's messages of 2026-11-27 (about 01:40 and 03:15 UTC). The session had sorted
+the feature's open tasks and named nine of the worktree and parallel-building group "load-bearing" and about sixteen
+"refinements".
+
+<!-- SOURCE: GM NOTES -->
+
+> Okay, sounds good. Well, go ahead and do all of the load-bearing ones. And then I think that the other sixteen refinements are probably also worth doing, So go ahead and tackle those as soon as you are done with the load-bearing ones. after you're done with all of that, we can talk about how to proceed and as you say, if we change the main session to become an orchestrator, then that might change some of the other things, So that is worth a discussion before we do it, though I think that if you are able to do whatever, I don't know, research or what have you would help inform that discussion in advance, then that would be useful, and I would appreciate that. Thanks. I'm stepping away for a while, so you should have a bit of time to make all of this happen. Thanks.
+
+> Don't worry about the rate of us consuming usage - I have more resets available in this account which I have been saving for my week off so I'd rather maximize productivity than conserve tokens by slowing down.
+
+> (Of course when I say "don't worry about conserving tokens" then obviously I mean "don't slow down in order to conserve tokens - efficient use of tokens is a huge project goal, haha.)
+
+<!-- END SOURCE -->
