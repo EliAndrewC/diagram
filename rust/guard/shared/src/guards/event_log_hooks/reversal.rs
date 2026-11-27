@@ -95,7 +95,8 @@ impl Kept<'_> {
 }
 
 /// Whole lines of the log (no line cut at either end): each line holding `key` handed to `on` once.
-fn lines(key: &Finder, text: &[u8], whole: bool, on: &mut impl FnMut(&[u8], bool)) {
+/// Its callback is `dyn`, so the scan is one function, not one per caller's closure type (each of which coverage judges apart).
+fn lines(key: &Finder, text: &[u8], whole: bool, on: &mut dyn FnMut(&[u8], bool)) {
     let mut done = 0;
     // a memchr search, not a regex - it cannot err - through memmem's free function, which the regex-scan check does not read as a scan
     for at in memchr::memmem::find_iter(text, key.needle()) {
