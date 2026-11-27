@@ -720,32 +720,64 @@ engine speed, so the performance checklist does not apply.
 <!-- plan-archive: T08 to T08 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T10 (<why: the finding or measurement that files it>)
+### T10 (phase 1's measurement on real work, US2 and SC-002: the hand-in in use since T43 landed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A measurement script, `dev/measurements/2026-11-27/461-t10-phase1/phase1.py`, reuses T02's `night-figures.py`
+  for the landings, the pool replay and the load, so the after figures count as the night's did. Its record is that
+  directory's `results.md`; nothing in the engine or the tooling changed.
+  - **Windows.** 19:57:00Z (T08 and T43 landed, 19:56:47Z) to 23:03:20Z (before this task's take), 3.11 h, and 21:06:47Z (T44
+    landed) to 23:03:20Z beside it (observed 2026-11-27, method: the event log's `make land` end rows and the pool log).
+  - **Hand-ins.** 27 pool `done` rows, all `"handed_in": true`, all run by a builder and none by the coordinator, on 22 tasks or
+    bundles; 21:06Z on, 22 on 18 (observed 2026-11-27, method: `phase1.py figures` over the kept extracts,
+    `output-1957-2303.txt` and `output-2106-2303.txt`, each done row joined to the builder-done call that wrote it).
+  - **Refused at hand-in.** Of 34 builder calls, 7 handed nothing in, on 7 of 23 tasks. 4 were conflicts and 3 first-pass
+    refusals: a ledger row, a feature-close report, and a plan review owed. Each named its fixing command or its paths. 3 of 4
+    conflicts were resolved by the builder that met them, the fourth by a fresh closing half from a handoff, and none by the
+    coordinator. No hand-in ran a coverage step (observed 2026-11-27, method: the same outputs; the outcomes and reasons from
+    the calls' own tool results in the subagent transcripts, found by call id, a second source the logs cannot give).
+  - **What the logs cannot show.** The event log's foreground tool rows carry no exit code, and the pool log writes nothing on
+    a refused or conflicted hand-in. So the logs show that a call handed nothing in, never why, and never a conflict resolved.
+  - **Landings refused before a gate.** 0 of 7 attempts (5 landed, 2 gates red) over 19:57Z on, and 0 of 4 over 21:06Z on,
+    against the night's 17 of 39. Trees held were 2.94 and 3.02 against 3.19, and the median load 9.4 and 10.3 against 14.1
+    on 22 cores (observed 2026-11-27, method: `night-figures.py`'s `landings()` and replay through `phase1.py`, the night's
+    from T02's record). The window is not LIKE the night, 3.11 h long with its load below 10.6, and seven attempts agree with
+    US2's "well under" without establishing it: at an 11% rate, none in seven comes 44% of the time (observed 2026-11-27,
+    method: 0.89^7, the likeness rule of `night-figures.py`).
+  - **The one real hand-in.** This task's own, a measurement's under T44's rule. Its outcome is in the builder's report, since
+    the record it commits cannot hold it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: a measurement, no engine or tooling code | - | - | - | - |
 
 ### T10 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Phase 1's after figures (hand-ins, refusals at hand-in and their causes, conflicts a builder
+   resolved, landings refused before a gate) recorded with their concurrency, re-derivable from kept extracts.
+2. **The constraints.** US2 and SC-002; FR-010 (every figure beside its concurrency); T02's counting rule for landings.
+3. **Where each comes from.** R: the spec's US2, SC-002 and FR-010; T02's record. O: this task's runs.
+4. **Do they describe the world here?** Measured on the pool log, the event log, the sampler and the transcripts over the
+   windows above (observed 2026-11-27, method: `phase1.py`; live and kept runs agree but for the transcript outcomes).
+5. **The order.** After T08, T43 and T44 landed; before T31, which reads the like window.
+6. **The exits.** Green: the record written and its counts re-derived from its outputs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the logs' gaps are named, and the transcripts fill them as a labeled second source.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `results.md` with the outputs it cites, the figures re-derived by the commands it lists.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: a measurement, no fix.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The likeness test's trees held counts the lane's own worktree, adopted `lane` at 21:08:09Z and never released, as a held
+  builder tree: 3.55 against 2.94 over 19:57Z on, and the sampler's `held` lists `lane` in 215 of 1,065 samples (observed
+  2026-11-27, method: `phase1.py` with and without the lane tree, and each sample's `held` against the replay). T31's like
+  window would read about one tree high. Not fixed here: a measurement changes no tooling. Filed as T59; lands before T31.
+- A build half's hand-in is refused for the feature-close ask, which only its closing half can answer: 451 T537's build half at
+  22:06:03Z (observed 2026-11-27, method: that call's tool result). T44 puts off a build half's plan asks by its kind, but not
+  this one. Not fixed here: a measurement changes no tooling. Filed as T60; lands before T31.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes - a measurement of where the landings' and the hand-ins' time and refusals go (451 FR-013: a
+measurement task counts).
 
 ### T11 (D2, D8, D15: phase 2's first task, the lane crate and its log, which T12-T22 build on)
 
@@ -2192,6 +2224,60 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 |---|---|---|---|---|
 
 ### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T59 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T60 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T60 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

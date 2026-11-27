@@ -1,0 +1,64 @@
+# 461 T10: phase 1 on real work, 2026-11-27T19:57:00Z to 2026-11-27T23:03:20Z (3.11 h wall)
+source: the kept extracts in dev/measurements/2026-11-27/461-t10-phase1/kept
+
+## Hand-ins (the pool log's `done` rows; who ran each from the event log's builder-done call)
+pool done rows: 27, of them `"handed_in": true`: 27
+  run by a builder: 27; run by the coordinator: 0; done rows no call explains: 0
+  distinct tasks (or bundles) handed in: 22; handed in more than once: 451 T537 x2, 461 T12 x3, 461 T14 x2, 461 T20 x2
+
+## builder-done calls that handed nothing in (a call with no `done` row of its task in its span)
+builder calls: 34; handed in: 27; handed nothing in: 7 (21% of calls)
+  tasks whose builder ran it: 23; of them with at least one call that handed nothing in: 7
+  20:28:08 451 T531 by aed816cf: conflict; then handed in 20:37:10 by another agent
+      by hand: rust/gate/crates/measure/src/measure/task_time.rs, rust/gate/crates/measure/src/measure/task_time/beside.rs, rust/gate/crates/measure/src/measure/task_time/sized_tests.rs, rust/gate/crates/measure/src/measure/task_time/turns.rs, rust/gate/crates/measure/src/measure/where_time/columns.rs, rust/gate/crates/measure/src/measure/where_time/columns/spent.rs
+      by rule: specs/451-time-retro-and-efficiency/plan-review.json
+  21:22:24 461 T17 by a204b8e9: first-pass refusal; then handed in 21:23:21 by the same builder
+      review passes with no ledger row - make ledger-owed WRITE="<where you recorded what you did>"
+  21:26:17 461 T12 by a5070889: conflict; then handed in 21:27:29 by the same builder
+      by hand: specs/461-landing-lane/tasks.md
+      by rule: specs/461-landing-lane/plan-review.json
+  21:49:55 461 T14 by a0f585d7: conflict; then handed in 21:53:08 by the same builder
+      by hand: rust/gate/crates/lane/src/runner/tests.rs
+      by rule: specs/461-landing-lane/plan.md, specs/461-landing-lane/tasks.md
+  22:06:03 451 T537 by a95f7064: first-pass refusal; then handed in 22:44:14 by another agent
+      rust-checks: format clean on 7 crate(s)
+      audit-register: 44 entries well formed; the delta's 0 mechanism(s) each named by one
+      hand-in: refused by the first pass - nothing committed, the work applied onto /diagram/.clones/diagram-backlog-t271's base fa0c5e1bf8 uncommitted; answer each, then run it again (make builder-done T=T
+      T537: tick: refused - this tick would close the feature, and:
+      451-time-retro-and-efficiency has no report.md - `make feature-report F=451 WRITE=1` writes it (FR-009)
+      review passes with no ledger row - make ledger-owed WRITE="<where you recorded what you did>"
+  22:26:49 461 T15 by a98b6a79: conflict; then handed in 22:34:45 by the same builder
+      by hand: rust/gate/crates/lane/src/lib.rs, rust/gate/crates/lane/src/runner/run.rs
+      by rule: rust/gate/CLAUDE.md
+  22:58:26 462 T371 by a393b439: first-pass refusal; not handed in since
+      T371: tick: refused - tick: refused - 462-efficiency-backlog's plan decisions have no current CLEAR review (feature 243).
+      3 block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): preamble, ## Summary, ## Task sections - `make plan-delta F=<n>` builds the review of those blocks alone
+  outcomes (the transcripts, a second source): conflict 4, first-pass refusal 3
+  conflicts: 4; resolved and handed in by the same builder: 3
+  the handed-in calls' own outcome, cross-check: handed in 27
+  what the hand-ins ran (the event log's Phase rows written under make builder-done): map cached 110, map generate 35, map page 30, map render 30; a coverage step (rust cover-build or cover-run): 0
+
+## Landing attempts (the event log's `make land` rows; night-figures.py landings())
+attempts: 7
+landed: 5
+landed, gate ran: 5
+landed, no gate (nothing owed one): 0
+refused before a gate: 0
+gate red: 2
+gate green, refused after it (tick or push): 0
+  19:57:26 diagram-backlog landed=True gate=0 (0 s) tasks=T519 T527 T523 T535 T528 T529
+  21:07:55 diagram-backlog landed=True gate=0 (0 s) tasks=T513 T514 T531 T532
+  21:52:03 diagram-backlog landed=True gate=0 (0 s) tasks=T536
+  21:02:50 diagram-backlog landed=False gate=1 (232 s) tasks=T44 T11 T13
+  21:06:46 diagram-backlog landed=True gate=0 (132 s) tasks=T44 T11 T13
+  21:50:26 diagram-backlog landed=True gate=0 (417 s) tasks=T12 T09 T48 T17 T45
+  22:41:34 diagram-backlog landed=False gate=1 (245 s) tasks=T49 T50 T14 T52 T46 T51 T54 T55 T53
+tasks landed by those attempts: 19
+
+## Concurrency (FR-010)
+trees held, time-weighted (pool log, the lane tree left out): 2.94; with it: 3.55
+tree-hours held: 9.12 - diagram-backlog-b1 0.89 h (29%), diagram-backlog-t269 2.85 h (92%), diagram-backlog-t270 2.57 h (83%), diagram-backlog-t271 2.81 h (90%)
+sampler: 1065 samples, 2026-11-27T19:57:01Z to 2026-11-27T23:03:15Z, 1 gap(s) over 120 s
+median load: 9.4 on 22 cores (0.43x)
+cross-check, the sampler's held: mean 3.18, median 3
+LIKE the night (night-figures.py's rule: >= 8.0 h wall, trees held 3.19 +- 0.5, load 14.1 x (0.75, 1.25)): no

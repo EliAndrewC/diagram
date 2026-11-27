@@ -606,6 +606,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T10 (phase 1's measurement on real work, US2 and SC-002: the hand-in in use since T43 landed)": {
+   "sha256": "986ebfecdce0a6caae6943950b09c00a5d9f33ed670510106869e5037bfdcafb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "4ab6b4b1d8dce7ed8cc05bccdd94ff23e02ef26acd13d722955abdd61746b02d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3721,6 +3733,64 @@
      "why": "In phase 2 this is a hang, so it is a defect. It is not live in phase 1: such hand-ins are landed by hand there, and staying quiet is correct, because calling them dead would add wakes FR-005 does not list. The defect only appears once T22 flips the base. The block files T56 to land with T22, before T23 runs the real batch. Legitimate on that ordering condition: T56 must land no later than T22."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T10 (phase 1's measurement on real work, US2 and SC-002: the hand-in in use since T43 landed)",
+    "### T10 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-method",
+     "summary": "A measurement script under dev/measurements reuses T02's night-figures.py for landings, pool replay and load, so after figures count as the night's did; no engine or tooling change.",
+     "class": "within",
+     "why": "SC-002 and FR-010 ask for after figures comparable with the night's; reusing T02's counting rule is what makes them comparable. Changes nothing the spec settles."
+    },
+    {
+     "id": "T10-windows",
+     "summary": "Measures over 19:57Z-23:03Z (3.11 h, after T08/T43) and 21:06Z-23:03Z (after T44), states trees held and load beside each against the night's 3.19 and 14.1, and says outright the window is not a LIKE window and seven attempts agree with SC-002's 'well under' without establishing it.",
+     "class": "within",
+     "why": "FR-010 requires every before-and-after figure beside both windows' concurrency; the block does that and does not declare SC-002 met on a short, unlike window, leaving the like-window reading to T31, so nothing asked is narrowed. One note, not a ruling: the block's night baseline is T02's record (17 of 39, beside the 3.19 trees held of FR-010's 04:30Z-14:29Z window) while SC-002 names 19 of 50; 0 of 7 is under either, and results.md should say which window each night figure is over."
+    },
+    {
+     "id": "T10-handin-figures",
+     "summary": "Records hand-ins, refusals at hand-in by cause, whether each refusal named its fixing command, who resolved conflicts, and that no hand-in ran coverage.",
+     "class": "within",
+     "why": "Each figure is a clause of SC-002 (refused at hand-in with its fixing command, runs no coverage) or of the sketch's item 2 (conflicts fixed by the builder with the context)."
+    },
+    {
+     "id": "T10-second-source",
+     "summary": "Names what the event and pool logs cannot show (exit codes, refused or conflicted hand-ins) and fills it from the subagent transcripts as a labeled second source.",
+     "class": "within",
+     "why": "Serves the measurement SC-002 asks for; a stated gap filled by a labeled source, not a scope change."
+    },
+    {
+     "id": "T10-own-handin",
+     "summary": "This task's own hand-in is reported in the builder's report because the committed record cannot hold its outcome.",
+     "class": "within",
+     "why": "A reporting placement; changes nothing asked."
+    },
+    {
+     "id": "T10-found-T59",
+     "summary": "The likeness test counts the lane's own worktree as a held builder tree (3.55 vs 2.94); T10's own figures exclude it, and the tooling fix is filed as T59, landing before T31.",
+     "class": "within",
+     "why": "Not a narrowing: T10's figures are already corrected for it, and the fix is in the feature's own task list ordered before the like-window measurement it would distort, so no known defect is carried into the step it affects."
+    },
+    {
+     "id": "T10-found-T60",
+     "summary": "A build half's hand-in is refused for the feature-close ask only its closing half can answer (a check refusing correct work); filed as T60, landing before T31.",
+     "class": "within",
+     "why": "A defect, and it is not left: it is filed in this feature and ordered before T31, the next step whose figures it would affect. A measurement task changing no tooling is the task's own stated scope, not a cut to what the GM asked."
+    },
+    {
+     "id": "T10-exits-and-perf",
+     "summary": "Green/red exits (red through make arbiter-ask), one-landing budget, tagged performance work as a measurement under 451 FR-013.",
+     "class": "within",
+     "why": "451 FR-013 counts measurement of where the time goes as performance work; exits and budget decide nothing the spec left open in a way that narrows it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4331,6 +4401,62 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "In phase 2 this is a hang, so it is a defect. It is not live in phase 1: such hand-ins are landed by hand there, and staying quiet is correct, because calling them dead would add wakes FR-005 does not list. The defect only appears once T22 flips the base. The block files T56 to land with T22, before T23 runs the real batch. Legitimate on that ordering condition: T56 must land no later than T22."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T10": {
+   "section_sha256": "dc25ff474b30cdc54453f692dc997104d6c26602b81bd62cfbb76a99e88e711e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T10-method",
+     "summary": "A measurement script under dev/measurements reuses T02's night-figures.py for landings, pool replay and load, so after figures count as the night's did; no engine or tooling change.",
+     "class": "within",
+     "why": "SC-002 and FR-010 ask for after figures comparable with the night's; reusing T02's counting rule is what makes them comparable. Changes nothing the spec settles."
+    },
+    {
+     "id": "T10-windows",
+     "summary": "Measures over 19:57Z-23:03Z (3.11 h, after T08/T43) and 21:06Z-23:03Z (after T44), states trees held and load beside each against the night's 3.19 and 14.1, and says outright the window is not a LIKE window and seven attempts agree with SC-002's 'well under' without establishing it.",
+     "class": "within",
+     "why": "FR-010 requires every before-and-after figure beside both windows' concurrency; the block does that and does not declare SC-002 met on a short, unlike window, leaving the like-window reading to T31, so nothing asked is narrowed. One note, not a ruling: the block's night baseline is T02's record (17 of 39, beside the 3.19 trees held of FR-010's 04:30Z-14:29Z window) while SC-002 names 19 of 50; 0 of 7 is under either, and results.md should say which window each night figure is over."
+    },
+    {
+     "id": "T10-handin-figures",
+     "summary": "Records hand-ins, refusals at hand-in by cause, whether each refusal named its fixing command, who resolved conflicts, and that no hand-in ran coverage.",
+     "class": "within",
+     "why": "Each figure is a clause of SC-002 (refused at hand-in with its fixing command, runs no coverage) or of the sketch's item 2 (conflicts fixed by the builder with the context)."
+    },
+    {
+     "id": "T10-second-source",
+     "summary": "Names what the event and pool logs cannot show (exit codes, refused or conflicted hand-ins) and fills it from the subagent transcripts as a labeled second source.",
+     "class": "within",
+     "why": "Serves the measurement SC-002 asks for; a stated gap filled by a labeled source, not a scope change."
+    },
+    {
+     "id": "T10-own-handin",
+     "summary": "This task's own hand-in is reported in the builder's report because the committed record cannot hold its outcome.",
+     "class": "within",
+     "why": "A reporting placement; changes nothing asked."
+    },
+    {
+     "id": "T10-found-T59",
+     "summary": "The likeness test counts the lane's own worktree as a held builder tree (3.55 vs 2.94); T10's own figures exclude it, and the tooling fix is filed as T59, landing before T31.",
+     "class": "within",
+     "why": "Not a narrowing: T10's figures are already corrected for it, and the fix is in the feature's own task list ordered before the like-window measurement it would distort, so no known defect is carried into the step it affects."
+    },
+    {
+     "id": "T10-found-T60",
+     "summary": "A build half's hand-in is refused for the feature-close ask only its closing half can answer (a check refusing correct work); filed as T60, landing before T31.",
+     "class": "within",
+     "why": "A defect, and it is not left: it is filed in this feature and ordered before T31, the next step whose figures it would affect. A measurement task changing no tooling is the task's own stated scope, not a cut to what the GM asked."
+    },
+    {
+     "id": "T10-exits-and-perf",
+     "summary": "Green/red exits (red through make arbiter-ask), one-landing budget, tagged performance work as a measurement under 451 FR-013.",
+     "class": "within",
+     "why": "451 FR-013 counts measurement of where the time goes as performance work; exits and budget decide nothing the spec left open in a way that narrows it."
     }
    ],
    "verdict": "CLEAR"
