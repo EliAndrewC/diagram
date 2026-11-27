@@ -127,7 +127,7 @@ for that batch with the conflict or the gate's output - never a standing integra
   Workflow tool (research C2) - and takes it where it fits (the GM: "I don't want to completely reinvent the wheel ... I would even
   download somebody's skill or whatever if that helped").
 - **FR-010** A LIKE WINDOW is one of eight hours or more of builder work (US1) whose concurrency is close to the window it is
-  compared with: trees held, time-weighted from the pool's log (the night of 2026-11-27: three pool trees, busy 93%, 98% and 83%),
+  compared with: trees held, time-weighted from the pool's log (the night of 2026-11-27: three pool trees, busy 93%, 98% and 83% - one-shot, the session's tree-idle.py run of 2026-11-27 about 14:40Z, as the Why says),
   and the machine's load. Every before-and-after figure is stated with the concurrency it was measured under, and where the two
   windows' concurrency differs both are stated beside the figure, so a window of one builder is never compared bare with one of
   four (the GM's seventh process-reviewer message, 2026-11-27, in `specs/449-rust-codebase/port-talk-gm-goal.md`).
@@ -175,7 +175,7 @@ check that holds today still holding.
   and every per-task figure read beside task size (FR-007); US1 measured by the cross-blocking row; the reuse decision (FR-009);
   the figures sourced; one repair order, a fresh builder; the takeover list by part; the approved sketch recorded in request.md.
 - 2026-11-27, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 6 items - the cross-blocking baseline dated to its run
-  (32.3 minutes over 130 tasks), the tree-busy figures' real source, T302 parts 1 and 4 and T307 part 2 taken, T308's two
+  (32.3 minutes over 130 tasks, round 2's own run of `make task-time`, 2026-11-27 about 16:30Z), the tree-busy figures' real source, T302 parts 1 and 4 and T307 part 2 taken, T308's two
   contradicting clauses replaced, bisection restored to current practice, US4's bound for one bad change.
 - 2026-11-27, round 3 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - T307 part 2's parenthetical said only its own
   text. The same commit added FR-010 from the GM's seventh process-reviewer message.
