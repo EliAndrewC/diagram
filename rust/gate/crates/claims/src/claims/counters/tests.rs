@@ -205,3 +205,37 @@ fn a_counter_beside_a_changed_constant_is_not_cleared() {
     assert!(!got.contains("cleared without a triage"));
     assert!(got.contains("code triage      rust/phases/src/lib.rs::reach#reach"));
 }
+
+/// 461 T41: at a hand-in the clear reads the base's version - another task's staged batch below it changed the unit's code, and its
+/// recorded row is that batch's - so the work's added counter alone is cleared, where the merge base's version is not the recorded one.
+#[test]
+fn at_a_hand_in_the_clear_reads_the_base_s_version() {
+    let root = fixture("claims-counters-hand-in");
+    let path = "rust/phases/src/lib.rs";
+    let lib = std::fs::read_to_string(root.join(path)).unwrap();
+    let staged = lib.replace("x + GAP + y\n", "x + GAP + y + 1.0\n");
+    put(&root, path, &staged);
+    let mut idx = serde_json::Map::new();
+    for (u, _) in all_rust_units(&root, "", true).unwrap() {
+        for c in &u.claims {
+            idx.insert(u.key(c), json!({"code": u.code(c), "verdict": "IN-STEP"}));
+        }
+    }
+    put(
+        &root,
+        "dev/claims-index.json",
+        &Value::Object(idx).to_string(),
+    );
+    let base = commit(&root, "another task's staged batch");
+    let counted = staged.replace(
+        "    x + GAP + y + 1.0\n",
+        "    tally(counts, \"read@reach\", 2);\n    x + GAP + y + 1.0\n",
+    );
+    put(&root, path, &counted);
+    git(&root, &["add", "-A"]);
+    let cleared = "claims-owed: 1 claim(s) cleared without a triage";
+    let got = claims(&root, &["owed"]);
+    assert!(!got.stdout.contains(cleared), "{}", got.stdout);
+    let at = l7r_gate_core::delta_base::with(base.trim(), || claims(&root, &["owed"]));
+    assert!(at.stdout.contains(cleared), "{}", at.stdout);
+}

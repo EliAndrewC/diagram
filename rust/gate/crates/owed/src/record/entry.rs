@@ -40,9 +40,14 @@ static QUESTION: LazyLock<Regex> =
     LazyLock::new(|| re(r"^questions/(\d{4}-([^.]+)(\.drawing)?\.html)$"));
 static NUMBERED: LazyLock<Regex> = LazyLock::new(|| re(r"^\d{4}-[^.]+(\.drawing)?\.html$"));
 
-/// (ref, description): the merge base of HEAD with origin/main, else HEAD (`base_of`).
+/// (ref, description): the merge base of HEAD with origin/main, else HEAD (`base_of`). At a hand-in, the base it names
+/// (`l7r_gate_core::delta_base`, 461 T42): the work applied on it is judged, not every staged batch below it.
 #[must_use]
 pub fn base_of(root: &Path) -> (String, String) {
+    if let Some(base) = l7r_gate_core::delta_base::named(root) {
+        let short: String = base.chars().take(8).collect();
+        return (base, format!("the hand-in base ({short})"));
+    }
     let head = git(root, &["rev-parse", "--verify", "-q", "HEAD"])
         .trim()
         .to_owned();

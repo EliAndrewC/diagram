@@ -118,9 +118,14 @@ impl Unit {
     }
 }
 
-/// `(ref, description)`: the merge base of HEAD with origin/main; HEAD without origin/main; "" with no commits.
+/// `(ref, description)`: the merge base of HEAD with origin/main; HEAD without origin/main; "" with no commits. At a hand-in, the base
+/// it names (`l7r_gate_core::delta_base`, 461 T42): the work applied on it is judged, not every staged batch below it.
 #[must_use]
 pub fn base_of(root: &Path) -> (String, String) {
+    if let Some(base) = l7r_gate_core::delta_base::named(root) {
+        let desc = format!("the hand-in base ({})", head8(&base));
+        return (base, desc);
+    }
     let head = git(root, &["rev-parse", "--verify", "-q", "HEAD"]).unwrap_or_default();
     if head.is_empty() {
         return (String::new(), "no commits yet".to_owned());

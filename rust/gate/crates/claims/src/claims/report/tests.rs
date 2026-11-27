@@ -136,6 +136,35 @@ fn a_form_problem_in_a_changed_file_refuses_and_the_base_tree_is_read() {
     base_tree("git", &none, "HEAD", &none).unwrap();
 }
 
+/// 461 T41: at a hand-in the form problems judged are the work's, read against the base it names with the work uncommitted on it - not
+/// another task's staged batch below the base, which `origin/main...HEAD` judged while missing the work itself.
+#[test]
+fn at_a_hand_in_the_form_problems_are_the_work_s() {
+    let root = fixture("claims-report-hand-in");
+    let mut b = unit("b", &[], &["bad"]);
+    b.path = "b.rs".into();
+    let mut n = unit("n", &[], &["bad"]);
+    n.path = "n.rs".into();
+    let pairs: Vec<Pair> = vec![
+        (unit("a", &[], &["bad"]), Vec::new()),
+        (b, Vec::new()),
+        (n, Vec::new()),
+    ];
+    put(&root, "a.rs", "x\n");
+    let base = commit(&root, "another task's staged batch");
+    put(&root, "b.rs", "x\n");
+    git(&root, &["add", "b.rs"]);
+    put(&root, "n.rs", "x\n");
+    let files = |got: Vec<String>| -> Vec<String> {
+        got.iter()
+            .map(|x| x.split(':').next().unwrap().to_owned())
+            .collect()
+    };
+    assert_eq!(files(delta_form_problems(&root, &pairs)), ["a.rs"]);
+    let at = l7r_gate_core::delta_base::with(base.trim(), || delta_form_problems(&root, &pairs));
+    assert_eq!(files(at), ["b.rs", "n.rs"]);
+}
+
 /// The rows and the index `classify` is asked about: (root, rows, index).
 fn classify_rows() -> (l7r_shared::tempdir::TempDir, Cur, Map<String, Value>) {
     let root = fixture("claims-report-classify");

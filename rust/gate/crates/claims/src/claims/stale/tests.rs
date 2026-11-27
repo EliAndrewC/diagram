@@ -172,3 +172,33 @@ fn naming_the_item_of_a_classed_claim_is_no_change() {
     let plain = source("23.0", &format!("{ptr}#inset"));
     assert_eq!(rust_stale("x.rs", &old, &plain, &pages), want);
 }
+
+/// 461 T41: at a hand-in the old figure is the base's - another task's staged batch below it changed the constant first - so the page
+/// stating the merge base's figure is that batch's, and the page stating the base's figure is the work's own.
+#[test]
+fn at_a_hand_in_the_old_figure_is_the_base_s() {
+    let root = fixture("claims-stale-hand-in");
+    let ptr = format!("{Q}0003-inset.drawing.html");
+    put(&root, &ptr, "<p>The inset is 23 ft.</p>\n");
+    put(
+        &root,
+        &format!("{Q}0005-later.drawing.html"),
+        "<p>As 0003-inset says, 24 ft.</p>\n",
+    );
+    put(&root, "rust/engine/src/lib.rs", &source("23.0", &ptr));
+    commit(&root, "the inset");
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    put(&root, "rust/engine/src/lib.rs", &source("24.0", &ptr));
+    let base = commit(&root, "another task's staged batch");
+    put(&root, "rust/engine/src/lib.rs", &source("25.0", &ptr));
+    git(&root, &["add", "-A"]);
+    let pages = |out: &str| -> Vec<String> {
+        out.lines()
+            .filter(|l| l.starts_with("stale figure"))
+            .map(|l| l.split(' ').nth(2).unwrap().to_owned())
+            .collect()
+    };
+    assert_eq!(pages(&claims(&root, &["owed"]).stdout), [ptr.clone()]);
+    let at = l7r_gate_core::delta_base::with(base.trim(), || claims(&root, &["owed"])).stdout;
+    assert_eq!(pages(&at), [format!("{Q}0005-later.drawing.html")]);
+}

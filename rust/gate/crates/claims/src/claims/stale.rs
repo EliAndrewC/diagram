@@ -47,7 +47,9 @@ pub type Page = (String, String, String);
 ///
 /// Where a read fails: the error says which and why.
 pub fn stale(root: &Path) -> Result<Vec<String>, Fail> {
-    let base = git_out(root, &["merge-base", "HEAD", "origin/main"]);
+    // at a hand-in, the base it names: the old figure is the base's, not another staged batch's below it (461 T41)
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| git_out(root, &["merge-base", "HEAD", "origin/main"]));
     let base = strip(&base);
     if base.is_empty() {
         return Ok(Vec::new());

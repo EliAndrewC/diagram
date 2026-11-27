@@ -1861,58 +1861,116 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T41 (<why: the finding or measurement that files it>)
+### T41 (T37's Found and left: the claims gate's form-problem delta, stale and counters read their own merge base at hand-in)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in pool tree `diagram-backlog-t269` on T07's ac41f0137b, beside T42. Each of the three claims-crate sites T41 names
+  now asks `l7r_gate_core::delta_base::named(root)` (T34's reader) first, its old base kept as the fallback. Only the lines the task
+  names change: `commands.rs` `gate_cmd` and the carry's `touches_engine` are untouched, as 461 T38 (with T40) builds in the claims
+  crate in another tree.
+  - `report.rs` `delta_form_problems`: at a hand-in its delta is `git diff --name-only <base>` plus the untracked files
+    (`ls-files --others --exclude-standard`, as `push.rs` `delta()` reads them), since the work stands uncommitted on the base and
+    `<base>...HEAD` would be empty. With no base named it reads `origin/main...HEAD` as before.
+  - `stale.rs` `stale`: the old figure is read at the named base, else the merge base. It already diffs the working tree.
+  - `counters.rs` `counters_clear`: the base version is read at the named base, else the merge base. `counter_only` holds the base's
+    version to the recorded code, so at a hand-in the recorded row is the staged batch's, as it would be in the clone.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/claims ONLY=at_a_hand_in` with the tests
+    written and the old code in place). Each fixture puts another task's staged commit between origin/main and the hand-in base. Each
+    asserts that the old base still judges it (first assertion, green on the old code), that the hand-in base does not, and that the
+    work's own change, uncommitted on the base, is judged:
+
+    | site | test | red at |
+    |---|---|---|
+    | form problems | `report::tests::at_a_hand_in_the_form_problems_are_the_work_s` | the staged `a.rs` refused, the work's staged `b.rs` and untracked `n.rs` missed |
+    | stale | `stale::tests::at_a_hand_in_the_old_figure_is_the_base_s` | the page stating the merge base's 23 named, not the one stating the base's 24 |
+    | counters | `counters::tests::at_a_hand_in_the_clear_reads_the_base_s_version` | the work's counter-only change not cleared |
+
+    The run: 1 passed (T34's carry test), 3 failed. The stale fixture was corrected after that run (its later page named no
+    `0003-inset`) and seen red again alone, 0 passed and 1 failed (observed 2026-11-27, method: the fix reverted, the same run). After
+    the fix the claims crate passes whole, 206 of 206 (observed 2026-11-27, method: `make builder-checks`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the claims gate's form problems, stale and counters read the hand-in base | n/a - no map | n/a | none | n/a |
 
 ### T41 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** At hand-in, the claims gate's form problems, the stale-figure check and the counter-only clear judge the
+   builder's work alone. They no longer judge every batch staged in the clone below it, and they no longer miss the work itself.
+2. **The constraints.** FR-002 (a builder's tree meets the refusals the builder can cure), D3's base by phase, D4, T34's one reader.
+   Constitution XIII: with the variable unset or empty, each site reads its old base, and every existing test passes.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md). R: plan D3, D4, T34's and T37's sections. O: the red-first
+   table.
+4. **Do they describe the world here?** Yes: each fixture stands as a phase-1 hand-in tree does, with a staged commit below the base
+   and the work on it, staged or untracked (T07's no-commit carry).
+5. **The order.** After T37, before T08.
+6. **The exits.** Green: the tests and `make builder-checks` of claims. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first table above, and `make builder-checks` over claims, owed and reviews (with T42).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The sites judge less only where a hand-in names its base. At every landing and push the variable is unset or
+   empty, and nothing changes. Before the fix, a hand-in could be refused for another staged task's form problem and pass its own.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The claims crate's other merge-base readers. The carry's `touches_engine` (`carry.rs` 52) is T38's. The impl-drift bundle's
+  `changed_lines` (`bundle.rs` 52) is built by `make claims-bundle` in the session's claims round, not at hand-in. Not a defect at
+  hand-in: neither is asked by the four gates here (observed 2026-11-27, method: grep of `"merge-base"` and `origin/main...` under
+  `rust/gate/crates` after this fix, each caller read). None is filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
+### T42 (T37's Found and left: two of the four gates read their own merge base below T34's reader at hand-in)
 
-### T42 (<why: the finding or measurement that files it>)
+- **Approach**: built in pool tree `diagram-backlog-t269` on T07's ac41f0137b, beside T41. Each `base_of` asks
+  `l7r_gate_core::delta_base::named(root)` (T34's reader) first, its old merge base, HEAD and no-commits fallbacks unchanged. A named
+  base reads `the hand-in base (<8 hex>)` as its description.
+  - `reviews` `owed.rs` `base_of`: behind `review-gate.sh`'s `reviews owed`. Every reader of the base asks it: `owed_discharged`,
+    `all_owed`, `check_declared_as`, `deferred.rs` and `declared.rs`. Each diffs the working tree against the base (`renamed`,
+    `touched_code`), so the work uncommitted on the base is judged.
+  - `owed` `entry.rs` `base_of`: behind `entry-gate.sh`'s `record-owed`, whose entry half (`owed.rs` `entry_lines`) asks
+    `entry::owed`. `moved_anchors` diffs the working tree against the base.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=<crate> ONLY=<test>` with the tests written and the old code in
+    place). Each fixture puts another task's staged commit between origin/main and the hand-in base. Each asserts that the old base
+    still owes it, that the hand-in base does not, and that the work's own change, staged on the base, is owed:
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+    | gate | crate, test | passed, failed | red at |
+    |---|---|---|---|
+    | `reviews owed` | reviews, `owed::tests::at_a_hand_in_the_units_owed_are_the_work_s` | 0, 1 | the staged batch's map `m` still owed its settlement-review and glyph-check |
+    | `record-owed`'s entry half | owed, `entry::tests::at_a_hand_in_the_entries_owed_are_the_work_s` | 0, 1 | the staged batch's moved `0001-a.html` still owed |
+
+    After the fix each crate passes whole: reviews 219 of 219, owed 143 of 143 (observed 2026-11-27, method: `make builder-checks`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `reviews owed` and `record-owed`'s entry half read the hand-in base | n/a - no map | n/a | none | n/a |
 
 ### T42 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** At hand-in, `review-gate.sh` and `entry-gate.sh` owe the builder's work alone: no review unit or entry of
+   another batch staged in the clone below it.
+2. **The constraints.** FR-002 (a builder's tree meets the refusals the builder can cure), D3's base by phase, D4, T34's one reader.
+   Constitution XIII: with the variable unset or empty, each `base_of` returns what it did, and every existing test passes.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md). R: plan D3, D4, T34's and T37's sections. O: the red-first
+   table.
+4. **Do they describe the world here?** Yes: each fixture stands as a phase-1 hand-in tree does, with a staged commit below the base
+   and the work staged on it.
+5. **The order.** After T37, before T08.
+6. **The exits.** Green: the tests and `make builder-checks` of reviews and owed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first table above, and `make builder-checks` over claims, owed and reviews (with T41).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The gates owe less only where a hand-in names its base. At every landing and push the variable is unset or
+   empty, and nothing changes. Before the fix, a hand-in could be refused for another staged task's owed review unit or owed entry.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none. The gates' other readers were checked (observed 2026-11-27, method: each `l7r-gate` call of
+`review-gate.sh` and `entry-gate.sh` read). `plan-gate.sh`'s `plan push` and the ranged `git diff` lines take the range the hand-in hands
+them. `reviews owed --undrawn` and `--check-declared` read `base_of` or no base. The cohort crate's `rust_landing` and
+`counter_only_delta` (`cohort.rs` 486, 571) serve `make cohort-landing`, which runs at landing and not in the hand-in's first pass.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 ### T39 (<why: the finding or measurement that files it>)
 

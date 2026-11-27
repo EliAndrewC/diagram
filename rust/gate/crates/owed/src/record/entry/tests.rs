@@ -334,3 +334,36 @@ fn the_command_line_s_refusals() {
     // the small fixture has no sibling table: the hamlet registry's first refusal, as the Python's import raised it
     assert!(failed.code == 1 && failed.stderr.starts_with("OSError: "));
 }
+
+/// 461 T42: at a hand-in the entries owed are read against the base it names, the work uncommitted on it - not another task's staged
+/// batch below the base, whose moved findings the merge base with origin/main owed too.
+#[test]
+fn at_a_hand_in_the_entries_owed_are_the_work_s() {
+    let root = repo("entry-hand-in");
+    move_findings(&root);
+    let base = commit(&root, "another task's staged batch");
+    put(
+        &root,
+        &format!("{Q}/0005-old-slug.html"),
+        &page("Old", "why", "a later finding"),
+    );
+    git(&root, &["add", "-A"]);
+    let pages = |lines: Vec<String>| -> Vec<String> {
+        let mut out: Vec<String> = lines
+            .iter()
+            .flat_map(|l| l.split(" - ").nth(1).unwrap().split(' '))
+            .map(str::to_owned)
+            .collect();
+        out.sort();
+        out.dedup();
+        out
+    };
+    let short: String = base.chars().take(8).collect();
+    let (desc, lines) = owed_from(&root, &root, &few).unwrap();
+    assert!(desc.starts_with("origin/main (merge base "));
+    assert_eq!(pages(lines), ["0001-a.html", "0005-old-slug.html"]);
+    let (desc, lines) =
+        l7r_gate_core::delta_base::with(base.trim(), || owed_from(&root, &root, &few).unwrap());
+    assert_eq!(pages(lines), ["0005-old-slug.html"]);
+    assert_eq!(desc, format!("the hand-in base ({short})"));
+}

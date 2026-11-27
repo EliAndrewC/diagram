@@ -288,6 +288,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T41 (T37's Found and left: the claims gate's form-problem delta, stale and counters read their own merge base at hand-in)": {
+   "sha256": "3f146ae85d16a45ce73a58f2345fda4b4185d9b08ccf1deeeef7128363d488af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "fc9663cfd62a997782b84a25d9de040f6d298b950c6c6b92fd98e247f693839d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T42 (T37's Found and left: two of the four gates read their own merge base below T34's reader at hand-in)": {
+   "sha256": "36d7f4c593c1d95a8544e95b0ba5203a793321746a92465b75ee0d8b7708d22e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Approach (checklist part A)": {
+   "sha256": "9b48617223444042d584a5013909296a7790d50a33b81340c05681fb33a39e03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1794,6 +1818,60 @@
      "summary": "The scoping cost (one rows_of over an already extracted base tree, only at a hand-in with something owed) is not timed.",
      "class": "within",
      "why": "No performance claim is made beyond the stated mechanism; nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T41 (T37's Found and left: the claims gate's form-problem delta, stale and counters read their own merge base at hand-in)",
+    "### T41 Approach (checklist part A)",
+    "### T42 (T37's Found and left: two of the four gates read their own merge base below T34's reader at hand-in)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T41-a",
+     "summary": "The claims gate's three sites (report.rs delta_form_problems, stale.rs stale, counters.rs counters_clear) ask T34's delta_base::named reader first, keeping the old merge base as the fallback when no base is named.",
+     "class": "within",
+     "why": "FR-002: the hand-in runs the landing's cheap first pass on the builder's rebased tree; a first pass that judges other staged batches below the base refuses work the builder cannot cure, and misses the builder's own. The fallback leaves every landing and push unchanged (FR-008)."
+    },
+    {
+     "id": "T41-b",
+     "summary": "At a hand-in the form-problem delta is git diff --name-only <base> plus untracked files, since the work stands uncommitted on the base.",
+     "class": "within",
+     "why": "Mechanism for FR-002's first pass judging the work being handed in; mirrors push.rs delta(). Decides nothing the request or spec leaves open beyond how to read the delta."
+    },
+    {
+     "id": "T41-c",
+     "summary": "commands.rs gate_cmd and the carry's touches_engine are left untouched because 461 T38 (with T40) changes them in another tree.",
+     "class": "within",
+     "why": "Not a narrowing of what was asked: the same feature's T38 owns those sites, so the behavior FR-002 needs is still built, by another task, to avoid a conflicting edit."
+    },
+    {
+     "id": "T41-d",
+     "summary": "Found and left: the impl-drift bundle's changed_lines (bundle.rs) is not changed, as it is run by make claims-bundle in the session's claims round, not at hand-in.",
+     "class": "within",
+     "why": "FR-002 reaches only what the hand-in's first pass runs; a reader outside that pass reading the merge base is not a wrong outcome at hand-in, and the search space (grep of merge-base and origin/main... under rust/gate/crates, each caller read) is stated."
+    },
+    {
+     "id": "T42-a",
+     "summary": "reviews owed.rs base_of and owed entry.rs base_of ask T34's reader first, old merge base / HEAD / no-commit fallbacks unchanged; a named base is described as 'the hand-in base (<8 hex>)'.",
+     "class": "within",
+     "why": "FR-002, same reasoning as T41-a: the review and entry gates at hand-in owe the builder's work alone; unset variable keeps every landing and push as today (FR-008). The description text is a wording choice, not scope."
+    },
+    {
+     "id": "T42-b",
+     "summary": "Found and left: plan-gate.sh's plan push and ranged git diff lines, reviews owed --undrawn / --check-declared, and the cohort crate's rust_landing and counter_only_delta are not changed.",
+     "class": "within",
+     "why": "Each is stated as either already taking the range the hand-in gives, already reading base_of, or serving make cohort-landing at landing rather than the hand-in's first pass; none is a hand-in defect FR-002 reaches. Search space stated (each l7r-gate call of review-gate.sh and entry-gate.sh read)."
+    },
+    {
+     "id": "T41/T42-order",
+     "summary": "Both tasks run after T37 and before T08, one landing each, red-first tests then builder-checks over claims, owed and reviews.",
+     "class": "within",
+     "why": "Sequencing and exits within the plan; decide nothing the request or spec left open about what is built. No coverage is run, consistent with FR-002 and the struck 'coverage for its own crates'."
     }
    ]
   }

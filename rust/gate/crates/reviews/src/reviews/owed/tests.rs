@@ -712,3 +712,26 @@ fn an_unclassified_folder_draws_nothing() {
 /// The declarations' own refusals (449 T238): a Rust stage's change, a declaration naming nothing or no pool map, and the one line
 /// that answers a delta - split from this file at the file-scale bar.
 mod declared;
+
+/// 461 T42: at a hand-in the units owed are read against the base it names, the work uncommitted on it - not another task's staged
+/// batch below the base, whose new map the merge base with origin/main owed too.
+#[test]
+fn at_a_hand_in_the_units_owed_are_the_work_s() {
+    let r = repo("hand-in");
+    hamlet(&r, "m", &["well"]);
+    commit(&r, "another task's staged batch");
+    let base = git(&r, &["rev-parse", "HEAD"]).unwrap();
+    hamlet(&r, "n", &["well"]);
+    sh(&r, "git add -A");
+    assert_eq!(
+        owed_slugs(&r),
+        [
+            "settlement-review--m",
+            "settlement-review--n",
+            "glyph-check--well--m"
+        ]
+    );
+    let (desc, units, _) = l7r_gate_core::delta_base::with(&base, || all_owed(&r));
+    assert_eq!(slugs(&units), ["settlement-review--n"]);
+    assert_eq!(desc, format!("the hand-in base ({})", &base[..8]));
+}

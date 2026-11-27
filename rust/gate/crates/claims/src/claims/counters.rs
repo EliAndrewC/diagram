@@ -90,7 +90,9 @@ pub fn counters_clear(
     if keys.is_empty() {
         return Ok(index);
     }
-    let base = crate::record::repo::git(root, &["merge-base", "HEAD", "origin/main"]);
+    // at a hand-in, the base it names: its version is the recorded one, not another staged batch's below it (461 T41)
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| crate::record::repo::git(root, &["merge-base", "HEAD", "origin/main"]));
     let base = l7r_shared::py_text::strip(&base).to_owned();
     if base.is_empty() {
         return Ok(index);
