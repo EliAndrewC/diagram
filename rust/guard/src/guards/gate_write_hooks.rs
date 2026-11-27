@@ -2,7 +2,8 @@
 //! WHILE THIS TREE'S OWN `make done` RUNS. A gate ends by checking that the tree did not move while it ran; a session voided two gates
 //! this way, the second an hour after the round arbiter named the slip (the GM, 2026-10-17: "a guard, not a reminder"). A change the gate
 //! does not see passes, asked of the gate's own `l7r-gate preflight --tree-check` (feature 405 T41). `GATE_WRITE_OK` with a reason is the
-//! escape. (Feature 426 T10's refusal while `make cache-audit` ran left with that target, deleted by 449 T218: nothing runs it, so the
+//! escape. ANOTHER TREE'S COMMIT IS NOT THIS GATE'S (451 T307): a `git commit`, a `git add` or a record-writing make is held only
+//! where it runs in the gated tree (`stands_here`). (Feature 426 T10's refusal while `make cache-audit` ran left with that target, deleted by 449 T218: nothing runs it, so the
 //! branch watched for a process that cannot exist - removed by 449 T223.)
 //!
 //! Plan T024's decisions: (a) the guard and `own-make.sh`'s question in-process, by pid; (b) `preflight.py` is a phase-2 piece, asked by
@@ -262,7 +263,9 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
     let tool = event.tool();
     if FILE_TOOLS.contains(&tool) {
         let file = file_of(event);
-        let rel = relative_in(&c.top, file).filter(|r| !r.is_empty())?;
+        // a file under the tree's `.git` is no file of the tree: the gate's snapshot never holds one (451 T307)
+        let rel = relative_in(&c.top, file)
+            .filter(|r| !r.is_empty() && r != ".git" && !r.starts_with(".git/"))?;
         let invisible = after_edit(event, file).is_some_and(|text| {
             let dir = crate::shared::tempdir::TempDir::new("gate-write");
             let scratch = dir.join("after-edit");
@@ -285,12 +288,17 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
         return None;
     }
     let cmd = input_field(event, "command");
-    if GIT_WRITE.is_match(cmd).unwrap_or(false) {
+    if GIT_WRITE.is_match(cmd).unwrap_or(false)
+        && stands_here(event, cmd, c, &|head, sub| {
+            head == "git" && matches!(sub, "commit" | "add")
+        })
+    {
         return (!unseen(c, &["--quiet"])).then(|| "a git commit or add of a change the gate sees (it moves HEAD, or what the gate compares against it)".to_owned());
     }
     if let Some(found) = crate::shared::make::invoked(cmd)
         .into_iter()
         .find(|t| MAKE_WRITE.contains(&t.as_str()))
+        .filter(|_| stands_here(event, cmd, c, &|head, _| head == "make"))
     {
         return Some(format!("make {found} (it writes a tracked record)"));
     }
@@ -326,6 +334,43 @@ fn head_of(head: &str) -> (&str, &str) {
     (head, sub)
 }
 
+/// Where the command's shell stands as it starts (the event's `cwd`, else the gated tree) and the home.
+fn standing(event: &Event, c: &Ctx) -> (String, String) {
+    let given = field(&event.input, "cwd");
+    let here = if given.is_empty() {
+        c.top.to_string_lossy().into_owned()
+    } else {
+        given.to_owned()
+    };
+    (here, std::env::var("HOME").unwrap_or_default())
+}
+
+/// Does a command of this kind (its name and, for git, its subcommand) run in THE GATED TREE (451 T307)? WHY: the guard asked only
+/// whether the command line held a commit, an add or a record-writing make, wherever it ran - so on 2026-11-26 07:51 the session,
+/// standing in the clone while its gate ran, was refused `cd <a builder's worktree> && git add -u; git commit`, which moves that
+/// worktree's HEAD and index and nothing the clone's gate compares. Each such command is placed by the walk (its `cd`s and git's `-C`;
+/// a make's own `-C` is not read, so it stands where its shell does); it is held where one stands in this tree, where the walk cannot say where one stands, and where the walk finds
+/// none at all (the pattern's match with no command placed: held as before).
+fn stands_here(event: &Event, cmd: &str, c: &Ctx, kind: &dyn Fn(&str, &str) -> bool) -> bool {
+    let (here, home) = standing(event, c);
+    let top = realpath(&c.top);
+    let walk = crate::shared::tree::walk_judged(cmd, Some(&here), "", &home);
+    let mut placed = walk
+        .targets
+        .iter()
+        .filter(|t| {
+            let (head, sub) = head_of(&t.head);
+            kind(head, sub)
+        })
+        .peekable();
+    placed.peek().is_none()
+        || placed.any(|t| {
+            t.path
+                .as_deref()
+                .is_none_or(|p| top_of(&realpath(Path::new(p))) == top)
+        })
+}
+
 /// What a running gate refuses of a shell command's writes (451 T33; on 2026-11-20 a builder's `git apply` and `cp` of guard files
 /// under T34's `make land` put unfinished code under its gate, which failed static's cover): each write the walk places in this
 /// tree - a redirect, `tee`, `cp`, `mv`, `rm`, `sed -i`, a writing git subcommand - that the gate would see, asked of the same tree
@@ -338,13 +383,7 @@ fn head_of(head: &str) -> (&str, &str) {
 /// resolved, which fails open (the round-3 replay's false refusals, measured 2026-11-20), and so does a literal handed to a
 /// function of the program's own (`own_args`), which make-only, fail-closed, still counts.
 fn shell_write(event: &Event, cmd: &str, c: &Ctx) -> Option<String> {
-    let given = field(&event.input, "cwd");
-    let here = if given.is_empty() {
-        c.top.to_string_lossy().into_owned()
-    } else {
-        given.to_owned()
-    };
-    let home = std::env::var("HOME").unwrap_or_default();
+    let (here, home) = standing(event, c);
     let top = realpath(&c.top).to_string_lossy().into_owned();
     // the path's place in the tree when the gate would see a write of it: "" the tree itself
     let seen = |path: &str| -> Option<String> {

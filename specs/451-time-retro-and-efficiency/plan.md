@@ -3355,31 +3355,45 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T307 (<why: the finding or measurement that files it>)
+### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: this section is ONE PART of T307, its part (1); the task is not ticked from this landing.
+  - **T307's remainder, not built here and still open on the task's box**: part (2), every check of the push asked in the landing's first pass with the table of the push's checks against the first pass's, and the way out for a task built inside another task's reviewed section; part (3) is the session's and the GM's. Part (2) was not started: the builder's brief ordered part (1) first and the two did not fit one builder.
+  - **D1, part (1a), built: a commit is held only where it runs in the gated tree.** The cause as read in `rust/guard/src/guards/gate_write_hooks.rs`: the guard finds the gated tree from where its own process stands (`decide`, `top_of`), then refused a command whose text held `git commit` or `git add` (the pattern `GIT_WRITE`) or a record-writing make (`MAKE_WRITE`) whenever the gated tree showed a change the gate sees - never asking where that command ran. The rule built, `stands_here`: each such command is placed by the walk the guard's shell-write rule already uses (`shared::tree::walk_judged`: the command's `cd`s and git's `-C`), and it is held where one stands in the gated tree, where the walk cannot say where one stands (a `cd "$VAR"`), and where the pattern matches and the walk places none (a quoted `git commit`), each as before. The refusal's text is unchanged, so no message-check is owed.
+  - **D2, a defect fixed in passing: a file under the gated tree's `.git` is no file of the tree.** The 01:22 firing refused a Write of `.git/l7r-handoffs/T254-<agent>.md`, a builder's handoff at its context cap; the gate's snapshot (`git diff --name-only HEAD`) never holds a path under `.git`, and the shell-write rule already let one through. The Edit and Write rule now does too.
+  - **D3, part (1b), measured and NOT built.** How the gate decides the tree moved (read 2026-11-26, `rust/gate/crates/measure/src/preflight.rs`): at its start `tree()` records HEAD and the content hash of every TRACKED file that differs from HEAD (an untracked file is never held); at its end `seen_moves` compares, reads a HEAD move as the paths its diff names, and excuses a path only by `plainly_unseen`: the same bytes, one of 4 named records (`RECORDS`), one of 5 files of the active feature (`FEATURE_RECORDS`, `tasks.md` among them, `plan.md` not), or a new landing-cohort log. So `make task-add` voids a gate by its plan.md stub alone, a measurement record by its commit (the HEAD move), and `research/source-attempts.jsonl` by any appended line. What the landing's up-front check reads (`land/writers.rs`, `foreign`): every line of `git status --porcelain` after its own escape records are committed, untracked files too; it is asked in the first pass and again before the ticks, and a clone dirty when the landing STARTS is not refused but sent to land alone in the landing worktree (`land/alone.rs`, `alone_owed`) - so the refusal of 2026-11-27 for the fetch log was the log appended between those two readings, seconds apart. What the green gate is to the push (`rust/gate/crates/tree/src/stamp.rs`): a hash of the files of four areas (the engine paths, the hook scripts and their suites with the Makefile, the page assets, the browser's), which the push compares with the content it sends; a landing begun again on content a stamp covers runs no gate (`land/long_runs.rs`). The options, by what keeps FR-004's purpose (a gate must not vouch for content it did not check):
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+    | option | what it changes | FR-004 | cost, and why it is not a fix |
+    |---|---|---|---|
+    | (A) a moved path outside every stamp area is unseen by the tree check | `plainly_unseen` asks the stamp's areas | kept only if every gate phase that reads a file outside the areas is asked again at the push; `spec-lint`, the record build and the research pointers are (the push-checks table), the tests' own reads of `dev/` and `specs/` are not inventoried | an inventory of each phase's reads first; and the write, cleared at the gate, is still refused before the ticks (`writer_refusal`), swept into the tick's `git add -- <feature dir>` or refused by the push's dirty-tree line unless committed - so the landing must also commit it, which changes what `make land` commits and pushes |
+    | (B) the landing commits the append-only logs as its own records (the fetch log, as it commits `dev/bypass-log`) before `alone_owed` and in `foreign` | `land/alone.rs`, `land/writers.rs`, `RECORDS` | kept for the log (its one reader outside tests, `check research-pointers`, is asked again at the push) | a research agent's log lines pushed by a landing that did not write them: it changes what `make land` pushes |
+    | (C) every landing gated in the landing worktree at its commit, the clone free to write | `make land` always takes `land-alone.sh`'s route | kept whole: the gate reads only the commit it lands | each landing pays the worktree's route (its seeding and the tip taken back); it changes where every landing runs |
+
+    Chosen: none built. Each option that lets the incident's writes go on changes what a landing commits or pushes, which the brief ruled out of a fix; (A) alone would move the refusal from the gate to the pre-tick check. Filed as T405 with this table.
+
+  - **The tests.** `guards::gate_write_hooks::tests::a_commit_in_another_tree_is_not_held` (4 commands let through, 9 held, the handoff Write let through and a tree file's Write held) and 4 cases of `tests/hooks/test-gate-write-hooks.sh`, counted in the test's text, observed 2026-11-26, method: read from the two files after the last edit. Red-first, 2026-11-26: on the old code the guard crate gave 552 passed, 1 failed (the new test, at its first let-through command); after, 553 passed, 0 failed; the suite 30 passed, 0 failed.
 
 ### T307 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** While the clone's gate runs, the session commits a finished builder's worktree and a builder writes its handoff without a refusal; a commit, an add or a record-writing make in the gated tree is still held.
+2. **The constraints.** Feature 385 plan D13 (no write the gate would see while it runs) and feature 375 FR-004 (a gate vouches for none of a tree that moved) both stand; the refusal's text is not changed.
+3. **Where each comes from.** G: T307's line in tasks.md, talked through with the GM 2026-11-26, whose part (1) asks that only writes to the tree being gated be held. O: the guard log's firings of 2026-11-26 01:22 and 07:51.
+4. **Do they describe the world here?** Yes: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, read 2026-11-26, shows both commands and the session's tree for each.
+5. **The order.** Before T307's tick; T405, T406 and T409 follow it and land before that tick.
+6. **The exits.** Green: the new test and the suite's new cases pass and the first-tier checks are green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The guard crate's 553 tests and the suite's 30 cases pass, measured 2026-11-26 (`make builder-checks CRATE="rust/guard rust/gate/crates/land"` and `bash tests/hooks/test-gate-write-hooks.sh`); on the old code the new test fails.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome, not a difference: a commit that moves nothing the gate compares was refused, costing the session a wait or an escape for each builder finished during a gate.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The tree check voids a gate for writes it never read, and the landing's up-front check refuses for a log appended mid-pass (D3). Visible effect: a whole gate run again, or a landing attempt lost. Not fixed here: each option changes what a landing commits or pushes, so it is larger than a fix. Filed as T405; lands before T307.
+- A commit sent INTO the gated tree from a session standing in another tree is not held (the guard asks only of the tree its own process stands in). Visible effect: a gate voided; found by reading, no firing observed. Not fixed here: it needs the guard to ask of every tree a command writes, a new rule with its own suite. Filed as T406; lands before T307.
+- A make's own `-C` is not read by the walk, so `make -C <another tree> tick` is held as the gated tree's while its gate runs. Visible effect: a false refusal of a record-writing make aimed at another tree; found by reading and pinned by one held case of the new test, no firing observed. Not fixed here: the walk (`rust/guard/shared/src/tree.rs`) is shared with the main-tree, gm-tree, make-only and house-style guards, so reading make's `-C` there moves their placements and owes their suites, a change of its own (observed 2026-11-26, method: read from the walk's make branch, which pushes one write where the shell stands). Filed as T409; lands before T307.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task: it removes a wait from the landings and the builders' loop); not an engine-speed task, so the performance checklist's questions do not apply.
 
 
 ### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))
@@ -5830,6 +5844,87 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T407 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T405 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T405 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T406 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T406 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T409 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T409 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

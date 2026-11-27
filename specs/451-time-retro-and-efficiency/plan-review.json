@@ -2642,7 +2642,7 @@
    "declared": "spec-fidelity"
   },
   "### T307 Approach (checklist part A)": {
-   "sha256": "272c4640623c4c240157bba112f4c5800f13aed532cb0c0bbcf83d7a3ec21eda",
+   "sha256": "3b8b1569f4c0897f19165aff798acccb9ed291dcb8fa73ed932b18036149d67d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3519,6 +3519,12 @@
   },
   "### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case \"two waiters on one quiet file and no run: still gone\" failed good work under load - \"expected dead, rc=0\" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)": {
    "sha256": "62f9ad2ff7022a60f93bcc8b490c1bfaaf19b9a82a7ca903e6984381398bb90c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))": {
+   "sha256": "9f5e3917fade0e72cedf8a88aea0eb8512ec3dfe235851850701f909f8c09103",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32286,6 +32292,128 @@
      "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings, this one and a Write of a handoff under `.git` at 01:22))",
+    "### T307 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T307-split",
+     "summary": "This landing builds part (1) only; part (2) is not started and T307 is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing is dropped: the remainder stays open on T307's box. Splitting a task into landings is ordering, not a narrowing."
+    },
+    {
+     "id": "T307-D1",
+     "summary": "A commit, an add or a record-writing make is held only where the shared tree walk (cd, git -C) places it in the gated tree. It is still held where the walk cannot place it (cd \"$VAR\") or places nothing while the pattern matches (a quoted git commit).",
+     "class": "within",
+     "why": "385 D13 refuses, while 'a make done of this tree runs', what moves what the gate's end checks. A commit in another worktree moves nothing that tree() compares, so the old refusal refused good work, which is a defect. The conservative holds keep D13 and 375 FR-004 whole."
+    },
+    {
+     "id": "T307-msg",
+     "summary": "The refusal's text is unchanged, so no message-check is owed.",
+     "class": "within",
+     "why": "Only the guard's reach changes; what it says to the refused command is untouched."
+    },
+    {
+     "id": "T307-D2",
+     "summary": "An Edit or Write under the gated tree's .git is let through, as the shell-write rule already lets it through.",
+     "class": "within",
+     "why": "D13 itself names a write 'only under .git/' as not refused, and the gate's snapshot (git diff --name-only HEAD) never holds such a path. Refusing a builder's handoff there refused good work, a defect fixed in passing (fix as we go)."
+    },
+    {
+     "id": "T307-D3",
+     "summary": "Part (1b), the gate's tree check voiding a gate for writes it never read and the landing's pre-tick refusal of a log appended mid-pass, is measured with an options table (A/B/C), not built, and filed as T405, which lands before T307.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It carries FR-009's three. Why: each option changes what a landing commits or pushes, and (A) alone only moves the refusal from the gate to the pre-tick check. The filed task is T405, and its order is 'lands before T307'. Nothing of the ask is dropped, because T307 stays open and T405 precedes its tick. FR-004's purpose (a gate vouches for none of a tree that moved) is kept, not relaxed."
+    },
+    {
+     "id": "T307-left-a",
+     "summary": "Found and left: a commit sent INTO the gated tree by a session standing in another tree is not held. The guard asks only of the tree its own process stands in. Filed as T406, which lands before T307.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a pre-existing missed hold, not introduced by D1, and in the opposite direction to part (1a)'s change. Its own reason is stated: the guard would have to ask of every tree a command writes, which is a new rule with its own suite. The filed id and the order are given, and T307 stays open behind it."
+    },
+    {
+     "id": "T307-left-b",
+     "summary": "Found and left: make's own -C is not read by the walk, so 'make -C <another tree> tick' (a record-writing make run in another tree) is held as the gated tree's. Bundled under T406.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the same wrong outcome D1 exists to remove: a write to a tree that is not being gated, refused as if it were (a guard refusing good work, a defect). It sits inside D1's own mechanism, the walk that places each GIT_WRITE/MAKE_WRITE command. The section's 'Not fixed here' sentence gives a reason only for the first defect ('the first needs the guard to ask of every tree a command writes'). It gives this one no reason at all, which fails FR-009's requirement that each deferred defect state why it is not fixed in this task. One justification is stretched over two unlike items. Either fix it here (the walk reads make's -C for MAKE_WRITE commands, with a let-through case in the new test) or give it its own reason, its own filed id and its own order."
+    }
+   ],
+   "tasks": [
+    "T307"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))",
+    "### T307 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part-split",
+     "summary": "This section builds only part (1) of T307; parts (2) and (3) remain open on the task's box and the task is not ticked from this landing.",
+     "class": "within",
+     "why": "Sequencing inside one task. Nothing T307 asks for is dropped, because the task stays open and its tick is the point where the whole of it is owed."
+    },
+    {
+     "id": "D1-release",
+     "summary": "A git commit/add or record-writing make is held only when the guard's shared walk (cd, git -C) places it in the gated tree. One placed in another tree (a builder's worktree) is let through.",
+     "class": "within",
+     "why": "This is the behavior the block states part (1) asks for: hold only writes to the tree being gated. It also keeps feature 385 D13's purpose, which is to refuse what moves HEAD or git diff of the gated tree, since a commit in another worktree moves neither."
+    },
+    {
+     "id": "D1-fail-closed",
+     "summary": "Where the walk cannot place a command (cd \"$VAR\"), or the pattern matches but the walk places nothing (a quoted git commit), the command is held as before.",
+     "class": "within",
+     "why": "This is the conservative side of the rule and keeps D13 and 375 FR-004. It narrows nothing the GM asked to have released, as far as the request and spec in the bundle show."
+    },
+    {
+     "id": "D1-message",
+     "summary": "The refusal's text is unchanged, so no message check is owed.",
+     "class": "within",
+     "why": "Nothing new is refused, so there is no new message to check against FR-012."
+    },
+    {
+     "id": "D2-dotgit",
+     "summary": "The Edit/Write rule no longer refuses a file under the gated tree's .git (a builder's handoff under .git/l7r-handoffs), matching the shell-write rule.",
+     "class": "within",
+     "why": "The 01:22 firing that T307's heading names is this refusal. D13 itself leaves writes that land only under .git unrefused (make modal-triaged). The premise 'no file of the tree' is loose for .git/HEAD and refs, but a Write there would still be caught by 375 FR-004's comparison of HEAD at the gate's end, so the worst case is a voided gate, never a false green."
+    },
+    {
+     "id": "D3-1b-deferred",
+     "summary": "Part (1b) is measured and not built: the tree check voids a gate for moved paths it never reads, and the landing's up-front check refuses a log appended between its two readings. It is filed as T405 with the options table, ordered to land before T307.",
+     "class": "within",
+     "why": "The deferral meets 451 FR-009: it gives why (each option changes what a landing commits, pushes or where it runs), a filed id (T405) and an order (lands before T307). T307 is not ticked here, so the ask is not narrowed but sequenced. 'Chosen: none built' binds this section only. T405 inherits the defect and must decide an option and build it, because a brief's 'no change to what a landing commits' is the session's words, not the GM's. Option (C) changes where a landing runs, not what it commits."
+    },
+    {
+     "id": "T406-deferred",
+     "summary": "A commit sent into the gated tree from a session standing in another tree is not held. The gap predates this change, and it is filed as T406 to land before T307.",
+     "class": "within",
+     "why": "D1 does not cause or widen this gap. It meets FR-009 (why, id, order), and its worst case is a gate voided by FR-004's end check, not a false green. It is owed before T307's tick."
+    },
+    {
+     "id": "T409-deferred",
+     "summary": "make -C <another tree> tick is still held as the gated tree's write, because the shared walk does not read make's -C. A held case of the new test pins this, and it is filed as T409 to land before T307.",
+     "class": "within",
+     "why": "This is a false refusal that stays, so the built part (1a) falls short of 'only writes to the tree being gated are held' for this one form. It is within only because T307 is not ticked here and T409 is ordered before that tick, which meets FR-009's why, id and order. The test that pins the held case must be inverted when T409 lands."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T307 is classed [perf] (it removes a wait from landings and builders), not engine speed, so the performance checklist's questions do not apply.",
+     "class": "within",
+     "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -50088,6 +50216,68 @@
      "summary": "Red first by a deliberate delay (a slowed tee plus a 0.5 s gap, no load generator). Green is the fixed order 3 of 3 under the same delays and the whole suite 30 runs in a row.",
      "class": "within",
      "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T307": {
+   "section_sha256": "8598bd59ef2e959aefce2e300efb583bb03878458efb6149dd8779bca9d6e15a",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "part-split",
+     "summary": "This section builds only part (1) of T307; parts (2) and (3) remain open on the task's box and the task is not ticked from this landing.",
+     "class": "within",
+     "why": "Sequencing inside one task. Nothing T307 asks for is dropped, because the task stays open and its tick is the point where the whole of it is owed."
+    },
+    {
+     "id": "D1-release",
+     "summary": "A git commit/add or record-writing make is held only when the guard's shared walk (cd, git -C) places it in the gated tree. One placed in another tree (a builder's worktree) is let through.",
+     "class": "within",
+     "why": "This is the behavior the block states part (1) asks for: hold only writes to the tree being gated. It also keeps feature 385 D13's purpose, which is to refuse what moves HEAD or git diff of the gated tree, since a commit in another worktree moves neither."
+    },
+    {
+     "id": "D1-fail-closed",
+     "summary": "Where the walk cannot place a command (cd \"$VAR\"), or the pattern matches but the walk places nothing (a quoted git commit), the command is held as before.",
+     "class": "within",
+     "why": "This is the conservative side of the rule and keeps D13 and 375 FR-004. It narrows nothing the GM asked to have released, as far as the request and spec in the bundle show."
+    },
+    {
+     "id": "D1-message",
+     "summary": "The refusal's text is unchanged, so no message check is owed.",
+     "class": "within",
+     "why": "Nothing new is refused, so there is no new message to check against FR-012."
+    },
+    {
+     "id": "D2-dotgit",
+     "summary": "The Edit/Write rule no longer refuses a file under the gated tree's .git (a builder's handoff under .git/l7r-handoffs), matching the shell-write rule.",
+     "class": "within",
+     "why": "The 01:22 firing that T307's heading names is this refusal. D13 itself leaves writes that land only under .git unrefused (make modal-triaged). The premise 'no file of the tree' is loose for .git/HEAD and refs, but a Write there would still be caught by 375 FR-004's comparison of HEAD at the gate's end, so the worst case is a voided gate, never a false green."
+    },
+    {
+     "id": "D3-1b-deferred",
+     "summary": "Part (1b) is measured and not built: the tree check voids a gate for moved paths it never reads, and the landing's up-front check refuses a log appended between its two readings. It is filed as T405 with the options table, ordered to land before T307.",
+     "class": "within",
+     "why": "The deferral meets 451 FR-009: it gives why (each option changes what a landing commits, pushes or where it runs), a filed id (T405) and an order (lands before T307). T307 is not ticked here, so the ask is not narrowed but sequenced. 'Chosen: none built' binds this section only. T405 inherits the defect and must decide an option and build it, because a brief's 'no change to what a landing commits' is the session's words, not the GM's. Option (C) changes where a landing runs, not what it commits."
+    },
+    {
+     "id": "T406-deferred",
+     "summary": "A commit sent into the gated tree from a session standing in another tree is not held. The gap predates this change, and it is filed as T406 to land before T307.",
+     "class": "within",
+     "why": "D1 does not cause or widen this gap. It meets FR-009 (why, id, order), and its worst case is a gate voided by FR-004's end check, not a false green. It is owed before T307's tick."
+    },
+    {
+     "id": "T409-deferred",
+     "summary": "make -C <another tree> tick is still held as the gated tree's write, because the shared walk does not read make's -C. A held case of the new test pins this, and it is filed as T409 to land before T307.",
+     "class": "within",
+     "why": "This is a false refusal that stays, so the built part (1a) falls short of 'only writes to the tree being gated are held' for this one form. It is within only because T307 is not ticked here and T409 is ordered before that tick, which meets FR-009's why, id and order. The test that pins the held case must be inverted when T409 lands."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T307 is classed [perf] (it removes a wait from landings and builders), not engine speed, so the performance checklist's questions do not apply.",
+     "class": "within",
+     "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
     }
    ],
    "verdict": "CLEAR"

@@ -54,6 +54,12 @@ check "a tee to /tmp: let through (451 T33)" 0 "$(run "$R" '{"tool_name":"Bash",
 check "the escape: let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"GATE_WRITE_OK=\"a deliberate fix for the gate itself\" git -C . commit -qm x"}}')"
 check "another tree's command, its own gate not running: let through" 0 "$(run "$OTHER" "$COMMIT")"
 check "an Edit outside this tree: let through" 0 "$(run "$R" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/b.txt"}}' "$OTHER")")"
+# 451 T307: a commit in ANOTHER tree, sent from the gated one (the session standing in the clone, committing a builder's worktree:
+# refused 2026-11-26 07:51), moves nothing this gate compares; the same commit aimed back at the gated tree is still held
+check "a commit after a cd into another tree: let through (451 T307)" 0 "$(run "$R" "$(printf '{"tool_name":"Bash","tool_input":{"command":"cd %s && git add -u; git commit -qm x"}}' "$OTHER")")"
+check "git -C another tree add: let through (451 T307)" 0 "$(run "$R" "$(printf '{"tool_name":"Bash","tool_input":{"command":"git -C %s add -A"}}' "$OTHER")")"
+check "a commit aimed back at the gated tree from another: refused (451 T307)" 2 "$(run "$R" "$(printf '{"tool_name":"Bash","tool_input":{"command":"cd %s && git -C %s commit -qm x"}}' "$OTHER" "$R")")"
+check "a Write under the tree's .git (a handoff): let through (451 T307)" 0 "$(run "$R" "$(printf '{"tool_name":"Write","tool_input":{"file_path":"%s/.git/l7r-handoffs/T1-a.md","content":"x"}}' "$R")")"
 pkill -f "sleep $NAP" 2>/dev/null
 
 echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"

@@ -131,6 +131,56 @@ fn a_running_gate_refuses_a_change_it_would_see() {
         .is_empty());
 }
 
+/// 451 T307: on 2026-11-26 07:51 the session, standing in the clone while its gate ran, was refused `cd <a builder's worktree> &&
+/// git add -u; git commit` - a commit that moves another tree's HEAD and index, which the clone's gate never compares. A git commit
+/// or add, and a make that writes a tracked record, are held only where the walk places them in the gated tree (or cannot place
+/// them); and a file under the tree's `.git` (a builder's handoff, refused 2026-11-26 01:22) is no file of the tree.
+#[test]
+fn a_commit_in_another_tree_is_not_held() {
+    let w = world("other-tree");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    let other = w.top.parent().unwrap().join("tree-t265");
+    std::fs::create_dir_all(&other).unwrap();
+    let (top, there) = (w.top.display().to_string(), other.display().to_string());
+    assert!(ask(Path::new("/"), "git", &["init", "-q", &there], "").ok());
+    for cmd in [
+        format!("cd {there} && rm -f x.profraw; git add -u; git commit -q -F /tmp/m 2>&1|tail -1"),
+        format!("git -C {there} commit -qm x"),
+        format!("git -C {there} add -A"),
+        format!("cd {there} && make tick F=1 T=T1 NOTE=x"),
+    ] {
+        assert_eq!(w.bash(&cmd), Vec::new(), "{cmd}");
+    }
+    for cmd in [
+        "git commit -qm x".to_owned(),
+        "git -C . add -A".to_owned(),
+        format!("cd {there} && git -C {top} commit -qm x"),
+        format!("cd {there}; cd {top}/l7r && git add -A"),
+        format!("git -C {there} add -A; git commit -qm x"),
+        // a place the walk cannot read is held, as before
+        "cd \"$T307_SOMEWHERE\" && git commit -qm x".to_owned(),
+        // ...and a commit the walk does not find where the pattern does
+        "echo 'a; git commit -qm x'".to_owned(),
+        format!("cd {there}; cd {top} && make tick F=1 T=T1 NOTE=x"),
+        // the walk reads no `make -C`: such a make stands where its shell does, and is held there
+        format!("make -C {there} accept X=1"),
+    ] {
+        let held = refused(&w.bash(&cmd), "while this tree's `make done` runs");
+        assert!(held, "{cmd}");
+    }
+    let handoff = format!("{top}/.git/l7r-handoffs/T254-a.md");
+    assert!(w
+        .run("Write", &json!({"file_path": handoff, "content": "x"}))
+        .is_empty());
+    assert!(refused(
+        &w.run(
+            "Write",
+            &json!({"file_path": w.file("l7r/x/a.py"), "content": "x"})
+        ),
+        "an Write of l7r/x/a.py"
+    ));
+}
+
 #[test]
 fn what_the_gate_does_not_see_passes() {
     let w = world("unseen");
