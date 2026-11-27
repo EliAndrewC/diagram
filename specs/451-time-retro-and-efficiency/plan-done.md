@@ -19693,3 +19693,71 @@ transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t3
 **Performance work?** yes: it takes a launcher walk, 17.5 ms measured 2026-11-27 (T494's record), off a gate call that follows an exit-0 engine-edit, builder-stop or stamp call in the same hook process. That includes an engine Edit refused under a live review while a gate runs, which walks once where it walked twice, measured 2026-11-27 (`t504-trace.sh`).
 <!-- plan-archive: T502 to T501 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
+<!-- plan-archive: archived 2026-11-27 -->
+### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)
+
+- **Approach**: a crate's built test binary, run directly (`side.rs`'s `run_built`), is given libtest's per-test times as its words: `-Z unstable-options --report-time` in place of `-q`, under `RUSTC_BOOTSTRAP=1` in the binary's environment (`alive::TIMES`). libtest then prints the pretty format, a `test <name> ... ok <time>` line a test, observed 2026-11-27, method: this crate's built binary run with those words. `alive::split` takes those lines out of the binary's stdout, so the checks read what `-q` left them: the `running` and `test result:` lines and a failure's output. Where that binary ran past its bound and its record was written, `alive::times` puts the lines on the end of the record, slowest first (an untimed line, an ignored test, last), cut at `CAP`, T463's GUESS knob. A run inside its bound writes nothing new, and no file is added to `alive/`, so `KEEP` still counts records. The crate's `cargo test` (`tested`) is not given them. With `RUSTC_BOOTSTRAP=1` in cargo's environment, a scratch crate over thiserror 2.0.21 rebuilt proc-macro2, thiserror, quote, syn and thiserror-impl ("the env variable RUSTC_BOOTSTRAP changed"), and its next plain run rebuilt thiserror and the crate again, measured 2026-11-27 (`cargo test --no-run -v`, three runs). The rustc crate itself stayed Fresh, 22 units, 0.56 s, with that variable, measured 2026-11-27 (`cargo test --no-run -v` in this tree's target). The difference is that crate's graph: no proc-macro2. Only rust/mode_a builds proc-macro2 among the crates read (`cargo tree`, 2026-11-27, of the rustc, core, tree, pool, guard, shared and mode_a manifests). The test binaries' inherited variable reaches only what a test spawns, and no test under `rust/` runs cargo or make on a real target, observed 2026-11-27, method: grep of `rust/` for `Command::new("cargo")`, `Command::new("make")`, `l7r-gate.sh` and `var("CARGO")`. The one real cargo, `the_real_cargo_tests_a_real_crate`, builds in a scratch target. DEPARTURE from the line's literal `--format json`: `test_line`'s summary, `only::judge` and a red crate's shown output all read libtest's human stdout, which JSON would replace. Nor `--logfile` beside `-q`: libtest writes "`--logfile` is deprecated" to stderr on every run, observed 2026-11-27 (this crate's built binary, `od -c` of its stderr); without the variable libtest refuses `-Z`. Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY=rustc::tests::alive`, `side.rs` at HEAD): 1 failed, 5 passed of 6, the new `a_caught_binary_s_per_test_times_end_its_record_slowest_first`. Green, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`, run by the rebuilt `l7r-rust`, so its own binaries took the new words): 157 passed with T363's tests. The pins on a binary's words in `side.rs` and `only.rs` now name `-Z unstable-options --report-time` where they named `-q`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a built test binary's per-test times on the end of its alive record (`rustc/alive.rs`, `rustc/side.rs`), red first 1 of 6, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
+
+### T470 Approach (checklist part A)
+
+1. **The goal, in the world.** The next slow test run's record says which tests took the time, slowest first, beside what was alive. A run is no slower for it, and no build is redone.
+2. **The constraints.** T463's line and T470's line; the brief (measure the fingerprint first, add the words only where they cost no rebuild); 451 FR-013; the two tiers.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting work that measures where time goes as performance work. O: the fingerprint runs and the logfile run above, measured 2026-11-27.
+4. **Do they describe the world here?** Yes, measured 2026-11-27: the fingerprint was read on this tree's own target and on a scratch crate holding the proc-macro2 build script the workspace's lockfile names. The words were run on this crate's real built binary and, through the rebuilt `l7r-rust`, on its whole test run.
+5. **The order.** After T463, whose record it extends; before T435.
+6. **The exits.** Green: the crate's tests with the red-first test passing; the next slow run's record ends with its times. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first test fails 1 of 6 on the old code and passes on the new, and the crate passes 157 tests with T363's, measured 2026-11-27 (`make rust-test`).
+10. **Before moving a constant.** n/a: no constant moved; `TIMES` is libtest's words, `CAP` T463's.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: tooling, no map changes.
+
+**Found and left?** none. The fallback `cargo test` path (a fresh run, a failed key build) records no times by design, as the approach says.
+
+**Performance work?** yes: a `[perf]` task (451 FR-013): it measures where the gate's test time goes, which counts as performance work under the GM's words of 2026-11-20. It is not engine speed, so the performance checklist does not apply.
+
+
+
+<!-- plan-archive: T473 to T463 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T473 to T473 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T475 to T451 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T475 to T475 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T480 to T468 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T480 to T480 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)
+
+- **Approach**: the leak pin (`run.rs`'s `leak_checked`) also fails a crate whose tests left a process running, by name, and ends it, as it fails one that left a file. `rustc/left.rs` (new): every process the tests start inherits the run's own `TMPDIR`, a fresh directory of this run, wherever it is reparented once its parent exits. So after the run (`go`), `left::ended` reads `/proc` for each process but this one, alive and no zombie, whose `environ` holds exactly `TMPDIR=<the run's>` (`marked`). Where one is found it waits `GRACE`, 1 s, a GUESS knob (why beside it: slack for a child a test signalled and has not seen end; 1 s, not 100 ms, because a falsely red batch gate costs about ten minutes and an arbiter round and the load reached 37 on 2026-11-27, observed 2026-11-27, method: `uptime` in this tree; waited only where something was found, so a clean run pays nothing), and reads again. Each process found both times is named `pid N (its command line)`, sent SIGKILL, and the crate fails with the fix: kill and wait what a test starts, and a stand-in shell waits on its background process. It covers both paths, a built binary run directly and a crate's `cargo test`, and a doctest run, since all run inside `leak_checked`. WHY the environment, not a process group (the line's suggestion): `land`'s stop sends TERM to the process groups it holds (`land/stop.rs`'s `kill_group`), and a test run moved into a group of its own would escape it; a process started with a cleared environment escapes this check; the two under `rust/` (`pages/src/runner/work.rs`, `diffrun/src/run.rs`) are each waited on by the code that starts them, observed 2026-11-27, method: grep of `rust/` for `env_clear`, each site read. What T364 already names is kept: a holder of the output pipe is still cut at `DRAIN` and named on its `HELD` line, and is now red too, being a process the tests left. The pin adds the descendant that holds no pipe, which nothing named. Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::left rustc::tests::drain"`, `run.rs` at HEAD): 2 failed, 6 passed of 8. They are the new `a_test_run_that_leaves_a_process_behind_fails_by_name_and_the_process_is_ended` (a stand-in `cargo test` leaves `sleep 46.7` with its output closed) and T364's holder test, now `a_crate_whose_run_left_a_holder_names_it_and_is_red`. The fake `/proc` test (a zombie, a process gone mid-read, a `TMPDIR` that only starts with the run's, this process, an entry that is no pid) and a run that waits on its child held already. Green, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`): 157 passed. The motivating crate, rust/guard, run fresh through the new pin: 603 passed, nothing left, measured 2026-11-27 (`make rust-test CRATE=rust/guard FRESH=1`), so T340's fixes hold and the batch gate does not turn red there.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a test run that leaves a process behind red by name, the process ended (`rustc/left.rs`, `rustc/run.rs`), red first 2 of 8, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
+
+### T363 Approach (checklist part A)
+
+1. **The goal, in the world.** A crate whose tests leave a process running is red and says which, and the process does not outlive the run; a clean run costs one read of `/proc`.
+2. **The constraints.** T363's line; the brief (add only what T364 misses, red-first with a stand-in that leaves a `sleep`); T101's leak pin, whose TMPDIR check is unchanged; 451 FR-013; the two tiers.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting work that makes the checks faster as performance work. O: T340's measurement in its line; this task's red-first and green runs, measured 2026-11-27.
+4. **Do they describe the world here?** Yes, measured 2026-11-27: the red-first test runs the real `answer` path with a real orphaned `sleep`, and the guard crate's real tests ran through the new pin.
+5. **The order.** After T364, whose `HELD` line it keeps; before T365.
+6. **The exits.** Green: the crate's tests with the red-first tests passing, and the guard crate green through the pin. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first tests fail 2 of 8 on the old code and pass on the new, and the crate passes 157 tests, measured 2026-11-27 (`make rust-test`).
+10. **Before moving a constant.** `GRACE` is new, a GUESS knob (above).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: tooling, no map changes. A crate that leaks a process is now red at the batch gate, where it was green.
+
+**Found and left?** none.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the checks faster): a process a test leaves no longer holds the phase or the machine past its run, and the leak that cost T340's run 3.1 s (measured 2026-11-26 (T340, the binary by hand into a pipe)) now fails its crate by name rather than going unseen. It is not engine speed, so the performance checklist does not apply.
+
+
+<!-- plan-archive: T365 to T340 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
