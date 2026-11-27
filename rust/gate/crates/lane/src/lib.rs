@@ -4,5 +4,6 @@
 
 pub mod lane;
 pub mod log;
+pub mod runner;
 
 pub use lane::cli;

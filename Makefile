@@ -734,6 +734,12 @@ builder-next:   ## [project] the next task to hand a pool tree: among the queue'
 lane:           ## [project] the landing lane as it stands, computed from the pool's log, the done refs, origin/main and the lane's log (l7r-lane/lane.jsonl in the git common directory): each hand-in on the lane with its state (waiting, in batch, ejected -> repair), each open batch with its state, the last landed batch and the repairs open; reads only, no fetch (feature 461 T11)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lane status
 
+lane-start:     ## [project] start the landing lane's runner, detached (l7r-gate lane --work, a session and process group of its own), one a clone by its flock on l7r-lane/lane.lock in the git common directory - a second start says the first's pid; it resumes the log's last open batch, and ends after LANE_IDLE_S (3600, a GUESS knob) with no hand-in; every hand-in starts it from phase 2's base (HAND_IN_BASE=origin) (feature 461 T12)   [LANE_IDLE_S=<seconds>] [LANE_POLL_S=<seconds>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lane start
+
+lane-stop:      ## [project] stop the landing lane's runner: after the batch in flight (waited for up to 10 s, then left asked), or with NOW=1 at once - its process group ended and its stop line written, its open batch resumed at the next make lane-start (feature 461 T12)   [NOW=1]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lane stop $(if $(NOW),--now,)
+
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 

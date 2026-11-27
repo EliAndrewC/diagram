@@ -111,3 +111,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T46 Phase 2: the Makefile's builder-tree-adopt help line names the lane - since 461 T13 make builder-tree-adopt TREE=<clone>-land (or L7R_LANE_TREE's) adopts the lane's tree under the reserved holder lane, outside the cap, and l7r-gate builder-tree lane brings it to origin/main; the root Makefile's help line and docs/make-targets.html say neither (T12 holds the Makefile). Lands after T12 and T13.
       research: rendering
+- [ ] T47 The stall watchdog's long-run warning would nudge the coordinator over its own backgrounded make lane-wait past 30 minutes (rust/guard/src/guards/stall_watchdog_hooks/pass.rs long_run/make_in, LONG_RUN 1800 s): exempt make lane-wait while the clone's lane runner lives (pass.rs lane_works, 461 T12), else each long batch costs one wake FR-005 does not list (540k-966k tokens a wake, D9). Lands with or after T20.
+      research: rendering

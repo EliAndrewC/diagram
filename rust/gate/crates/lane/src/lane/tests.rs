@@ -11,19 +11,73 @@ fn words(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
 }
 
+fn no_env(_: &str) -> Option<String> {
+    None
+}
+
+/// The command line from `cwd`, with no binary to start (a test binary run as the runner would run the tests again) and no knobs.
+fn ask(args: &[&str], cwd: &std::path::Path) -> l7r_gate_core::Reply {
+    cli(
+        &words(args),
+        cwd,
+        std::path::Path::new("/no/such/l7r-gate"),
+        &no_env,
+    )
+}
+
 #[test]
 fn a_verb_the_lane_lacks_is_refused_with_its_usage() {
-    for args in [vec![], words(&["start"])] {
-        let said = cli(&args, std::path::Path::new("."));
+    for args in [
+        vec![],
+        words(&["wait"]),
+        words(&["start", "x"]),
+        words(&["stop", "--later"]),
+        words(&["--work"]),
+    ] {
+        let said = cli(
+            &args,
+            std::path::Path::new("."),
+            std::path::Path::new("x"),
+            &no_env,
+        );
         assert_eq!(said.code, 2);
-        assert!(said.stderr.starts_with("usage: l7r-gate lane status"));
+        assert!(said
+            .stderr
+            .starts_with("usage: l7r-gate lane status|start|stop"));
     }
+}
+
+#[test]
+fn the_runner_s_verbs_are_asked_of_the_clone_s_common_directory() {
+    let dir = repo("lane-verbs");
+    let common = dir.path().join(".git");
+    // `start` runs the binary through setsid: one that does not exist takes no lock, an error naming the command
+    let failed = ask(&["start"], dir.path());
+    assert_eq!(failed.code, 1);
+    assert!(failed.stderr.contains("/no/such/l7r-gate lane --work"));
+    assert_eq!(ask(&["stop"], dir.path()).stdout, "lane: no runner\n");
+    assert_eq!(
+        ask(&["stop", "--now"], dir.path()).stdout,
+        "lane: no runner\n"
+    );
+    let env = |k: &str| (k == "LANE_IDLE_S").then(|| "0".to_owned());
+    let worked = cli(
+        &words(&["--work", &common.to_string_lossy()]),
+        dir.path(),
+        std::path::Path::new("x"),
+        &env,
+    );
+    assert_eq!(worked.stdout, "lane: the runner stopped (idle)\n");
+    let nowhere = l7r_gate_core::ci::fixtures::scratch("lane-verbs-norepo");
+    let lost = ask(&["stop"], nowhere.path());
+    assert_eq!(lost.code, 1);
+    assert!(lost.stderr.contains("is in no git repository"));
 }
 
 #[test]
 fn outside_a_repository_status_is_an_error_naming_the_directory() {
     let dir = l7r_gate_core::ci::fixtures::scratch("lane-no-repo");
-    let said = cli(&words(&["status"]), dir.path());
+    let said = ask(&["status"], dir.path());
     assert_eq!(said.code, 1);
     assert!(said.stderr.contains("is in no git repository"));
 }
@@ -31,7 +85,7 @@ fn outside_a_repository_status_is_an_error_naming_the_directory() {
 #[test]
 fn an_empty_lane_is_read_without_writing_anything() {
     let dir = repo("lane-empty");
-    let said = cli(&words(&["status"]), dir.path());
+    let said = ask(&["status"], dir.path());
     assert_eq!(said.code, 0);
     assert_eq!(
         said.stdout,
@@ -95,7 +149,7 @@ fn status_lists_each_hand_in_s_state_the_open_batch_the_last_landed_and_the_repa
     ] {
         log::append(&common, "2026-11-28T02:00:00Z", event, &fields).unwrap();
     }
-    let said = cli(&words(&["status"]), root);
+    let said = ask(&["status"], root);
     assert_eq!(said.code, 0, "{}", said.stderr);
     assert_eq!(
         said.stdout,

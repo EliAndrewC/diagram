@@ -4,7 +4,9 @@
 //! subagents'); not waiting on the GM (registry status `waiting`, or a pending `AskUserQuestion`); unfinished work in its clone
 //! (uncommitted changes, commits not on main, or a live make - the mirror is never a workspace and never counts); and not one of a
 //! page-session queue's own sessions while that queue is in its usage-limit retry wait, which holds only while the queue's runner lives
-//! and its retry line is younger than the wait it states (plan review round 1 found three stale retry lines that must exempt nothing).
+//! and its retry line is younger than the wait it states (plan review round 1 found three stale retry lines that must exempt nothing);
+//! nor a session whose clone's landing-lane runner lives (feature 461 T12: [`lane_works`], by the runner's exact argv), which waits on
+//! the lane by design until the runner idles out.
 //!
 //! WHAT IT DOES (the GM, 2026-09-30: "Tab title + bell"; "Nudge if prompt empty"; plan D6). The stalled session's tab is retitled and
 //! the bell rung, once per stall; in the session's OWN pane, when the input line is empty, one nudge is typed, once per stall. A
@@ -310,6 +312,22 @@ pub(crate) fn runs_queue(argv: &[String], log: &str) -> bool {
         if exe.rsplit('/').next() == Some("l7r-gate") && verb == "page-session" && work == "--work" && at == log)
 }
 
+/// Is `argv` the landing lane's runner of the git common directory `common`? Exactly its own command line, `<dir>/l7r-gate lane
+/// --work <common>` (feature 461 T12, the gate's `lane` crate, `runner::argv`), never a process that merely names the directory.
+pub(crate) fn runs_lane(argv: &[String], common: &Path) -> bool {
+    let argv = argv.strip_suffix(&[String::new()]).unwrap_or(argv);
+    matches!(argv, [exe, verb, work, at]
+        if exe.rsplit('/').next() == Some("l7r-gate") && verb == "lane" && work == "--work" && real(Path::new(at)) == real(common))
+}
+
+/// Does the landing lane's runner live for `clone` (461 T12)? While it does, the clone's session waits on the lane by design (D9: it
+/// ends its turn on a backgrounded `make lane-wait` while a batch runs), so silence there is not a stall. The exemption ends with the
+/// runner, which stops `LANE_IDLE_S` (an hour) after the last hand-in it saw, so a session left idle past that is judged again.
+pub(crate) fn lane_works(p: &Paths, clone: &str) -> bool {
+    let common = Path::new(clone).join(".git");
+    cmdlines(p).iter().any(|argv| runs_lane(argv, &common))
+}
+
 fn dispatcher_of(p: &Paths, pid: Option<&Value>) -> String {
     let id = pid.map_or_else(String::new, |v| {
         v.as_str().map_or_else(|| v.to_string(), str::to_owned)
@@ -395,7 +413,7 @@ pub(crate) fn judge(p: &Paths, entry: &Value, now: f64) -> Option<Stall> {
     } else {
         unfinished(p, &clone)
     };
-    if what.is_empty() || in_retry_wait(p, &clone, sid, now) {
+    if what.is_empty() || in_retry_wait(p, &clone, sid, now) || lane_works(p, &clone) {
         return None;
     }
     Some(Stall {

@@ -116,6 +116,18 @@ fn here() -> PathBuf {
     std::env::current_dir().unwrap_or_default()
 }
 
+/// This binary, which the lane's start runs again as its runner (feature 461 T12).
+fn exe() -> PathBuf {
+    std::env::current_exe().unwrap_or_default()
+}
+
+/// `l7r-gate land ...`; a hand-in that succeeded starts the lane's runner from phase 2's base (feature 461 T12, plan D2).
+fn land_or_hand_in(args: &[String]) -> Reply {
+    let done = land::cli(args, &here());
+    let base = std::env::var("HAND_IN_BASE").ok();
+    l7r_gate_lane::runner::on_hand_in(args, done, base.as_deref(), &here(), &exe())
+}
+
 fn cache_off(value: Option<&str>) -> bool {
     value.is_some_and(|v| !v.is_empty() && v != "0")
 }
@@ -202,8 +214,8 @@ pub fn cli(args: &[String]) -> Reply {
             &args[1..],
             &std::env::current_dir().unwrap_or_default(),
         ),
-        Some("land") => land::cli(&args[1..], &here()),
-        Some("lane") => l7r_gate_lane::cli(&args[1..], &here()),
+        Some("land") => land_or_hand_in(&args[1..]),
+        Some("lane") => l7r_gate_lane::cli(&args[1..], &here(), &exe(), &|k| std::env::var(k).ok()),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("research-backlog") => claims::backlog::backlog_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
@@ -363,6 +375,18 @@ mod tests {
         assert_eq!(status.code, 0, "{}", status.stderr);
         assert!(status.stdout.starts_with("lane: "));
         assert_eq!(cli(&["lane".to_owned()]).code, 2);
+        // a hand-in refused for its usage starts no runner (feature 461 T12): it passes through `land`'s own reply
+        let hand_in = cli(&["land".to_owned(), "--hand-in".to_owned()]);
+        assert_eq!(hand_in.code, 2);
+        assert!(!hand_in.stdout.contains("the runner"));
+        // the runner's own verb on a directory that is none: an error, nothing created
+        let work = cli(&[
+            "lane".to_owned(),
+            "--work".to_owned(),
+            "/no/such/l7r-lane-dir/.git".to_owned(),
+        ]);
+        assert_eq!(work.code, 1);
+        assert!(!Path::new("/no/such/l7r-lane-dir").exists());
     }
 
     #[test]

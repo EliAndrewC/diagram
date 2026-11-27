@@ -6,8 +6,8 @@ use std::path::{Path, PathBuf};
 use serde_json::{json, Value};
 
 use super::{
-    asking_gm, clone_of, host_pane, human, in_retry_wait, input_empty, judge, live_sessions, now,
-    resume_command, run_pass, unfinished, whole, Paths,
+    asking_gm, clone_of, host_pane, human, in_retry_wait, input_empty, judge, lane_works,
+    live_sessions, now, resume_command, run_pass, unfinished, whole, Paths,
 };
 use crate::shared::tool::ask;
 
@@ -543,4 +543,38 @@ fn a_long_make_with_no_pane_is_logged_and_a_dry_run_only_says_so() {
     std::fs::remove_file(w.p.clones.join("s")).unwrap();
     std::fs::remove_file(w.p.state.join("s.long-run")).unwrap();
     assert!(run_pass(&w.p, now()).is_empty());
+}
+
+#[test]
+fn a_live_lane_runner_of_the_clone_exempts_its_session_and_nothing_else_does() {
+    let mut w = world("lane");
+    let e = w.session("s", &json!({}), 7200);
+    w.dirty();
+    let proc = w.root.join("proc");
+    let at = proc.join("4343");
+    std::fs::create_dir_all(&at).unwrap();
+    std::fs::create_dir_all(proc.join("self")).unwrap();
+    w.p.proc = proc;
+    let t = now();
+    let common = w.clone.join(".git");
+    let c = w.clone.to_string_lossy().into_owned();
+    assert!(!lane_works(&w.p, &c));
+    // the runner of another clone, a process that only names the directory, and a runner with words after its own exempt nothing
+    for loose in [
+        "/x/l7r-gate\0lane\0--work\0/elsewhere/.git\0".to_owned(),
+        format!("bash\0-c\0l7r-gate lane --work\0{}\0", common.display()),
+        format!("/x/l7r-gate\0lane\0status\0{}\0", common.display()),
+        format!("/x/l7r-gate\0lane\0--work\0{}\0more\0", common.display()),
+    ] {
+        std::fs::write(at.join("cmdline"), loose).unwrap();
+        assert!(!lane_works(&w.p, &c));
+        assert!(judge(&w.p, &e, t).is_some());
+    }
+    let argv = format!(
+        "/home/u/.cache/l7r-cargo-target/x/tool/l7r-gate\0lane\0--work\0{}\0",
+        common.display()
+    );
+    std::fs::write(at.join("cmdline"), argv).unwrap();
+    assert!(lane_works(&w.p, &c));
+    assert!(judge(&w.p, &e, t).is_none());
 }

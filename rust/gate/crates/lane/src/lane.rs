@@ -1,8 +1,9 @@
 //! `l7r-gate lane <verb>` (feature 461 T11, `contracts/lane-cli.md`): the lane's command line. T11 builds `status` (`make lane`):
 //! each hand-in on the lane and its state, each open batch and its state, the last landed batch's line and the repairs open, all
 //! COMPUTED (`log.rs`) from the pool's log, the done refs, `origin/main` and the lane's log. It only reads: no fetch (the
-//! `origin/main` the clone last fetched), nothing created, and an empty lane ends 0. `start`, `wait`, `stop` and the runner's own
-//! `--work` come with the runner (T12) and the wake-up (T19); until then they are refused with the usage.
+//! `origin/main` the clone last fetched), nothing created, and an empty lane ends 0. T12 adds the runner's verbs (`runner.rs`):
+//! `start` (`make lane-start`), `stop [--now]` (`make lane-stop`, `NOW=1`) and the runner's own `--work <common>`; `wait` comes with
+//! the wake-up (T20) and is refused with the usage until then.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -13,16 +14,43 @@ use l7r_gate_core::Reply;
 use l7r_gate_task::builder_done::{held_by, REFS};
 
 use crate::log::{self, HandInState, World};
+use crate::runner;
 
-const USAGE: &str = "usage: l7r-gate lane status (make lane); start, wait, stop and --work come with the runner (461 T12)\n";
+const USAGE: &str = "usage: l7r-gate lane status|start|stop [--now] (make lane, make lane-start, make lane-stop [NOW=1]); wait comes with the wake-up (461 T20)\n";
 
-/// `l7r-gate lane <args>` from `cwd`, any tree of the clone.
+/// `l7r-gate lane <args>` from `cwd`, any tree of the clone; `exe` is this binary, which `start` runs again as the runner, and `env`
+/// the process's environment (the runner's knobs).
 #[must_use]
-pub fn cli(args: &[String], cwd: &Path) -> Reply {
-    match args.first().map(String::as_str) {
-        Some("status") => status(cwd),
+pub fn cli(args: &[String], cwd: &Path, exe: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
+    let in_clone = |verb: &dyn Fn(&Path) -> Reply| {
+        common_dir(cwd).map_or_else(|| nowhere(cwd), |common| verb(&common))
+    };
+    let words: Vec<&str> = args.iter().map(String::as_str).collect();
+    match words.as_slice() {
+        ["status", ..] => status(cwd),
+        ["start"] => in_clone(&|c| runner::start(c, exe, "setsid", runner::START_WAIT_S)),
+        ["stop"] => in_clone(&|c| runner::stop(c, false, runner::STOP_WAIT_S)),
+        ["stop", "--now"] => in_clone(&|c| runner::stop(c, true, runner::STOP_WAIT_S)),
+        ["--work", common] => runner::work_cli(Path::new(common), env),
         _ => reply(String::new(), USAGE.to_owned(), 2),
     }
+}
+
+/// The absolute git common directory of the clone `cwd` belongs to, shared by its pool trees and the lane's tree.
+pub(crate) fn common_dir(cwd: &Path) -> Option<PathBuf> {
+    git(
+        cwd,
+        &["rev-parse", "--path-format=absolute", "--git-common-dir"],
+    )
+    .map(|c| PathBuf::from(c.trim()))
+}
+
+fn nowhere(cwd: &Path) -> Reply {
+    reply(
+        String::new(),
+        format!("lane: {} is in no git repository\n", cwd.display()),
+        1,
+    )
 }
 
 fn reply(stdout: String, stderr: String, code: i32) -> Reply {
@@ -34,7 +62,7 @@ fn reply(stdout: String, stderr: String, code: i32) -> Reply {
 }
 
 /// `git -C cwd args`'s stdout, where it succeeded.
-fn git(cwd: &Path, args: &[&str]) -> Option<String> {
+pub(crate) fn git(cwd: &Path, args: &[&str]) -> Option<String> {
     let done = Command::new("git").arg("-C").arg(cwd).args(args).output();
     done.ok()
         .filter(|o| o.status.success())
@@ -43,15 +71,9 @@ fn git(cwd: &Path, args: &[&str]) -> Option<String> {
 
 /// `make lane`: the lane as it stands, read from the clone `cwd` belongs to.
 fn status(cwd: &Path) -> Reply {
-    let common = ["rev-parse", "--path-format=absolute", "--git-common-dir"];
-    let Some(common) = git(cwd, &common) else {
-        return reply(
-            String::new(),
-            format!("lane: {} is in no git repository\n", cwd.display()),
-            1,
-        );
+    let Some(common) = common_dir(cwd) else {
+        return nowhere(cwd);
     };
-    let common = PathBuf::from(common.trim());
     let pool = log::lines_of(&common.join(l7r_shared::builder_queue::LOG));
     let lane = log::read(&common);
     let refs: BTreeSet<String> = git(cwd, &["for-each-ref", "--format=%(objectname)", REFS])
