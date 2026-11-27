@@ -313,3 +313,13 @@ task's builders read (461 T01) - an estimate, not a measurement. Nothing measure
 The question the GM asked earlier was answered by the direct read alone; the carried cost, and the slow growth of a feature's
 records across a week, were not looked at - the kind of gap he names. The switch to a new feature is a natural before-and-after
 for both (461 T01's figures are the before).
+
+## His nineteenth message (2026-11-27, the afternoon after): FROM NOTICING TO REMEDY - the reviewer weighs the possible changes, picks one, and checks it afterwards
+
+<!-- SOURCE: GM NOTES -->
+> This is also something where I would hope that the process reviewer would be able to not only notice when something like this is happening, but then have some kind of command the sorts of changes that it might make sense to make. So for example, it might just be simplest to always close out a feature after a certain number of tasks. Or maybe we should just start enforcing file size limits on our spec kit files the way we do for other things. Or maybe it would have made sense to update our tooling so that the files that get mechanically parsed still get split up into subfiles within directories, in order to ensure that we don't accidentally consume too many tokens on something that is ordinarily cheap. Or maybe there are some safety hooks that could have been implemented that would have made sense. I don't really know. But these are the kinds of changes that if we have a sensible process reviewer that is able to not only diagnose this sort of thing after noticing it, but then also able to think through different possible approaches and then settle on one and then check its work after the fact to make sure that whatever it has done is achieving what we want and not coming along with other costs, then that will be a very positive sign that we have a process reviewer that is functioning properly and doing a good job. So this is probably also a good message to append to that growing list for when we eventually start that. Thank you.
+<!-- END SOURCE -->
+
+The GM's own example routes for the large-feature case, kept as the reviewer's first worked case (none chosen): close a feature
+after a set number of tasks; size limits on spec-kit files as on other files; split the mechanically parsed records into subfiles
+within directories; a guard against a whole read of a large record.
