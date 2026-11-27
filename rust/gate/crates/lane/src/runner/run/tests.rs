@@ -1,7 +1,9 @@
 //! The batch run end to end (feature 461 T14) on a scratch world: a clone, a bare `origin`, the lane's tree in the pool's registry
 //! and two pool trees, the landing a stand-in `make land` in the clone's own Makefile that ticks and pushes as the real one does. Two
-//! hand-ins, one batch, one push, both ticked, both done refs deleted, one `owed` line; a red run left open and resumed as attempt 2;
-//! a resumed batch already on `origin/main` landed with no run; a carry that stops; the errors.
+//! hand-ins, one batch, one push, both ticked, both done refs deleted, one `owed` line; a killed runner's batch resumed as attempt 2;
+//! a resumed batch already on `origin/main` landed with no run; a carry that stops; the errors. T15's red path: a red the gate's
+//! record places ejected as a repair entry and the other change landed on the next run; a red it cannot place ejecting the whole
+//! batch as one entry; a killed `make` stopping the runner with the batch open.
 
 use std::fmt::Write as _;
 use std::path::PathBuf;
@@ -13,8 +15,22 @@ use serde_json::{json, Value};
 
 use super::{resume, step, Lane};
 use crate::log::{self, Batch};
+use crate::repairs;
 
-const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
+/// The gate's red test of the crate `lib/two`, as `make done` writes it in the lane's tree (`@T@` and `@TREE@` the stand-in's).
+const PHASE: &str = r#"{"ev":"Phase","src":"rust","step":"test","t0":"@T@","t1":"@T@","code":101,"clone":"@TREE@","crates":["lib/two"]}"#;
+
+/// A task's `phase-<task>` file in the common directory: its line written to the feature's event log as the checks write theirs,
+/// stamped now and in the tree the landing runs in, and the landing red; a `kill` file: `make` itself killed, so no exit code.
+const RED_LINES: &str = concat!(
+    "\t",
+    r#"@c=$$(git rev-parse --path-format=absolute --git-common-dir); fail=; for t in $(T); do if [ -f "$$c/phase-$$t" ]; then mkdir -p "$$c/l7r-events"; now=$$(date -u +%Y-%m-%dT%H:%M:%S.%N | cut -c1-23)Z; sed "s|@TREE@|$$(pwd)|; s|@T@|$$now|g" "$$c/phase-$$t" >> "$$c/l7r-events/$$SPECIFY_FEATURE.jsonl"; fail=1; fi; done; [ -z "$$fail" ]"#,
+    "\n\t",
+    r#"@if [ -f "$$(git rev-parse --git-common-dir)/kill" ]; then kill -9 $$PPID; fi"#,
+    "\n"
+);
+
+const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
 
 struct World {
     dir: TempDir,
@@ -41,7 +57,7 @@ fn world(tag: &str) -> World {
     git(&clone, &["init", "-q", "-b", "main"]);
     git(&clone, &["config", "user.email", "t@t"]);
     git(&clone, &["config", "user.name", "t"]);
-    put(&clone, "Makefile", MAKEFILE);
+    put(&clone, "Makefile", &MAKEFILE.replace("@RED@", RED_LINES));
     put(
         &clone,
         "specs/461-x/tasks.md",
@@ -141,6 +157,10 @@ impl World {
     }
 }
 
+fn no_env(_: &str) -> Option<String> {
+    None
+}
+
 fn now() -> f64 {
     1000.0
 }
@@ -149,6 +169,7 @@ fn lane_of(w: &World) -> Lane<'_> {
     Lane {
         common: &w.common,
         now: &now,
+        env: &no_env,
     }
 }
 
@@ -198,19 +219,170 @@ fn two_hand_ins_land_as_one_batch_one_push_both_ticked_both_refs_deleted_one_owe
 }
 
 #[test]
-fn a_red_run_stops_the_step_with_its_owed_line_and_its_resume_is_attempt_two() {
-    let w = world("lane-run-red");
-    w.hand_in("461", "T01", "a.txt", "a\n");
+fn a_red_the_record_places_ejects_its_change_as_a_repair_entry_and_the_other_lands_on_the_next_run()
+{
+    let w = world("lane-run-placed");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "lib/two/x.rs", "x\n");
+    std::fs::write(w.common.join("phase-T02"), PHASE).unwrap();
+    let l = lane_of(&w);
+    assert_eq!(step(&l), Ok(true));
+    assert_eq!(
+        w.events(),
+        [
+            "batch",
+            "carry",
+            "run",
+            "attribute",
+            "eject",
+            "owed",
+            "carry",
+            "run",
+            "push",
+            "landed",
+            "owed"
+        ]
+    );
+    let lines = w.lane();
+    let attempt = lines[2]["attempt"].as_str().unwrap().to_owned();
+    assert!(attempt.ends_with("l7r-lane/attempts/461-1-1.log"));
+    assert_eq!(lines[2]["code"], 2);
+    assert_eq!(lines[2]["red"], json!(["lib/two test"]));
+    assert_eq!(lines[3]["candidates"], json!([two]));
+    assert_eq!(lines[3]["how"], "record");
+    assert_eq!(lines[4]["change"], json!(two));
+    assert_eq!(lines[4]["repair"], "r1");
+    assert_eq!(lines[4]["why"], "red");
+    assert_eq!(
+        lines[5]["line"],
+        format!("lane: batch 461-1 red at attempt 1 - 461 T02 ejected as repair r1 (red: lib/two test) - make builder-next hands it to a fresh builder: {attempt}")
+    );
+    assert_eq!(lines[7]["n"], 2);
+    assert_eq!(lines[7]["set"], json!([&one[..10]]));
+    assert_eq!(lines[7]["red"], json!([]));
+    assert_eq!(lines[9]["landed"], json!([one]));
+    assert_eq!(lines[9]["ejected"], json!([two]));
+    assert_eq!(lines[9]["runs"], 2);
+    assert_eq!(
+        lines[10]["line"],
+        "lane: batch 461-1 landed - 461 T01 (1 change(s), 1 ejected, 2 run(s), 0 minutes)"
+    );
+    let entries = repairs::read(&w.common);
+    assert_eq!(entries.len(), 1);
+    let mut entry = entries[0].clone();
+    entry.as_object_mut().unwrap().remove("utc");
+    assert_eq!(
+        entry,
+        json!({"repair": "r1", "feature": "461-x", "tasks": ["T02"], "kind": "fix", "ejected": [two], "batch": "461-1",
+            "why": "red", "units": ["lib/two test"], "attempt": attempt})
+    );
+    assert_eq!(w.origin_holds("a.txt"), "a");
+    assert!(w
+        .origin_holds("specs/461-x/tasks.md")
+        .starts_with("- [x] T01 one\n- [ ] T02 two"));
+    // the ejected change's done ref kept for its repair; it forms no batch again
+    assert_eq!(w.refs(), "refs/l7r/done/461-T02");
+    assert_eq!(step(&l), Ok(false));
+}
+
+#[test]
+fn a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_forms_no_batch_again(
+) {
+    let w = world("lane-run-unplaced");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "b.txt", "b\n");
     std::fs::write(w.common.join("red"), "").unwrap();
     let l = lane_of(&w);
-    let red = step(&l).unwrap_err();
-    assert!(red.starts_with("lane: batch 461-1 red at attempt 1 (make land exit 2)"));
-    assert!(red.ends_with("l7r-lane/attempts/461-1-1.log"));
-    assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
-    assert_eq!(w.lane()[3]["line"], red);
-    // the batch open: no step forms or runs again, every poll
-    assert_eq!(step(&l), Ok(false));
+    assert_eq!(step(&l), Ok(true));
+    assert_eq!(
+        w.events(),
+        [
+            "batch",
+            "carry",
+            "run",
+            "attribute",
+            "eject",
+            "eject",
+            "owed",
+            "landed",
+            "owed"
+        ]
+    );
+    let lines = w.lane();
+    let attempt = lines[2]["attempt"].as_str().unwrap().to_owned();
+    assert_eq!(lines[2]["red"], json!([]));
+    assert_eq!(lines[3]["candidates"], json!([one, two]));
+    assert_eq!(lines[3]["how"], "none");
+    for (line, sha) in [(&lines[4], &one), (&lines[5], &two)] {
+        assert_eq!(line["change"], json!(sha));
+        assert_eq!(line["repair"], "r1");
+        assert_eq!(line["why"], "unplaced");
+    }
+    assert_eq!(
+        lines[6]["line"],
+        format!("lane: batch 461-1 red at attempt 1 - 461 T01 T02 ejected as repair r1 (unplaced: the record names none) - make builder-next hands it to a fresh builder: {attempt}")
+    );
+    assert_eq!(lines[7]["landed"], json!([]));
+    assert_eq!(lines[7]["ejected"], json!([one, two]));
+    assert_eq!(
+        lines[8]["line"],
+        "lane: batch 461-1 ended - nothing landed, 2 ejected (1 run(s), 0 minutes)"
+    );
+    let entries = repairs::read(&w.common);
+    assert_eq!(entries.len(), 1);
+    assert_eq!(entries[0]["ejected"], json!([one, two]));
+    assert_eq!(entries[0]["tasks"], json!(["T01", "T02"]));
+    assert_eq!(entries[0]["why"], "unplaced");
+    assert_eq!(entries[0]["units"], json!([]));
+    assert_eq!(w.refs(), "refs/l7r/done/461-T01\nrefs/l7r/done/461-T02");
+    // no batch is formed again from the same hand-ins, red or not
     std::fs::remove_file(w.common.join("red")).unwrap();
+    assert_eq!(step(&l), Ok(false));
+    // a later hand-in of T01 (its repair) supersedes the ejected one and lands alone
+    w.hand_in("461", "T01", "c.txt", "c\n");
+    assert_eq!(step(&l), Ok(true));
+    assert_eq!(
+        w.lane().last().unwrap()["line"],
+        "lane: batch 461-2 landed - 461 T01 (1 change(s), 1 run(s), 0 minutes)"
+    );
+    assert_eq!(w.refs(), "refs/l7r/done/461-T02");
+}
+
+#[test]
+fn a_make_killed_mid_landing_stops_the_runner_with_the_batch_open_and_ejects_nothing() {
+    let w = world("lane-run-killed");
+    w.hand_in("461", "T01", "a.txt", "a\n");
+    std::fs::write(w.common.join("kill"), "").unwrap();
+    let l = lane_of(&w);
+    let err = step(&l).unwrap_err();
+    let head = "lane: batch 461-1: make land ended with no exit code at attempt 1";
+    assert!(err.starts_with(head), "{err}");
+    assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
+    assert_eq!(w.lane()[2]["code"], -1);
+    assert_eq!(w.lane()[3]["line"], err);
+    assert!(repairs::read(&w.common).is_empty());
+    assert!(open(&w).open());
+}
+
+#[test]
+fn the_runner_s_environment_is_the_process_s() {
+    assert_eq!(super::process_env("PATH"), std::env::var("PATH").ok());
+}
+
+#[test]
+fn a_killed_runner_s_open_batch_resumes_as_its_next_attempt() {
+    let w = world("lane-run-resume-two");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let l = lane_of(&w);
+    for (event, fields) in [
+        ("batch", json!({"batch": "461-1", "changes": [one]})),
+        (
+            "run",
+            json!({"batch": "461-1", "n": 1, "set": [&one[..10]], "code": -1}),
+        ),
+    ] {
+        log::append(&w.common, "t", event, &fields).unwrap();
+    }
     let b = open(&w);
     resume(&l, &b, &b.changes).unwrap();
     let lines = w.lane();

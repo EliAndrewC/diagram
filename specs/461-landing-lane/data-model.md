@@ -62,11 +62,12 @@ ejection pins nothing. At a task's second pin the lane files no repair: the batc
 
 ```json
 {"utc": "2026-11-28T03:12:09Z", "repair": "r3", "feature": "461-landing-lane", "tasks": ["T13"], "kind": "fix",
- "ejected": "<done commit sha>", "batch": "461-7", "why": "red", "units": ["rust/gate/crates/land test"],
+ "ejected": ["<done commit sha>"], "batch": "461-7", "why": "red", "units": ["rust/gate/crates/land test"],
  "attempt": "<common>/l7r-lane/attempts/461-7-2.log"}
 ```
 
-`why` is `red` (the gate placed it), `inferred` (the last left after the halving), `unplaced` (phase 2: a whole batch whose red
+`ejected` is always a list of full shas (461 T15): the one change the gate placed, or every change of an `unplaced` batch (or of an
+`integrate` set), so a reader takes one shape. `feature` is the spec directory's name. `why` is `red` (the gate placed it), `inferred` (the last left after the halving), `unplaced` (phase 2: a whole batch whose red
 the gate's record cannot place, ejected as one entry), `conflict` (the lane's carry stopped; `units` are the conflicting files),
 `push` (kind `integrate`: a green batch whose push failed twice; `tasks` every change of the set, `attempt` the push's output), or
 `arbiter` (filed once the round arbiter's ruling on a task's second pin is recorded; `attempt` names the ruling). Every entry is

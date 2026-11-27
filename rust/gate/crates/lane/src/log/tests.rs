@@ -231,6 +231,19 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
     );
     let log = [formed.clone(), eject.clone()];
     assert_eq!(ask(&a, &all, &[], &log), HandInState::Ejected("r1".into()));
+    // still ejected once its batch's `landed` line lists it among the ejected (461 T15); a landed line not listing it changes nothing
+    let ended = json!({"event": "landed", "batch": "461-1", "landed": [], "ejected": [A]});
+    let ended_log = [formed.clone(), eject.clone(), ended];
+    assert_eq!(
+        ask(&a, &all, &[], &ended_log),
+        HandInState::Ejected("r1".into())
+    );
+    let mention =
+        json!({"event": "landed", "batch": "461-1", "landed": [], "ejected": [], "set": [A]});
+    assert_eq!(
+        ask(&a, &all, &[], &[formed.clone(), mention]),
+        HandInState::Waiting
+    );
     assert_eq!(
         ask(&b, &all, &[], &log),
         HandInState::InBatch("461-1".into())

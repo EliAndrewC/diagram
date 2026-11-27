@@ -21,25 +21,37 @@
 //! `land-alone.sh` runs its own landing in this same worktree, `L7R_LAND_ALONE=1` (the tree is the landing, never sent alone again)
 //! and `SYNC_BACKUP=off`; with the caller's `MSG`, `GUARD`, `T`, `F`, `L7R_GATE_TREE` and make's own `MAKEFLAGS`, `MAKEOVERRIDES`,
 //! `MFLAGS` and `MAKELEVEL` removed ([`STRIPPED`]) - a runner a hand-in started inherits `make builder-done`'s, and a variable given
-//! on that make's command line reaches a grandchild make through `MAKEFLAGS`.
+//! on that make's command line reaches a grandchild make through `MAKEFLAGS`. `L7R_FEATURE_DIRECTORY` is removed too (461 T15): the
+//! event log's writer files a check's Phase line under that variable's feature before `SPECIFY_FEATURE`'s, so a caller's stale one
+//! would file the attempt's lines where the attribution never reads them.
 //!
-//! THE SEAMS LEFT (T14 builds the green path): a carry that stops, and a red or refused landing, end the step with an error after
-//! their line (a red one also ONE `owed` line naming the attempt file), the batch left OPEN - the runner stops (`error: ...`) rather
-//! than form or run again every poll, and the next `make lane-start` resumes it as a new attempt. The red's attribution and
-//! ejection are T15's, a carry conflict's repair entry phase 3's, a failed push's T19's.
+//! A RED ATTEMPT (461 T15, D6 step 2 and "By phase", D7): its output and the gate's Phase lines of its span in the lane's tree are
+//! read by [`crate::attribute`]; the `run` line names the red units, an `attribute` line the candidates, and phase 2's ejection
+//! follows - each change the record places a repair entry of its own (`why` `red`), else the whole of what ran as ONE entry (`why`
+//! `unplaced`) - written to `l7r-lane/repairs.jsonl` ([`crate::repairs`]) before the change's `eject` line, one `owed` line an entry.
+//! The rest runs again as the next attempt on the tree brought to `origin/main` anew; a batch that ejects everything ends with a
+//! `landed` line that lands nothing. An ejected change's done ref is kept: its repair's hand-in supersedes it (D7, D14).
+//!
+//! THE SEAMS LEFT: a carry that stops ends the step with an error after its line, and a `make` that cannot start (exit -1, no
+//! change's fault) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
+//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25), a failed
+//! push's T19's, the halving that replaces the whole-batch ejection T24's, the tripwire by task T18's.
 
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use std::time::SystemTime;
 
 use l7r_gate_task::builder_done::{held_by, REFS};
+use l7r_shared::guards::event_log_hooks::{log_path_in, now_stamp};
 use serde_json::{json, Value};
 
-use crate::batch;
+use crate::attribute::{self, Change, Verdict};
 use crate::log::{self, Batch, HandIn, World};
+use crate::{batch, repairs};
 
 /// What `make` in the lane's tree never inherits from the runner's caller (the module's doc).
-pub const STRIPPED: [&str; 9] = [
+pub const STRIPPED: [&str; 10] = [
     "MSG",
     "GUARD",
     "T",
@@ -49,6 +61,7 @@ pub const STRIPPED: [&str; 9] = [
     "MAKEOVERRIDES",
     "MFLAGS",
     "MAKELEVEL",
+    "L7R_FEATURE_DIRECTORY",
 ];
 /// The attempts' directory, in the lane's directory.
 pub const ATTEMPTS: &str = "attempts";
@@ -57,6 +70,15 @@ pub const ATTEMPTS: &str = "attempts";
 pub struct Lane<'a> {
     pub common: &'a Path,
     pub now: &'a dyn Fn() -> f64,
+    /// The environment the gate's event log is found by (`L7R_EVENTS_DIR`), as the landing's own `make` inherits it: the process's
+    /// ([`process_env`]) in the runner, a test's own (451 T38: no session's export reaches a test).
+    pub env: &'a dyn Fn(&str) -> Option<String>,
+}
+
+/// The process's environment, the runner's [`Lane::env`].
+#[must_use]
+pub fn process_env(name: &str) -> Option<String> {
+    std::env::var(name).ok()
 }
 
 impl Lane<'_> {
@@ -185,9 +207,8 @@ fn in_tree(tree: &Path, args: &[&str], env: &[(&str, &str)]) -> Command {
     c
 }
 
-/// The batch `id` of `changes` (one feature's) run on the lane's tree (the module's doc, steps 1-4).
-fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
-    let began = (l.now)();
+/// The tree brought to `origin/main` for batch `id` (T13's `builder-tree lane`).
+fn bring(l: &Lane, id: &str) -> Result<PathBuf, String> {
     let brought = l7r_gate_task::builder_tree::cli(&["lane".to_owned()], &l.clone_dir());
     if brought.code != 0 {
         return Err(format!("lane: batch {id}: {}", brought.stderr.trim()));
@@ -196,17 +217,22 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
     // THE BUILD AT THE RESET (461 T54): the reset moved the tree's sources; where nothing is carried after it, no `make` of the
     // batch runs the launcher, and the next start's build (T51) waited out the whole move in a hand-in's foreground - up to 112 s
     // measured 2026-11-27 (T51's scratch timing). With a carry it is the build `make carry`'s launcher would make; a failure stops
-    // nothing here: the carry's launcher, or the next start, says why.
+    // nothing here: the carry's launcher, or the next start, says why. Every reset of a batch builds (461 T15: a red attempt's
+    // rest runs again on the tree reset anew).
     let launcher = tree.join("scripts/gates").join(super::LAUNCHER);
     if launcher.is_file() {
         let _ = super::prebuild(&launcher);
     }
-    let shas: Vec<String> = changes.iter().map(|h| h.commit.clone()).collect();
-    let on_main = held_by(&tree, "HEAD", &shas);
-    let todo: Vec<&HandIn> = changes
-        .iter()
-        .filter(|h| !on_main.contains(&h.commit))
-        .collect();
+    Ok(tree)
+}
+
+/// The batch `id` of `changes` (one feature's) run on the lane's tree (the module's doc, steps 1-4): attempts until one pushes, each
+/// red attempt ejecting the changes its record places - or, unplaced, every change left - and the rest run again on the tree brought
+/// to `origin/main` anew. Every red attempt ejects one change at least, so the loop ends.
+fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
+    let began = (l.now)();
+    let mut left: Vec<HandIn> = changes.to_vec();
+    let mut landed: Vec<String> = Vec::new();
     let mut runs = log::batches(&log::read(l.common))
         .into_iter()
         .rev()
@@ -214,29 +240,78 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
         .map_or(0, |b| {
             b.lines.iter().filter(|x| x["event"] == "run").count()
         });
-    if let Some(first) = todo.first() {
+    loop {
+        let tree = bring(l, id)?;
+        let shas: Vec<String> = left.iter().map(|h| h.commit.clone()).collect();
+        let on_main = held_by(&tree, "HEAD", &shas);
+        landed.extend(shas.iter().filter(|s| on_main.contains(*s)).cloned());
+        let todo: Vec<&HandIn> = left
+            .iter()
+            .filter(|h| !on_main.contains(&h.commit))
+            .collect();
+        let Some(first) = todo.first() else {
+            break;
+        };
         carry(l, id, &tree, &todo)?;
         runs += 1;
-        land(l, id, &tree, &first.feature, &todo, runs, began)?;
+        match land(l, id, &tree, &first.feature, &todo, runs, began)? {
+            None => {
+                landed.extend(todo.iter().map(|h| h.commit.clone()));
+                break;
+            }
+            Some(out) => {
+                let ejected = eject(l, id, &todo, &out)?;
+                let rest: Vec<HandIn> = todo
+                    .into_iter()
+                    .filter(|h| !ejected.contains(&h.commit))
+                    .cloned()
+                    .collect();
+                left = rest;
+            }
+        }
     }
     for (name, sha) in done_refs(l.common) {
-        if shas.contains(&sha) {
+        if landed.contains(&sha) {
             let _ = git(l.common, &["update-ref", "-d", &name, &sha]);
         }
     }
+    let ejected: Vec<String> = log::batches(&log::read(l.common))
+        .into_iter()
+        .rev()
+        .find(|b| b.id == id)
+        .map_or(Vec::new(), |b| {
+            b.lines
+                .iter()
+                .filter(|x| x["event"] == "eject")
+                .filter_map(|x| x["change"].as_str().map(str::to_owned))
+                .collect()
+        });
     let minutes = ((l.now)() - began) / 60.0;
     let minutes = (minutes * 10.0).round() / 10.0;
     l.append(
         "landed",
-        &json!({"batch": id, "landed": shas, "ejected": [], "runs": runs, "minutes": minutes}),
+        &json!({"batch": id, "landed": landed, "ejected": ejected, "runs": runs, "minutes": minutes}),
     )?;
-    let tasks: Vec<String> = changes.iter().flat_map(|h| h.tasks.clone()).collect();
+    let on: Vec<&HandIn> = changes
+        .iter()
+        .filter(|h| landed.contains(&h.commit))
+        .collect();
+    let tasks: Vec<String> = on.iter().flat_map(|h| h.tasks.clone()).collect();
     let feature = changes.first().map_or("", |h| h.feature.as_str());
-    let line = format!(
-        "lane: batch {id} landed - {feature} {} ({} change(s), {runs} run(s), {minutes} minutes)",
-        tasks.join(" "),
-        changes.len()
-    );
+    let out = if ejected.is_empty() {
+        String::new()
+    } else {
+        format!(", {} ejected", ejected.len())
+    };
+    let line = if on.is_empty() {
+        format!("lane: batch {id} ended - nothing landed{out} ({runs} run(s), {minutes} minutes)")
+    } else {
+        format!(
+            "lane: batch {id} landed - {feature} {} ({} change(s){out}, {runs} run(s), {minutes} minutes)",
+            tasks.join(" "),
+            on.len()
+        )
+    };
     l.append("owed", &json!({"batch": id, "line": line}))
 }
 
@@ -281,7 +356,18 @@ fn on_origin(tree: &Path, shas: &[&str]) -> bool {
     held_by(tree, "refs/remotes/origin/main", &wanted).len() == wanted.len()
 }
 
-/// Step 3: `make land` in `tree` over `todo`, attempt `n`; its `run` line, and its `push` line where it pushed.
+/// A red attempt, as its ejection reads it.
+struct Redden {
+    n: usize,
+    /// The feature's spec directory's name, as a repair entry names its feature.
+    spec: String,
+    attempt: String,
+    units: Vec<String>,
+    verdict: Verdict,
+}
+
+/// Step 3: `make land` in `tree` over `todo`, attempt `n`; its `run` line, and its `push` line where it pushed (None); a red attempt
+/// read against the gate's record (`attribute`, T15) and handed back for its ejection.
 fn land(
     l: &Lane,
     id: &str,
@@ -290,7 +376,7 @@ fn land(
     todo: &[&HandIn],
     n: usize,
     began: f64,
-) -> Result<(), String> {
+) -> Result<Option<Redden>, String> {
     let spec = l7r_gate_task::tick::spec_dir(tree, feature)
         .and_then(|d| Some(d.file_name()?.to_string_lossy().into_owned()))
         .ok_or_else(|| {
@@ -326,6 +412,7 @@ fn land(
         ("L7R_LAND_ALONE", "1"),
         ("SYNC_BACKUP", "off"),
     ];
+    let t0 = now_stamp(SystemTime::now());
     let status = in_tree(
         tree,
         &["--no-print-directory", "land", &f_arg, &t_arg, &note],
@@ -334,23 +421,130 @@ fn land(
     .stdout(file)
     .stderr(err)
     .status();
-    // a make that cannot be started is a red run (exit -1), its line and its owed line written as any other's
+    let t1 = now_stamp(SystemTime::now());
+    // a make that cannot be started, or one killed, is exit -1: no change's fault, so nothing is ejected - the runner stops, the batch
+    // open
     let code = status.map_or(-1, |s| s.code().unwrap_or(-1));
     let set: Vec<String> = shas.iter().map(|s| short(s)).collect();
     let minutes = (((l.now)() - began) / 6.0).round() / 10.0;
-    let at = attempt.to_string_lossy();
+    let at = attempt.to_string_lossy().into_owned();
+    let pushed = code == 0 || on_origin(tree, &shas);
+    let red = (!pushed && code != -1).then(|| {
+        let events = log::lines_of(&log_path_in(tree, &spec, l.env));
+        let output = std::fs::read_to_string(&attempt).unwrap_or_default();
+        let reds = attribute::reds(&events, (&t0, &t1), tree, &output);
+        let changes: Vec<Change> = todo.iter().map(|h| change_of(tree, h)).collect();
+        let verdict = attribute::attribute(&reds, &changes);
+        (
+            reds.into_iter().map(|r| r.unit).collect::<Vec<_>>(),
+            verdict,
+        )
+    });
+    let units = red.as_ref().map_or(Vec::new(), |(u, _)| u.clone());
     l.append(
         "run",
-        &json!({"batch": id, "n": n, "set": set, "code": code, "minutes": minutes, "attempt": at, "red": []}),
+        &json!({"batch": id, "n": n, "set": set, "code": code, "minutes": minutes, "attempt": at, "red": units}),
     )?;
-    if code == 0 || on_origin(tree, &shas) {
-        return l.append("push", &json!({"batch": id, "set": set, "code": code}));
+    if pushed {
+        l.append("push", &json!({"batch": id, "set": set, "code": code}))?;
+        return Ok(None);
     }
-    let line = format!(
-        "lane: batch {id} red at attempt {n} (make land exit {code}) - the runner stopped, the batch open; its attribution and ejection are 461 T15's: {at}"
-    );
-    l.append("owed", &json!({"batch": id, "line": line}))?;
-    Err(line)
+    let Some((units, verdict)) = red else {
+        let line = format!(
+            "lane: batch {id}: make land ended with no exit code at attempt {n} (it could not start, or was killed) - the runner stopped, the batch open: {at}"
+        );
+        l.append("owed", &json!({"batch": id, "line": line}))?;
+        return Err(line);
+    };
+    Ok(Some(Redden {
+        n,
+        spec,
+        attempt: at,
+        units,
+        verdict,
+    }))
+}
+
+/// A change as attribution reads it: the paths its commit touches against its parent, and its tasks.
+fn change_of(tree: &Path, h: &HandIn) -> Change {
+    let files = git(
+        tree,
+        &[
+            "diff-tree",
+            "--no-commit-id",
+            "--name-only",
+            "-r",
+            &h.commit,
+        ],
+    )
+    .1
+    .lines()
+    .map(str::to_owned)
+    .collect();
+    Change {
+        files,
+        tasks: h.tasks.clone(),
+    }
+}
+
+/// PHASE 2'S EJECTION (D6 "By phase", D7): the `attribute` line, then each placed change as a repair entry of its own (`why` `red`,
+/// its units), or, unplaced, every change of `todo` as ONE entry (`why` `unplaced`, every unit read) - each entry filed before its
+/// `eject` lines (`repairs`' doc), then one `owed` line an entry, naming it and the attempt file. The ejected commits, returned.
+fn eject(l: &Lane, id: &str, todo: &[&HandIn], red: &Redden) -> Result<Vec<String>, String> {
+    let groups: Vec<(Vec<&HandIn>, Vec<String>, &str)> = match &red.verdict {
+        Verdict::Unplaced => vec![(todo.to_vec(), red.units.clone(), "unplaced")],
+        Verdict::Placed(placed) => placed
+            .iter()
+            .map(|(i, units)| (vec![todo[*i]], units.clone(), "red"))
+            .collect(),
+    };
+    let how = if red.verdict == Verdict::Unplaced {
+        "none"
+    } else {
+        "record"
+    };
+    let candidates: Vec<&str> = groups
+        .iter()
+        .flat_map(|(hs, _, _)| hs.iter().map(|h| h.commit.as_str()))
+        .collect();
+    l.append(
+        "attribute",
+        &json!({"batch": id, "candidates": candidates, "how": how}),
+    )?;
+    for (hs, units, why) in &groups {
+        let tasks: Vec<String> = hs.iter().flat_map(|h| h.tasks.clone()).collect();
+        let entry = repairs::Entry {
+            feature: red.spec.clone(),
+            tasks: tasks.clone(),
+            kind: "fix".to_owned(),
+            ejected: hs.iter().map(|h| h.commit.clone()).collect(),
+            batch: id.to_owned(),
+            why: (*why).to_owned(),
+            units: units.clone(),
+            attempt: red.attempt.clone(),
+        };
+        let r = repairs::file(l.common, &l7r_gate_core::record::repo::utc_now(), &entry)?;
+        for h in hs {
+            l.append(
+                "eject",
+                &json!({"batch": id, "change": h.commit, "repair": r, "why": why}),
+            )?;
+        }
+        let named = if units.is_empty() {
+            "the record names none".to_owned()
+        } else {
+            units.join(", ")
+        };
+        let feature = hs.first().map_or("", |h| h.feature.as_str());
+        let line = format!(
+            "lane: batch {id} red at attempt {} - {feature} {} ejected as repair {r} ({why}: {named}) - make builder-next hands it to a fresh builder: {}",
+            red.n,
+            tasks.join(" "),
+            red.attempt
+        );
+        l.append("owed", &json!({"batch": id, "line": line}))?;
+    }
+    Ok(candidates.into_iter().map(str::to_owned).collect())
 }
 
 #[cfg(test)]

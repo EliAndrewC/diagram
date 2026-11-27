@@ -546,7 +546,11 @@ pub fn work_cli(common: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
     };
     let sleep = |s: f64| std::thread::sleep(Duration::from_secs_f64(s.max(0.0)));
     let hand_ins = || on_lane(common);
-    let lane = run::Lane { common, now: &now };
+    let lane = run::Lane {
+        common,
+        now: &now,
+        env: &run::process_env,
+    };
     let mut resume = |b: &Batch, r: &[String]| run::resume(&lane, b, r);
     let mut step = || run::step(&lane);
     let mut run = Run {

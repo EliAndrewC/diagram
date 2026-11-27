@@ -310,8 +310,12 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     if w.on_main.contains(&h.commit) || landed_line {
         return HandInState::Landed;
     }
+    // the last line naming it an `eject`, or the `landed` line that ended its batch listing it as ejected (461 T15: read as `waiting`
+    // there, an ejected hand-in formed a batch again)
     let last = w.log.iter().rev().find(|l| mentions(l, &h.commit));
-    let ejected = last.filter(|l| l["event"] == "eject");
+    let ended_out =
+        |l: &&Value| l["event"] == "landed" && listed(l, "ejected").any(|s| names(&h.commit, s));
+    let ejected = last.filter(|l| l["event"] == "eject" || ended_out(l));
     let open = w
         .batches
         .iter()
@@ -328,9 +332,21 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     if later {
         return HandInState::Superseded;
     }
-    ejected.map_or(HandInState::Waiting, |l| {
-        HandInState::Ejected(l["repair"].as_str().unwrap_or_default().to_owned())
-    })
+    if ejected.is_none() {
+        return HandInState::Waiting;
+    }
+    // to the repair its last `eject` line names
+    let ejection = w
+        .log
+        .iter()
+        .rev()
+        .find(|l| l["event"] == "eject" && mentions(l, &h.commit));
+    HandInState::Ejected(
+        ejection
+            .and_then(|l| l["repair"].as_str())
+            .unwrap_or_default()
+            .to_owned(),
+    )
 }
 
 /// The repair entries the log's ejections filed that no hand-in answers by its `repair_of`, each once, in the order filed.
