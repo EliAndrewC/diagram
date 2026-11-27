@@ -79,6 +79,35 @@ fn a_built_binary_past_its_bound_is_caught_once_and_named_on_its_test_line() {
     caught(&root, test_line(&lines, "rust/a"), &root.join("rust/a"));
 }
 
+/// 451 T470: a built binary is asked libtest's per-test times (`-Z unstable-options --report-time`, under `RUSTC_BOOTSTRAP=1`), and a
+/// run past its bound has them on the end of its record, slowest first, a test with no time (ignored) last; the test lines are out of
+/// the crate's output, its summary kept.
+#[test]
+fn a_caught_binary_s_per_test_times_end_its_record_slowest_first() {
+    let (root, _, _) = kept_crates();
+    let world = bounded(world_with(&root, ONE_BINARY), &root, "100");
+    let exe = world.target.join("a-lib");
+    let pretty = "case \"$RUSTC_BOOTSTRAP $*\" in \"1 -Z unstable-options --report-time\") \
+                  printf '\\nrunning 3 tests\\ntest t::fast ... ok <0.001s>\\ntest t::off ... ignored\\ntest t::slow ... ok <31.250s>\\n\\n';; esac";
+    crate::write_executable(
+        &exe,
+        &format!("#!/bin/sh\n{pretty}\n{}\n", lingering(&alive_dir(&root))),
+    );
+    let done = answer(&world, "test", &["rust/a".to_owned()], false);
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    let (out, summary) = (
+        &done.stdout,
+        "rust-checks: test on rust/a: test result: ok. 1 passed",
+    );
+    assert!(out.contains(summary) && !out.contains("t::fast"), "{out}");
+    let lines = phases(&root);
+    let named = PathBuf::from(test_line(&lines, "rust/a")["alive"].as_str().unwrap());
+    let text = std::fs::read_to_string(&named).unwrap();
+    let times = "=== per-test times, slowest first (libtest --report-time)\ntest t::slow ... ok <31.250s>\ntest t::fast ... ok <0.001s>\ntest t::off ... ignored\n";
+    assert!(text.ends_with(times), "{text}");
+    assert!(text.contains("sleep 46.3"), "{text}");
+}
+
 /// 451 T473: a record written prunes the directory to the newest 50 (`alive.rs`'s `KEEP`), oldest first by mtime, never the one
 /// just written.
 #[test]

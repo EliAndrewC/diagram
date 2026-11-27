@@ -43,7 +43,12 @@ fn the_binaries_run_in_cargo_s_order_from_the_crate_with_cargo_s_variables() {
     sorted.sort();
     assert_eq!(
         sorted,
-        ["exe a-it -q", "exe a-lib -q", "exe b-it -q", "exe b-lib -q"]
+        [
+            "exe a-it -Z unstable-options --report-time",
+            "exe a-lib -Z unstable-options --report-time",
+            "exe b-it -Z unstable-options --report-time",
+            "exe b-lib -Z unstable-options --report-time"
+        ]
     );
     // within a crate the library's unit tests first, as `cargo test` runs them, and no `cargo test` was asked
     let at = |name: &str| ran.iter().position(|c| c.starts_with(name)).unwrap();

@@ -133,6 +133,51 @@ pub(super) fn bounded(mut text: String, cap: usize) -> String {
     text
 }
 
+/// libtest's words for its per-test times (451 T470): the pretty format, one `test <name> ... ok <0.367s>` line a test as it ends,
+/// in place of `-q`'s dots. Not `--format json` (T463's line's words): `answer`, `only::judge` and a red crate's shown output read
+/// libtest's human stdout, and `split` takes the test lines back out of it. Not `--logfile` beside `-q`: libtest says "`--logfile` is
+/// deprecated" on stderr on every run (observed 2026-11-27, this crate's built binary). Unstable, so the binary runs under
+/// `RUSTC_BOOTSTRAP=1`: a built binary only (`side.rs`), never `cargo test`, where that variable in cargo's environment rebuilt
+/// proc-macro2 and thiserror and all above them, and again on the next run without it (measured 2026-11-27, a scratch crate over
+/// thiserror 2.0.21, `cargo test --no-run -v`).
+pub(super) const TIMES: [&str; 3] = ["-Z", "unstable-options", "--report-time"];
+
+/// A binary's stdout without its per-test lines, as `-q` would leave the parts the checks read (the `running` and `test result:`
+/// lines, a failure's output), and those lines.
+pub(super) fn split(stdout: &str) -> (String, Vec<String>) {
+    let mut kept = String::new();
+    let mut tests = Vec::new();
+    for line in stdout.split_inclusive('\n') {
+        if line.starts_with("test ") && line.contains(" ... ") {
+            tests.push(line.trim_end().to_owned());
+        } else {
+            kept.push_str(line);
+        }
+    }
+    (kept, tests)
+}
+
+/// The per-test `lines` (`split`), slowest first (an untimed line, an ignored test, last), put on the end of the record at `at`, cut
+/// at `CAP`; nothing where the binary printed none (a stand-in, or a binary that never reached its tests).
+pub(super) fn times(at: &Path, lines: &[String]) {
+    if lines.is_empty() {
+        return;
+    }
+    let took = |l: &str| -> f64 {
+        l.rsplit_once(" <")
+            .and_then(|(_, t)| t.strip_suffix("s>")?.parse().ok())
+            .unwrap_or(-1.0)
+    };
+    let mut sorted: Vec<&String> = lines.iter().collect();
+    sorted.sort_by(|a, b| took(b).total_cmp(&took(a)));
+    let mut out = "=== per-test times, slowest first (libtest --report-time)\n".to_owned();
+    for l in sorted {
+        let _ = writeln!(out, "{l}");
+    }
+    let file = std::fs::OpenOptions::new().append(true).open(at);
+    let _ = file.and_then(|mut f| std::io::Write::write_all(&mut f, bounded(out, CAP).as_bytes()));
+}
+
 /// What `root` and every process under it is doing, read from `proc`.
 pub(super) fn record(proc: &Path, root: u32, head: &str) -> String {
     let read = |p: &Path| std::fs::read_to_string(p).unwrap_or_default();
@@ -216,7 +261,7 @@ fn tree(proc: &Path, root: u32) -> Vec<u32> {
 }
 
 /// A `/proc/<pid>/stat` line's state, parent and start time in ticks, read after its name's last `)`: a name holds any character.
-fn stat(text: &str) -> Option<(String, u32, f64)> {
+pub(super) fn stat(text: &str) -> Option<(String, u32, f64)> {
     let fields: Vec<&str> = text
         .get(text.rfind(')')? + 1..)?
         .split_whitespace()

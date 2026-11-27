@@ -69,7 +69,13 @@ fn a_filtered_run_reaches_each_binary_and_keeps_no_green_so_the_next_whole_run_r
     let world = only(world, &["carry"]);
     let done = answer(&world, "test", &["rust/a".to_owned()], false);
     assert_eq!(done.code, 0, "{}", done.stderr);
-    assert_eq!(exes(&world), ["exe a-it -q carry", "exe a-lib -q carry"]);
+    assert_eq!(
+        exes(&world),
+        [
+            "exe a-it -Z unstable-options --report-time carry",
+            "exe a-lib -Z unstable-options --report-time carry"
+        ]
+    );
     assert!(done.stdout.contains("rust-checks: test ONLY \"carry\" on rust/a: 2 ran, 0 filtered out - a part, not kept as the crate's green\n"), "{}", done.stdout);
     assert!(done.stdout.ends_with("rust-checks: test clean on 1 crate(s)\nrust-checks: ONLY \"carry\" ran a part of each crate's tests, NOT kept as its green - `make builder-checks` runs the whole crate\n"), "{}", done.stdout);
     assert!(!kept(&root, "test-a") && !kept(&root, "binary-a"));
@@ -79,7 +85,10 @@ fn a_filtered_run_reaches_each_binary_and_keeps_no_green_so_the_next_whole_run_r
     assert_eq!(whole.code, 0, "{}", whole.stderr);
     assert!(!whole.stdout.contains("unchanged"), "{}", whole.stdout);
     assert!(!whole.stdout.contains("ONLY"), "{}", whole.stdout);
-    let whole_runs = exes(&world).iter().filter(|c| c.ends_with(" -q")).count();
+    let whole_runs = exes(&world)
+        .iter()
+        .filter(|c| c.ends_with(" --report-time"))
+        .count();
     assert_eq!(whole_runs, 2);
     assert!(kept(&root, "test-a") && kept(&root, "binary-a"));
     // a filtered run where the whole crate's green stands reads it and runs nothing
@@ -108,7 +117,10 @@ fn a_filtered_run_leaves_the_counting_build_s_binary_unpassed() {
     assert_eq!(counted.code, 0, "{}", counted.stderr);
     assert!(!counted.stdout.contains("unchanged"), "{}", counted.stdout);
     assert_eq!(
-        exes(&world).iter().filter(|c| c.ends_with(" -q")).count(),
+        exes(&world)
+            .iter()
+            .filter(|c| c.ends_with(" --report-time"))
+            .count(),
         2
     );
 }

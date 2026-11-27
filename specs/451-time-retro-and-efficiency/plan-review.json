@@ -2935,14 +2935,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T363 (<why: the finding or measurement that files it>)": {
-   "sha256": "391107310c04b8aa2e4a6acc337c5f0c3fc9cdc90d1849ba52f7d288e8f3f987",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T363 Approach (checklist part A)": {
-   "sha256": "dd018a59e1eb7a269197cf445e32b04e92384d945c136d7f4001f3a4fa650db9",
+   "sha256": "3ccc6a58c509a87aed6235ae884884ddc52a1b4737540f85146a742d04897e30",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4297,14 +4291,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T470 (<why: the finding or measurement that files it>)": {
-   "sha256": "9e75f5a6ef5a6b6d73b6b9b293bac457bf53621d6bff826943c60168b6c165c4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T470 Approach (checklist part A)": {
-   "sha256": "78464d836e4e241c23ab38348f181598c5ec5e5e3c0597ce7c813b23b52bcecc",
+   "sha256": "d59f11c8c581b1ff8e6089850ac145372448e7d70ddc5e0cba18a4fa94147972",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4533,6 +4521,18 @@
   },
   "### T504 Approach (checklist part A)": {
    "sha256": "c3178b22b128673004820520376ec7ebcc5efeb86a14400f42add1354baab3e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)": {
+   "sha256": "68bb92cbb0b7cc5661d239898afdb6fbb12b05cd97fb6c7a1ced55152de7ce57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)": {
+   "sha256": "171c0b02cb700da421da8b0544d0e7499c8fec36dd0e75ef1c57f920f03e6b12",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -41567,6 +41567,194 @@
      "summary": "Delete the T490 block, which was an unfilled template skeleton (placeholder heading, placeholder Approach line, a table header with no rows)",
      "class": "within",
      "why": "The removed text carried no decision, no requirement and no commitment owed to the GM's request: every field was the template's own placeholder and the table had no rows. Deleting an empty stub withdraws nothing the request or the accepted spec asks for, so it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)",
+    "### T363 Approach (checklist part A)",
+    "### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)",
+    "### T470 Approach (checklist part A)",
+    "(removed) ### T363 (<why: the finding or measurement that files it>)",
+    "(removed) ### T470 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-D1",
+     "summary": "The leak pin (run.rs leak_checked) also fails a crate whose tests left a process running, naming it (pid and command line), and SIGKILLs it; covers the built-binary, cargo test and doctest paths.",
+     "class": "within",
+     "why": "T363's own finding is that leaked processes held the test phase's pipe and nothing failed for it; failing and ending them is what the task is for, and it serves FR-013 (the GM 2026-11-20: prioritize work that makes the checks faster)."
+    },
+    {
+     "id": "T363-D2",
+     "summary": "A leaked process is found by its environ holding exactly the run's fresh TMPDIR, not by a process group (the task line's suggestion); a process started with a cleared environment escapes, and the two env_clear sites under rust/ were observed to wait on their children.",
+     "class": "within",
+     "why": "The mechanism is not in the GM's words (the process-group idea is the coordinating session's task line), and the GM's request asks only that the checks be fast and the time measured. The choice keeps land's stop able to TERM the run's process group (land/stop.rs kill_group), which a test run moved to its own group would escape. Its stated reach: the check matches the run's TMPDIR exactly, so a child started with a cleared environment, or given a different TMPDIR, is not seen; the block's search covered the first form only (grep of rust/ for env_clear, two sites, each read and each waiting on its child, observed 2026-11-27). That is a stated limit of a detector, not a wrong outcome found, and it does not narrow anything the GM asked for."
+    },
+    {
+     "id": "T363-D3",
+     "summary": "GRACE, 100 ms, a new GUESS knob, re-reads /proc only where a process was found.",
+     "class": "within",
+     "why": "A labeled guess knob with its reason; a clean run costs one /proc read."
+    },
+    {
+     "id": "T363-D4",
+     "summary": "T364's holder of the output pipe, still cut at DRAIN and named on its HELD line, now also turns the crate red.",
+     "class": "within",
+     "why": "A pipe holder is a process the tests left, which T363 exists to fail; the batch gate turning red for a leaking crate is the point, and rust/guard, the motivating crate, was measured green fresh through the new pin."
+    },
+    {
+     "id": "T363-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T364, before T365.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks faster; ending a leaked process that held the phase 3.1 s and keeping such leaks from going unseen is that. Ordering after T364 follows from keeping its HELD line."
+    },
+    {
+     "id": "T470-D1",
+     "summary": "A crate's built test binary run directly is given `-Z unstable-options --report-time` (in place of -q) under RUSTC_BOOTSTRAP=1 in the binary's environment; alive::split strips the per-test lines so the checks read what -q left; on a run past its bound the times are appended to the alive record, slowest first, cut at T463's CAP; no new file in alive/.",
+     "class": "within",
+     "why": "This is what T463's and T470's lines ask: per-test times on a slow test run beside the live record. Measurement work counts as performance work (the GM 2026-11-20)."
+    },
+    {
+     "id": "T470-D2",
+     "summary": "Departure from the line's literal `--format json`: the human format with --report-time is used, because test_line's summary, only::judge and a red crate's shown output read libtest's human stdout; --logfile beside -q rejected for its stderr deprecation warning on every run.",
+     "class": "within",
+     "why": "The output format is the coordinating session's line, not the GM's words; the GM asked to see where time goes, and per-test times are delivered either way. JSON would break the checks that read the human stdout, a wrong outcome; the choice is a mechanism within what was asked."
+    },
+    {
+     "id": "T470-D3",
+     "summary": "The crate's cargo test path (tested: a fresh run, a failed key build) is not given the words and records no per-test times, because RUSTC_BOOTSTRAP in cargo's environment rebuilt proc-macro2 and its dependents, and the next plain run rebuilt again (measured 2026-11-27, three runs on a scratch crate over thiserror 2.0.21).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked that everything be measured so we know where our time goes, especially compiling and running tests (2026-11-22), and FR-003 books each crate's test seconds; neither the request nor the spec asks for per-test times on every path, which are T463's own refinement. The cargo test fallback (a fresh run, a failed key build) keeps its crate-level test seconds, so nothing the GM asked to be measured goes unmeasured. What was measured, on which graph: with RUSTC_BOOTSTRAP=1 in cargo's environment a scratch crate over thiserror 2.0.21 rebuilt proc-macro2, thiserror, quote, syn and thiserror-impl, and rebuilt again on the next plain run (three runs, 2026-11-27); the rustc crate stayed Fresh (22 units); only rust/mode_a builds proc-macro2 among the seven manifests read. So the rebuild cost is shown for proc-macro2 graphs only; for the rest the choice is a design choice inside what was asked, not a narrowing, and it is consistent with the GM's principle that time saved comes first (2026-11-26)."
+    },
+    {
+     "id": "T470-D4",
+     "summary": "RUSTC_BOOTSTRAP=1 is inherited only by what a test spawns; no test under rust/ runs cargo or make on a real target (grep observed 2026-11-27), the one real cargo test building in a scratch target. The pins in side.rs and only.rs on a binary's words now name the new words.",
+     "class": "within",
+     "why": "Checks that the inherited variable does not move a fingerprint elsewhere. Its stated search space: grep of rust/ for Command::new(\"cargo\"), Command::new(\"make\"), l7r-gate.sh and var(\"CARGO\"), observed 2026-11-27, which would not see a cargo or rustc started through another variable or env!(\"CARGO\"); the one real cargo test named builds in a scratch target. Within what was asked; the pins follow the words."
+    },
+    {
+     "id": "T470-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T463, before T435.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count a task that measures where the time goes as performance work."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The two placeholder T363 and T470 sections (the template's `<why: ...>` headings) are removed, replaced by the filled sections above.",
+     "class": "within",
+     "why": "A template heading replaced by the task's real heading; nothing the GM asked for is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)",
+    "### T363 Approach (checklist part A)",
+    "### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)",
+    "### T470 Approach (checklist part A)",
+    "(removed) ### T363 (<why: the finding or measurement that files it>)",
+    "(removed) ### T470 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-D1",
+     "summary": "The leak pin (run.rs leak_checked) also fails a crate whose tests left a process running, naming it (pid and command line), and SIGKILLs it; covers the built-binary, cargo test and doctest paths.",
+     "class": "within",
+     "why": "T363's own finding is that leaked processes held the test phase's pipe and nothing failed for it; failing and ending them is what the task is for, and it serves FR-013 (the GM 2026-11-20: prioritize work that makes the checks faster)."
+    },
+    {
+     "id": "T363-D2",
+     "summary": "A leaked process is found by its environ holding exactly the run's fresh TMPDIR, not by a process group (the task line's suggestion); a process started with a cleared environment escapes, and the two env_clear sites under rust/ were observed to wait on their children.",
+     "class": "within",
+     "why": "The mechanism is not in the GM's words (the process-group idea is the coordinating session's task line), and the GM's request asks only that the checks be fast and the time measured. The choice keeps land's stop able to TERM the run's process group (land/stop.rs kill_group), which a test run moved to its own group would escape. Its stated reach: the check matches the run's TMPDIR exactly, so a child started with a cleared environment, or given a different TMPDIR, is not seen; the block's search covered the first form only (grep of rust/ for env_clear, two sites, each read and each waiting on its child, observed 2026-11-27). That is a stated limit of a detector, not a wrong outcome found, and it does not narrow anything the GM asked for."
+    },
+    {
+     "id": "T363-D3",
+     "summary": "GRACE, 100 ms, a new GUESS knob, re-reads /proc only where a process was found.",
+     "class": "within",
+     "why": "A labeled guess knob with its reason; a clean run costs one /proc read."
+    },
+    {
+     "id": "T363-D4",
+     "summary": "T364's holder of the output pipe, still cut at DRAIN and named on its HELD line, now also turns the crate red.",
+     "class": "within",
+     "why": "A pipe holder is a process the tests left, which T363 exists to fail; the batch gate turning red for a leaking crate is the point, and rust/guard, the motivating crate, was measured green fresh through the new pin."
+    },
+    {
+     "id": "T363-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T364, before T365.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks faster; ending a leaked process that held the phase 3.1 s and keeping such leaks from going unseen is that. Ordering after T364 follows from keeping its HELD line."
+    },
+    {
+     "id": "T470-D1",
+     "summary": "A crate's built test binary run directly is given `-Z unstable-options --report-time` (in place of -q) under RUSTC_BOOTSTRAP=1 in the binary's environment; alive::split strips the per-test lines so the checks read what -q left; on a run past its bound the times are appended to the alive record, slowest first, cut at T463's CAP; no new file in alive/.",
+     "class": "within",
+     "why": "This is what T463's and T470's lines ask: per-test times on a slow test run beside the live record. Measurement work counts as performance work (the GM 2026-11-20)."
+    },
+    {
+     "id": "T470-D2",
+     "summary": "Departure from the line's literal `--format json`: the human format with --report-time is used, because test_line's summary, only::judge and a red crate's shown output read libtest's human stdout; --logfile beside -q rejected for its stderr deprecation warning on every run.",
+     "class": "within",
+     "why": "The output format is the coordinating session's line, not the GM's words; the GM asked to see where time goes, and per-test times are delivered either way. JSON would break the checks that read the human stdout, a wrong outcome; the choice is a mechanism within what was asked."
+    },
+    {
+     "id": "T470-D3",
+     "summary": "The crate's cargo test path (tested: a fresh run, a failed key build) is not given the words and records no per-test times, because RUSTC_BOOTSTRAP in cargo's environment rebuilt proc-macro2 and its dependents, and the next plain run rebuilt again (measured 2026-11-27, three runs on a scratch crate over thiserror 2.0.21).",
+     "class": "within",
+     "why": "The GM asked that everything be measured so we know where our time goes, especially compiling and running tests (2026-11-22), and FR-003 books each crate's test seconds; neither the request nor the spec asks for per-test times on every path, which are T463's own refinement. The cargo test fallback (a fresh run, a failed key build) keeps its crate-level test seconds, so nothing the GM asked to be measured goes unmeasured. What was measured, on which graph: with RUSTC_BOOTSTRAP=1 in cargo's environment a scratch crate over thiserror 2.0.21 rebuilt proc-macro2, thiserror, quote, syn and thiserror-impl, and rebuilt again on the next plain run (three runs, 2026-11-27); the rustc crate stayed Fresh (22 units); only rust/mode_a builds proc-macro2 among the seven manifests read. So the rebuild cost is shown for proc-macro2 graphs only; for the rest the choice is a design choice inside what was asked, not a narrowing, and it is consistent with the GM's principle that time saved comes first (2026-11-26)."
+    },
+    {
+     "id": "T470-D4",
+     "summary": "RUSTC_BOOTSTRAP=1 is inherited only by what a test spawns; no test under rust/ runs cargo or make on a real target (grep observed 2026-11-27), the one real cargo test building in a scratch target. The pins in side.rs and only.rs on a binary's words now name the new words.",
+     "class": "within",
+     "why": "Checks that the inherited variable does not move a fingerprint elsewhere. Its stated search space: grep of rust/ for Command::new(\"cargo\"), Command::new(\"make\"), l7r-gate.sh and var(\"CARGO\"), observed 2026-11-27, which would not see a cargo or rustc started through another variable or env!(\"CARGO\"); the one real cargo test named builds in a scratch target. Within what was asked; the pins follow the words."
+    },
+    {
+     "id": "T470-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T463, before T435.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count a task that measures where the time goes as performance work."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The two placeholder T363 and T470 sections (the template's `<why: ...>` headings) are removed, replaced by the filled sections above.",
+     "class": "within",
+     "why": "A template heading replaced by the task's real heading; nothing the GM asked for is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-grace-1s",
+     "summary": "The only change since the CLEAR verdict: GRACE, the re-read slack before a left process is declared leaked, raised from 100 ms to 1 s (a GUESS knob), because a falsely red batch gate costs about ten minutes and an arbiter round and load reached 37 (observed 2026-11-27, uptime); waited only where a process was found.",
+     "class": "within",
+     "why": "A tuning value inside the block's already-cleared mechanism. It removes no case the pin is for: T340's motivating `sleep 5` holders and the red-first fixture's `sleep 46.7` still outlive 1 s and are still named, killed and failed; a clean run still pays nothing. Avoiding false reds under load serves the GM's own 2026-11-26 words in request.md (\"I agree with prioritizing the test that fails under load being fixed\") and the feature's time purpose. The figure carries an observed label with date and method."
+    },
+    {
+     "id": "T363-env-marker",
+     "summary": "Leftover processes found by the run's own TMPDIR in /proc environ, not by a process group, so land's kill_group still reaches test runs; env_clear sites checked by grep (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since the CLEAR verdict; a mechanism choice that catches the leaked descendants T363 names, with the env_clear blind spot censused by a stated search."
+    },
+    {
+     "id": "T363-red-and-kill",
+     "summary": "A process found both times is named by pid and command line, sent SIGKILL, and the crate fails, on both the direct-binary and cargo-test paths and doctests; T364's pipe holder is now red too (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since the CLEAR verdict; it is the fix the T363 line asks for: a run that leaves a process behind no longer passes silently."
     }
    ]
   }

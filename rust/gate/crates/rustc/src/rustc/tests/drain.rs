@@ -55,9 +55,9 @@ fn a_late_reader_with_no_holder_is_waited_for_not_cut() {
     assert!(stdout == "late\n" && stderr.is_empty());
 }
 
-/// A green crate whose test run left a process on its output says so, and the run does not wait for it.
+/// A crate whose test run left a process on its output says so, is red for it (451 T363, `left.rs`), and the run does not wait for it.
 #[test]
-fn a_green_crate_whose_run_left_a_holder_names_it() {
+fn a_crate_whose_run_left_a_holder_names_it_and_is_red() {
     let (root, _, _) = two_crates();
     // the holder left by the test call alone, and alive well past the bound: the run waits for none of it
     let body = "case \"$*\" in \"test --quiet\"*) sleep 30 & echo $! >> \"$(dirname \"$0\")/left\";; esac\necho 'test result: ok. 1 passed'";
@@ -68,9 +68,7 @@ fn a_green_crate_whose_run_left_a_holder_names_it() {
     let left = std::fs::read_to_string(world.target.join("left")).unwrap();
     let _ = Command::new("kill").args(left.split_whitespace()).status();
     // the bound is the holder's 30 s, not a speed: a coverage build on a loaded host took past 2 s here (2026-11-27)
-    assert_eq!(done.code, 0);
+    assert_eq!(done.code, 1);
     assert!(took < std::time::Duration::from_secs(15), "{took:?}");
-    assert!(
-        done.stderr.contains("rust/a: rust-checks: HELD: ") && done.stderr.contains("(sleep 30)")
-    );
+    assert!(done.stderr.contains("rust-checks: HELD: ") && done.stderr.contains("(sleep 30)"));
 }

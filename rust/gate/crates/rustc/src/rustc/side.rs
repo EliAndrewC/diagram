@@ -72,6 +72,8 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
         );
         let env = BTreeMap::from([
             ("PATH".to_owned(), path),
+            // libtest's per-test times are unstable words (`alive::TIMES`, 451 T470)
+            ("RUSTC_BOOTSTRAP".to_owned(), "1".to_owned()),
             ("CARGO_TARGET_DIR".to_owned(), target),
             ("TMPDIR".to_owned(), tmp.display().to_string()),
             ("CARGO".to_owned(), world.cargo.clone()),
@@ -86,14 +88,19 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
             stdout: String::new(),
             stderr: String::new(),
         };
-        // a filtered run's words after the binary's own `-q` (`only.rs`, feature 451 T435)
-        let mut words = own(&["-q"]);
+        // the per-test times' words, then a filtered run's (`only.rs`, feature 451 T435); a run past its bound has its times on the end
+        // of its record, and the test lines are taken out of the output the checks read (`alive::split`, 451 T470)
+        let mut words = own(&alive::TIMES);
         words.extend(world.only.iter().cloned());
         let only: Vec<&str> = world.only.iter().map(String::as_str).collect();
         for exe in exes {
             let (ran, got) = run_seen(Some(dir), exe, &words, &env, Some(&bound));
+            let (stdout, tests) = alive::split(&ran.stdout);
+            if let Some(at) = &got {
+                alive::times(at, &tests);
+            }
             caught = caught.take().or(got);
-            all.stdout.push_str(&ran.stdout);
+            all.stdout.push_str(&stdout);
             all.stderr.push_str(&ran.stderr);
             if ran.code != 0 {
                 all.code = ran.code;

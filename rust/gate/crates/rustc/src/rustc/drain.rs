@@ -6,8 +6,8 @@
 //! only where another process holds it (`holders`, read from `/proc`): what was read is taken, and the holders are named on stderr
 //! under `HELD`, one line that `answer` shows on a green crate too, so the leak is seen rather than waited for. Where none holds it
 //! the only writer has exited and the reader is merely late (a loaded machine), so the run waits for the pipe's end: a cut there
-//! would lose the output's tail - a test build's last `executable` lines among it. Failing the crate on a leak, and ending those
-//! processes, is 451 T363's.
+//! would lose the output's tail - a test build's last `executable` lines among it. A test run's leak fails its crate, and the
+//! processes are ended, by the leak pin (`left.rs`, 451 T363), which finds a holder of no pipe too.
 
 use std::fmt::Write as _;
 use std::io::Read;

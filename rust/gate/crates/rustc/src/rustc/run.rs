@@ -10,7 +10,7 @@ use std::process::{Command, Stdio};
 
 use l7r_shared::tempdir::TempDir;
 
-use super::{alive, drain, own, slot, test_args, World};
+use super::{alive, drain, left, own, slot, test_args, World};
 
 pub(super) struct Ran {
     pub(super) code: i32,
@@ -175,7 +175,8 @@ pub(super) fn cargo_small(world: &World, args: &[&str], manifest: &Path, after: 
 ///
 /// The directory is under the temp directory itself, so a fixture check that knows a test by its `/tmp/` path still does. A SIGKILL
 /// cannot be caught, so a killed test's `Drop` never runs: this runner holds the directory in a `TempDir` and removes it whole after
-/// every run, so a killed test's leftovers go too (only a SIGKILL of the runner itself leaves its one directory).
+/// every run, so a killed test's leftovers go too (only a SIGKILL of the runner itself leaves its one directory). A process the tests
+/// left running, found by that `TMPDIR` in its environment, fails the crate too, named, and is ended (`left.rs`, 451 T363).
 pub(super) fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
     let name = manifest
         .parent()
@@ -192,7 +193,21 @@ pub(super) fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ra
         // with this run's directory on the next line
         .filter(|n| n != l7r_shared::tempdir::SHARED)
         .collect();
+    // a process the tests left running, found by this run's TMPDIR in its environment, named and ended (`left.rs`, 451 T363)
+    let procs = left::ended(&tmp);
     drop(tmp);
+    if !procs.is_empty() {
+        done.code = 1;
+        let _ = writeln!(
+            done.stderr,
+            "rust-checks: the tests left {} process{} running after they ended, now killed: {}\n  fix: kill and wait what a test \
+             starts (`child.kill()` then `child.wait()`, or a guard whose Drop does both), and a stand-in shell that starts a \
+             background process waits on it before it exits",
+            procs.len(),
+            if procs.len() == 1 { "" } else { "es" },
+            procs.join(", ")
+        );
+    }
     if !left.is_empty() {
         left.sort();
         done.code = 1;
