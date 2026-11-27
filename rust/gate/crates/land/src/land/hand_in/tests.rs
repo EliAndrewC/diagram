@@ -13,7 +13,7 @@ use serde_json::Value;
 
 use super::super::tests::has;
 use super::super::unfinished::tests::{repo, TASKS};
-use super::{must, run, FirstPass};
+use super::{io, must, none as clear, run, FirstPass};
 
 const TASKS_MD: &str = "specs/451-x/tasks.md";
 const SCRATCH: &str = "refs/l7r/hand-in/9001-T01";
@@ -57,10 +57,6 @@ fn commit(tree: &Path, subject: &str, files: &[(&str, &str)]) {
 fn handed_out(root: &Path, tree: &Path) {
     let head = git(root, &["rev-parse", "HEAD"]);
     git(tree, &["checkout", "-q", "--detach", &head]);
-}
-
-fn clear(_: &Path) -> Vec<String> {
-    Vec::new()
 }
 
 /// `make builder-done T=T01 F=9001` as a hand-in, run in the tree, the base by `knob`.
@@ -537,4 +533,15 @@ fn the_records_a_clear_first_pass_writes_are_committed_with_the_work() {
     landed(&handed(&tree, "", &records));
     assert_eq!(done(&root).1, "dev/review-ledger.md\nrust/held.rs");
     assert_eq!(git(&tree, &["status", "--porcelain"]), "");
+}
+
+#[test]
+fn a_file_step_that_fails_is_said_as_its_error() {
+    // the hand-in's own files are written under the tree's git directory; a write under a file, not a directory, fails
+    let (_dir, _root, tree) = pool("hand-in-io");
+    let under = tree.join("rust-file");
+    std::fs::write(&under, "").unwrap();
+    assert_eq!(io(std::fs::write(&under, "x")), Ok(()));
+    let why = io(std::fs::write(under.join("base"), "x")).unwrap_err();
+    has(&why, "Not a directory");
 }

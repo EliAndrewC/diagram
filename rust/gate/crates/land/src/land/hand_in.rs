@@ -67,8 +67,17 @@ pub(super) type FirstPass<'a> = &'a dyn Fn(&Path) -> Vec<String>;
 pub(super) fn cli(args: &[String], cwd: &Path) -> Reply {
     let var = |n: &str| std::env::var(n).unwrap_or_default();
     let (msg, guard, knob) = (var("MSG"), var("GUARD"), var("HAND_IN_BASE"));
-    let none = |_: &Path| Vec::new();
     run(args, cwd, &msg, &guard, &knob, &none)
+}
+
+/// No first pass (T08 wires one in): nothing refused.
+pub(super) fn none(_: &Path) -> Vec<String> {
+    Vec::new()
+}
+
+/// A file step's error as the hand-in says it, mapped here once.
+pub(super) fn io<T>(r: std::io::Result<T>) -> Result<T, String> {
+    r.map_err(|e| e.to_string())
 }
 
 fn said(stderr: String, code: i32) -> Reply {
@@ -115,7 +124,7 @@ impl Hand<'_> {
     /// The rules' resolved list written beside the base file, one `path (rule)` line each, for a resume's end to read.
     fn ruled(&self, resolved: &[String]) -> Result<(), String> {
         let list = resolved.join("\n") + "\n";
-        std::fs::write(self.file("resolved"), list).map_err(|e| e.to_string())
+        io(std::fs::write(self.file("resolved"), list))
     }
 
     /// The hand-in undone where nothing of it is to resume: the tree back at the scratch commit's content, HEAD at its old base,
@@ -201,9 +210,9 @@ fn handed(f: &Found, origin: bool, first: FirstPass) -> Result<Reply, String> {
         f.clone_head().to_owned()
     };
     f.sweep();
-    std::fs::create_dir_all(&hand.files).map_err(|e| e.to_string())?;
+    io(std::fs::create_dir_all(&hand.files))?;
     let message = hand.file("message");
-    std::fs::write(&message, f.message()).map_err(|e| e.to_string())?;
+    io(std::fs::write(&message, f.message()))?;
     must(&hand.tree, &["add", "-A"])?;
     let (rc, out) = git(
         &hand.tree,
@@ -234,7 +243,7 @@ fn placed(hand: &Hand) -> Result<Applied, String> {
         let name = format!("{REFS}{}-{task}", hand.f.feature());
         must(&hand.tree, &["update-ref", &name, &hand.sha])?;
     }
-    std::fs::write(hand.file("base"), &hand.base).map_err(|e| e.to_string())?;
+    io(std::fs::write(hand.file("base"), &hand.base))?;
     must(&hand.tree, &["checkout", "-q", "--detach", &hand.base])?;
     apply(&hand.tree, &hand.sha)
 }

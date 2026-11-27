@@ -396,10 +396,15 @@ fn the_environment_sets_the_paths_and_the_command_line_its_modes() {
             "SCRATCH_SWEEP_PROJECTS" => Some("/p".to_owned()),
             "SCRATCH_SWEEP_STATE" => Some("/s".to_owned()),
             "SCRATCH_SWEEP_DAYS" => Some("-1".to_owned()),
+            "L7R_BUILDERS" => Some("5".to_owned()),
             _ => None,
         },
         1,
     );
+    // the pool's count read through the seam (451 T526), and a value that does not parse taking the default
+    assert_eq!(set.builders, 5);
+    let junk = Config::from_env(&|k| (k == "L7R_BUILDERS").then(|| "many".to_owned()), 1);
+    assert_eq!(junk.builders, crate::shared::builder_queue::BUILDERS);
     assert!(
         set.root == Path::new("/r")
             && set.projects == Path::new("/p")
