@@ -583,31 +583,71 @@ No Constitution Check violation; the three XVI readings above go to spec-fidelit
 
 D9's Stop rule (the main session's stop refused while the lane holds a waiting hand-in or an open batch and no `make lane-wait` of this clone runs) lives in the guard's `pool_idle_hooks.rs`, with a case in its suite.
 
-### T01 (<why: the finding or measurement that files it>)
+### T01 (D12's token figure, taken while the night's transcripts are on disk)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A single measurement script, `dev/measurements/2026-11-27/461-t01-night-tokens/night-tokens.py`, of the same
+  kind as `tree-idle.py`. It reads the coordinator's transcript and every subagent transcript under it, workflow agents
+  included. It counts each call once, keyed by message id. It sums four kinds: output, fresh input, cache read and cache write.
+  The advisor's own calls go in separate columns.
+  - **Actors.** Builders, repair builders, review agents, the coordinator and page sessions.
+  - **Booking.** A builder books to the feature and task in its `BUILDER-BRIEF` marker. An agent a builder dispatched books
+    through its `parentAgentId` chain. Any other agent books to a task only where its description names exactly one feature
+    and task. The coordinator books to no task.
+  - **The task list.** The script takes a `make task-time` output and reads the window's landed tasks, with their test and
+    non-test lines, from its T512 table.
+  - **Two windows.** The headline is 04:30Z to 14:29Z (D12, T512's fill). The brief also asked for the spec's whole window,
+    02:00Z to 14:29Z, so the script was run over that too.
+  - **The 04:30Z figure.** In this window 120 tasks landed, and window totals per landed task are 44.5k output, 0.14k fresh
+    input, 11.21M cache read and 172k cache write, of which builders account for 33.6k output and 7.08M cache read, review
+    agents 7.2k and 0.18M, and the coordinator 3.6k and 3.95M (observed 2026-11-27, method: `night-tokens.py` over the
+    transcripts, `output-0430-1429.txt`).
+  - **The coordinator's share.** The coordinator carries 35.2% of the window's cache read and 8.2% of its output
+    (observed 2026-11-27, method: that output's totals divided).
+  - **No repair builders or page sessions.** None ran in either window (observed 2026-11-27, method: the script's
+    classification, with its builder audit list printed).
+  - **The record.** It is `results.md`, alongside both windows' outputs, the per-call extract `calls-0200-1429.tsv.gz` (no content,
+    so the record re-derives once the transcripts are gone) and the kept cut of the 04:30Z `make task-time` run.
+  - **The directory.** It follows the brief (`461-t01-night-tokens/`), not T01's line (`landing-lane/`). T02 extends this
+    script where it is.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: a measurement, no engine or tooling code | - | - | - | - |
 
 ### T01 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Feature 461's before figure for FR-006 exists in the form phase 5's after figure will take.
+   That form is tokens per landed task by actor and kind, as window totals over every actor, with the per-task booking beside
+   it. It also has to exist while the night's transcripts are still on disk.
+2. **The constraints.** FR-006 (a cost is counted where it lands), FR-007 (task size beside each per-task figure), D12 (one
+   script, a window over every actor, T512 as a cross-check only, 04:30Z on) and R3 (the night's window and its 130 tasks).
+3. **Where each comes from.** R: plan D12 and research R3. O: 451 T513's finding that most coordinator calls book to no task,
+   and T512's fill starting at 04:30Z. G: none beyond the spec's.
+4. **Do they describe the world here?** Yes, with checks.
+   - Duplicate records of one message id carry identical usage, measured 2026-11-27 (every in-window record compared).
+   - The top-level usage leaves out the advisor's iterations, measured 2026-11-27 (sample calls' iterations summed).
+   - The coordinator's count agrees with the update note within 1.5%, at 1,016 calls, 0.589M output and 624.7M cache read
+     over 02:00Z to 15:00Z, measured 2026-11-27 (the same dedupe over that span).
+5. **The order.** Before T02, which extends this script with D12's other figures, and before any phase 1 edit.
+6. **The exits.** Green: the outputs are written and the reconciliation holds for every actor (booked to a landed task, plus
+   booked to a task not landed, plus unbooked, equals the total). Red: what failed is recorded and the task set down. A claim
+   that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Both windows' outputs are kept, and the totals re-derive from the extract with `results.md`'s `zcat |
+   awk` line to within one call. The one-call difference is a message whose records fall on both sides of 04:30:00 (observed
+   2026-11-27, method: that line run).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing to fix. A measurement changes no behavior.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none. The per-task T512 booking is higher than this script's figure, at 5.62M output against 4.71M over
+the same 120 tasks (observed 2026-11-27, method: the outputs' cross-check sections), a gap from T512's design, not a defect:
+it adds the coordinator's booked calls and counts a builder's calls from before the window. It is stated in `results.md` as
+a limit.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, as a `[perf]` measurement (451 FR-013). It measures where the tokens go, but it changes no
+engine speed, so the performance checklist does not apply.
 
 
 

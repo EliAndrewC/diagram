@@ -168,6 +168,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T01 (D12's token figure, taken while the night's transcripts are on disk)": {
+   "sha256": "3c5c0b4c8e213128cd84b571b5ded82dfda4270716e74f801117c0ac99715e79",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "da1736a3f929f6f7f9e6e05b894415d93770ba9d3d91a68b000f8fea71bb2aa4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -883,6 +895,234 @@
      "why": "Each labeled; FR-004 makes the batch a knob; the Stop-rule line now matches D9."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T01 (D12's token figure, taken while the night's transcripts are on disk)",
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-script",
+     "summary": "One measurement script over the coordinator's and every subagent transcript (workflow agents included), each call counted once by message id",
+     "class": "within",
+     "why": "FR-006 asks for total tokens per landed task over every actor; one deduplicated pass over all transcripts is that measurement, and D12 asks for one script."
+    },
+    {
+     "id": "T01-kinds",
+     "summary": "Four kinds summed: output, fresh input, cache read and cache write",
+     "class": "within",
+     "why": "FR-006 names output, fresh input and cache read; all three are carried, and cache write is extra information, not a narrowing."
+    },
+    {
+     "id": "T01-advisor",
+     "summary": "The advisor's own calls go in separate columns",
+     "class": "within",
+     "why": "Reported apart, not dropped: the advisor's cost stays visible and the before figure takes the same form the after figure will, so FR-006's comparison is not narrowed."
+    },
+    {
+     "id": "T01-actors",
+     "summary": "Actors: builders, repair builders, review agents, the coordinator and page sessions; no fresh integration agents",
+     "class": "within",
+     "why": "The headline is a window total over every actor. Fresh integration agents are FR-006 actors of the lane, which does not exist in the before window, so their absence is the world, not a carve-out; page sessions are an addition."
+    },
+    {
+     "id": "T01-booking",
+     "summary": "Builders book by BUILDER-BRIEF, their dispatched agents by parentAgentId, other agents only where the description names one task; the coordinator books to no task",
+     "class": "within",
+     "why": "The headline is window totals divided by landed tasks, which carries the coordinator's cost whole (FR-006: a cost counts where it lands); the per-task booking sits beside it, and the reconciliation exit (booked + booked-not-landed + unbooked = total) keeps nothing out."
+    },
+    {
+     "id": "T01-task-size",
+     "summary": "The landed task list and each task's test and non-test lines come from T512's table in a make task-time output",
+     "class": "within",
+     "why": "FR-007: every per-task figure read beside task size from 451 T512's lines."
+    },
+    {
+     "id": "T01-windows",
+     "summary": "Headline window 04:30Z to 14:29Z (D12, T512's fill), and the spec's whole window 02:00Z to 14:29Z also run and kept",
+     "class": "within",
+     "why": "Follows the plan's D12; the 04:30Z window is about ten hours, inside FR-010's eight-hour floor, and the wider window R3 names is measured and kept too, so nothing asked is left unmeasured."
+    },
+    {
+     "id": "T01-directory",
+     "summary": "Output directory 461-t01-night-tokens/ per the brief rather than T01's line (landing-lane/); T02 extends the script there",
+     "class": "within",
+     "why": "A naming choice with no bearing on what is measured."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green on outputs written and per-actor reconciliation holding; red recorded and set down; a claim it cannot be done goes to make arbiter-ask; done when totals re-derive from the content-free extract within one call",
+     "class": "within",
+     "why": "Reproducibility of a measurement from its kept extract; the one-call boundary difference is explained and measured, not an exactness carve-out."
+    },
+    {
+     "id": "T01-found-and-left",
+     "summary": "T512's per-task booking (5.62M output) exceeds the script's (4.71M) over the same 120 tasks; stated in results.md as a limit, not fixed",
+     "class": "within",
+     "why": "D12 makes T512 a cross-check only, and the gap comes from T512's design (it adds coordinator booked calls and pre-window builder calls); no wrong outcome, so not a defect under XIV."
+    },
+    {
+     "id": "T01-perf",
+     "summary": "Tagged [perf] as a measurement (451 FR-013); the performance checklist does not apply",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the cost goes as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T01 (D12's token figure, taken while the night's transcripts are on disk)",
+    "### T01 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T01-kinds",
+     "summary": "Four token kinds summed: output, fresh input, cache read and cache write",
+     "class": "within",
+     "why": "FR-006 names output, fresh input and cache read; all three are carried, and cache write is an extra column that narrows nothing."
+    },
+    {
+     "id": "T01-advisor",
+     "summary": "The advisor's own calls go in separate columns (top-level usage leaves out advisor iterations, measured)",
+     "class": "within",
+     "why": "FR-006 counts every actor's tokens; separating advisor iterations keeps them from being lost from the top-level usage. The block does not say whether the advisor columns are inside the 44.5k window total; whichever it is, the after figure must take the same form, which the goal (item 1) requires."
+    },
+    {
+     "id": "T01-actors",
+     "summary": "Actor classes: builders, repair builders, review agents, coordinator, page sessions (FR-006's 'fresh integration agents' not named as a class)",
+     "class": "within",
+     "why": "FR-006 asks for the total over all actors together, by kind. The block's headline is window totals over every actor, with a reconciliation (booked-landed + booked-not-landed + unbooked = total) as its green exit, and the parts sum (7.08+0.18+3.95 = 11.21M cache read). No actor's cost is dropped from the total by the class list; page sessions are an added class."
+    },
+    {
+     "id": "T01-booking",
+     "summary": "Booking: builder by BUILDER-BRIEF marker, its dispatched agents by parentAgentId chain, others only when the description names exactly one task; the coordinator books to no task",
+     "class": "within",
+     "why": "The headline is window total per landed task, so the coordinator's unbooked cost is still counted in the figure FR-006 holds (and stated as 35.2% of cache read), satisfying 'a cost moved from the coordinator to builders counts where it lands'."
+    },
+    {
+     "id": "T01-tasklist",
+     "summary": "Landed tasks and their test / non-test lines read from make task-time's T512 table",
+     "class": "within",
+     "why": "Serves FR-007: task size beside every per-task figure, using the line counts FR-006/FR-007 cite (451 T512)."
+    },
+    {
+     "id": "T01-window",
+     "summary": "Headline window 04:30Z-14:29Z (where T512's size fill starts), with the spec's whole window 02:00Z-14:29Z also run and kept",
+     "class": "within",
+     "why": "Nothing is excluded: both windows are measured, kept and re-derivable from the per-call extract. The headline choice serves FR-007 (sizes exist only from 04:30Z) and is about 10 hours, inside FR-010's eight-hour floor. Note: FR-010, SC-005 and the GM's seventh message require every figure stated with its concurrency; the block states none and does not name FR-010. That does not block a measurement that compares nothing, but the 04:30Z headline will need its own concurrency (trees held, load) before SC-005's comparison; the bundle does not say which window FR-010's 93/98/83% covers."
+    },
+    {
+     "id": "T01-crosscheck",
+     "summary": "T512's per-task booking used as a cross-check only; its 5.62M vs this script's 4.71M output gap left as a stated limit in results.md",
+     "class": "within",
+     "why": "The two figures measure different things (T512 adds the coordinator's booked calls and pre-window builder calls); a difference that is explained and stated is not a defect (constitution XIV as quoted in this agent's contract), so leaving it is within."
+    },
+    {
+     "id": "T01-directory",
+     "summary": "Output directory follows the brief (461-t01-night-tokens/) rather than T01's line (landing-lane/)",
+     "class": "within",
+     "why": "A path name; no requirement settles it."
+    },
+    {
+     "id": "T01-record",
+     "summary": "Record kept as results.md, both outputs, a content-free per-call extract and the kept task-time cut, re-deriving to within one call",
+     "class": "within",
+     "why": "Serves the task's purpose that the before figure survive the transcripts' deletion; the one-call difference is explained (a message straddling 04:30:00)."
+    },
+    {
+     "id": "T01-perf",
+     "summary": "Classed [perf] as a measurement task under 451 FR-013; the performance checklist not applied",
+     "class": "within",
+     "why": "451 FR-013 counts measuring where the cost goes as performance work for ordering, though it speeds nothing."
+    },
+    {
+     "id": "T01-order",
+     "summary": "Runs before T02 and before any phase 1 edit",
+     "class": "within",
+     "why": "A before figure must be taken before the change it is a before of, and while the night's transcripts exist."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T01": {
+   "section_sha256": "120d01db7e4635c4bf3f120d16b4eec79c22ed1634eeb5257ccf4ad6b3bc1d07",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T01-script",
+     "summary": "One measurement script over the coordinator's and every subagent transcript (workflow agents included), each call counted once by message id",
+     "class": "within",
+     "why": "FR-006 asks for total tokens per landed task over every actor; one deduplicated pass over all transcripts is that measurement, and D12 asks for one script."
+    },
+    {
+     "id": "T01-kinds",
+     "summary": "Four kinds summed: output, fresh input, cache read and cache write",
+     "class": "within",
+     "why": "FR-006 names output, fresh input and cache read; all three are carried, and cache write is extra information, not a narrowing."
+    },
+    {
+     "id": "T01-advisor",
+     "summary": "The advisor's own calls go in separate columns",
+     "class": "within",
+     "why": "Reported apart, not dropped: the advisor's cost stays visible and the before figure takes the same form the after figure will, so FR-006's comparison is not narrowed."
+    },
+    {
+     "id": "T01-actors",
+     "summary": "Actors: builders, repair builders, review agents, the coordinator and page sessions; no fresh integration agents",
+     "class": "within",
+     "why": "The headline is a window total over every actor. Fresh integration agents are FR-006 actors of the lane, which does not exist in the before window, so their absence is the world, not a carve-out; page sessions are an addition."
+    },
+    {
+     "id": "T01-booking",
+     "summary": "Builders book by BUILDER-BRIEF, their dispatched agents by parentAgentId, other agents only where the description names one task; the coordinator books to no task",
+     "class": "within",
+     "why": "The headline is window totals divided by landed tasks, which carries the coordinator's cost whole (FR-006: a cost counts where it lands); the per-task booking sits beside it, and the reconciliation exit (booked + booked-not-landed + unbooked = total) keeps nothing out."
+    },
+    {
+     "id": "T01-task-size",
+     "summary": "The landed task list and each task's test and non-test lines come from T512's table in a make task-time output",
+     "class": "within",
+     "why": "FR-007: every per-task figure read beside task size from 451 T512's lines."
+    },
+    {
+     "id": "T01-windows",
+     "summary": "Headline window 04:30Z to 14:29Z (D12, T512's fill), and the spec's whole window 02:00Z to 14:29Z also run and kept",
+     "class": "within",
+     "why": "Follows the plan's D12; the 04:30Z window is about ten hours, inside FR-010's eight-hour floor, and the wider window R3 names is measured and kept too, so nothing asked is left unmeasured."
+    },
+    {
+     "id": "T01-directory",
+     "summary": "Output directory 461-t01-night-tokens/ per the brief rather than T01's line (landing-lane/); T02 extends the script there",
+     "class": "within",
+     "why": "A naming choice with no bearing on what is measured."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "Green on outputs written and per-actor reconciliation holding; red recorded and set down; a claim it cannot be done goes to make arbiter-ask; done when totals re-derive from the content-free extract within one call",
+     "class": "within",
+     "why": "Reproducibility of a measurement from its kept extract; the one-call boundary difference is explained and measured, not an exactness carve-out."
+    },
+    {
+     "id": "T01-found-and-left",
+     "summary": "T512's per-task booking (5.62M output) exceeds the script's (4.71M) over the same 120 tasks; stated in results.md as a limit, not fixed",
+     "class": "within",
+     "why": "D12 makes T512 a cross-check only, and the gap comes from T512's design (it adds coordinator booked calls and pre-window builder calls); no wrong outcome, so not a defect under XIV."
+    },
+    {
+     "id": "T01-perf",
+     "summary": "Tagged [perf] as a measurement (451 FR-013); the performance checklist does not apply",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the cost goes as performance work for ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

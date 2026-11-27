@@ -1,0 +1,240 @@
+# night-tokens.py 2026-11-27T02:00:00Z 2026-11-27T14:29:00Z baseline-task-time.txt
+window [2026-11-27T02:00:00Z, 2026-11-27T14:29:00Z): 9148 model calls (each message id once), 285 transcripts with a call; tasks landed (the T512 table of baseline-task-time.txt): 130
+other main sessions in /home/agent/.claude/projects/-diagram with a call in the window (page sessions): 0 []
+
+## Tokens by actor and kind (window totals; advisor calls apart)
+
+| actor | transcripts | calls | output | fresh input | cache read | cache write | per landed task: output / cache read | advisor out / in |
+|---|---|---|---|---|---|---|---|---|
+| builder | 104 | 7092 | 4.86M | 0.02M | 1,027.54M | 19.63M | 37.4k / 7.90M | 1.22M / 15.12M |
+| repair builder | 0 | 0 | 0.00M | 0.00M | 0.00M | 0.00M | 0.0k / 0.00M | 0.00M / 0.00M |
+| review agent | 180 | 1076 | 1.03M | 0.00M | 25.60M | 4.91M | 7.9k / 0.20M | 0.55M / 2.46M |
+| other agent | 0 | 0 | 0.00M | 0.00M | 0.00M | 0.00M | 0.0k / 0.00M | 0.00M / 0.00M |
+| coordinator | 1 | 980 | 0.56M | 0.00M | 591.33M | 2.48M | 4.3k / 4.55M | 0.00M / 0.00M |
+| page session | 0 | 0 | 0.00M | 0.00M | 0.00M | 0.00M | 0.0k / 0.00M | 0.00M / 0.00M |
+| all | 285 | 9148 | 6.46M | 0.02M | 1,644.47M | 27.02M | 49.7k / 12.65M | 1.77M / 17.57M |
+
+model mix (calls): {'builder': {'claude-opus-5-5': 6823, 'claude-sonnet-5-5': 24, 'claude-fable-5-2': 241, '<synthetic>': 4}, 'review agent': {'claude-opus-5-5': 1032, 'claude-sonnet-5-5': 44}, 'coordinator': {'claude-fable-5-2': 45, '<synthetic>': 1, 'claude-opus-5-5': 934}}
+
+## Reconciliation: each actor's total = booked to a landed task + booked to a task not landed + unbooked (output / cache read)
+
+- builder: landed 4.56M / 968.63M; booked, not landed 0.31M / 58.91M; unbooked 0.00M / 0.00M (sums to total: True)
+- repair builder: landed 0.00M / 0.00M; booked, not landed 0.00M / 0.00M; unbooked 0.00M / 0.00M (sums to total: True)
+- review agent: landed 0.90M / 21.87M; booked, not landed 0.05M / 1.07M; unbooked 0.08M / 2.65M (sums to total: True)
+- other agent: landed 0.00M / 0.00M; booked, not landed 0.00M / 0.00M; unbooked 0.00M / 0.00M (sums to total: True)
+- coordinator: landed 0.00M / 0.00M; booked, not landed 0.00M / 0.00M; unbooked 0.56M / 591.33M (sums to total: True)
+- page session: landed 0.00M / 0.00M; booked, not landed 0.00M / 0.00M; unbooked 0.00M / 0.00M (sums to total: True)
+
+## Per landed task (booked: its builder(s) and the agents they and the session dispatched for it)
+
+tasks landed with tokens booked: 91 of 130 (a bundle is one unit)
+task size (T512, added+deleted, a shared commit counted whole under each task it names, so totals double-count 72 shared rows): test lines median 98.5 total 18190; non-test lines median 155.0 total 42082
+- output: median 56.6k, total 5.46M over the booked tasks
+- fresh_in: median 0.2k, total 0.02M over the booked tasks
+- cache_read: median 9,998.8k, total 990.50M over the booked tasks
+- cache_write: median 224.4k, total 22.67M over the booked tasks
+
+| task | test lines | non-test lines | output | fresh input | cache read | cache write | builder / review share |
+|---|---|---|---|---|---|---|---|
+| 451 T313 | 1555 | 1680 | 304.1k | 0.7k | 63,009.0k | 1,306.0k | 98% / 2% |
+| 451 T286 | 199 | 109 | 122.4k | 0.3k | 25,282.4k | 421.8k | 96% / 4% |
+| 451 T417,T352 | 1276 | 398 | 98.1k | 0.3k | 25,106.2k | 307.3k | 99% / 1% |
+| 451 T479,T481 | 118 | 189 | 70.6k | 0.3k | 23,267.4k | 304.1k | 99% / 1% |
+| 451 T470,T363 | 146 | 163 | 95.0k | 0.3k | 20,191.2k | 294.1k | 98% / 2% |
+| 451 T448,T451 | 76 | 94 | 88.0k | 0.3k | 18,950.7k | 360.2k | 96% / 4% |
+| 451 T465 | 673 | 715 | 139.3k | 0.3k | 18,620.6k | 385.4k | 99% / 1% |
+| 451 T427,T428 | 118 | 103 | 76.4k | 0.3k | 16,944.7k | 279.7k | 97% / 3% |
+| 451 T489,T488 | 80 | 198 | 93.1k | 0.2k | 16,361.9k | 320.0k | 95% / 5% |
+| 451 T387 | 120 | 423 | 86.5k | 0.2k | 16,036.8k | 241.7k | 99% / 1% |
+| 451 T364,T341 | 121 | 560 | 95.1k | 0.2k | 15,930.9k | 342.1k | 95% / 5% |
+| 451 T353,T360 | 135 | 736 | 92.1k | 0.2k | 15,710.6k | 317.1k | 95% / 5% |
+| 451 T388 | 0 | 571 | 73.6k | 0.2k | 15,086.9k | 244.4k | 99% / 1% |
+| 451 T443 | 386 | 617 | 127.7k | 0.3k | 14,962.5k | 501.9k | 96% / 4% |
+| 451 T455 | 0 | 783 | 67.8k | 0.2k | 14,892.9k | 597.8k | 99% / 1% |
+| 451 T487,T486 | 99 | 85 | 64.7k | 0.2k | 14,672.7k | 236.8k | 99% / 1% |
+| 451 T413 | 255 | 175 | 58.2k | 0.2k | 14,539.6k | 258.5k | 99% / 1% |
+| 451 T495,T492 | 252 | 178 | 66.2k | 0.2k | 14,482.8k | 218.2k | 98% / 2% |
+| 451 T306 | 102 | 85 | 62.6k | 0.2k | 14,476.9k | 222.5k | 98% / 2% |
+| 451 T467,T468 | 222 | 264 | 79.6k | 0.2k | 14,406.5k | 233.9k | 98% / 2% |
+| 451 T446 | 79 | 163 | 78.5k | 0.2k | 14,049.3k | 288.7k | 97% / 3% |
+| 451 T419,T404 | 227 | 376 | 68.1k | 0.2k | 13,946.5k | 226.2k | 98% / 2% |
+| 451 T497,T494 | 31 | 275 | 71.3k | 0.2k | 13,735.4k | 245.3k | 99% / 1% |
+| 451 T490 | 225 | 862 | 92.2k | 0.2k | 13,647.4k | 237.7k | 98% / 2% |
+| 451 T457 | 121 | 199 | 63.3k | 0.2k | 13,370.7k | 332.2k | 99% / 1% |
+| 451 T505,T506 | 30 | 155 | 68.7k | 0.2k | 13,311.6k | 256.2k | 96% / 4% |
+| 451 T491,T493 | 131 | 105 | 62.5k | 0.2k | 13,058.3k | 235.4k | 98% / 2% |
+| 451 T369 | 216 | 139 | 61.1k | 0.2k | 12,936.6k | 254.3k | 97% / 3% |
+| 451 T453 | 115 | 126 | 59.3k | 0.2k | 12,720.4k | 200.2k | 98% / 2% |
+| 451 T304 | 252 | 242 | 74.4k | 0.2k | 12,573.8k | 500.2k | 98% / 2% |
+| 451 T449 | 84 | 63 | 76.0k | 0.2k | 12,184.4k | 261.2k | 96% / 4% |
+| 451 T392 | 98 | 462 | 67.7k | 0.2k | 12,047.6k | 336.1k | 99% / 1% |
+| 451 T437,T440 | 92 | 75 | 52.6k | 0.2k | 11,983.1k | 235.9k | 97% / 3% |
+| 451 T462 | 221 | 89 | 59.4k | 0.2k | 11,834.4k | 253.8k | 98% / 2% |
+| 451 T275 | 78 | 41 | 61.7k | 0.2k | 11,544.3k | 229.6k | 97% / 3% |
+| 451 T367,T411 | 179 | 409 | 72.6k | 0.2k | 11,489.1k | 248.0k | 98% / 2% |
+| 451 T445 | 0 | 286 | 50.3k | 0.2k | 11,482.7k | 218.7k | 98% / 2% |
+| 451 T426 | 241 | 117 | 51.2k | 0.2k | 11,456.8k | 223.9k | 99% / 1% |
+| 451 T463 | 172 | 631 | 69.1k | 0.2k | 11,205.7k | 244.1k | 98% / 2% |
+| 451 T435 | 209 | 202 | 60.5k | 0.2k | 11,048.9k | 308.0k | 98% / 2% |
+| 451 T311 | 397 | 536 | 60.3k | 0.2k | 10,930.8k | 226.6k | 99% / 1% |
+| 451 T409,T406 | 165 | 198 | 55.0k | 0.2k | 10,794.7k | 223.4k | 98% / 2% |
+| 451 T143,T342 | 39 | 0 | 53.4k | 0.2k | 10,642.5k | 226.0k | 98% / 2% |
+| 451 T397 | 192 | 98 | 47.1k | 0.2k | 10,608.1k | 208.2k | 99% / 1% |
+| 451 T438,T459 | 141 | 185 | 66.4k | 0.2k | 10,401.5k | 278.7k | 97% / 3% |
+| 451 T294 | 124 | 286 | 56.6k | 0.2k | 9,998.8k | 224.4k | 97% / 3% |
+| 451 T431,T432 | 24 | 75 | 57.3k | 0.2k | 9,962.4k | 238.9k | 95% / 5% |
+| 451 T500 | 84 | 163 | 46.0k | 0.2k | 9,849.1k | 183.8k | 98% / 2% |
+| 451 T501 | 132 | 263 | 73.6k | 0.2k | 9,627.8k | 322.2k | 97% / 3% |
+| 451 T482,T475 | 68 | 63 | 45.1k | 0.2k | 8,998.5k | 200.9k | 97% / 3% |
+| 451 T477,T472 | 137 | 115 | 49.1k | 0.1k | 8,959.9k | 226.9k | 96% / 4% |
+| 451 T441 | 141 | 122 | 48.9k | 0.2k | 8,836.5k | 186.9k | 97% / 3% |
+| 451 T433,T436 | 86 | 176 | 58.4k | 0.2k | 8,730.2k | 291.5k | 96% / 4% |
+| 451 T504 | 64 | 35 | 46.0k | 0.2k | 8,690.7k | 163.4k | 99% / 1% |
+| 451 T434 | 461 | 290 | 64.8k | 0.1k | 8,666.6k | 221.6k | 97% / 3% |
+| 451 T442 | 155 | 63 | 48.0k | 0.2k | 8,656.7k | 188.8k | 97% / 3% |
+| 451 T458 | 34 | 234 | 46.2k | 0.2k | 8,476.5k | 165.9k | 97% / 3% |
+| 451 T420 | 0 | 534 | 50.4k | 0.1k | 8,419.3k | 164.3k | 100% / 0% |
+| 451 T464 | 61 | 189 | 47.3k | 0.2k | 8,409.2k | 169.5k | 98% / 2% |
+| 451 T312 | 37 | 17 | 44.1k | 0.1k | 7,827.5k | 207.2k | 98% / 2% |
+| 451 T478,T473 | 107 | 86 | 46.0k | 0.1k | 7,619.5k | 191.0k | 96% / 4% |
+| 451 T452 | 86 | 226 | 66.4k | 0.1k | 7,493.9k | 191.8k | 96% / 4% |
+| 451 T460,T450 | 42 | 44 | 38.1k | 0.2k | 7,236.9k | 210.2k | 96% / 4% |
+| 451 T310 | 64 | 20 | 60.3k | 0.2k | 7,202.3k | 284.0k | 87% / 13% |
+| 451 T496,T498 | 96 | 66 | 35.4k | 0.1k | 6,722.7k | 175.4k | 97% / 3% |
+| 451 T466 | 27 | 110 | 33.0k | 0.1k | 6,673.3k | 158.5k | 98% / 2% |
+| 451 T314 | 35 | 0 | 43.5k | 0.1k | 6,635.9k | 598.2k | 98% / 2% |
+| 451 T444 | 139 | 155 | 52.4k | 0.1k | 6,552.5k | 200.6k | 92% / 8% |
+| 451 T483,T480 | 40 | 61 | 35.3k | 0.1k | 6,412.3k | 190.3k | 97% / 3% |
+| 451 T403 | 28 | 22 | 30.0k | 0.1k | 6,397.3k | 188.3k | 97% / 3% |
+| 451 T365,T373,T420 | 0 | 12768 | 47.3k | 0.1k | 6,295.7k | 219.4k | 92% / 8% |
+| 451 T342 | 39 | 1004 | 47.9k | 0.1k | 6,124.7k | 128.0k | 100% / 0% |
+| 451 T430 | 76 | 15 | 39.4k | 0.1k | 6,028.6k | 212.8k | 92% / 8% |
+| 451 T412,T418 | 115 | 130 | 38.6k | 0.1k | 5,665.1k | 164.8k | 97% / 3% |
+| 451 T386 | 66 | 156 | 38.8k | 0.1k | 5,501.4k | 150.5k | 98% / 2% |
+| 451 T485,T447 | 0 | 0 | 32.4k | 0.1k | 5,447.6k | 132.1k | 97% / 3% |
+| 451 T469,T456 | 15 | 56 | 35.8k | 0.1k | 5,418.3k | 173.4k | 95% / 5% |
+| 451 T384 | 30 | 55 | 34.1k | 0.1k | 4,866.2k | 157.3k | 94% / 6% |
+| 451 T425 | 197 | 121 | 34.5k | 0.1k | 4,814.0k | 166.4k | 96% / 4% |
+| 451 T414 | 121 | 37 | 36.7k | 0.1k | 4,565.1k | 163.9k | 97% / 3% |
+| 451 T355 | 169 | 690 | 28.5k | 0.1k | 4,490.8k | 309.9k | 97% / 3% |
+| 451 T288 | 32 | 12 | 26.8k | 0.1k | 4,242.2k | 137.7k | 97% / 3% |
+| 451 T439 | 22 | 109 | 46.2k | 0.1k | 4,185.1k | 169.3k | 92% / 8% |
+| 451 T424 | 14 | 0 | 29.7k | 0.1k | 4,143.6k | 128.9k | 97% / 3% |
+| 451 T454 | 36 | 0 | 27.4k | 0.1k | 3,946.4k | 139.0k | 97% / 3% |
+| 451 T297 | 0 | 411 | 35.7k | 0.1k | 3,905.1k | 142.4k | 100% / 0% |
+| 451 T408 | 31 | 42 | 22.1k | 0.1k | 3,520.8k | 160.6k | 96% / 4% |
+| 451 T296 | 0 | 18 | 20.3k | 0.1k | 3,377.3k | 96.9k | 100% / 0% |
+| 451 T296,T297 | 0 | 18 | 23.8k | 0.1k | 2,912.0k | 133.0k | 90% / 10% |
+| 451 T499 | 0 | 218 | 20.1k | 0.1k | 1,893.7k | 122.1k | 91% / 9% |
+| 451 T475 | 68 | 63 | 4.8k | 0.0k | 166.6k | 23.0k | 0% / 100% |
+
+## Cross-check: the T512 table's own per-task booking, summed over its rows (builders + review agents + session)
+- T512 rows: output 6.18M, fresh_in 0.02M, cache_read 1,146.88M, cache_write 24.82M
+- this script, booked to landed tasks (no session share): output 5.46M, fresh_in 0.02M, cache_read 990.50M, cache_write 22.67M
+
+## Audit: builders and repair builders matched, and agents booked through a parent or a description
+- builder aa6cb23e37 ('451', 'T143,T342') KIND=fix landed=True: Fix: 451 T143 tests on the live guard log, T342 close
+- builder ac29a6c9ee ('451', 'T275') KIND=fix landed=True: Fix: 451 T275 state paths in a worktree
+- builder ab4a8e9fb1 ('451', 'T286') KIND=fix landed=True: Fix: 451 T286 a fresh tree's first closing checks
+- builder a2d9dbe1d9 ('451', 'T288') KIND=fix landed=True: Fix: 451 T288 shared plan bundle path
+- builder aa360a6ff1 ('451', 'T294') KIND=fix landed=True: Fix: 451 T294 a landing names files HEAD lacks
+- builder a35aad4b25 ('451', 'T296') KIND=build-half landed=True: Build half: 451 T296 pool follow-ups
+- builder a1b429aa84 ('451', 'T296,T297') KIND=fix landed=True: Close: 451 T296 T297 sections
+- builder afaff8f656 ('451', 'T297') KIND=measurement landed=True: Measure: 451 T297 message delivery to a builder
+- builder a2d0bf313c ('451', 'T304') KIND=fix landed=True: Fix: 451 T304 remainder, shared stamps and index locks
+- builder a12b3bb566 ('451', 'T306') KIND=fix landed=True: Fix: 451 T306 program spellings the guards miss
+- builder a376b492ea ('451', 'T307') KIND=fix landed=False: Fix: 451 T307 what a landing waits on
+- builder a5b03fe73a ('451', 'T307') KIND=closing-half landed=False: Closing half: 451 T307 part two
+- builder a6b2e74e58 ('451', 'T307') KIND=fix landed=False: Fix: 451 T307 part two
+- builder abb7d2581b ('451', 'T308') KIND=fix landed=False: Fix: 451 T308 two tiers in the tooling
+- builder ac6cb057ca ('451', 'T310') KIND=fix landed=True: Fix: 451 T310 pool builders' dispatches booked
+- builder a0f5973677 ('451', 'T311') KIND=fix landed=True: Fix: 451 T311 closing-checks Python and withdrawn passes
+- builder afebe168f8 ('451', 'T312') KIND=fix landed=True: Fix: 451 T312 tests reading live state
+- builder a09656496b ('451', 'T313') KIND=build-half landed=True: Build half: 451 T313 queue and pool kept full
+- builder a4df3777a0 ('451', 'T313') KIND=fix landed=True: Fix: 451 T313 round 3 per arbiter
+- builder aa9fa78ca6 ('451', 'T313') KIND=fix landed=True: Fix: 451 T313 two review objections
+- builder ad21d5b459 ('451', 'T313') KIND=closing-half landed=True: Closing half: 451 T313 queue and pool
+- builder a53f07e4e9 ('451', 'T314') KIND=fix landed=True: Fix: 451 T314 state-sync suite flake
+- builder a6ffa20e5e ('451', 'T342') KIND=measurement landed=True: Measure: 451 T342 test selection's worth
+- builder ab32babfca ('451', 'T353,T360') KIND=fix landed=True: Fix: 451 T353 T360 builder-brief guard gaps
+- builder a6fb8b55a1 ('451', 'T355') KIND=fix landed=True: Fix: 451 T355 lint in the small lane
+- builder a2de5b3759 ('451', 'T364,T341') KIND=fix landed=True: Fix: 451 T364 T341 the checks' own waits
+- builder a40179f9da ('451', 'T365,T373,T420') KIND=fix landed=True: Close: 451 T365 T373 T420 measurements
+- builder a464c63e8c ('451', 'T367,T411') KIND=fix landed=True: Fix: 451 T367 T411 pre-warm keeps alone keys
+- builder a982ff407c ('451', 'T369') KIND=fix landed=True: Fix: 451 T369 a task's start mark per tree
+- builder a52de18d65 ('451', 'T384') KIND=fix landed=True: Fix: 451 T384 clone-sync reads the transcript early
+- builder a3d7770d2b ('451', 'T386') KIND=fix landed=True: Fix: 451 T386 clone-sync's clean-path session reads
+- builder a606570a98 ('451', 'T387') KIND=fix landed=True: Fix: 451 T387 the plan hold's save on every Bash
+- builder acd337295a ('451', 'T388') KIND=measurement landed=True: Measure: 451 T388 the Agent call's hooks
+- builder a971c2f01e ('451', 'T392') KIND=fix landed=True: Fix: 451 T392 the Edit hook's whole-log read
+- builder a8a5e4575f ('451', 'T397') KIND=fix landed=True: Fix: 451 T397(c) make land carries its done commits
+- builder addb63709b ('451', 'T403') KIND=fix landed=True: Fix: 451 T403 second-tier row books GM waits
+- builder a3b67300be ('451', 'T408') KIND=fix landed=True: Fix: 451 T408 overlap notice at a hand handout
+- builder a1432522d6 ('451', 'T409,T406') KIND=fix landed=True: Fix: 451 T409 T406 tree walk and gate-write
+- builder a77d806a92 ('451', 'T412,T418') KIND=fix landed=True: Fix: 451 T412 T418 queue flags and boards
+- builder a6714d8d56 ('451', 'T413') KIND=fix landed=True: Fix: 451 T413 first pass's missing checks
+- builder ab7d82d203 ('451', 'T414') KIND=fix landed=True: Fix: 451 T414 keep a failed suite's log
+- builder a56b9b9596 ('451', 'T417,T352') KIND=fix landed=True: Fix: 451 T417 T352 context cap wrap-up band
+- builder a919ba33f2 ('451', 'T419,T404') KIND=fix landed=True: Fix: 451 T419 T404 carry by heading, done refs
+- builder a711af4702 ('451', 'T420') KIND=measurement landed=True: Measure: 451 T420 remaining wide slot waits
+- builder a9f874d103 ('451', 'T424') KIND=fix landed=True: Fix: 451 T424 pre-warm test flake
+- builder ab6887ef06 ('451', 'T425') KIND=fix landed=True: Fix: 451 T425 small build takes a free wide slot
+- builder a26de0df4d ('451', 'T426') KIND=fix landed=True: Fix: 451 T426 scratch slot waits booked as real
+- builder add09796f5 ('451', 'T427,T428') KIND=fix landed=True: Fix: 451 T427 T428 wrap-up band follow-ups
+- builder aa543e9478 ('451', 'T430') KIND=fix landed=True: Fix: 451 T430 writes into a gated tree
+- builder a2f33f76b1 ('451', 'T431,T432') KIND=fix landed=True: Fix: 451 T431 T432 brief misread, ready-hold scope
+- builder aa95616bbc ('451', 'T433,T436') KIND=fix landed=True: Fix: 451 T433 T436 walk redirect gaps
+- builder af7611903d ('451', 'T433,T436') KIND=fix landed=True: Fix: 451 T433 T436 walk redirect gaps
+- builder abacd1e3c0 ('451', 'T434') KIND=fix landed=True: Fix: 451 T434 views cache keyed by its code
+- builder a0b87b93f7 ('451', 'T435') KIND=closing-half landed=True: Closing half: 451 T435 filtered test runs
+- builder a265b4deb4 ('451', 'T435') KIND=build-half landed=True: Build half: 451 T435 filtered test runs
+- builder ab14df5eb3 ('451', 'T437,T440') KIND=fix landed=True: Fix: 451 T437 T440 dead-tree marks, run lock path
+- builder a367e93ec0 ('451', 'T438,T459') KIND=fix landed=True: Fix: 451 T438 T459 bundle D-ids, stale temp files
+- builder aa236e82c9 ('451', 'T439') KIND=fix landed=True: Fix: 451 T439 the hook launcher's floor
+- builder aab21269f1 ('451', 'T441') KIND=fix landed=True: Fix: 451 T441 guard state in a linked worktree
+- builder a6f14a2c5e ('451', 'T442') KIND=fix landed=True: Fix: 451 T442 review verdicts read in a worktree
+- builder aee7ed9aeb ('451', 'T443') KIND=build-half landed=True: Build half: 451 T443 reversal index
+- builder aef91547e6 ('451', 'T443') KIND=closing-half landed=True: Closing half: 451 T443 reversal index
+- builder a95c7c7399 ('451', 'T444') KIND=fix landed=True: Fix: 451 T444 audit counts fixture rows
+- builder a6e65bda9b ('451', 'T445') KIND=measurement landed=True: Measure: 451 T445 three hung rustc test runs
+- builder a117249c3c ('451', 'T446') KIND=fix landed=True: Fix: 451 T446 guards' git calls take the index lock
+- builder afe5f41cb3 ('451', 'T448,T451') KIND=fix landed=True: Fix: 451 T448 T451 closing-checks residue
+- builder a317b5d61d ('451', 'T449') KIND=fix landed=True: Fix: 451 T449 guard link failure is silent
+- builder a889fc1180 ('451', 'T452') KIND=fix landed=True: Fix: 451 T452 the guard build's own cut
+- builder a5308b712c ('451', 'T453') KIND=fix landed=True: Fix: 451 T453 spellings left unread
+- builder a2723b1228 ('451', 'T454') KIND=fix landed=True: Fix: 451 T454 a red pre-warm test fails at once
+- builder a32aca488a ('451', 'T455') KIND=measurement landed=True: Measure: 451 T455 the land crate's slow green runs
+- builder afca4f58ad ('451', 'T457') KIND=unmarked landed=True: Fix: 451 T457 the first pass reads plan history
+- builder aa44e8c2c6 ('451', 'T458') KIND=fix landed=True: Fix: 451 T458 the reversal index's cold rebuild
+- builder afd3de3eaa ('451', 'T460,T450') KIND=fix landed=True: Fix: 451 T460 T450 band stopgaps and carry wording
+- builder ab76cf4a56 ('451', 'T462') KIND=fix landed=True: Fix: 451 T462 blank stubs count review rounds
+- builder a637315dd8 ('451', 'T463') KIND=fix landed=True: Fix: 451 T463 catch a slow land test run alive
+- builder a72d79d8d7 ('451', 'T464') KIND=fix landed=True: Fix: 451 T464 the tick checks' per-task cost
+- builder a05a5d6ea4 ('451', 'T465') KIND=closing-half landed=True: Closing half: 451 T465 with T474
+- builder a215792560 ('451', 'T465') KIND=build-half landed=True: Build half: 451 T465 history index on disk
+- builder a68107df1b ('451', 'T466') KIND=fix landed=True: Fix: 451 T466 task sections parsed per task
+- builder a903e68974 ('451', 'T467,T468') KIND=fix landed=True: Fix: 451 T467 T468 possessive ids, closing-owes rows
+- builder ad7228468f ('451', 'T469,T456') KIND=fix landed=True: Fix: 451 T469 T456 land test wait, env hop
+- builder ac9b78f908 ('451', 'T470,T363') KIND=fix landed=True: Fix: 451 T470 T363 per-test times, leaked processes
+- builder a1554b6cf3 ('451', 'T477,T472') KIND=fix landed=True: Fix: 451 T477 T472 arbiter trigger, part B scope
+- builder a5410e48d2 ('451', 'T478,T473') KIND=fix landed=True: Fix: 451 T478 T473 prune kept texts and records
+- builder aaca8eeae0 ('451', 'T479,T481') KIND=fix landed=True: Fix: 451 T479 T481 tick scope, idle flag
+- builder afd4bf9707 ('451', 'T482,T475') KIND=fix landed=True: Fix: 451 T482 T475 unowed ruling, escape wording
+- builder ac46309324 ('451', 'T483,T480') KIND=fix landed=True: Fix: 451 T483 T480 gate-write wording, audit rate
+- builder a97f22e86d ('451', 'T485,T447') KIND=fix landed=True: Fix: 451 T485 T447 two verdicts, a superseded close
+- builder aa6412b1b9 ('451', 'T487,T486') KIND=fix landed=True: Fix: 451 T487 T486 review readers, stale message store
+- builder a588e7cd55 ('451', 'T489,T488') KIND=fix landed=True: Fix: 451 T489 T488 stale holds, wave marks
+- builder a6b70f65b6 ('451', 'T490') KIND=fix landed=True: Fix: 451 T490 the check state's parse floor
+- builder a210defb8d ('451', 'T491,T493') KIND=fix landed=True: Fix: 451 T491 T493 two reads an Agent hook skips
+- builder a2202399c5 ('451', 'T495,T492') KIND=fix landed=True: Fix: 451 T495 T492 review merge tie, cascade diff
+- builder a5d6c66ba7 ('451', 'T496,T498') KIND=fix landed=True: Fix: 451 T496 T498 vestigial escape, double log read
+- builder a94d0b2190 ('451', 'T497,T494') KIND=fix landed=True: Fix: 451 T497 T494 one parse a dispatch, the gate launcher's walk
+- builder a0779a8081 ('451', 'T499') KIND=measurement landed=True: Measure: 451 T499 plan bytes builders read
+- builder a5d8e03cb0 ('451', 'T500') KIND=fix landed=True: Fix: 451 T500 five guards' launcher starts
+- builder a390abfd4f ('451', 'T501') KIND=closing-half landed=True: Closing half: 451 T501 with T502
+- builder a5437bf4fe ('451', 'T501') KIND=build-half landed=True: Build half: 451 T501 a task's plan sections
+- builder ac9a7ece71 ('451', 'T504') KIND=fix landed=True: Fix: 451 T504 three more guards onto the asker
+- builder a4de704cf7 ('451', 'T505,T506') KIND=fix landed=True: Fix: 451 T505 T506 stale wave rows, the scan
+- builder a160aab3fd ('451', 'T507') KIND=measurement landed=False: Measure: 451 T507 what the partial read still costs
+- builder affc9df246 ('451', 'T508') KIND=fix landed=False: Fix: 451 T508 the Bash hooks' prefilter reads
+- other agents' booking: {('review agent', 'via builder'): 151, ('review agent', 'unbooked'): 24, ('review agent', 'by description'): 5}
