@@ -563,8 +563,9 @@ fn misnumbered(root: &Rooted, triggers: &[String]) -> Vec<String> {
 /// at its own clock, which neither the run log's `utc` nor the gate's Phase line shares - on 2026-11-27 the session derived
 /// `red-gate@2026-11-27T09:39:16Z` from a Phase line where `red-gate@2026-11-27T09:39:13Z` was owed, the arbiter ruled on the
 /// mis-keyed id, the ruling discharged nothing and the next landing was refused for the real one. Owed means a key of
-/// `arbiter-owed.json`, under any feature; a ruled trigger is popped from it, so its second bundle is named as ruled.
-fn unowed_red_gate(root: &Rooted, trigger: &str) -> Option<String> {
+/// `arbiter-owed.json`, under any feature; a ruled trigger is popped from it, so its second bundle is named as ruled. The ruling's
+/// own door, `make arbiter-ruled` (`ruling_at`, `batch_at`), asks it too (451 T482).
+pub(super) fn unowed_red_gate(root: &Rooted, trigger: &str) -> Option<String> {
     let owed = core::owed(root);
     if !trigger.starts_with("red-gate@") || owed.contains_key(trigger) {
         return None;

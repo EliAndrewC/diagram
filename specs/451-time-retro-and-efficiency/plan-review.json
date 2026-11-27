@@ -4208,7 +4208,7 @@
    "declared": "spec-fidelity"
   },
   "### T475 Approach (checklist part A)": {
-   "sha256": "6b67b7e200273b2c3ac3436c09f3bba7da7cdc878c8c57f656762ac95ac400cc",
+   "sha256": "3cad61483e4cf04223536293e44dcbe5e11c7fcc639b24ba82ec77c24ea58004",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4233,6 +4233,24 @@
   },
   "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)": {
    "sha256": "ef89f867db0f78301b46a682f167169fce60934457786adb4e2407f63311d90d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T482 (left by 451 T477's found-and-left: `make arbiter-ruled` recorded a ruling on red-gate@2026-11-27T09:39:16Z at 09:45:54Z while arbiter-owed.json held only red-gate@2026-11-27T09:39:13Z, so the ruling discharged nothing, 451 arbiter.jsonl row 73)": {
+   "sha256": "435ebc08333d4fde2a9835a4fadb907f0745fbaf85784a2b3e563947532b45c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T482 Approach (checklist part A)": {
+   "sha256": "589ab4d276054714c59e7d6d50987840e5e74a69e0a5a99f96f4e25882749949",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)": {
+   "sha256": "9c852a48824511e5b05863c6f93b80cfd4e5905dee4bc182a5a93090df136a51",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -39723,6 +39741,74 @@
      "why": "The placeholder text is replaced. No decision is lost."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T482 (left by 451 T477's found-and-left: `make arbiter-ruled` recorded a ruling on red-gate@2026-11-27T09:39:16Z at 09:45:54Z while arbiter-owed.json held only red-gate@2026-11-27T09:39:13Z, so the ruling discharged nothing, 451 arbiter.jsonl row 73)",
+    "### T482 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T482-D1",
+     "summary": "ruling_at asks T477's unowed_red_gate (the rule's one reader) after its already-ruled check and before validation or any row is written, refusing with the owed red-gate ids as make arbiter-bundle TRIGGER=<id> commands, or saying none is owed",
+     "class": "within",
+     "why": "It carries the task's own line (refuse it there too, naming the owed red-gate keys) and fixes the defect T477 found and left (arbiter.jsonl row 73: a ruling recorded on red-gate@...09:39:16Z that discharged nothing). Reusing the bundle's reader adds no behavior beyond the refusal asked for; it narrows nothing."
+    },
+    {
+     "id": "T482-D2",
+     "summary": "batch_at asks unowed_red_gate of every trigger the batch names before the first row, so a batch with one unowed red gate writes nothing",
+     "class": "within",
+     "why": "A batch is the other path a ruling is recorded by. Leaving it open would leave the same defect in one copy, so closing it is the fix, not added scope. Refusing the whole batch before any row matches the batch's existing refusals (451 T179). Nothing the request or task asked for is narrowed."
+    },
+    {
+     "id": "T482-test-change",
+     "summary": "the existing arbiter test's ruled batch of an unowed red-gate@2 now asserts the refusal, then owes red-gate@2 and asserts the batch records",
+     "class": "within",
+     "why": "The old fixture depended on the very behavior being fixed. The rewrite enforces the fix and keeps the batch's success path tested, so it is enforcement, not narrowed coverage."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)",
+    "### T475 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form '<your command>  # TOKEN: <why>'; both forms are still accepted, and the text says 'where the token is' because the helper's callers pass commands, prompts, summaries and Stop messages.",
+     "class": "within",
+     "why": "The GM's 2026-11-23 hook-output request asks for the same thing in fewer tokens with no loss of fidelity. Which form a message shows is a wording choice inside that request. No accepted form is removed, the reason floor is unchanged, and the one form shown works for every caller, so the reader loses nothing it needs."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the 'CI is down' example, the 'TOKEN: ok' sentence and the GM 2026-08-30 history are cut from the text, and the history moves to a WHY comment. The header 'TOKEN with no reason given' stays, because builder_stop_hooks/tests.rs pins it.",
+     "class": "within",
+     "why": "This is the brevity the 2026-11-23 request asks for. It answers the message-check BREVITY finding, and message-check found FIDELITY PASS on all 14 re-rendered wordings. What the reader acts on stays in the text: the token, the bar of two words and eight characters (which already rules out 'ok'), where the reason goes, that make audit shows it, and the form. The history is kept, in the source. No requirement is narrowed."
+    },
+    {
+     "id": "T475-test",
+     "summary": "A red-first test escape::tests::the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly pins the text: at most 260 characters, 'two words or more', the GATE_OK=\"<why form, and neither '# GATE_OK:' nor the history. The old assertion on 'GATE_OK: ok' now asserts the header.",
+     "class": "within",
+     "why": "Enforcement of the requested brevity and fidelity, and of 451 T170's per-message budget and verdict. With the cut removed from the spec, the test would have nothing left to check. It serves the request."
+    },
+    {
+     "id": "T475-rerender",
+     "summary": "The eleven guard suites whose recorded wordings held the old text are re-run with the tree's message store, then make guard-messages records 14 new wordings (176-200 characters against the 1,800 budget), with message-check's PASS on each.",
+     "class": "within",
+     "why": "This keeps the message store and its reviewed verdicts true to the new text, as T170 and the 2026-11-23 subagent brevity and fidelity check require. It adds no behavior. The set of suites comes from the recorded store's rows, and the 30 call sites carry their grep, so the census states its search space."
+    },
+    {
+     "id": "T475-order",
+     "summary": "The task lands after T482 in this tree, as T477's found-and-left line orders it.",
+     "class": "within",
+     "why": "Sequencing only. It changes nothing about what is built."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -59886,6 +59972,70 @@
      "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
      "class": "within",
      "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T482": {
+   "section_sha256": "b9236e98513c5a290cddd9e0f478abbaa6f3bc250413ff3a76762fc4badd9d1e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T482-D1",
+     "summary": "ruling_at asks T477's unowed_red_gate (the rule's one reader) after its already-ruled check and before validation or any row is written, refusing with the owed red-gate ids as make arbiter-bundle TRIGGER=<id> commands, or saying none is owed",
+     "class": "within",
+     "why": "It carries the task's own line (refuse it there too, naming the owed red-gate keys) and fixes the defect T477 found and left (arbiter.jsonl row 73: a ruling recorded on red-gate@...09:39:16Z that discharged nothing). Reusing the bundle's reader adds no behavior beyond the refusal asked for; it narrows nothing."
+    },
+    {
+     "id": "T482-D2",
+     "summary": "batch_at asks unowed_red_gate of every trigger the batch names before the first row, so a batch with one unowed red gate writes nothing",
+     "class": "within",
+     "why": "A batch is the other path a ruling is recorded by. Leaving it open would leave the same defect in one copy, so closing it is the fix, not added scope. Refusing the whole batch before any row matches the batch's existing refusals (451 T179). Nothing the request or task asked for is narrowed."
+    },
+    {
+     "id": "T482-test-change",
+     "summary": "the existing arbiter test's ruled batch of an unowed red-gate@2 now asserts the refusal, then owes red-gate@2 and asserts the batch records",
+     "class": "within",
+     "why": "The old fixture depended on the very behavior being fixed. The rewrite enforces the fix and keeps the batch's success path tested, so it is enforcement, not narrowed coverage."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T475": {
+   "section_sha256": "368002f27cc268d93880c636379fd017c4c69043c745afcb5d696ed9b293912e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form '<your command>  # TOKEN: <why>'; both forms are still accepted, and the text says 'where the token is' because the helper's callers pass commands, prompts, summaries and Stop messages.",
+     "class": "within",
+     "why": "The GM's 2026-11-23 hook-output request asks for the same thing in fewer tokens with no loss of fidelity. Which form a message shows is a wording choice inside that request. No accepted form is removed, the reason floor is unchanged, and the one form shown works for every caller, so the reader loses nothing it needs."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the 'CI is down' example, the 'TOKEN: ok' sentence and the GM 2026-08-30 history are cut from the text, and the history moves to a WHY comment. The header 'TOKEN with no reason given' stays, because builder_stop_hooks/tests.rs pins it.",
+     "class": "within",
+     "why": "This is the brevity the 2026-11-23 request asks for. It answers the message-check BREVITY finding, and message-check found FIDELITY PASS on all 14 re-rendered wordings. What the reader acts on stays in the text: the token, the bar of two words and eight characters (which already rules out 'ok'), where the reason goes, that make audit shows it, and the form. The history is kept, in the source. No requirement is narrowed."
+    },
+    {
+     "id": "T475-test",
+     "summary": "A red-first test escape::tests::the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly pins the text: at most 260 characters, 'two words or more', the GATE_OK=\"<why form, and neither '# GATE_OK:' nor the history. The old assertion on 'GATE_OK: ok' now asserts the header.",
+     "class": "within",
+     "why": "Enforcement of the requested brevity and fidelity, and of 451 T170's per-message budget and verdict. With the cut removed from the spec, the test would have nothing left to check. It serves the request."
+    },
+    {
+     "id": "T475-rerender",
+     "summary": "The eleven guard suites whose recorded wordings held the old text are re-run with the tree's message store, then make guard-messages records 14 new wordings (176-200 characters against the 1,800 budget), with message-check's PASS on each.",
+     "class": "within",
+     "why": "This keeps the message store and its reviewed verdicts true to the new text, as T170 and the 2026-11-23 subagent brevity and fidelity check require. It adds no behavior. The set of suites comes from the recorded store's rows, and the 30 call sites carry their grep, so the census states its search space."
+    },
+    {
+     "id": "T475-order",
+     "summary": "The task lands after T482 in this tree, as T477's found-and-left line orders it.",
+     "class": "within",
+     "why": "Sequencing only. It changes nothing about what is built."
     }
    ],
    "verdict": "CLEAR"

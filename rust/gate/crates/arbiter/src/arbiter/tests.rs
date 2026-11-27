@@ -573,6 +573,16 @@ fn a_plan_or_claims_ask_stands_as_that_reviews_verdict() {
         "batch.json",
         &json!({"ruling": "continue", "why": "w", "triggers": ["red-gate@2"]}),
     );
+    let unowed = run(&root, &["ruled-batch", &batch, "--as", "round-arbiter"]);
+    assert!(
+        unowed.code != 0 && unowed.stderr.contains("red-gate@2 is owed by no guard"),
+        "{}",
+        unowed.stderr
+    );
+    owe(
+        &root,
+        &json!({"red-gate@2": {"kind": "red-gate", "feature": "999-x"}}),
+    );
     let b = run(&root, &["ruled-batch", &batch, "--as", "round-arbiter"]);
     assert!(
         b.code == 0 && b.stdout.contains("the batch's 1 triggers recorded"),
@@ -743,4 +753,5 @@ fn a_fix_that_cannot_be_settled_says_why() {
 mod home;
 mod landing;
 mod plan_accept;
+mod unowed;
 mod verbs;

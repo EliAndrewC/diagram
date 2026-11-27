@@ -7086,31 +7086,36 @@ that batch; the red was not in its change.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013): it bounds the disk the slow-run records take, at most about 3.2 MiB (`KEEP` times `CAP`, both GUESS knobs), which the GM ranks below time but not at nothing. Not an engine-speed task: no checklist answers owed.
 
-### T475 (<why: the finding or measurement that files it>)
+### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the one wording of `escape_or_refuse` (`rust/guard/shared/src/escape.rs`) cut to what its reader needs - the token, that a reason of two words or more and eight characters is owed, where it goes, that `make audit` shows it, and its form - 176-200 characters a token as rendered, measured 2026-11-27 (`make guard-messages`, its length column).
+  - **T475-D1, built: the form shown is `TOKEN="<why this case is legitimate>"`**, not `<your command>  # TOKEN: <why>`. Label: CONVENTION (tooling; no research claim). Reason: the task's line (the comment form stood beside guards whose own refusals print `TOKEN="<reason>"`, as `context_cap_hooks/split.rs` does); `reason` reads both, and the helper's callers pass a command, a prompt, a summary or a Stop message, where only the assignment form fits every one, so the text says "where the token is", not "in the command".
+  - **T475-D2, built: the workaround rationale, the "CI is down" example, the `TOKEN: ok` sentence and the GM 2026-08-30 history are cut from the text**; the history stays in a WHY comment beside it. Label: CONVENTION. Reason: the message-check BREVITY finding on ebf269213127bfc4 (about 230 characters asked for). The header `TOKEN with no reason given` stays: `builder_stop_hooks/tests.rs` pins it, and it names the token first.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="escape::tests"`, the test only added): 4 passed, 1 failed of 5 - `the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly` (at most 260 characters, `two words or more`, the `GATE_OK="<why` form, neither `# GATE_OK:` nor the history). Green after: 5 of 5. `an_escape_stands_aside_with_its_reason_and_refuses_without` asserted the old text's `GATE_OK: ok`; it now asserts the header.
+  - **Re-rendered**, measured 2026-11-27 (each suite run with the tree's message store, then `make guard-messages`): the eleven suites of the guards whose recorded wordings held it (main-tree, shell-check, no-poll, static-runs, conflict-marker, gate, context-cap, download-copy, builder-pool, readme, and builder-stop, which pins it) run with the tree's message store, each green; `make guard-messages` named 14 new wordings, one a token, 176-200 characters against the 1,800 budget; message-check judged the 14 in one dispatch, FIDELITY and BREVITY PASS on each (nothing to cut; it weighed "`make audit` shows it" and kept it as the reason's why), recorded with `make guard-messages KEY= VERDICT=PASS BY=`, after which `make guard-messages` said 101 wordings, each reviewed or baselined.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the shared no-reason refusal cut to 176-200 characters, its form `TOKEN="<why>"` (T475-D1, D2) | `escape::tests::the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly` | n/a: tooling | none: no engine code | n/a |
 
 ### T475 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session refused for a bare escape token reads, in about 190 characters, which token, what reason is owed and the one form to give it.
+2. **The constraints.** The task's line; 451 T170 (every guard message held to its kind's budget and a verdict); the reason floor (feature 170, the GM 2026-08-30: two words and eight characters), unchanged.
+3. **Where each comes from.** O: dev/guard-messages.tsv's rows (519-555 characters) and the BREVITY finding on ebf269213127bfc4, read 2026-11-27; G: the GM's floor, feature 170; O: this task's red-first run and re-rendering.
+4. **Do they describe the world here?** Yes: the suites render the real refusal through each guard, and the length is the rendered text's.
+5. **The order.** After T482 in this tree (T477's found-and-left named T482 before T475).
+6. **The exits.** Green: the red-first test passing, the suites green, message-check's PASS recorded and `make builder-checks` on the guard crates. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27: `escape::tests` 4 passed, 1 failed on the old code, 5 clean after; 14 wordings rendered at 176-200 characters and reviewed.
+10. **Before moving a constant.** n/a: the reason floor is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: a 190-character refusal in place of a 540-character one, for every guard escaped through the shared helper, observed 2026-11-27, method: `grep -rn "escape_or_refuse(" rust` (30 call sites, one function) and dev/guard-messages.tsv's rows holding the old wording; no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T474 to T465 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -7233,31 +7238,36 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T482 (<why: the finding or measurement that files it>)
+### T482 (left by 451 T477's found-and-left: `make arbiter-ruled` recorded a ruling on red-gate@2026-11-27T09:39:16Z at 09:45:54Z while arbiter-owed.json held only red-gate@2026-11-27T09:39:13Z, so the ruling discharged nothing, 451 arbiter.jsonl row 73)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the ruling's own door refuses a `red-gate@` trigger no guard owes, through T477's `unowed_red_gate` (`rust/gate/crates/arbiter/src/arbiter/bundle.rs`, now `pub(super)`), the one reader of that rule, asked in `rust/gate/crates/arbiter/src/arbiter.rs`.
+  - **T482-D1, built: `ruling_at` asks `unowed_red_gate` after its own already-ruled check and before the ruling is validated or any row written**, refusing with its words (the owed red-gate ids as `make arbiter-bundle TRIGGER=<id>` commands, or that none is owed). Label: CONVENTION (tooling; no research claim). Reason: the task's line ("refuse it there too, naming the owed red-gate keys"); one reader, so the bundle and the ruling never disagree on what is owed.
+  - **T482-D2, built: `batch_at` asks it of every trigger the batch names before the first row is written**, so a batch carrying one unowed red gate writes nothing, as its already-ruled check does; without it the batch's owed triggers would be ruled and the unowed one refused half way. Label: CONVENTION. Reason: the builder's, matching the batch's refusals before it (451 T179: a batch refused before any row).
+  - **The ruled batch of the arbiter tests changes** (`arbiter/tests.rs`, `a_plan_or_claims_ask_stands_as_that_reviews_verdict`): its `ruled-batch` of an unowed `red-gate@2` now asserts the refusal (`red-gate@2 is owed by no guard`), then owes `red-gate@2` and asserts the batch recorded, so the batch's success path is still tested.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/arbiter ONLY="arbiter::tests"`, the new test only added): 24 passed, 1 failed of 25 - `tests/unowed.rs`' `a_ruling_on_an_unowed_red_gate_is_refused_naming_the_owed_one` (the night's two ids: the unowed one ruled alone and in a batch beside the owed one, nothing written; the owed one ruled; with nothing owed, the refusal says so). Green after: `ONLY="arbiter"` 47 ran, clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| an unowed red-gate trigger refused at `make arbiter-ruled` and in a batch before any row (T482-D1, D2) | `arbiter::tests::unowed::a_ruling_on_an_unowed_red_gate_is_refused_naming_the_owed_one` | n/a: tooling | none: no engine code | n/a |
 
 ### T482 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No ruling is recorded on a red-gate id no guard owes: the ruling's door, like the bundle's, refuses it and names the owed one.
+2. **The constraints.** The task's line; T477-D1 (the rule and its one reader); one ruling per trigger; a batch refused before any row (451 T179).
+3. **Where each comes from.** O: 451 arbiter.jsonl row 73 and T477's section, read 2026-11-27; O: this task's red-first run.
+4. **Do they describe the world here?** Yes: the fixture is the night's two ids, red on the old code.
+5. **The order.** After T477 (the rule at the bundle); with T475 in one builder's tree.
+6. **The exits.** Green: the red-first test passing and `make builder-checks` on the arbiter crate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27: `arbiter::tests` 24 passed, 1 failed on the old code, clean after; the crate's first-tier checks clean (`make builder-checks`).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: `make arbiter-ruled TRIGGER=red-gate@<a wrong id>` (and a batch naming one) refuses, naming the owed id, where it recorded a ruling that discharged nothing; no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T483 (<why: the finding or measurement that files it>)

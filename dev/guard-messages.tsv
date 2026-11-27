@@ -47,6 +47,7 @@ key	verdict	chars	guard	kind	by	over	head
 17d79bae9b512eee	BASELINE	534	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: MAIN_TREE_OK with no reason given. An escape is a workaround, and
 188284d41e734a22	PASS	478	research-switch-hooks	refuse	a298fc28230da3c64		BLOCKED: make page-session - research is DEFERRED (make switches; since N-N-NTN:N:NZ by
 18b6b9a327dd1c53	BASELINE	759	measure-hooks	notice	unreviewed - stood before 451 T170		REMINDER (measure-hooks, once per batch of work): this is the expensive measurement.
+190f3cfbaaccbffc	PASS	182	context-cap-hooks	refuse	message-check a4beff929301454d7		BLOCKED: CONTEXT_OK with no reason given. Give one where the token is,
 19bb45378871e9dc	PASS	718	review-round-hooks	refuse	ab27eab0ddbc290ad		BLOCKED: round N of <path>'s spec review - past the five-round cap
 1a2dd0843953ee9c	BASELINE	318	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 1b1ee97fbd581d28	BASELINE	227	set-down-hooks	refuse	unreviewed - set-down's none-can-start open-task block: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: feature N-x has N open task(s) and nothing is running -
@@ -160,6 +161,7 @@ key	verdict	chars	guard	kind	by	over	head
 5fe2b4f2b330c7dc	BASELINE	546	download-copy-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: DOWNLOAD_COPY_OK with no reason given. An escape is a workaround, and
 60fc1c63e58dc2d6	PASS	479	workflow-hooks	refuse	ac1df8d661090ad85		BLOCKED: an ad-hoc agent() call names the model `opus`: agent('is it right',
 620d58f5cd97d279	BASELINE	733	repo-safety-hooks	refuse	unreviewed - repo-safety's host-repo write refusal: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a git write against <path> That is the GM's own repo,
+652a9a5cf6df9eda	PASS	186	main-tree-hooks	refuse	message-check a4beff929301454d7		BLOCKED: MAIN_TREE_OK with no reason given. Give one where the token is,
 65fecf80488e61d5	BASELINE	583	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `record-format` dispatch points the agent at files IN the repository.
 66cdd2ffdf3f7a88	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Read). Ask
 67371de9470425aa	BASELINE	795	shell-check-hooks	refuse	unreviewed - shell-check's co-author refusal, a family of 2 keys: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a co-author trailer addressed to 'other@example.com'. The co-author address is <noreply@anthropic.com>.
@@ -171,6 +173,7 @@ key	verdict	chars	guard	kind	by	over	head
 6cec2326f43c9d92	BASELINE	281	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
 6d20043fc61254a3	PASS	248	batching-hooks	notice	ad-hoc sonnet message-check aa702292a2fe849ce (round 1), 2026-11-23		BATCHING NOTICE: N of your last N turns were one bare read
 6d2976c0aa5ea0cc	BASELINE	321	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
+6db5b1c603b85b40	PASS	200	conflict-marker-hooks	refuse	message-check a4beff929301454d7		BLOCKED: CONFLICT_MARKERS_OK with no reason given. Give one where the token is,
 6dc586b1423c80b9	BASELINE	622	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
 6e32d671cd4cb82c	BASELINE	509	archive-first-hooks	refuse	unreviewed - stood before 451 T170		The source archive already holds this page (captured N-N-N) - read it
 6f2059b7c3ad8fc8	PASS	1230	static-runs-hooks	refuse	round-arbiter	arbiter ask:t295-static-runs-message: round 2's remaining cuts (the crate list, the measured-tree words) declined; the list is make crate-checks' own argument, the words are T295's point	BLOCKED: TN of N-rust-codebase has run `make static` N times since its
@@ -180,8 +183,10 @@ key	verdict	chars	guard	kind	by	over	head
 70fc99374c7f8a84	BASELINE	317	escalation-hooks	refuse	unreviewed - stood before 451 T170		QUESTION KEPT, NOT NAMED: escalation-check kept these for the GM this turn,
 718f68047261fb80	BASELINE	224	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the feature's hour is up and its step-back is not open:
 73115bbb9b1eef21	BASELINE	71	finished-run-hooks	refuse	unreviewed - stood before 451 T170		still: A MAKE RUN THIS SESSION STARTED IS STILL - unchanged since
+735b54fd713cbd7d	PASS	176	no-poll-hooks	refuse	message-check a4beff929301454d7		BLOCKED: CRON_OK with no reason given. Give one where the token is,
 73e5b27008fce832	BASELINE	202	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new glossary file takes a RESERVED prefix, so parallel queues
 748b12af8931ff12	PASS	391	builder-brief-hooks	refuse	message-check a557cb52cdb56de63		BLOCKED (builder-brief): this dispatch works in a pool tree and its prompt
+74c4d393fb8648b1	PASS	192	static-runs-hooks	refuse	message-check a4beff929301454d7		BLOCKED: CLOSING_BARE_OK with no reason given. Give one where the token is,
 75392613244f979d	BASELINE	859	static-runs-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (static-runs, the closing step's order - feature N TN): `make hooks-test`
 76922f6025e1d469	BASELINE	813	shell-check-hooks	refuse	unreviewed - shell-check's parse refusal, a family of 4 keys: 5 shown a session, 5,650 characters, under 4 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: the command does not parse: bash: -c: line N: syntax error:
 770abc509f3feddd	FAIL	204	context-cap-hooks	refuse	adcc691351458bcd7		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this
@@ -191,6 +196,7 @@ key	verdict	chars	guard	kind	by	over	head
 79a2a7039a45e586	BASELINE	456	blocked-fetch-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this WebFetch refused: https:/<path> is on the blocked list (blocked-domains.json: grokipedia.com
 79db1a90a4de9238	PASS	433	ledger-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		ledger-owed: N check pass(es) have no row in <path>'s measured table -
 7a36087a36a8e361	BASELINE	208	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new question file takes a RESERVED prefix, so parallel queues
+7a515b41ffb944f7	PASS	194	download-copy-hooks	refuse	message-check a4beff929301454d7		BLOCKED: DOWNLOAD_COPY_OK with no reason given. Give one where the token is,
 7b3557f0f52d2c78	BASELINE	967	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 7c0d5d62024a1dae	BASELINE	507	review-round-hooks	notice	unreviewed - stood before 451 T170		review-round: this dispatch was rewritten into MODE N round N of <path>
 7d05da583094338a	PASS	706	blocked-fetch-hooks	notice	message-check a02a48f6090388186		attempts: https:/<path> - N earlier attempt(s) (date Q question: outcome - what
@@ -218,6 +224,7 @@ key	verdict	chars	guard	kind	by	over	head
 89f1e765dc3d1467	BASELINE	891	shell-check-hooks	refuse	unreviewed - shell-check's -m newline refusal: 5 shown a session, 4,455 characters - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a newline inside a -m message. Use the heredoc form, whose
 8a49f17b4b67dd64	PASS	353	no-poll-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		POLL_OK permitted this wait, and its process-match pattern was bracketed for you:
 8b65be9059e56665	BASELINE	200	new-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a new glossary file takes a RESERVED prefix, so parallel queues
+8c41cf1df7ceeed7	PASS	192	builder-pool-hooks	refuse	message-check a4beff929301454d7		BLOCKED: BUILDER_TREE_OK with no reason given. Give one where the token is,
 8c4967333aea2af5	BASELINE	756	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a Nth `spec-fidelity` launch within seconds - a wave goes through
 8d75a0702db866bf	BASELINE	525	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `quote-check` is not owed on this bundle. Its MANIFEST (<path>) owes:
 8d8d965e504a23a9	PASS	480	workflow-hooks	refuse	a327b183d7f2b1341		BLOCKED: an agent() call of type `Explore` would not run on the
@@ -226,6 +233,7 @@ key	verdict	chars	guard	kind	by	over	head
 8e32a146cf4fd856	PASS	357	no-poll-hooks	refuse	round-arbiter aad643ace8004667b (ask:guard-wordings-sleep-and-slot: the original first line, no further review)		BLOCKED (no-poll): `sleep` was invoked in a form that evades the harness's
 8f52fca7ecc207d5	BASELINE	416	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: record-format on <path>: decide first, then check (feature N FR-Na) -
 901ed7703834409b	BASELINE	393	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
+9095964b13c22e8f	PASS	180	static-runs-hooks	refuse	message-check a4beff929301454d7		BLOCKED: STATIC_OK with no reason given. Give one where the token is,
 92394bca63807c7a	BASELINE	1108	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
 9273c5cbec81c0d6	PASS	348	workflow-hooks	refuse	a3f4533b308fc243f		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a'})
 9381ece384525e64	BASELINE	446	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
@@ -237,6 +245,7 @@ key	verdict	chars	guard	kind	by	over	head
 97b5f076ac22fe50	BASELINE	820	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: N characters of this prompt repeat an earlier `modal-form` dispatch's, from
 98a1c8880e11bdbf	PASS	890	agent-model-hooks	refuse	ac1df8d661090ad85		BLOCKED: this `Explore` agent names `opus`, which would not follow the session's
 98e73f0f6180bcbd	PASS	407	static-runs-hooks	notice	aa86dee860377ba8a		TN order: your last code edit not landed (<path>, N-N-NTN:N:N.NZ) has no
+991e56c77d86e61a	PASS	186	no-poll-hooks	refuse	message-check a4beff929301454d7		BLOCKED: SLOW_POLL_OK with no reason given. Give one where the token is,
 99e961bdba354607	BASELINE	193	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> has a make run going (a gate or a roll)
 9b88f0df15ae7ca1	BASELINE	577	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 9bf843d0b4680c84	BASELINE	798	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Edit). Ask
@@ -244,6 +253,7 @@ key	verdict	chars	guard	kind	by	over	head
 9c311cb22d92082c	BASELINE	1209	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is a GUARD, not ordinary source. The guards are what
 9c6a42d4b1fe8377	BASELINE	260	make-only-hooks	notice	unreviewed - stood before 451 T170		`pythonN -m lNr.diagram.switches` was rewritten to `make switches`, the target that wraps
 9c78a84cd7f285cd	BASELINE	326	gate-hooks	notice	unreviewed - stood before 451 T170		`make quick` was dropped from this command and `make done` runs alone:
+9cd1e449adc0cadb	PASS	176	gate-hooks	refuse	message-check a4beff929301454d7		BLOCKED: GATE_OK with no reason given. Give one where the token is,
 9d61332005309f35	PASS	899	agent-model-hooks	refuse	ac1df8d661090ad85		BLOCKED: this `general-purpose` agent names `fable`, which would not follow the session's
 9e2e372849b9273e	PASS	629	context-cap-hooks	refuse	message-check aa08dbd20e04e5641		BLOCKED: this builder's context is N tokens, past the cap of N.
 9f75bd8c83aa6891	BASELINE	567	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): the process pattern [r]esvg --width matches this command's own text
@@ -294,6 +304,7 @@ b58b92e04f5a7bc6	BASELINE	311	clone-sync-hooks	refuse	unreviewed - stood before 
 b64312f452c9671f	PASS	927	checks-hooks	refuse	ace1afc5bc6430da1		a tripwire is owed its ruling first (reversal:<path>, reversal:<path>, and N more:
 b853398911eb19da	BASELINE	66	set-down-hooks	refuse	unreviewed - stood before 451 T170		still: BLOCKED: a builder slot is free - N - unchanged since
 b8816e328019a07b	BASELINE	436	review-round-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: REVIEW_ROUND_OK with no reason given. An escape is a workaround, and
+b9658f797302414f	PASS	180	no-poll-hooks	refuse	message-check a4beff929301454d7		BLOCKED: DETACH_OK with no reason given. Give one where the token is,
 b9a6c5cb65aa084e	BASELINE	748	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): this wait sleeps up to N s between its checks,
 b9ecd2249ace6f2e	BASELINE	549	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: `?` runs through the check-wave workflow, not a script of its
 ba171cb5f873bcc6	BASELINE	490	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an agent() call with no agentType: agent('x', {label: 'a'}) A workflow's
@@ -326,6 +337,7 @@ c8e40c8703abdd5b	BASELINE	543	builder-pool-hooks	refuse	unreviewed - 543 charact
 c916d77692a2f8db	BASELINE	1246	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: your shell is standing in <path>, inside <path> - the MIRROR
 c91b3477e0191643	BASELINE	276	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this make call sets Q twice, and make silently keeps only
 c997198336fec401	BASELINE	256	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N - a guard of its type refused it:
+caf321ee8e44ba80	PASS	180	readme-hooks	refuse	message-check a4beff929301454d7		BLOCKED: README_OK with no reason given. Give one where the token is,
 cc4482b1603455fc	BASELINE	599	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `source-reader` dispatch points the agent at files IN the repository.
 ce0f272918914000	BASELINE	314	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
 ce34fe125942135e	BASELINE	330	clone-sync-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is already occupied by another live session (sid-live-other) - two
@@ -367,6 +379,7 @@ de0932ca609ad194	BASELINE	272	workflow-hooks	refuse	unreviewed - stood before 45
 deb6db8f2bef4d33	BASELINE	181	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> holds a running gate's lock - clone merge skipped; mirror
 e09f17b92e1ea58c	BASELINE	797	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a settlement-review with no green gate for this content. A review
 e0d7b1fff5fe779c	PASS	318	builder-brief-hooks	refuse	message-check a1ec2a2aee139b292		BLOCKED (builder-brief): KIND=mechanism-build is no builder's kind. Run: make builder-brief T=TN F=N
+e2dc742eaf6b9c98	PASS	188	static-runs-hooks	refuse	message-check a4beff929301454d7		BLOCKED: FOREGROUND_OK with no reason given. Give one where the token is,
 e627a18457b45e56	PASS	489	workflow-hooks	refuse	aca18caf1a04b8724		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
 e635d558d24223af	PASS	374	escalation-hooks	refuse	a17673d9041f37133		OFFER UNFILTERED: your final message offers a decision back to the GM
 e683b508f5ea6ebb	BASELINE	305	wakeup-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: ScheduleWakeup, and this guard could not establish that the session is
@@ -386,6 +399,7 @@ ed8e85dd559d50a4	BASELINE	383	escalation-hooks	refuse	unreviewed - stood before 
 ee111d8def80a0e2	PASS	355	workflow-hooks	refuse	a066d53b0b706fa51		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
 ef61e1f3080925d4	PASS	157	context-cap-hooks	refuse	a428547a5cd4d6ca2		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this
 ef9533c10a2d83ee	PASS	484	research-switch-hooks	refuse	a298fc28230da3c64		BLOCKED: a research-pass dispatch - research is DEFERRED (make switches; since N-N-NTN:N:NZ
+f06a3db330e5e855	PASS	190	shell-check-hooks	refuse	message-check a4beff929301454d7		BLOCKED: SHELL_CHECK_OK with no reason given. Give one where the token is,
 f129932e221f76a5	BASELINE	799	claims-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: the research claims sheet is not opened by hand (Write). Ask
 f1e6d843831095e2	PASS	817	context-cap-hooks	refuse	ae10733670bca1dd3		BLOCKED: this builder's context is N tokens, past the cap of N:
 f1f787afa84a2a3c	BASELINE	446	blocked-fetch-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this Bash refused: https:/<path> is on the blocked list (blocked-domains.json: grokipedia.com

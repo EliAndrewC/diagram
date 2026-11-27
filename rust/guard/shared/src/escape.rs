@@ -138,15 +138,17 @@ pub fn escape_or_refuse(cmd: &str, token: &str) -> Escape {
     if enough(&why) {
         return Escape::Escaped(why);
     }
-    Escape::Refused(format!(
-        "BLOCKED: {token} with no reason given.\n\n\
-         An escape is a workaround, and a workaround nobody can audit is indistinguishable from the\n\
-         rule not existing. Say why, in the command, and it ships with it:\n\n    \
-         <your command>  # {token}: <why this case is legitimate>\n\n\
-         Two words and eight characters is the whole bar - \"CI is down\" clears it. What it stops is a\n\
-         bare token and \"{token}: ok\", which record that a rule was bypassed and nothing about why.\n\
-         (GM 2026-08-30, feature 170; the reasons are what `make audit` shows you.)\n"
-    ))
+    Escape::Refused(no_reason(token))
+}
+
+/// The refusal of `token` used with no reason, or too short a one. WHY this short (451 T475): the 543-character wording failed
+/// message-check BREVITY; the reader needs the token, the bar and the form, and the form is the `TOKEN="<why>"` the guards' own
+/// refusals print (the GM's bar, 2026-08-30, feature 170).
+fn no_reason(token: &str) -> String {
+    format!(
+        "BLOCKED: {token} with no reason given. Give one where the token is, two words or more \
+         and eight characters; `make audit` shows it:\n\n    {token}=\"<why this case is legitimate>\"\n"
+    )
 }
 
 #[cfg(test)]
@@ -207,7 +209,20 @@ mod tests {
             Escape::Escaped("the files all ran".to_owned())
         );
         assert!(
-            matches!(escape_or_refuse("make done  # GATE_OK: ok", "GATE_OK"), Escape::Refused(w) if w.contains("GATE_OK: ok"))
+            matches!(escape_or_refuse("make done  # GATE_OK: ok", "GATE_OK"), Escape::Refused(w) if w.contains("GATE_OK with no reason given"))
         );
+    }
+
+    /// The refusal says the token, that a reason of two words is owed and the form to give it, in about 230 characters (451 T475:
+    /// at 543 it failed message-check BREVITY, key ebf269213127bfc4); the form is the `TOKEN="<why>"` the guards' own refusals print.
+    #[test]
+    fn the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly() {
+        use super::{escape_or_refuse, no_reason, Escape};
+        let w = no_reason("GATE_OK");
+        let refused = escape_or_refuse("make done GATE_OK", "GATE_OK");
+        assert_eq!(refused, Escape::Refused(w.clone()));
+        let (length, form) = (w.chars().count(), w.contains("GATE_OK=\"<why"));
+        assert!(length <= 260 && form && w.contains("two words or more"));
+        assert!(!w.contains("# GATE_OK:") && !w.contains("GM 2026-08-30"));
     }
 }

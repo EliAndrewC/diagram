@@ -454,6 +454,9 @@ fn ruling_at(
             others.len()
         )));
     }
+    if let Some(why) = bundle::unowed_red_gate(root, trigger) {
+        return Err(Stop::Refused(why));
+    }
     let hour = trigger.starts_with("hour:");
     let (fix, fix_on, measure) = validate_ruling(ruling, hour, batch)?;
     let when = now.map_or_else(utc_now, str::to_owned);
@@ -621,6 +624,12 @@ fn batch_at(
             "already ruled: {} - one ruling per trigger, binding",
             join_refs(&done)
         )));
+    }
+    if let Some(why) = triggers
+        .iter()
+        .find_map(|t| bundle::unowed_red_gate(root, t))
+    {
+        return Err(Stop::Refused(why));
     }
     let plan = batch_plan(ruling, &triggers)?;
     for (t, one) in &plan {
