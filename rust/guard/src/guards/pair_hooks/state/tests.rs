@@ -212,3 +212,20 @@ fn in_a_linked_worktree_review_state_is_the_clones_and_the_trees_keys_are_its_ow
     .unwrap();
     assert!(gate_green(&tree, "t") && !gate_green(&tree, "c"));
 }
+
+/// 451 T504, RED FIRST: the stamp's question rides an earlier fresh call's proof through the same launcher in this hook process.
+#[test]
+fn the_stamp_rides_an_earlier_fresh_gate_call() {
+    let c = clone("fresh");
+    crate::shared::env::set("L7R_GATE_TARGET", "/t504-target");
+    std::fs::create_dir_all(c.join("scripts/gates")).unwrap();
+    let launcher = c.join("scripts/gates/l7r-gate.sh");
+    std::fs::write(
+        &launcher,
+        "[ \"$1\" = warm ] || [ \"$*,${L7R_GATE_FRESH:-}\" = \"stamp --fresh diagram,/t504-target/tool/l7r-gate\" ]\n",
+    )
+    .unwrap();
+    assert!(!gate_green(&c, "k"));
+    assert!(crate::shared::tool::ask_gate(&c, &launcher, &["warm"], "").ok());
+    assert!(gate_green(&c, "k"));
+}

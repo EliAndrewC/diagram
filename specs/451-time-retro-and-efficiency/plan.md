@@ -6887,6 +6887,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T486 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T495 to T487 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))
 
 - **Approach**: route (b), the hot hooks read the state in part. `checks::handle` reads the state through `handle/part.rs`'s `Part`, not `load`. Measured 2026-11-27 (`dev/measurements/2026-11-27/t490-part-read/`).
@@ -6952,33 +6953,43 @@ that batch; the red was not in its change.
 <!-- plan-archive: T498 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T501 to T499 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T504 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T504 (451 T500's found-and-left: three guards started the gate launcher by `bash` but outside `tool::ask_gate`'s shared walk, so a later call could not ride an earlier fresh call's proof, up to a 17.5 ms walk a call, measured 2026-11-27 (T494's walk on T388's sandbox))
+
+- **Approach**: the last three guards that start the launcher outside the shared asker now call it. Measured 2026-11-27.
+  - **T504-D1, the three callers moved, each answer unchanged (observed 2026-11-27, method: the grep below).** `engine_freeze_hooks.rs` asks `plan engine-edit` through `ask_gate`, from `/` with the question on stdin as before. `pair_hooks/state.rs` `stamp_fresh` asks `stamp --fresh diagram` through `ask_gate`, from the clone as before. `builder_stop_hooks.rs` asks `plan decided` through `ask_gate_within` with its `ASK_LIMIT` (40 s, a GUESS knob), from the builder's tree as before. Each already ran by `bash` and reads only `.ok()`, or the code and `.out`, so a launcher that cannot start answers nothing new (T494-D1's reasoning). Each subcommand is plain (`plan`, `stamp`), so an exit 0 proves the binary ran (T494-D2) and is now proof for the calls after it. A subcommand that exits 1 to say "no", as `stamp --fresh` does for a stale stamp, proves nothing and walks as before. The proof is keyed on the launcher's path. In a session clone the guard tree is the clone, so engine-freeze's launcher is the one gate-write's `preflight` asks. For the builder-stop and pair guards it is the launcher of the tree or clone they ask.
+  - **The search that found the set.** `grep -rn "l7r-gate.sh"` over the non-test files of `rust/guard/src` and `rust/guard/shared/src`, run 2026-11-27, with `"bash"` searched over the same files as a cross-check. After this task, every hit that starts the launcher goes through the shared asker: `pair_hooks.rs` `gate`, `review_round_hooks.rs` (twice), `check_bundle_hooks.rs`, `record_edit_hooks.rs`, `measure_hooks.rs`, `gate_write_hooks.rs`, `clone_sync_hooks.rs` (twice), `ledger_hooks.rs` (its `Ctx::gate` path, given to `ask_gate`), and the three moved here. The other hits start nothing. They are the stale-suite list in `suite_tools/deps.rs`, the `own-make` command written into a no-poll message, and comments in `make_only_hooks.rs`, `scratch_sweep_hooks/sweep/cargo.rs`, `shared/src/make.rs`, `builder_pool.rs` and `event_log_hooks.rs`. `tool.rs` is the asker itself. The other `"bash"` starts are not the gate: `finished_run_hooks/runs.rs` runs `writer-alive.sh` and `shell_check_hooks.rs` runs bash's own parse. Nothing is left.
+  - **Red first.** There are three new tests. Each is handed `L7R_GATE_FRESH` after an earlier call through the same launcher exited 0, and on the old code each fails at its last assertion: 0 passed, 3 failed, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=...`). They are `the_engine_edit_question_rides_an_earlier_fresh_gate_call`, `the_stamp_rides_an_earlier_fresh_gate_call` and `the_decided_question_rides_an_earlier_fresh_gate_call`. Each stub answers yes only when it is given the proof. Each test first asserts the answer with no proof, so it also pins the call as it was before. The brief's other red test, a launcher with no shebang and no exec bit, cannot be red here. All three already ran by `bash`, and their existing stubs are written with no shebang and no exec bit (`engine_freeze_hooks/tests.rs` `world`, `builder_stop_hooks/tests.rs` `the_hook_blocks_the_stop_through_the_gate_script`, `pair_hooks/state/tests.rs` `a_green_gate_is_the_stamp_else_the_recorded_key`), so that start stays pinned by the tests already there. `make builder-checks CRATE="rust/guard rust/guard/shared"` is green: guard 606 passed, measured 2026-11-27. The three suites passed, measured 2026-11-27 (`bash tests/hooks/test-<guard>.sh`): engine-freeze 41, pair 104, builder-stop 7, none failed. No guard message changed.
+  - **One Edit hook, before and after, on T388's sandbox.** The method is `t504-time.py`, which uses T500's environment with the guard tree set to the sandbox clone, as a session clone's hooks run. The hook is the whole `l7r-guard PreToolUse` on an Edit of `rust/guard/src/lib.rs` while a glyph-check review is live, so engine-freeze asks `plan engine-edit` (exit 0: refused). The binaries are this tree's own, copied before and after the change. Arms are interleaved round-robin after one uncounted warm-up. Each arm ran 20 times, and every run exited 2 (the refusal), measured 2026-11-27 (`t504-run1.tsv` to `t504-run3.tsv`). The load was high, 1-minute 19.8 to 24.6 across the three runs, from the other builders, measured 2026-11-27 (`/proc/loadavg`, the runs' own lines).
+    - With a `make done` standing in the clone (`exec -a "make done" sleep`), gate-write asks `preflight` after engine-freeze. The `find` shim on `PATH` (`t504-trace.sh`) counts 2 launcher walks before and 1 after, measured 2026-11-27 (one run each). The second call's walk is ridden. Medians went 281.9 -> 276.9, 269.2 -> 246.7 and 225.8 -> 212.2 ms, measured 2026-11-27 (`t504-time.py`, 20 runs). Minima went 233.3 -> 201.9, 203.7 -> 174.3 and 206.2 -> 187.2 ms, measured 2026-11-27 (`t504-time.py`, 20 runs).
+    - The control, with no `make done`, makes one gate call and has nothing to ride. The shim counts 1 walk in each binary. Medians went 217.0 -> 233.3, 194.2 -> 224.4 and 166.6 -> 175.7 ms, measured 2026-11-27 (`t504-time.py`, 20 runs). Minima went 161.4 -> 155.2, 153.8 -> 161.5 and 153.2 -> 144.2 ms, measured 2026-11-27 (`t504-time.py`, 20 runs).
+    - At this load the medians cannot resolve a 17.5 ms walk: the control's medians moved 9 to 30 ms with no change in its work, measured 2026-11-27 (`t504-time.py`, 20 runs). The saving rests on the walk count (2 -> 1) and on T494's measure of one walk, 17.5 ms, measured 2026-11-27 (`t504-trace.sh`; T494's record). The minima agree with it: the gate arm's fell 19 to 31 ms, and the control's moved -9 to +8 ms, measured 2026-11-27 (`t504-time.py`, 20 runs).
+  - **Where it saves.** In an Edit hook the save needs engine-freeze's call to exit 0 before a later call through the same launcher. Engine-freeze runs before gate-write (`lib.rs`'s order), and exits 0 only on an engine edit under a live review or roll. That is the edit it refuses, and `preflight` follows it while a gate runs. `record edit-route` asks only for a record or plan file, which `plan engine-edit` does not call engine code, so it never follows an exit-0 engine-edit call. A SubagentStop's `plan decided` rides only an earlier exit-0 call through the same tree's launcher in that hook process, and its own exit 0 now serves a later one; neither was measured here. The pair guard's `stamp_fresh` shares its walk with the pair guard's own `gate` calls when the guard tree is the clone. That is why this task claims a walk saved only on the Edit path measured.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| three guards' gate calls moved onto the shared asker | n/a: guard tooling, no map | n/a: tooling | none | none |
 
 ### T504 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No guard starts the gate launcher outside the shared asker. Each guard's call shares the hook process's freshness proof, and its own exit 0 proves the binary fresh for the calls after it.
+2. **The constraints.** No guard message or verdict changes (the brief). A stale gate binary is never run where the launcher would not run it already (T494-D2). A caller's reading of a failed start does not change (T494-D1).
+3. **Where each comes from.** O: 451 T500's found-and-left item and T494's walk, 17.5 ms a call, measured 2026-11-27 (T494's record). R: `rust/guard/shared/src/tool.rs` (`ask_gate`, `ask_gate_within`). O: the timings and walk counts above.
+4. **Do they describe the world here?** Yes. In the sandbox the measured Edit reached engine-freeze's gate call, every run exiting 2 with its refusal, and gate-write's `preflight` in the gate arm, as the shim's second walk before the change shows, measured 2026-11-27 (`t504-time.py`, `t504-trace.sh`).
+5. **The order.** After T494 (the asker) and T500 (`ask_gate_within`). Before T501.
+6. **The exits.** Green: the three red tests pass, the suites pass, and the walk count drops. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The Edit hook with a gate running walks the launcher once where it walked twice, measured 2026-11-27 (`t504-trace.sh`). Its minimum fell 19 to 31 ms over three runs of 20 at load 20 to 25, measured 2026-11-27 (`t504-time.py`). The grep finds no launcher start left outside the asker.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every verdict and message is unchanged.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: it takes a launcher walk, 17.5 ms measured 2026-11-27 (T494's record), off a gate call that follows an exit-0 engine-edit, builder-stop or stamp call in the same hook process. That includes an engine Edit refused under a live review while a gate runs, which walks once where it walked twice, measured 2026-11-27 (`t504-trace.sh`).
 <!-- plan-archive: T502 to T501 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T503 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

@@ -297,3 +297,31 @@ fn a_task_started_and_unstarted_holds_no_stop() {
     );
     assert_eq!(judge(&w.input("done"), &w.tree, None, &held), Said::Quiet);
 }
+
+/// 451 T504, RED FIRST: through the hook, the gate's `plan decided` rides an earlier fresh call's proof through the same launcher in
+/// this hook process, handed `L7R_GATE_FRESH`; with none it is asked as before.
+#[test]
+fn the_decided_question_rides_an_earlier_fresh_gate_call() {
+    let w = World::new("fresh");
+    crate::shared::env::set("L7R_GATE_TARGET", "/t504-target");
+    let said_file = w.tree.join("scripts/gates/said");
+    put(&said_file, NOT_DECIDED);
+    let launcher = w.tree.join("scripts/gates/l7r-gate.sh");
+    put(
+        &launcher,
+        &format!(
+            "[ \"$1\" = warm ] && exit 0\n[ \"${{L7R_GATE_FRESH:-}}\" = /t504-target/tool/l7r-gate ] || exit 0\ncat '{}'\nexit 1\n",
+            said_file.display()
+        ),
+    );
+    let e = Event {
+        name: "SubagentStop".to_owned(),
+        input: w.input("done"),
+    };
+    let decide = || (super::GUARD.decide)(&e, &Session::with_env(&e.input, |_| None));
+    assert!(decide().is_empty());
+    assert!(crate::shared::tool::ask_gate(&w.tree, &launcher, &["warm"], "").ok());
+    assert!(
+        matches!(&decide()[..], [Answer::StopBlock(r)] if r.contains("make decide F=451 T=T84"))
+    );
+}

@@ -9,7 +9,7 @@ use serde_json::{json, Map, Value};
 
 use crate::guards::event_log_hooks::{common_git_dir, own_git_dir};
 use crate::shared::sha256;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, ask_gate};
 
 /// A JSON object read from `p`, or an empty one (`except Exception: d = {}`).
 fn object(p: &Path) -> Map<String, Value> {
@@ -284,21 +284,12 @@ pub fn wall() -> i64 {
         .map_or(0, |d| i64::try_from(d.as_secs()).unwrap_or(0))
 }
 
-/// The clone's gate stamp says the gate is fresh (`l7r-gate stamp --fresh diagram`, run whether or not the wrapper is there).
+/// The clone's gate stamp says the gate is fresh (`l7r-gate stamp --fresh diagram`, run whether or not the wrapper is there), asked
+/// through the shared gate asker (451 T504).
 #[must_use]
 pub fn stamp_fresh(clone: &Path) -> bool {
-    ask(
-        clone,
-        "bash",
-        &[
-            &clone.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
-            "stamp",
-            "--fresh",
-            "diagram",
-        ],
-        "",
-    )
-    .ok()
+    let gate = clone.join("scripts/gates/l7r-gate.sh");
+    ask_gate(clone, &gate, &["stamp", "--fresh", "diagram"], "").ok()
 }
 
 /// A green gate has seen exactly this content (`gate_green`): the clone's gate stamp, else its recorded verification key.

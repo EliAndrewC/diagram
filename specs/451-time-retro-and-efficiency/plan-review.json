@@ -4530,6 +4530,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T504 (451 T500's found-and-left: three guards started the gate launcher by `bash` but outside `tool::ask_gate`'s shared walk, so a later call could not ride an earlier fresh call's proof, up to a 17.5 ms walk a call, measured 2026-11-27 (T494's walk on T388's sandbox))": {
+   "sha256": "0eef8738f06aa9d1d4c0dc00313a3f01ef3ad3ac39ef0a8a7e802eebf878fa66",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T504 Approach (checklist part A)": {
+   "sha256": "c3178b22b128673004820520376ec7ebcc5efeb86a14400f42add1354baab3e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41506,6 +41518,46 @@
      "summary": "Lands after T387 and T489, before T505 and T506. One landing. The step table marks no map and no pool manifest moved.",
      "class": "within",
      "why": "This is ordering and bookkeeping inside the feature, consistent with FR-013's perf-first ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T504 (451 T500's found-and-left: three guards started the gate launcher by `bash` but outside `tool::ask_gate`'s shared walk, so a later call could not ride an earlier fresh call's proof, up to a 17.5 ms walk a call, measured 2026-11-27 (T494's walk on T388's sandbox))",
+    "### T504 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T504-D1",
+     "summary": "engine-freeze's plan engine-edit, pair_hooks/state.rs stamp_fresh and builder-stop's plan decided move onto tool::ask_gate / ask_gate_within, each from the same directory, stdin and limit as before, reading the same fields",
+     "class": "within",
+     "why": "Performance work the GM asked to have prioritized (request 2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013): it takes a launcher walk off a later gate call in the same hook process, with no guard message or verdict changed and a stale binary never run where the launcher would not run it (T494-D2)."
+    },
+    {
+     "id": "T504-search",
+     "summary": "the set of launcher starts censused by grep -rn 'l7r-gate.sh' over non-test files of rust/guard/src and rust/guard/shared/src, cross-checked by a 'bash' grep; every remaining hit classified as through the asker or starting nothing",
+     "class": "within",
+     "why": "The enumeration names its search space and its cross-check (spec-fidelity item 8); nothing found is left out of the task."
+    },
+    {
+     "id": "T504-red",
+     "summary": "three new red-first tests, one per moved caller, riding L7R_GATE_FRESH; the brief's no-shebang/no-exec-bit red test is not written because all three already ran by bash and their existing stubs already pin that start",
+     "class": "within",
+     "why": "Tests that only fail when the requested behavior is absent enforce the request. Dropping the brief's second red test does not narrow anything the GM asked for: the request asks for performance work, not that test, and the start it would pin is already pinned by the named existing tests."
+    },
+    {
+     "id": "T504-claim",
+     "summary": "the saving is claimed only on the measured Edit path (2 walks -> 1, T494's 17.5 ms a walk), with medians declared unable to resolve it at load 20-25 and the SubagentStop and pair paths stated as unmeasured",
+     "class": "within",
+     "why": "A claim restricted to what was measured is the project's measurement rule, not a narrowing of the work: all three callers are still moved."
+    },
+    {
+     "id": "T504-order",
+     "summary": "after T494 and T500, before T501; one landing; exits green on the red tests, suites and walk count, red routed through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and exits inside the feature; the task is performance work, which FR-013 puts first."
     }
    ]
   }

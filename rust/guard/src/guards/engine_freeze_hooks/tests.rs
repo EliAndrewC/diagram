@@ -327,3 +327,22 @@ fn a_prompt_naming_no_usable_tree_holds_every_tree() {
         [&rt]
     );
 }
+
+/// 451 T504, RED FIRST: the engine-edit question rides an earlier fresh gate call's proof in the same hook process (an Edit's
+/// `preflight` and `edit-route` ask the same launcher): handed `L7R_GATE_FRESH` after an earlier call through it exited 0.
+#[test]
+fn the_engine_edit_question_rides_an_earlier_fresh_gate_call() {
+    let w = world("fresh");
+    crate::shared::env::set("L7R_GATE_TARGET", "/t504-target");
+    let launcher = w.root.join("tree/scripts/gates/l7r-gate.sh");
+    std::fs::write(
+        &launcher,
+        "[ \"$1\" = warm ] || [ \"${L7R_GATE_FRESH:-}\" = /t504-target/tool/l7r-gate ]\n",
+    )
+    .unwrap();
+    w.agent("a1", "glyph-check", MID, "");
+    let f = w.clone.join("lanes.py");
+    assert!(w.edit(&f).is_empty());
+    assert!(crate::shared::tool::ask_gate(&w.root, &launcher, &["warm"], "").ok());
+    assert!(refused(&w.edit(&f), "a map review is still running"));
+}

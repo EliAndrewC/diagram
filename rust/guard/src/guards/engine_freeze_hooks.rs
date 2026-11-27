@@ -30,7 +30,7 @@ use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::ask_gate;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -252,10 +252,11 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
         json!({"root": root.to_string_lossy(), "path": path, "tool": tool, "tool_input": input})
             .to_string();
     let answerer = c.tree.join("scripts/gates/l7r-gate.sh");
-    if !ask(
+    // through the shared asker, so it rides an earlier fresh call's proof in this hook process (451 T504)
+    if !ask_gate(
         Path::new("/"),
-        "bash",
-        &[&answerer.to_string_lossy(), "plan", "engine-edit"],
+        &answerer,
+        &["plan", "engine-edit"],
         &question,
     )
     .ok()

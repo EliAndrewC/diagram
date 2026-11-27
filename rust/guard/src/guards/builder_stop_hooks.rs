@@ -33,7 +33,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log::fire;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask_within;
+use crate::shared::tool::ask_gate_within;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -68,10 +68,9 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
     let clone = session.clone_dir().map(Path::to_path_buf);
     let ask = |root: &Path, args: &[&str]| {
+        // through the shared gate asker, its walk shared with this hook process's other gate calls (451 T504)
         let script = root.join("scripts/gates/l7r-gate.sh");
-        let mut all = vec![script.to_str().unwrap_or("")];
-        all.extend_from_slice(args);
-        let said = ask_within(root, "bash", &all, ASK_LIMIT);
+        let said = ask_gate_within(root, &script, args, ASK_LIMIT);
         (said.code, said.out)
     };
     let said = judge(&event.input, &here, clone, &ask);
