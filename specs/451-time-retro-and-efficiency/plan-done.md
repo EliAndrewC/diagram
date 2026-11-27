@@ -19467,3 +19467,125 @@ transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t3
 **Performance work?** yes (a `[perf]` task, 451 FR-013): with the step-back switched on it takes one whole read of the 50 MB event log, about 50 ms on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms, not timed again here), off every `checkpoint due`; while `dev/step-back.json` is off, as it has been since 2026-10-21, it costs and saves nothing, since `due` and `state_in` read no log then (451 T491). Not an engine-speed task: no checklist answers owed.
 
 <!-- plan-archive: T496 to T489 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)
+
+- **Approach**: the five guards' launcher calls go through `tool::ask_gate` (`rust/guard/shared/src/tool.rs`, 451 T494), and the gate-write guard's bounded call through a new `tool::ask_gate_within`. Measured 2026-11-27.
+  - **T500-D1, the five callers moved, each answer unchanged.** `record_edit_hooks.rs` (`record edit-route`), `measure_hooks.rs` (`measure gatecost done full`), `clone_sync_hooks.rs` (`own-make`, in both `running` and `sync`, and the clone's own `lock held`), `gate_write_hooks.rs` `unseen` (`preflight`, bounded) and `ledger_hooks.rs` (`reviews ledger-owed`, its `Ctx::gate` the one caller, now a path) call the asker, the gate-write call keeping its limit of 20 seconds, measured 2026-11-27 (`gate_write_hooks.rs` read). Each reads only `.ok()` or `.out`, with the same working directory as before, so bash's 127 for a launcher that cannot start holds nothing, as the exec's -1 did (T494-D1's reasoning). `ledger` and `lock held` already ran by `bash`; they gain only the shared proof. Every subcommand reaches the binary: the launcher handles none itself before its `exec` (`scripts/gates/l7r-gate.sh` read whole, 2026-11-27), so T494-D2's "exit 0 means the binary ran" holds for these too.
+  - **T500-D2, `ask_gate_within`.** `ask_gate`'s body became `gate_asked`, which takes the run as a closure: `ask_gate` runs it with stdin, `ask_gate_within` through `said_within`, the body `ask_within` already had, now taking a made `Command`. So the limit, the kill, the null stdin and the -1 at the limit are `ask_within`'s, unchanged. A call killed at its limit answers -1, which proves nothing.
+  - **T500-D3, clone-sync's prompt asks `own-make` once.** `sync` asked `own-make` for its "has a make run going" line and then `running`, which asked it again before the lock. A first "no" exits 1, which gives the second call no proof to ride, so it was a whole second gate call on every prompt in a clean clone. `running` is now `making || locked`, and `sync` asks `making`, then `locked`. Its lines and their order are unchanged. Fixed here.
+  - **Red first.** Five new tests, each failing on the old code: 0 passed, 5 failed, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=...`). In four of them the launcher is written with no shebang and no exec bit, so only a `bash` start can answer: `the_route_is_asked_of_the_launcher_by_bash_not_its_shebang`, `the_median_is_asked_of_the_launcher_by_bash_not_its_shebang`, `the_tree_check_is_asked_of_the_launcher_by_bash_not_its_shebang` and `own_make_is_asked_by_bash_and_once_a_prompt`. The last also counts the prompt's `own-make` calls, 1. The ledger already ran by `bash`, so its red test is the shared walk: `the_owed_report_rides_an_earlier_fresh_gate_call` is handed `L7R_GATE_FRESH` after an earlier call through the same launcher exited 0. `a_bounded_gate_call_shares_the_walk_and_stops_at_its_limit` (shared) pins the new asker: -1 at its limit, 127 for no script, the proof shared both ways. `make builder-checks CRATE="rust/guard rust/guard/shared"` is green, measured 2026-11-27 (guard 603 passed, shared 589). The five suites passed, measured 2026-11-27 (`bash tests/hooks/test-<guard>.sh`): record-edit 14, measure 49, clone-sync all, gate-write 35, ledger 25, none failed. No guard message changed.
+  - **Before and after, on T388's sandbox.** The method is `t500-time.py`: T494's environment, with `MEASURE_CADENCE_S=1` so that measure-hooks reaches its gate call. Arms are interleaved round-robin after one uncounted warm-up, and the streak file is removed before every run. The binaries are this tree's own, copied before and after the change, and the gate is T388's copy. Each arm ran 20 times, every run exiting as expected, measured 2026-11-27 (`t500-run1.tsv`, `t500-run2.tsv`). Medians, run 1 at load 8.3 to 8.8, run 2 at load 8.0 to 8.3:
+    - measure-hooks' whole call on `make done FULL=1` (the streak's first, which asks `measure gatecost`): 121.4 -> 115.3 ms, and 116.0 -> 107.2, measured 2026-11-27 (`t500-time.py`, 20 runs);
+    - one launcher call, `own-make ""` (exit 1), started by its shebang against by `bash`: 27.4 -> 22.3 ms, and 27.3 -> 21.6, measured 2026-11-27 (`t500-time.py`, 20 runs). That is about 5 ms of `env` a call at this load, against T388's 2.5 ms, measured 2026-11-27 (`t500-time.py`, 20 runs; T388's record).
+  - **The prompt's saving.** D3 takes a whole `own-make` call off each prompt sync in a clean clone: 22 ms, measured 2026-11-27 (the bash arm's median above). The shebang's 5 ms also comes off the call that remains, measured 2026-11-27 (`t500-time.py`, 20 runs).
+  - **Not measured: a walk ridden.** Each of these calls is the first gate call of its hook process on the paths measured. A later call rides a proof only after an earlier exit-0 call through the same launcher (an Edit's `preflight` then `edit-route`, or a held lock then nothing), so this task claims no walk saved.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| five guards' gate calls run by bash through the shared asker; clone-sync's second own-make dropped | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T500 Approach (checklist part A)
+
+1. **The goal, in the world.** No guard starts the gate launcher by its shebang. Each guard's call shares the hook process's freshness proof. A prompt's sync asks `own-make` once.
+2. **The constraints.** No guard message or verdict changes (the brief). A stale gate binary is never run where the launcher would not run it already (T494-D2). A caller's reading of a failed start does not change (T494-D1).
+3. **Where each comes from.** O: 451 T494's found-and-left item and T388's record (2.5 ms a shebang start, measured 2026-11-27 (T388's record)). R: `scripts/gates/l7r-gate.sh` (every subcommand `exec`s its binary). O: the timings above.
+4. **Do they describe the world here?** Yes. Each guard reached its gate call in the sandbox: the measure arm's notice is the reminder, and `own-make` exited 1 in every run, measured 2026-11-27 (`t500-time.py`'s rc and said columns).
+5. **The order.** After T494 (its asker). Before T504 (the bash-started callers outside the asker).
+6. **The exits.** Green: the five red tests pass, the suites pass, and the timings drop. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** measure-hooks' call went from 121.4 and 116.0 ms to 115.3 and 107.2 ms, measured 2026-11-27 (`t500-time.py`, 20 runs). One launcher start went from 27.4 and 27.3 ms to 22.3 and 21.6 ms, measured 2026-11-27 (`t500-time.py`, 20 runs). A prompt sync makes one gate call fewer. All are medians of 20 interleaved runs, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every verdict and message is unchanged.
+
+**Found and left?**
+- Three more guards start the launcher by `bash` but outside the shared asker, so a later call cannot ride an earlier fresh call's proof: `engine_freeze_hooks.rs` (`plan engine-edit`, in an Edit's hook process beside `preflight` and `edit-route`), `pair_hooks/state.rs` `stamp_fresh` and `builder_stop_hooks.rs` (`ask_within` with bash, which `ask_gate_within` now fits). The visible effect is up to a 17.5 ms walk a call where an earlier call exited 0, measured 2026-11-27 (T494's walk on T388's sandbox). Not fixed here: they are outside the five this brief names, and the brief has one job. Filed as T504; lands before T501.
+
+**Performance work?** yes: it takes about 5 ms of `env` off each of these guards' gate calls and one whole `own-make` gate call, 22 ms, off every prompt sync in a clean clone, measured 2026-11-27 (`t500-time.py`, 20 runs, interleaved).
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md))
+
+- **Approach**: one new verb, `l7r-gate plan section <feature> <task[,task]> [--cited]` (`rust/gate/crates/plan/src/plan/show.rs`, its arm and `USAGE` in `plan.rs`), behind `make plan-section T=<task[,task]> [F=] [CITED=1]` (Makefile, F defaulting to `$(SPECIFY_FEATURE)`; `docs/make-targets.html` regenerated). It reads through the crate's own `sections::task_sections`, with no copy of the reader: plan.md first, plan-done.md only for a task plan.md has no section of, each file parsed at most once (pinned by `parses()`). One bullet in `scripts/container/builder-brief.md` names it; T502 puts it in the block every brief opens with. Built by the build half, its handoff `T501-build.md`; measured 2026-11-27.
+  - **T501-D1, an id only mentioned is no section** (deliberate: the reader's own rule would mislead here). `task_sections` hands a task with no heading of its own the first heading that mentions it, which is another task's section; so a section counts only where its first heading's `leading_tasks` holds the id, else the next file is tried, else one line says `T<n>: no section of its own in plan.md or plan-done.md`. Without it an archived task would print whichever live task's heading names it. Chosen by the build half.
+  - **T501-D2, the output form** (convention, chosen by the build half). Each task's text under `==> T<n> (<file>)`; a cited one `(<file>, cited by T<m>)`, the first requested task naming it; the archive's `<!-- plan-archive: ... -->` lines dropped; a bundle's shared heading printed once, a task whose blocks were all printed above told so in one line. Exit 0 whether or not a section is found: the line says which.
+  - **T501-D3, `CITED=1` stays off by default** (the measurement's verdict). It adds every section the requested tasks' own sections name, one level, skipping the requested tasks, repeats and an id preceded by another feature's number (also across a hard wrap, "449" ending a line); "451 T08" is kept. It printed 4.6 to 18 times the plain bytes and more than any one builder's whole plan read (the table below), so it is an option for a builder that needs most of them, and the brief's line says so. Another feature's number carries across a list of its ids ("449 T92, T93 and T94": all three 449's), a list's ids parted only by commas, dashes, spaces, line breaks, "and" or "or"; the build half had left T93 read as this feature's, a wrong `cited by` label, which the plan review's round 1 ruled a defect and which is fixed here. Chosen by the build half, the list rule by the closing half.
+  - **T501-D4, a bare number is its id** (convention, chosen by the build half: `92` is `T92`, with no zero padding, so `5` is not `T05`; ids are matched as tasks.md writes them).
+  - **T501-D5, T499-D1 reopened.** T499 declined this lever, about 2.7% of a 300k cap on the mean (an ESTIMATE from the bytes measured 2026-11-27, `plan-reads.py`), the GM's words above put token cost beside throughput, which is what reopens it.
+  - **Measured: bytes printed against builders' plan reads** (2026-11-27, `make -s plan-section ... | wc -c`, against T499's per-builder rows in `dev/measurements/2026-11-27/plan-reads/`):
+
+    | T= | plain | CITED=1 (cited sections) | T499's builder rows for that task |
+    |---|---|---|---|
+    | T487 | 4,819 | 86,821 (11) | - |
+    | T487,T486 | 7,616 | 101,343 (13) | 14,633 |
+    | T313 | 44,410 | 342,150 (33; three with no section) | 7; 83,600; 38,615; 7,253 |
+    | T443 | 15,900 | 73,099 (6) | 25,619; 38,392 |
+    | T465 | 8,068 | 52,793 (7) | 32,293; 25,133 |
+
+    Plain output is under 6 of the 9 builder rows; the three over it are T313's, whose section grew after its builders read it (four part Bs, 09:25Z to 09:53Z). The saving on the matching rows: 7.0 KB (T487,T486), 9.7 and 22.5 KB (T443), 24.2 and 17.1 KB (T465), 39.2 KB on T313's largest, each a difference of the measured bytes of 2026-11-27. Wall time 0.05 to 0.08 s, 16 MB RSS, measured 2026-11-27 (`make -s plan-section T=T487 CITED=1`, both files parsed).
+  - **The day-long before and after is T503's**, which its line asks for: it needs a day of builders who were briefed with the command, so it cannot run in this task. T499's 3.68 MB and 30,377-byte median are its before, measured 2026-11-27 (`plan-reads.py`).
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan`, the handoff's counts): `plan::tests::show`'s first 5 tests 0 passed, 5 failed before the verb (code 2, the usage), 5 passed after; the sixth (`cited_over_several_tasks_prints_each_once_under_its_first_naming_task`, the wrapped "449\n  T92") failed with the single-space check put back and passed after; the closing half's `another_feature_s_number_carries_across_a_list_of_its_ids`, 6 passed and 1 failed on the build half's code (T93, T94 and T95 read as this feature's), 7 of 7 after. `make builder-checks CRATE="rust/gate/crates/plan rust/gate/crates/task"` green, 2026-11-27.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `make plan-section`, a task's own sections printed from plan.md or plan-done.md | n/a: gate tooling, no map | n/a: tooling | none | none |
+
+### T501 Approach (checklist part A)
+
+1. **The goal, in the world.** A builder takes exactly its task's plan sections with one command, and the plan bytes in its context fall to those sections.
+2. **The constraints.** T501's line (read through the plan crate's `task_sections`, plan.md and plan-done.md, named in `scripts/container/builder-brief.md`, measured before and after); 451 FR-013; the GM's words on token cost (request.md, 2026-11-27).
+3. **Where each comes from.** G: the GM 2026-11-27 (request.md). O: T499's record. R: `rust/gate/crates/plan/src/plan/sections.rs`.
+4. **Do they describe the world here?** Yes: the five tasks above were printed from today's plan files and set against the builders' own rows.
+5. **The order.** After T499. Before T502 (the block names it) and T503 (the day after).
+6. **The exits.** Green: the command prints each task's section and the tests pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make -s plan-section T=T487` prints 4,819 bytes, its section alone (2026-11-27); the day's figure is T503's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: a new read-only command.
+
+**Found and left?**
+- The block `make builder-brief` prints did not name the command, so a builder read the rules file's line only if it opened that file: fixed here, as T502 in this tree, its own section below, landing with this task.
+- The day's before and after over builders who used the command: not a defect (a measurement the task line asks for, which needs a day of builders briefed with the command after this lands), so it is a task of its own, T503.
+
+**Performance work?** yes: it cuts the plan bytes a builder carries as cached input on every later turn - token cost, the GM 2026-11-27, "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md); 7.0 to 39.2 KB a builder on the matching rows, measured 2026-11-27.
+
+
+<!-- plan-archive: T500 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)
+
+- **Approach**: one line in the block (`rust/gate/crates/task/src/builder_brief.rs`, `plan_read`), after the rules file's line, for every kind: ``Read your plan sections with `make plan-section T=<task(s)>`, never by grep, sed or a Read over plan.md or plan-done.md.``, the brief's own task or bundle filled in. Measured 2026-11-27.
+  - **T502-D1, every kind gets the line** (chosen by the closing half): a measurement writes no plan section but reads its task's; one fixed line is simpler than a kind's branch, and no test then needs a branch's arm.
+  - **T502-D2, the line names no `CITED=1`** (chosen by the closing half): T501-D3 keeps it off by default, and the rules file's bullet says when to take it; the block stays short.
+  - **Red first** (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_brief::tests"`): the line added to `each_kind_s_block_opens_with_its_marker_and_stays_short`'s expected words, 5 passed and 1 failed (that test) on the old block; 6 of 6 after. `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/plan"`: task 147 passed, lint and format clean.
+  - **The cap** (2,000 characters, a CONVENTION: `agent-prefix-hooks`' shared block, pinned by the same test on the fixture's short paths): the longest real block - a bundle `T501,T502`, `JOBS=3`, `LOAD=1`, `BLOCKS=`, three crates, a build half with this clone's tree and handoff paths - is 1,942 characters with the line and about 1,823 without it, measured 2026-11-27 (`t501-len.py` in the scratchpad, a replica of the block's format). The margin is 58 characters, measured 2026-11-27 (the same replica), and a further line in the block will need one shortened.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the builder brief's block names `make plan-section` | n/a: gate tooling, no map | n/a: tooling | none | none |
+
+### T502 Approach (checklist part A)
+
+1. **The goal, in the world.** Every builder's brief tells it, in the block it opens with, to read its plan sections by `make plan-section`.
+2. **The constraints.** T502's line; the block under 2,000 characters (`agent-prefix-hooks`; the test's cap); 451 FR-013.
+3. **Where each comes from.** O: T501's build half's handoff. R: `builder_brief.rs`'s module doc (the cap), `builder_brief/tests.rs`.
+4. **Do they describe the world here?** Yes: the longest real block is 1,942 characters, measured 2026-11-27 (`t501-len.py`).
+5. **The order.** After T501 (the command it names), in the same tree.
+6. **The exits.** Green: the test holds the line and the cap. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, with T501.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/task ONLY="builder_brief::tests"` 6 of 6, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a: the line fits under the cap as it stands.
+12. **Before any fix.** Nothing a map shows: one line of a brief.
+
+**Found and left?** none
+
+**Performance work?** yes: it puts T501's command in front of every builder, so the plan bytes it saves (7.0 to 39.2 KB a builder on the matching rows, measured 2026-11-27) reach builders who never open the rules file - token cost, the GM 2026-11-27, "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md).
+
+
