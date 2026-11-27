@@ -64,9 +64,11 @@ fn split(text: &str) -> impl Iterator<Item = String> + '_ {
     text.split_whitespace().map(str::to_owned)
 }
 
-/// (the merge base, every path the delta holds, the uncommitted ones), or None with no merge base to read a delta from.
+/// (the merge base, every path the delta holds, the uncommitted ones), or None with no merge base to read a delta from. At a hand-in
+/// the base is the one it names (`l7r_gate_core::delta_base`, 461 T34), so the work applied on it is judged, not every staged batch.
 fn delta(root: &Path) -> Option<(String, Vec<String>, Vec<String>)> {
-    let base = git_line(root, &["merge-base", "HEAD", "origin/main"]);
+    let base = l7r_gate_core::delta_base::named(root)
+        .unwrap_or_else(|| git_line(root, &["merge-base", "HEAD", "origin/main"]));
     if base.is_empty() {
         return None;
     }

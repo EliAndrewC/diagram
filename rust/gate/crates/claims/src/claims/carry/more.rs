@@ -212,6 +212,18 @@ fn an_introduced_finding_refuses_and_an_answered_relabel_does_not() {
     assert!(!got.stdout.contains("reach#reach"));
 }
 
+/// 461 T34: at a hand-in whose base holds the finding's code - another task's staged batch - the finding is not the work's.
+#[test]
+fn at_a_hand_in_a_finding_below_its_base_is_not_introduced() {
+    let (root, _) = introduced("claims-carry-hand-in");
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "another task's staged batch"]);
+    let base = git(&root, &["rev-parse", "HEAD"]);
+    let out = l7r_gate_core::delta_base::with(base.trim(), || claims(&root, &["gate"])).stdout;
+    assert!(!out.contains("introduced:"), "{out}");
+    assert!(out.contains("pre-existing: DRIFTED"), "{out}");
+}
+
 #[test]
 fn at_clean_an_introduced_finding_is_refused() {
     let (root, _) = introduced("claims-carry-intro-clean");

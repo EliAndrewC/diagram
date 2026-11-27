@@ -240,6 +240,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T04 (<why: the finding or measurement that files it>)": {
+   "sha256": "54011ef793b7c46a6c9d5a7fe864be05b5b2da56ee0167e59505a2b146659fe9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T34 (T06's plan reviewer, 2026-11-27: three hand-in checks read their own delta from the merge base with origin/main)": {
+   "sha256": "c25c5d150269ec499147ab08124d91e7a5ca01fbdd9795afc30fb27e066d4fee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Approach (checklist part A)": {
+   "sha256": "39656cff09a8cf6cba91a4dfb56a7ac853c182a243d51dfb20d31a5c508f8dd5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1481,6 +1499,56 @@
      "summary": "land-alone.sh line 573's COVER_OK forwarding and the Makefile FREE_TEXT entry are left for T30 and not filed",
      "class": "within",
      "why": "The variable is empty and nothing reads it, so it has no visible effect and is not a defect (XIV v2.36.0). It goes away with land-alone in T30. Leaving a harmless leftover needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T04 (<why: the finding or measurement that files it>)",
+    "### T04 Approach (checklist part A)",
+    "### T34 (T06's plan reviewer, 2026-11-27: three hand-in checks read their own delta from the merge base with origin/main)",
+    "### T34 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-reader",
+     "summary": "One variable, L7R_DELTA_BASE, read by one function delta_base::named; unset, empty or unresolvable gives None and each check falls back to its own merge base; tests read a thread-local value",
+     "class": "within",
+     "why": "Mechanism for FR-002's hand-in first pass judging the builder's own work; the fallback keeps every check's old behavior when no base is named, so nothing judged is narrowed outside a hand-in (constitution XIII)."
+    },
+    {
+     "id": "T34-sites",
+     "summary": "The base is read by push.rs delta() (push-gate skip for claims and entry gates), owed Delta::merge and owed::merge_base (record-owed), and claims carry.rs classified",
+     "class": "within",
+     "why": "These are the three checks the task line names; reading the hand-in base there makes the first pass judge the builder's work rather than every batch staged below it, which is what FR-002's hand-in is for."
+    },
+    {
+     "id": "T34-setter",
+     "summary": "Only make land's first pass sets the variable: the hand-in base for the four gates and push-checks --every at hand-in, an empty value at landing",
+     "class": "within",
+     "why": "The landing's own first pass and the push are left exactly as today (FR-008: no check dropped); the empty value makes an exported variable inert at landing."
+    },
+    {
+     "id": "T34-pointer",
+     "summary": "The task line's pointer corrected: the push table's delta-scoped rows do not go through push.rs delta(); they receive the variable but do not yet read it",
+     "class": "within",
+     "why": "A factual correction of where the table's deltas are computed, stated with how it was found; it narrows nothing by itself - the unread sites are the deferral ruled below."
+    },
+    {
+     "id": "T34-defer-T37",
+     "summary": "The push table's delta-scoped rows (spec-lint, audit-register, gm-attributions, gm-questions, needs_run, closing's origin/main...HEAD) left reading the merge base; filed as T37, lands before T08",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect: in phase 1 a hand-in could be refused for another staged task's finding, which is a check refusing good work against FR-002. But no hand-in can hit it yet. The hand-in mode is wired into hand_in.rs only by T08, and T37 is ordered to land before T08, so no builder meets this refusal before it is fixed. The defect is fixed before the step that exposes it, as fix-as-we-go requires. The search space is stated (grep of merge-base under rust/gate/crates), and the fix is named per site."
+    },
+    {
+     "id": "T34-defer-T38",
+     "summary": "In-process claims calls in make land's own process (the carry's touches_engine and the open-claims report) cannot see the variable; filed as T38, lands before T08",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground as T37. The defect (the carry filing another staged task's findings into the builder's tree in phase 1) is reachable only once T08 wires the hand-in, and T38 is ordered before T08. The fix needs a change to the in-process claims door's signature, which is outside the three sites this task names. It is filed and ordered, not left."
     }
    ]
   }

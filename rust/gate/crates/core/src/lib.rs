@@ -8,6 +8,7 @@ pub mod checks;
 pub mod checks_door;
 pub mod codeid;
 pub mod cohort;
+pub mod delta_base;
 pub mod difflib;
 pub mod logs;
 pub mod measure;

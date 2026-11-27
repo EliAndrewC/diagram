@@ -130,15 +130,17 @@ impl Delta {
     }
 
     /// The merge base of HEAD with origin/main, "" where either is missing: a merge base found says both exist, so the
-    /// common case asks nothing else.
+    /// common case asks nothing else. At a hand-in, the base it names (`l7r_gate_core::delta_base`, 461 T34).
     fn merge(&mut self) -> String {
         let root = &self.root;
         self.revs
             .merge
             .get_or_insert_with(|| {
-                git(root, &["merge-base", "HEAD", "origin/main"])
-                    .trim()
-                    .to_owned()
+                l7r_gate_core::delta_base::named(root).unwrap_or_else(|| {
+                    git(root, &["merge-base", "HEAD", "origin/main"])
+                        .trim()
+                        .to_owned()
+                })
             })
             .clone()
     }

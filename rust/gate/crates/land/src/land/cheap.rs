@@ -38,6 +38,9 @@ const GATES: [&str; 4] = [
 
 /// The gates of [`GATES`] that take a range as their first argument (`origin/main...HEAD` unset), given the hand-in base at hand-in.
 const RANGED: [&str; 2] = ["review-gate.sh", "plan-gate.sh"];
+/// The variable the checks that read their own delta take the hand-in base in (461 T34): `push-checks`, `entry-gate.sh`'s
+/// `record-owed` and the claims gate, each through `l7r_gate_core::delta_base`.
+const DELTA_BASE: &str = l7r_gate_core::delta_base::VAR;
 
 /// The first pass's two modes (461 T06, D4): the landing's, and the hand-in's in a builder's tree, whose delta is the working tree
 /// against `base` (the hand-in base: the clone's HEAD in phase 1, `origin/main` from phase 2, D3), whose records are written into the
@@ -393,7 +396,9 @@ impl Land {
             if let Some(base) = base.filter(|_| RANGED.contains(&gate)) {
                 cmd.push(base);
             }
-            let (rc, out) = self.run(&cmd, &[("L7R_LAND_TICKS", ticks)])?;
+            // ...and every gate the base its own delta is read from: the hand-in's, else none, so an export never narrows a landing (461 T34)
+            let told = [("L7R_LAND_TICKS", ticks), (DELTA_BASE, base.unwrap_or(""))];
+            let (rc, out) = self.run(&cmd, &told)?;
             if rc == 0 {
                 continue;
             }
@@ -436,7 +441,12 @@ impl Land {
         if l7r_shared::escape::enough(strip(&self.root.var("CLOSE_OK"))) {
             cmd.extend(["--skip", "closing"]);
         }
-        let told = [("L7R_LAND_TICKS", ticks), ("SPECIFY_FEATURE", &name_of(d))];
+        let base = self.hand_in.borrow().clone().unwrap_or_default();
+        let told = [
+            ("L7R_LAND_TICKS", ticks),
+            ("SPECIFY_FEATURE", &name_of(d)),
+            (DELTA_BASE, &base),
+        ];
         let (rc, out) = self.run(&cmd, &told)?;
         if rc == 0 {
             return Ok(String::new());

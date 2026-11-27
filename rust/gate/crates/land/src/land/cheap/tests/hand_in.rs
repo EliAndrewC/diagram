@@ -249,3 +249,30 @@ fn a_rust_stage_s_checklist_and_open_claims_are_asked_of_the_applied_work() {
         "T1 is a Rust stage's landing with 1 open claim finding(s)",
     );
 }
+
+/// 461 T34: the checks that read their own delta - the push's table, `record-owed` behind `entry-gate.sh`, the claims gate - are
+/// handed the hand-in base, and the landing's pass hands them none, so an exported base never narrows a landing.
+#[test]
+fn the_checks_that_read_their_own_delta_are_handed_the_hand_in_base() {
+    let fx = fx("hand-in-base");
+    let said = r#"printf 'base=%s\n' "${L7R_DELTA_BASE-unset}" >> "$STUB_DIR/log""#;
+    for line in [
+        tool("gates/entry-gate.sh"),
+        tool("gates/claims-gate.sh"),
+        push_call(&fx),
+    ] {
+        fx.answer(&line, "sh", said);
+    }
+    staged(&fx, "scripts/work.sh", "true\n");
+    let base = git(&fx.root, &["rev-parse", "HEAD"]);
+    assert!(pass(&fx, &["T1"]).is_empty());
+    let handed = format!("base={base}\n");
+    assert_eq!(fx.log().matches(&handed).count(), 3, "{}", fx.log());
+    git(&fx.root, &["reset", "-q", "--", "scripts/work.sh"]);
+    std::fs::remove_file(fx.root.join("scripts/work.sh")).unwrap();
+    let d = fx.root.join("specs/449-x");
+    fx.land
+        .cheap_refusals(&d, &tasks(&["T1"]), NOTE, &Pass::Landing, None)
+        .unwrap();
+    assert_eq!(fx.log().matches("base=\n").count(), 3, "{}", fx.log());
+}

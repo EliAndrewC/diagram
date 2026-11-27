@@ -257,3 +257,22 @@ fn a_tree_with_no_repository_has_nothing_changed() {
         Ok(String::new())
     );
 }
+
+/// 461 T34: at a hand-in every base reader takes the base it names, so `record-owed` judges the work applied on it, not another task's
+/// staged batch below it.
+#[test]
+fn at_a_hand_in_the_record_owed_is_read_from_the_base_it_names() {
+    let root = record("delta-hand-in");
+    edit_everything(&root);
+    let base = commit(&root, "another task's staged batch");
+    put(&root, "scripts/work.sh", "true\n");
+    let owed = || {
+        let all = ["--root".to_owned(), root.to_string_lossy().into_owned()];
+        crate::record::owed::cli_in(&all, &l7r_shared::env::Rooted::with(".", &[])).stdout
+    };
+    assert!(owed().contains("unit(s) owed"));
+    let at = |f: &dyn Fn() -> String| l7r_gate_core::delta_base::with(&base, f);
+    assert_eq!(at(&owed), "record-owed: no record check is owed\n");
+    assert_eq!(at(&|| crate::record::owed::merge_base(&root)), base);
+    assert_eq!(at(&|| Delta::new(&root).merge_base()), base);
+}

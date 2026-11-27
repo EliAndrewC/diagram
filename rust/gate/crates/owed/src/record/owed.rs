@@ -40,9 +40,14 @@ fn usage(line: &str) -> Reply {
     }
 }
 
-/// The merge base of HEAD with origin/main, else HEAD.
+/// The merge base of HEAD with origin/main, else HEAD; at a hand-in, the base it names (`l7r_gate_core::delta_base`, 461 T34).
 #[must_use]
 pub fn merge_base(root: &Path) -> String {
+    l7r_gate_core::delta_base::named(root).unwrap_or_else(|| own_merge_base(root))
+}
+
+/// [`merge_base`] where no hand-in names one.
+fn own_merge_base(root: &Path) -> String {
     if !git(root, &["rev-parse", "--verify", "-q", "origin/main"])
         .trim()
         .is_empty()

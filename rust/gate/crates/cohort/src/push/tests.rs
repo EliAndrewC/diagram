@@ -109,6 +109,27 @@ fn a_records_only_delta_skips_every_gate() {
     }
 }
 
+/// 461 T34: at a hand-in the delta is read from the base it names - a staged batch's code below it is not the work's, and the work
+/// applied on it uncommitted is.
+#[test]
+fn at_a_hand_in_the_delta_is_read_from_the_base_it_names() {
+    let work = repo();
+    std::fs::write(work.join("l7r/a.py"), "x = 2\n").unwrap();
+    git(&work, &["commit", "-qam", "another task's staged code"]);
+    let base = git(&work, &["rev-parse", "HEAD"]);
+    std::fs::create_dir_all(work.join("dev/run-log")).unwrap();
+    std::fs::write(work.join("dev/run-log/r.json"), "{}").unwrap();
+    assert_eq!(ask(&work, "claims"), "");
+    let got = l7r_gate_core::delta_base::with(&base, || ask(&work, "claims"));
+    assert!(got.contains("nothing to judge"), "{got}");
+    // ...and the work's own code, uncommitted on the base, is judged
+    std::fs::write(work.join("l7r/a.py"), "x = 3\n").unwrap();
+    assert_eq!(
+        l7r_gate_core::delta_base::with(&base, || ask(&work, "claims")),
+        ""
+    );
+}
+
 #[test]
 fn a_pass_is_served_only_for_the_same_committed_content() {
     let work = repo();

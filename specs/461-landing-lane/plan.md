@@ -1479,14 +1479,118 @@ engine speed, so the performance checklist does not apply.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T34 (<why: the finding or measurement that files it>)
+### T34 (T06's plan reviewer, 2026-11-27: three hand-in checks read their own delta from the merge base with origin/main)
+
+- **Approach**: built in pool tree `diagram-backlog-t270` on main's f412c319b7. The hand-in base reaches every check that reads its own
+  delta through one variable, `L7R_DELTA_BASE`, read by one function.
+  - **The reader** (new, `rust/gate/crates/core/src/delta_base.rs`): `named(root)` gives the commit the variable names, resolved by
+    `git rev-parse --verify <base>^{commit}`. It gives None when the variable is unset, empty or names no commit; each check then
+    falls back to its own merge base. So a base that cannot be read never narrows what is judged. A test build reads a thread-local
+    value (`delta_base::with`) and never the process's, as `build::with` does.
+  - **Where it is read**: each site keeps its old call as the fallback (`named(root).unwrap_or_else(<the merge base, as before>)`).
+    - The push-gate's `delta()` (`cohort` `push.rs`). It serves `push-gate skip|pass` for the claims and entry gates. At hand-in
+      a work holding no engine code or record now skips those gates ("nothing to judge"), where another task's staged code below the
+      base had made them run.
+    - `record-owed`'s base (`owed` `delta.rs` `Delta::merge`, which `merge_base`, `entry_base` and `translation_base` all read) and
+      `owed.rs` `merge_base`.
+    - The claims gate's sorting of introduced, pre-existing and carried findings (`claims` `carry.rs` `classified`).
+  - **Who sets it**: only `make land`'s first pass. `gate_refusals` hands it to each of the four gates, and `push_refusal` hands it
+    to `push-checks --every`. Each gets the hand-in base at hand-in, and an empty value at landing. The empty value makes an exported
+    variable inert for the landing's own first pass.
+  - **The task line's pointer, made precise**: the push's table is not judged through `push.rs` `delta()`. That function serves
+    only the push-gate skip of the claims and entry gates. The table's delta-scoped rows (spec-lint, audit-register,
+    gm-attributions, gm-questions, closing) each compute their own merge base in other crates. They now receive the variable but
+    do not yet read it: see Found and left.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=<crate> ONLY=<module>` with each line below broken in turn and
+    restored, by `t34-mutate.py` in the scratchpad):
+
+    | line broken | crate, ONLY | passed, failed | red |
+    |---|---|---|---|
+    | `push.rs` `delta()` reads the merge base only | cohort, `push::tests::at_a_hand_in` | 0, 1 | at_a_hand_in_the_delta_is_read_from_the_base_it_names |
+    | `Delta::merge` reads the merge base only | owed, `record::delta::tests::at_a_hand_in` | 0, 1 | at_a_hand_in_the_record_owed_is_read_from_the_base_it_names |
+    | `owed::merge_base` reads the merge base only | owed, same | 0, 1 | the same |
+    | `classified` reads the merge base only | claims, `claims::carry::more::at_a_hand_in` | 0, 1 | at_a_hand_in_a_finding_below_its_base_is_not_introduced |
+    | the four gates not handed the base | land, `land::cheap::tests::hand_in` | 6, 1 | the_checks_that_read_their_own_delta_are_handed_the_hand_in_base |
+    | `push-checks` not handed the base | land, same | 6, 1 | the same |
+    | the landing handing a non-empty value | land, same | 6, 1 | the same |
+
+    The reader is new, so on the old code these tests do not compile. Each line was broken, its test was seen red, and the line was restored.
+    - Each fixture puts another task's staged commit between origin/main and the hand-in base.
+    - The push-gate: from the merge base it judges that commit's code and runs the claims gate. From the base, it judges nothing.
+    - `record-owed`: from the merge base it lists the commit's record units as owed. From the base, "no record check is owed".
+    - The claims gate: a DRIFTED finding on that commit's code is "introduced" from the merge base and "pre-existing" from the base.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the hand-in base handed to the checks that read their own delta | n/a - no map | n/a | none | n/a |
+
+### T34 Approach (checklist part A)
+
+1. **The goal, in the world.** At hand-in, the checks that work out their own delta judge the builder's work alone. In phase 1 they
+   do not judge every batch staged in the clone below it.
+2. **The constraints.** FR-002 (a builder's tree meets the refusals the builder can cure), D3's base by phase, D4. Constitution XIII:
+   with the variable unset, every check reads the merge base as before, and every existing test passes.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md). R: plan D3, D4 and T06's section. O: the red-first table.
+4. **Do they describe the world here?** Yes for the three checks named in the task line: each fixture stands as a phase-1 hand-in tree
+   does, with a staged commit below the base and the work uncommitted on it. The claims gate's owed claims are not base-dependent: see
+   FOR THE SESSION in the report.
+5. **The order.** After T06, before T08, which wires the hand-in mode into `hand_in.rs`.
+6. **The exits.** Green: the tests and `make builder-checks` of core, cohort, owed, claims and land. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first table above, and `make builder-checks` over core, cohort, owed, claims and land.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The checks judge less only where a hand-in names its base. With the variable unset or empty, as at every
+   landing and push, nothing changes.
+
+**Found and left?**
+- The push table's delta-scoped rows still read the merge base with origin/main: spec-lint, audit-register, gm-attributions,
+  gm-questions, the rows' `needs_run` gate, and closing's literal `origin/main...HEAD`. In phase 1 each may refuse a hand-in for another
+  staged task's finding (observed 2026-11-27, method: reading each row's base). Not fixed here: those sites lie in the checks, reviews, tree and cohort crates beyond the task line's three (observed
+  2026-11-27, method: grep of `merge-base` under `rust/gate/crates`); each is a one-line read of `delta_base::named`. Filed as T37; lands before T08.
+- The first pass's in-process claims calls cannot see a variable handed to child processes: the carry's `touches_engine` and the
+  open-claims report, both in `make land`'s own process. In phase 1 the carry may file another staged task's findings into the
+  builder's tree (observed 2026-11-27, method: reading `cheap.rs`'s `self.claims` calls). Not fixed here: it needs the base passed
+  through the in-process claims door, a change of its signature. Filed as T38; lands before T08.
+
+**Performance work?** no.
+
+### T37 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T34 Approach (checklist part A)
+### T37 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T38 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T38 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

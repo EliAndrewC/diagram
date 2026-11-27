@@ -431,8 +431,10 @@ pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
     )?;
     // a rebuilt file's old claims wait on what is owed under its `as` paths (ask:449-T152-rebuilt-claims)
     let owed_keys: Vec<String> = due.iter().map(|(k, _)| k.clone()).collect();
-    let mut mb =
-        l7r_shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"])).to_owned();
+    // at a hand-in, the base it names (461 T34): a finding on another task's staged code below it is not the work's
+    let mut mb = l7r_gate_core::delta_base::named(root).unwrap_or_else(|| {
+        l7r_shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"])).to_owned()
+    });
     if mb.is_empty() {
         l7r_shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).clone_into(&mut mb);
     }
