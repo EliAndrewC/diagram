@@ -162,11 +162,23 @@ T321 (a reproduction helper), T354 (brief sizing) and T401 (the tree-idle re-mea
 - The process reviewer (its own feature, after this one; T512's figures are its first data).
 - Adopting Gas Town or another framework whole (FR-009 takes parts where they fit).
 
-## Success measure
+## Success criteria
 
-Over a like window after the feature lands, against the night of 2026-11-27: landed tasks per hour of builder work at least the
-night's, read beside task size (FR-007); the cross-blocking row no higher; total tokens per landed task no higher (FR-006); every
-check that holds today still holding.
+The acceptance of each user story, gathered by requirement (the measures themselves unchanged from the stories above):
+
+- **SC-001** (FR-001, FR-003, FR-005): a landing's gate never runs in the session's clone; the lane runs a batch with no coordinator
+  turn between the hand-ins and the push, and wakes the coordinator once per landed batch; a filing or a note in the session's tree
+  during a gate is never held (US1, US3).
+- **SC-002** (FR-002): a hand-in the landing's first pass would refuse is refused at hand-in with its fixing command, and runs no
+  coverage; landings refused before a gate are well under the night's 19 of 50 (US2).
+- **SC-003** (FR-004): a red batch lands its other changes as US4 bounds it, the failing change returned as a repair for a fresh
+  builder; no batch is repaired whole by the coordinator (US4).
+- **SC-004** (FR-005, FR-008): every integration wake's work goes to a fresh agent, never the coordinator's context, and a change
+  lands only through the same gate and push checks as today (US5).
+- **SC-005** (FR-006, FR-007, FR-010): over a like window after the feature lands, against the night of 2026-11-27: landed tasks
+  per hour of builder work at least the night's, read beside task size; the cross-blocking row no higher; total tokens per landed
+  task no higher; every figure stated with its concurrency.
+- **SC-006** (FR-009): the plan's reuse decision is recorded for each part of the lane (research.md R1) before that part is built.
 
 ## Review history
 
@@ -182,3 +194,4 @@ check that holds today still holding.
 - 2026-11-27, round 4 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - FR-010's like window reworded so the night's
   baseline can meet it (concurrency close, time-weighted, never compared bare).
 - 2026-11-27, round 5 (spec-fidelity-verify, MODE 3): FAITHFUL.
+- 2026-11-27, after round 5: the "Success measure" section restated as SC-001 to SC-006, each naming its requirements, for spec-lint; no requirement or measure changed.
