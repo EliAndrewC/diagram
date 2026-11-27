@@ -477,7 +477,7 @@ fn the_test_fixtures_rows_are_left_out_and_counted() {
         .contains("  task-add     blocked=1   escape rate 0%\n"));
     assert!(said
         .stdout
-        .contains("  sync-with-main blocked=1   escape rate unknown\n"));
+        .contains("  sync-with-main blocked=1   escape rate unknown; since the event logs began 0 told, 20 short of a rate\n"));
     assert!(said.stdout.contains("  9 entries, "));
     assert!(said.stdout.contains(concat!(
         "  left out, as test fixtures' rows (451 T444, T468): 6 - checks check-closed \"nothing to close here\" 2; ",
@@ -634,7 +634,7 @@ fn the_cohort_tests_closing_rows_are_told_by_the_event_logs_test_runs() {
     assert_eq!(said.code, 0);
     assert!(said
         .stdout
-        .contains("  sync-with-main blocked=4, escaped=1   escape rate unknown\n"));
+        .contains("  sync-with-main blocked=4, escaped=1   escape rate unknown; since the event logs began 4 told, 16 short of a rate\n"));
     assert!(said.stdout.contains("  left out, as test fixtures' rows (451 T444, T468): 3 - sync-with-main closing-owes inside a cohort crate's test run 3\n"));
     assert!(said.stdout.contains("  cannot tell (451 T468): sync-with-main closing-owes 1 before the event logs' first Phase line, 2026-11-20T11:57:18Z, with no test run to stand in - a fixture's row is a real refusal's byte for byte, so its escape rate is unknown\n"));
     std::fs::remove_file(log.join("a-early.json")).unwrap();
@@ -648,7 +648,28 @@ fn the_cohort_tests_closing_rows_are_told_by_the_event_logs_test_runs() {
     let none = cli(&["guards".to_owned()], &bare, &log, &bare.join("none"));
     assert!(none
         .stdout
-        .contains("  sync-with-main blocked=6, escaped=1   escape rate unknown\n"));
+        .contains("  sync-with-main blocked=6, escaped=1   escape rate unknown; since the event logs began 0 told, 20 short of a rate\n"));
     assert!(none.stdout.contains("  cannot tell (451 T468): sync-with-main closing-owes 5 with no event log's Phase line to read - "));
     assert!(!none.stdout.contains("left out"));
+}
+
+/// 451 T480: while untold rows keep the guard's rate unknown, the rows told since the event logs began give a rate of their own
+/// once there are `TOLD_ENOUGH` of them; a told row is one the audit keeps, at or after the first `Phase` line.
+#[test]
+fn the_told_rows_give_a_rate_beside_unknown_once_there_are_enough() {
+    let (dir, log, clones) = closing_world();
+    for i in 0..16 {
+        let event = if i < 4 { "escaped" } else { "blocked" };
+        put(
+            &log,
+            &format!("told-{i}.json"),
+            &format!(
+                r#"{{"utc": "2026-11-26T10:00:{i:02}Z", "guard": "sync-with-main", "event": "{event}", "rule": "closing-owes", "detail": "closing"}}"#
+            ),
+        );
+    }
+    let said = cli(&["guards".to_owned()], &dir, &log, &clones);
+    assert!(said
+        .stdout
+        .contains("  sync-with-main blocked=16, escaped=5   escape rate unknown; since the event logs began 25% (20 told)\n"));
 }

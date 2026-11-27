@@ -4201,14 +4201,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T480 (<why: the finding or measurement that files it>)": {
-   "sha256": "ea2f4737ab41521be9e05e9f89629da05e25283ff4cc9ef6a91076546f3eefb9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T480 Approach (checklist part A)": {
-   "sha256": "3800e5c328b0ee484c8f8f3289cdf3729dd0ae22a33b1e6524773686705bb580",
+   "sha256": "9d5ccb4bd546246f39291a3bcb5c8b77d63cda6c033a98ed5a3f2c6f502b0384",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4269,6 +4263,24 @@
   },
   "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)": {
    "sha256": "65b92ecea25500b263838204c0312fcf9905af7504942f39d8fd025404d63fd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T480 (found by 451 T468-D3: `make audit`'s sync-with-main line reads `escape rate unknown` for as long as the 656 `closing-owes` rows before the event logs' first Phase line, 2026-11-20T11:57:18Z, stay on ~/.claude/guard-log, measured 2026-11-27 over a copy of the live log, method: `GUARD_LOG_DIR=<copy> l7r-gate.sh measure audit guards`)": {
+   "sha256": "8f913c28dd1a2183de8d487406d2c5930f2ff5204c3fa95e27710a83d03995fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T483 (found by message-check a02ac623b053dacd2, 2026-11-27: the gate-write refusal, key 0f7f266f923e6e4f, 453 characters, FAIL on BREVITY - its feature trail and the aside \"its exit is the notification\" spare; every gate-write rendering stood BASELINE in `dev/guard-messages.tsv`, 9 keys, observed 2026-11-27, method: `grep gate-write dev/guard-messages.tsv`)": {
+   "sha256": "3d27d44cb0c73005d811eb036c852616bab70184b1896f3f7d04e1d341c237b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T483 Approach (checklist part A)": {
+   "sha256": "3ab10080ef0bc69b1d81854d437737c1f397de573b4942923b59e75392202a41",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40173,6 +40185,67 @@
      "summary": "The plan block for T475 is deleted. As last judged it was the unfilled section template: its heading still carries the placeholder '<why: the finding or measurement that files it>', its Approach is the placeholder '<what changes, where, and how it was measured ...>', and its step table has a header and no rows.",
      "class": "within",
      "why": "The block made no decision: no approach, no step, no requirement cited, no figure. Deleting a placeholder that said nothing removes no work the request or the spec asks for, narrows no FR (no FR-001..FR-013 or SC is named by it or depends on it), and T475 appears nowhere in the GM's request. It is housekeeping of the plan file, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T480 (found by 451 T468-D3: `make audit`'s sync-with-main line reads `escape rate unknown` for as long as the 656 `closing-owes` rows before the event logs' first Phase line, 2026-11-20T11:57:18Z, stay on ~/.claude/guard-log, measured 2026-11-27 over a copy of the live log, method: `GUARD_LOG_DIR=<copy> l7r-gate.sh measure audit guards`)",
+    "### T480 Approach (checklist part A)",
+    "### T483 (found by message-check a02ac623b053dacd2, 2026-11-27: the gate-write refusal, key 0f7f266f923e6e4f, 453 characters, FAIL on BREVITY - its feature trail and the aside \"its exit is the notification\" spare; every gate-write rendering stood BASELINE in `dev/guard-messages.tsv`, 9 keys, observed 2026-11-27, method: `grep gate-write dev/guard-messages.tsv`)",
+    "### T483 Approach (checklist part A)",
+    "(removed) ### T480 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T480-D1",
+     "summary": "Beside `escape rate unknown`, give the rate over the rows since the event logs began (the told rows), never a guess at the 656 untold rows.",
+     "class": "within",
+     "why": "The task line and brief ask for a rate over the told rows once past a GUESS count; T468 ruled the untold rows cannot be told, so no split of them is the rule, not an exception. The line names its shorter window."
+    },
+    {
+     "id": "T480 (1) told test",
+     "summary": "A kept sync-with-main row is told when utc >= the first Phase line, the exact complement of the untold test; no event log means none told.",
+     "class": "within",
+     "why": "A mechanism for the asked rate; the complement leaves no row in both or neither class, and the no-log case still prints the short form rather than hiding the line."
+    },
+    {
+     "id": "T480 (2) line form",
+     "summary": "Past TOLD_ENOUGH: `since the event logs began <rate> (<n> told)`; below it: `<n> told, <k> short of a rate`.",
+     "class": "within",
+     "why": "Exactly the brief's two branches: a rate once past the count, else how many more."
+    },
+    {
+     "id": "T480 (3) TOLD_ENOUGH = 20, no dev/audits entry",
+     "summary": "A GUESS knob of 20 with its why beside it; not entered in the audit register.",
+     "class": "within",
+     "why": "The brief asks for a GUESS count. The register (T259) is for optimizations, processes and procedures; a display threshold on a report line is none of those, so leaving it out narrows nothing. (The block's stated reason - the detector's word list - is the weaker ground; the substance holds regardless.)"
+    },
+    {
+     "id": "T483 cuts",
+     "summary": "Drop the aside 'its exit is the notification' and the feature trail 'feature 385, plan D13' from the gate-write refusal.",
+     "class": "within",
+     "why": "The GM's hook-output request: same thing, no loss of fidelity, fewer tokens. message-check named both as spare; the instructions (wait with make verify-wait in the background, then the change; the escape) stay."
+    },
+    {
+     "id": "T483 escape bar wording",
+     "summary": "The escape line states 'two words or more' and leaves the eight-character minimum to the bare-token refusal's own text.",
+     "class": "within",
+     "why": "FR-012's own wording of the bar is 'a reason of two words or more'; the full bar is still told to anyone whose reason falls short, so no instruction is lost."
+    },
+    {
+     "id": "T483 old BASELINE rows kept",
+     "summary": "The 9 old gate-write BASELINE rows stay in dev/guard-messages.tsv as recorded wordings no suite renders.",
+     "class": "within",
+     "why": "The tool's existing behavior for superseded wordings; every new rendering was reviewed and passed, which is what the request asks."
+    },
+    {
+     "id": "removed T480 placeholder",
+     "summary": "The template-only T480 section removed, replaced by the filled section.",
+     "class": "within",
+     "why": "A placeholder with no content replaced by the section it stood for; nothing asked is dropped."
     }
    ]
   }

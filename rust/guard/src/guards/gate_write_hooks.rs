@@ -518,8 +518,8 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     vec![Answer::Refuse(format!(
         "\u{1b}[1mBLOCKED (gate-write): {what} while this tree's `make done` runs.\u{1b}[0m\n\
 A write during the run voids its verdict (\"the tree moved while the gate ran\") and costs the whole gate again.\n\
-Wait for it: `make verify-wait`, run_in_background - its exit is the notification - then make the change.\n\
-(feature 385, plan D13; escape GATE_WRITE_OK=\"<reason>\")"
+Wait for it: `make verify-wait`, run_in_background, then make the change.\n\
+(escape: GATE_WRITE_OK=\"<reason>\", two words or more)"
     ))]
 }
 

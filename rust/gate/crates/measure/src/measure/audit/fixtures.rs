@@ -13,7 +13,9 @@
 //! each slug with its count, and a tree with no `specs/` directory at all leaves out none of those. The `sync-with-main`
 //! `closing-owes` rows (1,017 on the same copy) are a real refusal's byte for byte, so a signal from outside the row tells them (451
 //! T468, `runs.rs`): one inside a cohort crate's test run is left out; one before the event logs' first `Phase` line cannot be told,
-//! stays counted and makes the guard's escape rate unknown; any other, and any after `FIXTURES_END`, is a real refusal's.
+//! stays counted and makes the guard's escape rate unknown; any other, and any after `FIXTURES_END`, is a real refusal's. Beside the
+//! unknown rate the guard's line gives the rate over its TOLD rows - those the audit keeps, written at or after the first `Phase`
+//! line - once there are `TOLD_ENOUGH`, or how many it is short (451 T480: 2 blocked and 3 escaped on the copy of 2026-11-27).
 
 use std::path::Path;
 
@@ -36,7 +38,13 @@ pub(super) struct LeftOut {
     in_run: usize,
     /// `closing-owes` rows before the event logs' first `Phase` line, counted, which no signal tells apart.
     untold: usize,
+    /// The guard's kept rows at or after that line, `(blocked, escaped)`: the rows a signal can tell (451 T480).
+    told: (usize, usize),
 }
+
+/// The told rows a rate is given over (451 T480). GUESS: below 20 one row moves the rate by five points or more, so it would read
+/// as a measurement it is not; a knob to move.
+pub(super) const TOLD_ENOUGH: usize = 20;
 
 /// The guard whose `closing-owes` rows only a signal from outside the row tells apart.
 pub(super) const SYNC: &str = "sync-with-main";
@@ -105,8 +113,42 @@ impl LeftOut {
         false
     }
 
-    /// Whether `row` is a fixture's (and so tallied here); `specs` the reading tree's `specs/` directory.
+    /// What beside the guard's unknown rate the told rows say: a rate over them, or how many it is short (451 T480).
+    pub(super) fn told_rate(&self) -> String {
+        let (blocked, escaped) = self.told;
+        let n = blocked + escaped;
+        if n < TOLD_ENOUGH {
+            return format!(
+                "; since the event logs began {n} told, {} short of a rate",
+                TOLD_ENOUGH - n
+            );
+        }
+        #[expect(
+            clippy::cast_precision_loss,
+            reason = "a rate of two counts, as the guard's own"
+        )]
+        let r = escaped as f64 / n as f64;
+        format!("; since the event logs began {:.0}% ({n} told)", r * 100.0)
+    }
+
+    /// Whether `row` is a fixture's (and so tallied here), a kept row of the one guard tallied as told where a signal can tell it;
+    /// `specs` the reading tree's `specs/` directory.
     pub(super) fn take(&mut self, row: &Value, specs: &Path) -> bool {
+        let text = |k: &str| row.get(k).and_then(Value::as_str).unwrap_or_default();
+        let fixture = self.fixture(row, specs);
+        if !fixture && text("guard") == SYNC {
+            let since = self.runs.first.as_deref().is_some_and(|f| text("utc") >= f);
+            match text("event") {
+                "blocked" if since => self.told.0 += 1,
+                "escaped" if since => self.told.1 += 1,
+                _ => {}
+            }
+        }
+        fixture
+    }
+
+    /// Whether `row` is a fixture's, tallied by its class.
+    fn fixture(&mut self, row: &Value, specs: &Path) -> bool {
         let text = |k: &str| row.get(k).and_then(Value::as_str).unwrap_or_default();
         let (guard, detail) = (text("guard"), text("detail"));
         if guard == "checks" && text("rule") == "check-closed" && detail == CLOSED {

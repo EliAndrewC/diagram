@@ -7173,31 +7173,39 @@ that batch; the red was not in its change.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013): it bounds the disk the landings' plan history takes, which the GM ranks below time but not at nothing, at about 1.5 ms a text written, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
 
-### T480 (<why: the finding or measurement that files it>)
+### T480 (found by 451 T468-D3: `make audit`'s sync-with-main line reads `escape rate unknown` for as long as the 656 `closing-owes` rows before the event logs' first Phase line, 2026-11-20T11:57:18Z, stay on ~/.claude/guard-log, measured 2026-11-27 over a copy of the live log, method: `GUARD_LOG_DIR=<copy> l7r-gate.sh measure audit guards`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: beside the unknown rate, the guard's line gives the rate over the rows a signal CAN tell, in `rust/gate/crates/measure/src/measure/audit/fixtures.rs` and `audit.rs`'s `rate_of`.
+  - **(1) The told rows.** `LeftOut::take` now decides fixture or not in `fixture` (the old body, unchanged) and then, for a kept `sync-with-main` row written at or after the event logs' first `Phase` line (`utc >= first`, the exact complement of the untold test `utc < first`), tallies its `blocked` or `escaped` in `told` - the two events `rate_of` already rates. With no event log (`first` none) nothing is told.
+  - **(2) The line.** Where the rate is unknown, the words after it give the told rows' rate and their count once the told rows reach `TOLD_ENOUGH` (`since the event logs began <rate> (<n> told)`), and before that their count and how many it is short (`since the event logs began <n> told, <k> short of a rate`), the no-event-log case taking the short form with none told.
+  - **(3) The knob.** `TOLD_ENOUGH`, 20, a GUESS with its why beside it: below 20 one row moves the rate by five points or more. Its name holds no threshold word of the audit register's detector, so it owes no `dev/audits/` entry.
+  - **(4) Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure ONLY=measure::audit` on the old code, the tests only changed): 6 passed, 3 failed of 9 - the new `the_told_rows_give_a_rate_beside_unknown_once_there_are_enough` (20 told, over the count) and the two existing tests' three `escape rate unknown` lines now owed their beside-text (4 told, 16 short; 0 told twice). Green after: 9 of 9.
+  - **(5) Over the live log's copy**, measured 2026-11-27 (127,728 files copied to the scratchpad, `GUARD_LOG_DIR` pointed at it): `sync-with-main blocked=658, escaped=87   escape rate unknown; since the event logs began 5 told, 15 short of a rate`, and the cannot-tell line's 656 - the 5 told are the task line's 2 blocked and 3 escaped.
+
+**T480-D1 - The told rows' rate, not the unknown rows guessed.** The untold rows (656 on the copy, measured 2026-11-27 (`make audit`'s guards section over a copy of the live log)) are a real refusal's byte for byte (T468), so no rule splits them; a rate over the rows since the event logs began is the only rate the log can stand behind. It covers a shorter window than the guard's whole count, which the line says ("since the event logs began"). Chosen by the builder, as the task line asks.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the told rows' rate beside `escape rate unknown`, or how many it is short (`audit/fixtures.rs`, `audit.rs`), red first 3 of 9, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T480 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make audit` gives sync-with-main an escape rate a reader can use while the untold rows stay on the log, or says how many more told rows it needs.
+2. **The constraints.** T480's line and the brief (a rate over the told rows once past a GUESS count, else how many more; over a copy of the guard log, never the live file; red first on a fixture); T468's rule that the untold rows cannot be told; the two tiers.
+3. **Where each comes from.** O: the copy's 656 untold and 5 told rows, measured 2026-11-27. G: none beyond the brief.
+4. **Do they describe the world here?** Yes: the tests drive the real `cli` over fixture logs and event logs, and the copy of the live log gives the figures the task line names.
+5. **The order.** After T468, which filed it; with T483 in one builder's tree.
+6. **The exits.** Green: the red-first tests passing and the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The three red-first assertions fail on the old code and pass on the new, the live log's copy reads 5 told, 15 short, and `make builder-checks CRATE="rust/guard rust/gate/crates/measure"` is clean, measured 2026-11-27.
+10. **Before moving a constant.** n/a: `TOLD_ENOUGH` is a new GUESS knob with its why beside it.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: `make audit`'s sync-with-main line gains the told rows' rate or count; no other guard's line moves.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 <!-- plan-archive: T456 to T439 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T456 to T456 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -7301,31 +7309,35 @@ that batch; the red was not in its change.
 **Performance work?** no
 
 
-### T483 (<why: the finding or measurement that files it>)
+### T483 (found by message-check a02ac623b053dacd2, 2026-11-27: the gate-write refusal, key 0f7f266f923e6e4f, 453 characters, FAIL on BREVITY - its feature trail and the aside "its exit is the notification" spare; every gate-write rendering stood BASELINE in `dev/guard-messages.tsv`, 9 keys, observed 2026-11-27, method: `grep gate-write dev/guard-messages.tsv`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the refusal's closing lines cut in `rust/guard/src/guards/gate_write_hooks.rs`: `Wait for it: \`make verify-wait\`, run_in_background, then make the change.` and `(escape: GATE_WRITE_OK="<reason>", two words or more)`, where they read `... run_in_background - its exit is the notification - then ...` and `(feature 385, plan D13; escape GATE_WRITE_OK="<reason>")`.
+  - **(1) The bar is real.** `shared::escape::escape_or_refuse` escapes only on a reason of two words and eight characters, so "two words or more" states the rule the token is held to; the eight characters stay in the bare-token refusal's own text.
+  - **(2) Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=guards::gate_write_hooks` on the old code, the test only added): 14 passed, 1 failed of 15 - `the_refusal_names_the_escape_and_its_bar_and_nothing_spare`, which pins the new last two lines and the absence of "its exit is the notification" and "plan D13". Green after: 15 of 15.
+  - **(3) The renderings.** `tests/hooks/test-gate-write-hooks.sh` run with `L7R_MESSAGE_CORPUS` on a scratch store, 35 passed, its 16 renderings copied into the tree's store (`l7r-guard messages store`) as `gate-write-hooks.sh.jsonl`; `make guard-messages` named the 9 new gate-write keys (321 to 404 characters, against 356 to 453 before), and one message-check dispatch on `make guard-messages BUNDLE=1`'s bundle passed all 9 on FIDELITY and BREVITY, recorded with `make guard-messages KEY= VERDICT=PASS BY=`, measured 2026-11-27. The old 9 BASELINE rows stay as recorded wordings no suite renders, as the tool keeps them.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the gate-write refusal's last two lines cut (`gate_write_hooks.rs`), pinned by a test, red first 1 of 15, its 9 renderings passed by message-check, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T483 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The gate-write refusal says what was refused, why, the wait and the escape with its bar, and nothing spare.
+2. **The constraints.** T483's line and the brief (the two cuts word for word; render with the guard's own suite and `make guard-messages`; ONE message-check dispatch; a test pins the wording); 451 T170's message budget and review.
+3. **Where each comes from.** O: message-check's BREVITY FAIL on key 0f7f266f923e6e4f and the 9 new keys' PASS, 2026-11-27. G: none beyond the brief.
+4. **Do they describe the world here?** Yes: the renderings are the suite's own, through the real guard.
+5. **The order.** First of the two jobs in this tree, before T480.
+6. **The exits.** Green: the pinning test passing, every new gate-write key PASS, the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The pinning test fails on the old code and passes on the new, `make guard-messages` names no gate-write key owed, and `make builder-checks CRATE="rust/guard rust/gate/crates/measure"` is clean, measured 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: a refused session reads a refusal 35 characters shorter with the same instructions.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T484 (<why: the finding or measurement that files it>)

@@ -122,6 +122,19 @@ fn nothing_is_refused_with_no_gate_running_here() {
     assert!(w.bash("git commit -qm x").is_empty());
 }
 
+/// The refusal's wording, cut for message-check BREVITY (451 T483): the escape and its bar, no feature trail, no aside.
+#[test]
+fn the_refusal_names_the_escape_and_its_bar_and_nothing_spare() {
+    let w = world("wording");
+    w.make(61, "/usr/bin/make", "done", &w.top);
+    let refusal = w.bash("git add -A");
+    assert!(refused(
+        &refusal,
+        "`make verify-wait`, run_in_background, then make the change.\n(escape: GATE_WRITE_OK=\"<reason>\", two words or more)"
+    ));
+    assert!(!refused(&refusal, "its exit is the notification") && !refused(&refusal, "plan D13"));
+}
+
 #[test]
 fn a_running_gate_refuses_a_change_it_would_see() {
     let w = world("gate");

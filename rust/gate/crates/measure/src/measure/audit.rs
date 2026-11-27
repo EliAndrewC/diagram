@@ -416,7 +416,7 @@ fn guard_rows(
 fn rate_of(left: &fixtures::LeftOut, g: &Value, c: &Counter) -> String {
     let (blocked, escaped) = (c.get("blocked"), c.get("escaped"));
     if left.untold(&s(g)) {
-        "   escape rate unknown".to_owned()
+        format!("   escape rate unknown{}", left.told_rate())
     } else if blocked > 0 || escaped > 0 {
         #[expect(
             clippy::cast_precision_loss,
