@@ -1,0 +1,7 @@
+window 2026-11-26T17:19Z to 2026-11-27T04:54Z = 11.6 h
+rust-test: runs 476, test wall 2303 s; saving LOW 828 s = 13.8 min, HIGH 1942 s = 32.4 min in the window
+builder-checks: runs 197, test wall 853 s; saving LOW 307 s = 5.1 min, HIGH 719 s = 12.0 min in the window
+both: runs 673, test wall 3156 s; saving LOW 1135 s = 18.9 min, HIGH 2660 s = 44.3 min in the window
+rust-test at load1 0-22: runs 333, wall 1357 s, saving LOW 8.1 min HIGH 19.0 min
+rust-test at load1 22-999: runs 138, wall 929 s, saving LOW 5.6 min HIGH 13.1 min
+rust-test per-run saving, median: LOW 0.78 s HIGH 1.84 s

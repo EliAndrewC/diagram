@@ -1,0 +1,677 @@
+t0	tree	make	crates	wall_s	code	task	load1_max	held
+2026-11-26T17:19:50.204Z	diagram-backlog-t269	rust-test	reviews	1.18	101	T285	None	None
+2026-11-26T17:20:10.438Z	diagram-backlog-t269	rust-test	reviews	1.17	101	T285	None	None
+2026-11-26T17:21:35.868Z	diagram-backlog-t269	rust-test	land+reviews	11.4	101	T285	None	None
+2026-11-26T17:22:28.106Z	diagram-backlog-t269	rust-test	land+reviews	2.49	0	T285	None	None
+2026-11-26T17:24:10.773Z	diagram-backlog-t269	builder-checks	land+reviews	4.72	0	T285	None	None
+2026-11-26T17:24:54.301Z	diagram-backlog-t269	builder-checks	reviews	1.34	0	T285	None	None
+2026-11-26T17:25:18.503Z	diagram-backlog-t269	rust-test	reviews	1.12	101	T285	None	None
+2026-11-26T17:39:55.416Z	diagram-backlog-t271	rust-test	land	20.36	0	T271	21.87	-1
+2026-11-26T17:43:53.943Z	diagram-backlog-t270	rust-test	arbiter	2.39	0	T292	260.58	-1
+2026-11-26T17:46:57.833Z	diagram-backlog-t270	rust-test	arbiter	4.39	0	T292	306.95	-1
+2026-11-26T17:48:46.265Z	diagram-backlog-t271	rust-test	land	7.95	101	T271	254.24	-1
+2026-11-26T17:49:00.968Z	diagram-backlog-t271	rust-test	land	14.69	0	T271	194.19	-1
+2026-11-26T17:59:48.390Z	diagram-backlog-t269	rust-test	guard	24.8	101	T285	294.21	-1
+2026-11-26T18:00:14.719Z	diagram-backlog-t271	rust-test	shared	12.33	101	T271	284.77	-1
+2026-11-26T18:01:07.348Z	diagram-backlog-t271	rust-test	shared	12.51	0	T271	242.31	-1
+2026-11-26T18:01:42.385Z	diagram-backlog-t271	builder-checks	land	7.55	0	T271	249.62	-1
+2026-11-26T18:03:07.260Z	diagram-backlog-t271	builder-checks	land	5.46	0	T271	246.11	-1
+2026-11-26T18:06:24.062Z	diagram-backlog-t270	rust-test	land	10.33	0	T292	248.29	-1
+2026-11-26T18:06:49.015Z	diagram-backlog-t270	rust-test	land	7.38	101	T292	247.68	-1
+2026-11-26T18:07:01.715Z	diagram-backlog-t270	rust-test	land	8.2	101	T292	264.92	-1
+2026-11-26T18:08:05.487Z	diagram-backlog-t270	builder-checks	task	11.11	0	T292	326.97	-1
+2026-11-26T18:09:18.391Z	diagram-backlog-t270	builder-checks	land+task	18.34	0	T292	345.69	-1
+2026-11-26T18:10:59.992Z	diagram-backlog-t269	builder-checks	guard	9.78	0	T285	285.69	-1
+2026-11-26T18:15:13.784Z	diagram-backlog-t270	builder-checks	land+task	37.12	0	T292	361.05	-1
+2026-11-26T18:25:05.489Z	diagram-backlog-t270	rust-test	mode_a	15.75	0	T292	389.26	-1
+2026-11-26T18:25:37.496Z	diagram-backlog-t270	rust-test	pool	85.37	0	T292	388.93	-1
+2026-11-26T18:27:33.060Z	diagram-backlog-t270	rust-test	checks	26.54	0	T292	404.15	-1
+2026-11-26T18:29:09.851Z	diagram-backlog-t270	rust-test	gate	7.88	0	T292	351.06	-1
+2026-11-26T18:29:57.963Z	diagram-backlog-t270	rust-test	mode_a	11.86	0	T292	302.86	-1
+2026-11-26T18:33:34.129Z	diagram-backlog-t269	builder-checks	guard	45.49	0	T285	265.73	-1
+2026-11-26T18:38:50.109Z	diagram-backlog-t270	builder-checks	mode_a	12.05	0	T292	255.83	-1
+2026-11-26T18:53:06.406Z	diagram-backlog-t269	rust-test	land	10.66	0	T285	249.26	-1
+2026-11-26T19:03:32.158Z	diagram-backlog-t269	builder-checks	rustc+task	403.06	101	T285	263.55	-1
+2026-11-26T19:11:21.689Z	diagram-backlog-t269	builder-checks	rustc	4.07	101	T285	38.94	-1
+2026-11-26T19:11:21.692Z	diagram-backlog-t269	builder-checks	task	4.9	0	T285	38.94	-1
+2026-11-26T19:11:21.693Z	diagram-backlog-t269	builder-checks	measure	4.5	0	T285	38.94	-1
+2026-11-26T19:12:14.666Z	diagram-backlog-t269	rust-test	rustc	1.7	0	T285	25.69	-1
+2026-11-26T19:13:16.735Z	diagram-backlog-t269	builder-checks	measure+rustc	3.39	0	T285	28.04	-1
+2026-11-26T19:14:06.293Z	diagram-backlog-t269	rust-test	land	3.28	0	T285	34.07	-1
+2026-11-26T19:16:09.843Z	diagram-backlog-t270	rust-test	measure	0.5	101	T292	24.89	-1
+2026-11-26T19:17:27.212Z	diagram-backlog-t270	rust-test	measure	0.53	101	T292	19.46	-1
+2026-11-26T19:17:50.585Z	diagram-backlog-t270	rust-test	measure	0.98	101	T292	20.75	-1
+2026-11-26T19:18:10.964Z	diagram-backlog-t270	rust-test	measure	3.0	0	T292	25.73	-1
+2026-11-26T19:20:59.428Z	diagram-backlog-t269	rust-test	land	1.71	0	T285	17.38	-1
+2026-11-26T19:21:19.536Z	diagram-backlog-t270	rust-test	measure	0.4	101	T292	15.67	-1
+2026-11-26T19:21:49.780Z	diagram-backlog-t269	rust-test	land	1.66	101	T285	12.12	-1
+2026-11-26T19:21:56.957Z	diagram-backlog-t269	rust-test	land	5.04	0	T285	12.25	-1
+2026-11-26T19:22:03.905Z	diagram-backlog-t270	rust-test	measure	0.42	101	T292	12.25	-1
+2026-11-26T19:22:30.165Z	diagram-backlog-t269	rust-test	land	1.62	0	T285	10.83	-1
+2026-11-26T19:22:49.022Z	diagram-backlog-t270	rust-test	measure	0.64	101	T292	9.75	-1
+2026-11-26T19:22:56.235Z	diagram-backlog-t269	rust-test	land	1.65	0	T285	9.75	-1
+2026-11-26T19:23:08.894Z	diagram-backlog-t269	rust-test	land	1.59	0	T285	9.75	-1
+2026-11-26T19:23:25.764Z	diagram-backlog-t269	rust-test	land	2.11	0	T285	13.47	-1
+2026-11-26T19:23:40.813Z	diagram-backlog-t270	rust-test	measure	0.88	101	T292	13.55	-1
+2026-11-26T19:23:47.377Z	diagram-backlog-t269	rust-test	land	1.83	0	T285	13.55	-1
+2026-11-26T19:24:16.235Z	diagram-backlog-t269	rust-test	land	1.71	0	T285	11.78	-1
+2026-11-26T19:24:37.711Z	diagram-backlog-t269	rust-test	land	1.75	0	T285	13.92	-1
+2026-11-26T19:24:49.048Z	diagram-backlog-t270	rust-test	measure	0.67	0	T292	13.92	-1
+2026-11-26T19:25:03.332Z	diagram-backlog-t269	rust-test	land	4.55	0	T285	12.4	-1
+2026-11-26T19:25:29.640Z	diagram-backlog-t270	builder-checks	measure	1.36	0	T292	14.13	-1
+2026-11-26T19:25:40.069Z	diagram-backlog-t269	rust-test	task	2.23	101	T285	14.13	-1
+2026-11-26T19:25:47.021Z	diagram-backlog-t269	rust-test	rustc	60.14	101	T285	16.22	-1
+2026-11-26T19:26:24.674Z	diagram-backlog-t270	builder-checks	measure	0.63	0	T292	16.22	-1
+2026-11-26T19:26:57.373Z	diagram-backlog-t270	builder-checks	measure	0.62	0	T292	13.68	-1
+2026-11-26T19:28:15.587Z	diagram-backlog-t269	builder-checks	task	2.67	0	T285	16.59	-1
+2026-11-26T19:30:01.348Z	diagram-backlog-t270	rust-test	measure	1.14	101	T292	17.24	-1
+2026-11-26T19:30:38.247Z	diagram-backlog-t270	builder-checks	measure	0.65	0	T292	19.73	-1
+2026-11-26T19:32:55.979Z	diagram-backlog-t271	rust-test	measure	0.88	0	T271	7.28	-1
+2026-11-26T19:34:14.780Z	diagram-backlog-t270	rust-test	measure	0.54	101	T292	4.69	-1
+2026-11-26T19:34:39.081Z	diagram-backlog-t270	builder-checks	measure	0.65	0	T292	6.53	-1
+2026-11-26T19:35:25.563Z	diagram-backlog-t269	builder-checks	rustc+task	2.2	0	T285	4.95	-1
+2026-11-26T19:35:49.166Z	diagram-backlog-t269	rust-test	rustc	1.55	0	T285	6.46	-1
+2026-11-26T19:35:51.203Z	diagram-backlog-t269	rust-test	rustc	1.51	0	T285	6.46	-1
+2026-11-26T19:35:53.192Z	diagram-backlog-t269	rust-test	rustc	2.0	0	T285	6.46	-1
+2026-11-26T19:35:55.685Z	diagram-backlog-t269	rust-test	rustc	1.55	0	T285	6.46	-1
+2026-11-26T19:35:57.729Z	diagram-backlog-t269	rust-test	rustc	1.54	0	T285	6.46	-1
+2026-11-26T19:37:55.641Z	diagram-backlog-t270	builder-checks	measure	0.61	0	T292	4.56	-1
+2026-11-26T19:40:54.921Z	diagram-backlog-t269	builder-checks	task	1.69	0	T285	1.62	-1
+2026-11-26T19:42:13.173Z	diagram-backlog-t270	rust-test	measure	0.44	101	T292	3.36	-1
+2026-11-26T19:42:35.726Z	diagram-backlog-t270	builder-checks	measure	0.59	0	T292	3.14	-1
+2026-11-26T19:46:30.245Z	diagram-backlog-t269	rust-test	rustc	600.25	101	T285	36.62	-1
+2026-11-26T19:54:58.356Z	diagram-backlog-t271	rust-test	plan	2.16	101	T271	13.52	-1
+2026-11-26T19:56:17.539Z	diagram-backlog-t271	rust-test	guard	5.51	101	T271	36.62	-1
+2026-11-26T19:56:35.550Z	diagram-backlog-t269	builder-checks	task	2.35	0	T285	36.62	-1
+2026-11-26T19:57:08.821Z	diagram-backlog-t271	builder-checks	guard+plan	5.93	0	T271	21.57	-1
+2026-11-26T19:59:53.691Z	diagram-backlog-t271	builder-checks	guard+plan	6.8	0	T271	11.43	-1
+2026-11-26T20:07:17.969Z	diagram-backlog-t270	rust-test	guard	5.21	101	T292	11.41	-1
+2026-11-26T20:07:36.892Z	diagram-backlog-t271	rust-test	plan	0.8	0	T271	9.96	-1
+2026-11-26T20:07:53.389Z	diagram-backlog-t271	rust-test	plan	0.66	101	T271	9.11	-1
+2026-11-26T20:07:54.484Z	diagram-backlog-t269	rust-test	land	1.59	0	T285	9.11	-1
+2026-11-26T20:08:14.213Z	diagram-backlog-t271	rust-test	plan	0.73	0	T271	8.6	-1
+2026-11-26T20:08:15.017Z	diagram-backlog-t269	rust-test	land	1.68	0	T285	8.6	-1
+2026-11-26T20:08:17.249Z	diagram-backlog-t269	rust-test	land	1.65	0	T285	8.6	-1
+2026-11-26T20:08:19.422Z	diagram-backlog-t269	rust-test	land	1.7	0	T285	8.6	-1
+2026-11-26T20:08:23.129Z	diagram-backlog-t269	rust-test	reviews	1.5	0	T285	8.6	-1
+2026-11-26T20:08:25.186Z	diagram-backlog-t269	rust-test	reviews	1.54	0	T285	8.6	-1
+2026-11-26T20:08:27.271Z	diagram-backlog-t269	rust-test	reviews	1.45	0	T285	8.6	-1
+2026-11-26T20:08:47.502Z	diagram-backlog-t269	rust-test	measure	0.76	0	T285	10.18	-1
+2026-11-26T20:08:48.867Z	diagram-backlog-t269	rust-test	measure	0.8	0	T285	10.18	-1
+2026-11-26T20:08:50.299Z	diagram-backlog-t269	rust-test	measure	0.75	0	T285	10.18	-1
+2026-11-26T20:08:52.614Z	diagram-backlog-t269	rust-test	plan	0.83	0	T285	10.18	-1
+2026-11-26T20:08:53.977Z	diagram-backlog-t269	rust-test	plan	0.83	0	T285	10.18	-1
+2026-11-26T20:08:55.332Z	diagram-backlog-t269	rust-test	plan	0.77	0	T285	10.18	-1
+2026-11-26T20:08:57.475Z	diagram-backlog-t269	rust-test	task	2.49	0	T285	10.18	-1
+2026-11-26T20:09:00.518Z	diagram-backlog-t269	rust-test	task	1.9	0	T285	10.18	-1
+2026-11-26T20:09:02.924Z	diagram-backlog-t269	rust-test	task	1.83	0	T285	10.18	-1
+2026-11-26T20:09:13.883Z	diagram-backlog-t269	rust-test	guard	5.94	0	T285	12.51	-1
+2026-11-26T20:09:20.400Z	diagram-backlog-t269	rust-test	guard	6.2	0	T285	12.51	-1
+2026-11-26T20:09:21.415Z	diagram-backlog-t270	rust-test	guard	6.05	0	T292	12.51	-1
+2026-11-26T20:09:27.135Z	diagram-backlog-t269	rust-test	guard	5.36	0	T285	12.75	-1
+2026-11-26T20:09:43.024Z	diagram-backlog-t269	rust-test	shared	8.86	0	T285	12.75	-1
+2026-11-26T20:09:52.427Z	diagram-backlog-t269	rust-test	shared	8.82	0	T285	12.75	-1
+2026-11-26T20:10:01.784Z	diagram-backlog-t269	rust-test	shared	8.84	0	T285	11.26	-1
+2026-11-26T20:10:57.374Z	diagram-backlog-t270	rust-test	guard	5.22	101	T292	9.38	-1
+2026-11-26T20:11:22.656Z	diagram-backlog-t270	builder-checks	guard	5.55	0	T292	7.74	-1
+2026-11-26T20:12:46.693Z	diagram-backlog-t271	builder-checks	guard	5.51	0	T271	8.73	-1
+2026-11-26T20:14:41.497Z	diagram-backlog-t269	rust-test	guard	5.79	0	T285	7.46	-1
+2026-11-26T20:14:45.537Z	diagram-backlog-t270	builder-checks	guard	5.53	0	T292	7.46	-1
+2026-11-26T20:16:07.541Z	diagram-backlog-t269	rust-test	land	1.63	0	T285	5.5	-1
+2026-11-26T20:16:11.771Z	diagram-backlog-t269	rust-test	land	1.61	0	T285	5.5	-1
+2026-11-26T20:16:15.510Z	diagram-backlog-t269	rust-test	land	1.57	0	T285	5.5	-1
+2026-11-26T20:16:18.250Z	diagram-backlog-t269	rust-test	land	1.61	0	T285	5.5	-1
+2026-11-26T20:16:20.449Z	diagram-backlog-t269	rust-test	reviews	1.46	0	T285	5.5	-1
+2026-11-26T20:16:26.866Z	diagram-backlog-t269	rust-test	reviews	1.44	0	T285	5.5	-1
+2026-11-26T20:16:32.694Z	diagram-backlog-t269	rust-test	reviews	1.44	0	T285	5.5	-1
+2026-11-26T20:16:35.872Z	diagram-backlog-t269	rust-test	reviews	1.46	0	T285	5.5	-1
+2026-11-26T20:16:40.594Z	diagram-backlog-t269	rust-test	measure	0.75	0	T285	4.88	-1
+2026-11-26T20:16:45.445Z	diagram-backlog-t269	rust-test	measure	0.76	0	T285	4.88	-1
+2026-11-26T20:16:50.284Z	diagram-backlog-t269	rust-test	measure	0.74	0	T285	4.59	-1
+2026-11-26T20:16:53.377Z	diagram-backlog-t269	rust-test	measure	0.76	0	T285	5.18	-1
+2026-11-26T20:16:54.713Z	diagram-backlog-t269	rust-test	plan	0.8	0	T285	5.18	-1
+2026-11-26T20:16:59.155Z	diagram-backlog-t269	rust-test	plan	0.79	0	T285	5.18	-1
+2026-11-26T20:17:03.553Z	diagram-backlog-t269	rust-test	plan	0.82	0	T285	5.94	-1
+2026-11-26T20:17:05.663Z	diagram-backlog-t269	rust-test	plan	0.81	0	T285	5.94	-1
+2026-11-26T20:17:08.447Z	diagram-backlog-t269	rust-test	task	1.86	0	T285	5.94	-1
+2026-11-26T20:17:12.679Z	diagram-backlog-t269	rust-test	task	1.84	0	T285	5.94	-1
+2026-11-26T20:17:16.908Z	diagram-backlog-t269	rust-test	task	1.82	0	T285	5.94	-1
+2026-11-26T20:17:19.878Z	diagram-backlog-t269	rust-test	task	1.84	0	T285	5.94	-1
+2026-11-26T20:17:22.294Z	diagram-backlog-t269	rust-test	guard	5.29	0	T285	6.07	-1
+2026-11-26T20:17:32.978Z	diagram-backlog-t269	rust-test	guard	5.29	0	T285	6.91	-1
+2026-11-26T20:17:43.478Z	diagram-backlog-t269	rust-test	guard	5.34	0	T285	6.91	-1
+2026-11-26T20:17:51.611Z	diagram-backlog-t269	rust-test	guard	5.31	0	T285	6.91	-1
+2026-11-26T20:17:57.537Z	diagram-backlog-t269	rust-test	shared	8.84	0	T285	6.91	-1
+2026-11-26T20:18:17.231Z	diagram-backlog-t269	rust-test	shared	8.91	0	T285	6.95	-1
+2026-11-26T20:18:26.151Z	diagram-backlog-t270	builder-checks	guard	5.55	0	T292	6.95	-1
+2026-11-26T20:18:36.368Z	diagram-backlog-t269	rust-test	shared	8.86	0	T285	6.95	-1
+2026-11-26T20:18:48.174Z	diagram-backlog-t269	rust-test	shared	8.8	0	T285	6.57	-1
+2026-11-26T20:19:27.967Z	diagram-backlog-t269	rust-test	land	1.63	0	T285	5.66	-1
+2026-11-26T20:19:32.145Z	diagram-backlog-t269	rust-test	land	1.8	0	T285	5.66	-1
+2026-11-26T20:19:36.337Z	diagram-backlog-t269	rust-test	land	1.74	0	T285	5.66	-1
+2026-11-26T20:19:39.809Z	diagram-backlog-t269	rust-test	reviews	1.46	0	T285	5.66	-1
+2026-11-26T20:19:45.811Z	diagram-backlog-t269	rust-test	reviews	1.47	0	T285	5.66	-1
+2026-11-26T20:19:51.611Z	diagram-backlog-t269	rust-test	reviews	1.49	0	T285	5.09	-1
+2026-11-26T20:19:56.013Z	diagram-backlog-t269	rust-test	measure	0.75	0	T285	5.09	-1
+2026-11-26T20:20:00.941Z	diagram-backlog-t269	rust-test	measure	0.76	0	T285	4.6	-1
+2026-11-26T20:20:05.762Z	diagram-backlog-t269	rust-test	measure	0.77	0	T285	4.6	-1
+2026-11-26T20:20:07.978Z	diagram-backlog-t269	rust-test	plan	0.81	0	T285	4.6	-1
+2026-11-26T20:20:12.284Z	diagram-backlog-t269	rust-test	plan	0.81	0	T285	5.03	-1
+2026-11-26T20:20:16.631Z	diagram-backlog-t269	rust-test	plan	0.81	0	T285	5.03	-1
+2026-11-26T20:20:19.302Z	diagram-backlog-t269	rust-test	task	1.82	0	T285	5.03	-1
+2026-11-26T20:20:23.370Z	diagram-backlog-t269	rust-test	task	1.84	0	T285	5.7	-1
+2026-11-26T20:20:27.549Z	diagram-backlog-t269	rust-test	task	1.86	0	T285	5.7	-1
+2026-11-26T20:20:33.593Z	diagram-backlog-t269	rust-test	guard	5.29	0	T285	5.7	-1
+2026-11-26T20:20:43.867Z	diagram-backlog-t269	rust-test	guard	5.27	0	T285	5.7	-1
+2026-11-26T20:20:54.304Z	diagram-backlog-t269	rust-test	guard	5.29	0	T285	4.64	-1
+2026-11-26T20:21:00.189Z	diagram-backlog-t269	rust-test	shared	8.83	0	T285	4.64	-1
+2026-11-26T20:21:19.325Z	diagram-backlog-t269	rust-test	shared	8.81	0	T285	3.76	-1
+2026-11-26T20:21:37.943Z	diagram-backlog-t269	rust-test	shared	8.82	0	T285	3.31	-1
+2026-11-26T20:22:18.693Z	diagram-backlog-t269	rust-test	reviews	1.93	0	T285	4.35	-1
+2026-11-26T20:23:49.063Z	diagram-backlog-t269	rust-test	land	4.68	0	T285	2.57	-1
+2026-11-26T20:23:57.167Z	diagram-backlog-t269	rust-test	reviews	1.32	0	T285	2.8	-1
+2026-11-26T20:24:04.118Z	diagram-backlog-t269	rust-test	measure	0.59	0	T285	2.8	-1
+2026-11-26T20:24:09.133Z	diagram-backlog-t269	rust-test	plan	0.7	0	T285	4.74	-1
+2026-11-26T20:24:13.681Z	diagram-backlog-t269	rust-test	task	1.71	0	T285	4.74	-1
+2026-11-26T20:24:23.387Z	diagram-backlog-t269	rust-test	guard	5.53	0	T285	5.81	-1
+2026-11-26T20:24:41.395Z	diagram-backlog-t269	rust-test	shared	8.7	0	T285	5.81	-1
+2026-11-26T20:41:34.285Z	diagram-backlog-t271	builder-checks	measure	0.51	101	T271	16.26	-1
+2026-11-26T20:42:34.216Z	diagram-backlog-t271	builder-checks	measure	0.45	101	T271	16.71	-1
+2026-11-26T20:43:50.711Z	diagram-backlog-t271	builder-checks	measure	2.48	0	T271	20.8	-1
+2026-11-26T20:46:18.307Z	diagram-backlog-t269	rust-test	reviews	1.69	0	T285	27.04	-1
+2026-11-26T20:46:38.039Z	diagram-backlog-b1	builder-checks	measure+task	3.1	0	T256	27.27	-1
+2026-11-26T20:46:42.161Z	diagram-backlog-t269	rust-test	reviews	2.59	0	T285	27.27	-1
+2026-11-26T20:46:53.342Z	diagram-backlog-t269	rust-test	reviews	1.44	0	T285	27.27	-1
+2026-11-26T20:47:34.383Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	21.37	-1
+2026-11-26T20:50:07.334Z	diagram-backlog-t271	builder-checks	measure	0.69	0	T271	12.94	-1
+2026-11-26T20:50:39.165Z	diagram-backlog-b1	rust-test	measure	0.85	101	T256	18.91	-1
+2026-11-26T20:51:21.510Z	diagram-backlog-b1	rust-test	measure	0.48	101	T256	15.16	-1
+2026-11-26T20:51:29.609Z	diagram-backlog-b1	rust-test	measure	0.45	101	T256	14.98	-1
+2026-11-26T20:51:40.258Z	diagram-backlog-b1	rust-test	measure	1.05	101	T256	14.68	-1
+2026-11-26T20:52:08.909Z	diagram-backlog-b1	rust-test	measure	1.86	0	T256	15.87	-1
+2026-11-26T20:53:40.667Z	diagram-backlog-b1	builder-checks	measure+task	2.59	0	T256	12.99	4
+2026-11-26T20:54:41.098Z	diagram-backlog-b1	builder-checks	measure	0.61	0	T256	13.13	-1
+2026-11-26T20:55:44.884Z	diagram-backlog-b1	rust-test	measure	0.5	101	T256	11.71	4
+2026-11-26T20:55:51.036Z	diagram-backlog-b1	rust-test	measure	0.49	101	T256	11.61	-1
+2026-11-26T20:55:55.038Z	diagram-backlog-b1	rust-test	measure	243.42	1	T256	14.71	4
+2026-11-26T20:57:12.539Z	diagram-backlog-t271	rust-test	measure	0.47	101	T271	9.59	-1
+2026-11-26T20:57:34.518Z	diagram-backlog-t271	builder-checks	measure	0.73	0	T271	11.58	-1
+2026-11-26T20:57:59.946Z	diagram-backlog-t271	builder-checks	measure	0.79	0	T271	11.1	-1
+2026-11-26T20:59:21.409Z	diagram-backlog-t271	builder-checks	measure	0.67	0	T271	14.71	4
+2026-11-26T21:00:04.908Z	diagram-backlog-b1	rust-test	measure	0.44	101	T256	12.91	-1
+2026-11-26T21:00:12.652Z	diagram-backlog-b1	rust-test	measure	1.65	101	T256	12.91	-1
+2026-11-26T21:01:47.060Z	diagram-backlog-b1	builder-checks	measure	0.67	0	T256	9.25	4
+2026-11-26T21:14:51.729Z	diagram-backlog-t271	builder-checks	measure	0.82	0	T271	14.43	-1
+2026-11-26T21:19:45.235Z	diagram-backlog-t269	rust-test	reviews	1.47	0	T285	14.18	-1
+2026-11-26T21:19:53.620Z	diagram-backlog-t269	rust-test	reviews	1.68	0	T285	14.18	-1
+2026-11-26T21:20:01.645Z	diagram-backlog-t269	rust-test	reviews	1.62	0	T285	14.6	-1
+2026-11-26T21:20:15.337Z	diagram-backlog-t269	rust-test	land	6.17	0	T285	14.6	-1
+2026-11-26T21:20:24.815Z	diagram-backlog-t269	rust-test	land	4.37	0	T285	14.66	-1
+2026-11-26T21:20:31.152Z	diagram-backlog-t269	rust-test	land	3.63	0	T285	14.66	-1
+2026-11-26T21:20:53.713Z	diagram-backlog-b1	builder-checks	measure+task	4.26	101		21.29	-1
+2026-11-26T21:21:13.171Z	diagram-backlog-t269	rust-test	measure	0.64	0	T285	22.98	-1
+2026-11-26T21:21:21.020Z	diagram-backlog-t269	rust-test	measure	0.7	0	T285	22.98	-1
+2026-11-26T21:21:23.964Z	diagram-backlog-b1	builder-checks	measure	1.31	101		25.12	-1
+2026-11-26T21:21:23.965Z	diagram-backlog-b1	builder-checks	task	2.35	0		25.12	-1
+2026-11-26T21:21:31.999Z	diagram-backlog-t269	rust-test	measure	1.13	0	T285	25.12	-1
+2026-11-26T21:21:44.826Z	diagram-backlog-t269	rust-test	plan	0.7	0	T285	25.12	-1
+2026-11-26T21:21:49.603Z	diagram-backlog-t269	rust-test	plan	1.51	0	T285	26.6	-1
+2026-11-26T21:21:53.978Z	diagram-backlog-b1	builder-checks	measure	1.18	0		26.6	-1
+2026-11-26T21:21:54.756Z	diagram-backlog-t269	rust-test	plan	0.75	0	T285	26.6	-1
+2026-11-26T21:22:06.197Z	diagram-backlog-t269	rust-test	task	2.19	0	T285	26.6	-1
+2026-11-26T21:22:10.549Z	diagram-backlog-t269	rust-test	task	1.73	0	T285	26.6	-1
+2026-11-26T21:22:14.567Z	diagram-backlog-t269	rust-test	task	1.73	0	T285	26.6	-1
+2026-11-26T21:22:23.942Z	diagram-backlog-b1	rust-test	measure	1.71	101		27.78	-1
+2026-11-26T21:22:44.763Z	diagram-backlog-b1	rust-test	measure	1.25	101		27.78	-1
+2026-11-26T21:22:44.853Z	diagram-backlog-t269	rust-test	guard	5.74	0	T285	27.78	-1
+2026-11-26T21:22:48.650Z	diagram-backlog-b1	rust-test	task	1.87	101		27.78	-1
+2026-11-26T21:22:57.027Z	diagram-backlog-t269	rust-test	guard	6.61	0	T285	27.15	-1
+2026-11-26T21:23:12.597Z	diagram-backlog-t269	rust-test	guard	5.52	0	T285	25.87	-1
+2026-11-26T21:24:22.235Z	diagram-backlog-t269	rust-test	shared	10.27	0	T285	33.48	-1
+2026-11-26T21:24:48.865Z	diagram-backlog-t269	rust-test	shared	9.55	0	T285	33.48	-1
+2026-11-26T21:25:10.043Z	diagram-backlog-t269	rust-test	shared	8.71	0	T285	26.14	-1
+2026-11-26T21:28:52.159Z	diagram-backlog-t271	rust-test	guard	5.82	0	T271	17.79	-1
+2026-11-26T21:31:36.012Z	diagram-backlog-t271	rust-test	task	2.28	0	T271	5.0	-1
+2026-11-26T21:33:24.286Z	diagram-backlog-t269	rust-test	measure	0.65	0	T285	8.08	-1
+2026-11-26T21:33:44.858Z	diagram-backlog-t269	rust-test	measure	0.62	0	T285	9.8	-1
+2026-11-26T21:33:54.689Z	diagram-backlog-b1	builder-checks	task	1.71	0	T256	9.8	-1
+2026-11-26T21:34:00.140Z	diagram-backlog-t269	rust-test	guard	5.55	0	T285	9.49	-1
+2026-11-26T21:34:27.569Z	diagram-backlog-t269	rust-test	guard	5.56	0	T285	12.9	-1
+2026-11-26T21:34:58.945Z	diagram-backlog-t269	rust-test	mode_a	5.84	0	T285	12.48	-1
+2026-11-26T21:35:11.761Z	diagram-backlog-t269	rust-test	mode_a	6.17	0	T285	11.16	-1
+2026-11-26T21:35:45.511Z	diagram-backlog-t269	rust-test	mode_a	6.08	0	T285	11.98	-1
+2026-11-26T21:36:13.510Z	diagram-backlog-t271	builder-checks	gate+guard+shared	10.04	0	T271	20.78	-1
+2026-11-26T21:39:42.331Z	diagram-backlog-t271	builder-checks	gate+guard+shared+task	10.27	0	T271	10.36	3
+2026-11-26T21:43:02.833Z	diagram-backlog-t269	rust-test	shared	8.86	0	T285	4.18	3
+2026-11-26T21:43:12.156Z	diagram-backlog-t269	rust-test	shared	8.79	0	T285	4.18	3
+2026-11-26T21:43:21.394Z	diagram-backlog-t269	rust-test	shared	8.78	0	T285	3.69	3
+2026-11-26T21:46:02.266Z	diagram-backlog-t269	rust-test	shared	24.96	0	T285	5.24	3
+2026-11-26T21:46:25.034Z	diagram-backlog-t270	rust-test	rustc	510.25	101	T292	10.46	3
+2026-11-26T21:48:14.248Z	diagram-backlog-t269	rust-test	shared	3.3	0	T285	3.56	3
+2026-11-26T21:48:39.072Z	diagram-backlog-t271	builder-checks	gate+guard+shared+task	10.3	0	T271	8.38	3
+2026-11-26T21:48:50.325Z	diagram-backlog-t269	rust-test	shared	3.08	101	T285	8.38	3
+2026-11-26T21:53:15.979Z	diagram-backlog-t269	rust-test	shared	3.06	101	T285	10.46	3
+2026-11-26T21:53:33.272Z	diagram-backlog-t269	rust-test	shared	3.1	101	T285	8.53	3
+2026-11-26T21:53:50.697Z	diagram-backlog-t269	rust-test	shared	2.93	101	T285	7.67	3
+2026-11-26T21:54:08.102Z	diagram-backlog-t269	rust-test	shared	2.88	101	T285	6.28	3
+2026-11-26T21:54:35.344Z	diagram-backlog-t269	rust-test	shared	3.46	0	T285	5.35	3
+2026-11-26T21:54:39.245Z	diagram-backlog-t269	rust-test	shared	3.62	0	T285	5.35	3
+2026-11-26T21:54:43.346Z	diagram-backlog-t269	rust-test	shared	3.48	0	T285	5.35	3
+2026-11-26T21:55:37.283Z	diagram-backlog-t270	builder-checks	rustc+task	2.48	101	T292	13.3	3
+2026-11-26T21:56:27.329Z	diagram-backlog-t270	builder-checks	rustc+task	1.89	101	T292	7.43	3
+2026-11-26T21:57:16.411Z	diagram-backlog-t270	builder-checks	rustc+task	1.98	0	T292	5.63	3
+2026-11-26T21:58:00.083Z	diagram-backlog-t270	builder-checks	rustc	1.38	0	T292	4.77	3
+2026-11-26T21:58:36.667Z	diagram-backlog-t270	builder-checks	rustc	1.43	0	T292	5.3	3
+2026-11-26T21:59:09.784Z	diagram-backlog-t270	rust-test	guard	5.54	0	T292	7.5	3
+2026-11-26T22:00:33.284Z	diagram-backlog-t270	rust-test	guard	5.29	0	T292	6.58	3
+2026-11-26T22:00:54.814Z	diagram-backlog-t269	rust-test	shared	2.91	101	T285	9.64	3
+2026-11-26T22:01:01.758Z	diagram-backlog-t269	rust-test	shared	2.87	101	T285	9.64	3
+2026-11-26T22:01:22.370Z	diagram-backlog-t269	rust-test	shared	3.34	0	T285	7.42	3
+2026-11-26T22:01:51.196Z	diagram-backlog-t269	rust-test	shared	3.06	101	T285	4.99	3
+2026-11-26T22:02:08.448Z	diagram-backlog-t269	rust-test	shared	2.95	101	T285	8.52	3
+2026-11-26T22:02:26.436Z	diagram-backlog-t269	rust-test	shared	4.58	101	T285	10.25	3
+2026-11-26T22:02:45.812Z	diagram-backlog-t269	rust-test	shared	3.0	101	T285	10.25	3
+2026-11-26T22:03:05.184Z	diagram-backlog-t269	rust-test	shared	3.05	101	T285	8.33	3
+2026-11-26T22:03:24.522Z	diagram-backlog-t269	rust-test	shared	3.45	0	T285	7.86	3
+2026-11-26T22:03:28.524Z	diagram-backlog-t269	rust-test	shared	3.31	0	T285	7.86	3
+2026-11-26T22:03:32.258Z	diagram-backlog-t269	rust-test	shared	3.39	0	T285	7.86	3
+2026-11-26T22:31:35.831Z	diagram-backlog-t270	rust-test	guard	5.86	0	T292	11.2	3
+2026-11-26T22:31:42.210Z	diagram-backlog-t270	rust-test	guard	5.28	0	T292	11.2	3
+2026-11-26T22:31:47.966Z	diagram-backlog-t270	rust-test	guard	5.27	0	T292	11.2	3
+2026-11-26T22:31:59.272Z	diagram-backlog-t270	rust-test	guard	5.27	0	T292	9.71	3
+2026-11-26T22:35:03.196Z	diagram-backlog-t269	rust-test	reviews	1.47	0	T285	22.86	3
+2026-11-26T22:36:11.447Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	10.36	3
+2026-11-26T22:36:20.212Z	diagram-backlog-t270	rust-test	guard	5.29	101	T292	12.52	3
+2026-11-26T22:37:15.686Z	diagram-backlog-t269	rust-test	reviews	1.65	0	T285	14.61	3
+2026-11-26T22:38:52.264Z	diagram-backlog-t270	rust-test	guard	2.65	0	T292	14.17	3
+2026-11-26T22:38:55.376Z	diagram-backlog-t270	rust-test	guard	3.24	0	T292	14.17	3
+2026-11-26T22:38:59.119Z	diagram-backlog-t270	rust-test	guard	3.72	0	T292	16.88	3
+2026-11-26T22:39:03.455Z	diagram-backlog-t270	rust-test	guard	6.54	0	T292	16.88	3
+2026-11-26T22:39:13.462Z	diagram-backlog-t271	rust-test	shared	3.49	101	T271	16.88	3
+2026-11-26T22:39:24.243Z	diagram-backlog-t271	rust-test	task	2.24	101	T271	16.88	3
+2026-11-26T22:39:52.578Z	diagram-backlog-t270	rust-test	guard	2.54	0	T292	12.37	3
+2026-11-26T22:39:55.569Z	diagram-backlog-t270	rust-test	guard	2.55	0	T292	12.37	3
+2026-11-26T22:39:58.578Z	diagram-backlog-t270	rust-test	guard	2.68	0	T292	12.37	3
+2026-11-26T22:40:40.601Z	diagram-backlog-t271	rust-test	shared	3.2	0	T271	11.95	3
+2026-11-26T22:40:50.419Z	diagram-backlog-t271	rust-test	task	1.68	101	T271	11.95	3
+2026-11-26T22:41:03.644Z	diagram-backlog-t271	rust-test	task	1.72	0	T271	11.45	3
+2026-11-26T22:43:04.022Z	diagram-backlog-t269	rust-test	rustc	2.2	101	T285	9.22	3
+2026-11-26T22:43:19.802Z	diagram-backlog-t269	rust-test	rustc	1.34	101	T285	9.22	3
+2026-11-26T22:43:41.860Z	diagram-backlog-t269	builder-checks	rustc	1.46	0	T285	7.32	3
+2026-11-26T22:44:04.518Z	diagram-backlog-t269	builder-checks	rustc	1.82	0	T285	7.18	3
+2026-11-26T22:44:31.570Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	7.18	3
+2026-11-26T22:45:42.463Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	4.26	3
+2026-11-26T22:45:46.668Z	diagram-backlog-t269	rust-test	reviews	1.86	0	T285	4.26	3
+2026-11-26T22:46:20.520Z	diagram-backlog-t271	builder-checks	guard+land+measure+shared+task	6.39	0	T271	13.11	3
+2026-11-26T22:46:23.829Z	diagram-backlog-t271	builder-checks	core	0.72	0	T271	13.11	3
+2026-11-26T22:46:24.221Z	diagram-backlog-t271	builder-checks	plan	1.04	0	T271	13.11	3
+2026-11-26T22:46:24.551Z	diagram-backlog-t271	builder-checks	gate	0.16	0	T271	13.11	3
+2026-11-26T22:46:46.688Z	diagram-backlog-t269	rust-test	reviews	1.37	0	T285	11.4	3
+2026-11-26T22:47:50.431Z	diagram-backlog-t271	builder-checks	core+land+measure+shared+task	5.94	0	T271	15.06	3
+2026-11-26T22:47:51.499Z	diagram-backlog-t271	builder-checks	gate	0.29	0	T271	15.06	3
+2026-11-26T22:48:42.562Z	diagram-backlog-t271	builder-checks	gate+land+task	3.85	0	T271	8.12	3
+2026-11-26T22:49:09.054Z	diagram-backlog-t269	rust-test	reviews	1.32	0	T285	6.37	3
+2026-11-26T22:49:13.150Z	diagram-backlog-t269	rust-test	reviews	1.31	0	T285	5.78	3
+2026-11-26T22:49:17.217Z	diagram-backlog-t269	rust-test	reviews	1.27	0	T285	5.78	3
+2026-11-26T22:49:51.845Z	diagram-backlog-t269	rust-test	rustc	1.35	101	T285	5.18	3
+2026-11-26T22:50:12.469Z	diagram-backlog-t269	builder-checks	rustc	1.42	0	T285	5.62	3
+2026-11-26T22:50:27.823Z	diagram-backlog-t269	rust-test	reviews	1.31	0	T285	5.62	3
+2026-11-26T22:50:31.917Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	5.62	3
+2026-11-26T22:50:36.047Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	5.15	3
+2026-11-26T22:51:39.244Z	diagram-backlog-t269	rust-test	reviews	1.34	0	T285	3.86	3
+2026-11-26T22:52:36.104Z	diagram-backlog-t269	rust-test	reviews	1.31	0	T285	7.9	3
+2026-11-26T22:54:45.451Z	diagram-backlog-t269	rust-test	reviews	1.26	0	T285	3.81	3
+2026-11-26T22:55:51.231Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	4.56	3
+2026-11-26T22:56:00.366Z	diagram-backlog-t269	rust-test	reviews	1.3	0	T285	4.56	3
+2026-11-26T22:56:04.369Z	diagram-backlog-t269	rust-test	reviews	1.32	0	T285	4.56	3
+2026-11-26T22:57:20.438Z	diagram-backlog-t269	builder-checks	rustc	1.47	0	T285	5.14	3
+2026-11-26T23:01:36.891Z	diagram-backlog-t271	rust-test	plan	0.6	101	T271	7.18	3
+2026-11-26T23:01:55.382Z	diagram-backlog-t269	builder-checks	rustc	1.4	0	T285	7.18	3
+2026-11-26T23:02:01.844Z	diagram-backlog-t269	rust-test	reviews	1.32	0	T285	7.18	3
+2026-11-26T23:03:19.496Z	diagram-backlog-t271	rust-test	shared	4.41	101	T271	4.89	3
+2026-11-26T23:07:15.904Z	diagram-backlog-t271	rust-test	task	1.68	101	T271	6.29	3
+2026-11-26T23:07:34.141Z	diagram-backlog-t271	rust-test	task	1.75	101	T271	6.72	3
+2026-11-26T23:07:48.274Z	diagram-backlog-t271	rust-test	task	2.38	0	T271	9.3	3
+2026-11-26T23:08:14.469Z	diagram-backlog-t269	rust-test	rustc	2.4	101	T285	19.62	3
+2026-11-26T23:08:59.705Z	diagram-backlog-t269	rust-test	rustc	1.93	0	T285	22.24	3
+2026-11-26T23:09:02.085Z	diagram-backlog-t269	rust-test	rustc	2.12	0	T285	19.9	3
+2026-11-26T23:09:20.661Z	diagram-backlog-t269	rust-test	rustc	3.16	0	T285	20.54	3
+2026-11-26T23:09:24.957Z	diagram-backlog-t269	rust-test	rustc	2.3	0	T285	20.54	3
+2026-11-26T23:09:27.700Z	diagram-backlog-t269	rust-test	rustc	1.53	0	T285	20.54	3
+2026-11-26T23:09:29.717Z	diagram-backlog-t269	rust-test	rustc	1.84	0	T285	20.54	3
+2026-11-26T23:09:32.008Z	diagram-backlog-t269	rust-test	rustc	1.65	0	T285	23.1	3
+2026-11-26T23:09:34.285Z	diagram-backlog-t269	rust-test	rustc	2.5	0	T285	23.1	3
+2026-11-26T23:09:39.617Z	diagram-backlog-t271	builder-checks	core+guard+land+measure+shared	12.34	101	T271	23.1	3
+2026-11-26T23:09:41.654Z	diagram-backlog-t271	builder-checks	plan	2.28	0	T271	23.1	3
+2026-11-26T23:09:43.937Z	diagram-backlog-t271	builder-checks	gate	0.28	0	T271	23.1	3
+2026-11-26T23:09:54.432Z	diagram-backlog-t269	rust-test	rustc	1.37	101	T285	23.1	3
+2026-11-26T23:10:49.613Z	diagram-backlog-t269	rust-test	reviews	3.41	0	T285	13.0	3
+2026-11-26T23:11:28.405Z	diagram-backlog-t269	rust-test	plan	0.72	0	T285	14.59	3
+2026-11-26T23:11:46.002Z	diagram-backlog-t269	rust-test	plan	1.79	0	T285	17.55	3
+2026-11-26T23:11:51.494Z	diagram-backlog-t269	rust-test	reviews	1.53	0	T285	17.55	3
+2026-11-26T23:12:48.645Z	diagram-backlog-t269	rust-test	reviews	1.43	0	T285	18.97	3
+2026-11-26T23:21:06.141Z	diagram-backlog-t270	rust-test	task	2.3	0	T292	0.5	3
+2026-11-26T23:26:26.693Z	diagram-backlog-b1	rust-test	shared	3.02	101	T256	13.27	4
+2026-11-26T23:26:43.073Z	diagram-backlog-b1	rust-test	guard	2.84	0	T256	11.16	4
+2026-11-26T23:29:12.337Z	diagram-backlog-b1	builder-checks	guard+shared	4.07	0	T256	9.27	4
+2026-11-26T23:32:01.696Z	diagram-backlog-t271	rust-test	guard	5.24	101	T271	5.85	3
+2026-11-26T23:32:40.957Z	diagram-backlog-t271	rust-test	plan	0.61	101	T271	7.8	4
+2026-11-26T23:33:45.257Z	diagram-backlog-t271	builder-checks	guard	7.57	0	T271	16.71	4
+2026-11-26T23:33:45.258Z	diagram-backlog-t271	builder-checks	plan+task	3.91	101	T271	16.25	4
+2026-11-26T23:34:17.913Z	diagram-backlog-t269	rust-test	task	2.27	101	T285	18.51	4
+2026-11-26T23:34:33.083Z	diagram-backlog-t269	builder-checks	task	1.75	0	T285	16.9	4
+2026-11-26T23:34:48.137Z	diagram-backlog-t271	rust-test	plan	0.66	101	T271	15.83	4
+2026-11-26T23:35:52.632Z	diagram-backlog-t271	builder-checks	plan	0.76	0	T271	9.05	4
+2026-11-26T23:48:48.099Z	diagram-backlog-t269	rust-test	measure	0.89	101	T285	30.96	4
+2026-11-26T23:53:05.948Z	diagram-backlog-t269	rust-test	measure	5.03	101	T285	13.42	4
+2026-11-26T23:54:27.029Z	diagram-backlog-b1	rust-test	gate	0.06	0		16.69	4
+2026-11-26T23:54:27.949Z	diagram-backlog-t269	rust-test	measure	0.91	0	T285	16.69	4
+2026-11-26T23:55:03.644Z	diagram-backlog-t269	rust-test	measure	0.45	101	T285	14.79	4
+2026-11-26T23:55:37.739Z	diagram-backlog-t269	rust-test	measure	0.8	0	T285	16.0	4
+2026-11-26T23:56:31.642Z	diagram-backlog-b1	rust-test	arbiter	3.31	0		41.69	4
+2026-11-26T23:56:31.643Z	diagram-backlog-b1	rust-test	archive+author	5.65	0		41.69	4
+2026-11-26T23:56:31.644Z	diagram-backlog-b1	rust-test	bundle	8.98	0		41.69	4
+2026-11-26T23:56:31.650Z	diagram-backlog-b1	rust-test	checks	27.06	0		50.49	4
+2026-11-26T23:56:33.941Z	diagram-backlog-b1	rust-test	ci	3.48	0		41.69	4
+2026-11-26T23:56:34.954Z	diagram-backlog-b1	rust-test	claims	22.32	0		50.49	4
+2026-11-26T23:56:37.292Z	diagram-backlog-b1	rust-test	cohort	15.46	0		48.88	4
+2026-11-26T23:56:37.422Z	diagram-backlog-b1	rust-test	core	7.89	0		48.88	4
+2026-11-26T23:56:40.629Z	diagram-backlog-b1	rust-test	diffrun	17.11	0		50.49	4
+2026-11-26T23:56:45.318Z	diagram-backlog-b1	rust-test	downloads	4.9	0		48.88	4
+2026-11-26T23:56:50.226Z	diagram-backlog-b1	rust-test	land	19.48	0		50.49	4
+2026-11-26T23:56:52.756Z	diagram-backlog-b1	rust-test	measure	6.7	0		50.49	4
+2026-11-26T23:56:57.279Z	diagram-backlog-b1	rust-test	owed	3.4	0		50.49	4
+2026-11-26T23:56:57.742Z	diagram-backlog-b1	rust-test	pages	0.97	0		50.49	4
+2026-11-26T23:56:58.379Z	diagram-backlog-t269	builder-checks	measure	3.08	0	T285	50.49	4
+2026-11-26T23:56:58.710Z	diagram-backlog-b1	rust-test	plan	1.87	0		50.49	4
+2026-11-26T23:56:58.723Z	diagram-backlog-b1	rust-test	pool	1.83	0		50.49	4
+2026-11-26T23:56:59.465Z	diagram-backlog-b1	rust-test	record	3.45	0		50.49	4
+2026-11-26T23:57:00.553Z	diagram-backlog-b1	rust-test	registry	4.88	0		50.49	4
+2026-11-26T23:57:00.586Z	diagram-backlog-b1	rust-test	research	1.12	0		50.49	4
+2026-11-26T23:57:00.684Z	diagram-backlog-b1	rust-test	reviews	5.07	0		50.49	4
+2026-11-26T23:57:01.706Z	diagram-backlog-b1	rust-test	rustc	2.83	0		50.49	4
+2026-11-26T23:57:02.919Z	diagram-backlog-b1	rust-test	semantic	0.63	0		50.49	4
+2026-11-26T23:57:03.551Z	diagram-backlog-b1	rust-test	task	2.86	0		50.49	4
+2026-11-26T23:57:04.541Z	diagram-backlog-b1	rust-test	tree	0.64	0		50.49	4
+2026-11-26T23:57:05.186Z	diagram-backlog-b1	rust-test	trials	1.85	0		50.49	4
+2026-11-26T23:57:05.433Z	diagram-backlog-b1	rust-test	uncited	0.55	0		50.49	4
+2026-11-26T23:58:05.145Z	diagram-backlog-t269	builder-checks	measure	0.82	0	T285	27.84	4
+2026-11-26T23:59:47.484Z	diagram-backlog-t269	builder-checks	measure	7.07	0	T285	26.42	4
+2026-11-26T23:59:53.123Z	diagram-backlog-b1	rust-test	checks	7.65	0		26.81	4
+2026-11-27T00:01:09.125Z	diagram-backlog-t269	rust-test	measure	1.32	101	T285	23.5	4
+2026-11-27T00:01:31.323Z	diagram-backlog-b1	rust-test	checks	12.7	101		26.37	4
+2026-11-27T00:01:43.625Z	diagram-backlog-t269	builder-checks	measure	9.36	0	T285	27.44	4
+2026-11-27T00:02:11.525Z	diagram-backlog-b1	rust-test	checks	11.83	101		41.28	4
+2026-11-27T00:08:11.413Z	diagram-backlog-b1	rust-test	arbiter+gate	1.07	0		19.7	3
+2026-11-27T00:08:11.414Z	diagram-backlog-b1	rust-test	archive+author+bundle	2.8	0		19.7	3
+2026-11-27T00:08:11.999Z	diagram-backlog-b1	rust-test	checks	4.25	0		23.13	3
+2026-11-27T00:08:12.481Z	diagram-backlog-b1	rust-test	ci+claims	3.51	0		19.7	3
+2026-11-27T00:08:12.852Z	diagram-backlog-b1	rust-test	cohort	2.26	0		19.7	3
+2026-11-27T00:08:12.955Z	diagram-backlog-b1	rust-test	core	1.56	0		19.7	3
+2026-11-27T00:08:14.210Z	diagram-backlog-b1	rust-test	diffrun	2.26	0		23.13	3
+2026-11-27T00:08:14.517Z	diagram-backlog-b1	rust-test	downloads	0.54	0		19.7	3
+2026-11-27T00:08:15.062Z	diagram-backlog-b1	rust-test	land	11.81	0		24.9	3
+2026-11-27T00:08:15.112Z	diagram-backlog-b1	rust-test	measure	3.08	0		23.13	3
+2026-11-27T00:08:15.996Z	diagram-backlog-b1	rust-test	owed	3.55	0		23.13	3
+2026-11-27T00:08:16.259Z	diagram-backlog-b1	rust-test	pages	1.08	0		23.13	3
+2026-11-27T00:08:16.471Z	diagram-backlog-b1	rust-test	plan	1.41	0		23.13	3
+2026-11-27T00:08:17.339Z	diagram-backlog-b1	rust-test	pool	2.16	0		23.13	3
+2026-11-27T00:08:17.885Z	diagram-backlog-b1	rust-test	record	2.5	0		23.13	3
+2026-11-27T00:08:18.195Z	diagram-backlog-b1	rust-test	registry	4.19	0		23.13	3
+2026-11-27T00:08:19.507Z	diagram-backlog-b1	rust-test	research	0.77	0		23.13	3
+2026-11-27T00:08:19.550Z	diagram-backlog-b1	rust-test	reviews	3.94	0		23.13	3
+2026-11-27T00:08:20.275Z	diagram-backlog-b1	rust-test	rustc	2.72	0		23.13	3
+2026-11-27T00:08:20.386Z	diagram-backlog-b1	rust-test	semantic	0.66	0		23.13	3
+2026-11-27T00:08:21.045Z	diagram-backlog-b1	rust-test	task	2.77	0		23.13	3
+2026-11-27T00:08:22.390Z	diagram-backlog-b1	rust-test	tree	0.54	0		23.13	3
+2026-11-27T00:08:22.928Z	diagram-backlog-b1	rust-test	trials	1.38	0		23.13	3
+2026-11-27T00:08:22.999Z	diagram-backlog-b1	rust-test	uncited	0.58	0		23.13	3
+2026-11-27T00:09:16.395Z	diagram-backlog-b1	rust-test	checks	2.13	0		18.45	3
+2026-11-27T00:10:32.756Z	diagram-backlog-b1	builder-checks	guard+shared	4.28	0		8.89	3
+2026-11-27T00:12:42.024Z	diagram-backlog-t269	builder-checks	measure	0.77	0	T285	5.42	3
+2026-11-27T00:16:49.654Z	diagram-backlog-b1	builder-checks	checks	1.53	0		12.44	3
+2026-11-27T00:18:21.019Z	diagram-backlog-b1	rust-test	mode_a	7.68	0		20.8	3
+2026-11-27T00:22:00.407Z	diagram-backlog-t270	rust-test	shared	3.02	101	T292	13.51	3
+2026-11-27T00:22:34.655Z	diagram-backlog-t270	rust-test	shared	2.98	101	T292	13.02	3
+2026-11-27T00:22:51.318Z	diagram-backlog-b1	rust-test	rustc	1.44	101		13.02	3
+2026-11-27T00:24:40.975Z	diagram-backlog-t270	builder-checks	guard+shared	4.37	0	T292	29.7	4
+2026-11-27T00:24:49.120Z	diagram-backlog-b1	rust-test	rustc	1.55	0		29.7	4
+2026-11-27T00:25:45.074Z	diagram-backlog-b1	builder-checks	checks	2.45	0		18.86	4
+2026-11-27T00:26:07.354Z	diagram-backlog-t270	rust-test	shared	52.84	0	T292	20.17	4
+2026-11-27T00:27:53.205Z	diagram-backlog-t270	builder-checks	shared	9.94	0	T292	30.73	4
+2026-11-27T00:27:53.539Z	diagram-backlog-b1	builder-checks	checks	6.57	0		30.73	4
+2026-11-27T00:28:34.167Z	diagram-backlog-t271	rust-test	shared	3.27	101	T271	24.8	4
+2026-11-27T00:29:32.769Z	diagram-backlog-t271	builder-checks	shared	8.8	0	T332	18.07	4
+2026-11-27T00:29:43.413Z	diagram-backlog-t269	rust-test	measure	2.9	101	T285	18.07	4
+2026-11-27T00:30:04.449Z	diagram-backlog-t269	rust-test	measure	0.73	0	T285	16.63	4
+2026-11-27T00:30:10.089Z	diagram-backlog-t271	rust-test	plan	0.85	0	T332	15.13	4
+2026-11-27T00:31:53.479Z	diagram-backlog-t269	rust-test	measure	0.65	101	T285	23.59	4
+2026-11-27T00:32:32.714Z	diagram-backlog-t271	builder-checks	measure	3.11	0	T332	18.29	4
+2026-11-27T00:32:56.808Z	diagram-backlog-t269	rust-test	measure	4.79	101	T285	20.62	4
+2026-11-27T00:33:45.496Z	diagram-backlog-t269	rust-test	measure	0.73	0	T285	13.96	4
+2026-11-27T00:34:00.096Z	diagram-backlog-t269	builder-checks	measure	1.3	0	T285	11.46	4
+2026-11-27T00:34:46.618Z	diagram-backlog-t269	builder-checks	measure	0.74	0	T285	12.68	4
+2026-11-27T00:38:16.247Z	diagram-backlog-t270	builder-checks	guard+shared	4.45	0	T292	9.12	4
+2026-11-27T00:56:56.857Z	diagram-backlog-t270	rust-test	task	1.99	101	T394	22.61	3
+2026-11-27T00:58:36.524Z	diagram-backlog-t270	rust-test	task	2.39	0	T394	19.71	3
+2026-11-27T01:01:08.867Z	diagram-backlog-t270	builder-checks	gate+task	1.74	101	T394	7.28	3
+2026-11-27T01:01:49.074Z	diagram-backlog-t270	builder-checks	gate+task	1.88	0	T394	4.21	3
+2026-11-27T01:02:51.206Z	diagram-backlog-t271	rust-test	land	1.87	101	T300	8.98	3
+2026-11-27T01:03:36.147Z	diagram-backlog-t271	rust-test	land	1.94	101	T300	7.76	3
+2026-11-27T01:04:13.409Z	diagram-backlog-t271	rust-test	land	1.81	101	T300	6.04	3
+2026-11-27T01:04:29.497Z	diagram-backlog-t271	rust-test	land	1.68	101	T300	4.91	3
+2026-11-27T01:06:15.242Z	diagram-backlog-t270	builder-checks	gate+task	2.25	0	T394	12.54	3
+2026-11-27T01:06:40.243Z	diagram-backlog-t271	rust-test	land	5.22	101	T300	13.38	3
+2026-11-27T01:06:57.741Z	diagram-backlog-t271	builder-checks	land	4.72	101	T300	14.35	3
+2026-11-27T01:07:36.299Z	diagram-backlog-t271	builder-checks	land	4.3	0	T300	13.54	3
+2026-11-27T01:09:58.888Z	diagram-backlog-t271	builder-checks	land	4.7	0	T300	16.3	3
+2026-11-27T01:13:01.901Z	diagram-backlog-t270	builder-checks	gate+land	4.72	0	T394	12.39	3
+2026-11-27T01:13:24.159Z	diagram-backlog-t270	builder-checks	gate+land	3.45	0	T394	10.71	3
+2026-11-27T01:13:43.507Z	diagram-backlog-t270	builder-checks	task	4.57	0	T394	8.28	3
+2026-11-27T01:13:52.701Z	diagram-backlog-t269	rust-test	measure	0.48	101	T391	8.28	3
+2026-11-27T01:14:05.540Z	diagram-backlog-t270	rust-test	land	1.62	101	T394	8.28	3
+2026-11-27T01:14:28.145Z	diagram-backlog-t269	rust-test	measure	0.49	101	T391	7.55	3
+2026-11-27T01:14:58.056Z	diagram-backlog-t269	rust-test	measure	0.45	101	T391	9.18	3
+2026-11-27T01:15:23.824Z	diagram-backlog-t269	builder-checks	measure	0.63	0	T391	9.7	3
+2026-11-27T01:15:35.930Z	diagram-backlog-t270	rust-test	task	1.82	101	T394	9.7	3
+2026-11-27T01:15:40.024Z	diagram-backlog-t270	rust-test	land	3.45	101	T394	8.36	3
+2026-11-27T01:15:45.921Z	diagram-backlog-t270	builder-checks	task	1.78	101	T394	8.36	3
+2026-11-27T01:16:03.491Z	diagram-backlog-t269	builder-checks	measure	0.67	0	T391	6.68	3
+2026-11-27T01:16:09.077Z	diagram-backlog-t270	builder-checks	task	1.88	0	T394	5.96	3
+2026-11-27T01:16:15.890Z	diagram-backlog-t270	rust-test	task	2.02	0	T394	5.96	3
+2026-11-27T01:16:18.384Z	diagram-backlog-t270	rust-test	task	2.02	0	T394	5.51	3
+2026-11-27T01:16:20.884Z	diagram-backlog-t270	rust-test	task	2.0	0	T394	5.51	3
+2026-11-27T01:16:23.345Z	diagram-backlog-t270	rust-test	task	1.98	0	T394	5.51	3
+2026-11-27T01:16:25.789Z	diagram-backlog-t270	rust-test	task	1.97	0	T394	5.51	3
+2026-11-27T01:16:28.241Z	diagram-backlog-t270	rust-test	task	1.98	0	T394	4.97	3
+2026-11-27T01:19:46.231Z	diagram-backlog-t269	builder-checks	measure	0.68	0	T391	2.39	3
+2026-11-27T01:26:12.003Z	diagram-backlog-t270	rust-test	land	5.33	101	T394	3.02	3
+2026-11-27T01:26:25.992Z	diagram-backlog-t270	builder-checks	gate+land+task	4.91	0	T394	5.1	3
+2026-11-27T01:27:19.433Z	diagram-backlog-t270	builder-checks	gate+task	1.93	0	T394	3.79	3
+2026-11-27T01:28:03.538Z	diagram-backlog-t271	rust-test	land	11.8	101	T300	5.15	3
+2026-11-27T01:29:31.298Z	diagram-backlog-t269	rust-test	measure	0.44	101	T391	2.48	3
+2026-11-27T01:29:58.730Z	diagram-backlog-t269	rust-test	measure	0.46	101	T391	6.3	3
+2026-11-27T01:30:19.802Z	diagram-backlog-t269	rust-test	measure	0.47	101	T391	7.36	3
+2026-11-27T01:30:25.422Z	diagram-backlog-t271	rust-test	land	6.13	101	T300	9.77	3
+2026-11-27T01:30:47.216Z	diagram-backlog-t269	builder-checks	measure	0.73	0	T391	9.77	3
+2026-11-27T01:32:38.613Z	diagram-backlog-t271	rust-test	land	4.51	101	T300	10.48	3
+2026-11-27T01:33:03.500Z	diagram-backlog-t271	builder-checks	land	2.16	0	T300	12.8	3
+2026-11-27T01:33:49.460Z	diagram-backlog-t271	builder-checks	land	3.97	0	T300	12.31	3
+2026-11-27T01:40:56.757Z	diagram-backlog-t270	rust-test	reviews	1.31	0	T355	5.81	3
+2026-11-27T01:41:23.697Z	diagram-backlog-t271	builder-checks	land	11.57	0	T300	17.48	3
+2026-11-27T01:44:34.441Z	diagram-backlog-t269	builder-checks	shared	3.95	101	T313	23.04	4
+2026-11-27T01:47:25.613Z	diagram-backlog-t269	builder-checks	shared	4.05	0	T313	20.46	4
+2026-11-27T01:48:57.854Z	diagram-backlog-t270	builder-checks	reviews	1.34	0	T355	7.02	4
+2026-11-27T01:49:11.842Z	diagram-backlog-t270	builder-checks	reviews	1.33	0	T355	6.85	4
+2026-11-27T01:49:19.575Z	diagram-backlog-t270	builder-checks	reviews	1.56	0	T355	6.35	4
+2026-11-27T01:50:22.732Z	diagram-backlog-t271	rust-test	guard	4.88	101	T307	22.55	4
+2026-11-27T01:50:36.607Z	diagram-backlog-t270	builder-checks	reviews	3.91	0	T355	24.16	4
+2026-11-27T01:50:44.586Z	diagram-backlog-t269	rust-test	task	2.29	101	T313	24.16	4
+2026-11-27T01:51:23.645Z	diagram-backlog-t271	rust-test	guard	2.34	101	T307	16.74	4
+2026-11-27T01:52:13.580Z	diagram-backlog-t271	rust-test	guard	3.76	0	T307	22.59	4
+2026-11-27T01:52:19.354Z	diagram-backlog-t269	builder-checks	gate+shared+task	5.31	101	T313	22.59	4
+2026-11-27T01:52:55.129Z	diagram-backlog-t270	rust-test	rustc	1.43	101	T355	17.22	4
+2026-11-27T01:53:06.455Z	diagram-backlog-t269	builder-checks	task	2.0	0	T313	17.22	4
+2026-11-27T01:53:41.989Z	diagram-backlog-t270	builder-checks	rustc	1.42	101	T355	12.99	4
+2026-11-27T01:54:06.675Z	diagram-backlog-t270	builder-checks	rustc	1.49	0	T355	10.57	4
+2026-11-27T01:54:37.310Z	diagram-backlog-t270	builder-checks	rustc	1.51	0	T355	10.42	4
+2026-11-27T01:54:45.563Z	diagram-backlog-t271	builder-checks	land	3.97	0	T307	13.21	4
+2026-11-27T01:55:16.767Z	diagram-backlog-t270	builder-checks	rustc	2.66	0	T355	16.37	4
+2026-11-27T01:55:24.538Z	diagram-backlog-t270	builder-checks	reviews	1.32	0	T355	16.37	4
+2026-11-27T01:55:32.457Z	diagram-backlog-t270	builder-checks	reviews	1.34	0	T355	16.37	4
+2026-11-27T01:55:40.704Z	diagram-backlog-t270	builder-checks	reviews	1.51	0	T355	16.37	4
+2026-11-27T01:55:44.409Z	diagram-backlog-t271	builder-checks	guard	2.55	0	T307	16.37	4
+2026-11-27T01:56:48.029Z	diagram-backlog-t270	builder-checks	reviews	1.33	0	T355	6.79	4
+2026-11-27T01:57:48.330Z	diagram-backlog-t270	builder-checks	reviews	1.33	0	T355	3.29	4
+2026-11-27T01:58:32.235Z	diagram-backlog-t269	builder-checks	gate+guard+land+shared+task	5.76	0	T313	18.35	4
+2026-11-27T01:59:49.993Z	diagram-backlog-t270	builder-checks	reviews	1.3	0	T355	8.21	4
+2026-11-27T02:00:03.493Z	diagram-backlog-t270	builder-checks	reviews	1.34	0	T355	7.33	4
+2026-11-27T02:00:11.821Z	diagram-backlog-t270	builder-checks	reviews	1.3	0	T355	6.52	4
+2026-11-27T02:01:19.519Z	diagram-backlog-t270	builder-checks	reviews	1.42	0	T355	4.77	4
+2026-11-27T02:02:21.686Z	diagram-backlog-t270	builder-checks	rustc	1.48	0	T355	2.72	4
+2026-11-27T02:02:39.170Z	diagram-backlog-t270	rust-test	rustc	1.61	0	T355	2.72	4
+2026-11-27T02:02:41.271Z	diagram-backlog-t270	rust-test	rustc	1.61	0	T355	2.72	4
+2026-11-27T02:02:43.345Z	diagram-backlog-t270	rust-test	rustc	1.62	0	T355	2.72	4
+2026-11-27T02:04:54.386Z	diagram-backlog-t269	builder-checks	gate+guard+land+shared+task	9.81	0	T313	10.9	3
+2026-11-27T03:08:48.854Z	diagram-backlog-t269	builder-checks	guard+shared+task	4.64	0	T313	2.13	4
+2026-11-27T03:11:26.638Z	diagram-backlog-t271	rust-test	guard	4.33	101	T308	14.36	4
+2026-11-27T03:12:54.841Z	diagram-backlog-t271	rust-test	guard	5.7	0	T308	34.04	4
+2026-11-27T03:14:13.592Z	diagram-backlog-t271	rust-test	task	2.4	101	T308	13.37	4
+2026-11-27T03:14:18.321Z	diagram-backlog-t271	rust-test	task	1.85	0	T308	13.37	4
+2026-11-27T03:16:16.322Z	diagram-backlog-t271	rust-test	plan	0.71	101	T308	11.4	4
+2026-11-27T03:16:27.027Z	diagram-backlog-t271	rust-test	plan	0.69	0	T308	11.4	4
+2026-11-27T03:16:40.399Z	diagram-backlog-t269	builder-checks	guard+task	3.43	101	T313	10.04	4
+2026-11-27T03:17:36.730Z	diagram-backlog-t270	builder-checks	task	2.31	0	T307	8.01	4
+2026-11-27T03:17:49.589Z	diagram-backlog-t269	builder-checks	guard+shared	4.31	0	T313	8.01	4
+2026-11-27T03:18:22.571Z	diagram-backlog-t270	builder-checks	task	2.49	101	T307	8.17	4
+2026-11-27T03:18:51.346Z	diagram-backlog-t270	rust-test	land	18.28	101	T307	14.03	4
+2026-11-27T03:19:01.258Z	diagram-backlog-t269	builder-checks	guard+shared	6.47	101	T313	14.03	4
+2026-11-27T03:19:33.696Z	diagram-backlog-t271	builder-checks	guard+plan+task	4.5	0	T308	17.76	4
+2026-11-27T03:19:36.329Z	diagram-backlog-t270	builder-checks	cohort+land+plan+task	6.52	101	T307	17.76	4
+2026-11-27T03:20:59.720Z	diagram-backlog-t270	builder-checks	land+task	5.65	101	T307	7.92	4
+2026-11-27T03:21:22.507Z	diagram-backlog-t270	builder-checks	task	1.95	0	T307	6.78	4
+2026-11-27T03:22:01.190Z	diagram-backlog-t270	builder-checks	task	1.93	0	T307	4.22	4
+2026-11-27T03:24:50.229Z	diagram-backlog-t269	builder-checks	gate+guard+task	3.84	0	T313	6.3	4
+2026-11-27T03:27:08.695Z	diagram-backlog-t271	builder-checks	plan+task	2.8	0	T308	6.92	4
+2026-11-27T03:31:41.664Z	diagram-backlog-t269	builder-checks	shared	3.1	101	T313	2.93	4
+2026-11-27T03:32:47.256Z	diagram-backlog-t269	builder-checks	gate+guard+land+shared+task	11.14	0	T313	14.68	4
+2026-11-27T03:33:11.420Z	diagram-backlog-t270	builder-checks	plan	0.73	0	T307	13.71	4
+2026-11-27T03:33:32.636Z	diagram-backlog-t270	builder-checks	plan	0.77	0	T307	11.99	4
+2026-11-27T03:35:48.670Z	diagram-backlog-t270	builder-checks	task	2.4	0	T307	9.37	4
+2026-11-27T03:36:15.849Z	diagram-backlog-t270	builder-checks	cohort+land+task	11.25	0	T307	7.5	4
+2026-11-27T03:36:46.540Z	diagram-backlog-t270	builder-checks	land	4.84	0	T307	9.62	4
+2026-11-27T03:37:04.128Z	diagram-backlog-t270	builder-checks	land	2.1	0	T307	9.62	4
+2026-11-27T03:37:26.105Z	diagram-backlog-t270	rust-test	plan	0.77	101	T307	11.75	4
+2026-11-27T03:37:35.002Z	diagram-backlog-t270	rust-test	task	2.21	101	T307	11.78	4
+2026-11-27T03:37:53.952Z	diagram-backlog-t270	rust-test	plan	1.31	101	T307	21.15	4
+2026-11-27T03:38:40.430Z	diagram-backlog-t271	rust-test	rustc	1.46	101	T367	26.17	4
+2026-11-27T03:39:04.274Z	diagram-backlog-t271	rust-test	rustc	1.46	101	T367	21.11	4
+2026-11-27T03:40:32.349Z	diagram-backlog-t271	rust-test	rustc	1.5	101	T367	12.33	4
+2026-11-27T03:40:50.781Z	diagram-backlog-t271	rust-test	rustc	1.53	0	T367	11.37	4
+2026-11-27T03:41:18.012Z	diagram-backlog-t269	rust-test	shared	3.04	101	T313	12.62	4
+2026-11-27T03:41:23.835Z	diagram-backlog-t271	builder-checks	rustc+task	2.72	0	T367	12.62	4
+2026-11-27T03:42:00.510Z	diagram-backlog-t271	builder-checks	rustc	1.52	0	T367	8.52	4
+2026-11-27T03:43:22.009Z	diagram-backlog-t271	builder-checks	rustc	1.51	0	T367	5.68	4
+2026-11-27T03:43:55.427Z	diagram-backlog-t269	rust-test	shared	3.39	0	T313	8.39	4
+2026-11-27T03:44:00.238Z	diagram-backlog-t270	builder-checks	cohort+task	2.56	0	T307	10.26	4
+2026-11-27T03:44:49.696Z	diagram-backlog-t269	rust-test	task	2.39	101	T313	17.38	4
+2026-11-27T03:46:27.301Z	diagram-backlog-t269	rust-test	task	3.89	101	T313	19.64	4
+2026-11-27T03:46:45.433Z	diagram-backlog-t269	rust-test	task	2.68	101	T313	23.66	4
+2026-11-27T03:47:03.604Z	diagram-backlog-t271	builder-checks	rustc+task	3.32	0	T367	25.85	4
+2026-11-27T03:47:23.279Z	diagram-backlog-t269	rust-test	task	1.83	101	T313	22.48	4
+2026-11-27T03:47:35.856Z	diagram-backlog-t269	rust-test	task	1.8	101	T313	19.93	4
+2026-11-27T03:47:57.246Z	diagram-backlog-t269	rust-test	task	1.81	101	T313	15.83	4
+2026-11-27T03:48:06.734Z	diagram-backlog-t269	rust-test	task	1.79	101	T313	15.55	4
+2026-11-27T03:48:18.687Z	diagram-backlog-t269	rust-test	task	1.9	0	T313	13.38	4
+2026-11-27T03:49:09.463Z	diagram-backlog-t269	builder-checks	guard+shared	4.18	101	T313	12.61	4
+2026-11-27T03:49:39.554Z	diagram-backlog-t270	rust-test	measure	0.66	101	T414	15.31	4
+2026-11-27T03:50:00.814Z	diagram-backlog-b1	rust-test	guard	3.81	101	T417	18.81	4
+2026-11-27T03:50:09.872Z	diagram-backlog-b1	rust-test	land	13.82	101	T417	19.89	4
+2026-11-27T03:50:40.291Z	diagram-backlog-t269	builder-checks	guard	3.52	0	T313	23.44	4
+2026-11-27T03:52:06.667Z	diagram-backlog-t270	builder-checks	measure	3.0	0	T414	20.63	4
+2026-11-27T03:52:12.176Z	diagram-backlog-t269	builder-checks	task	2.27	0	T313	19.94	4
+2026-11-27T03:52:29.168Z	diagram-backlog-b1	rust-test	guard	2.79	0	T417	19.53	4
+2026-11-27T03:52:34.730Z	diagram-backlog-b1	rust-test	land	5.77	0	T417	19.53	4
+2026-11-27T03:53:58.641Z	diagram-backlog-b1	rust-test	shared	3.72	101		14.91	4
+2026-11-27T03:56:42.805Z	diagram-backlog-b1	rust-test	guard	2.54	101		15.5	4
+2026-11-27T03:58:04.291Z	diagram-backlog-b1	rust-test	guard	5.42	0		28.86	4
+2026-11-27T03:58:39.890Z	diagram-backlog-t271	rust-test	land	7.86	101	T419	25.01	4
+2026-11-27T03:59:16.143Z	diagram-backlog-b1	builder-checks	guard+land+shared	10.95	0		20.08	4
+2026-11-27T03:59:43.418Z	diagram-backlog-t271	rust-test	land	12.29	101	T419	21.02	4
+2026-11-27T04:00:11.881Z	diagram-backlog-t271	rust-test	land	14.93	101	T419	26.77	4
+2026-11-27T04:01:14.281Z	diagram-backlog-t271	rust-test	land	14.2	0	T419	32.37	4
+2026-11-27T04:01:56.565Z	diagram-backlog-b1	builder-checks	guard	3.03	0		34.79	4
+2026-11-27T04:02:37.557Z	diagram-backlog-t271	rust-test	land	5.2	0	T419	26.81	4
+2026-11-27T04:04:20.527Z	diagram-backlog-b1	rust-test	guard	2.18	101		10.6	4
+2026-11-27T04:05:03.992Z	diagram-backlog-t270	rust-test	gate	0.07	0	T420	9.41	4
+2026-11-27T04:05:04.930Z	diagram-backlog-t270	rust-test	task	2.7	0	T420	9.41	4
+2026-11-27T04:05:26.118Z	diagram-backlog-t270	rust-test	gate	0.06	0	T420	9.62	4
+2026-11-27T04:05:42.836Z	diagram-backlog-t270	rust-test	task	2.06	0	T420	10.17	4
+2026-11-27T04:05:49.488Z	diagram-backlog-t271	rust-test	land	6.28	101	T419	10.17	4
+2026-11-27T04:06:13.941Z	diagram-backlog-t271	builder-checks	land+plan	4.17	0	T419	11.84	4
+2026-11-27T04:07:00.871Z	diagram-backlog-t271	builder-checks	land	7.44	0	T419	13.55	4
+2026-11-27T04:07:00.872Z	diagram-backlog-t271	builder-checks	plan	1.15	0	T419	13.55	4
+2026-11-27T04:07:51.666Z	diagram-backlog-b1	builder-checks	guard	5.26	0		23.75	4
+2026-11-27T04:07:51.668Z	diagram-backlog-b1	builder-checks	shared	6.76	0		23.75	4
+2026-11-27T04:11:36.419Z	diagram-backlog-t271	builder-checks	land+task	3.35	0	T419	10.5	4
+2026-11-27T04:15:28.818Z	diagram-backlog-b1	rust-test	guard	2.24	101		13.17	4
+2026-11-27T04:16:04.076Z	diagram-backlog-b1	builder-checks	guard+land+shared	5.42	0		17.94	4
+2026-11-27T04:16:29.649Z	diagram-backlog-t270	rust-test	measure	0.54	101	T403	15.56	4
+2026-11-27T04:16:48.080Z	diagram-backlog-b1	builder-checks	guard	2.6	0		11.84	4
+2026-11-27T04:16:55.767Z	diagram-backlog-t270	rust-test	measure	0.65	0	T403	10.17	4
+2026-11-27T04:19:25.433Z	diagram-backlog-t270	builder-checks	measure	0.81	0	T403	11.08	4
+2026-11-27T04:19:47.072Z	diagram-backlog-t270	builder-checks	measure	0.71	0	T403	11.08	4
+2026-11-27T04:19:57.091Z	diagram-backlog-t271	rust-test	rustc	2.77	0	T424	9.85	3
+2026-11-27T04:20:21.949Z	diagram-backlog-t270	builder-checks	measure	0.93	0	T403	15.44	4
+2026-11-27T04:20:49.564Z	diagram-backlog-t271	rust-test	rustc	1.48	101	T424	17.14	4
+2026-11-27T04:21:20.596Z	diagram-backlog-t271	rust-test	rustc	1.48	101	T424	18.44	4
+2026-11-27T04:21:43.587Z	diagram-backlog-t271	rust-test	rustc	61.07	0	T424	15.34	4
+2026-11-27T04:22:58.120Z	diagram-backlog-t271	rust-test	rustc	3.87	0	T424	11.85	4
+2026-11-27T04:25:40.449Z	diagram-backlog-t269	builder-checks	guard+shared+task	6.79	0	T313	26.14	4
+2026-11-27T04:26:14.847Z	diagram-backlog-b1	rust-test	shared	3.01	101	T409	20.5	4
+2026-11-27T04:27:51.592Z	diagram-backlog-t269	builder-checks	guard+shared+task	6.31	0	T313	16.34	2
+2026-11-27T04:28:21.688Z	diagram-backlog-b1	builder-checks	guard+shared	4.15	101	T409	16.33	2
+2026-11-27T04:29:24.295Z	diagram-backlog-t269	builder-checks	task	7.48	0	T313	25.29	4
+2026-11-27T04:29:24.297Z	diagram-backlog-t269	builder-checks	guard	8.35	0	T313	25.29	4
+2026-11-27T04:29:51.907Z	diagram-backlog-b1	builder-checks	guard+shared	6.21	0	T409	25.29	4
+2026-11-27T04:31:38.184Z	diagram-backlog-t269	builder-checks	guard+shared+task	17.65	101	T313	36.77	4
+2026-11-27T04:33:22.657Z	diagram-backlog-b1	rust-test	guard	3.41	101	T409	29.3	4
+2026-11-27T04:35:21.975Z	diagram-backlog-b1	builder-checks	guard	3.51	0	T409	34.9	4
+2026-11-27T04:35:59.620Z	diagram-backlog-t270	rust-test	guard	2.21	101	T427	27.8	4
+2026-11-27T04:36:31.562Z	diagram-backlog-t270	rust-test	guard	3.83	101	T427	26.03	4
+2026-11-27T04:36:49.174Z	diagram-backlog-t270	rust-test	guard	2.96	101	T427	26.03	4
+2026-11-27T04:37:09.156Z	diagram-backlog-b1	builder-checks	guard	2.63	0	T409	23.3	4
+2026-11-27T04:37:53.684Z	diagram-backlog-t270	rust-test	guard	9.51	0	T427	25.41	4
+2026-11-27T04:38:51.281Z	diagram-backlog-t270	rust-test	shared	4.23	101	T427	19.94	4
+2026-11-27T04:39:14.561Z	diagram-backlog-t270	rust-test	shared	3.46	0	T427	19.17	4
+2026-11-27T04:39:28.831Z	diagram-backlog-t269	builder-checks	guard+shared+task	24.51	0	T313	36.21	4
+2026-11-27T04:40:06.766Z	diagram-backlog-t271	rust-test	land	42.74	101	T413	38.51	4
+2026-11-27T04:41:02.827Z	diagram-backlog-t270	rust-test	shared	8.54	101	T427	36.4	4
+2026-11-27T04:41:21.589Z	diagram-backlog-t271	rust-test	land	4.47	101	T413	32.8	4
+2026-11-27T04:41:23.382Z	diagram-backlog-t270	rust-test	guard	3.75	101	T427	32.8	4
+2026-11-27T04:41:56.671Z	diagram-backlog-t271	rust-test	land	5.19	101	T413	24.79	4
+2026-11-27T04:43:08.827Z	diagram-backlog-t270	rust-test	guard	2.31	101	T427	13.48	3
+2026-11-27T04:43:24.246Z	diagram-backlog-t271	rust-test	land	9.14	0	T413	13.39	4
+2026-11-27T04:43:30.597Z	diagram-backlog-t270	rust-test	guard	3.94	0	T427	13.39	4
+2026-11-27T04:44:14.062Z	diagram-backlog-t270	builder-checks	shared	3.43	0	T427	14.49	3
+2026-11-27T04:44:53.886Z	diagram-backlog-t271	builder-checks	land	19.7	0	T413	38.12	4
+2026-11-27T04:46:06.410Z	diagram-backlog-t271	builder-checks	land	4.53	0	T413	23.47	4
+2026-11-27T04:46:42.237Z	diagram-backlog-t270	builder-checks	guard	14.05	0	T427	30.96	4
+2026-11-27T04:46:42.238Z	diagram-backlog-t270	builder-checks	shared	12.4	0	T427	28.86	4
+2026-11-27T04:48:10.460Z	diagram-backlog-t269	rust-test	rustc	5.07	101	T364	36.62	4
+2026-11-27T04:49:11.913Z	diagram-backlog-b1	rust-test	task	2.88	101		23.39	4
+2026-11-27T04:49:12.996Z	diagram-backlog-t270	builder-checks	guard+shared	6.23	0	T427	23.39	4
+2026-11-27T04:49:19.901Z	diagram-backlog-t269	rust-test	rustc	1.59	0	T364	23.39	4
+2026-11-27T04:50:13.809Z	diagram-backlog-t269	rust-test	rustc	4.45	0	T364	23.75	4
+2026-11-27T04:52:03.954Z	diagram-backlog-t269	rust-test	rustc	3.5	0	T364	29.07	4
+2026-11-27T04:52:06.738Z	diagram-backlog-t270	rust-test	guard	3.43	0	T427	27.15	4
+2026-11-27T04:52:08.382Z	diagram-backlog-t269	rust-test	rustc	1.94	0	T364	27.15	4
+2026-11-27T04:52:56.445Z	diagram-backlog-b1	rust-test	shared	11.83	0		27.8	3
+2026-11-27T04:54:09.658Z	diagram-backlog-b1	rust-test	task	2.85	101		47.12	4
+2026-11-27T04:54:11.850Z	diagram-backlog-t269	rust-test	tree	0.21	0	T364	47.12	4
+2026-11-27T04:55:14.223Z	diagram-backlog-b1	rust-test	task	7.98	0		45.95	4
+2026-11-27T04:55:44.255Z	diagram-backlog-b1	rust-test	land	72.47	0		46.95	4
+2026-11-27T04:56:16.264Z	diagram-backlog-t269	rust-test	guard	9.61	0	T364	46.95	4
+2026-11-27T04:56:25.447Z	diagram-backlog-t270	rust-test	guard	8.06	101	T427	46.95	4
+2026-11-27T04:56:58.237Z	diagram-backlog-t270	rust-test	guard	6.15	101	T427	45.16	4
+2026-11-27T04:57:22.850Z	diagram-backlog-t270	rust-test	guard	10.19	0	T427	42.51	4

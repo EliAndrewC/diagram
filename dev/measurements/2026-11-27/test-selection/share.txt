@@ -1,0 +1,17 @@
+== 04f4c2b193 451 T424: the pre-warm test that failed once in a 
+  rustc: crate tests 132; modules ['prewarm'] tests 9 (7%); root file touched: False -> conservative selection 9
+== 84e61811d4 451 T417 T352: a builder past the 300k context cap
+  land: crate tests 155; modules ['writers'] tests 9 (6%); root file touched: False -> conservative selection 9
+  shared: crate tests 541; modules ['tree'] tests 87 (16%); root file touched: False -> conservative selection 87
+  guard: crate tests 567; modules ['guards::context_cap_hooks'] tests 28 (5%); root file touched: False -> conservative selection 28
+== 54aec28044 451 T419 T404: make carry merges plan.md by whole 
+  land: crate tests 155; modules ['carry'] tests 39 (25%); root file touched: False -> conservative selection 39
+  plan: crate tests 204; modules ['approach'] tests 14 (7%); root file touched: True -> conservative selection 204
+  task: crate tests 131; modules ['builder_done'] tests 11 (8%); root file touched: False -> conservative selection 11
+== b991ec95f5 451 T355: each clippy pass of a crate's lint told 
+  rustc: crate tests 132; modules ['alone', 'kept', 'lint', 'slot', 'stale'] tests 52 (39%); root file touched: True -> conservative selection 132
+== 25ab6ec156 451 T413: make land's first pass asks the push's u
+  land: crate tests 155; modules ['cheap', 'parity'] tests 15 (10%); root file touched: True -> conservative selection 155
+== f92be462a5 451 T409 T406: the shared tree walk reads a make's
+  shared: crate tests 541; modules ['tree'] tests 87 (16%); root file touched: False -> conservative selection 87
+  guard: crate tests 567; modules ['guards::gate_write_hooks', 'guards::static_runs_hooks'] tests 40 (7%); root file touched: False -> conservative selection 40

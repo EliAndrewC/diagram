@@ -1,0 +1,113 @@
+== T300 a8c9a444bc82bcd91 start=2026-11-27T00:50:10.414Z edited=['land:land/carry', 'land:land/carry/boxes', 'land:land/carry/sections', 'land:land/carry/spec']
+   IN  land::carry::tests::spec::a_plan_section_both_sides_changed_stops
+   IN  land::carry::tests::spec::a_plan_is_merged_by_section_the_builders_filled_stub_taken_and_its_removed_stub_dropped
+   IN  land::carry::tests::spec::a_request_both_sides_added_a_dated_section_to_keeps_both
+   IN  land::carry::tests::spec::every_open_box_keeps_the_line_under_it_that_either_side_had
+   IN  land::carry::tests::spec::a_plan_is_merged_by_section_the_builders_filled_stub_taken_and_the_clones_withdrawn_stub_left_out
+   IN  land::carry::tests::spec::a_list_line_and_the_lines_under_it_are_one_line_to_the_merge
+   IN  land::carry::tests::spec::a_tasks_side_holding_the_joining_character_is_merged_by_line
+== T347 a25f78ab6e91ea847 start=2026-11-26T23:03:00.605Z edited=['rustc:rustc/alone', 'rustc:rustc/kept/alone', 'rustc:rustc/stale']
+   IN  rustc::tests::alone::a_build_told_alone_takes_the_lane_while_both_wide_slots_are_held_and_a_second_waits_behind_it
+== T159 a118bc8d661450ead start=2026-11-26T18:21:14.734Z edited=['mode_a:audit/armory', 'mode_a:page/held', 'mode_a:pool_sweep']
+   IN  audit::armory::tests::every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it
+== T364 a2de5b375994cadaa start=2026-11-27T04:44:37.164Z edited=['guard:lib', 'rustc:rustc', 'rustc:rustc/drain', 'rustc:rustc/kept']
+   IN  rustc::tests::drain::a_run_ends_at_the_exit_though_a_process_it_left_holds_the_pipe
+== T365 ade68ee3bf2490085 start=2026-11-26T22:53:47.372Z edited=[]
+   OUT guards::builder_pool_hooks::tests::a_pool_tree_and_its_build_cache_are_not_removed_by_hand
+   OUT guards::builder_pool_hooks::tests::a_worktree_made_by_hand_under_the_clones_directory_is_refused
+   OUT guards::make_only_hooks::tests::a_write_into_a_project_repositorys_worktree_in_scratch_is_a_guard_write
+   OUT guards::static_runs_hooks::tests::the_crates_are_those_of_the_tree_the_make_runs_in
+== T313 ad21d5b4593330ef5 start=2026-11-27T03:10:44.234Z edited=['guard:guards/pool_idle_hooks', 'shared:builder_queue', 'task:builder_queue']
+   IN  guards::pool_idle_hooks::tests::the_escape_is_a_line_of_the_final_message_with_a_reason
+== T300 aa326dd9957673561 start=2026-11-27T01:21:29.603Z edited=['land:land/carry', 'land:land/carry/added', 'land:land/carry/files', 'land:land/carry/records', 'land:land/carry/words']
+   IN  land::carry::tests::a_code_conflict_stops_with_the_pick_standing_and_nothing_resolved
+   IN  land::carry::tests::files::words_are_merged_only_in_prose_and_never_by_choosing
+== T414 ab7d82d203d479d96 start=2026-11-27T03:45:28.164Z edited=['measure:measure/event_log', 'measure:measure/event_log/phase']
+   IN  measure::event_log::phase::tests::a_span_carries_its_kept_log
+== T367 a464c63e8c2166af6 start=2026-11-27T03:30:21.177Z edited=['rustc:rustc/kept', 'rustc:rustc/kept/alone', 'rustc:rustc/lint', 'rustc:rustc/prewarm']
+   IN  rustc::tests::prewarm::a_crate_that_names_itself_is_warmed_at_all_three_passes_and_the_lint_is_off_at_its_knob
+   IN  rustc::tests::prewarm::a_red_build_or_pass_keeps_no_key_and_a_pre_warm_told_alone_leaves_its_key_as_it_was
+   IN  rustc::tests::prewarm::the_pre_warm_keeps_the_keys_a_builders_first_test_build_and_lint_are_told_alone_by
+   IN  rustc::tests::prewarm::it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothing
+   IN  rustc::tests::prewarm::the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents
+   IN  rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done
+   IN  rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
+== T394 a0f76779b7e2b197f start=2026-11-27T00:49:46.618Z edited=['gate:lib', 'task:', 'task:builder_brief', 'task:builder_done', 'task:builder_tree', 'task:lib', 'task:task_unstart']
+   IN  task_unstart::tests::a_start_is_undone_and_the_log_s_pair_reads_as_no_start
+== T332 a7da703dea72b63d2 start=2026-11-27T00:24:28.956Z edited=['shared:guards/event_log_hooks', 'shared:guards/event_log_hooks/pool']
+   IN  guards::event_log_hooks::tests::pool::a_second_handouts_phase_line_carries_the_second_task
+   IN  guards::event_log_hooks::tests::pool::the_start_in_force_stands_where_the_pool_names_no_holder_or_the_builder_started_later
+== T305 ab344f260fbc1293a start=2026-11-26T17:13:29.424Z edited=['land:land', 'land:land/cheap', 'reviews:reviews/ledger_passes', 'reviews:reviews/ledger_passes/left', 'reviews:reviews/ledger_passes/left/pool']
+   IN  reviews::ledger_passes::left::pool::tests::a_builder_s_pass_from_its_pool_tree_is_its_task_s_landing_s_and_no_other_s
+   IN  reviews::ledger_passes::left::pool::tests::a_pass_with_no_first_record_and_a_ticked_holder_s_pass_still_refuse
+   IN  land::carry::tests::a_clean_carry_is_verified_and_says_so_in_one_line
+== T336 a872dd3f7792cabc5 start=2026-11-26T21:41:35.106Z edited=['rustc:rustc', 'rustc:rustc/phase', 'rustc:rustc/prewarm', 'rustc:rustc/slot', 'rustc:rustc/stale', 'task:builder_tree']
+   IN  rustc::tests::stale::a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked
+   IN  rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done
+   IN  rustc::tests::stale::a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more
+== T307 a6b2e74e582293bc3 start=2026-11-27T03:11:31.353Z edited=['cohort:push', 'land:land', 'land:land/cheap', 'land:land/phase', 'task:tick']
+   IN  tick::tests::the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded
+   IN  land::phase::tests::a_landing_of_two_tasks_names_both_in_its_end
+   IN  land::tests::a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing
+   IN  land::tests::fix::a_landing_that_closes_its_feature_carries_its_fix
+== T346 a6ee3e67ad36330bd start=2026-11-27T00:24:18.998Z edited=['measure:measure/task_time/book', 'measure:measure/task_time/book/resumed_tests', 'measure:measure/task_time/tier_tests', 'measure:measure/task_time/tiers', 'measure:measure/task_time/top', 'measure:measure/where_time', 'measure:measure/where_time/columns/flight']
+   IN  measure::task_time::book::resumed_tests::a_resumed_builder_is_booked_in_every_span_and_stopped_between_them
+   IN  measure::where_time::tests::the_columns_book_make_runs_compile_and_until
+== T391 a84cc84efc8510ec1 start=2026-11-27T01:05:38.995Z edited=['measure:measure/task_time', 'measure:measure/task_time/book/tier', 'measure:measure/task_time/held', 'measure:measure/task_time/held_tests', 'measure:measure/task_time/pool_tests', 'measure:measure/task_time/progress', 'measure:measure/task_time/tiers', 'measure:measure/where_time']
+   IN  measure::task_time::pool_tests::a_pool_tree_s_build_is_its_holder_s_whatever_task_its_line_names
+== T307 a5b03fe73a35c3709 start=2026-11-27T03:23:34.684Z edited=['land:land', 'land:land/cheap', 'plan:plan', 'plan:plan/inside', 'plan:plan/lint', 'plan:plan/status', 'plan:plan/template', 'plan:plan/withdrawn', 'task:', 'task:task_withdraw']
+   IN  plan::inside::tests::make_decide_holds_a_built_here_line_to_an_open_task_with_an_unfilled_stub
+   IN  tick::tests::a_task_built_inside_another_s_section_closes_with_it
+   IN  plan::tests::withdrawn::a_withdrawn_task_s_removed_stub_holds_no_later_tick
+== T413 a6714d8d562a66a4b start=2026-11-27T04:29:14.547Z edited=['land:land', 'land:land/cheap', 'land:land/cheap/push_parity', 'land:land/parity']
+   IN  land::cheap::tests::push_parity::another_feature_in_progress_that_the_delta_touches_is_refused_unless_its_status_closes_it
+   IN  land::cheap::tests::push_parity::a_pass_the_landing_s_last_write_does_not_take_refuses_before_the_ticks
+   IN  land::cheap::tests::push_parity::a_clone_whose_history_shares_no_commit_with_main_s_is_refused_before_anything_is_written
+   IN  land::cheap::tests::push_parity::a_batch_landing_whose_second_task_s_block_changed_since_its_review_is_refused_in_the_first_pass
+   IN  land::cheap::tests::push_parity::the_feature_pointer_naming_a_feature_in_progress_is_refused
+   IN  land::cheap::tests::push_parity::the_landing_s_write_takes_its_own_pass_and_leaves_an_untraced_one_owed
+== T313 aa9fa78ca67629ea9 start=2026-11-27T03:36:31.019Z edited=['guard:guards/pool_idle_hooks', 'shared:builder_queue', 'task:builder_brief', 'task:builder_done', 'task:builder_queue']
+   IN  builder_brief::tests::the_entry_a_brief_serves_is_on_the_log_and_on_its_done_line
+== T369 a982ff407ca39a64e start=2026-11-27T04:43:31.255Z edited=['land:land/bundle', 'shared:speckit/marks', 'task:set_down', 'task:task_start', 'task:task_start/bundle', 'task:task_unstart']
+   IN  task_unstart::tests::a_released_pool_tree_s_start_outlives_the_clone_s_undo_until_the_landing
+   IN  task_unstart::tests::a_task_started_in_two_trees_keeps_each_tree_s_mark
+== T313 a09656496b983a830 start=2026-11-27T01:35:53.228Z edited=['gate:lib', 'guard:guards/pool_idle_hooks', 'shared:builder_queue', 'task:', 'task:builder_done', 'task:builder_queue', 'task:builder_tree', 'task:lib']
+   IN  builder_queue::tests::a_malformed_line_is_an_error_naming_the_line
+   IN  builder_queue::tests::an_entry_is_appended_as_one_line_or_refused
+   IN  builder_queue::tests::the_queue_is_listed_with_each_state_computed
+   IN  builder_queue::tests::the_next_entry_is_named_with_its_command_and_what_it_passed_over
+== T383 a77dccef3e6c10f5e start=2026-11-27T00:15:00.245Z edited=['shared:guards/event_log_hooks/reversal', 'shared:session']
+   IN  guards::event_log_hooks::reversal::tests::the_needle_is_the_path_only_where_it_has_one_spelling
+== T274 abf03cd7b9c532454 start=2026-11-26T20:40:13.438Z edited=['measure:measure', 'measure:measure/sampler', 'measure:measure/sampler/report', 'task:builder_tree']
+   IN  measure::sampler::tests::a_sample_reads_the_cgroup_and_proc_and_leaves_out_what_its_file_does_not_give
+   IN  measure::sampler::tests::the_loop_samples_until_its_hours_are_up_and_removes_its_pid_file
+   IN  measure::sampler::tests::the_report_s_rows_are_the_counts_held_and_its_arithmetic_holds
+   IN  measure::sampler::tests::run_is_the_loop_as_this_process_and_the_door_finds_the_clone
+   IN  measure::sampler::tests::a_second_start_says_one_is_running_and_a_stop_ends_it
+== T316 a62d36270f44f3749 start=2026-11-26T18:51:44.773Z edited=['core:lib', 'measure:measure/where_time/columns', 'rustc:rustc', 'rustc:rustc/kept', 'rustc:rustc/prewarm', 'rustc:rustc/runlock', 'rustc:rustc/slot', 'shared:lib', 'task:builder_tree']
+   IN  rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once
+== T419 a919ba33f238d03b3 start=2026-11-27T03:51:14.105Z edited=['land:land/carry', 'land:land/carry/sections', 'land:land/carry/spec', 'plan:plan', 'plan:plan/approach']
+   IN  land::carry::tests::spec::sections_merged_takes_each_side_s_change_and_stops_on_a_choice
+   IN  land::carry::tests::spec::a_plan_section_both_sides_changed_stops
+   IN  land::carry::tests::a_carry_outside_the_clone_keeps_the_done_ref_the_clone_still_waits_on
+== T104 a2360ae2ff3f5fc95 start=2026-11-26T17:37:55.602Z edited=['guard:guards/idle_tests_hooks']
+   IN  guards::idle_tests_hooks::tests::a_state_file_being_rewritten_is_read_whole
+== T394 aa10236f91282b1f5 start=2026-11-27T01:07:03.770Z edited=['land:land/carry', 'task:builder_done', 'task:builder_tree']
+   IN  land::carry::tests::a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task
+== T298 a982c4d8de877ed1d start=2026-11-26T18:57:42.865Z edited=['measure:measure/events', 'measure:measure/task_time', 'measure:measure/task_time/asked', 'measure:measure/task_time/book', 'measure:measure/task_time/book/cats', 'measure:measure/task_time/book/clue', 'measure:measure/task_time/book/tier', 'measure:measure/task_time/book/window', 'measure:measure/task_time/tier_tests', 'measure:measure/task_time/tiers']
+   IN  measure::task_time::book::tests::the_kinds_and_the_runs_are_named
+   IN  measure::task_time::tests::a_landed_task_carries_its_time_before_the_window
+   IN  measure::task_time::tests::one_table_across_features_each_landed_task_its_own
+   IN  measure::task_time::tier_tests::the_report_opens_with_the_window_s_table_and_a_line_a_landed_task
+== T325 a60f86a2b2198d30b start=2026-11-26T23:41:46.045Z edited=['checks:checks/guard_deps/feature_sets', 'rustc:rustc/lint']
+   IN  checks::guard_deps::feature_sets::a_root_that_gets_fewer_features_is_told_its_line
+== T359 a334fd82f5801a60e start=2026-11-26T23:29:18.309Z edited=['guard:guards/static_runs_hooks', 'plan:plan/status', 'plan:plan/template', 'plan:plan/withdrawn', 'task:task_withdraw']
+   IN  guards::static_runs_hooks::tests::an_unstart_and_a_new_start_restart_no_count
+   IN  plan::tests::withdrawn::a_withdrawn_task_s_removed_stub_holds_no_later_tick
+== T359 a224927e1b5286578 start=2026-11-26T22:29:45.499Z edited=['gate:lib', 'shared:speckit/marks', 'task:task_unstart', 'task:task_withdraw']
+   IN  task_unstart::tests::a_start_is_undone_and_the_log_s_pair_reads_as_no_start
+   IN  task_withdraw::tests::a_filed_task_is_ticked_withdrawn_and_its_stub_removed
+== T370 a9091232cf0fbb513 start=2026-11-26T23:24:00.356Z edited=[]
+   OUT tempdir::tests::the_temp_directory_is_listed_once_a_process
+== T359 ae861075c54e4033b start=2026-11-26T22:53:33.528Z edited=['core:logs', 'guard:guards/static_runs_hooks', 'land:land/ready', 'measure:measure/feature_report/sources', 'measure:measure/task_time', 'measure:measure/where_time', 'plan:plan', 'plan:plan/approach', 'plan:plan/status', 'plan:plan/withdrawn']
+   IN  plan::tests::withdrawn::a_withdrawn_task_s_removed_stub_holds_no_later_tick
