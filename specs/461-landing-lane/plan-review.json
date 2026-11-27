@@ -3,169 +3,169 @@
  "blocks": {
   "preamble": {
    "sha256": "c40f7b5e66dd628c88639cf0f0a18d176236d1132ef6d2174d8ef0a5774664ea",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "6a5265834665e059d6daec9bddf00651e439c967d88d60aca749383b7bc14588",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
    "sha256": "8ac822160561cb3b2ad3e36869a830649a95f37bb590bd8a3471120173d0ea21",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "e23545ef968a0c02929de44c74c86bbff3edca659dfbddf9258eec4821fcf930",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Design decisions": {
    "sha256": "f24866c47d7c713a2cd9d69bf077768c028f510aea7ab243f14b91f655f61015",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D1 - the lane's tree: the existing landing worktree, adopted into the pool as the lane's reserved tree": {
    "sha256": "81b0cbf0a5fc2b9beb5d25b796f455ebb0a68464d4a7a5184a510a5a9953e659",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D2 - what drives the lane: a detached runner of our own, `l7r-gate lane --work`": {
    "sha256": "0fcfa7ee909c6d1495850cb7a44ef0b4d10e85957fa2dcbc2568769f85869b2f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D3 - the hand-in's \"rebase\": the builder's diff applied onto `origin/main` with the carry's rules, then the first pass, then the commit": {
    "sha256": "9b0f11c475d137eb2231b3001046018771d6a6b66948f3c78fdfa9b1d8892e1a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D4 - the first pass at hand-in: what a builder can answer is asked; what is the lane's is not": {
    "sha256": "f928692e3ed3daf42c7e1e48a0ea5d5e67f10d806e4cd557065c74243c457dee",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D5 - when the lane starts a batch, and what it holds (FR-004, 451 T415)": {
    "sha256": "58ba631527f9a3fe047efa6bbb4769c88d375f5cb7033330a7e105acd6216b2a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D6 - a red batch: attribute, else halve; eject; land the rest (US4)": {
-   "sha256": "3bc561c245ff83d8cf9615e0a182b384f8ac90124eee3dd3ad026b122e060e5f",
-   "verdict": "BLOCKED",
+   "sha256": "55904958dde13cbdd9886cb9b7cd5ec44eaa2e4d3c566111c3ba168bf6dd5d93",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D7 - the repair: a queue entry a fresh builder takes (US4, US5)": {
    "sha256": "b0294fd89c17da9ce05981f1fae3b34dbb903c93e66fbe166735ed8b17abc6dc",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D8 - the lane's states and its log": {
    "sha256": "6b5acee13ff4c620c8385982bf0b3d2639405e9b5325cec8847848c65471445f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D9 - the coordinator's wake-up: one background command, one status line a batch (FR-005)": {
    "sha256": "702d5c8fbeb8c7f07d4116c04ab369e7bfacb517532d25d1f129b824d4d364d8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D10 - FR-001's gate-write guard and 451 T405's tree check, by construction plus a fixture": {
    "sha256": "8c6970cf0db562918e7302802d98c66cd8376dc89b83e2be0db3e8de89b6f72c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D11 - what retires, and when (451 T302 parts 1 and 4)": {
    "sha256": "81d4d7332ad2f1dafe70e7796d74bac51163a1bb3d08c79f92558cbeb5ec620e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D12 - the measurement (FR-006, FR-007, FR-010)": {
    "sha256": "1b7f183917d3af5094fafba9b2b7a950d0e0bb5c5ac58bfccfb10c5be9616212",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D13 - the coordinator's own commits go out before a builder builds on them": {
    "sha256": "14d64972f4519556f86b0b608bb473f39bf4a26d6b7fab048942e5d5d18624a8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D14 - done refs, successors and repairs": {
    "sha256": "6267a5e470cb7fa0a87a21e267e29eeffaa309adbb8e559a4537e695ba71389b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### D15 - where the code lives": {
    "sha256": "f58219de4a412a5e0748dc2186c2b8158181dd252004325b749c88a2c2a54105",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## The phases - each usable on its own": {
-   "sha256": "84f40c7109a6990511333282a86874c93f05777ad3bcc974381828de83990cce",
-   "verdict": "BLOCKED",
+   "sha256": "862941e5caae11e6d6dd92708fcd621c1be1b5a6fff885bbfa277d05143c501e",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## What retires (451 T302 part 4) and when": {
    "sha256": "0c8fc0bcc7e1cf7b6dac4bde2d15121862d483287b31ce97e9e707793d99316e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## The 451 parts this feature takes over": {
    "sha256": "225d1e49127008fcda7ac8439a337811691ad874a3cc16cda6d35c6b562b11bd",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Risks": {
    "sha256": "1324ccc4656eb33adeb299d36bc9e8881829e3b3d9f455d95a8445f593c4f556",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Found and left": {
    "sha256": "77e25fab526507384bde6a03c5be482b708cbfd8c42ebe9fd3245218a2d0a3eb",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "3c47e7f169a12483652c425a6a4dd5505b0c3940672d2cc7bf1277618e6f2fd7",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
    "sha256": "06fde1deedd38412518abee97d9d8a9e77110a61c02b26f57c2938b91739305e",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "## Knobs this plan takes (the record could not settle them)": {
-   "sha256": "6c0cbe391a14c6b9871054f61a24a36e59d98b81e0f68af812cf3369453899e4",
-   "verdict": "BLOCKED",
+   "sha256": "44c5f28a35622ea29b6708a66e5c8d6aad828ac4b6cf3f5b58d2d1ce5d45c4a3",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   }
@@ -724,6 +724,163 @@
      "summary": "The knob table (L7R_LANE_TREE, LANE_MAX, LANE_WAIT_S, LANE_RETRY, LANE_IDLE_S, HAND_IN_BASE, LANE_WAIT_MAX, LANE_REPAIR_FIRST, the trees-held band, LIKE_LOAD_BAND), each labeled.",
      "class": "within",
      "why": "Each knob belongs to a decision ruled above; labeled GUESS or the easier route."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Design decisions",
+    "## Found and left",
+    "## Knobs this plan takes (the record could not settle them)",
+    "## Project Structure",
+    "## Risks",
+    "## Summary",
+    "## Technical Context",
+    "## The 451 parts this feature takes over",
+    "## The phases - each usable on its own",
+    "## What retires (451 T302 part 4) and when",
+    "### D1 - the lane's tree: the existing landing worktree, adopted into the pool as the lane's reserved tree",
+    "### D10 - FR-001's gate-write guard and 451 T405's tree check, by construction plus a fixture",
+    "### D11 - what retires, and when (451 T302 parts 1 and 4)",
+    "### D12 - the measurement (FR-006, FR-007, FR-010)",
+    "### D13 - the coordinator's own commits go out before a builder builds on them",
+    "### D14 - done refs, successors and repairs",
+    "### D15 - where the code lives",
+    "### D2 - what drives the lane: a detached runner of our own, `l7r-gate lane --work`",
+    "### D3 - the hand-in's \"rebase\": the builder's diff applied onto `origin/main` with the carry's rules, then the first pass, then the commit",
+    "### D4 - the first pass at hand-in: what a builder can answer is asked; what is the lane's is not",
+    "### D5 - when the lane starts a batch, and what it holds (FR-004, 451 T415)",
+    "### D6 - a red batch: attribute, else halve; eject; land the rest (US4)",
+    "### D7 - the repair: a queue entry a fresh builder takes (US4, US5)",
+    "### D8 - the lane's states and its log",
+    "### D9 - the coordinator's wake-up: one background command, one status line a batch (FR-005)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "the lane's tree is the existing -land worktree, adopted into the pool under a reserved holder; T525's removal replaced",
+     "class": "within",
+     "why": "FR-003 asks for the lane's own worktree and leaves which one to the plan; nothing asked is dropped."
+    },
+    {
+     "id": "D2",
+     "summary": "a detached runner l7r-gate lane --work of the project's own, flock-held, restartable from its log",
+     "class": "within",
+     "why": "The sketch: 'run as a script in its own worktree rather than in my turns'; FR-009's reuse question is answered and priced."
+    },
+    {
+     "id": "D3",
+     "summary": "the hand-in's rebase is the builder's diff applied onto origin/main with the carry's rules (clone HEAD in phase 1), then the first pass, then the commit",
+     "class": "within",
+     "why": "FR-002's order kept literally; the no-rewrite rule forbids git rebase, and applying onto current main is what rebasing onto it delivers. Phase 1's base is where work lands while the coordinator still carries."
+    },
+    {
+     "id": "D4",
+     "summary": "the hand-in's first pass asks what the builder can answer; another writer's changes, the mark's hold, the tripwire and the gate's stamp rows are left to the lane's landing, asked there again",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Asked literally in a builder's own tree, writer_refusal and the hold refuse for reasons no builder can cure, defeating the sketch's purpose ('bookkeeping refusals then get fixed by the builder that has the context'); every check left out is still asked at the lane's make land, so FR-008 loses nothing. No coverage runs, as FR-002 says."
+    },
+    {
+     "id": "D5",
+     "summary": "a batch starts at once on an idle lane; same-feature hand-ins in order up to LANE_MAX=6, GUESS knobs seeded from 458's absent finding",
+     "class": "within",
+     "why": "FR-004 makes size and start a knob seeded from 458; the seeding is stated and the order is FR-003's."
+    },
+    {
+     "id": "D6",
+     "summary": "red batch: attribute from the gate's record, else halve; eject; land the rest; tripwire keyed by task's second pin; the stand-down only for a run in the lane's tree with an open batch id or started by the lock-holding runner; a one-change red run pins why red",
+     "class": "within",
+     "why": "Round 2's two required changes are made: step 4 scopes second_red_gate's stand-down to a lane-tree run with a batch open in lane.jsonl or the lock holder's child, a by-hand make land with the variable meets the gate as today (phase 2's red-first fixtures, both ways), and an ejection after its own one-change red run pins why red. FR-004 and FR-008 literally."
+    },
+    {
+     "id": "D7",
+     "summary": "an ejected change becomes a repair entry in l7r-lane/repairs.jsonl a fresh builder takes; every integration wake's work goes to a fresh agent the coordinator dispatches",
+     "class": "within",
+     "why": "US4/US5 and the sketch: 'the ejected task returns to the queue as a repair entry'; the coordinator carries one line and one dispatch."
+    },
+    {
+     "id": "D8",
+     "summary": "computed states and one jsonl line a transition; each attempt its own file",
+     "class": "within",
+     "why": "Serves US4/FR-004's attribution and the night's lost causes; no behavior beyond the asked lane."
+    },
+    {
+     "id": "D9",
+     "summary": "make lane-wait in the background wakes the coordinator per batch and for US5's cases; a Stop rule keeps it armed",
+     "class": "within",
+     "why": "FR-005 literally; the Stop rule only enforces the asked wake-up. The knobs table's Stop-rule line now matches D9's body (round 2's aside)."
+    },
+    {
+     "id": "D10",
+     "summary": "FR-001 by construction plus a two-tree guard fixture; T405 by option (C)",
+     "class": "within",
+     "why": "FR-001 taken over as the spec says; the fixture enforces it."
+    },
+    {
+     "id": "D11",
+     "summary": "T302 part 1 confirmed by reading; in phase 4 make land outside the lane refused (LAND_HERE_OK recorded), land-alone steps 1-6 retired, step 7 kept as take-tip.sh, writers.rs kept",
+     "class": "within",
+     "why": "The spec's takeover of T302 parts 1 and 4; FR-008's checks kept; the recorded escape covers only a broken lane."
+    },
+    {
+     "id": "D12",
+     "summary": "one measurement script over both windows; a like window by trees held within 0.5 and median load within 0.75-1.25 of the night's; tokens by actor over window totals",
+     "class": "within",
+     "why": "FR-006, FR-007 and FR-010 literally; the bands are labeled GUESS knobs and both concurrencies stated beside each figure."
+    },
+    {
+     "id": "D13",
+     "summary": "a handout refused while the clone holds unpushed commits, naming sync-with-main.sh done; the waits= wait measured in phase 5",
+     "class": "within",
+     "why": "Serves US1 ('nothing it writes waits on a gate') and D3's base; the premise it moves is measured, not built around."
+    },
+    {
+     "id": "D14",
+     "summary": "a successor builds on its earlier done commit by a no-commit apply and supersedes the ref; an open batch's shas fixed when it forms",
+     "class": "within",
+     "why": "Keeps trees from idling on a landing, the request's purpose; within FR-002/FR-003."
+    },
+    {
+     "id": "D15",
+     "summary": "a new lane crate and the hand-in in the land crate; file-scale plan",
+     "class": "within",
+     "why": "Where code lives; no fidelity content."
+    },
+    {
+     "id": "phases",
+     "summary": "five phases each usable alone, each with its Verify line; phase 2 adds the stand-down's red-first fixtures",
+     "class": "within",
+     "why": "Sequencing of the asked work; the added fixtures enforce FR-008 and round 2's item 1."
+    },
+    {
+     "id": "retires",
+     "summary": "what retires and when (451 T302 part 4), the -land worktree kept",
+     "class": "within",
+     "why": "Follows D1 and D11."
+    },
+    {
+     "id": "takeover",
+     "summary": "the 451 parts taken over and T525 answered",
+     "class": "within",
+     "why": "As the spec's takeover list names them."
+    },
+    {
+     "id": "XVI readings",
+     "summary": "the Constitution Check's three readings (a) D7's routing, (b) D6's tripwire by task, (c) D3's rebase",
+     "class": "within",
+     "why": "Each is the literal ask under a constraint the GM set; judged at D3, D6 and D7 above."
+    },
+    {
+     "id": "knobs",
+     "summary": "the knob table (LANE_MAX, LANE_WAIT_S, LANE_RETRY=0, LANE_IDLE_S, HAND_IN_BASE, LANE_WAIT_MAX none, LANE_REPAIR_FIRST, the two likeness bands)",
+     "class": "within",
+     "why": "Each labeled; FR-004 makes the batch a knob; the Stop-rule line now matches D9."
     }
    ]
   }
