@@ -575,3 +575,22 @@ fn a_handout_asks_for_the_clone_s_sampler_and_never_fails_on_it() {
     assert!(super::sampler_words(gate(), "0").is_empty());
     assert!(super::sampler_words(None, "").is_empty());
 }
+
+#[test]
+fn a_warm_handout_empties_the_tree_s_store_of_rendered_messages() {
+    // 451 T486: a pool tree's `<git dir>/hooks-test/messages` outlived its handout, so `make guard-messages` there named wordings its
+    // new HEAD does not render (T485's two keys, a pre-T282 wording; t269's nine of T483's uncarried edit)
+    let (dir, root) = world("pool-messages");
+    let e = env(&dir);
+    let b1 = dir.join("repo-b1");
+    assert_eq!(run(&words(&["take", "T01", "9001-x"]), &root, &e).code, 0);
+    let store = super::tree_git_dir(&b1).join("hooks-test/messages");
+    put(
+        &store,
+        "escalation-hooks.sh.jsonl",
+        "{\"key\": \"a01405381091d548\"}\n",
+    );
+    assert_eq!(run(&words(&["release", "T01", "9001"]), &root, &e).code, 0);
+    assert_eq!(run(&words(&["take", "T02", "9001-x"]), &root, &e).code, 0);
+    assert!(!store.join("escalation-hooks.sh.jsonl").exists());
+}

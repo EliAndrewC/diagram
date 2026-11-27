@@ -35,7 +35,7 @@ use history::History;
 use record::Stop;
 use sections::{blocks, digest, task_sections, wording_only};
 pub use status::Shared;
-use status::{block_status_of, owed, ruled_tasks, RECORD};
+use status::{owed, RECORD};
 use task::resolve;
 pub use task::touched_features;
 
@@ -206,11 +206,6 @@ fn hint_of(out: &str) -> String {
     }
 }
 
-fn read_review(spec_dir: &Path) -> Value {
-    serde_json::from_str(&std::fs::read_to_string(spec_dir.join(RECORD)).unwrap_or_default())
-        .unwrap_or(json!({}))
-}
-
 /// Where a verb's spec directory is, or the refusal saying it is not exactly one.
 fn dir_of(feature: &str, root: &Path, prefix: &str) -> Result<PathBuf, crate::Reply> {
     resolve(feature, root).ok_or_else(|| {
@@ -365,24 +360,12 @@ fn bundle_refusal(
 
 fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>) -> crate::Reply {
     let plan = dir.join("plan.md");
-    let review = read_review(dir);
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
     if let Some(ahead) = approach::future_refusal(&text, None) {
         return fail(format!("plan-delta: {ahead}\n"), 1);
     }
     let history = History::new(&plan, "HEAD");
-    let sections = task_sections(&text);
-    let ruled = ruled_tasks(&review, &text, &sections, Some(&history));
-    let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap_or_default();
-    let (mut keys, blocked) =
-        block_status_of(&review, &text, &sections, &ruled, Some(&history), &done);
-    for key in blocked {
-        if !keys.contains(&key) {
-            keys.push(key);
-        }
-    }
-    // a section still the `make task-add` template rides in no bundle (451 T462): no reviewer judges it, no round is counted for it
-    let keys = status::written_only(keys, &text, &std::collections::BTreeSet::new());
+    let keys = status::delta_keys(dir, &history);
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     if keys.is_empty() {
         return said(format!(

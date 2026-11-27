@@ -511,6 +511,53 @@ fn in_scope(
         .collect()
 }
 
+/// The blocks `make plan-delta` owes a review (FR-043): the whole plan's owed and BLOCKED keys, but an unwritten section's, read through
+/// [`in_scope`] with every task in scope - so a `(removed)` block a task's CLEAR verdict answers for is owed there exactly as a tick
+/// owes it. WHY (451 T487, 2026-11-27): the two readers asked different questions of one record - plan-delta owed `(removed) ### T475
+/// (<why: ...>)`, T475's removed stub heading, which no tick held (T475's CLEAR task verdict answers for it), and a reviewer spent the
+/// round bb51ce5d2c on it.
+pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
+    let read = |f: &str| std::fs::read_to_string(spec_dir.join(f)).unwrap_or_default();
+    let text = read("plan.md");
+    let review: Value = serde_json::from_str(&read(RECORD)).unwrap_or_else(|_| json!({}));
+    let sections = task_sections(&text);
+    let ruled = ruled_tasks(&review, &text, &sections, Some(history));
+    let (mut keys, blocked) = block_status_of(
+        &review,
+        &text,
+        &sections,
+        &ruled,
+        Some(history),
+        &read("plan-done.md"),
+    );
+    for key in blocked {
+        if !keys.contains(&key) {
+            keys.push(key);
+        }
+    }
+    // a section still the `make task-add` template rides in no bundle (451 T462): no reviewer judges it, no round is counted for it
+    let keys = written_only(keys, &text, &BTreeSet::new());
+    let tasks = l7r_shared::speckit::tasks::joined(
+        &read("tasks.md"),
+        &read(l7r_shared::speckit::tasks::DONE),
+    );
+    let mut every = scope_of(&tasks, &[]);
+    every.tasks.extend(sections.keys().cloned());
+    for key in &keys {
+        let title = heading_text(key.strip_prefix(REMOVED).unwrap_or(key));
+        every
+            .tasks
+            .extend(leading_tasks(&title).into_iter().map(str::to_owned));
+    }
+    in_scope(
+        keys,
+        &review,
+        &Layout::of(&review, &text, &sections),
+        &every,
+        Some(history),
+    )
+}
+
 /// [`judge`], the blocks read only as far as `scope` reaches ([`in_scope`]); None reads every block.
 pub(super) fn judge_in(
     plan: Option<&[u8]>,

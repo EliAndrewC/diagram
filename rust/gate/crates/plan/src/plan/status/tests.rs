@@ -580,3 +580,29 @@ fn a_quiet_bundle_part_b_leaves_its_first_task_s_section_reviewed() {
     let text = plan.replace("### T05 Decisions", &format!("{block}### T05 Decisions"));
     assert!(task_current(&review, &text, "T05", None));
 }
+
+#[test]
+fn plan_delta_and_a_tick_owe_a_removed_stub_block_alike() {
+    // 451 T487: T475's removed stub heading, answered by T475's CLEAR task verdict, was owed by `make plan-delta` and by no tick
+    let plan = "# p\n\n### T02 (filed from a finding)\n\nwhy\n\n### T02 Approach (checklist part A)\n\n1. The well (FR-002).\n";
+    let dir = feature(Some(plan), None);
+    std::fs::write(dir.join("tasks.md"), "- [ ] T02 b\n- [ ] T03 c\n").unwrap();
+    record(&dir, &current(&[], "CLEAR", plan), "spec-fidelity", None).unwrap();
+    let sha = digest(task_sections(plan)["T02"].as_bytes());
+    super::super::record::record_task(
+        &dir,
+        "T02",
+        &json!({"section_sha256": sha, "decisions": []}),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    let path = dir.join("plan-review.json");
+    let mut review: Value = serde_json::from_str(&std::fs::read_to_string(&path).unwrap()).unwrap();
+    review["blocks"]["### T02 (<why: the finding or measurement that files it>)"] =
+        json!({"sha256": digest(b"a stub"), "verdict": "CLEAR"});
+    std::fs::write(&path, review.to_string()).unwrap();
+    let history = History::new(&dir.join("plan.md"), "HEAD");
+    assert_eq!(super::delta_keys(&dir, &history), Vec::<String>::new());
+    assert_eq!(super::owed_for(&dir, &["T02"]), None);
+}

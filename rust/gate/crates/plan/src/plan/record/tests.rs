@@ -368,6 +368,16 @@ fn a_block_review_names_each_block_and_a_removal_leaves_the_record() {
     .unwrap();
     assert_eq!(blocked["verdict"], "BLOCKED");
     assert!(read(&dir)["blocks"].get("## A").is_some());
+    // 451 T487: a CLEAR on a removed block's older text leaves the verdict of the block of that key the plan still holds
+    record_blocks(
+        &dir,
+        &json!({"blocks": {"(removed) ## A": "removed"}, "decisions": []}),
+        sf,
+        None,
+    )
+    .unwrap();
+    assert_eq!(read(&dir)["blocks"]["## A"]["sha256"], sha.as_str());
+    std::fs::write(dir.join("plan.md"), "# p\n\n## B\n\ny\n").unwrap();
     record_blocks(
         &dir,
         &json!({"blocks": {"(removed) ## A": "removed"}, "decisions": []}),

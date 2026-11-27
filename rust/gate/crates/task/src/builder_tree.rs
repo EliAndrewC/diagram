@@ -321,6 +321,8 @@ pub(crate) fn tree_git_dir(tree: &Path) -> PathBuf {
 }
 
 const BASE: &str = "prewarm-base";
+/// The tree's store of rendered guard messages, under its own git directory (the guard's `suite_tools::messages::store`).
+const MESSAGES: &str = "hooks-test/messages";
 const PREWARM_LOG: &str = "prewarm.log";
 /// What a crate's build reads: the crates and the workspace's manifests, cargo's configuration and the toolchain's pin.
 const BUILT_FROM: [&str; 4] = ["rust", ".cargo", "rust-toolchain", "rust-toolchain.toml"];
@@ -459,6 +461,9 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
         if !env.discard.is_empty() {
             note(p, env, "discard", &tree, &env.discard);
         }
+        // the tree's store of rendered guard messages is its last holder's (451 T486): left, `make guard-messages` named wordings this
+        // HEAD does not render (T485's two keys, 2026-11-27); emptied, the next `make hooks-test` here fills it from this HEAD's suites
+        let _ = std::fs::remove_dir_all(tree_git_dir(&tree).join(MESSAGES));
         feature.clone_into(&mut trees[i].feature);
         trees[i].tasks = tasks.to_vec();
         trees[i].since.clone_from(&env.now);

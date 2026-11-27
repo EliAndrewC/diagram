@@ -7,7 +7,10 @@ use serde_json::json;
 use super::super::record::{record, record_task};
 use super::super::sections::{digest, task_sections};
 use super::super::tests::{current, feature_at, git, repo, within, PLAN, PLAN_TASKS, TASKS};
-use super::{active_task, archive, decision_refusal, owed, push_owed, resolve, touched_features};
+use super::{
+    active_task, archive, decision_refusal, owed, owed_for, push_owed, resolve, touched_features,
+    RECORD,
+};
 use crate::checks::scratch;
 
 fn activate(root: &Path) {
@@ -408,4 +411,43 @@ fn a_bundle_block_stays_while_any_task_it_lists_is_open() {
     assert_eq!(archive(&dir, Some("2026-01-02")), ["T02"]);
     let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(!text.contains("part B") && !text.contains("second"));
+}
+
+#[test]
+fn a_heading_that_names_a_ticked_task_leaves_none_of_its_own_section_behind() {
+    // 451 T487 (2026-11-27, 11:29Z and 11:36Z): T475's heading named 451 T451, ticked and with no section of its own, so T451's
+    // "section" was T475's heading block alone; it was taken first, T475's whole section starting at the same byte was skipped as
+    // inside it, and the archive left `### T475 Approach` in plan.md - judged alone, by a block verdict a carry had made stale, it
+    // refused every later tick of the landing while `make plan-delta` (T475's section current) owed nothing
+    let plan = "# p\n\n### T02 (filed from T01's finding)\n\nwhy\n\n### T02 Approach (checklist part A)\n\n1. The well by the lane (FR-002).\n\n## T03 open\n\nlater\n";
+    let root = repo();
+    let dir = feature_at(&root, Some(plan), None, "375-x");
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [x] T01 a\n- [x] T02 b\n- [ ] T03 c\n",
+    )
+    .unwrap();
+    record(&dir, &current(&[], "CLEAR", plan), "spec-fidelity", None).unwrap();
+    let sha = digest(task_sections(plan)["T02"].as_bytes());
+    record_task(
+        &dir,
+        "T02",
+        &json!({"section_sha256": sha, "decisions": []}),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    // the block's own entry made stale, as T310's carry made T475's: a same-day verdict on the unfilled stub's text won the merge
+    let path = dir.join(RECORD);
+    let mut review: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&path).unwrap()).unwrap();
+    review["blocks"]["### T02 Approach (checklist part A)"]["sha256"] =
+        json!(digest(b"the stub's text"));
+    std::fs::write(&path, review.to_string()).unwrap();
+    archive(&dir, Some("2026-11-27"));
+    let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    assert!(
+        !text.contains("T02 Approach") && !text.contains("why\n") && text.contains("## T03 open")
+    );
+    assert_eq!(owed_for(&dir, &["T03"]), None);
 }

@@ -425,7 +425,9 @@ pub(super) fn record_blocks(
         .unwrap_or_else(|| unreachable!("blocks is an object"));
     for (key, sha) in named {
         if let Some(gone) = key.strip_prefix(REMOVED) {
-            if verdict == "CLEAR" {
+            // ...never the verdict of a block of the same key the plan still holds (451 T487): a removal judged on a stub's older
+            // text is no review of the filled block that replaced it under that heading
+            if verdict == "CLEAR" && !now.iter().any(|(k, ..)| k == gone) {
                 per_block.shift_remove(gone);
             }
         } else {

@@ -6963,41 +6963,77 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T485 to T481 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T485 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T486 (<why: the finding or measurement that files it>)
+### T486 (451 T485's keys were a pool tree's stale store of rendered guard messages, not a wording HEAD renders)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a warm handout (`make builder-tree`'s take, `rust/gate/crates/task/src/builder_tree.rs`) empties the tree's `<git dir>/hooks-test/messages` once the tree is at the clone's HEAD, so `make guard-messages` there reads only what this HEAD's suites render. Chosen over reading only renderings newer than HEAD's commit: a store a session clone filled before its own landing's commit is older than that HEAD and still owed, so a time filter could hide a real owed wording; an emptied store hides nothing, since the next `make hooks-test` fills it (a suite skipped on a shared stamp is filled from the keyed rendering, `suite_tools/messages/store.rs`'s `gather`). A cold handout makes a new worktree, whose git directory holds no store.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| empty the store at a warm take | `builder_tree::tests::a_warm_handout_empties_the_tree_s_store_of_rendered_messages` | n/a | none | `rm -r <git dir>/hooks-test/messages` by hand |
 
 ### T486 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make guard-messages` in a pool tree names only wordings its HEAD renders.
+2. **The constraints.** 451 FR-013 does not apply; no guard message changes; the shared stamps and keyed renderings (451 T281) stay as they are.
+3. **Where each comes from.** O: 451 T485's finding (two keys, `a01405381091d548` and `eee895a7b090e5af`, in the diagram-backlog-review and diagram-backlog-t271 stores; nine keys of T483's uncarried edit in t269's, observed 2026-11-27, method: each worktree's `escalation-hooks.sh.jsonl` read).
+4. **Do they describe the world here?** Yes: the red test puts a rendering in a held tree's store, releases it and takes it again; on the old code the file was still there (1 test failed, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task ONLY=...`)).
+5. **The order.** After T485; with T487 in one tree, no shared file.
+6. **The exits.** Green: the red test passes and the task crate's 147 tests pass (measured 2026-11-27, `make builder-checks`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The store is gone after a warm take (the test's last assertion).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A pool tree's `make guard-messages` named wordings as owed that HEAD does not render, and a message-check would have judged them.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
-### T487 (<why: the finding or measurement that files it>)
+### T487 (a removed stub's verdict and an archive split refused a 12-task landing's ticks twice while `make plan-delta` owed nothing)
+
+- **Approach**: traced on the real record and plan (observed 2026-11-27, method: each commit's `plan-review.json` entry for `### T475 Approach (checklist part A)` read with `jq` from e2e18eee43 to 3b773899aa, and a throwaway test replaying the landing's ticks over 23ca09d5d7's spec files with `task::archive`). Three causes, each fixed or filed:
+- the entry was set to the unfilled stub's digest (6b67b7e2) by T310's carry, cec429b447: T310's pool tree had reviewed T475's stub, and `merge.rs` gives a same-day tie to the incoming side. No removed verdict wrote it. Not fixed here: a merge tie-break that reads the merged plan is its own design. Filed as T495; lands before T484.
+- the ARCHIVE then left the block behind (`rust/gate/crates/plan/src/plan/task.rs`, `archivable`): T475's heading names 451 T451, a ticked task with no section of its own, so T451's "section" was T475's heading block alone. It was taken first, and T475's whole section, starting at the same byte, was skipped as inside it. The orphan `### T475 Approach`, judged alone by the stale entry, refused the ticks of T479, T481 and T310 (the log `land-b9b.log`; the guard log's eleven refusals at 11:29Z and 11:36Z, observed 2026-11-27, method: `~/.claude/guard-log` read for `T475 Approach`). `make plan-delta`, run before the landing, saw T475's section current under its task verdict. Fixed here: a section is skipped only where it lies wholly inside a taken one.
+- the brief's literal case (`record.rs`, `record_blocks`): a CLEAR on `(removed) <key>` deleted that key's entry even where plan.md still holds a block of that key. It did not fire tonight but would erase a live block's verdict. Fixed here: the entry is removed only where the plan holds no such block.
+- the readers' remaining difference (`status.rs`): `make plan-delta` owed a `(removed)` block that a task's CLEAR verdict answers for, which no tick owes; bb51ce5d2c was a review round spent on `(removed) ### T475 (<why: ...>)`. Fixed here: `status::delta_keys` reads plan-delta's keys through the tick's own `in_scope` with every task in scope, and `plan.rs`'s `plan_delta` asks it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the archive takes a task's whole section | `task::tests::a_heading_that_names_a_ticked_task_leaves_none_of_its_own_section_behind` | n/a | none | `make plan-delta` and a review of the orphan |
+| a removal keeps a live block's verdict | `record::tests::a_block_review_names_each_block_and_a_removal_leaves_the_record` | n/a | none | a review of the live block |
+| plan-delta asks the tick's question | `status::tests::plan_delta_and_a_tick_owe_a_removed_stub_block_alike` | n/a | none | a review of the removed block |
+
+### T487 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing's ticks refuse only what `make plan-delta` names, and plan-delta names nothing no tick would hold.
+2. **The constraints.** 451 FR-013 (landing speed); feature 375 FR-043 and FR-044 (the block review and the archive); 451 T84's scope rule and T359's withdrawn-stub exemption, kept.
+3. **Where each comes from.** O: the traces in the Approach above.
+4. **Do they describe the world here?** Yes: each red test failed on the old code - the archive test at its plan assertion (`### T02 Approach` left), the record test with the live entry gone (`Null`), the delta test owing 1 removed block where the tick owed 0, measured 2026-11-27 (`make rust-test ONLY=` on each).
+5. **The order.** After T485; before T495, whose merge fix this does not need.
+6. **The exits.** Green: the three tests pass and the plan crate's 234 tests pass, lint and format clean (measured 2026-11-27, `make builder-checks`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The replay's orphan is gone: the archive test's fixture, the landing's order in small, leaves no block of T02 and owes the next tick nothing.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The landing of 2026-11-27 was refused twice, nothing landed, with its batch gate green both times.
+
+**Found and left?**
+- `merge.rs`'s same-day tie lets a pool tree's verdict on a stub's text replace the clone's CLEAR on the filled block. Not fixed here: it needs the merged plan's text at merge time, its own design. Filed as T495; lands before T484.
+
+**Performance work?** yes - two refused landings' first passes, each a whole batch gate's wait (451 FR-013).
+
+
+### T495 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T487 Approach (checklist part A)
+### T495 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

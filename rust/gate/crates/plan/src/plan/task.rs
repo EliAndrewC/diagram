@@ -155,9 +155,15 @@ fn archivable(dir: &Path) -> Vec<String> {
             .map_while(Result::ok)
             .map(|m| m.as_str())
             .collect();
+        // a section is skipped only where it lies WHOLLY inside one already taken (451 T487): T475's heading named the ticked 451 T451,
+        // whose "section" was that heading block alone; taken first, it hid T475's whole section, which starts at the same byte, and the
+        // archive left `### T475 Approach` behind to refuse a landing's later ticks (2026-11-27)
+        let end = at.map(|a| a + sec.len());
         if ids.is_empty()
             || ids.iter().any(|i| !done.contains(*i))
-            || at.is_some_and(|a| taken.iter().any(|(lo, hi)| *lo <= a && a < *hi))
+            || at
+                .zip(end)
+                .is_some_and(|(a, z)| taken.iter().any(|(lo, hi)| *lo <= a && z <= *hi))
         {
             continue;
         }

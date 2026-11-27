@@ -4296,6 +4296,54 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T470 (<why: the finding or measurement that files it>)": {
+   "sha256": "9e75f5a6ef5a6b6d73b6b9b293bac457bf53621d6bff826943c60168b6c165c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T470 Approach (checklist part A)": {
+   "sha256": "78464d836e4e241c23ab38348f181598c5ec5e5e3c0597ce7c813b23b52bcecc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T484 (<why: the finding or measurement that files it>)": {
+   "sha256": "767d7941bb772d250d2a944dca313753ac3546ebdcea494fe713f437980434b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T484 Approach (checklist part A)": {
+   "sha256": "2788f7954344d8ce51ef3517479e92e82d4c00e72252b3aeefe6f7566e9464a8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T486 (451 T485's keys were a pool tree's stale store of rendered guard messages, not a wording HEAD renders)": {
+   "sha256": "b0d600f88c5a163d6273f824533cc4758f6059d84804ee45b559b1150acac6da",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T486 Approach (checklist part A)": {
+   "sha256": "410588ae87f98ba4e0ffd69055480acac9b2d91c6d4428c44031d67e2df87464",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T487 (a removed stub's verdict and an archive split refused a 12-task landing's ticks twice while `make plan-delta` owed nothing)": {
+   "sha256": "b0d75f3b7bb9be6cd32d2b2f8201a8ccec61e283400b7283a42d175d9017562c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T487 Approach (checklist part A)": {
+   "sha256": "56bf302810cb3cb3e748920ccdc9040c1889a1ef60dce4e1173882578e7146ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -40531,6 +40579,77 @@
      "summary": "The unfilled template stub of T475 removed",
      "class": "within",
      "why": "The stub held only template placeholders and no decision; its removal drops no content and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T470 (<why: the finding or measurement that files it>)",
+    "### T470 Approach (checklist part A)",
+    "### T484 (<why: the finding or measurement that files it>)",
+    "### T484 Approach (checklist part A)",
+    "### T486 (451 T485's keys were a pool tree's stale store of rendered guard messages, not a wording HEAD renders)",
+    "### T486 Approach (checklist part A)",
+    "### T487 (a removed stub's verdict and an archive split refused a 12-task landing's ticks twice while `make plan-delta` owed nothing)",
+    "### T487 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T470/T484 stubs",
+     "summary": "T470's and T484's sections are the unfilled template: placeholders only, no approach, no step rows.",
+     "class": "within",
+     "why": "A stub decides nothing; it narrows nothing the request or spec asked for. Its decisions owe review when it is filled."
+    },
+    {
+     "id": "T486-D1",
+     "summary": "A warm handout (make builder-tree's take) empties <git dir>/hooks-test/messages once the tree is at the clone's HEAD, chosen over a time filter on renderings; a cold handout is unchanged (a new worktree holds no store).",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured by T485: make guard-messages in a pool tree named wordings HEAD does not render as owed, so a check would judge work that is not there (a check refusing/demanding on false input, constitution XIV's defect). Fix-as-we-go and the GM's 2026-11-26 'fix all of this as part of our tasking ... before resuming our port' cover it; the chosen mechanism hides no owed wording, since the next hooks-test refills the store."
+    },
+    {
+     "id": "T486-D2",
+     "summary": "Constraints: no guard message changes; the shared stamps and keyed renderings (451 T281) stay; ordered after T485, beside T487 in one tree.",
+     "class": "within",
+     "why": "Keeps existing approved behavior the fix does not need to touch; ordering is scheduling, not scope."
+    },
+    {
+     "id": "T486-D3",
+     "summary": "Classed not performance work (FR-013 does not apply).",
+     "class": "within",
+     "why": "A correctness fix of a reader; FR-013's ordering is not narrowed by classing a task out of it, and the task is already built (its tests measured), so no ordering is at stake."
+    },
+    {
+     "id": "T487-D1",
+     "summary": "The archive (plan task.rs, archivable) skips a section only where it lies wholly inside a taken one, so a heading naming a ticked task without its own section no longer orphans the next task's Approach block.",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome: an orphaned block judged by a stale entry refused the ticks of T479, T481 and T310 with the batch gate green (a check refusing good work). FR-044 asks that finished sections leave the plan; this makes the archive do it."
+    },
+    {
+     "id": "T487-D2",
+     "summary": "record_blocks: a CLEAR on '(removed) <key>' deletes that key's entry only where plan.md holds no block of that key.",
+     "class": "within",
+     "why": "A latent defect in the same mechanism (it would erase a live block's verdict, so a tick would refuse reviewed work); fix-as-we-go fixes known defects in the step. FR-043 keeps a reviewed block's verdict; this keeps it."
+    },
+    {
+     "id": "T487-D3",
+     "summary": "status::delta_keys reads plan-delta's owed keys through the tick's own in_scope with every task in scope; plan.rs's plan_delta asks it, so plan-delta no longer owes a (removed) block that a task's CLEAR verdict answers for.",
+     "class": "within",
+     "why": "Aligns the advisory reader with the tick's already-accepted rule (T84's scope rule, T359's exemption, both kept); it removes nothing any tick enforces. The goal stated - ticks refuse only what plan-delta names, and plan-delta names nothing no tick holds - is the reader disagreement T475 filed, and the measured cost was a review round spent on a removed stub (FR-013, landing speed)."
+    },
+    {
+     "id": "T487-D4",
+     "summary": "merge.rs's same-day tie (incoming side wins, so a pool tree's verdict on a stub's text can replace the clone's CLEAR on the filled block) is not fixed here: filed as T495, lands before T484.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect (it can refuse a tick of reviewed work) left out of this task. The GM's words place the fix inside the current tasking ('fix all of this as part of our tasking that we are doing before resuming our port', 2026-11-26), not inside every single task, and FR-009/D15, from his approval of the six improvements, define exactly this deferral: a reason (the tie-break needs the merged plan's text at merge time, a separate design), a filed task id and an order. It is filed in this feature and ordered before later work, so it is not carried past the step; T487's own fixes do not depend on it (step 5). The deferral's open-id test is make decide's (D15), not this review's."
+    },
+    {
+     "id": "T487-D5",
+     "summary": "Classed performance work (FR-013): two refused landings each cost a whole batch gate's wait.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings faster; refused landings with a green gate are that cost. Classing it in widens nothing the request excluded."
     }
    ]
   }
