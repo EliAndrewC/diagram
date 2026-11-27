@@ -4039,12 +4039,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T463 Approach (checklist part A)": {
-   "sha256": "212cfbb7e5d45092d7367995bef902a25699bbfca95a9b1b9f521d03ad565a39",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)": {
    "sha256": "31fcaeb9a01f080268d71105d81077130aff533568d661789d4e024ece399785",
    "verdict": "CLEAR",
@@ -4153,12 +4147,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T463 (<why: the finding or measurement that files it>)": {
-   "sha256": "f6908a8df6cb5f468f1ba944129f431d74b3aeaf0e272083d045de67dd052be2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)": {
    "sha256": "a3f6c88cfa34fbacd0315771e70edd9e1b1b5a2f207e64931491c7bad4ea4286",
    "verdict": "CLEAR",
@@ -4221,6 +4209,30 @@
   },
   "### T478 Approach (checklist part A)": {
    "sha256": "e6bc9470b33c833d7a1be1c5f58675614dd2172b76472a965c776ab38001f822",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T475 (<why: the finding or measurement that files it>)": {
+   "sha256": "8e93981a4fb0a2bb4bc333713378bb1bc2e57edd3ed1d82085e8b99dd8bbe492",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T475 Approach (checklist part A)": {
+   "sha256": "6b67b7e200273b2c3ac3436c09f3bba7da7cdc878c8c57f656762ac95ac400cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T480 (<why: the finding or measurement that files it>)": {
+   "sha256": "ea2f4737ab41521be9e05e9f89629da05e25283ff4cc9ef6a91076546f3eefb9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T480 Approach (checklist part A)": {
+   "sha256": "3800e5c328b0ee484c8f8f3289cdf3729dd0ae22a33b1e6524773686705bb580",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -39420,6 +39432,26 @@
      "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
      "class": "within",
      "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (<why: the finding or measurement that files it>)",
+    "### T475 Approach (checklist part A)",
+    "### T480 (<why: the finding or measurement that files it>)",
+    "### T480 Approach (checklist part A)",
+    "(removed) ### T463 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T463-removal",
+     "summary": "The two T463 sections are removed from plan.md; their earlier text (earlier.md) was the unfilled template - every field a <placeholder> - with no approach, constraint, exit or deferral filled in.",
+     "class": "within",
+     "why": "Removing a section that held only template placeholders drops no decision, constraint or deferral, so nothing the request or spec asks for is narrowed; it is the plan housekeeping FR-044 describes (finished sections leave the plan), and the archive comments beside it are generated lines that owe no review."
     }
    ]
   }
