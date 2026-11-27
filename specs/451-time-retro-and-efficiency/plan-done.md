@@ -15108,3 +15108,133 @@ lines no test reached. Of this task: line 327 of `builder_done.rs` was its own.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
    re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.
 
+<!-- plan-archive: archived 2026-11-27 -->
+### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)
+
+- **Approach**: the reports read a pool tree's `Phase` line by the task the pool's log says held the tree when the phase began; the log is left as written. T393 is built here: a holder's detail is split by one function.
+  - **What a `Phase` line's task decides (the finding).** One thing: which Bash run the line is tied to (`tie`, `rust/gate/crates/measure/src/measure/where_time/columns.rs`). Among the runs of the line's session whose span holds it, a run with the line's make target and the line's task comes before one with the target alone, the latest started breaking a tie; a line that fits no run is counted loose. A tied phase splits ITS RUN's minutes into compile, tests and the rest and adds none, so a wrong task can move a task's compile and tests minutes and can never move its total. A session's builders share its id, so two builders each inside a `make builder-checks` are told apart by the task alone.
+  - **The rule** (`rust/gate/crates/measure/src/measure/task_time/held.rs`, new; `retask`). A `Phase` line whose `clone` is a tree the pool's log names, begun while a holder held that tree for the line's feature, takes the holder's first task. A line from a tree the log does not know, from a time nobody held it, or filed under a feature the holder was not held for keeps its own.
+  - **One function, four readers.** `make task-time` (`task_time.rs`, `run`), `make task-progress` (`task_time/progress.rs`, `view`, whose own `retask` is deleted) and `make where-time` (`where_time.rs`, `booked`) call `held::retask` before their runs are read; `make feature-report` reads its timing columns through `where_time::columns_text`, which calls `booked`, so it is the fourth with no edit of its own.
+  - **DECISION, a hold ends at its release.** The function `make task-progress` had took the tree's last `take` at or before the line, whatever followed, so a line written after the release still took the last holder. The log's rows are now read as HOLDS (`holds`): one opens at a `take`, at a tree's `make` for a task, or at an `adopt` of a held tree, and ends at the tree's `release` or its next handout. The task line asks for the holder at the line's start; after a release there is none. `make task-progress` reads through the same function and so takes this too; a builder's block there reads its tree's lines by the tree, whatever task they name, and its tests pass unchanged.
+  - **DECISION, a `make` row and an `adopt` row open a hold.** A tree made for a task is written `make`, never `take`: `diagram-backlog-b1` was made for T274 at 2026-11-26T20:38:58Z and released at 21:38:22Z with no `take` between, observed 2026-11-27 (method: the clone's `.git/builder-pool.log` read row by row). Read as takes alone its lines would keep the stale task; with the row counted T274's tests minutes go from 5.8 to 9.9, measured 2026-11-27 (the two binaries' reports of that window, read row by row). `tiers::takes`, which names the holder a `make carry` ran under, kept `take` rows alone for the same reason and found T274 no carry; it now keeps every row that opens a hold (`held::opens`, the one test both readers use), so T274's own table ends at its carry, 21:34. That is the plan review's first-round ruling: the section had deferred it, and it is fixed here.
+  - **DECISION, a line naming one of the holder's tasks keeps it.** A bundle's holder is its first task (the brief's words). But since T332 the writer books a bundle's line to the second member where the builder started it (T332's section, "A start after the handout stands"); overwriting that with the first would undo T332 at read time. So the first task replaces only a task that is none of the holder's.
+  - **DECISION, the holder's feature is checked.** A line is re-tasked only where its feature - its log's, which the readers tag, or for `make where-time`, which reads one feature's logs untagged, that feature's name - is the holder's number or opens with it and a hyphen. T332's writer-side rule checks the same; without it a line filed in another feature's log would be given a task of this one's.
+  - **T393, built here.** `held::holder` reads a detail (`451 T324,T345`) as its feature number and its tasks, split on spaces and commas; `tiers::batches` (which split on spaces alone), `make task-progress`'s staged list and `retask` read it, and `held::first` gives the carry's run its clue (`451 T324`) in `book/tier.rs`'s `run_booking`, which keyed the run to a task named `T324,T345`. T393's own section, where the clone's tasks.md has its box (its filing commit was not in this tree), is this one.
+  - **On the real logs**, measured 2026-11-27 (the old binary kept as a copy and this tree's, run back to back, `l7r-gate measure task-time --root /diagram/.clones/diagram-backlog --since 2026-11-26T17:00:00Z --until 2026-11-27T01:00:00Z`; each task's compile and tests rows read from its own section, since the one-line table has no such columns):
+    - The window's totals do not move: 2670.9 minutes and 501.2 blocking before and after, measured 2026-11-27 (the two binaries' reports of that window, read row by row). Phases tied to no run fall from 5,937 (308.6 min) to 5,513 (253.2 min), and the window's compile row goes from 60.5 to 74.1 minutes, tests from 137.6 to 146.3, waiting on a build slot from 3.4 to 5.6, each taken out of its own runs' other minutes, measured 2026-11-27 (the two binaries' reports of that window, read row by row).
+    - The three largest moves: T347's compile 0.0 to 5.2 minutes, T274's tests 5.8 to 9.9, T315's tests 1.0 to 4.8 (and its compile 0.1 to 2.8), measured 2026-11-27 (the two binaries' reports of that window, read row by row). T316's tests fall 26.2 to 24.8 as its compile rises 0.6 to 2.3, measured 2026-11-27 (the two binaries' reports of that window, read row by row). Nine tasks' compile or tests rows change (T289, T298, T316, T293, T315, T274, T336, T340, T347), and no task's minutes or blocking change by T391.
+    - T336's 163.3 minutes do not move, and cannot by this task: they are its builders' own runs, booked by each call's own line (58.0 wait loops, 42.3 shell reads and file edits, 25.9 the model's turns running a command), while its compile goes 1.2 to 1.4 and its tests 10.0 to 10.1, measured 2026-11-27 (the two binaries' reports of that window, read row by row).
+    - T332's count (the heading's 385 minutes, measured 2026-11-27 (T332's plan section)) is an upper figure for what could move, not what does: most stale lines fit one run alone, by its make target, and were tied to the right run whatever task they named.
+    - T393 and the `make` row: the "no carry found" rows fall from 10 to 1, measured 2026-11-27 (the two binaries' reports of that window, read row by row). T370, T372, T324, T345, T332, T344, T383 and T385 now end at their carries (23:39, 00:18, 00:43). T274 ends at its carry (21:34), its minutes 63.1 to 63.0 and its blocking 1.5 to 1.4, measured 2026-11-27 (the two binaries' reports of that window, read row by row). The second tier's row goes from 257.7 to 258.2 minutes and 145.9 to 146.9 blocking as the time after those carries leaves the tasks' own tables (T372's blocking 0.4 to 0.0, T385's minutes and blocking 0.2 to 0.0), measured 2026-11-27 (the two binaries' reports of that window, read row by row). The one left is T282: the pool's log has no row naming it (its bundle's take reads `451 T299`, observed 2026-11-27, method: the clone's `.git/builder-pool.log` searched for T282), so no reader of that log can find its carry.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| T391: `make task-time` ties a pool tree's phase to its holder's run | `a_pool_tree_s_build_is_its_holder_s_whatever_task_its_line_names` (`task_time/pool_tests.rs`), red on the old code (the build under T2, the run begun last) | n/a: tooling | none | n/a |
+| T391: `make where-time` and `make feature-report` read it so too | `a_pool_tree_s_phase_is_tied_to_its_holder_s_run` (`where_time/tests.rs`), red on the old code | n/a: tooling | none | n/a |
+| T391: the holds and the lines that keep their own task | `the_log_is_read_as_holds_each_ended_by_its_release_or_the_next_handout`, `a_phase_line_takes_its_tree_s_holder_s_first_task_and_keeps_its_own_elsewhere` (`task_time/held_tests.rs`) | n/a: tooling | none | n/a |
+| T393: a bundle's carry is each member's, its run the first's | `a_bundle_s_carry_is_each_of_its_tasks` (`task_time/pool_tests.rs`), red on the old code (T1 and T3 "no carry found", the run under `T1,T3`); `a_holder_s_detail_splits_on_spaces_and_commas` |
+| a tree made for its task is held from its making, for its lines and for its carry | the same test's T2 row (`its carry`), red with `tiers::takes` reading `take` rows alone; the `make` row of `the_log_is_read_as_holds_each_ended_by_its_release_or_the_next_handout` | n/a: tooling | none | n/a |
+
+### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case "two waiters on one quiet file and no run: still gone" failed good work under load - "expected dead, rc=0" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)
+
+- **Approach**: the T71 case of section 6b ("a live call whose command opens with its assignment and tees into it: alive") ends its
+  call SHELL FIRST. One line of `tests/hooks/test-no-poll-hooks.sh` changes, with its comment, and the comment over the later
+  case's touch is restated; no guard, no guard message and no crate changes.
+  - THE CAUSE, as proved. The call is `bash -c "... eval 'B=<dir>; sleep 30; echo ... | tee -a $B/fresh.log'"`. The case ended it
+    with `pkill -P "$WA_RUN"` (its sleep), then `kill "$WA_RUN"` (its shell), then `wait "$WA_RUN"`. A shell whose sleep has died
+    goes on to its next command: where it ran between the two kills it forked `echo | tee -a fresh.log`, and that tee, no child of
+    the suite, outlived the `wait`. The next case touches `fresh.log` two hours old and expects "gone"; a tee that writes it after
+    the touch (the staleness belt), holds it open for writing, or is read as a live process that writes it, answers alive.
+  - **T139-D1, built: the shell is killed first.** `WA_KIDS=$(pgrep -P "$WA_RUN"); kill "$WA_RUN"; wait "$WA_RUN"; kill $WA_KIDS`.
+    A shell killed while its `sleep 30` still runs forks nothing more, so no tee exists in any interleaving: the shell dead before
+    it forked the sleep, or the sleep forked after the `pgrep`, each ends with no pipeline (in the second, a `sleep 30` is left to
+    end by itself, as the cases above this one already leave theirs: they end `kill "$WA_RUN"; wait "$WA_RUN"`, shell first).
+    The sleep's pid is read before the kill because `pkill -P` finds no child of a dead shell. What the T71 case proves is its
+    `alive` assertion, made before the teardown and unchanged; the later case keeps `fresh.log`, its two waiters and its touch.
+  - **T139-D2, NOT built: the call in a process group of its own, ended in one signal** (`setsid bash -c ...`, `kill -- -<pgid>`).
+    Priced, not measured: it changes how the T71 case's call is STARTED, which is what that case proves (the walk reads the
+    call's command line, which would open `setsid bash -c` until the exec, and `wa_settle` would accept that line), and one
+    signal to a group still reaches its members one after another. D1 changes only the end, and is ordered by a `wait`.
+  - **T139-D3, NOT built: the later case on a file of its own.** It would pass, and would leave the stray tee running into the
+    cases after it (the "a process holding it open: alive" check at the section's end reads `fresh.log` too) and past the
+    section's `rm -rf`. It moves the reader away from the leak rather than ending it.
+  - **T139-D4, NOT built: the later case waiting on a condition** (no process naming `fresh.log` but its waiters). The stray tee
+    may not be forked yet when such a wait looks, so the condition is met a moment before it is false; only an end that forks
+    nothing is certain.
+  - THE SAME SHAPE ELSEWHERE, left as it is: the two reader cases later in 6b end `pkill -P` then `kill` too (`WA_R1`, and `WA_R3`
+    with `WA_R4`). What their shells run on to is a `grep`, a file test or a `tail -1` of `quiet.log` - reads, which the helper
+    counts as no producer (451 T61) - so no outcome is wrong there (observed 2026-11-27, method: each of the section's `pkill -P`
+    lines read with the command its shell runs next).
+- **Red first**, observed 2026-11-27, method: a scratch copy of the suite at HEAD (`t139-red/old.sh` in the session's scratchpad,
+  `HERE` pinned to this tree's `tests/hooks`) with `sleep 0.5` between the `pkill -P` and the `kill`, run as `PARTS_CASES=case_6b`
+  with a `tee` first on `PATH` that sleeps 2 s before the real one - a deliberate delay, no load: 3 of 3 runs red, each
+  `27 passed, 1 failed`, the one failure this case's "expected dead, rc=0". The same copy with the 0.5 s delay and the real
+  `tee`, observed 2026-11-27, method: that copy run without the slowed `tee` on `PATH`: 2 of 2 green (`28 passed, 0 failed`), the tee done before the touch - the race needs both. The fixed order under the
+  same slowed `tee`, with 0.5 s after the `pgrep`, after the `kill` and after the `wait`, observed 2026-11-27, method: `t139-red/new.sh` run as the red copy was: 3 of 3 green,
+  `28 passed, 0 failed`, the sleep's pid gone after each.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the T71 case of `test-no-poll-hooks.sh` 6b ends its call shell first, then the sleep whose pid it read before | n/a - no map | n/a | none | n/a |
+
+### T139 Approach (checklist part A)
+
+1. **The goal, in the world.** The no-poll suite fails only when the guard or `writer-alive.sh` is wrong: a batch gate under load is not turned red by one of the suite's own fixtures writing a file a later case reads.
+2. **The constraints.** The task's line (the fix ends the call's whole tree before the touch, red first on a slowed copy); constitution XIV (a defect is a wrong outcome: a red gate on good work is one); each case goes on proving what it proves; no guard message changes; the brief's red-first by a deliberate delay, never a load generator.
+3. **Where each comes from.** O: the red of 2026-11-22 (T118's closing run, `hooks-test.log` line 88) and of 2026-11-27 (a batch gate), and T115's builder's slowed copy, 3 of 3 red (measured 2026-11-22, the task's line). O: this task's own slowed copy, above.
+4. **Do they describe the world here?** Yes: 3 of 3 runs red on this case alone, measured 2026-11-27 (the scratch copy of the suite at HEAD with the tee slowed 2 s and the second kill 0.5 s late, run as `PARTS_CASES=case_6b`).
+5. **The order.** After T97 (the touch moved after the waiters, which narrowed the window and did not close it) and T71 (the case whose end this is); before nothing.
+6. **The exits.** Green: the fixed order 3 of 3 green under the delays that made the old order 3 of 3 red, and the whole suite green 30 times in a row. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** Observed 2026-11-27, method: `bash tests/hooks/test-no-poll-hooks.sh`, whole, 30 times one after another in this tree (`t139-30runs.sh`, one line a run in `t139-30runs.log`): 30 of 30 green, each `146 passed, 0 failed` (and 30 of 30 on a first loop, run before a date in the new comment was corrected). The red-first figures are the Approach's.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** No map changes. The check it mends: `make hooks-test` (in `make done` and a batch gate) read red on good work - "two waiters on one quiet file and no run: still gone (expected dead, rc=0)" - twice on record, each costing a gate's re-run.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T391 Approach (checklist part A)
+
+1. **The goal, in the world.** The GM reads `make task-time`'s compile, tests and blocking minutes for each task to decide how the work is run; for a task built in a pool tree those rows hold that tree's builds and tests, whenever its lines were written.
+2. **The constraints.** T332 (the writer's rule: the pool's holder for the line's feature, a builder's later start standing); T293 (`make task-progress` re-tasks at read time, by one function, not a copy); T298 (a task's own table ends at its carry); the log is not rewritten (T391's line). Constitution XIII: no report is held to its earlier figures, only to its totals.
+3. **Where each comes from.** O: T332's count of 2026-11-27 and this section's before and after. G: none new; no task line here quotes the GM.
+4. **Do they describe the world here?** Yes for the stale lines and for T393's rows: 10 "no carry found" before, 8 of them bundles' members, measured 2026-11-27 (the old binary's report of the pinned window, its one-line table). Not as the brief expected for T336, whose minutes are not phases (the Approach's reading).
+5. **The order.** After T332 (landed). Before T317: T332's review made it a condition that T391 lands before T317 starts, since T317 books the pre-warm's `Phase` lines by the line's task and the pre-warms written before T332 carry stale ones. T393 lands with it.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/measure"` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure`, the three report tests on the old sources): 268 passed, 3 failed - the two of `pool_tests.rs` and the one of `where_time/tests.rs`. With `tiers::takes` alone put back to `take` rows: 273 passed, 1 failed (the bundle test's T2 row). After, with the three unit tests of `held_tests.rs`: 274 passed, 0 failed. The real window's totals unchanged (the Approach's reading).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: T332's count, and on the real window nine landed tasks' compile or tests rows wrong by up to 5.2 minutes and nine tasks' tables running past their carries, measured 2026-11-27 (the two binaries' reports of that window, read row by row). No map changes.
+
+**Found and left?** none: T274's carry, found and at first deferred as T402, is fixed here (the Approach's `make` decision) and T402 withdrawn.
+
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
+
+### T391 part B (2026-11-27T01:51Z)
+
+Owed by red-gate@2026-11-27T01:50:26Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T394, T391
+and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (2026-11-27, the landing's log), each time on
+lines no test reached. None of those lines is this task's: it rode in the batch.
+
+1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
+   at the first run (a fixer's tests cleared them; observed 2026-11-27, method: the landing's log), `land/carry/words.rs` line 143 at the second - the closure of
+   `ok_or_else` on a guard its builder documented as one no fixture can reach.
+2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
+   decision.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
+   `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
+5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
+6. **The one-sentence test.** "Why is T391 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
+   else carried in before it (the arbiter's ruling).
+8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
+   coverage is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
+   re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.
+
