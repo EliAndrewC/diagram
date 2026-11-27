@@ -1,0 +1,4 @@
+"$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test --crate "rust/gate/crates/task"
+rust-checks: test on rust/gate/crates/task: test result: ok. 122 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.82s
+rust-checks: test clean on 1 crate(s)
+rc=0 wall=11.02 samples=488 peak_anon=392MiB peak_rss=860MiB hwm_sum=3907MiB max_rustc=4 max_linkers=3 units=15

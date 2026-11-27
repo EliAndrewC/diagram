@@ -1,0 +1,15 @@
+0.15	l7r_gate_core	lib
+0.38	l7r_gate_tree	lib
+0.54	l7r_gate_rustc	lib
+2.70	l7r_rust	bin
+5.12	l7r_gate_core	lib
+5.36	l7r_gate_tree	lib
+5.36	l7r_gate_reviews	lib
+5.36	l7r_gate_research	lib
+5.60	l7r_gate_plan	lib
+6.00	l7r_gate_registry	lib
+6.20	l7r_gate_owed	lib
+6.63	l7r_gate_trials	lib
+6.63	l7r_gate_claims	lib
+7.16	l7r_gate_task	lib
+7.32	l7r_gate_task	test

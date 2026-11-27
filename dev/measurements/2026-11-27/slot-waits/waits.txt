@@ -1,0 +1,112 @@
+window 2026-11-27T00:20Z to 2026-11-27T03:56:52Z; slot-wait lines 20, 316.3 s; wide 7, 229.0 s; lane 13, 87.4 s
+  synthetic (a measurement's scratch slots): 4, 221.9 s; of 5 s or more 4, 221.9 s
+  real wide: 3, 7.1 s; of 5 s or more 0, 0.0 s
+  real lane: 13, 87.4 s; of 5 s or more 6, 78.3 s
+  T367's window (to 03:30:03Z): 13 lines, 283.5 s, of them synthetic 221.9 s and in the lane 54.6 s
+wide waits of 5 s or more, and every real wide wait whatever its length: 7, 229.0 s
+
+00:28:03 wait   1.5 s  tree diagram-backlog-t270  make builder-checks  task T292
+    in: lint ['shared']  ran 14.5 s after the wait (code 0)
+    told wide by: untold (no slot-tell: a FRESH run, the landing's gate, or a step no telling covers)
+    held: pre-warm           diagram-backlog-t271   make prewarm         ['measure'] 00:27:33-00:28:05 (1.3 s of the wait)
+    held: build (told wide)  diagram-backlog-t271   make rust-test       ['shared'] 00:27:56-00:28:06 (1.5 s of the wait)
+
+01:45:33 wait   1.5 s  tree diagram-backlog  make builder-checks  task T391
+    in: build ['gate']  ran 13.2 s after the wait (code 0)
+    told wide by: a carry or landing moved files (no Edit in this tree since its last build)
+    held: pre-warm           diagram-backlog-t271   make prewarm         ['measure'] 01:44:44-01:45:34 (1.3 s of the wait)
+    held: lint (told wide)   diagram-backlog-b1     make crate-checks    ['land'] 01:45:28-01:45:49 (1.5 s of the wait)
+
+01:49:21 wait  55.5 s  tree diagram-backlog-t270  SYNTHETIC: 451 T355 lint-wait.sh (scratch slots) - its row in dev/measurements/2026-11-27/lint-memory/lint-wait-rows.txt holds this wait; its holders were the script's flock
+
+01:50:40 wait  49.9 s  tree diagram-backlog-t270  SYNTHETIC: 451 T355 lint-wait.sh (scratch slots) - its row in dev/measurements/2026-11-27/lint-memory/lint-wait-rows.txt holds this wait; its holders were the script's flock
+
+01:58:49 wait  56.4 s  tree diagram-backlog-t270  SYNTHETIC: 451 T355 lint-wait.sh (scratch slots) - its row in dev/measurements/2026-11-27/lint-memory/lint-wait-rows.txt holds this wait; its holders were the script's flock
+
+02:00:17 wait  60.0 s  tree diagram-backlog-t270  SYNTHETIC: 451 T355 lint-wait.sh (scratch slots) - its row in dev/measurements/2026-11-27/lint-memory/lint-wait-rows.txt holds this wait; its holders were the script's flock
+
+03:19:22 wait   4.0 s  tree diagram-backlog-t270  make builder-checks  task T307
+    in: build ['plan']  ran 1.5 s after the wait (code 0)
+    told wide by: first build of this crate after the handout
+    held: lint (told wide)   diagram-backlog-t269   make builder-checks  ['shared'] 03:19:16-03:19:27 (4.0 s of the wait)
+    held: build (told wide)  diagram-backlog-t271   make builder-checks  ['task'] 03:19:20-03:19:26 (3.9 s of the wait)
+
+the REAL wide waits, told wide by (count, seconds waited):
+    1     4.0 s  first build of this crate after the handout
+    1     1.5 s  untold (no slot-tell
+    1     1.5 s  a carry or landing moved files (no Edit in this tree since its last build)
+
+holders during the REAL wide waits (slot-seconds of overlap with a wait; two slots, so a wait of w s is 2w slot-s):
+      4.0 slot-s  29.8%  lint (told wide)   pool/other tree  make builder-checks
+      3.9 slot-s  28.7%  build (told wide)  pool/other tree  make builder-checks
+      2.6 slot-s  19.3%  pre-warm           pool/other tree  make prewarm
+      1.5 slot-s  11.1%  build (told wide)  pool/other tree  make rust-test
+      1.5 slot-s  11.1%  lint (told wide)   pool/other tree  make crate-checks
+     13.6 slot-s total
+
+the window's wide slot use by holder kind (minutes, overlapping spans summed):
+     27.4 min  pre-warm           pool/other tree  make prewarm
+     10.7 min  lint (told wide)   pool/other tree  make builder-checks
+      7.2 min  coverage build     clone            make land
+      6.6 min  lint (told wide)   clone            make land
+      6.3 min  build (told wide)  pool/other tree  make builder-checks
+      4.9 min  build (told wide)  pool/other tree  make rust-test
+      3.7 min  build (told wide)  clone            make builder-checks
+      2.3 min  lint (told wide)   pool/other tree  make rust-lint
+      1.6 min  lint (told wide)   clone            make builder-checks
+      1.0 min  build (told wide)  clone            make land
+      0.8 min  coverage build     pool/other tree  make crate-checks
+      0.6 min  build (told wide)  pool/other tree  make crate-checks
+      0.4 min  lint (told wide)   pool/other tree  make crate-checks
+      0.1 min  build (told wide)  clone            make rust-test
+      0.1 min  coverage build     clone            make crate-checks
+      0.1 min  build (told wide)  clone            make crate-checks
+      0.0 min  lint (told wide)   clone            make crate-checks
+seconds with 0 / 1 / 2 / 3+ wide holders seen: 8983 / 3523 / 455 / 0
+
+the lane's waits (every one), the build told alone that waited and the lane's holder:
+00:27:34 wait  18.8 s  tree diagram-backlog-b1 make builder-checks  build ['checks'] ran 0.1 s after
+    lane held: build diagram-backlog-t270 make builder-checks ['shared'] 00:27:28-00:27:53 (24.9 s alone-told, 18.6 s of the wait)
+01:16:03 wait   0.5 s  tree diagram-backlog-t270 make builder-checks  build ['task'] ran 1.9 s after
+    lane held: build diagram-backlog-t269 make builder-checks ['measure'] 01:15:57-01:16:03 (6.0 s alone-told, 0.0 s of the wait)
+01:30:19 wait   0.5 s  tree diagram-backlog-t271 make rust-test  build ['land'] ran 5.2 s after
+    lane held: build diagram-backlog-t269 make rust-test ['measure'] 01:29:59-01:30:19 (20.0 s alone-told, 0.0 s of the wait)
+01:30:20 wait   5.0 s  tree diagram-backlog-t269 make builder-checks  build ['measure'] ran 21.3 s after
+    lane held: build diagram-backlog-t271 make rust-test ['land'] 01:30:20-01:30:25 (5.2 s alone-told, 4.6 s of the wait)
+01:47:08 wait  17.7 s  tree diagram-backlog make builder-checks  build ['task'] ran 2.6 s after
+    lane held: build diagram-backlog-t269 make builder-checks ['shared'] 01:46:57-01:47:25 (27.7 s alone-told, 17.4 s of the wait)
+01:51:41 wait  12.1 s  tree diagram-backlog-t271 make rust-test  build ['guard'] ran 19.6 s after
+    lane held: build diagram-backlog-t269 make builder-checks ['task'] 01:51:40-01:51:45 (4.3 s alone-told, 3.8 s of the wait)
+    lane held: build diagram-backlog-t269 make builder-checks ['shared'] 01:51:45-01:51:53 (7.8 s alone-told, 7.8 s of the wait)
+03:46:13 wait   7.1 s  tree diagram-backlog-t269 make rust-test  build ['task'] ran 7.0 s after
+    lane held: build diagram-backlog make builder-checks ['plan'] 03:46:12-03:46:19 (7.2 s alone-told, 6.9 s of the wait)
+03:47:03 wait   0.5 s  tree diagram-backlog make builder-checks  build ['plan'] ran 2.2 s after
+    lane held: build diagram-backlog-t271 make builder-checks ['task'] 03:47:03-03:47:03 (0.1 s alone-told, 0.1 s of the wait)
+03:47:07 wait   1.5 s  tree diagram-backlog-t271 make builder-checks  lint ['rustc'] ran 1.6 s after
+    lane held: lint diagram-backlog make builder-checks ['plan'] 03:47:06-03:47:08 (2.3 s alone-told, 1.4 s of the wait)
+03:47:52 wait   3.0 s  tree diagram-backlog-t269 make rust-test  build ['task'] ran 1.5 s after
+    lane held: build diagram-backlog make builder-checks ['plan'] 03:47:49-03:47:55 (6.2 s alone-told, 2.8 s of the wait)
+03:47:56 wait   1.0 s  tree diagram-backlog make builder-checks  lint ['plan'] ran 2.9 s after
+    lane held: build diagram-backlog-t269 make rust-test ['task'] 03:47:55-03:47:57 (1.5 s alone-told, 0.6 s of the wait)
+03:51:48 wait  17.7 s  tree diagram-backlog-t269 make builder-checks  build ['task'] ran 5.6 s after
+    lane held: build diagram-backlog-t270 make builder-checks ['measure'] 03:51:48-03:52:06 (18.3 s alone-told, 17.6 s of the wait)
+03:52:10 wait   2.0 s  tree diagram-backlog-b1 make rust-test  build ['guard'] ran 16.5 s after
+    lane held: build diagram-backlog-t269 make builder-checks ['task'] 03:52:06-03:52:12 (5.6 s alone-told, 1.7 s of the wait)
+lane holders during lane waits (s): build shared 43.7, build measure 17.7, build plan 9.7, build task 6.1, build land 4.6, lint plan 1.4
+the lane's builds in the window: 169, median 2.8 s, longest 28.4 s, over 10 s 27
+
+the lane's waits with a wide slot free (an alone-told build could have taken it):
+  00:27:34 diagram-backlog-b1 wait  18.8 s, a wide slot free  18.8 s of it
+  01:16:03 diagram-backlog-t270 wait   0.5 s, a wide slot free   0.5 s of it
+  01:30:19 diagram-backlog-t271 wait   0.5 s, a wide slot free   0.5 s of it
+  01:30:20 diagram-backlog-t269 wait   5.0 s, a wide slot free   5.0 s of it
+  01:47:08 diagram-backlog wait  17.7 s, a wide slot free  17.7 s of it
+  01:51:41 diagram-backlog-t271 wait  12.1 s, a wide slot free  12.1 s of it
+  03:46:13 diagram-backlog-t269 wait   7.1 s, a wide slot free   7.0 s of it
+  03:47:03 diagram-backlog wait   0.5 s, a wide slot free   0.5 s of it
+  03:47:07 diagram-backlog-t271 wait   1.5 s, a wide slot free   1.5 s of it
+  03:47:52 diagram-backlog-t269 wait   3.0 s, a wide slot free   3.0 s of it
+  03:47:56 diagram-backlog wait   1.0 s, a wide slot free   1.0 s of it
+  03:51:48 diagram-backlog-t269 wait  17.7 s, a wide slot free  17.7 s of it
+  03:52:10 diagram-backlog-b1 wait   2.0 s, a wide slot free   0.4 s of it
+  total: 85.7 s of 87.4 s
