@@ -100,14 +100,20 @@ thread_local! {
         std::cell::RefCell::new(std::collections::HashMap::new());
 }
 
-/// `_gitdir`: the repository's absolute git directory.
+/// `_gitdir`: the repository's absolute COMMON git directory - in a linked worktree of the clone (a builder's pool tree, the landing
+/// worktree) the clone's own, since every state read through here is the clone's: the review verdicts and discharges, the pairing
+/// state, the glyph clock and landing marker, the checkpoint's mark and the feature's event log, each written there by the review, the
+/// hooks or the clone's session (451 T442; T275 moved the prerequisite's own readers). None outside a repository.
 pub fn gitdir(root: &Path) -> Option<PathBuf> {
     if let Some(known) = GITDIRS.with(|m| m.borrow().get(root).cloned()) {
         return Some(known);
     }
-    let found = git(root, &["rev-parse", "--absolute-git-dir"])
-        .filter(|g| !g.is_empty())
-        .map(PathBuf::from)?;
+    let found = git(
+        root,
+        &["rev-parse", "--path-format=absolute", "--git-common-dir"],
+    )
+    .filter(|g| !g.is_empty())
+    .map(PathBuf::from)?;
     GITDIRS.with(|m| m.borrow_mut().insert(root.to_owned(), found.clone()));
     Some(found)
 }

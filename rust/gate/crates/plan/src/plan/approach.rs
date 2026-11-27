@@ -206,13 +206,10 @@ fn best(
     )
 }
 
+/// Where `approach-owed.json` lives: the clone's COMMON git directory, so a block owed in a builder's pool tree is still owed where the
+/// task lands (451 T442); `<root>/.git` outside a repository.
 fn git_dir(root: &Path) -> PathBuf {
-    let out = super::git_line(root, &["rev-parse", "--absolute-git-dir"]);
-    if out.is_empty() {
-        root.join(".git")
-    } else {
-        PathBuf::from(out)
-    }
+    common_git_dir(root).unwrap_or_else(|| root.join(".git"))
 }
 
 fn owed_entries(root: &Path) -> Vec<Value> {
@@ -357,9 +354,7 @@ fn last_tick(root: &Path, dir: &Path) -> i64 {
 fn in_flight(root: &Path, dir: &Path, active: &str) -> Vec<String> {
     let tasks = std::fs::read_to_string(dir.join("tasks.md")).unwrap_or_default();
     let since = last_tick(root, dir);
-    let path = common_git_dir(root)
-        .unwrap_or_else(|| git_dir(root))
-        .join("task-starts.jsonl");
+    let path = git_dir(root).join("task-starts.jsonl");
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     let mut out = vec![active.to_owned()];
     // a start and its `make task-unstart` read as no start (451 T359)

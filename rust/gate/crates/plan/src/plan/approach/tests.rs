@@ -372,3 +372,23 @@ fn a_part_b_apart_from_its_tasks_sections_is_named() {
     // a part B before any task's heading stands apart too
     assert!(apart("### T1 part B (x)\n", &tasks(&["T1"])).is_some());
 }
+
+/// RED FIRST (451 T442): an owed block is the task's wherever it is worked - a builder's pool tree, the clone, the landing worktree -
+/// so a linked worktree records and reads it in the clone's COMMON git directory, as `in_flight` reads the task starts.
+#[test]
+fn a_linked_worktree_owes_into_the_clones_git_dir() {
+    let (root, _dir) = feature();
+    git(&root, &["commit", "-q", "--allow-empty", "-m", "base"]);
+    git(&root, &["worktree", "add", "-q", "--detach", "linked"]);
+    let wt = root.join("linked");
+    owe(
+        &wt,
+        "999-x",
+        "T01",
+        "hour:999-x@2",
+        "B",
+        Some("2026-10-17T21:40:00Z"),
+    );
+    assert_eq!(owed_entries(&root).len(), 1);
+    assert_eq!(owed_entries(&wt).len(), 1);
+}

@@ -275,7 +275,8 @@ if [ -n "$owed_units" ]; then
 fi
 passed=()   # GUARD_EDIT_OK: feature 449 T232 - the units whose review stands, so a deferred one is recorded reviewed on main
 for unit in $owed_units; do
-  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"
+  # the record is the clone's: the review writes it in the COMMON git dir, which a linked worktree (a pool tree, land-alone's) shares (451 T442)
+  verdict_rec="$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)/review-verdicts/$unit.json"
   if [ ! -f "$verdict_rec" ]; then
     printf '\n\033[1mREVIEW GATE: %s is owed and has no verdict record.\033[0m\n' "$unit"
     printf 'Its occasion: %s\n' "$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"

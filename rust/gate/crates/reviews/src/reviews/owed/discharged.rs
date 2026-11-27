@@ -6,8 +6,8 @@
 //!
 //! `l7r-gate reviews discharge --root DIR --ruling TRIGGER UNIT...` records, for each glyph unit owed now, the accept that discharges it
 //! and its kind's marks on its map as they read now (`marks::digest`: its tags and text, and the `<defs>` entries they use):
-//! `<git dir>/review-verdicts/<unit>.discharge.json`, beside the verdicts, so `land-alone.sh` seeds a landing worktree with it as it does
-//! them. The owed lookup passes over a glyph unit whose record's ruling reads `accept` in that feature's `arbiter.jsonl` and whose kind's
+//! `<git dir>/review-verdicts/<unit>.discharge.json`, beside the verdicts, in the clone's common git dir that every worktree of it
+//! (a pool tree, the landing worktree) reads (451 T442). The owed lookup passes over a glyph unit whose record's ruling reads `accept` in that feature's `arbiter.jsonl` and whose kind's
 //! marks hash as recorded - so `make verify`, the glyph hour, the checkpoint and the push all read it discharged - and owes it again once
 //! they move (the ruling: "If a sheet changes again before the push, any kind whose marks change is owed again under the rule"). The
 //! session names the units, since only the ruling's words do; the tool refuses a ruling that is no accept, and a unit not owed, not a
@@ -30,7 +30,7 @@ use crate::Reply;
 const SUFFIX: &str = ".discharge.json";
 const USAGE: &str = "usage: l7r-gate reviews discharge [--root DIR] --ruling TRIGGER UNIT...\n";
 
-/// Where unit `slug`'s discharge is recorded: its git directory's, beside the verdicts.
+/// Where unit `slug`'s discharge is recorded: the clone's common git directory's, beside the verdicts.
 fn record_of(root: &Path, slug: &str) -> PathBuf {
     gitdir(root)
         .unwrap_or(root.join(".git"))

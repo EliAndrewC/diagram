@@ -303,6 +303,14 @@ V=.git/review-verdicts/glyph-check--well--m.json
 mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; drawn "$NEW"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
 echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$V"
 check "a PASS record at this engine key, no notes touch" r1 ok
+# GUARD_EDIT_OK: feature 451 T442 - A LINKED WORKTREE of the clone (a builder's pool tree, land-alone's landing tree) reads the record
+# the review wrote in the clone's COMMON git dir: it looked in the tree's own, so a reviewed unit read as owed with no record. The
+# tree's untracked drawing is the clone's, its cache entry made current on the tree's own spec (draw.py's engine read from the clone)
+( cd "$T/r1" && git worktree add -q --detach "$T/r1w" HEAD && cp -a scripts .gencache "$T/r1w/" && cp "$POOL/m.driver.json" "$T/r1w/$POOL/" \
+  && sed 's#os.path.join(root, ".git/stand-in-hamlet")#sys.argv[2]#' .git/draw.py > "$T/r1-draw.py" \
+  && python3 "$T/r1-draw.py" "$T/r1w" "$T/r1/.git/stand-in-hamlet" )
+check "...and from a linked worktree of the clone, the record in its common git dir (451 T442)" r1w ok
+has "...not read as owed with no record" r1w '! grep -q "has no verdict record" <<<"$(said r1w)"'
 echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/$V"
 check "...a NEEDS-WORK record at this key too (the findings are fixed under the same key)" r1 ok
 echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/$V"

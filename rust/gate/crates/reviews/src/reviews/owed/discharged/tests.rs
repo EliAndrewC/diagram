@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use l7r_shared::tempdir::Held;
 
-use super::super::super::tests::{commit, compound, drawn, hamlet, put, redraw, repo, sh};
+use super::super::super::tests::{commit, compound, drawn, hamlet, linked, put, redraw, repo, sh};
 use super::super::{all_owed, cli as owed_cli};
 use super::*;
 
@@ -145,4 +145,17 @@ fn a_record_that_does_not_stand_discharges_nothing() {
     let rec = json!({"ruling": "ask:t", "feature": "specs/451-x", "marks": marks});
     put(&r, &at, &rec.to_string());
     assert_eq!(glyphs(&r), [WEIR]);
+}
+
+/// RED FIRST (451 T442): a discharge is recorded beside the verdicts in the clone's common git directory, so a linked worktree of the
+/// clone records and reads it there.
+#[test]
+fn a_linked_worktree_records_its_discharge_in_the_clones_git_dir() {
+    let r = repo("discharge-linked");
+    let wt = linked(&r);
+    assert_eq!(
+        record_of(&wt, KILN),
+        r.join(".git/review-verdicts")
+            .join(format!("{KILN}{SUFFIX}"))
+    );
 }

@@ -36,9 +36,13 @@ fn utc_key(v: Option<&Value>) -> String {
     text.chars().take(19).collect()
 }
 
-/// The git directory as `rev-parse --absolute-git-dir` names it, else `<root>/.git`.
+/// The clone's COMMON git directory as `rev-parse --git-common-dir` names it, else `<root>/.git`: the owed part B and the task starts
+/// read here are written there from any tree of the clone (451 T442).
 fn git_dir(root: &Path) -> PathBuf {
-    let (_, out) = git(root, &["rev-parse", "--absolute-git-dir"]);
+    let (_, out) = git(
+        root,
+        &["rev-parse", "--path-format=absolute", "--git-common-dir"],
+    );
     let text = strip(&String::from_utf8_lossy(&out)).to_owned();
     Some(text)
         .filter(|t| !t.is_empty())

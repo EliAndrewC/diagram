@@ -7374,31 +7374,52 @@ batch; the red was not in its change.
 
 **Performance work?** no - a defect class.
 
-### T442 (<why: the finding or measurement that files it>)
+### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every site resolves the clone's COMMON git directory, so a linked worktree of the clone (a builder's pool tree, land-alone's landing worktree) reads what the review, the hooks and the clone's session wrote. In a plain clone the common directory is `<root>/.git`, so nothing moves there.
+  - **The resolvers, reused.** No new one. Where a site already ran `git rev-parse` and its `None` outside a repository matters, it keeps that shape with `--path-format=absolute --git-common-dir`: `reviews::gitdir`, whose `let Some(g) = gitdir(root) else { return }` writers in `glyph.rs` must not write under a directory that is no repository, and `set_down::git_dir`. Where the site joined `<root>/.git` with no process, it takes `l7r_shared::guards::event_log_hooks::common_git_dir` (T275's): `stale_terms.rs`, `helpers.rs`. `plan/approach.rs` `git_dir` takes the plan crate's own `codeid::common_git_dir`, already used beside it for `task-starts.jsonl`.
+  - **The sites, each common.**
+    - `rust/gate/crates/reviews/src/reviews.rs` `gitdir` (one change, every caller): `checkpoint.rs` `clock`, `events`, `nowhere` (the verdicts and `pairing-state.json`) and the `checkpoint-admitted` mark; `owed/discharged.rs` `record_of` (`*.discharge.json`); `glyph.rs`' `glyph-clock.json`, `glyph-landing` and `pairing-state.json`, and its event-log read; `measure/stepback_bundle.rs:497`'s event log. Audited 2026-11-27 by grepping each file name over `rust/` and `scripts/`: every writer is the clone's - the event log is `common_git_dir(root).join("l7r-events")` (`event_log_hooks.rs:624`), `pairing-state.json` the pair guard's in its session clone (`pair_hooks/state.rs:38`), the verdicts the review's in the common dir (T275), the clock, the landing marker and the admitted mark this crate's own, now common too. None is per tree on purpose.
+    - `scripts/gates/review-gate.sh:278`: `git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir` (it was `git rev-parse --git-dir`, the cwd's own).
+    - `scripts/land-alone.sh` (5): the copies of `review-verdicts/` and `approach-owed.json` into the landing worktree's own dir are dropped, since nothing reads them there any more; `rust-checks/` is still copied (its reader is not in this task's census).
+    - `record/stale_terms.rs:508`: the review-round guard's snapshot (`review_round_hooks.rs:720,773`, written into its session clone's `.git`).
+    - `bundle/record/helpers.rs:234`: quote-verbatim's report. It is a write: in a worktree `<root>/.git` is a file, so `create_dir_all` failed with `Not a directory`.
+    - `plan/approach.rs` `git_dir` and `task/set_down.rs` `git_dir`, together: `approach-owed.json` has three parties (decide and tick write and read it, set-down reads it, land-alone copied it), and all move at once. **DECISION, common, not per tree** (rendering): a block owed is the TASK's, and a task moves between trees (built in a pool tree, carried, landed from the clone or its landing worktree). Per tree, an owed part B written in a builder's tree was dropped at the carry. `set_down.rs`' `since_start` read `task-starts.jsonl` from the tree's own dir while `make task-start` writes it in the common one (`approach.rs`' `in_flight` already read it there): fixed here by the same change.
+  - **A behavior that moves, said plainly.** In land-alone's landing worktree the tick's checkpoint hold (`tick/refusal.rs:326`) and the glyph hour now read the clone's clock and event log. Before, they found none in the worktree's own dir and held nothing. A landing from that worktree now holds where the same landing run in the clone would. That is the intended read, not a new refusal.
+  - **Per tree on purpose, kept.** `scripts/sync-with-main.sh:439` removes `glyph-landing` through `rev-parse --absolute-git-dir` of `$ROOT`. It runs from the session clone, where its own dir is the common one, so it is unchanged. The sites T442's line rules "not defects, by reading" are unchanged: `speckit_todo/report.rs:179`, `owed/answers.rs:422`, `ci/switches.rs:312`, `model_trial/case.rs`, `archive/store.rs:161`, and `land-tooling.sh`, `verify_wait.sh`, `review-tree.sh`.
+  - **Red first** (2026-11-27, on the old code; each test builds a real `git worktree add` of a scratch repository, except quote-verbatim's, whose fixture is no repository and takes a `.git` file and `commondir` as git writes them):
+    - reviews, `make rust-test ONLY=` the three new tests: `a_linked_worktree_finds_the_clones_git_dir`, `a_linked_worktree_reads_the_clones_checkpoint_state` (event log, clock and a PASS verdict answering) and `a_linked_worktree_records_its_discharge_in_the_clones_git_dir`. 0 passed, 3 failed.
+    - plan: `a_linked_worktree_owes_into_the_clones_git_dir`, 0 passed, 1 failed (0 rows read where 1 was owed), measured 2026-11-27 (`make rust-test ONLY=` on the old code).
+    - task: `a_linked_worktree_reads_the_clones_owed_part_b`, 0 passed, 1 failed (`.git/worktrees/linked` against `.git`).
+    - record: `a_linked_worktree_reads_the_clones_snapshot`, 0 passed, 1 failed ("no snapshot of 449-x").
+    - bundle: `quote_verbatim_writes_its_json_from_a_linked_worktree`, 0 passed, 1 failed (`OSError: Not a directory`).
+    - `tests/hooks/test-review-gate.sh`, a new case: a reviewed map pushed from a linked worktree of the clone, its untracked drawing copied in and its cache entry made current on the tree's own spec. 113 passed, 2 failed ("has no verdict record").
+  - **After the fix**: reviews 214/214, plan 210/210, task 141/141, record 104/104, bundle 88/88, measure 283/283, with lint and format clean (`make builder-checks CRATE="rust/gate/crates/reviews rust/gate/crates/plan rust/gate/crates/task rust/gate/crates/record rust/gate/crates/bundle rust/gate/crates/measure"`); `test-review-gate.sh` 115/115.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a - tooling, no engine step | n/a | n/a | none | n/a |
 
 ### T442 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A verdict the review recorded, a discharge, the checkpoint's clock and log, an owed part B and a round's snapshot read the same from any tree of the clone. A checkpoint or tick in a pool tree or the landing worktree no longer holds a reviewed unit as unanswered.
+2. **The constraints.** Reuse the existing resolvers (the brief; T275's "no second resolver"); a plain clone's paths unchanged; no guard file edited, no guard message changed.
+3. **Where each comes from.** O: T275's census and T442's line; each site's writer found by grepping the file's name over `rust/` and `scripts/` and reading each hit, 2026-11-27.
+4. **Do they describe the world here?** Yes: this tree is a linked worktree of the clone, and every red test builds the same shape.
+5. **The order.** After T275 (the prerequisite's readers); beside T441 (the guard's sites); before T22.
+6. **The exits.** Green: the eight new checks pass with their crates' and the suite's whole runs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks` over the six crates green and `tests/hooks/test-review-gate.sh` 115 of 115 passed, measured 2026-11-27 (both runs whole, after the fix).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** In a pool tree, a checkpoint or a tick held a reviewed unit as owed, the push from a linked worktree refused a map whose review was recorded, quote-verbatim failed to write, and stale-terms said no round was dispatched. Each is a wrong outcome, and this task fixes it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `set_down.rs`' `since_start` read the task starts from the tree's own dir, where none is written: fixed here (the same `git_dir`). Observed 2026-11-27, method: each file name of the moved state grepped over `rust/` and `scripts/`, each hit read for where its root comes from.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect class.
+
 
 ### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))
 

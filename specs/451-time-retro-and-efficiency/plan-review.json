@@ -3764,7 +3764,7 @@
    "declared": "spec-fidelity"
   },
   "### T442 Approach (checklist part A)": {
-   "sha256": "bfe3b01c138fecf2470381ff3a8897c5c3265816254c182b1f44d9499fc8aa47",
+   "sha256": "144d1c2891f3c91fe955ef74909815fd41d79bb4a4325d273d49e96460ef6962",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4143,6 +4143,12 @@
   },
   "### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)": {
    "sha256": "81e0e90235bcbca4414df077b1ed9354e019329d5320270c462d565426ccc332",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)": {
+   "sha256": "54fd06c9845e8b06af455aefec6a62f57f111f345350c722053cf3f9c5272d00",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37623,6 +37629,70 @@
      "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)",
+    "### T442 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T442-common",
+     "summary": "Every listed site (reviews::gitdir and its callers, review-gate.sh:278, stale_terms.rs:508, bundle helpers.rs:234, plan approach.rs and task set_down.rs git_dir) resolves the clone's COMMON git dir; a plain clone's paths unchanged.",
+     "class": "within",
+     "why": "A defect fix. The block names the wrong outcomes measured red-first on the old code: a push from a linked worktree refused a reviewed map, a checkpoint or tick in a pool tree held a reviewed unit as owed, quote-verbatim crashed with Not a directory, and stale-terms said no round was dispatched. The 2026-11-27 go-ahead approved the worktree and parallel-building work, and fix-as-we-go makes these defects the task's to fix. Line 254's 'a review recording in its own tree' (T257) is the plan-review record in the plan's tree. T442 does not move that record (the MANIFEST still records it per tree), and T275, already landed, put the review verdicts in the common dir. T442 only makes the readers follow those writers."
+    },
+    {
+     "id": "T442-resolvers",
+     "summary": "No new resolver: rev-parse --git-common-dir where a site already shelled out and its None matters (reviews::gitdir, set_down::git_dir), event_log_hooks::common_git_dir for the bare <root>/.git joins, and the plan crate's codeid::common_git_dir.",
+     "class": "within",
+     "why": "This is how the fix is built and it narrows nothing. It follows T275's 'no second resolver'."
+    },
+    {
+     "id": "T442-land-alone-copies",
+     "summary": "land-alone.sh stops copying review-verdicts/ and approach-owed.json into the landing worktree's own git dir.",
+     "class": "within",
+     "why": "The copies only stood in for the per-tree reads this task removes. Once no reader looks there, dropping them changes no outcome."
+    },
+    {
+     "id": "T442-rust-checks-kept",
+     "summary": "land-alone.sh still copies rust-checks/, because its reader is outside this task's census.",
+     "class": "within",
+     "why": "Nothing is fixed less: the copy is left working as it is, and the block names no wrong outcome for it. Under 'WHAT A DEFECT IS', leaving a working mechanism alone is not a narrowing."
+    },
+    {
+     "id": "T442-approach-owed-common",
+     "summary": "DECISION: approach-owed.json is common, not per tree, and all three of its parties (decide/tick, set-down, land-alone) move together.",
+     "class": "within",
+     "why": "An owed block belongs to the TASK, and a task moves between trees. Kept per tree, an owed part B written in a builder's tree was dropped at the carry, which is a wrong outcome. No request text puts this state per tree."
+    },
+    {
+     "id": "T442-since-start",
+     "summary": "set_down.rs since_start now reads task-starts.jsonl from the common dir where make task-start writes it; fixed by the same git_dir change and recorded under Found and left.",
+     "class": "within",
+     "why": "A defect found while doing the task and fixed in it, as fix-as-we-go requires. It is not deferred."
+    },
+    {
+     "id": "T442-landing-worktree-hold",
+     "summary": "In land-alone's landing worktree the tick's checkpoint hold and the glyph hour now read the clone's clock and event log, so the landing holds where the same landing would in the clone.",
+     "class": "within",
+     "why": "An existing check, already approved, now reaches the tree it previously missed. Before the fix it held nothing there, which is a check passing work it should hold: a defect under 'WHAT A DEFECT IS'. No new refusal and no new message."
+    },
+    {
+     "id": "T442-per-tree-kept",
+     "summary": "sync-with-main.sh:439 (runs from the session clone, where its own dir is the common one) and the eight sites T442's line rules 'not defects, by reading' (speckit_todo/report.rs:179, owed/answers.rs:422, ci/switches.rs:312, model_trial/case.rs, archive/store.rs:161, land-tooling.sh, verify_wait.sh, review-tree.sh) are left unchanged.",
+     "class": "within",
+     "why": "Leaving a non-defect alone is within the request. This class rests on the block's own statement of the task line's ruling: the bundle does not carry the task line, so that reading was not re-checked here. If any of those sites turns out to give a wrong outcome from a linked worktree, it is a defect left and would need fixing."
+    },
+    {
+     "id": "T442-no-guard-edit",
+     "summary": "Constraint: no guard file edited and no guard message changed.",
+     "class": "within",
+     "why": "A limit on the work that narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -57382,6 +57452,68 @@
      "summary": "The gate crates' remaining .git sites are left to T442, filed beside this task.",
      "class": "within",
      "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T442": {
+   "section_sha256": "ea7fbfa8a93f0c7a75a5a90c83e1402277874868ea00164b5da85c7fcbd06c17",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T442-common",
+     "summary": "Every listed site (reviews::gitdir and its callers, review-gate.sh:278, stale_terms.rs:508, bundle helpers.rs:234, plan approach.rs and task set_down.rs git_dir) resolves the clone's COMMON git dir; a plain clone's paths unchanged.",
+     "class": "within",
+     "why": "A defect fix. The block names the wrong outcomes measured red-first on the old code: a push from a linked worktree refused a reviewed map, a checkpoint or tick in a pool tree held a reviewed unit as owed, quote-verbatim crashed with Not a directory, and stale-terms said no round was dispatched. The 2026-11-27 go-ahead approved the worktree and parallel-building work, and fix-as-we-go makes these defects the task's to fix. Line 254's 'a review recording in its own tree' (T257) is the plan-review record in the plan's tree. T442 does not move that record (the MANIFEST still records it per tree), and T275, already landed, put the review verdicts in the common dir. T442 only makes the readers follow those writers."
+    },
+    {
+     "id": "T442-resolvers",
+     "summary": "No new resolver: rev-parse --git-common-dir where a site already shelled out and its None matters (reviews::gitdir, set_down::git_dir), event_log_hooks::common_git_dir for the bare <root>/.git joins, and the plan crate's codeid::common_git_dir.",
+     "class": "within",
+     "why": "This is how the fix is built and it narrows nothing. It follows T275's 'no second resolver'."
+    },
+    {
+     "id": "T442-land-alone-copies",
+     "summary": "land-alone.sh stops copying review-verdicts/ and approach-owed.json into the landing worktree's own git dir.",
+     "class": "within",
+     "why": "The copies only stood in for the per-tree reads this task removes. Once no reader looks there, dropping them changes no outcome."
+    },
+    {
+     "id": "T442-rust-checks-kept",
+     "summary": "land-alone.sh still copies rust-checks/, because its reader is outside this task's census.",
+     "class": "within",
+     "why": "Nothing is fixed less: the copy is left working as it is, and the block names no wrong outcome for it. Under 'WHAT A DEFECT IS', leaving a working mechanism alone is not a narrowing."
+    },
+    {
+     "id": "T442-approach-owed-common",
+     "summary": "DECISION: approach-owed.json is common, not per tree, and all three of its parties (decide/tick, set-down, land-alone) move together.",
+     "class": "within",
+     "why": "An owed block belongs to the TASK, and a task moves between trees. Kept per tree, an owed part B written in a builder's tree was dropped at the carry, which is a wrong outcome. No request text puts this state per tree."
+    },
+    {
+     "id": "T442-since-start",
+     "summary": "set_down.rs since_start now reads task-starts.jsonl from the common dir where make task-start writes it; fixed by the same git_dir change and recorded under Found and left.",
+     "class": "within",
+     "why": "A defect found while doing the task and fixed in it, as fix-as-we-go requires. It is not deferred."
+    },
+    {
+     "id": "T442-landing-worktree-hold",
+     "summary": "In land-alone's landing worktree the tick's checkpoint hold and the glyph hour now read the clone's clock and event log, so the landing holds where the same landing would in the clone.",
+     "class": "within",
+     "why": "An existing check, already approved, now reaches the tree it previously missed. Before the fix it held nothing there, which is a check passing work it should hold: a defect under 'WHAT A DEFECT IS'. No new refusal and no new message."
+    },
+    {
+     "id": "T442-per-tree-kept",
+     "summary": "sync-with-main.sh:439 (runs from the session clone, where its own dir is the common one) and the eight sites T442's line rules 'not defects, by reading' (speckit_todo/report.rs:179, owed/answers.rs:422, ci/switches.rs:312, model_trial/case.rs, archive/store.rs:161, land-tooling.sh, verify_wait.sh, review-tree.sh) are left unchanged.",
+     "class": "within",
+     "why": "Leaving a non-defect alone is within the request. This class rests on the block's own statement of the task line's ruling: the bundle does not carry the task line, so that reading was not re-checked here. If any of those sites turns out to give a wrong outcome from a linked worktree, it is a defect left and would need fixing."
+    },
+    {
+     "id": "T442-no-guard-edit",
+     "summary": "Constraint: no guard file edited and no guard message changed.",
+     "class": "within",
+     "why": "A limit on the work that narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"

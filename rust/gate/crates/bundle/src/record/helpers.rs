@@ -231,7 +231,10 @@ pub fn quote_verbatim(args: &[String], cwd: &Path) -> Reply {
     let json_arg = parsed.text("--json", "");
     let out = if json_arg.is_empty() {
         let safe = UNSAFE.replace_all(&name, "-");
-        py_path(&format!("{root_arg}/.git/quote-verbatim/{safe}.json"))
+        // the COMMON git dir: in a linked worktree `<root>/.git` is a file, and the directory under it could not be made (451 T442)
+        l7r_shared::guards::event_log_hooks::common_git_dir(&py_path(root_arg))
+            .join("quote-verbatim")
+            .join(format!("{safe}.json"))
     } else {
         py_path(json_arg)
     };

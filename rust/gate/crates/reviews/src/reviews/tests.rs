@@ -46,6 +46,13 @@ fn git_ok(root: &Path, args: &[&str]) {
     assert!(o.status.success(), "git {args:?}: {said}");
 }
 
+/// A linked worktree of `root` at its HEAD, `<root>/linked`, as a builder's pool tree is one of the clone (451 T442).
+pub(super) fn linked(root: &Path) -> PathBuf {
+    let wt = root.join("linked");
+    git_ok(root, &["worktree", "add", "-q", "--detach", "linked"]);
+    wt
+}
+
 /// Commit everything in `root`.
 pub(super) fn commit(root: &Path, msg: &str) {
     git_ok(root, &["add", "-A"]);
@@ -335,4 +342,13 @@ fn the_helpers_read_as_python_did() {
     let r = repo("git");
     assert_eq!(gitdir(&r), Some(r.join(".git")));
     assert!(now() > 1.0e9);
+}
+
+/// RED FIRST (451 T442): the review state is the clone's - its verdicts, clock, pairing and event log - so a linked worktree of it (a
+/// builder's pool tree, the landing worktree) reads it from the COMMON git directory, not the tree's own.
+#[test]
+fn a_linked_worktree_finds_the_clones_git_dir() {
+    let r = repo("gitdir-linked");
+    let wt = linked(&r);
+    assert_eq!(gitdir(&wt), Some(r.join(".git")));
 }

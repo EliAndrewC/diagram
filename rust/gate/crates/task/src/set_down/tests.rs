@@ -424,3 +424,30 @@ fn only_parked_stages_left_the_stop_is_taken_under_the_cap_naming_the_ruling() {
     let none = down(&root, &session);
     assert_eq!(none.code, 2, "{}", none.stdout);
 }
+
+/// RED FIRST (451 T442): from a linked worktree of the clone the set-down reads the clone's owed part B and task starts, in the COMMON
+/// git directory where `make decide` and `make task-start` write them.
+#[test]
+fn a_linked_worktree_reads_the_clones_owed_part_b() {
+    let dir = repo("set-down-linked");
+    let root = root_of(&dir);
+    let wt = dir.join("linked");
+    let added = std::process::Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args(["worktree", "add", "-q", "--detach"])
+        .arg(&wt)
+        .status()
+        .unwrap();
+    assert!(added.success());
+    std::fs::write(
+        root.join(".git/approach-owed.json"),
+        r#"[{"feature": "9001-x", "task": "T01", "trigger": "cohort@x", "part": "B", "utc": "2026-10-21T19:28:05Z"}]"#,
+    )
+    .unwrap();
+    assert_eq!(
+        git_dir(&wt),
+        std::fs::canonicalize(root.join(".git")).unwrap()
+    );
+    assert_eq!(down(&wt, &[]).code, 2);
+}

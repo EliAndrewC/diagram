@@ -458,3 +458,25 @@ fn a_word_re_wrapped_onto_the_next_line_is_no_old_value_and_the_real_catches_sta
     )
     .is_empty());
 }
+
+/// RED FIRST (451 T442): the review-round guard snapshots the feature into its clone's git directory, so `--clone` naming a linked
+/// worktree of that clone (a builder's pool tree) reads the snapshot from the COMMON git directory, not `<tree>/.git`, a file there.
+#[test]
+fn a_linked_worktree_reads_the_clones_snapshot() {
+    let root = clone("stale-linked");
+    let wt = root.join("linked");
+    assert!(std::process::Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args(["worktree", "add", "-q", "--detach", "linked"])
+        .status()
+        .unwrap()
+        .success());
+    write(
+        &root,
+        ".git/review-round/449-x/snapshot/spec.md",
+        NEW.as_bytes(),
+    );
+    let got = cli(&words(&["449", "--clone", &wt.display().to_string()]));
+    assert!(!got.stderr.contains("no snapshot"), "{}", got.stderr);
+}

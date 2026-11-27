@@ -5,7 +5,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::super::tests::{events, feature, hamlet, put, repo};
+use super::super::tests::{events, feature, hamlet, linked, put, repo};
 use super::*;
 
 /// Worked from `secs` ago to a minute ago, an event every ten minutes: no idle gap.
@@ -407,4 +407,27 @@ fn the_command_line_reads_as_argparse_did() {
     );
     let elsewhere = cli(&["status".to_owned(), "--root".to_owned(), "/".to_owned()]);
     assert_eq!(elsewhere.code, 0);
+}
+
+/// RED FIRST (451 T442): in a linked worktree of the clone (a builder's pool tree, the landing worktree) the checkpoint reads the
+/// clone's event log, clock, pairing and verdicts from the common git directory, where the hooks and the review write them; read from
+/// the tree's own, a verdict the review recorded held its unit as unanswered.
+#[test]
+fn a_linked_worktree_reads_the_clones_checkpoint_state() {
+    let r = repo("linked-checkpoint");
+    worked(&r, 7200);
+    put(
+        &r,
+        ".git/glyph-clock.json",
+        r#"{"900-x": {"checkpoint_at": 5}}"#,
+    );
+    put(
+        &r,
+        ".git/review-verdicts/settlement-review--m.json",
+        r#"{"verdict": "PASS", "engine_key": "K"}"#,
+    );
+    let wt = linked(&r);
+    assert!(!events_log(&wt, "900-x").is_empty());
+    assert_eq!(clock(&wt).1["900-x"]["checkpoint_at"], json!(5));
+    assert!(answered(&wt, "settlement-review--m", "m", "K"));
 }

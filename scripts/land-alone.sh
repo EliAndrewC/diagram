@@ -558,14 +558,14 @@ say "worktree $WT at ${head:0:10} ($(lap) s)"
 # (5) the clone's kept results, where newer: a crate's or suite's result is keyed by its inputs' contents, so the clone's builders'
 # closing checks on the task's own files serve the landing (measured 2026-11-21: every crate's lint, test, format and dead reused)
 gd=$(git -C "$WT" rev-parse --absolute-git-dir) || exit 2
-# review-verdicts too: the review gate reads them from the worktree's own git dir, and each is keyed by its engine key, so a verdict
-# the tree no longer matches is still refused (2026-11-22: 449's batch landing refused three reviews the clone held as unrecorded)
+# NOT review-verdicts or approach-owed.json (451 T442): the review gate, the checkpoint, the discharges and the approach gate read them
+# from the common git dir, which this worktree shares, so nothing read the copies (2026-11-22's three reviews refused as unrecorded
+# were the gate reading the worktree's own dir)
 # NOT hooks-test (451 T281): the suites' stamps are read from the common git dir, so nothing read the copy (since commit d7456c4c8d),
 # and the tree's own hooks-test/messages is now its store of rendered guard messages - the copy would fill it with the clone's
-for d in rust-checks review-verdicts; do
+for d in rust-checks; do
   [ -d "$COMMON/$d" ] && mkdir -p "$gd/$d" && cp -a -u "$COMMON/$d/." "$gd/$d/"
 done
-[ -f "$COMMON/approach-owed.json" ] && cp -a "$COMMON/approach-owed.json" "$gd/"
 say "kept results seeded ($(lap) s)"
 
 # (6) the landing, whole, in the worktree

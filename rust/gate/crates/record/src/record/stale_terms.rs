@@ -505,7 +505,11 @@ pub fn cli(args: &[String]) -> Reply {
         .unwrap_or_default()
         .to_string_lossy()
         .into_owned();
-    let snap = clone.join(".git/review-round").join(&name).join("snapshot");
+    // the review-round guard's snapshot is its clone's: read from the COMMON git dir, so `--clone` may name a linked worktree (451 T442)
+    let snap = l7r_shared::guards::event_log_hooks::common_git_dir(&clone)
+        .join("review-round")
+        .join(&name)
+        .join("snapshot");
     let old = if !against.is_empty() {
         read_ref(&clone, against, &name)
     } else if snap.is_dir() {

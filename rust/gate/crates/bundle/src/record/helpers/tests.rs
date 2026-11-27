@@ -438,3 +438,25 @@ fn the_residue_save_and_the_runner() {
     assert!(run("nope", &[], &root).is_none());
     assert!(entry_dir(&root, "x").ends_with(entry_dir(Path::new(""), "x")));
 }
+
+/// RED FIRST (451 T442): in a linked worktree `<root>/.git` is a file naming the tree's git directory, so the report is written in the
+/// clone's COMMON git directory - before, its directory could not be made and the write failed.
+#[test]
+fn quote_verbatim_writes_its_json_from_a_linked_worktree() {
+    let (_d, root) = world("helpers-quote-linked");
+    let wt = root.join("linked");
+    std::fs::create_dir_all(root.join(".git/worktrees/linked")).unwrap();
+    std::fs::write(root.join(".git/worktrees/linked/commondir"), "../..\n").unwrap();
+    for (rel, text) in FILES {
+        put(&wt.join("research"), rel, text);
+    }
+    std::fs::write(
+        wt.join(".git"),
+        format!("gitdir: {}\n", s(&root.join(".git/worktrees/linked"))),
+    )
+    .unwrap();
+    cached(&wt);
+    let got = quote_verbatim(&a(&["--root", &s(&wt), "0001"]), &root);
+    assert_eq!(got.code, 0, "{}", got.stderr);
+    assert!(root.join(".git/quote-verbatim/0001.json").is_file());
+}
