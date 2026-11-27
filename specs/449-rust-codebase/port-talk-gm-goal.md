@@ -272,3 +272,17 @@ may do the same work in more or fewer tokens, or more or fewer turns, which is a
 change if windows are compared without it. So the model in use is one more dimension of a like window (his seventh message), beside
 concurrency; any quota or dollar view is computed at read time from a rate table, never stored. Filed as 451 T531: the tokens split
 by model in `make task-time`.
+
+## His sixteenth message (2026-11-27, the afternoon after): THE NUMBER OF BUILDERS - a knob the reviewer watches, but settled sooner, in feature 461
+
+<!-- SOURCE: GM NOTES -->
+> Yeah, what did our measurements show about the number of builders? Like, is it correct for it to be 4 on this host? I know we tried 3 and then said we'd move to 4 if 3 seemed to have slack, and I don't know where we actually settled on that, but I guess that's the kind of thing that should be handled by the process reviewer in the long run, right?
+>
+> Okay, well, go ahead and add this to the growing list of notes for the process reviewer, since we will want it to be generally monitoring this as one of its things, or more generally as an example of a category of things that we want it to be monitoring. Though to be honest, this one is such a big performance deal that we probably want to also do those measurements and then settle on something for now in advance of letting the process reviewer handle it, because this reflects a huge impact to our throughput where we don't want to wait until later to make it. So I think that as soon as the orchestrator feature is in a place to handle this, then we should probably add those measurements and decisions to the orchestrator feature in the appropriate place rather than keeping them as part of the long-running feature that we have been working.
+<!-- END SOURCE -->
+
+What the session measured (2026-11-27, `make sampler-report` over 02:00Z to 15:00Z): `L7R_BUILDERS` is still 3 (a GUESS knob),
+but four trees were held about 420 of the 780 minutes and three about 220; memory peaked at 59% of 10 GiB with four held (31% with
+three) and no OOM kill; median load 14.3 against 12.5 on 22 cores; CPU stall about 1.04 s a sample with four against 0.69 with
+three. Whether four landed more work is not measurable from that night: integration was the bottleneck. Filed as feature 461's
+task to measure three against four over like windows once the lane runs, and settle the knob there.
