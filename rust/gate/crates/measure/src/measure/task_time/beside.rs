@@ -10,6 +10,7 @@
 use std::collections::HashMap;
 use std::fmt::Write as _;
 
+use super::super::where_time::columns::ran::{self, Counts};
 use super::super::where_time::columns::spent::Tok;
 use super::super::where_time::columns::SLOT_WAIT;
 use super::book::{Cell, Key, Ledger};
@@ -80,30 +81,39 @@ fn all(t: &Tok) -> f64 {
     t.out + t.fresh + t.cached + t.created
 }
 
-/// The ledger's counts for `key`: its test runs and compiles (the `tests` and `compile` phases its runs held), and its make runs.
+/// The ledger's counts for `key` (its counted lines, 451 T522, [`counts`]) and its make runs.
 #[must_use]
-pub fn counts(l: &Ledger, key: &Key) -> (usize, usize, usize) {
-    let n = |col: &str| {
-        l.phases
-            .get(&(key.clone(), col.to_owned()))
-            .copied()
-            .unwrap_or(0)
-    };
+pub fn counts(l: &Ledger, key: &Key) -> (Counts, usize) {
     let makes = l
         .runs
         .iter()
         .filter(|((k, t), _)| k == key && t.starts_with("make "))
         .map(|(_, n)| n)
         .sum();
-    (n("tests"), n("compile"), makes)
+    (ran::counts(l.ran.get(key).into_iter().flatten()), makes)
+}
+
+/// A count of lines and the minutes each of their own spans held on average, `-` minutes for none (451 T521, T522).
+fn runs_each((n, secs): (usize, f64)) -> String {
+    format!("{n}{}", each(n, secs))
+}
+
+/// A task's compiles: how many, how many did work, the minutes each (451 T522).
+fn compiles(c: &Counts) -> String {
+    format!(
+        "{} ({} of {} s or more){}",
+        c.compile.0,
+        c.worked,
+        super::super::events::fixed(ran::NOOP_BELOW_S, 1),
+        each(c.compile.0, c.compile.1)
+    )
 }
 
 /// The size, count, turn and token cells of one task, in the summary table's order.
 fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
     let s = x.sizes.get(k).cloned().unwrap_or_default();
     let t = x.turns.get(k).copied().unwrap_or_default();
-    let (tests, compiles, makes) = counts(whole, k);
-    let cats = super::sums(whole, &|x| x == k).0;
+    let (counted, makes) = counts(whole, k);
     let tok = t.tok();
     let every = all(&tok);
     let shared = if s.shared.is_empty() {
@@ -116,8 +126,9 @@ fn cells(whole: &Ledger, k: &Key, x: &Extra) -> Vec<String> {
         lines(s.test),
         lines(s.code),
         lines(s.prose),
-        format!("{tests}{}", each(tests, secs(&cats, "tests"))),
-        format!("{compiles}{}", each(compiles, secs(&cats, "compile"))),
+        runs_each(counted.unit),
+        runs_each(counted.cover),
+        compiles(&counted),
         makes.to_string(),
         t.builders.to_string(),
         t.agents.to_string(),
@@ -140,9 +151,10 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
     out.push_str(
         "## The landed tasks' size, counts, turns and tokens (451 T512: raw figures, a share only of tokens, for \
          the process review to read beside the minutes, never a target)\n\n\
-         | task | commits | test lines | non-test lines | prose lines | test runs | compiles | make runs | builder turns | review-agent \
-         turns | session turns | output | fresh input | cache read | cache write | tokens: builders / review agents / session |\n\
-         |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n",
+         | task | commits | test lines | non-test lines | prose lines | unit-test runs | coverage runs | compiles | make runs | \
+         builder turns | review-agent turns | session turns | output | fresh input | cache read | cache write | tokens: builders / \
+         review agents / session |\n\
+         |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n",
     );
     for (_, k) in landed {
         let _ = writeln!(
@@ -156,8 +168,8 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
     let _ = writeln!(
         out,
         "\n(a share only of time and of tokens: each token kind's % is of the task's tokens, and the last column each actor's share \
-         of them; a count and a line class carry none (451 T521): test runs and compiles carry the minutes per run of the task's \
-         `tests` and `compile` minutes, a make target's runs its own row's minutes per run in the task's target table, lines and \
+         of them; a count and a line class carry none (451 T521): unit-test runs, coverage runs and compiles carry the minutes \
+         each of their own lines' spans held (451 T522), a make target's runs its own row's minutes per run in the task's target table, lines and \
          turns are counts alone) {SOURCES} The main session's calls booked to no task: {}, their tokens {} (output {}, cache read {}).\n",
         x.unbooked.0,
         kilo(all(&x.unbooked.1)),
@@ -170,10 +182,13 @@ pub fn table(out: &mut String, whole: &Ledger, landed: &[(f64, Key)], x: &Extra)
 pub const SOURCES: &str = "Sources: LINES from git, each commit whose subject names the task (`451 T510:`, a bundle's `451 T470 \
      T363:` whole under each task it names, marked shared, never split; a coverage repair `451: T490's coverage repair`), a landing's \
      tick commit left out; test = `tests/`, `tests.rs`, `*_tests.rs`, prose = `specs/` and `.md`, an inline `#[cfg(test)]` block \
-     counted non-test (its files counted in the task's section); a commit whose subject names no task is in no row. TEST RUNS and \
-     COMPILES are the `tests` and `compile` Phase lines the task's runs held, as its minutes are booked: a compile is a `build` or \
-     `cover-build` line, written only where the binary's key moved, so a kept result is none, and the line cannot say whether cargo \
-     compiled anything; a pool tree's pre-warm and a lint's own compile are not counted. MAKE RUNS are its `make` targets' runs. TURNS \
+     counted non-test (its files counted in the task's section); a commit whose subject names no task is in no row. UNIT-TEST RUNS, COVERAGE RUNS \
+     and COMPILES are the `Phase` lines its runs held, tied as its minutes are, and its pool tree's pre-warm builds by their own task \
+     (451 T522, each listed under the task's tables): a unit-test run a `test` line, a coverage run a `cover-run` line, a compile \
+     every compiler invocation - a `build` or `cover-build` line (written only where the binary's key moved, so a kept result is \
+     none), each `lint` pass and each `prewarm` - and one that ran 1.0 s or more counted as having done work, a shorter one likely \
+     cargo finding every crate fresh (a GUESS from its span: the line does not say); a `make quick` or preflight line, which holds \
+     its own cargo calls' lines, is counted in none. A pool tree's line goes only to a run of its holder's tasks. MAKE RUNS are its `make` targets' runs. TURNS \
      are model calls, each message id once: a builder's and a review agent's from its transcript over the read-back (the agent under \
      the task its lines name), the main session's from its transcript, each call booked to the task its next own event-log line \
      names, a line carrying only the session's `make task-start` mark booked to none, a call after the task's carry the second \
@@ -371,35 +386,47 @@ pub fn own_table(out: &mut String, whole: &Ledger, key: &Key) {
     out.push('\n');
 }
 
-/// The task's line beside its tables: its counts beside the `tests` and `compile` minutes with the minutes per run, its size, its
-/// turns and its tokens, a share only of its tokens (451 T521).
+/// The task's line beside its tables: its `tests` and `compile` minutes, its counted lines (451 T522, each listed under its tables)
+/// with the minutes each, its size, its turns and its tokens, a share only of its tokens (451 T521).
 #[must_use]
 pub fn line(whole: &Ledger, key: &Key, cats: &[(String, Cell)], x: &Extra) -> String {
-    let (tests, compiles, _) = counts(whole, key);
-    let (t, cm) = (secs(cats, "tests"), secs(cats, "compile"));
+    let (n, _) = counts(whole, key);
+    let rans = whole.ran.get(key).map_or(&[][..], Vec::as_slice);
+    let step = |s: &str| rans.iter().filter(|r| r.step == s).count();
     let c = cells(whole, key, x);
     let inline = x.sizes.get(key).map_or(0, |s| s.inline);
     format!(
-        "Beside its minutes (451 T512): `tests` {} min in {tests} test runs{}; `compile` {} min in {compiles} compiles{}; {} make runs \
-         (each target's in the runs column below, with its minutes per run); {} commits: test {}, non-test {}, prose {}, {inline} of its non-test `.rs` files \
-         holding an inline test block; turns: builders {}, review agents {}, session {}; tokens: output {}, fresh input {}, cache \
-         read {}, cache write {}; by actor (builders / review agents / session) {}.\n",
-        m(t),
-        each(tests, t),
-        m(cm),
-        each(compiles, cm),
-        c[6],
+        "Beside its minutes (451 T512): `tests` {} min, `compile` {} min; its counted lines (451 T522, listed under its tables): {} \
+         unit-test runs{}, {} coverage runs{}, {} compiles ({} of {} s or more){} - {} builds, {} coverage builds, {} lint passes, {} pre-warm builds; {} make \
+         runs (each target's in the runs column below, with its minutes per run); {} commits: test {}, non-test {}, prose {}, \
+         {inline} of its non-test `.rs` files holding an inline test block; turns: builders {}, review agents {}, session {}; tokens: \
+         output {}, fresh input {}, cache read {}, cache write {}; by actor (builders / review agents / session) {}.\n",
+        m(secs(cats, "tests")),
+        m(secs(cats, "compile")),
+        n.unit.0,
+        each(n.unit.0, n.unit.1),
+        n.cover.0,
+        each(n.cover.0, n.cover.1),
+        n.compile.0,
+        n.worked,
+        super::super::events::fixed(ran::NOOP_BELOW_S, 1),
+        each(n.compile.0, n.compile.1),
+        step("build"),
+        step("cover-build"),
+        step("lint"),
+        step(ran::PREWARM),
+        c[7],
         c[0],
         c[1],
         c[2],
         c[3],
-        c[7],
         c[8],
         c[9],
         c[10],
         c[11],
         c[12],
         c[13],
-        c[14]
+        c[14],
+        c[15]
     )
 }

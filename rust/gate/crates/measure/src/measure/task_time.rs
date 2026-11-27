@@ -37,6 +37,7 @@ pub mod beside;
 pub mod book;
 pub mod cross;
 pub mod held;
+mod listed;
 pub mod program;
 pub mod progress;
 pub mod sized;
@@ -598,6 +599,7 @@ pub fn render(
         out.push('\n');
         beside::own_table(&mut out, whole, k);
         tables(&mut out, &c, &tg, &d, false);
+        listed::listing(&mut out, whole, k);
     }
     out.push_str(
         "## The rest of the window: tasks not landed in it, and time under no task (`-`); the second tier's is in its own section\n\n",

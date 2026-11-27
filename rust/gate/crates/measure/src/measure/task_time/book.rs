@@ -33,7 +33,7 @@ use std::collections::{HashMap, HashSet};
 
 use super::super::events::{get, is, or_s, t_of, Event, Raised, IDLE_CAP_S};
 
-use super::super::where_time::columns::{Agent, Runs};
+use super::super::where_time::columns::{Agent, Ran, Runs};
 use super::program;
 
 /// (feature, task): task ids collide across features.
@@ -69,9 +69,9 @@ pub struct Ledger {
     /// lines - a resumed one's every span (451 T324), the time it was stopped between them left out, its lines that run on after a stop with no start line a span too (451 T382) - never from its report (451
     /// T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
     pub builders: HashMap<Key, (f64, usize)>,
-    /// (key, phase category) -> how many phases of it its runs held, counted where its runs are (451 T512: test runs and compiles
-    /// beside their minutes).
-    pub phases: HashMap<(Key, String), usize>,
+    /// key -> the counted lines its runs held, counted where its runs are, and its pre-warm builds by their own task (451 T512, T522:
+    /// compiles, unit-test runs and coverage runs beside their minutes, each listed).
+    pub ran: HashMap<Key, Vec<Ran>>,
     /// (key, category, target) -> its OWN-PATH seconds (451 T512, the GM 2026-11-27): each builder's own clock, each second booked
     /// once to what its next step waited on by the descent the main session's blocking takes, its background work minutes only.
     pub own: HashMap<(Key, String, String), f64>,
@@ -881,11 +881,10 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
             *l.runs
                 .entry((ix.run_key[i].clone(), ix.run_cats[i].1.clone()))
                 .or_default() += 1;
-            for (col, n) in &r.split.counts {
-                *l.phases
-                    .entry((ix.run_key[i].clone(), (*col).to_owned()))
-                    .or_default() += n;
-            }
+            l.ran
+                .entry(ix.run_key[i].clone())
+                .or_default()
+                .extend(r.split.ran.iter().cloned());
         }
         l.books_to
             .insert(ix.run_cats[i].1.clone(), ix.run_cats[i].0.clone());
@@ -914,6 +913,9 @@ pub fn book(w: &World) -> Result<Ledger, Raised> {
                 }
             }
         }
+    }
+    for p in w.runs.prewarm.iter().filter(|p| p.t1 >= lo && p.t0 <= hi) {
+        l.ran.entry(p.key.clone()).or_default().push(p.clone());
     }
     span_minutes(w, &ix, &mut l);
     builder_minutes(w, &ix, &mut l);

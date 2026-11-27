@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-27T17:23:55Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T522",
+  "commit": "824597f74f",
+  "why": "no open task waits on T528 or T529"
+}

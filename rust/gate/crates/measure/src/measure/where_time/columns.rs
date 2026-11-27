@@ -433,8 +433,9 @@ pub type Parts = Vec<(&'static str, Vec<(f64, f64)>)>;
 pub struct Split {
     /// (category, its spans), first first.
     pub parts: Parts,
-    /// (category, how many phases of it the call held), first first: a `make task-time` count beside its minutes (451 T512).
-    pub counts: Vec<(&'static str, usize)>,
+    /// Its counted lines ([`ran::kind`]: every compile, unit-test run and coverage run), a `make task-time` count and listing
+    /// beside its minutes (451 T512, T522).
+    pub ran: Vec<Ran>,
 }
 
 impl Split {
@@ -449,11 +450,6 @@ impl Split {
                 .collect(),
         );
         let mut parts = Vec::new();
-        let counts = PHASE_COLUMNS
-            .iter()
-            .map(|col| (*col, held.iter().filter(|(c, _)| c == col).count()))
-            .filter(|(_, n)| *n > 0)
-            .collect();
         for col in PHASE_COLUMNS {
             let spans: Vec<(f64, f64)> = held
                 .iter()
@@ -467,7 +463,10 @@ impl Split {
             taken = union(taken.into_iter().chain(own.iter().copied()).collect());
             parts.push((col, own));
         }
-        Self { parts, counts }
+        Self {
+            parts,
+            ran: Vec::new(),
+        }
     }
 
     /// One category's spans, none where it holds none.
@@ -504,6 +503,8 @@ pub struct Runs {
     pub detached: Vec<(String, &'static str, f64)>,
     /// The scratch waits' spans ([`scratch_wait`], feature 451 T426), every one read, the reports counting their window's.
     pub scratch: Vec<(f64, f64)>,
+    /// The pool trees' pre-warm builds ([`ran::PREWARM`], 451 T522): held by no run, each counted under its line's own task.
+    pub prewarm: Vec<Ran>,
 }
 
 /// What the runs are cut and ended by.
@@ -618,67 +619,6 @@ pub fn runs(
     }
     tie(&mut out, aside, starts, w.end)?;
     Ok(out)
-}
-
-/// Each phase of `aside` with a [`category`] tied to its run (the module's doc), the loose counted; a page session's booked by its task.
-fn tie(out: &mut Runs, aside: &[Event], starts: &[(f64, String)], end: f64) -> Result<(), Raised> {
-    let mut held: Vec<Parts> = vec![Vec::new(); out.runs.len()];
-    for p in aside.iter().filter(|p| is(p, "ev", "Phase")) {
-        let scratch = scratch_wait(p);
-        let Some(col) = (if scratch { Some(SCRATCH) } else { category(p) }) else {
-            continue;
-        };
-        let span = |k: &str| match get(p, k) {
-            Value::String(t) => ts(t),
-            _ => Err(format!("TypeError: a Phase line's {k} is no text")),
-        };
-        let (a, b) = (span("t0")?, span("t1")?);
-        if a >= end {
-            // after the window: the logs are read to their end, its runs cut at the window's
-            continue;
-        }
-        if scratch {
-            out.scratch.push((a, b));
-        }
-        let (make, task) = (or_s(p, "make"), or_s(p, "task"));
-        if is(p, "src", "page-session") {
-            let task = if task.is_empty() {
-                task_at(starts, a)
-            } else {
-                task
-            };
-            out.detached.push((task, col, b.min(end) - a));
-            continue;
-        }
-        let (same_make, same_task) = (
-            |r: &Run| make.is_empty() || r.makes.contains(&make),
-            |r: &Run| !task.is_empty() && r.task == task,
-        );
-        let fits = |r: &&Run| {
-            r.sid == or_s(p, "sid") && (same_make(r) || same_task(r)) && r.t0 <= a && b <= r.t1
-        };
-        let best = out
-            .runs
-            .iter()
-            .enumerate()
-            .filter(|(_, r)| fits(r))
-            .max_by(|(_, x), (_, y)| {
-                (same_make(x), same_task(x))
-                    .cmp(&(same_make(y), same_task(y)))
-                    .then(cmp_f(x.t0, y.t0))
-            })
-            .map(|(i, _)| i);
-        if let Some(i) = best {
-            held[i].push((col, vec![(a, b)]));
-        } else if !scratch {
-            out.loose.0 += 1;
-            out.loose.1 += b - a;
-        }
-    }
-    for (r, spans) in out.runs.iter_mut().zip(held) {
-        r.split = Split::of(&spans);
-    }
-    Ok(())
 }
 
 /// `spans` less `cut`, both disjoint and in order.
@@ -823,8 +763,11 @@ pub fn scratch_note(spans: &[(f64, f64)], from: f64) -> String {
 }
 
 mod flight;
+pub mod ran;
 pub mod spent;
 pub use flight::{flight, Agent, Flight};
+use ran::tie;
+pub use ran::Ran;
 
 #[cfg(test)]
 mod tests;

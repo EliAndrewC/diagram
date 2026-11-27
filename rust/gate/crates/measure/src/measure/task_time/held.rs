@@ -16,7 +16,8 @@
 //! THE RULE. A line whose `clone` is a tree the log names, begun while a holder held it for the line's feature, takes the holder's
 //! FIRST task - unless its own task is one of the holder's (a bundle's second member, named by a builder's own later start, stands:
 //! T332's rule at the writer). A line from a tree the log does not know, from a time nobody held it, or filed under a feature the
-//! holder was not held for keeps its own task.
+//! holder was not held for keeps its own task. A held line also carries `held_for`, the holder's tasks, and is tied only to a run of
+//! one of them (451 T522 (d): two builders' runs of one target, one holding the other's lines, `where_time::columns::ran::tie`).
 
 use std::path::{Path, PathBuf};
 
@@ -118,6 +119,9 @@ pub fn holds(bases: &[PathBuf]) -> Vec<Hold> {
     out
 }
 
+/// The log of the lines the writer filed under no feature (`event_log_hooks::log_path_in`).
+const UNFILED: &str = "_unassigned";
+
 /// Each `Phase` line of a pool tree given the task its tree's holder had when the phase began (the module's doc). `home` is the
 /// feature of a line that carries none (one feature's log read untagged).
 pub fn retask(aside: &mut [Event], holds: &[Hold], home: &str) {
@@ -132,9 +136,18 @@ pub fn retask(aside: &mut [Event], holds: &[Hold], home: &str) {
             h.tree == tree
                 && h.from <= t0
                 && t0 < h.until
-                && (feature == h.feature || feature.starts_with(&format!("{}-", h.feature)))
+                // a line the writer filed under no feature is the holder's (451 T522 (d): 647 of b1's lines on 2026-11-27, T529)
+                && (feature == UNFILED
+                    || feature == h.feature
+                    || feature.starts_with(&format!("{}-", h.feature)))
         });
-        if let Some(h) = held.filter(|h| !h.tasks.contains(&own)) {
+        let Some(h) = held else {
+            continue;
+        };
+        // the holder's tasks, so the tie gives the line to no other builder's run of the same target (451 T522 (d), `ran::tie`)
+        let tasks = h.tasks.iter().cloned().map(Value::String).collect();
+        e.insert("held_for".to_owned(), Value::Array(tasks));
+        if !h.tasks.contains(&own) {
             e.insert("task".to_owned(), Value::String(h.tasks[0].clone()));
         }
     }

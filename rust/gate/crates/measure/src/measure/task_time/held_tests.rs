@@ -150,4 +150,16 @@ fn a_phase_line_takes_its_tree_s_holder_s_first_task_and_keeps_its_own_elsewhere
     let mut bare = vec![phase("a", "10:25", "T9", "")];
     retask(&mut bare, &held, "451-x");
     assert_eq!(bare[0].get("task"), Some(&Value::String("T2".to_owned())));
+    // a held line names its holder's tasks for the tie, and one filed under no feature is the holder's (451 T522 (d))
+    assert_eq!(bare[0].get("held_for"), Some(&json!(["T2", "T3"])));
+    let mut unfiled = vec![
+        phase("a", "10:25", "", "_unassigned"),
+        phase("a", "10:15", "", "_unassigned"),
+    ];
+    retask(&mut unfiled, &held, "");
+    let got: Vec<(String, bool)> = unfiled
+        .iter()
+        .map(|e| (or_s(e, "task"), e.contains_key("held_for")))
+        .collect();
+    assert_eq!(got, [("T2".to_owned(), true), (String::new(), false)]);
 }

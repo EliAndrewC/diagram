@@ -7083,31 +7083,43 @@ that batch; the red was not in its change.
 
 
 <!-- plan-archive: T521 to T521 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T522 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, "I would have expected the number of compiler runs to actually be strictly higher than the number of test runs")
+
+- **Approach**: `make task-time` counts a task's compiles, unit-test runs and coverage runs from the `Phase` lines its runs held, and lists them under the task's tables. The new module is `rust/gate/crates/measure/src/measure/where_time/columns/ran.rs`; `tie` moved there from `columns.rs`. The rest is in `task_time/book.rs`, `task_time/beside.rs`, `task_time/held.rs` and the new `task_time/listed.rs`. The minutes are booked as before.
+  - **T522-D1, what a compile is (a).** Every compiler invocation is one compile: a `build`, a `cover-build`, each `lint` pass, and each `prewarm` (`ran::kind`). Before, only `build` and `cover-build` lines counted. The 451 log holds 9,507 lint lines and 2,914 prewarm lines that were never counted (observed 2026-11-27, method: the log's `Phase` lines counted by `src`/`step`). A lint has no category, so it is now tied to its run only to be counted. A prewarm is held by no run, so it is counted under its own line's task (`Runs::prewarm`, booked in `book`). Its minutes stay outside the call's compile (T316).
+  - **T522-D2, which compiles did work (a).** A compile under `NOOP_BELOW_S` (1.0 s, a GUESS knob) is counted as a no-op check. This is a GUESS knob (`dev/audits/compile-noop-threshold.md`). The no-op floor is 0.03 to 0.15 s for `build`, `cover-build` and `lint`, and 0.5 s for `prewarm`, whose span is polled in 0.5 s steps, observed 2026-11-27, method: each (step, crates) pair's fastest span over the 451 log. A real one-crate rebuild takes over 1 s: the p10 is 1.51 s for `rust/guard/shared`'s builds and 1.27 s for `rust/gate/crates/measure`'s (observed 2026-11-27, method: each (step, crates) pair's fastest, p10 and median span over the 451 log, pairs with 10 or more lines). The `Phase` line cannot say what cargo did, so the span is read back. Only a writer can give the exact answer, and that is filed as T528. Where a line carries `compiled`, the reader takes it first (`Ran::said`).
+  - **T522-D3, test runs (b).** A unit-test run is a `test` line and a coverage run is a `cover-run` line, counted apart. `make quick` and preflight lines are counted in neither: each holds its own cargo calls' `test` lines, so counting it too counts those twice. Nine of T417's 28 "test runs" were `quick` lines written by `make task-add`'s own check, 0 to 1 s each (observed 2026-11-27, method: T417's lines in the 451 log). The minutes per run are now each kind's own lines' mean span, where before they were the category's minutes divided by the count.
+  - **T522-D4, the listing (c).** Every landed task's section now ends with a table of its counted lines: start (UTC), tree, make target, step, crates, seconds, and what each was counted as. It is printed always, in start order, under the task's tables. A flag would hide the listing that explains the count. The size table's columns are now `unit-test runs | coverage runs | compiles`, and a compiles cell reads `40 (39 of 1.0 s or more), 0.2 min each`.
+  - **T522-D5, where T417's other runs came from (d).** They were T417's own runs. Its builder ran 15 more builds, 15 more tests and 9 lint passes in `diagram-backlog-b1` (03:53 to 04:17Z), and the writer filed those lines in `_unassigned.jsonl` with no task (`fallback: true`). The report reads that log, which explains the "4 builds and 4 tests" seen in the 451 log alone (observed 2026-11-27, method: the T417 listing, all 59 rows in b1, none from another tree; and the `_unassigned` log's b1 lines in the handout's window counted by step). The writer's filing is filed as T529: 647 b1 lines on 2026-11-27, observed 2026-11-27, method: the `_unassigned` log's `Phase` lines counted by tree and date.
+  - **T522-D6, a booking that was wrong (d).** `tie` matched a line to a run by session id plus make target or task, never by tree, and every builder shares its session's id. So where no run of the line's own task held it, a pool tree's line went to another builder's run of the same target. It is fixed two ways. `held::retask` now writes `held_for` (the holder's tasks) on each held line, and `tie` gives such a line only to a run of one of them. `retask` also treats a line filed under `_unassigned` as the holder's. T417's figures do not move: they were its own. Other tasks' do. Phases tied to no run fall from 4,319 (253.6 min) to 4,082 (242.3 min), as `_unassigned` lines now find their holder's run (measured 2026-11-27, method: `make task-time SINCE=2026-11-27T03:30:00Z UNTIL=2026-11-27T12:00:00Z`). Seven tasks' `tests` or `compile` minutes move by 0.1 to 1.9 min (T392 compile 5.8 to 7.2, T455 tests 0.8 to 2.7), observed 2026-11-27, method: `make task-time SINCE=2026-11-27T03:30:00Z UNTIL=2026-11-27T12:00:00Z` before and after, each task line's minutes diffed.
+  - **T522-D7, T417 before and after**, observed 2026-11-27 with the same command. Before, measured 2026-11-27 (the same command), the row read `| 28, 0.2 min each | 19, 0.2 min each | 33 |` and the line "`tests` 5.9 min in 28 test runs, `compile` 4.2 min in 19 compiles". After: `| 19, 0.1 min each | 0 | 40 (39 of 1.0 s or more), 0.2 min each | 33 |`, and the line breaks the 40 compiles down as 19 builds, 0 coverage builds, 9 lint passes and 12 pre-warm builds. Compiles now outnumber test runs, as the GM expected. The one under 1.0 s is a 0.1 s build of `rust/guard/shared` (measured 2026-11-27, method: `make task-time SINCE=2026-11-27T03:30:00Z UNTIL=2026-11-27T12:00:00Z`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a pool tree's line tied only to its holder's run | `where_time::columns::ran::tests::a_pool_trees_line_ties_only_to_its_holders_run`: with the holder rule turned off, 1 passed and 1 failed (T1's run took T2's 03:01:10 build: `left: [(1795748470.0, 1795748480.0)] right: []`); 2 passed with it on, observed 2026-11-27 (`make rust-test CRATE=rust/gate/crates/measure ONLY="measure::where_time::columns::ran"`) | n/a, a report's text | none | n/a |
+| the counts, the knob, the listing, the pre-warm booking, `_unassigned` retasked | `ran::tests::every_compiler_invocation_is_a_compile_and_a_coverage_run_is_apart`, `listed::tests::a_tasks_counted_lines_are_listed_by_start`, the `held_tests` additions, and `sized_tests`' row and line: new API, so they fail to build on the old code; 303 passed after, observed 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/measure"`, coverage clean) | n/a | none | n/a |
 
 ### T522 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make task-time` sees a task's compiles counted as every compiler invocation, those that did work split out, and unit-test runs apart from coverage runs. Under each task's tables they can check every count by eye, line by line.
+2. **The constraints.** The GM's question of 2026-11-27 (request.md) and his eighth process-reviewer message (`specs/449-rust-codebase/port-talk-gm-goal.md`: a metric that does not measure what it seems to). T521's rule holds: a count carries no share. T316's holds too: a pre-warm is no call's compile in the minutes.
+3. **Where each comes from.** G: *"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs"*. O: D1 to D3 and D5 to D7. The 1.0 s knob is a GUESS (D2).
+4. **Do they describe the world here?** Yes: T417's listing shows 59 lines, all in its own tree, and its compiles now outnumber its test runs, measured 2026-11-27 (`make task-time SINCE=2026-11-27T03:30:00Z UNTIL=2026-11-27T12:00:00Z`).
+5. **The order.** After T521, the same files. Before the process review reads the report.
+6. **The exits.** Green: the tests above and the report run (D6, D7). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** T417's row reads `19 | 0 | 40 (39 ...)`, and its listing names every line behind the numbers (D7).
+10. **Before moving a constant.** n/a: `NOOP_BELOW_S` is new, with its audit entry.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The reader saw T417 at 19 compiles and 28 test runs (measured 2026-11-27, the report before this task), with lint and pre-warm compiles uncounted and `make quick`'s lines counted as tests. They now see 40 compiles and 19 unit-test runs. D6 is a defect in the booking: another builder's lines went into a task's minutes and counts, which moved seven tasks' minutes and 237 loose phases.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The compile lines do not say whether cargo compiled anything, so the 1.0 s span (a GUESS knob) is a guess. Not fixed here: it is the writer's (`rustc`'s `kept.rs`, `cover.rs`, `lint.rs`, `phase.rs`), outside this task's crate. Filed as T528; lands before T380, the next reading of the compile and slot figures.
+- A pool tree's lines are filed in `_unassigned.jsonl` with no task: 647 of `diagram-backlog-b1`'s on 2026-11-27, observed 2026-11-27, method: that log's `Phase` lines counted by tree and date. `make where-time F=451` misses them, and a pre-warm filed there is counted under the `_unassigned` feature. Not fixed here: it is the writer's (`event_log_hooks` `filed::filed`); this task makes the reader take them. Filed as T529; lands before T22, the close, which reads `make where-time F=` per feature.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a report of where the time goes, counted as performance work by the GM's words of 2026-11-20
 
 
 ### T526 (<why: the finding or measurement that files it>)
@@ -7145,6 +7157,59 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T527 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T528 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T528 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T529 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T529 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

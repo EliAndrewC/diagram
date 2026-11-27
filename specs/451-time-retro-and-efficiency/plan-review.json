@@ -4680,6 +4680,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T525 (<why: the finding or measurement that files it>)": {
+   "sha256": "a4c8a4cc96752a72bb1a339e29ecd52274db361bf3c8a89670147684f5992a82",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T525 Approach (checklist part A)": {
+   "sha256": "3e0b5832b3017ab9ad6a04ca12bfbffba2f8c337612e746d4c078780f9a0a28e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")": {
+   "sha256": "78c0c3e8a4618ae2b174c34c7398068be56abf56f81a7d63134d58b508e41561",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T522 Approach (checklist part A)": {
+   "sha256": "2171529a37da9b480eb4b7b9328bbb8753dab01a59304052ef5b3793a3061beb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -42872,6 +42896,165 @@
      "summary": "L7R_CACHE_BUDGET_GB (100) and L7R_BUILDERS (3) unchanged; the levers that would move them are the GM's",
      "class": "within",
      "why": "Moves nothing the GM has not approved."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")",
+    "### T522 Approach (checklist part A)",
+    "### T525 (<why: the finding or measurement that files it>)",
+    "### T525 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T522-D1",
+     "summary": "A compile is every compiler invocation: build, cover-build, each lint pass, each prewarm; a prewarm is counted under its own line's task, its minutes still outside any call's compile (T316).",
+     "class": "within",
+     "why": "Answers the GM's own question verbatim (2026-11-27): 'if running make test implicitly invokes the compiler, then does that mean that the compiler is actually being invoked many more times than what is reflected in these numbers?' and his earlier ask to see 'the number of times we had to recompile next to the amount of time we spent recompiling'. Counting the uncounted lint and prewarm invocations is the count he asked about; keeping T316's minutes rule changes nothing he asked to change."
+    },
+    {
+     "id": "T522-D2",
+     "summary": "Compiles under NOOP_BELOW_S (1.0 s, GUESS knob with audit entry) are reported apart as no-op checks; a line's own 'compiled' field wins; the writer's exact answer deferred to T528.",
+     "class": "within",
+     "why": "Serves 'the number of times we had to recompile': the full count of D1 is still shown (40), with the ones that did work beside it. The knob is labeled GUESS with an audit entry and its basis measured (floor 0.03-0.15 s, p10 of real one-crate rebuilds 1.27-1.51 s, dated with method). The writer-side exact answer is ruled separately (T522-deferral-T528)."
+    },
+    {
+     "id": "T522-D3",
+     "summary": "A unit-test run is a 'test' line, a coverage run a 'cover-run' line, counted apart; make quick and preflight lines are not counted (they hold their own cargo test lines); minutes per run from each kind's own lines' mean span.",
+     "class": "within",
+     "why": "Directly answers 'these numbers make me a little concerned about whether they actually reflect what is really happening': nine of T417's 28 were task-add's own 0-1 s quick checks (observed with method). Removing a double count and dividing by the right lines is making the requested count true, not narrowing it."
+    },
+    {
+     "id": "T522-D4",
+     "summary": "Each landed task's section ends with an always-printed table of its counted lines (start, tree, target, step, crates, seconds, counted-as); the size table's columns become unit-test runs | coverage runs | compiles, the compiles cell without a percentage.",
+     "class": "within",
+     "why": "The GM asked 'Or am I missing something?' and earlier said the data should make it 'much easier for me to eyeball how reasonable the times that I'm seeing look'; a listing behind every count lets him check it by eye. No percentage on a count, per his 2026-11-27 words ('I only really care about that for time and tokens')."
+    },
+    {
+     "id": "T522-D5",
+     "summary": "T417's other runs are traced to its own builder's tree (diagram-backlog-b1), whose lines the writer filed in _unassigned.jsonl; make task-time now reads that log and retasks them to the holder.",
+     "class": "within",
+     "why": "This is the explanation the GM asked for ('Or am I missing something?'), measured with method, and it makes the task-time row he read count T417's own lines. The writer-side misfiling it found is a separate decision, T522-deferral-T529."
+    },
+    {
+     "id": "T522-D6",
+     "summary": "tie() matched lines to runs by session plus target/task, never by tree, so a pool tree's line could go to another builder's run; fixed by held_for on held lines and _unassigned retasked to the holder; seven tasks' minutes move.",
+     "class": "within",
+     "why": "A defect found while answering whether the numbers 'reflect what is really happening', fixed in this task rather than deferred. Other tasks' figures moving is the fix taking effect, not a regression (constitution XIII/XIV)."
+    },
+    {
+     "id": "T522-D7",
+     "summary": "T417 before/after recorded with one command: compiles 40 (39 of 1.0 s or more) vs 19 unit-test runs and 0 coverage runs; compiles broken down as 19 builds, 0 coverage builds, 9 lint, 12 prewarm.",
+     "class": "within",
+     "why": "The measured outcome of D1-D6 on the exact row the GM read; dated with method. It reports what the counts are, not a target the counts were tuned to: each change is justified by what a line is (D1, D3), independent of the GM's expectation."
+    },
+    {
+     "id": "T522-deferral-T528",
+     "summary": "Found and left: compile lines do not say whether cargo compiled anything, so the no-op split rests on the 1.0 s GUESS; the writer's exact answer is filed as T528, 'no open task waits on it'.",
+     "class": "within",
+     "why": "Not a defect by constitution XIV's test: no wrong outcome is shown. The requested count (every compiler invocation, D1) does not depend on the knob; the split beside it is labeled a GUESS, carries an audit entry, and its threshold sits in a measured gap between the no-op floor (0.03-0.15 s) and real rebuilds (p10 1.27-1.51 s). Leaving a measured heuristic as it is stays within what was asked."
+    },
+    {
+     "id": "T522-deferral-T529",
+     "summary": "Found and left: a pool tree's lines are filed in _unassigned.jsonl with no task (647 of diagram-backlog-b1's on 2026-11-27); make where-time F=451 misses them and a pre-warm filed there is counted under the _unassigned feature. Not fixed here because it is the writer's (event_log_hooks filed::filed), outside this task's crate; filed as T529, 'no open task waits on it'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "It is a defect left: make where-time F=451, this feature's own FR-005 report, gives a wrong answer by 647 lines of this feature's work, the GM's 2026-11-19 'how much time are we spending on running our tests? ... on recompiling things?'. Its stated reason (the writer is outside this task's crate) is the more-of-the-codebase kind that does not make a carve-out legitimate. The ground that would, FR-009's GM-approved deferral, holds only in its approved form: why, a filed open task, AND its order 'lands before T<m>' (D15: refused when missing). This item gives 'no open task waits on it' in place of the order, so nothing schedules the fix before the reports are read, though the block's own item 5 says T522 lands 'Before the process review reads the report'. To clear: fix the writer here, or state the order, 'Not fixed here: <why>. Filed as T529; lands before T<m>.', naming the open task that next reads make where-time per feature (the process review, if it is filed and open)."
+    },
+    {
+     "id": "T522-perf",
+     "summary": "T522 is classed performance work: a report of where the time goes.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T522-constraints",
+     "summary": "T521's rule (a count carries no share) and T316's (a pre-warm is no call's compile in the minutes) are held.",
+     "class": "within",
+     "why": "T521's rule is the GM's 2026-11-27 'I don't know that it's useful to see percentages for counts'; T316's keeps the minutes as booked, which the request did not ask to change."
+    },
+    {
+     "id": "T525",
+     "summary": "An unfilled template block: placeholder heading and checklist, an empty step table.",
+     "class": "within",
+     "why": "It decides nothing; no decision to judge against the request. Whatever fills it is a changed block owed its own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")",
+    "### T522 Approach (checklist part A)",
+    "### T525 (<why: the finding or measurement that files it>)",
+    "### T525 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T525 (both blocks)",
+     "summary": "The template as task-add writes it: every field a placeholder, no approach, no table rows.",
+     "class": "within",
+     "why": "It decides nothing, so there is nothing to rule on. Once the section is filled in, its blocks change and are owed review again."
+    },
+    {
+     "id": "T522-D1",
+     "summary": "A compile is every compiler invocation: build, cover-build, each lint pass and each prewarm. A prewarm is counted under its own line's task, and its minutes stay outside the call's compile (T316).",
+     "class": "within",
+     "why": "It answers the GM's question directly: 'if running make test implicitly invokes the compiler, then does that mean that the compiler is actually being invoked many more times than what is reflected in these numbers?'"
+    },
+    {
+     "id": "T522-D2",
+     "summary": "Compiles under NOOP_BELOW_S (1.0 s, a GUESS knob with an audit entry) are split out as no-op checks. A writer-given 'compiled' field is used first when present.",
+     "class": "within",
+     "why": "It serves 'whether they actually reflect what is really happening'. It adds a sub-count and leaves the total exact. The knob is labeled a guess and its figures are dated with their methods."
+    },
+    {
+     "id": "T522-D2/Found-and-left-1 (T528)",
+     "summary": "The exact did-cargo-compile answer has to come from the writer. That is deferred to T528, which lands before T380, the next reading of the compile and slot figures.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked for 'the number of times we had to recompile' (request.md, the T512 words) and whether the counts reflect reality. The total, 40 compiler invocations, is exact. Only the split of those that did work rests on the span, and the cell states that threshold literally ('39 of 1.0 s or more'). The knob is labeled GUESS with an audit entry, and the reader takes a writer-given 'compiled' first. The writer's fix is outside this crate. Its deferral is in D15's form and lands before T380, the next reading of the compile and slot figures, so no later reading relies on the guess unflagged. The earlier BLOCKED text had 'no open task waits on it'; that is now an order."
+    },
+    {
+     "id": "T522-D3",
+     "summary": "A unit-test run is a 'test' line and a coverage run is a 'cover-run' line, counted apart. make quick and preflight lines are counted as neither, since their own 'test' lines would be counted twice. Minutes per run become each kind's mean span.",
+     "class": "within",
+     "why": "It answers 'why we would run our unit tests so much more than running our compiler'. Nine of T417's 28 'test runs' were quick lines. Removing a double count is a fix to a wrong outcome."
+    },
+    {
+     "id": "T522-D4",
+     "summary": "Every landed task's section ends with a listing of its counted lines, always printed. The size table's columns become unit-test runs | coverage runs | compiles (N (M of 1.0 s or more)). Counts carry no share (T521).",
+     "class": "within",
+     "why": "It serves 'Or am I missing something?' and the GM's earlier words that the counts are there to make it 'much easier for me to eyeball how reasonable the times that I'm seeing look'. Leaving percentages off the counts follows his words on percentages."
+    },
+    {
+     "id": "T522-D5",
+     "summary": "T417's missing runs were its own pool-tree lines, which the writer had filed in _unassigned.jsonl. The report now reads that log.",
+     "class": "within",
+     "why": "It is the explanation the GM asked for, and the reader now counts the lines that had been left out."
+    },
+    {
+     "id": "T522-D5/Found-and-left-2 (T529)",
+     "summary": "The writer still files pool-tree lines in _unassigned with no task. make where-time F=451 misses them, and a pre-warm filed there is counted under the _unassigned feature. Deferred to T529, which lands before T22 (the close, which reads make where-time F= per feature).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I ruled the item's two effects separately. (a) make where-time F=451 misses the pool-tree lines: its consumer is the close, which reads where-time F= per feature, and T529 lands before T22. (b) A pre-warm filed in _unassigned is counted under the _unassigned feature: that is attribution to a FEATURE, the same per-feature reading. In make task-time the task-level count is already right. T417's listing holds 59 rows, all in pool tree b1 (19 builds + 19 tests + 9 lints + 12 pre-warms = 59), so its pool-tree pre-warms are credited to the task. So the count the GM questioned is correct now, and what is deferred reaches no consumer before T22. The deferral is in D15's form. The earlier BLOCKED text had 'no open task waits on it'; that is now an order, and the 647 figure now carries its date and method in D5."
+    },
+    {
+     "id": "T522-D6",
+     "summary": "Booking defect fixed: tie now gives a held line only to a run of the holder's tasks (held_for), and retask treats _unassigned lines as the holder's. Seven other tasks' minutes and 237 loose phases move.",
+     "class": "within",
+     "why": "It fixes a wrong outcome found while answering the question: another builder's lines went into a task's counts and minutes. That is exactly the GM's concern 'whether they actually reflect what is really happening', and the fix-as-we-go rule. The figures that moved are measured and dated."
+    },
+    {
+     "id": "T522-Approach items 2/5/Performance",
+     "summary": "It holds to T521 (a count carries no share) and T316 (a pre-warm is not a call's compile in the minutes). It is ordered after T521 and before the process review reads the report, and it is counted as performance work.",
+     "class": "within",
+     "why": "Those rules are inside the feature already. FR-013 counts measurement of where time goes as performance work, citing the GM's words of 2026-11-20."
     }
    ]
   }
