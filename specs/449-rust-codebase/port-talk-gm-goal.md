@@ -299,3 +299,17 @@ of 451's records and the size of its result): plan.md 1,416 calls, 3.68M charact
 plan-review.json 188 calls, 0.13M; tasks-done.md 0.09M; checks-open.json 0.07M - about 7.5M characters in all, near 50k (some 13k
 tokens) a builder. So the records are a real but small share of a builder's 300k context, not its main cause, by that measure;
 what a read costs over the turns that follow it (it is re-read from cache every turn after) is not in that figure.
+
+## His eighteenth message (2026-11-27, the afternoon after): IF THE COST WAS THERE DESPITE HIS ASKING, THE MEASURING WAS DEFICIENT
+
+<!-- SOURCE: GM NOTES -->
+> Okay.  And I mean, I did ask about this a few times just to sanity check things, and so I know that we're definitely not just loading a full megabyte of context into everything that we're doing, because that would have been immediately obvious. But this does make me wonder whether our token usage this week has been just massively higher as a result of working off of the same feature. And I think that an important thing that we want to achieve with our process reviewer is that, you know, I did ask about this a few times, and if it turns out that this was true in spite of me asking about it, then that really implies some serious deficiencies in how we conduct our measurements and what we think to look at, that our process reviewer absolutely needs to be smart enough and to be well equipped to handle in order to ensure that this kind of thing doesn't happen again.
+<!-- END SOURCE -->
+
+What the session can say today (2026-11-27): the direct reads are measured (the seventeenth message's table, about 13k tokens a
+builder); their carried cost is only estimated - a read stays in context and is re-read from cache every later turn, so 13k
+tokens read early in a builder of about 100 turns could carry to roughly a million cache-read tokens, against the 7.08M a landed
+task's builders read (461 T01) - an estimate, not a measurement. Nothing measured the records' share of the coordinator's context.
+The question the GM asked earlier was answered by the direct read alone; the carried cost, and the slow growth of a feature's
+records across a week, were not looked at - the kind of gap he names. The switch to a new feature is a natural before-and-after
+for both (461 T01's figures are the before).
