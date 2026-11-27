@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-27T23:02:33Z",
+  "target": "plan-gate decide-defer 462-efficiency-backlog plan-delta",
+  "commit": "7c0cfca73c",
+  "why": "sections moved verbatim from 451 under 462 FR-002; their found-and-left items name 451 tasks that have since landed"
+}
