@@ -28,13 +28,14 @@ use std::path::{Path, PathBuf};
 use l7r_gate_core::Reply;
 use l7r_shared::builder_brief::{mechanism, targets, Marker, JOBS_MAX, KINDS, MEASURES_MAX};
 use l7r_shared::builder_pool;
+use l7r_shared::builder_queue::repairs::{self, Repair};
 use l7r_shared::speckit::{marks, tasks};
 use serde_json::json;
 
 use crate::builder_tree::{self, Env};
 use crate::reply;
 
-const USAGE: &str = "usage: make builder-brief T=<task(s)> F=<feature> KIND=fix|measurement|build-half|closing-half [JOBS=<1-3>] [MEASURES=<things measured>] [CRATE=\"<crate dirs>\"] [BLOCKS=\"<feature> T<n>\"] [LOAD=1] [ENTRY=<the queue entry, as make builder-next prints it>]\n";
+const USAGE: &str = "usage: make builder-brief T=<task(s)> F=<feature> KIND=fix|measurement|build-half|closing-half [JOBS=<1-3>] [MEASURES=<things measured>] [CRATE=\"<crate dirs>\"] [BLOCKS=\"<feature> T<n>\"] [LOAD=1] [ENTRY=<the queue entry, as make builder-next prints it>] [REPAIR=<the lane's repair entry, as make builder-next prints it>]\n";
 
 /// What a caller says of the brief it is writing.
 struct Ask<'a> {
@@ -50,6 +51,8 @@ struct Ask<'a> {
     load: bool,
     /// The queue entry it serves, `ENTRY=` as `make builder-next` prints it (451 T313): its ordinal among its first task's lines.
     entry: &'a str,
+    /// The lane's repair entry it serves, `REPAIR=` as `make builder-next` prints it (461 T16): `r<n>`, or empty.
+    repair: &'a str,
 }
 
 /// The line of `task` in a feature's tasks, open or archived.
@@ -81,6 +84,27 @@ fn refused(why: String) -> Reply {
     reply(String::new(), why, 2)
 }
 
+/// THE LANE'S REPAIR ENTRY `REPAIR=` names (461 T16): none where it names none; refused where no open entry has that id (an
+/// answered or superseded one included: its fresh builder was dispatched), or where the entry is not this brief's - its feature,
+/// its tasks and its kind as `make builder-next` printed them.
+fn repair_of(
+    a: &Ask,
+    key: &str,
+    tasks: &[String],
+    common: &Path,
+) -> Result<Option<Repair>, String> {
+    if a.repair.is_empty() {
+        return Ok(None);
+    }
+    let Some(r) = repairs::open(common).into_iter().find(|r| r.id == a.repair) else {
+        return Err(format!("builder-brief: refused - REPAIR={} is no open repair entry of the lane: answered, superseded or never ejected. make builder-next names the open ones\n", a.repair));
+    };
+    if r.key != key || r.tasks != tasks || r.kind != a.kind {
+        return Err(format!("builder-brief: refused - REPAIR={} is {} of kind {}, not this brief's: brief it as filed\n  {}\n", r.id, r.name(), r.kind, r.command()));
+    }
+    Ok(Some(r))
+}
+
 /// The command for one brief of `kind`.
 fn command(a: &Ask, key: &str, kind: &str) -> String {
     format!("make builder-brief T={} F={key} KIND={kind}", a.task)
@@ -99,6 +123,9 @@ fn logged(a: &Ask, common: &Path, env: &Env, tree: &Path, holder: &str) {
         json!({"utc": env.now, "event": "brief", "tree": tree, "detail": holder, "kind": a.kind});
     if let Some(k) = entry(a) {
         line["entry"] = json!(k);
+    }
+    if !a.repair.is_empty() {
+        line["repair"] = json!(a.repair);
     }
     builder_tree::log_in(common, &line);
 }
@@ -154,7 +181,14 @@ fn plan_read(task: &str) -> String {
 }
 
 /// The block for `a`, in `tree`, of the feature directory named `name`, its handoff at `handoff`.
-fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String {
+fn block(
+    a: &Ask,
+    key: &str,
+    name: &str,
+    tree: &Path,
+    handoff: &Path,
+    fixing: Option<&Repair>,
+) -> String {
     // a bundle's scratch files carry its first task's prefix
     let first = a.task.split(',').next().unwrap_or(a.task);
     let marker = Marker {
@@ -214,6 +248,11 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
     if a.load {
         out.push_str("This task LOADS the machine: it runs ALONE in its batch, bounded.\n");
     }
+    // 461 T16 (D7, 451 T308): a repair's builder is FRESH and given what it needs whole - the gate's output and the change
+    if let Some(r) = fixing {
+        let shas: Vec<&str> = r.changes.iter().map(|c| c.get(..10).unwrap_or(c)).collect();
+        let _ = writeln!(out, "REPAIR {} (batch {}, {}): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read the gate's output first: {}", r.id, r.batch, r.why, shas.join(" "), r.attempt);
+    }
     let _ = writeln!(out, "{stop}\n{checks}");
     if a.kind != "measurement" {
         out.push_str("Test every new line as if coverage ran (each closure counts); an assertion's message stays on its own line or is left out.\n");
@@ -255,6 +294,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
         blocks: arg(6),
         load: !arg(7).is_empty(),
         entry: arg(8),
+        repair: arg(9),
     };
     let key = builder_tree::feature_key(a.feature);
     if a.task.is_empty() || key.is_empty() || a.kind.is_empty() {
@@ -267,6 +307,10 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
         return refused("builder-brief: not in a git repository\n".to_owned());
     };
     let clone = marks::main_top(&common);
+    let repair = match repair_of(&a, &key, &bundle, &common) {
+        Ok(r) => r,
+        Err(why) => return refused(why),
+    };
     let Some(dir) = feature_dir(&clone, &key) else {
         return refused(format!(
             "builder-brief: refused - no specs/{key}-* in {}\n",
@@ -291,7 +335,8 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
     let named = lines
         .iter()
         .find_map(|(t, line)| mechanism(line, &known).map(|what| (*t, what)));
-    if let Some((task, what)) = named.filter(|_| a.kind == "fix") {
+    // a repair is briefed as the lane filed it: its task's line already built once, so no split is owed
+    if let Some((task, what)) = named.filter(|_| a.kind == "fix" && repair.is_none()) {
         if !l7r_shared::escape::enough(sizing_ok) {
             return refused(format!(
                 "builder-brief: refused - {task}'s line names a new mechanism ({what}), which is TWO builders from the start (three of three such tasks briefed as one reached the cap, 2026-11-26):\n  {}   (builds and tests, ends at a handoff)\n  {}   (after it reports: the owed tests, the plan section, the review)\nIf the line only names a mechanism this task repairs: SIZING_OK=\"<reason, two words or more>\"\n",
@@ -332,7 +377,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
         let _ = writeln!(notes, "builder-brief: NOTE - the build half's handoff {} is not written yet; the closing half reads it first", handoff.display());
     }
     reply(
-        block(&a, &key, &name, &tree, &handoff),
+        block(&a, &key, &name, &tree, &handoff, repair.as_ref()),
         format!("{}{notes}", took.stderr),
         0,
     )

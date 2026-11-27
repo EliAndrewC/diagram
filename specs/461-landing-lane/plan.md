@@ -1009,31 +1009,44 @@ measurement task counts).
 **Performance work?** no
 
 
-### T16 (<why: the finding or measurement that files it>)
+### T16 (phase 2's repairs taken by fresh builders: a change the lane ejects is the next dispatch, briefed with the gate's output)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/shared/src/builder_queue/repairs.rs` (new) reads the lane's three files by name - `l7r-lane/repairs.jsonl`, `l7r-lane/lane.jsonl` and the pool's log - since the guard cannot reach the lane crate (the lane builds on `l7r_shared`): `open` (an entry an `eject` line names, unanswered, not superseded), `offer` (READY, or passed over with why) and the knob `first` (`LANE_REPAIR_FIRST`). `builder_queue.rs` gains its `mod` line and one call in `idle`, so the pool-idle Stop block names the repair's command. The task crate: `builder_queue.rs`'s `repairs_said` is said first by `make builder-next`, `make queue` and `dispatch` (`make builder-done`'s step 1); `builder_brief.rs` takes `REPAIR=<id>` (the Makefile passes it), refuses one no open entry has or one not this brief's, logs it on the `brief` line and prints one block line naming the ejected commit and the attempt file; `builder_done.rs` copies it to the done line as `repair_of`. The handout and the supersede are T09's, reused: D14 keeps the ejected done ref, so `build_on` applies it onto the handout uncommitted and the repair's done moves the ref. This also closes 451 T308 (the two-tier split): the first tier the builder's (T06-T08), the full gate the lane's (T14), its "repaired by whoever is cheapest" replaced here by a fresh builder on a repair entry, its builder coverage by none.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A repair is offered before every queue entry, a performance entry's included** (`LANE_REPAIR_FIRST` = 1, the plan's GUESS knob; `0` offers it only where no queue entry is picked). Label: D7's literal "read these entries before `queue.txt`'s" - a performance entry is a `queue.txt` entry. The open performance tasks NO line names stay first in `make builder-done`'s step 1 and the Stop block, since they are a line to write, not a dispatch. `make builder-next` says the repairs before them. Pinned by `builder_queue::tests::an_open_repair_entry_is_named_before_the_queue_s_next_entry` and `repairs::tests::a_free_tree_is_idle_over_an_open_repair_before_a_ready_queue_entry`, both ways of the knob.
+2. **Open is read from the lane's lines, never the entry alone**: an entry is offered only once an `eject` line carries its id, its changes those lines' `change`s, its tasks their done lines' tasks (the entry's `tasks` where no done line names one). Label: data-model.md, "A repair entry", as T15's Decision 7 states it. Pinned by `repairs::tests::an_entry_is_open_once_ejected_its_changes_and_tasks_the_eject_lines` (r4 never ejected; r2's second sha landed on a resume).
+3. **Closed by its answer or by a later hand-in of its task**: a `done` line naming it in `repair_of` (any done line: the builder briefed for it has ended), or a hand-in of its feature sharing a task, later than its last `eject` line (`superseded`). Label: data-model.md's "the earlier one's repair entry then read as closed (`superseded`)"; the done line's `repair_of` the data model's field. Pinned by `a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task` (an earlier hand-in, a done not handed in, another feature's task: none close it).
+4. **Passed over, with a line: in flight, and a kind no brief takes.** A pool tree held for one of its tasks would be handed back to its holder, and a repair is a fresh builder's; `integrate` (T19) is no kind `make builder-brief` takes, so no command that refuses is offered. Label: the algorithmically easier route; T19 makes `integrate` briefable or keeps the line. Pinned by `in_flight_and_a_kind_no_brief_takes_are_passed_over`.
+5. **`REPAIR=` passes the brief's mechanism refusal**: the task's line was briefed and built once, so the repair is one fix whatever its line names. And it is refused, before any tree is taken, where no open entry has the id (answered, superseded, never ejected) or where the entry's feature, tasks or kind are not the brief's - naming the command as filed. Label: the algorithmically easier route (US4: one fresh builder a repair).
+6. **The handout's base is the clone's HEAD until T22**: the pool's take applies the ejected commit onto the handout's base, which is the clone's HEAD today; T22 moves the base to `origin/main` (D13). Label: D3's base by phase, read as T22's line says.
+7. **The knob is read by the commands and handed in**: `run_with` and `dispatch_with` take it, so the task crate's tests run both ways (the shared crate's environment map is not compiled into the task crate's tests).
+8. **A fresh builder, never one kept past its report** (451 T308): the queue never offers a repair in flight, and both the command's line and the brief's `REPAIR` line say FRESH. Label: the reviewer's rule, D7's table. Red first: the shared crate's `repairs` tests, 1 of 5 failed on the old `idle` (it offered the queue's T3 over the repair); the task crate's loop test, 0 of 1 passed with `builder_done.rs` at HEAD (no `repair_of` on the done line); the queue test does not compile against the old `builder_queue.rs` (no `run_with`, `dispatch_with`).
 
 ### T16 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An ejected change costs the coordinator one dispatch: `make builder-next` (and the Stop block, and `make builder-done`'s next line) names the repair's `make builder-brief ... REPAIR=`, whose block names the gate's output and the change, the tree holds the change uncommitted, and the repair's hand-in closes the entry.
+2. **The constraints.** US4 ("The repair goes to a FRESH builder given the gate's output; no builder is kept past its report"), D7, D14, data-model.md's repair entry, 451 T308's two tiers.
+3. **Where each comes from.** R: plan.md D7, D14; data-model.md; T15's Decision 7. O: the tests named above.
+4. **Do they describe the world here?** No real repair entry exists yet (the lane has run no real batch, observed 2026-11-27: no `l7r-lane/repairs.jsonl` in the clone); the fixtures write the lane's own line shapes, `runner/run.rs`'s `eject` line and `repairs.rs`'s entry.
+5. **The order.** After T15 (the writer) and T09 (the handout that builds on a done commit); before T22.
+6. **The exits.** Green: the shared and task crates' tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"` clean, 2026-11-27; the red-first counts in Decision 8.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fixed: a new route. An ejected change had no reader - the lane filed entries no command offered, so a repair waited on the coordinator remembering it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make lane`'s status (`rust/gate/crates/lane/src/log.rs`, `repairs_open`) lists a repair superseded by a later hand-in as open, where the queue closes it (Decision 3): the status says a repair is owed that no command offers. Not fixed here: the lane crate is T15's and T18's, its reader one change away. Filed as T65; lands before T23.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -2560,4 +2573,32 @@ waiting on its closing half.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T65 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 

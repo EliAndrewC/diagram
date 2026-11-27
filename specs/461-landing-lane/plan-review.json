@@ -518,7 +518,7 @@
    "declared": "spec-fidelity"
   },
   "### T16 Approach (checklist part A)": {
-   "sha256": "0dac4fa8f3bf704b54096fde11dfca20592b77611837d1ea4233be136080f3b4",
+   "sha256": "38d8c86e19478e244d2619c613af2e1fd7d12b191f657f7598547f3dcece7fec",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -699,6 +699,12 @@
   },
   "### T19 Approach (checklist part A)": {
    "sha256": "603d1657557d27aab7a7dc9458af42c5f0e01259137e1d8e348e640b096e88fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T16 (phase 2's repairs taken by fresh builders: a change the lane ejects is the next dispatch, briefed with the gate's output)": {
+   "sha256": "c1664f036ca27e0ea13df7ab9b62737dd3cea130fb5b5b36604435e1915d9e29",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4462,6 +4468,76 @@
      "why": "This sends the observation to another task already in the plan and drops nothing from the requirements. The stand-in fails its push the way land.rs reports one."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T16 (phase 2's repairs taken by fresh builders: a change the lane ejects is the next dispatch, briefed with the gate's output)",
+    "### T16 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-D1",
+     "summary": "An open repair is offered before every queue entry, a performance entry's included (LANE_REPAIR_FIRST=1; 0 offers it only where no queue entry is picked); unwritten performance lines stay first in builder-done's step 1 and the Stop block",
+     "class": "within",
+     "why": "The request's sketch item 1 has the ejected task 'return to the queue as a repair entry' and FR-004/SC-003 have it go to a fresh builder; neither sets its order against other entries. Ordering it first delays nothing the GM asked for, and the knob's 0 still offers it. A priority choice inside what was asked."
+    },
+    {
+     "id": "T16-D2",
+     "summary": "Open is read from the lane's eject lines (an entry is offered only once an eject line names it; its changes and tasks from those lines), never from the repair entry alone",
+     "class": "within",
+     "why": "Implements FR-004's 'eject ... file the repair' as the data model defines a repair entry; it narrows nothing the request or spec names - an entry no eject names is not an ejected change."
+    },
+    {
+     "id": "T16-D3",
+     "summary": "A repair is closed by a done line naming it in repair_of, or superseded by a later hand-in of its feature sharing a task",
+     "class": "within",
+     "why": "The repair exists to land the ejected task's change (sketch item 1, US4); a later hand-in of that task after the eject is the change being handed in again, so offering the stale repair would dispatch a second builder for work already answered. The data model's 'superseded' reading; earlier hand-ins, undone hand-ins and other features' tasks do not close it."
+    },
+    {
+     "id": "T16-D4",
+     "summary": "Passed over with a line: a repair whose task is in flight in a pool tree, and an integrate-kind repair no make builder-brief takes (until T19)",
+     "class": "within",
+     "why": "In flight: offering it would hand the tree back to its holder, which US4 ('no builder is kept past its report') forbids - the pass-over enforces the request. Integrate: the sketch's item 3 and US5/SC-004 route integration work to a fresh agent, not a builder brief, so offering a builder-brief command that refuses would serve nothing; the entry is still named on a line, so nothing is hidden or dropped."
+    },
+    {
+     "id": "T16-D5",
+     "summary": "REPAIR= passes the brief's mechanism refusal, and is itself refused before any tree is taken where no open entry has the id or the entry's feature, tasks or kind are not the brief's",
+     "class": "within",
+     "why": "FR-008's 'nothing dropped' is the landing's gate and push checks, which a repair still passes in full; the brief-time refusal was already met when the line was first briefed and built, and the repair is one fix of that same line (US4). The REPAIR= refusals add a check rather than remove one. No clause of the request or spec is narrowed."
+    },
+    {
+     "id": "T16-D6",
+     "summary": "The handout's base is the clone's HEAD until T22 moves it to origin/main (D13)",
+     "class": "within",
+     "why": "Phasing of a base the plan's D3/D13 already settle; the request and spec set no base for a repair handout, and the move is scheduled, not dropped."
+    },
+    {
+     "id": "T16-D7",
+     "summary": "The knob is read by the commands and handed in (run_with, dispatch_with) so the task crate's tests run both ways",
+     "class": "within",
+     "why": "Test plumbing; touches no clause of the request or spec."
+    },
+    {
+     "id": "T16-D8",
+     "summary": "A fresh builder, never one kept past its report: the queue never offers a repair in flight, and the command's line and the brief's REPAIR line say FRESH",
+     "class": "within",
+     "why": "Directly implements US4 and SC-003 ('the failing change returned as a repair for a fresh builder') and the sketch's item 3 (the coordinator does not repair)."
+    },
+    {
+     "id": "T16-D9",
+     "summary": "This closes 451 T308's two-tier split: first tier the builder's (T06-T08), full gate the lane's (T14), 'repaired by whoever is cheapest' replaced by a fresh builder on a repair entry, builder coverage by none",
+     "class": "within",
+     "why": "The GM's first message is that the second tier was meant not to block; moving the full gate into the lane and repairs to fresh builders is the sketch's items 1-3. 'Builder coverage by none' follows the spec's recorded striking of 'coverage for its own crates' (request.md, spec-fidelity 2026-11-27) and SC-002's 'runs no coverage'."
+    },
+    {
+     "id": "T16-left-T65",
+     "summary": "make lane's status (lane crate log.rs repairs_open) lists a superseded repair as open; not fixed here, filed as T65 to land before T23",
+     "class": "within",
+     "why": "A status line that names a repair no command offers is a wrong answer (a defect), but it is in the lane crate T15/T18 own, filed with a landing order before T23, not carried past the feature; nothing the GM asked for is narrowed by fixing it in its own task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5203,6 +5279,74 @@
      "summary": "The suite and row readers read the attempt file, which make land's stdout and stderr go to; the --src hooks Phase lines stay an unbuilt fallback.",
      "class": "within",
      "why": "Which record the attribution reads, measured by reading the code. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T16": {
+   "section_sha256": "506ec444092bf54fccff11476aecb84cf495d90e29e23ac5404e5e0bd8296f87",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T16-D1",
+     "summary": "An open repair is offered before every queue entry, a performance entry's included (LANE_REPAIR_FIRST=1; 0 offers it only where no queue entry is picked); unwritten performance lines stay first in builder-done's step 1 and the Stop block",
+     "class": "within",
+     "why": "The request's sketch item 1 has the ejected task 'return to the queue as a repair entry' and FR-004/SC-003 have it go to a fresh builder; neither sets its order against other entries. Ordering it first delays nothing the GM asked for, and the knob's 0 still offers it. A priority choice inside what was asked."
+    },
+    {
+     "id": "T16-D2",
+     "summary": "Open is read from the lane's eject lines (an entry is offered only once an eject line names it; its changes and tasks from those lines), never from the repair entry alone",
+     "class": "within",
+     "why": "Implements FR-004's 'eject ... file the repair' as the data model defines a repair entry; it narrows nothing the request or spec names - an entry no eject names is not an ejected change."
+    },
+    {
+     "id": "T16-D3",
+     "summary": "A repair is closed by a done line naming it in repair_of, or superseded by a later hand-in of its feature sharing a task",
+     "class": "within",
+     "why": "The repair exists to land the ejected task's change (sketch item 1, US4); a later hand-in of that task after the eject is the change being handed in again, so offering the stale repair would dispatch a second builder for work already answered. The data model's 'superseded' reading; earlier hand-ins, undone hand-ins and other features' tasks do not close it."
+    },
+    {
+     "id": "T16-D4",
+     "summary": "Passed over with a line: a repair whose task is in flight in a pool tree, and an integrate-kind repair no make builder-brief takes (until T19)",
+     "class": "within",
+     "why": "In flight: offering it would hand the tree back to its holder, which US4 ('no builder is kept past its report') forbids - the pass-over enforces the request. Integrate: the sketch's item 3 and US5/SC-004 route integration work to a fresh agent, not a builder brief, so offering a builder-brief command that refuses would serve nothing; the entry is still named on a line, so nothing is hidden or dropped."
+    },
+    {
+     "id": "T16-D5",
+     "summary": "REPAIR= passes the brief's mechanism refusal, and is itself refused before any tree is taken where no open entry has the id or the entry's feature, tasks or kind are not the brief's",
+     "class": "within",
+     "why": "FR-008's 'nothing dropped' is the landing's gate and push checks, which a repair still passes in full; the brief-time refusal was already met when the line was first briefed and built, and the repair is one fix of that same line (US4). The REPAIR= refusals add a check rather than remove one. No clause of the request or spec is narrowed."
+    },
+    {
+     "id": "T16-D6",
+     "summary": "The handout's base is the clone's HEAD until T22 moves it to origin/main (D13)",
+     "class": "within",
+     "why": "Phasing of a base the plan's D3/D13 already settle; the request and spec set no base for a repair handout, and the move is scheduled, not dropped."
+    },
+    {
+     "id": "T16-D7",
+     "summary": "The knob is read by the commands and handed in (run_with, dispatch_with) so the task crate's tests run both ways",
+     "class": "within",
+     "why": "Test plumbing; touches no clause of the request or spec."
+    },
+    {
+     "id": "T16-D8",
+     "summary": "A fresh builder, never one kept past its report: the queue never offers a repair in flight, and the command's line and the brief's REPAIR line say FRESH",
+     "class": "within",
+     "why": "Directly implements US4 and SC-003 ('the failing change returned as a repair for a fresh builder') and the sketch's item 3 (the coordinator does not repair)."
+    },
+    {
+     "id": "T16-D9",
+     "summary": "This closes 451 T308's two-tier split: first tier the builder's (T06-T08), full gate the lane's (T14), 'repaired by whoever is cheapest' replaced by a fresh builder on a repair entry, builder coverage by none",
+     "class": "within",
+     "why": "The GM's first message is that the second tier was meant not to block; moving the full gate into the lane and repairs to fresh builders is the sketch's items 1-3. 'Builder coverage by none' follows the spec's recorded striking of 'coverage for its own crates' (request.md, spec-fidelity 2026-11-27) and SC-002's 'runs no coverage'."
+    },
+    {
+     "id": "T16-left-T65",
+     "summary": "make lane's status (lane crate log.rs repairs_open) lists a superseded repair as open; not fixed here, filed as T65 to land before T23",
+     "class": "within",
+     "why": "A status line that names a repair no command offers is a wrong answer (a defect), but it is in the lane crate T15/T18 own, filed with a landing order before T23, not carried past the feature; nothing the GM asked for is narrowed by fixing it in its own task."
     }
    ],
    "verdict": "CLEAR"

@@ -823,3 +823,84 @@ fn held_by_asks_the_carried_rule_of_any_rev() {
     assert!(super::held_by(root, "origin/main", &[missing]).is_empty());
     assert!(super::held_by(root, "origin/main", &[]).is_empty());
 }
+
+/// The lane's files for one ejected change of T01: its repair entry and its `eject` line.
+fn ejected(root: &Path, sha: &str) {
+    let lane = root.join(".git/l7r-lane");
+    put(&lane, "repairs.jsonl", &format!("{{\"utc\": \"2026-11-26T12:00:00Z\", \"repair\": \"r1\", \"feature\": \"9001-x\", \"tasks\": [\"T01\"], \"kind\": \"fix\", \"ejected\": [\"{sha}\"], \"batch\": \"9001-1\", \"why\": \"red\", \"units\": [\"rust/x test\"], \"attempt\": \"/c/.git/l7r-lane/attempts/9001-1-1.log\"}}\n"));
+    put(&lane, "lane.jsonl", &format!("{{\"utc\": \"2026-11-26T12:00:01Z\", \"event\": \"eject\", \"batch\": \"9001-1\", \"change\": \"{sha}\", \"repair\": \"r1\", \"why\": \"red\"}}\n"));
+}
+
+/// 461 T16 (D7, US4): an ejected change's repair entry is the next dispatch, ahead of a READY queue entry; its brief names the
+/// gate's output and the change, its handout builds on the ejected commit, and its done answers the entry (`repair_of`) and
+/// supersedes the ejected ref - after which no command offers it again.
+#[test]
+fn a_repair_entry_is_dispatched_first_briefed_with_the_gate_s_output_and_answered_by_its_done() {
+    let (dir, root, mut e, b1) = held("done-repair", "T01");
+    e.apply = applier(&dir, "exec git cherry-pick -n \"$5\"");
+    put(&b1, "scripts/n.py", "n = 1\n");
+    assert_eq!(done(&root, &e, "T01", "9001 T01: the change", "").code, 0);
+    let sha = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    ejected(&root, &sha);
+    put(
+        &root,
+        "specs/9001-x/queue.txt",
+        "T02 fix files=scripts/a.py\nT03 fix files=scripts/b.py\n",
+    );
+    // another builder's done: its step 1 names the repair before the queue's READY T03
+    builder_tree::run(&words(&["take", "T02", "9001"]), &root, &e);
+    put(&b1, "scripts/a.py", "a = 1\n");
+    let said = done(&b1, &e, "T02", "9001 T02: two", "");
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let first = format!("  1. make builder-brief T=T01 F=9001 KIND=fix CRATE=\"rust/x\" REPAIR=r1   (9001 T01 (repair r1): the lane ejected {} from batch 9001-1 (red); the gate's output /c/.git/l7r-lane/attempts/9001-1-1.log - a FRESH builder, never one kept past its report)\n", &sha[..10]);
+    assert!(said.stdout.contains(&first), "{}", said.stdout);
+    let brief = |a: &[&str]| crate::builder_brief::run(&words(a), &root, &e, "");
+    // a repair no open entry has, or briefed as another task's, is refused before any tree is taken
+    let none = brief(&["T01", "9001", "fix", "", "", "", "", "", "", "r9"]);
+    assert!(
+        none.stderr
+            .starts_with("builder-brief: refused - REPAIR=r9 is no open repair entry of the lane"),
+        "{}",
+        none.stderr
+    );
+    let other = brief(&["T03", "9001", "fix", "", "", "", "", "", "", "r1"]);
+    assert!(other.stderr.contains("REPAIR=r1 is 9001 T01 (repair r1) of kind fix, not this brief's: brief it as filed\n  make builder-brief T=T01 F=9001 KIND=fix CRATE=\"rust/x\" REPAIR=r1\n"), "{}", other.stderr);
+    assert_eq!(pool_of(&root).iter().filter(|t| !t.free()).count(), 0);
+    // the repair's brief: the gate's output and the change named, the ejected commit applied in the tree uncommitted
+    let r = brief(&["T01", "9001", "fix", "", "", "rust/x", "", "", "", "r1"]);
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    let line = format!("REPAIR r1 (batch 9001-1, red): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read the gate's output first: /c/.git/l7r-lane/attempts/9001-1-1.log\n", &sha[..10]);
+    assert!(r.stdout.contains(&line), "{}", r.stdout);
+    assert!(
+        r.stderr
+            .contains("builder-tree: it builds on refs/l7r/done/9001-T01"),
+        "{}",
+        r.stderr
+    );
+    // still under the prefix guard's 2,000 characters with the repair's line (the fixture's paths read as a real tree's)
+    let n = r
+        .stdout
+        .replace(&*dir.to_string_lossy(), "/diagram/.clones")
+        .chars()
+        .count();
+    assert!(n < 2000, "{n}");
+    let tree = pool_of(&root)
+        .into_iter()
+        .find(|t| t.tasks == ["T01"])
+        .unwrap()
+        .tree;
+    assert!(git(&tree, &["status", "--porcelain"]).contains("scripts/n.py"));
+    // its done answers the entry and supersedes the ejected ref
+    put(&tree, "scripts/n.py", "n = 2\n");
+    let fixed = done(&root, &e, "T01", "9001 T01: the repair", "");
+    assert_eq!(fixed.code, 0, "{}", fixed.stderr);
+    let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
+    let last = log
+        .lines()
+        .rfind(|l| l.contains("\"event\":\"done\""))
+        .unwrap();
+    assert!(last.contains("\"repair_of\":\"r1\""), "{last}");
+    assert_ne!(git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]), sha);
+    assert!(l7r_shared::builder_queue::repairs::open(&root.join(".git")).is_empty());
+    assert!(!fixed.stdout.contains("REPAIR=r1"), "{}", fixed.stdout);
+}

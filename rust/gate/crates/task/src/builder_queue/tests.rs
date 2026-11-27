@@ -488,3 +488,92 @@ fn with_no_feature_named_a_queue_of_another_form_is_passed_over_once() {
     let first = "queue: specs/269-research-backfill/queue.txt line 1: ";
     assert!(none.stderr.starts_with(first), "{}", none.stderr);
 }
+
+/// The lane's repair entries for 9001: r1 (T02, READY), r2 (T01, in flight in [`queued`]'s tree), r3 (`integrate`) and r4 (T05,
+/// READY after r1), each ejected.
+fn repaired(root: &Path) {
+    let entry = |id: &str, task: &str, kind: &str| {
+        format!("{{\"repair\": \"{id}\", \"feature\": \"9001-x\", \"tasks\": [\"{task}\"], \"kind\": \"{kind}\", \"batch\": \"9001-1\", \"why\": \"red\", \"units\": [], \"attempt\": \"/a-{id}.log\"}}\n")
+    };
+    let eject = |id: &str| {
+        format!("{{\"utc\": \"2026-11-26T12:00:00Z\", \"event\": \"eject\", \"change\": \"c-{id}\", \"repair\": \"{id}\"}}\n")
+    };
+    let all = ["r1", "r2", "r3", "r4"];
+    put(
+        root,
+        ".git/l7r-lane/repairs.jsonl",
+        &(entry("r1", "T02", "fix")
+            + &entry("r2", "T01", "fix")
+            + &entry("r3", "T03", "integrate")
+            + &entry("r4", "T05", "fix")),
+    );
+    put(root, ".git/l7r-lane/lane.jsonl", &all.map(eject).concat());
+}
+
+/// 461 T16 (D7): `make builder-next`, `make queue` and `make builder-done`'s step 1 name the lane's open repair entry before the
+/// queue's READY one (`LANE_REPAIR_FIRST`), each other open entry READY after it or passed over with why; with the knob at 0 after
+/// the queues; and with no queue to read, alone.
+#[test]
+fn an_open_repair_entry_is_named_before_the_queue_s_next_entry() {
+    let (_dir, root, _e, tree) = queued("queue-repair");
+    repaired(&root);
+    let one = "T03 fix files=docs/a.md\n";
+    put(&root, "specs/9001-x/queue.txt", one);
+    let r1 = "make builder-brief T=T02 F=9001 KIND=fix REPAIR=r1   (9001 T02 (repair r1): the lane ejected c-r1 from batch 9001-1 (red); the gate's output /a-r1.log - a FRESH builder, never one kept past its report)";
+    let rest = format!("  repair READY after it: make builder-brief T=T05 F=9001 KIND=fix REPAIR=r4   (9001 T05 (repair r4))\n  repair passed over: 9001 T01 (repair r2) - in flight (9001 T01 holds {})\n  repair passed over: 9001 T03 (repair r3) - kind integrate is no kind make builder-brief takes yet: brief its builder by hand\n", tree.display());
+    let next = ask("builder-next", &["9001"], &root).stdout;
+    assert!(next.starts_with(&format!("builder-next: the lane's open repair entry:\n  {r1}\n{rest}builder-next: 9001 T03 (line 1")), "{next}");
+    let listed = ask("queue", &["9001"], &root).stdout;
+    assert!(
+        listed.starts_with(&format!(
+            "queue: the lane's open repair, READY:\n  {r1}\n{rest}queue: specs/9001-x/queue.txt"
+        )),
+        "{listed}"
+    );
+    // the knob at 0: after the queue's
+    let late = super::run_with("builder-next", &words(&["9001"]), &root, "", 3, false).stdout;
+    let said = format!("\nbuilder-next: the lane's open repair entry:\n  {r1}\n");
+    assert!(late.starts_with("builder-next: 9001 T03 (line 1"), "{late}");
+    assert!(late.contains(&said), "{late}");
+    // no queue to read: the repairs alone, the queue's error on stderr
+    std::fs::remove_file(root.join("specs/9001-x/queue.txt")).unwrap();
+    let alone = ask("builder-next", &["9001"], &root);
+    assert_eq!(alone.code, 0);
+    assert!(
+        alone
+            .stdout
+            .starts_with("builder-next: the lane's open repair entry:\n"),
+        "{}",
+        alone.stdout
+    );
+    assert!(
+        alone.stderr.starts_with("builder-next: "),
+        "{}",
+        alone.stderr
+    );
+    // builder-done's step 1, both ways: first; with the knob at 0 and no queue, the repair still
+    let p = crate::builder_tree::pool(&root).unwrap();
+    let rest = rest.replace("  repair", "     repair");
+    let step = super::dispatch(&p, "9001");
+    assert!(step.starts_with(&format!("{r1}\n{rest}")), "{step}");
+    let after = super::dispatch_with(&p, "9001", false);
+    let tail = format!("{r1}\n{rest}");
+    assert!(after.ends_with(&tail), "{after}");
+    assert!(after.starts_with("no next dispatch named: "), "{after}");
+    // with a queue and the knob at 0: the queue's entry, and no repair named
+    put(&root, "specs/9001-x/queue.txt", one);
+    let queued = super::dispatch_with(&p, "9001", false);
+    let wanted = "make builder-brief T=T03 F=9001 KIND=fix ENTRY=1";
+    assert!(queued.starts_with(wanted), "{queued}");
+    assert!(!queued.contains("REPAIR"), "{queued}");
+    // every open entry answered: nothing of the lane said
+    let answered = ["r1", "r2", "r3", "r4"]
+        .map(|r| format!("{{\"event\":\"done\",\"detail\":\"9001 T09\",\"repair_of\":\"{r}\"}}\n"))
+        .concat();
+    let log = root.join(".git").join(l7r_shared::builder_queue::LOG);
+    let had = std::fs::read_to_string(&log).unwrap();
+    std::fs::write(&log, had + &answered).unwrap();
+    assert!(!ask("builder-next", &["9001"], &root)
+        .stdout
+        .contains("repair"));
+}

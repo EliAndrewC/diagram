@@ -651,6 +651,14 @@ impl Found {
         if let Some(k) = entry_of(p, tree, &holder) {
             line["entry"] = json!(k);
         }
+        // 461 T16: the lane's repair entry the brief named, which this done answers (the queue's and the lane's `repair_of`)
+        let repair = briefs(p, tree, &holder)
+            .iter()
+            .filter_map(|e| e["repair"].as_str().map(str::to_owned))
+            .next_back();
+        if let Some(r) = repair {
+            line["repair_of"] = json!(r);
+        }
         if handed_in {
             line["handed_in"] = json!(true);
         }

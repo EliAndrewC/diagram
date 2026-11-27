@@ -59,6 +59,9 @@ use serde_json::Value;
 
 use crate::builder_pool::Tree;
 
+// GUARD_EDIT_OK: feature 461 T16 - the lane's repair entries, offered before the queue's (D7)
+pub mod repairs;
+
 /// The queue's file, in a feature's directory.
 pub const FILE: &str = "queue.txt";
 /// The pool's log, in the git common directory, where `make builder-done` writes a `done` line.
@@ -889,13 +892,31 @@ pub fn idle(clone: &Path, builders: usize) -> Verdict {
     let known = crate::builder_brief::targets(
         &std::fs::read_to_string(clone.join("Makefile")).unwrap_or_default(),
     );
-    let pick = offer(&boards, "").map(|(b, i)| {
+    let queued = offer(&boards, "").map(|(b, i)| {
         (
             format!("{} {}", b.key, b.entries[i].name()),
             b.entries[i].command(&b.key),
             flagged(b, i, &known, "  "),
         )
     });
+    // GUARD_EDIT_OK: feature 461 T16 - an open repair entry of the lane is offered before the queue's pick (D7, LANE_REPAIR_FIRST)
+    let held: Vec<Tree> = trees.iter().filter(|t| !t.free()).cloned().collect();
+    let repair = repairs::offer(&common, &held)
+        .ready
+        .into_iter()
+        .next()
+        .map(|r| {
+            (
+                format!("{}, a FRESH builder", r.name()),
+                r.command(),
+                String::new(),
+            )
+        });
+    let pick = if repairs::first() {
+        repair.or(queued)
+    } else {
+        queued.or(repair)
+    };
     if pick.is_none() && unlisted.is_empty() {
         return unread.map_or(Verdict::Quiet, Verdict::Unread);
     }

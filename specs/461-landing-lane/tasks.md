@@ -137,3 +137,7 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T64 Phase 2: from T22's base the Stop rule counts a waiting hand-in no runner serves - l7r_shared::lane_wake::holds (461 T21) counts a waiting hand-in only while the runner lives (phase 1's hand-ins are landed by hand), so once T22 flips HAND_IN_BASE to origin a hand-in whose runner start failed holds no stop and nothing arms the make lane-wait that T56 makes say the death; count it where the base is origin, from the one reading of the knob T22 makes. Lands with T22 and T56.
       research: rendering
+- [ ] T65 Phase 2: the lane's log::repairs_open (rust/gate/crates/lane/src/log.rs:354, which make lane's status lists from, lane.rs:172) still lists a repair entry SUPERSEDED by a later hand-in of its task as open, where data-model.md reads it closed and the queue's l7r_shared::builder_queue::repairs::open (461 T16) closes it - so make lane says an open repair the queue no longer offers; red first in the lane crate's tests, then repairs_open asks the shared reader. Found by 461 T16. Lands before T23.
+      research: rendering
+- [x] T66 x Withdrawn 2026-11-27: filed by mistake: a probe of task-add's output, a duplicate of nothing
+      research: rendering

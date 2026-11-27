@@ -183,11 +183,51 @@ fn unlisted_said(p: &Pool, prefer: &str, pad: &str) -> String {
     out
 }
 
+/// THE LANE'S OPEN REPAIR ENTRIES (461 T16, plan D7; `l7r_shared::builder_queue::repairs`): the first READY entry's command, said as
+/// a FRESH builder's, and a line for every other open entry, `pad` before each - READY, or passed over with why. `None` and nothing
+/// where the lane holds no open entry.
+fn repairs_said(p: &Pool, pad: &str) -> (Option<String>, String) {
+    let held: Vec<builder_pool::Tree> = builder_pool::read(&p.common)
+        .into_iter()
+        .filter(|t| !t.free())
+        .collect();
+    let o = queue::repairs::offer(&p.common, &held);
+    let mut rest = String::new();
+    for r in o.ready.iter().skip(1) {
+        let _ = writeln!(
+            rest,
+            "{pad}repair READY after it: {}   ({})",
+            r.command(),
+            r.name()
+        );
+    }
+    for (r, why) in &o.passed {
+        let _ = writeln!(rest, "{pad}repair passed over: {} - {why}", r.name());
+    }
+    let first = o.ready.first().map(|r| {
+        format!(
+            "{}   ({}: the lane ejected {} from batch {} ({}); the gate's output {} - a FRESH builder, never one kept past its report)",
+            r.command(),
+            r.name(),
+            r.changes.iter().map(|c| c.get(..10).unwrap_or(c)).collect::<Vec<_>>().join(" "),
+            r.batch,
+            r.why,
+            r.attempt
+        )
+    });
+    (first, rest)
+}
+
 /// THE NEXT DISPATCH, as `make builder-done` prints it after `  1. `: the open performance tasks no queue line names first, then the
 /// entry [`queue::offer`] picks over EVERY queue of the clone - a READY performance entry of any active feature's queue before the
 /// done task's own feature's first pick (FR-013 "in any active feature", 451 T313's round-3 ruling) - with what it passed over; or
 /// why there is none: no entry to hand out, or the feature's queue missing or malformed (never a refusal: the tree is committed).
 pub(crate) fn dispatch(p: &Pool, feature: &str) -> String {
+    dispatch_with(p, feature, queue::repairs::first())
+}
+
+/// [`dispatch`] with `LANE_REPAIR_FIRST` read: `first` offers an open repair entry before any queue's entry.
+pub(crate) fn dispatch_with(p: &Pool, feature: &str, first: bool) -> String {
     let key = feature_key(feature);
     let trees = builder_pool::read(&p.common);
     // every readable queue: another feature's file of that name in another form (a page session's) is passed, as `idle` passes it
@@ -208,6 +248,11 @@ pub(crate) fn dispatch(p: &Pool, feature: &str) -> String {
             "     "
         }
     };
+    // the lane's open repair entry first (461 T16, D7's `LANE_REPAIR_FIRST`), whatever the queues hold
+    let (repair, rest) = repairs_said(p, "     ");
+    if let Some(r) = repair.as_ref().filter(|_| first) {
+        return format!("{out}{}{r}\n{rest}", lead(&out));
+    }
     if own.is_none() {
         let why = boards(p, feature).err().unwrap_or_default();
         let pad = lead(&out);
@@ -237,14 +282,15 @@ pub(crate) fn dispatch(p: &Pool, feature: &str) -> String {
             );
             out + &flagged(b, i, &known(p), "     ") + &asides(b, "     ")
         }
-        None => match own {
-            Some(b) => format!(
+        None => match (repair, own) {
+            (Some(r), _) => format!("{out}{}{r}\n{rest}", lead(&out)),
+            (None, Some(b)) => format!(
                 "{out}{}no next dispatch: {} (make queue F={})\n",
                 lead(&out),
                 b.next.none,
                 b.key
             ),
-            None => out,
+            (None, None) => out,
         },
     }
 }
@@ -384,6 +430,18 @@ pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
 }
 
 pub(crate) fn run(verb: &str, args: &[String], cwd: &Path, note: &str, builders: usize) -> Reply {
+    run_with(verb, args, cwd, note, builders, queue::repairs::first())
+}
+
+/// [`run`] with `LANE_REPAIR_FIRST` read, as [`dispatch_with`] takes it.
+pub(crate) fn run_with(
+    verb: &str,
+    args: &[String],
+    cwd: &Path,
+    note: &str,
+    builders: usize,
+    first: bool,
+) -> Reply {
     let Some(p) = builder_tree::pool(cwd) else {
         return refused(format!("{verb}: not in a git repository\n"));
     };
@@ -394,20 +452,35 @@ pub(crate) fn run(verb: &str, args: &[String], cwd: &Path, note: &str, builders:
         }
         return add(&p, args, note);
     }
+    // the lane's open repair entries (461 T16, D7): said before the queues where `LANE_REPAIR_FIRST` is on, after them where not,
+    // and said alone where no queue can be read - a repair's feature needs no queue of its own
+    let (repair, rest) = repairs_said(&p, "  ");
+    let repairs = repair.map_or(rest.clone(), |r| {
+        let said = if verb == "queue" {
+            "queue: the lane's open repair, READY"
+        } else {
+            "builder-next: the lane's open repair entry"
+        };
+        format!("{said}:\n  {r}\n{rest}")
+    });
     let (all, passed) = match boards(&p, args.first().map_or("", String::as_str)) {
         Ok(all) => all,
+        Err(why) if !repairs.is_empty() => return reply(repairs, format!("{verb}: {why}\n"), 0),
         Err(why) => return refused(format!("{verb}: {why}\n")),
     };
     let known = known(&p);
-    let mut out = if verb == "builder-next" {
-        unlisted_said(
-            &p,
-            &feature_key(args.first().map_or("", String::as_str)),
-            "  ",
-        )
+    let mut out = if first {
+        repairs.clone()
     } else {
         String::new()
     };
+    if verb == "builder-next" {
+        out += &unlisted_said(
+            &p,
+            &feature_key(args.first().map_or("", String::as_str)),
+            "  ",
+        );
+    }
     for (b, at) in &all {
         out += &if verb == "queue" {
             listing(b, at, &known)
@@ -421,6 +494,9 @@ pub(crate) fn run(verb: &str, args: &[String], cwd: &Path, note: &str, builders:
             &feature_key(args.first().map_or("", String::as_str)),
             "  ",
         );
+    }
+    if !first {
+        out += &repairs;
     }
     if verb == "builder-next" {
         let trees = builder_pool::read(&p.common);
