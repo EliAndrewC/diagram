@@ -54,7 +54,7 @@ Its states: `forming` -> `carrying` -> `gating <n>` -> (`halving` -> `gating <n+
 (a US5 case: the arbiter owed - a task's second pinned red, `plan.md` D6 step 4 - or the runner killed). A green batch whose push
 failed twice is not `stopped`: it files one `integrate` repair entry (`why` `push`) and ends.
 
-A task's PINS are its `eject` lines with `why` `red`, `inferred` or `unplaced`, any batch; a red half pins nothing, a `conflict`
+A task's PINS are its `eject` lines with `why` `red`, `inferred` or `unplaced`, any batch (a change ejected after its own one-change red run is `red`, so pinned); a red half of two changes or more pins nothing, a `conflict`
 ejection pins nothing. At a task's second pin the lane files no repair: the batch stops and the round arbiter is owed.
 
 ## A repair entry (`l7r-lane/repairs.jsonl`, one JSON line)

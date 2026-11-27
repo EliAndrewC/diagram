@@ -16,8 +16,9 @@ command that fixes it), 1 an error the command could not handle (its cause print
 Internal: `l7r-gate lane --work` is the runner's own argv (the stall watchdog's match); nobody types it.
 
 Environment the lane hands `make land` in its tree: `SPECIFY_FEATURE` (the batch's feature), `LAND_NOTE` (the changes' subjects,
-`landed by the lane, batch <b>`), `L7R_LANE_BATCH` (the batch's id: the red-gate tripwire leaves a run carrying it to the lane's
-own rule, keyed by task, D6 step 4).
+`landed by the lane, batch <b>`), `L7R_LANE_BATCH` (the batch's id: the red-gate tripwire leaves a run to the lane's own rule,
+keyed by task, only when the run is in the lane's tree and the id names a batch open in `lane.jsonl`, or the runner holding
+`lane.lock` started it; anywhere else the variable changes nothing, D6 step 4).
 
 Refusals added (each with its test, constitution XVIII):
 

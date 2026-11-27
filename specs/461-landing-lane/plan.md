@@ -238,15 +238,20 @@ verdict resets both; the lane log gives it the batch sizes it asks for.
    on main, so the red belonged to it alone or to its meeting with them, and its repair builder's hand-in re-tests it on that main.
 4. **The tripwire inside the lane, keyed by TASK.** Inside the lane the tripwire still fires on repeated reds on the same work, and
    stays quiet only on a halving's own steps. A red counts against a task only when the lane PINS it there: the task is ejected
-   red-attributed (`why` `red`), left last after a halving (`inferred`), or ejected with its whole batch in phase 2 (`unplaced`). A
-   red half pins on nobody, so the red runs in a row of one halving count nothing; each batch ejects a task at most once. The lane
+   red-attributed (`why` `red`), ejected after its own one-change red run in a halving (`why` `red`: that run's red is its alone),
+   left last after a halving (`inferred`), or ejected with its whole batch in phase 2 (`unplaced`). A red half of two changes or
+   more pins on nobody, so the red runs in a row of one halving count nothing until a change is ejected; each batch ejects a task at
+   most once. The lane
    fires the tripwire at the moment of a task's SECOND pin, read from the earlier `eject` lines of `lane.jsonl` for that task, any
    batch (a repair's hand-in carries the task's id, so its red is the same task's): a repair's hand-in red again, or one task
    ejected from two batches. It then files no second repair: the batch stops, `make arbiter-ask SUBJECT=lane-<task>` is run by the
    lane with the two attempt files as its `FILES`, and the coordinator is owed one line (D7's table). A conflict ejection
-   (`conflict`) is not a red and pins nothing. Each lane attempt runs `make land` with `L7R_LANE_BATCH` = the batch's id, and
-   `tree/state.rs`'s `second_red_gate` leaves a run carrying it to the lane's rule above (the lane's own record decides; the
-   `make land` attempt is not refused for a halving's red before it); outside the lane `second_red_gate` is unchanged. Label: the
+   (`conflict`) is not a red and pins nothing. Each lane attempt runs `make land` with `L7R_LANE_BATCH` = the batch's id. The
+   variable alone stands nothing down: `tree/state.rs`'s `second_red_gate` leaves a run to the lane's rule above only when the run
+   is in the lane's tree (`L7R_LANE_TREE`) AND its batch id names a batch open in `lane.jsonl` (a `batch` line with no `landed` or
+   `stop` after it), or the run was started by the runner holding `l7r-lane/lane.lock` (its pid the lock's holder or a child of
+   it). A run outside the lane meets `second_red_gate` exactly as today, the variable set or not, so a by-hand `make land` with
+   `L7R_LANE_BATCH` exported is no unrecorded escape (FR-008); the recorded escapes stay the arbiter's, as today. Label: the
    reviewer's reading of the tripwire (repeated reds on the same work), the pin rule the easier route. The tripwire keyed by change
    set was priced and dropped: a halving runs smaller subsets, the rest after an ejection is a new set, and a repair's hand-in has a
    new sha, so a set never comes back and the tripwire could never fire in the lane.
@@ -470,7 +475,10 @@ and repairs nothing itself, so US1 holds from here (D7's table, a push failed tw
 hand-ins, one batch, one push, the refs deleted, the status line; an attributed red ejects one change and lands the other); red
 first, the tripwire by task reached: that ejected task's repair handed in red again in a later batch stops the lane, files no
 second repair and owes the round arbiter (its `make arbiter-ask` bundle written, one owed line), and a green batch whose push
-fails twice files one `integrate` repair entry; a real batch of this feature's tasks;
+fails twice files one `integrate` repair entry; red first, the stand-down's reach: a by-hand `make land` in the clone carrying
+`L7R_LANE_BATCH` (outside the lane's tree, its batch id open or not) is still stopped on its second red by `second_red_gate`, and
+a run in the lane's tree with a batch id `lane.jsonl` holds no open batch for is stopped too (in `tree/state.rs`'s tests and the
+lane crate's end-to-end test); a real batch of this feature's tasks;
 measured: the lane tree's first gate minutes (D1), a background command's lifetime (D9).
 
 **Phase 3 - the whole red path (US4, US5, FR-004; D5, D6 step 3, D7's conflict entries, 451 T415).** The halving in place of the
@@ -573,4 +581,4 @@ No Constitution Check violation; the three XVI readings above go to spec-fidelit
 | like-window band | trees held within 0.5 | GUESS (D12) |
 | `LIKE_LOAD_BAND` | median load 0.75 to 1.25 times the night's | GUESS (D12) |
 
-D9's Stop rule (the coordinator's turn not closed while a lane line it owes is unread) lives in the guard's `pool_idle_hooks.rs`, with a case in its suite.
+D9's Stop rule (the main session's stop refused while the lane holds a waiting hand-in or an open batch and no `make lane-wait` of this clone runs) lives in the guard's `pool_idle_hooks.rs`, with a case in its suite.
