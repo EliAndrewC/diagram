@@ -5789,4 +5789,71 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+### T394 part B (2026-11-27T01:51Z)
 
+Owed by red-gate@2026-11-27T01:50:26Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T394, T391
+and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (2026-11-27, the landing's log), each time on
+lines no test reached. Of this task: line 327 of `builder_done.rs` was its own.
+
+1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
+   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   `ok_or_else` on a guard its builder documented as one no fixture can reach.
+2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
+   decision.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
+   `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
+5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
+6. **The one-sentence test.** "Why is T394 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
+   else carried in before it (the arbiter's ruling).
+8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
+   coverage is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
+   re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.
+
+### T391 part B (2026-11-27T01:51Z)
+
+Owed by red-gate@2026-11-27T01:50:26Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T394, T391
+and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (2026-11-27, the landing's log), each time on
+lines no test reached. None of the three lines is this task's: it rode in the batch.
+
+1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
+   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   `ok_or_else` on a guard its builder documented as one no fixture can reach.
+2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
+   decision.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
+   `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
+5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
+6. **The one-sentence test.** "Why is T391 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
+   else carried in before it (the arbiter's ruling).
+8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
+   coverage is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
+   re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.
+
+### T399 part B (2026-11-27T01:51Z)
+
+Owed by red-gate@2026-11-27T01:50:26Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T394, T391
+and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (2026-11-27, the landing's log), each time on
+lines no test reached. Line 143 of `words.rs` came in with T300's second part, which this task was built beside.
+
+1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
+   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   `ok_or_else` on a guard its builder documented as one no fixture can reach.
+2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
+   decision.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
+   `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
+5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
+6. **The one-sentence test.** "Why is T399 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
+   else carried in before it (the arbiter's ruling).
+8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
+   coverage is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
+   re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.

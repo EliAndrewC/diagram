@@ -140,5 +140,6 @@ pub(super) fn merged(base: &str, ours: &str, theirs: &str, kind: Prose) -> Resul
     out += &b[at..].concat();
     // a guard no fixture reaches: every side held the same fixed parts and only words moved, so the result is prose too
     let kept = fixed_parts(&out, kind).is_ok_and(|parts| parts == held);
-    kept.then_some(out).ok_or_else(|| STRAYED.to_owned())
+    // (said eagerly: a closure here would be a line no test can reach)
+    kept.then_some(out).ok_or(STRAYED.to_owned())
 }
