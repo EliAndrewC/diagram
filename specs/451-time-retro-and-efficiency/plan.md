@@ -5899,31 +5899,34 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T424 (<why: the finding or measurement that files it>)
+### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: "assertion failed: builds(&world).is_empty() && spare(&world.slots)", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a flaky check, not a defect: `prewarm.rs` is unchanged. Which half failed, measured 2026-11-27 (a scratch test, since removed, whose slots' `flock` program was a wrapper that, after taking each lock, left the open file on fd 3 of a `sleep 0.3` child - the "child another thread is starting holds a copy of the open file until its exec" of `slot.rs` lines 12-13, held for 0.3 s instead of the microseconds of a fork-to-exec window): the old form went red 3 of 3 run alone, plus once in the crate's run, each time on the `spare` half - `builds()` empty, cargo's calls `["--version"]` only. The fix is in the test: the slot is read let go by `let_go`, a taker that waits (10 ms polls and a 60 s ceiling, GUESS: a bound no load reaches, as `until_calls`'s; the slot tests' own `quick`), where the bare `spare` read it once. On the same slowed form the fixed check went green 3 of 3, beside an `assert!(!spare(..))` showing the slot still read held; a hold never let go still fails it (`let_go` false after 60.96 s, measured 2026-11-27 (a scratch test holding the slot, since removed)). Then the real test, 30 times in a row, one run at a time (`t424-thirty.sh` in the scratchpad): 30 passed, 0 failed.
+- The candidates, each tested: THE CEILING - ruled out by the assertion that passed: the "stopped at its ceiling" line just above 261 held, so the run ended at its ceiling as meant, and a slow coverage build only makes fewer loop turns before it. `builds()` COUNTING LINT CALLS - none is made: with one slot the pre-warm's own `free_now` hold is on the only slot when `spare` opens that file again, a separate open under `flock`, so `spare` reads it held and no build, test or lint, starts (the slowed run's calls: `--version` alone); a lint call would start `clippy` and be left out anyway. A SLOT HELD BETWEEN `free_now` AND THE `filter` - `Option::filter` drops the rejected `Hold` at once, closing the file in process; it read held afterwards only while a copy of the file lived in a child. A SHARED DIRECTORY - `scratch` names carry the pid and a sequence number (`checks.rs`), so no other test's slots or calls file is this one's.
+- The task line's premise, read: the `free_now(...).filter(spare)` take and this assertion date from 451 T316 (`1783cf6eed`), not from T367/T411 (`git diff 7b104cda01^ 7b104cda01` touches neither); T367/T411 add test threads that start processes (the lint passes), which can only widen the chance of a copy at that instant. The 04:03 failure itself is inferred, not observed: the simulation shows the assertion fails on exactly that transient and the other candidates cannot fail it at 261.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the `spare` half after a pre-warm | n/a | n/a | n/a | n/a: a waiting take, bounded at 60 s (GUESS) |
 
 ### T424 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The pre-warm test fails only where a pre-warm leaves a slot held, never on a copy of a let-go slot's file another test's child holds for a moment.
+2. **The constraints.** `slot.rs`'s own word that a slot just let go may read held for a moment; the brief's method (451 T139, T314: the race made certain, never the machine loaded).
+3. **Where each comes from.** O: the slowed scratch runs above, 2026-11-27; R: `slot.rs` lines 12-13, `tests/slot.rs` lines 125 and 320 (the same transient, met the same way).
+4. **Do they describe the world here?** Yes: the slowed form failed the old check 3 of 3 on the `spare` half alone, measured 2026-11-27 (the scratch test of the Approach, run alone).
+5. **The order.** After T367, T411 (carried in this tree); before their landing.
+6. **The exits.** Green: the fixed check 3 of 3 on the slowed form, 30 of 30 alone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 3 of 3 red, then 3 of 3 green on the slowed form; 30 of 30 real runs; `make builder-checks CRATE="rust/gate/crates/rustc"` clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of a map would see: a red batch gate on a correct pre-warm, so the check is fixed, not the code (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a flaky check.
 
 ### T419, T404 (bundle)
 

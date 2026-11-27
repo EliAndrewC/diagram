@@ -3656,7 +3656,7 @@
    "declared": "spec-fidelity"
   },
   "### T424 Approach (checklist part A)": {
-   "sha256": "af6c2343962e69f844ec9dcfae1c1fb9bbc77e699a9610767748a2fbe9440e9d",
+   "sha256": "f9e3df9f09e741e850f446ab0077de2b75bb66c89427cbed24cd059d7d5c0e51",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3687,6 +3687,12 @@
   },
   "### T403 (`make task-time` booked 27.6 of the second tier's blocking minutes over 2026-11-26T17:00Z to 2026-11-27T01:00Z to the session stopped waiting on the GM - its turns ended on a question to the GM between a task's carry and its landing - where every other window's waiting-on-the-GM minutes are the GM's row; the GM read the tier's figure as \"a HUGE problem, either with our measurements or with our process\", 2026-11-27, request.md; the measurement `dev/measurements/2026-11-27/tree-idle/results.md`)": {
    "sha256": "db82d0e2e9f7a56a94f44615d315c1f7ae9adf12c501a1b58386e140cec33b3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: \"assertion failed: builds(&world).is_empty() && spare(&world.slots)\", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)": {
+   "sha256": "16790d68b06333f3b7d4d75300c4a4baa07b121e4ad2caf828e1f3309b6a3b8e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -33328,6 +33334,55 @@
      "summary": "T314's empty template heading removed",
      "class": "within",
      "why": "Its earlier text held only placeholders and decided nothing, so removing it removes no decision of the plan."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T413 (<why: the finding or measurement that files it>)",
+    "### T413 Approach (checklist part A)",
+    "### T417 (<why: the finding or measurement that files it>)",
+    "### T417 Approach (checklist part A)",
+    "### T419 (<why: the finding or measurement that files it>)",
+    "### T419 Approach (checklist part A)",
+    "### T420 (<why: the finding or measurement that files it>)",
+    "### T420 Approach (checklist part A)",
+    "### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: \"assertion failed: builds(&world).is_empty() && spare(&world.slots)\", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)",
+    "### T424 Approach (checklist part A)",
+    "(removed) ### T314 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T424-fix-the-test",
+     "summary": "The pre-warm test's `spare` half is read by a waiting take (`let_go`, 10 ms polls) instead of a single read; prewarm.rs and slot.rs are unchanged.",
+     "class": "within",
+     "why": "A check that refuses correct work on a documented transient (slot.rs lines 12-13: a let-go slot may read held while another thread's child holds a copy of the file until exec) is fixed as the check, not the code (constitution XIV; the GM 2026-11-26 'I agree with prioritizing the test that fails under load being fixed'). The fixed check still does its job: red 3 of 3 on the old form under the slowed simulation, and a hold never let go still fails it (let_go false after 60.96 s, measured 2026-11-27)."
+    },
+    {
+     "id": "T424-ceiling",
+     "summary": "The waiting take is bounded at 60 s, labeled GUESS, matching until_calls's bound.",
+     "class": "within",
+     "why": "A labeled knob inside the fix; it widens nothing the GM asked for and a real held slot still fails within it."
+    },
+    {
+     "id": "T424-not-a-defect",
+     "summary": "Classed a flaky check, not a defect of the pre-warm; Performance work: no; Found and left: none.",
+     "class": "within",
+     "why": "The candidates (ceiling, lint calls, a hold between free_now and filter, a shared directory) are each ruled out by a stated test; the 04:03 failure is honestly labeled inferred from the simulation. A test fix that speeds nothing is not FR-013 performance work."
+    },
+    {
+     "id": "T413-T417-T419-T420-placeholders",
+     "summary": "Unfilled template sections for T413, T417, T419, T420 (the why/Approach and checklist part A placeholders, including the FR-013 measurement wording in T419/T420).",
+     "class": "within",
+     "why": "Placeholders decide nothing; the template text restates FR-013 and D15 as written in the spec."
+    },
+    {
+     "id": "T314-removed",
+     "summary": "T314's empty template block removed.",
+     "class": "within",
+     "why": "Its earlier text (verdict CLEAR) was an unfilled placeholder carrying no decision, so its removal narrows nothing."
     }
    ]
   }

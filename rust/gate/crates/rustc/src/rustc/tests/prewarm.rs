@@ -11,6 +11,7 @@ use super::alone::{fixture, lane_world, put, since as slot_lines};
 use super::lint::{both_held, lint, passes_of, SMALL};
 use super::phases::phases;
 use super::runlock::{me, stage};
+use super::slot::quick;
 use super::{answer, calls, kept_crates, world_with, World};
 use crate::checks::scratch;
 use crate::rustc::kept::alone::DIR;
@@ -81,6 +82,17 @@ fn codes(root: &Path) -> Vec<i64> {
         .filter(|l| l["step"] == STEP)
         .map(|l| l["code"].as_i64().unwrap())
         .collect()
+}
+
+/// Is the one slot under `dir` let go? Asked of a taker that waits, a minute at most: a slot just let go can read held for a moment, a
+/// child another test's thread is starting holding a copy of its open file until its exec (`slot.rs`) - so a bare `spare` straight
+/// after a pre-warm failed once inside a batch gate's coverage run (451 T424), where a hold never let go still fails here.
+fn let_go(dir: &Path) -> bool {
+    let slots = Slots {
+        ceiling: Duration::from_secs(60),
+        ..quick(dir, 1)
+    };
+    take(&slots, "a later run\n", &mut |_| {}).hold.is_some()
 }
 
 /// A fake cargo that stays in a build for as long as `slow` lies beside it - for 30 s at most, so a test that fails before it
@@ -258,7 +270,7 @@ fn it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling() {
         ),
         "{said}"
     );
-    assert!(builds(&world).is_empty() && spare(&world.slots));
+    assert!(builds(&world).is_empty() && let_go(&slots));
     // two, one held by a real compile: the same
     world.slots = Slots::at(slots.to_path_buf(), 2);
     let real = take(&world.slots, "a real run\n", &mut |_| {});
