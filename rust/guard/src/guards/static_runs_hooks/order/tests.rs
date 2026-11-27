@@ -194,6 +194,82 @@ fn landing(t: &str, landed: bool, tasks: &[&str]) -> Value {
     json!({"ev": "Phase", "src": "land", "step": "end", "t": t, "code": 0, "make": "land", "tasks": tasks, "landed": landed})
 }
 
+/// The main session's hook-log line that a `make <target>` ran: its call and, with `done`, the result that says it started.
+fn main_ran(t: &str, id: &str, target: &str, done: bool) -> Vec<Value> {
+    let pre = json!({"t": t, "ev": "PreToolUse", "tool": "Bash", "id": id, "sid": "s", "make": "ledger-owed", "makes": ["ledger-owed", target]});
+    let mut post = pre.clone();
+    post["ev"] = json!("PostToolUse");
+    post["bg"] = json!("b1");
+    if done {
+        vec![pre, post]
+    } else {
+        vec![pre]
+    }
+}
+
+/// TWO TIERS (451 T308): in the clone with work carried for a batch landing, the batch gate is the check - the main session is told
+/// `make land` for the batch, never `make closing-checks`, and nothing while a landing runs.
+#[test]
+fn the_main_session_with_a_batch_staged_is_told_the_landing_and_nothing_while_one_runs() {
+    let repair = edit_of(
+        "2026-11-27T01:10:00.000Z",
+        "",
+        "/c/rust/guard/src/x.rs",
+        "T394",
+    );
+    // a carry since the last landing that went out: the batch is staged
+    let mut lines = main_ran("2026-11-27T01:00:00.000Z", "k1", "carry", true);
+    lines.push(repair.clone());
+    let text = said_text(decide_said(&lines, ""));
+    for want in [
+        "T55 order: your last code edit not landed (rust/guard/src/x.rs, 2026-11-27T01:10:00.000Z)",
+        "the batch gate is its check",
+        "`make land F=451 T=\"<the staged tasks>\" NOTE=\"<what lands>\"`",
+        "run_in_background: true",
+    ] {
+        assert!(text.contains(want), "{want} in {text}");
+    }
+    assert!(!text.contains("closing-checks"), "{text}");
+    // a carry that never ran (refused by a hook: no result line) stages nothing, and a builder is never told the landing
+    let mut refused = main_ran("2026-11-27T01:00:00.000Z", "k1", "carry", false);
+    refused.push(repair.clone());
+    assert!(said_text(decide_said(&refused, ""))
+        .contains("start `make closing-checks T=T55 F=451` now"));
+    let mut builders = main_ran("2026-11-27T01:00:00.000Z", "k1", "carry", true);
+    builders.push(edit(
+        "2026-11-27T01:10:00.000Z",
+        "a1",
+        "/c/rust/guard/src/x.rs",
+    ));
+    assert!(said_text(decide_said(&builders, "a1")).contains("make builder-checks"));
+    // a landing that went out since the carry took the batch with it: the edit after it is told the closing run as before
+    let mut out = main_ran("2026-11-27T01:00:00.000Z", "k1", "carry", true);
+    out.push(landing("2026-11-27T01:05:00.000Z", true, &["T300"]));
+    out.push(repair.clone());
+    assert!(said_text(decide_said(&out, "")).contains("make closing-checks"));
+    // a landing REFUSED since the carry leaves the batch staged
+    let mut red = main_ran("2026-11-27T01:00:00.000Z", "k1", "carry", true);
+    red.push(landing("2026-11-27T01:05:00.000Z", false, &["T300"]));
+    red.push(repair.clone());
+    assert!(said_text(decide_said(&red, "")).contains("the batch gate is its check"));
+    // a landing started after the edit and not yet ended is running: nothing is said, staged or not
+    lines.extend(main_ran("2026-11-27T01:11:00.000Z", "k2", "land", true));
+    assert!(decide_said(&lines, "").is_none());
+    let mut bare = vec![repair.clone()];
+    bare.extend(main_ran("2026-11-27T01:11:00.000Z", "k2", "land", true));
+    assert!(decide_said(&bare, "").is_none());
+    // once it ends, landed or refused, it runs no more: the batch is still staged after a refusal, and so told again
+    lines.push(landing("2026-11-27T01:20:00.000Z", false, &["T394"]));
+    assert!(said_text(decide_said(&lines, "")).contains("the batch gate is its check"));
+    // a landing the hooks refused (no result line), one started BEFORE the edit, and a builder's own call are no landing running
+    let mut never = vec![repair.clone()];
+    never.extend(main_ran("2026-11-27T01:11:00.000Z", "k3", "land", false));
+    assert!(decide_said(&never, "").is_some());
+    let mut before = main_ran("2026-11-27T01:09:00.000Z", "k4", "land", true);
+    before.push(repair);
+    assert!(decide_said(&before, "").is_some());
+}
+
 #[test]
 fn an_edit_before_a_landing_of_its_task_is_landed_and_never_told() {
     // the finding (T64): the main session's Makefile edit filed under T12, T12 landed after it, told at every later decide

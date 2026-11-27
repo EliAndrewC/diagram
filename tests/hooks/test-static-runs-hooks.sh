@@ -134,6 +134,14 @@ runby "make decide F=451 T=T06"
 printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c3","sid":"t","by":"a1","make":"builder-checks"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c3","sid":"t","by":"a1","make":"builder-checks","bg":"b3"}\n' >> "$LOG"
 runby "make decide F=451 T=T06"
 [ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once its builder-checks has started since" || no "a notice after builder-checks started" "(rc=$RC: $OUT)"
+fresh  # feature 451 T308: the main session with work carried for a batch landing is told the landing, and nothing while one runs
+printf '{"t":"2026-11-27T01:00:00.000Z","ev":"PreToolUse","tool":"Bash","id":"k1","sid":"t","make":"carry"}\n{"t":"2026-11-27T01:00:05.000Z","ev":"PostToolUse","tool":"Bash","id":"k1","sid":"t","make":"carry"}\n' >> "$LOG"
+printf '{"t":"2026-11-27T01:10:00.000Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","path":"%s/rust/guard/src/x.rs"}\n' "$C" >> "$LOG"
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && seen OUT -q 'additionalContext' && seen OUT -q 'the batch gate is its check' && seen OUT -q 'make land F=451 T=' && ! seen OUT -q 'closing-checks' && ok "the main session's decide with a batch staged: told the landing, not the closing checks" || no "no batch-landing order notice" "(rc=$RC: $OUT)"
+printf '{"t":"2026-11-27T01:11:00.000Z","ev":"PreToolUse","tool":"Bash","id":"k2","sid":"t","make":"land"}\n{"t":"2026-11-27T01:11:01.000Z","ev":"PostToolUse","tool":"Bash","id":"k2","sid":"t","make":"land","bg":"b4"}\n' >> "$LOG"
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent while a landing started since runs" || no "a notice while the landing runs" "(rc=$RC: $OUT)"
 fresh  # feature 451 T64: a code edit its task's landing went out after is landed, never told again
 printf '{"t":"2026-11-20T15:48:51.173Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","path":"%s/Makefile","task":"T12"}\n' "$C" >> "$LOG"
 landing 2026-11-20T15:55:22.200Z false 0 '["T12"]'

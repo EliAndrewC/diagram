@@ -55,6 +55,7 @@ key	verdict	chars	guard	kind	by	over	head
 1d356dcea1e0e93b	BASELINE	642	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 201066fbdcce67e5	BASELINE	575	no-poll-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its
 20b8790b521b178b	BASELINE	1777	measure-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: that is the second EXPENSIVE measurement in a row with no
+211d059bf7eb596a	PASS	356	static-runs-hooks	notice	aea202a841373f067		TN order: your last code edit not landed (<path>, N-N-NTN:N:N.NZ) has no
 216b351a82af90c6	PASS	1199	pair-hooks	refuse	ae5329252c169f895		BLOCKED: this glyph-check would spend its round on work that has not
 219ef64072096361	PASS	349	set-down-hooks	refuse	round-arbiter aad643ace8004667b (ask:guard-wordings-sleep-and-slot: stands as it is)		BLOCKED: a builder slot is free - N of N builders running
 21bfd051af88e144	BASELINE	911	main-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this command names a path inside the mirror and writes to

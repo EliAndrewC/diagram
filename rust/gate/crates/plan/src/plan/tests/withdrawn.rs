@@ -16,7 +16,7 @@ fn a_withdrawn_task_s_removed_stub_holds_no_later_tick() {
     let root = repo();
     std::fs::create_dir_all(root.join("dev")).unwrap();
     // reviewed whole, T06's unfilled stub among its blocks
-    let [_, stub] = stubs("T06");
+    let [_, stub, ..] = stubs("T06");
     let template = PLAN_TASKS.replace("## T06 the wells\n\n- a well by the kitchen\n", &stub);
     let dir = feature_at(&root, Some(&template), None, "375-x");
     let boxes = "# Tasks\n\n- [ ] T05 the bath\n- [ ] T06 the wells\n";

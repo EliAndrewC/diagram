@@ -34,8 +34,16 @@ pub const TEMPLATE: &str = concat!(r#"### {T} (<why: the finding or measurement 
 
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 "#);
+
+/// What the template's "Performance work?" prompt said of a `[perf]` task until feature 451 T410, and what it says since: FR-013's
+/// measurement clause named. WHY: the prompt defined performance work only as what makes something faster, and on 2026-11-26/27
+/// five plan reviews blocked a round on a section answering "no: a measurement" (T315, T274, T301 and two headed off by brief),
+/// against FR-013 - work that measures where the time goes counts as performance work for the ordering. Kept so [`stubs`] still
+/// knows a stub written before the change.
+const FASTER_WAS: &str = "the builders' loop faster), and for";
+const FASTER: &str = "the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for";
 
 /// What `make task-add ... PERF=1` appends to a performance task's section (feature 435, D2; the GM 2026-10-27: the checklist helps "us
 /// not forget steps as we work towards our goal, rather than the checklist items being taken as if they are themselves the goal").
@@ -53,12 +61,21 @@ pub const PERFORMANCE: &str = r"
 ";
 
 /// The unfilled section `make task-add` writes for `task`, in its two forms: with the performance checklist (`PERF=1`), the longer
-/// and so the first, and without. THE ONE STUB TEST (feature 451 T359): `make task-withdraw` removes a section only where it is one
+/// and so the first, and without - then the same two as they were written before feature 451 T410 changed the "Performance work?"
+/// prompt ([`FASTER_WAS`]), which the plans still hold (a stub is matched byte for byte, so a changed template would orphan every
+/// stub filed before it). THE ONE STUB TEST (feature 451 T359): `make task-withdraw` removes a section only where it is one
 /// of these byte for byte, and the plan gate owes nothing for a withdrawn task's removed block only where it was a block of one
 /// ([`stub_block`]) - a section somebody filled in is a decision, whatever form its task's box takes.
 #[must_use]
-pub fn stubs(task: &str) -> [String; 2] {
-    [format!("{TEMPLATE}{PERFORMANCE}"), TEMPLATE.to_owned()].map(|t| t.replace("{T}", task))
+pub fn stubs(task: &str) -> [String; 4] {
+    let was = TEMPLATE.replace(FASTER, FASTER_WAS);
+    [
+        format!("{TEMPLATE}{PERFORMANCE}"),
+        TEMPLATE.to_owned(),
+        format!("{was}{PERFORMANCE}"),
+        was,
+    ]
+    .map(|t| t.replace("{T}", task))
 }
 
 /// Is `block` - a heading line and the text to the next heading - a block of `task`'s unfilled stub ([`stubs`]), byte for byte? The
@@ -77,7 +94,22 @@ mod tests {
 
     #[test]
     fn a_stub_s_blocks_are_the_template_s_with_the_id_filled() {
-        let [perf, plain] = stubs("T07");
+        let [perf, plain, was_perf, was_plain] = stubs("T07");
+        // the prompt names FR-013's measurement clause (451 T410), and a stub written before it did is a stub still
+        let prompt = "(a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task";
+        assert!(plain.contains(prompt), "{plain}");
+        let was = "the builders' loop faster), and for an engine-speed task";
+        assert!(was_plain.contains(was) && !plain.contains(was));
+        assert_eq!(was_plain.replace(super::FASTER_WAS, super::FASTER), plain);
+        assert_eq!(
+            was_perf,
+            format!("{was_plain}{}", PERFORMANCE.replace("{T}", "T07"))
+        );
+        let approach = "### T07 Approach (checklist part A)";
+        let old_block = &was_plain[was_plain.find(approach).unwrap()..];
+        assert!(
+            stub_block("T07", old_block) && old_block != &plain[plain.find(approach).unwrap()..]
+        );
         assert_eq!(plain, TEMPLATE.replace("{T}", "T07"));
         assert_eq!(
             perf,

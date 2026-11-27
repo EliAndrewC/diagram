@@ -431,3 +431,14 @@ the feature's open tasks and named nine of the worktree and parallel-building gr
 > (Of course when I say "don't worry about conserving tokens" then obviously I mean "don't slow down in order to conserve tokens - efficient use of tokens is a huge project goal, haha.)
 
 <!-- END SOURCE -->
+## 2026-11-26: a builder runs no coverage (451 T308)
+
+The same night the coordinating session, on its own reading, had each builder's brief add a coverage run of the crates it changed
+after its first tier was green. The GM, 2026-11-26, as `docs/process-decisions.md` records his words under "Two tiers of
+checking" (copied here from that record by the builder of T308's remainder, who did not hear them):
+
+> Why is a builder's closing step also running coverage? Like, isn't the whole point of running coverage later that it's not really that much of a problem if we have a few coverage failures that we have to fix later? I mean, our goal is not to minimize that happening. Our goal is to maximize task throughput.
+
+And, when the trial was adopted, on whether round two runs under it and at what count (the same record):
+
+> Yes, I agree that round two should run under two-tier checking as described. And yes, I agree that we should start it at 3 builders with a batch of 4 if the first goes well.

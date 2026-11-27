@@ -697,3 +697,62 @@ fn a_suffixed_count_and_a_rounded_unit_figure_need_a_label() {
         assert_eq!(first(unlabeled_unit_figure(fine)), "", "{fine}");
     }
 }
+
+/// FR-013's measurement clause (feature 451 T410): a "Performance work?" line that answers no and names a measurement is refused at
+/// `make decide`, with the sentence to write; the template's own prompt, a yes and a no that names none pass.
+#[test]
+fn a_performance_line_answering_no_of_a_measurement_is_refused_at_decide() {
+    let dir = scratch("t410-perf-line");
+    let section =
+        "### T301 (why)\n\n**Performance work?** No: a measurement, it changes no source.\n";
+    let found = super::decide_findings(&dir, section, &[]);
+    let told = super::decide_refusal(section, section, &found, None);
+    holds(
+        &told,
+        &[
+            "1 finding ",
+            "the section's `**Performance work?**` line answers no and names a measurement",
+            "451 FR-013's measurement clause: a measurement task counts, the GM 2026-11-20",
+            "Write: \"**Performance work?** yes - a `[perf]` task under 451 FR-013's measurement clause: it measures where time goes and speeds nothing itself.\" - and tag the task's box `[perf]`",
+            "The unit: each line that opens `**Performance work?**`",
+            "plan.md:3: **Performance work?** No: a measurement, it changes no source.",
+        ],
+    );
+    // judged at the decision only: `make plan-delta`'s lint, which reads blocks, says nothing of it
+    assert_eq!(super::findings(&dir, section), []);
+    // two such lines are two findings, each at its own line; a line past 160 characters is shown cut
+    let long = format!("**Performance work?** no - measurement {}", "x".repeat(200));
+    let two = format!("{section}\n{long}\n");
+    let found = super::decide_findings(&dir, &two, &[]);
+    assert_eq!(found.len(), 2);
+    assert_eq!(
+        (found[1].start, found[1].text.chars().count()),
+        (section.len() + 1, 160)
+    );
+    assert_eq!(
+        super::perf_line::measured_no("**Performance work?** no (two measurements).").len(),
+        1
+    );
+    // an indented line and a list item's are read as the line is
+    assert_eq!(
+        super::perf_line::measured_no("  - **Performance work?** NO (a Measurement)").len(),
+        1
+    );
+    // the template's unfilled prompt, a yes naming a measurement, a no naming none, `none` and `not`, and the word elsewhere pass
+    let template = crate::plan::template::TEMPLATE.replace("{T}", "T301");
+    assert!(
+        template.contains("**Performance work?** <no - or yes")
+            && template.contains("a measurement task counts")
+    );
+    for passes in [
+        template.as_str(),
+        "**Performance work?** yes - a measurement task (FR-013).\n",
+        "**Performance work?** no: it rewords a refusal.\n",
+        "**Performance work?** none of this measurement\n",
+        "**Performance work?** not a measurement\n",
+        "**Performance work?** no: it reads dev/measurements/2026-11-27/x.md and a re-measurement's.\n",
+        "a measurement.\n**Performance work?** no.\nThe measurement is T22's.\n",
+    ] {
+        assert_eq!(super::perf_line::measured_no(passes), [], "{passes}");
+    }
+}

@@ -34,7 +34,8 @@ agent, make claims-bundle, impl-drift, make claims-checked) as its own dispatch;
 THE FOUR KINDS: `fix` - red-first, then its own plan section and review; `measurement` - changes no source, writes the record,
 files the levers it priced, and its report is the next builder's brief; `build-half` - builds and tests a new mechanism and ends at
 a handoff file (`<the clone's git dir>/l7r-handoffs/<task>-build.md`) by about 200k; `closing-half` - reads that handoff first, then
-the owed tests, real coverage of the changed crates (`make crate-checks`), the plan section and the review.
+the owed tests, the plan section and the review. Every kind that changes source stops at the FIRST TIER's checks (TWO TIERS, below):
+the closing half too, whose block told it to run `make crate-checks` for real coverage until 451 T308 brought it into line.
 
 SIZING, before you write the brief (the GM 2026-11-25, pre-approving the talk's item 12; `docs/process-decisions.md`, "The
 builders' context cap stays at 300k, builders stay, and briefs are sized"; audited as `dev/audits/builder-brief-sizing.md`):
@@ -65,7 +66,13 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   tier only - `make builder-checks CRATE="<the crates it changed>"` (tests, lint, format) and a changed guard's own hook suite
   - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
   over the batch (`make land T="<tasks>"`), after `make carry` and `scripts/sync-with-main.sh backup` for each. The block's
-  CHECKS line says so.
+  CHECKS line says so, for every kind. A BUILDER RUNS NO COVERAGE (the GM's ruling of 2026-11-26, the same record's "REVERSED
+  the same night": the goal is tasks through, not gates passed, and a red batch gate holds no builder back): on the session's own
+  reading, briefs from 21:40 UTC that day added `make crate-checks` after the first tier, 7 to 111 s on every builder's critical
+  path, and that was withdrawn (451 T381). THE ONE EXCEPTION: a builder whose JOB is the coverage repair of a red batch gate
+  runs `make crate-checks CRATE="<the crates its brief names>"` - coverage is what it was sent to mend. In the session clone the
+  check of a repair is the batch gate itself: the order notice at `make decide` names `make land` for the staged batch there,
+  and says nothing while a landing runs (451 T308).
 - A builder ENDS at its report and is not kept for follow-up (the GM 2026-11-26): what a successor needs is in its plan
   section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
   agent briefed from those. A message to a builder is for a question it asked before it reported.

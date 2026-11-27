@@ -18,8 +18,12 @@
 //!   rule fires on 127, keyed on the decide's task still 127, keyed on the edit's task 105: the 22 it drops are all the main session's
 //!   on edits landed, and the main session's 3 left are within 4 min of their edit, before its landing.
 //!   A BUILDER (a caller with an `agent_id`) is told both tiers' runs, the first tier's `make builder-checks` first, and a
-//!   `builder-checks` it started since its last code edit is a start as `closing-checks` is (451 T308); the main session, which
-//!   builds under no tier, is told the closing run alone.
+//!   `builder-checks` it started since its last code edit is a start as `closing-checks` is (451 T308). THE MAIN SESSION is told
+//!   the closing run - unless work is carried in its clone for a batch landing ([`staged`]: a `make carry` it ran since the last
+//!   landing that went out), where the batch gate is the check (the second tier) and it is told `make land` for the batch; and it
+//!   is told nothing while a landing it started since the edit runs ([`landing_runs`]). WHY: on 2026-11-26/27 the notice told the
+//!   coordinating session, after each one-line repair of a red batch gate, to start `make closing-checks T=<task>` - the full
+//!   rigor a second time, on a tree whose gate was about to run or was running.
 //! - a foreground `make static`, `make hooks-test` or `make closing-checks` (no `run_in_background`) is REFUSED, naming
 //!   `run_in_background` and `make closing-checks`, recorded `blocked`; [`TOKEN`] with a reason escapes, recorded. It reads no log.
 //!
@@ -157,11 +161,25 @@ fn decide(input: &Value, root: &str, lines: &[Value], run: &dyn Fn() -> String) 
                 .iter()
                 .any(|p| text(p, "ev") == "PostToolUse" && text(p, "id") == text(l, "id"))
     });
-    (!started).then(|| {
+    if started || (!builder && landing_runs(after, &mine)) {
+        return None;
+    }
+    let staged = !builder && staged(lines, &mine);
+    Some({
         let path = text(edit, "path");
-        let rel = path.strip_prefix(root).unwrap_or(path).trim_start_matches('/');
+        let rel = path
+            .strip_prefix(root)
+            .unwrap_or(path)
+            .trim_start_matches('/');
         let (at, run) = (text(edit, "t"), run());
-        Told::Decide(if builder {
+        Told::Decide(if staged {
+            let feature = run.split(" F=").nth(1).unwrap_or("<feature>");
+            format!(
+                "T55 order: your last code edit not landed ({rel}, {at}) has no check started after it, and work is carried here for a \
+                 batch landing: the batch gate is its check. Start `make land F={feature} T=\"<the staged tasks>\" NOTE=\"<what lands>\"` \
+                 with run_in_background: true, and write the plan section and run `make decide` while it runs."
+            )
+        } else if builder {
             format!(
                 "T55 order: your last code edit not landed ({rel}, {at}) has no check run started after it. Neither needs the other's \
                  result: start one now with run_in_background: true - under FIRST TIER (your brief says so) `make {FIRST_TIER} \
@@ -176,6 +194,34 @@ fn decide(input: &Value, root: &str, lines: &[Value], run: &dyn Fn() -> String) 
             )
         })
     })
+}
+
+/// Did the caller's `make <target>` on `l` run: a `PreToolUse` line of its own naming the target, with its `PostToolUse` in `lines`?
+fn ran(l: &Value, target: &str, lines: &[Value], mine: &dyn Fn(&Value) -> bool) -> bool {
+    let post = |p: &Value| text(p, "ev") == "PostToolUse" && text(p, "id") == text(l, "id");
+    text(l, "ev") == "PreToolUse" && mine(l) && names(l, target) && lines.iter().any(post)
+}
+
+/// A landing's `end` line, written whether it went out or was refused.
+fn landing_end(l: &Value) -> bool {
+    text(l, "ev") == "Phase" && text(l, "src") == "land" && text(l, "step") == "end"
+}
+
+/// Is a landing running: a `make land` the caller started in `after` (the lines since its last code edit) with no landing's `end`
+/// line after it? WHY SILENT THEN (451 T308): under two tiers the batch gate is the check, and it is already running. A landing
+/// killed before its `end` line keeps the notice silent until the next landing ends: it can miss, never wrongly tell.
+fn landing_runs(after: &[Value], mine: &dyn Fn(&Value) -> bool) -> bool {
+    let start = after.iter().rposition(|l| ran(l, "land", after, mine));
+    start.is_some_and(|at| !after[at + 1..].iter().any(landing_end))
+}
+
+/// Is work STAGED for a batch landing: a `make carry` the caller ran since the last landing that went out? Read from the log like
+/// the rest of the notice: a carry that stopped on a conflict counts as one, so the notice can name a landing `make land` then
+/// refuses in its own words - a notice, never a refusal.
+fn staged(lines: &[Value], mine: &dyn Fn(&Value) -> bool) -> bool {
+    let out = |l: &Value| landing_end(l) && l.get("landed") == Some(&Value::Bool(true));
+    let since = lines.iter().rposition(out).map_or(0, |at| at + 1);
+    lines[since..].iter().any(|l| ran(l, "carry", lines, mine))
 }
 
 /// Each task's last landing that went out, by its line's place in the log: `static_runs_hooks`' landed rule (`runs`) - a `Phase` `end`

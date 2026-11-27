@@ -171,7 +171,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         format!("Tree (the pool's, held for T01): {t} - `cd` into it in every command, work ONLY there, make or remove no worktree. `export SPECIFY_FEATURE=9001-x SPECIFY_FEATURE_DIRECTORY=specs/9001-x`\n"),
         "Read scripts/container/builder-brief.md first: the rules behind this block. Prefix scratch files `t01-`.\n".to_owned(),
         "STOP POINT (fix): red-first - the test failing on the old code, its counts reported - then the plan section, `make decide`, the plan review (`make plan-delta F=9001`) and `make claims-triage`; you dispatch no claims-triage or impl-drift agent.\n".to_owned(),
-        "CHECKS, the first tier only: `make builder-checks CRATE=\"<the crates you changed>\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run.\n".to_owned(),
+        "CHECKS, the first tier only: `make builder-checks CRATE=\"<the crates you changed>\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n".to_owned(),
         "Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n".to_owned(),
         "FILE what you find and leave, from your tree: `make task-add F=9001 TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\n".to_owned(),
         "Report in the fixed format of scripts/container/builder-report-format.md, read at your stop point.".to_owned(),
@@ -211,8 +211,11 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     put(&root, ".git/l7r-handoffs/T01-build.md", "built\n");
     let closing = ask(&["T01", "9001", "closing-half", "", "", "rust/guard"]);
     assert!(!closing.stderr.contains("NOTE"), "{}", closing.stderr);
-    assert!(closing.stdout.contains(&format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, real coverage of the changed crates, the plan section,", handoff.display())), "{}", closing.stdout);
-    assert!(closing.stdout.contains("CHECKS: `make crate-checks CRATE=\"rust/guard\"` (tests, lint, format, coverage) and a changed guard's own suite - not closing-checks, static or hooks-test.\n"));
+    assert!(closing.stdout.contains(&format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, the plan section,", handoff.display())), "{}", closing.stdout);
+    // TWO TIERS (451 T308): the closing half runs the first tier like every kind, and no coverage - the second tier's alone
+    assert!(closing.stdout.contains("CHECKS, the first tier only: `make builder-checks CRATE=\"rust/guard\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n"), "{}", closing.stdout);
+    let was = ["real coverage", "(tests, lint, format, coverage)"];
+    assert!(!was.iter().any(|w| closing.stdout.contains(w)));
     // a measurement changes no source and is told of no test
     let measured = ask(&["T01", "9001", "measurement", "2", "6"]);
     assert_eq!(parse(&measured.stdout), Some(marker("measurement", 2)));

@@ -180,6 +180,10 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
         a.crates
     };
     let closes = format!("the plan section, `make decide`, the plan review (`make plan-delta F={key}`) and `make claims-triage`; you dispatch no claims-triage or impl-drift agent.");
+    // TWO TIERS (451 T308; the GM 2026-11-26, docs/process-decisions.md "Two tiers of checking"): every kind that changes source runs
+    // the first tier and no coverage - the closing half too, which ran `make crate-checks` until the GM's ruling that coverage is the
+    // second tier's alone. The one builder that runs coverage is the one whose job is the repair of a batch gate red on it.
+    let first_tier = format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).");
     let (stop, checks) = match a.kind {
         "measurement" => (
             format!("STOP POINT (measurement, {} things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.", a.measures),
@@ -187,15 +191,15 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
         ),
         "build-half" => (
             format!("STOP POINT (build half): build and test, red-first, then END at a handoff, {}, by about 200k of context: what is built, each decision and why, the red-first counts, what is not done or not tested. No plan section, `make decide`, plan review or claims step.", handoff.display()),
-            format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run."),
+            first_tier,
         ),
         "closing-half" => (
-            format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, real coverage of the changed crates, {closes}", handoff.display()),
-            format!("CHECKS: `make crate-checks CRATE=\"{crates}\"` (tests, lint, format, coverage) and a changed guard's own suite - not closing-checks, static or hooks-test."),
+            format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, {closes}", handoff.display()),
+            first_tier,
         ),
         _ => (
             format!("STOP POINT (fix): red-first - the test failing on the old code, its counts reported - then {closes}"),
-            format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run."),
+            first_tier,
         ),
     };
     let mut out = format!(
@@ -283,7 +287,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env, sizing_ok: &str) -> Re
     if let Some((task, what)) = named.filter(|_| a.kind == "fix") {
         if !l7r_shared::escape::enough(sizing_ok) {
             return refused(format!(
-                "builder-brief: refused - {task}'s line names a new mechanism ({what}), which is TWO builders from the start (three of three such tasks briefed as one reached the cap, 2026-11-26):\n  {}   (builds and tests, ends at a handoff)\n  {}   (after it reports: coverage, the plan section, the review)\nIf the line only names a mechanism this task repairs: SIZING_OK=\"<reason, two words or more>\"\n",
+                "builder-brief: refused - {task}'s line names a new mechanism ({what}), which is TWO builders from the start (three of three such tasks briefed as one reached the cap, 2026-11-26):\n  {}   (builds and tests, ends at a handoff)\n  {}   (after it reports: the owed tests, the plan section, the review)\nIf the line only names a mechanism this task repairs: SIZING_OK=\"<reason, two words or more>\"\n",
                 command(&a, &key, "build-half"),
                 command(&a, &key, "closing-half")
             ));

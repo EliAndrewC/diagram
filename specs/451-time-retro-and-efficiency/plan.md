@@ -298,6 +298,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 <!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T21 to T21 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+
 ### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)
 
 - **Approach**: after T02-T21 have landed and a full day of work has run on them: `make where-time F=<the day's feature> SINCE= UNTIL=`
@@ -362,6 +363,7 @@ None.
 
 <!-- plan-archive: T23 to T02 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T23 to T23 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+
 ### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)
 
 - **Approach**: each section's deferral read by hand (its `**Found and left?**`, and for 451 T02, whose answer was `none`, the class its fix named) and given one verdict per deferred defect: **carried** (an open or ticked task covers it), **fixed** (a later commit), **still open** (filed now, `make task-add`), or **not a defect** (no visible effect and no research finding broken, so not filed - constitution XIV). History is not re-judged: a ticked task's work is taken as its tick says. Three tasks filed: 449 T243, 451 T52, 451 T53.
@@ -425,6 +427,7 @@ The T02 class, by kind (the grep's hits, each read):
 <!-- plan-archive: T47 to T47 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T48 to T46 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T77 to T77 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+
 ### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note("citations/urban-features.html", ...)`, writing `R / path` with `R = pathlib.Path("research")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))
 
 - **Approach**: THE FIX WAITS ON T96, THEN T110. The reading it needs (a call's literal bound to the parameter of a function the
@@ -524,6 +527,7 @@ The T02 class, by kind (the grep's hits, each read):
 
 <!-- plan-archive: T50 to T33 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T50 to T50 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+
 ### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)
 
 - **Approach**: MEASURED, NOT BUILT; T51 waits on T118. The design: a script run's text - the command's own heredoc that writes
@@ -682,6 +686,7 @@ The T02 class, by kind (the grep's hits, each read):
 <!-- plan-archive: T56 to T53 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T56 to T56 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T111 to T111 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+
 ### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as "an agent's own separate calls, no process between them" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))
 
 - **Approach**: neither of the two shapes the brief offered (the wait reading the waiter's own transcript as the writer; the no-poll
@@ -810,6 +815,7 @@ docs/performance-checklist.md answers.
 <!-- plan-archive: T90 to T90 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T100 to T171 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T100 to T100 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
 ### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)
 
 - **Approach**: a task line carries its wait, and the one reading of "can this task start now" skips a task whose wait is not met:
@@ -924,6 +930,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T103 to T103 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T104 to T99 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T104 to T104 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T107 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1228,6 +1235,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T123 to T80 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T123 to T123 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+
 ### T125 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1338,6 +1346,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T129 to T83 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T129 to T129 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+
 ### T130 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1582,6 +1591,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T391 to T393 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T140 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1611,6 +1621,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T142 to T142 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T141 to T141 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+
 ### T143 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1720,6 +1731,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T147 to T147 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+
 ### T148 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1802,6 +1814,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T151 to T249 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+
 ### T152 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1834,6 +1847,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T155 to T155 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T159 to T154 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T159 to T159 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T163 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1908,6 +1922,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T165 to T172 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
 ### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused "review passes with no ledger row" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)
 
 - **Approach**: two changes, each with a test that is red on HEAD.
@@ -1980,6 +1995,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T175 to T175 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T174 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
 ### T173 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2077,6 +2093,7 @@ engine speed, so no checklist.
 **Performance work?** no - a wrong outcome of the arbiter's record; the time it cost (dispatches refused for days) goes with it.
 
 <!-- plan-archive: T182 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
 ### T178 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2145,6 +2162,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T183 to T183 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
 ### T181 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2190,6 +2208,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T192 to T187 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T192 to T192 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T218 to T218 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
+
 ### T206 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2250,6 +2269,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T211 to T192 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T211 to T211 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T212 to T212 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
+
 ### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)
 
 - **Approach**: `relabeled_only` (rust/gate/crates/claims/src/claims/index.rs) passed any claim whose row read `verdict: MISLABELED` once the unit's body was unchanged (385 T23 D45), so a comment edit could restate the account freely. Its MISLABELED arm now passes only a relabel, the account unchanged: the stored claim's account equal to the claim's now, word for word (`account_of`: after the first ` - `, after the backing's first `: `, as `parse_claim` splits it), the backing - its class, or the question it cites - free to change; a row storing no claim is no relabel. `relabel_answered` (the push's carry, `carry.rs`) reads it, so a restated account no longer answers a MISLABELED verdict there either. Labels still cascade mechanically (the GM, the convergence talk): a relabel alone owes nothing, and T204's item naming is untouched (its own arms, before this one). Two fixtures asserted the defect - an account rewrite passing as a relabel - and are restated as true relabels: the stored claim each row read, an account rewrite before, now the claim's own account under another class (`index::tests::a_relabel_alone_owes_nothing_and_answers_its_mislabel` stores `gap - CONVENTION: relabeled` where it stored `gap - NONE: before`; `carry::more`'s `introduced` stores `reach - CONVENTION: within GAP, relabeled` where it stored `before`).
@@ -2291,6 +2311,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T220 to T33 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T221 to T221 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
 <!-- plan-archive: T222 to T222 moved to plan-done.md, 2026-11-24 (feature 375 FR-044) -->
+
 ### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)
 
 - **Approach**: A landing alone reads each row a mixed build's triage answered at the answer before it, and owes the claim what its own build finds since. The refused landing took 920 s and listed 241 claims, measured 2026-11-24 (`/home/agent/.claude/jobs/c6fd72d1/tmp/arbiter-mixed-build.md`).
@@ -2354,6 +2375,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T226 to T226 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T227 to T227 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed "BLOCKED: every error static printed is in another task's files - ()" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)
 
 - **Approach**: The cause is the attribution's awk in `scripts/gates/closing-checks.sh` (`theirs`), not the parsing of the error lines.
@@ -2432,6 +2454,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T232 to T232 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T233 to T233 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
+
 ### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)
 
 - **Approach**: T230's fix and tests, nothing of its own. T230's plan section holds the cause, the fix and the red-first proof. It ticks in T230's landing (`make land F=451 T=T230,T239`).
@@ -2506,6 +2529,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T248 to T227 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 <!-- plan-archive: T250 to T233 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T250 to T250 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T260 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2538,6 +2562,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T261 to T84 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T261 to T261 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T263 to T263 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T264 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2567,6 +2592,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T265 to T250 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T265 to T265 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T266 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2599,6 +2625,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T268 to T268 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T269 to T258 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T269 to T269 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T273 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2627,6 +2654,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T274 to T274 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T275 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2791,6 +2819,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T281 to T285 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T281 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T283 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2819,6 +2848,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T284 to T284 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T286 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2901,6 +2931,7 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T289 to T285 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T290 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2958,6 +2989,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T292 to T262 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T292 to T292 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T293 to T293 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T294 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2987,6 +3019,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T295 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T295 to T295 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T296 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -3044,6 +3077,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T298 to T298 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T299 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T299 to T282 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)
 
 - **Approach**: `make carry` resolves by rule the three spec-file conflicts the session resolved by script that day (`resolve3.py`, kept at `/home/agent/.claude/jobs/c6fd72d1/tmp/`, read as the specification by example). Measured 2026-11-26 by REPLAY (`dev/measurements/2026-11-26/carry-replay/`: `t300-replay.sh` redoes each builder commit's pick onto the parent of the clone's commit of it in a scratch clone and compares the carry's tree with the session's commit; `t300-pin.py` is the box check): of the clone's 68 commits since 2026-11-26 opening `451 T`, 54 pair with a builder's commit (same author time and subject), 30 of those conflict under a plain `git cherry-pick`; the carry before this task carried 16 of the 30 (`t300-before.txt`) and now carries 24 (`t300-job1.txt`), 16 identical to the session's commit and 8 differing only where the hand resolution was wrong (below). The 6 still stopping are this task's second job (4: `docs/make-targets.html`, the one-line and adjacent-block conflicts of T274, T285, T334 and T336's carries) and T399's (2: a `.jsonl`).
@@ -3223,6 +3257,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T303 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T303 to T303 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T304 (451 T281's census, 2026-11-26: a carry test red under load, and the session clone's `index.lock` met by the session's own commits while builders ran; the stamps of the task's line are its remainder)
 
 - **Approach**: two of the task's parts, each measured before it was changed: `make carry` skips a pick that comes out empty (`rust/gate/crates/land/src/land/carry.rs`), and every program the guards ask runs with `GIT_OPTIONAL_LOCKS=0` (`rust/guard/shared/src/tool.rs`).
@@ -3268,6 +3303,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T305 to T284 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T305 to T305 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T306 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -3388,8 +3424,49 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster); not an engine-speed task, so the performance checklist's engine items do not apply.
 
+### T308 part 2 (the remainder: after a day of the two-tier trial, parts of the tooling still spoke the one-tier language - the closing half's brief block, the builder brief's rules file, the order notice in the session clone and the plan template's performance prompt - each of which cost a round or a correction on 2026-11-26/27; and the trial's own record, so the task's box can close)
+
+- **Approach**: this section is the REST of T308, after its plan-review part above; with it the task's box can be ticked. It changes words the tooling prints and one notice's rule, adds one refusal at `make decide` (T410, built here), and records what the trial has measured and what it has not. The remainder line of the part above also named the changed crate's coverage run tried beside the review: the GM's ruling the same night retires it - a builder runs no coverage, coverage is the second tier's (request.md, "2026-11-26: a builder runs no coverage (451 T308)"; `docs/process-decisions.md`, "Two tiers of checking", the paragraph REVERSED the same night) - so it is not built and not owed.
+  - **T308-D7, built: the closing half's block is the first tier, like every kind.** `make builder-brief KIND=closing-half` printed a STOP POINT asking for real coverage of the changed crates and a CHECKS line naming `make crate-checks` with coverage (`rust/gate/crates/task/src/builder_brief.rs`), the amendment the GM reversed. Every kind that changes source now prints one CHECKS line: `make builder-checks CRATE=...` and a changed guard's own suite, no closing-checks, static, hooks-test or coverage run, with the one exception stated in it - a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names. The mechanism refusal's hint for the closing half says the owed tests where it said coverage. The block keeps its bound: the longest block the command can print for this feature's real paths (a closing half of a two-task bundle, three jobs, the load line, three crates) is 1,793 characters against the 2,000 `agent-prefix-hooks` refuses a repeat of (measured 2026-11-27 (the block's format strings filled with those values and counted in a scratch script)), and the crate's test holds every printed block under 2,000.
+  - **T308-D8, built: the rules file says the same.** `scripts/container/builder-brief.md`: THE FOUR KINDS no longer tells the closing half to run coverage, and the TWO TIERS item states that a builder runs no coverage, why (the GM's ruling), the one exception, and that in the session clone the check of a repair is the batch gate. The incidents stay. No sentence of the file tells a builder to run `make closing-checks`, `make static` or a coverage run (observed 2026-11-27, method: `grep -n "closing-checks\|coverage\|make static\|crate-checks"` over the file, each hit read - the prohibition, the withdrawn amendment's incident, the exception and the assertion-message incident).
+  - **T308-D9, built: the order notice names the batch landing in the session clone.** `rust/guard/src/guards/static_runs_hooks/order.rs` told the coordinating session at `make decide`, after a one-line repair of a red batch gate, to start `make closing-checks T=<task>`: the full rigor a second time in the clone, where the batch gate is the check. The notice tells a builder from the main session by the call's `agent_id` (the part above). For the main session it now reads two more things from the same event log: (i) a landing RUNNING - a `make land` it started since the edit (its call line with its result line) with no landing `end` line after it - and it then says nothing; (ii) work STAGED - a `make carry` it ran since the last landing that went out - and it then names `make land F=<feature> T="<the staged tasks>" NOTE="<what lands>"` with `run_in_background: true` in place of the closing run. With nothing staged the main session is told the closing run as before, and a builder's wording is unchanged. The staged tasks are a placeholder on purpose: a carry's log line is filed under the session's own task, not the carried one. Read from the log, so two known misses, both on the quiet side of a notice that refuses nothing: a carry that stopped on a conflict counts as staged (the landing named then refuses in its own words), and a landing killed before its `end` line keeps the notice silent until the next landing ends. The changed wording had its message-check: the hook suite renders it (case 8's new lines), its rendering was put in the tree's store by the hand route T338's line gives, and `message-check` returned PASS on FIDELITY and BREVITY for key 211d059bf7eb596a, 356 characters against a budget of 900 (measured 2026-11-27 (`make guard-messages BUNDLE=1`, the unit's own header)), recorded in `dev/guard-messages.tsv`. `docs/guards.md`'s row for the guard says the new rule.
+  - **T308-D10, built: the performance prompt names FR-013's measurement clause, and decide refuses the no - T410, covered here.** `rust/gate/crates/plan/src/plan/template.rs`: the prompt's definition of a `[perf]` task now ends "or measures where time goes: a measurement task counts, the GM 2026-11-20" (FR-013's second sentence; his words are in request.md under the heading of 2026-11-20 on measurement work). `lint/perf_line.rs`, judged at `make decide` only: a line that opens `**Performance work?**` (after an indent or a list dash), whose answer's first word is `no` and which holds the word `measurement`, is refused, the refusal printing the sentence to write and saying to tag the box `[perf]`. The template's own unfilled prompt opens `<no` and is no answer; `none`, `not` and a `yes` naming a measurement pass. The cost of the rule's plainness: a task that truly is not performance work and writes the word in its no is refused, and the refusal says the way out (say it without that word). A stub is matched byte for byte (`make task-withdraw`, the plan gate's withdrawn-stub rule), so `stubs()` now also yields the two forms as they were written before this change: the plans of features 449, 451 and 452 hold 151 unfilled prompts in the old wording (observed 2026-11-27, method: `grep -c "Performance work?\*\* <no - or yes"` over each `specs/*/plan.md` once T410's own stub was filled, the three non-zero counts summed), which a changed template alone would have orphaned. Replayed over the plans as committed the rule refuses none of the 193 Performance lines of those three plans (observed 2026-11-27, method: `dev/measurements/2026-11-27/two-tier-trial/perf-line-replay.py` over the three plan.md files): the sections that answered no of a measurement were corrected in their reviews' later rounds, which is the round this refusal saves.
+  - **T308-D11, the trial's record, from what is already measured** (the readings are kept in `dev/measurements/2026-11-27/two-tier-trial/`; nothing was run again but two reports over the event log):
+    - Tasks through: 33 tasks landed under two tiers from the trial's first `make builder-checks` at 2026-11-26T17:10Z to 2026-11-27T03:08Z, in 16 landings that went out of 33 attempts (observed 2026-11-27, method: `dev/measurements/2026-11-27/two-tier-trial/landings.py` over the 451 event log's `Phase` lines of `make land`, its output `landings-to-2026-11-27T0308.txt`).
+    - Builder minutes a task: 28 tasks landed in the window 2026-11-26T17:00Z to 2026-11-27T01:00Z with 825.0 builder minutes between them (observed 2026-11-27, method: `make task-time SINCE=2026-11-26T17:00:00Z UNTIL=2026-11-27T01:00:00Z`, its table of landed tasks, kept as `task-time-2026-11-26T17-to-2026-11-27T01.txt`, the builder-minutes column summed). The eight tasks one builder closed in under twenty minutes took 7.9 to 19.9 builder minutes each (observed 2026-11-27, method: the same table, the rows with one builder and under twenty builder minutes). Under one tier the closing checks alone were a median 28.8 minutes of a small task's builder clock, 63% of it (measured 2026-11-26 (`dev/measurements/2026-11-26/task-route/m11-results.md`, its decomposition over the 8 small tasks)). The two are not like for like - round one's eight tasks were chosen as small, the window's eight are the ones that came out short - so this says the closing checks' share is gone from a builder's clock, not by how much a task shortened.
+    - Batch gates red: of the 33 attempts, 17 did not go out - 10 red at the gate and 7 refused before a gate ran (observed 2026-11-27, method: `dev/measurements/2026-11-27/two-tier-trial/landings.py`, a `gate` step with a non-zero code against an attempt with no `gate` step). The red gate runs took 34.6 minutes of gate time together, the green ones 51.5 (measured 2026-11-27 (`dev/measurements/2026-11-27/two-tier-trial/landings.py`, each `gate` step's span summed)). By cause, as the record already tells it and not tallied gate by gate here: lines no test reached (4 of the first 9 batch gates, `docs/process-decisions.md`; the two in a row of 2026-11-27T01:42Z and 01:50Z, this plan's `### T394 part B`), what only integration shows (a field one task added that another's test did not set, a recipe a hook suite the first tier does not run refuses, a test that fails only beside other crates' tests: the same decision record), one test that failed by the clock (commit 4f244987ac, a task id matched against a timestamp for one hour), and attempts the cheap pass refused on the session's own omissions.
+    - What a red batch cost, and who repaired it: a red gate delays the landing on main and takes a repair and a second gate, 5 to 15 minutes each for the first four (measured 2026-11-26 (`docs/process-decisions.md`, "Two tiers of checking", the amendment's paragraph)); the repairs were the coordinating session's by hand or a small fresh agent's, and no builder was kept or called back for one. The second tier as a whole took 258.2 machine minutes of the eight-hour window and 146.9 blocking minutes (measured 2026-11-27 (`make task-time` over the window, its category table)), where the report expects near none. The three warm pool trees stood idle 23% of that window, 105 of their 336 idle tree-minutes while a landing ran and 170 in the session's own turns (measured 2026-11-27 (`dev/measurements/2026-11-27/tree-idle/results.md`)): the cost of the second tier fell on builders through the ORDER the session worked a builder's end in, which T394 changed (dispatch before carry).
+    - What the trial has NOT shown: (i) whether the threshold for running the second tier (at the drain, a ceiling of about six tasks or ninety minutes, GUESS knobs) is right, or a gate on a snapshot is better - trial feature 458 holds that, not to be read before 2026-11-28; (ii) whether T394's order brought the trees' idle share down - 451 T401 is that re-measurement; (iii) tasks landed a wall hour against round one, which no record here states like for like; (iv) the cost of each red gate's repair in the session's turns and tokens, gate by gate, and so whether repairs after a gate hold builders back by more than a coverage step would cost them - the one thing the GM's ruling says would reopen a builder's coverage run; (v) the falsifier's third arm, a defect reaching main that a builder's closing checks would have caught: none is recorded, and none was looked for by a method.
+  - **T308-D12, a RECOMMENDATION, the GM's to confirm at the talk: T308's box closes with the two tiers adopted as the trial stands.** The tooling now speaks two tiers in every place this task found (D7 to D10 and the part above), and that is what the task's box asked to be built. The verdict on the arrangement itself - the threshold, the snapshot gate, the idle share after T394 - stays open with feature 458 and T401 and is not decided by this section. Against the trial's falsifier as measured so far: builder minutes a task are down by the closing checks' share, and no defect on main is recorded; gate failures were frequent (10 red of 26 gate runs to 03:08Z (observed 2026-11-27, method: `dev/measurements/2026-11-27/two-tier-trial/landings.py`)) and what they cost against the closing checks they replaced is item (iv) above, not shown. If the GM does not confirm, the box stays open and nothing built here is undone by that.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the closing half's block (T308-D7) | `builder_brief::tests::each_kind_s_block_opens_with_its_marker_and_stays_short`, red on the old code; `a_brief_is_sized_before_any_tree_is_taken`'s pin of the refusal's hint | n/a: tooling | none | none |
+| the order notice in the session clone (T308-D9) | `order::tests::the_main_session_with_a_batch_staged_is_told_the_landing_and_nothing_while_one_runs`, red on the old code; `tests/hooks/test-static-runs-hooks.sh` case 8's two new lines | n/a: tooling | none | none |
+| the performance prompt and decide's refusal (T308-D10, T410) | `lint::tests::a_performance_line_answering_no_of_a_measurement_is_refused_at_decide` and `template::tests::a_stub_s_blocks_are_the_template_s_with_the_id_filled`, each red on the old code | n/a: tooling | none | none |
+
+### T308 part 2 Approach (checklist part A)
+
+1. **The goal, in the world.** Every word the tooling prints to a builder or to the coordinating session about checks agrees with the two tiers: a builder runs tests, lint and format in its tree and no coverage; the session, in its clone with a batch staged, runs the batch gate once; and a section that measures where time goes is not sent to a review answering no to performance work.
+2. **The constraints.** The GM's two tiers and his ruling that a builder runs no coverage (request.md); FR-013 with its measurement clause; the block under the 2,000 characters `agent-prefix-hooks` holds a repeated prompt to; a notice stays a notice (T55's replay priced a refusal there and declined it); a stub is matched byte for byte, so no filed stub may be orphaned; no check refuses good work (constitution XIV).
+3. **Where each comes from.** G: the GM's words of 2026-11-26 in request.md under "2026-11-26: two tiers of checking, and the plan review's later rounds (451 T308)" and "2026-11-26: a builder runs no coverage (451 T308)", and of 2026-11-20 on measurement work; O: the brief of this builder, the session's account of where each one-tier wording cost a round or a correction; O: T410's line (the five blocked plan reviews); O: the event log and `make task-time`, for the trial's record.
+4. **Do they describe the world here?** Yes: each wording was read in the code that prints it before it was changed, and the trial's figures are read from the event log and the reports named beside each, none from memory or from the brief.
+5. **The order.** After the part above and after T394 (the order of a builder's end); before T302. T410 lands with it. The trial's verdict is feature 458's, after 2026-11-28.
+6. **The exits.** Green: the changed crates' tests and `make builder-checks` green, the hook suite green, the changed message reviewed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one design each. For the notice, reading git for commits ahead of main was weighed against reading the log and left: the module reads the log alone and its tests are pure.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, each on the old code with the new tests, observed 2026-11-27, method: `make rust-test CRATE=<crate>` with the source file put back to HEAD's and the new test kept, then restored - the order notice `552 passed; 1 failed` in `rust/guard`, then `553 passed; 0 failed`; the block `119 passed; 1 failed` in `rust/gate/crates/task`, then `120 passed; 0 failed`; the prompt and the refusal `196 passed; 2 failed` in `rust/gate/crates/plan` (the lint at HEAD's with the new module only declared, the template's new constant set to the old wording), then `198 passed; 0 failed`. The hook suite `static-runs-hooks: 42 passed, 0 failed` (observed 2026-11-27, method: `bash tests/hooks/test-static-runs-hooks.sh` in the tree, its last line).
+10. **Before moving a constant.** n/a: no constant moves; the notice and the refusal add no knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. What a reader of the tooling sees differently: a closing-half builder is no longer told to run coverage the GM ruled out; the session at `make decide` in its clone is told the landing that is the check, or nothing while it runs, where it was told to start a second full run; a section answering no to performance work of a measurement is refused in seconds where a plan review blocked a round on it.
+
+**Found and left?** none - T410 is built here (T308-D10) and closes with this landing; what the trial has not shown is held by feature 458 and T401, both open before this section, and is no defect of this code.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop and the landings faster - a coverage run off the closing half's path, a second full check run off the session's, a plan review round saved - and its second job records where the trial's time went, FR-013's measurement clause); not an engine-speed task, so the performance checklist's engine items do not apply.
+
 
 <!-- plan-archive: T309 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T310 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -3648,6 +3725,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T316 to T316 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T317 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -3812,6 +3890,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T332 to T344 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T332 to T344 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T320 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -3961,6 +4040,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T324 to T289 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T324 to T345 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T328 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4186,6 +4266,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T336 to T299 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T336 to T336 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T343 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4352,6 +4433,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T339 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T340 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T341 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4429,6 +4511,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T347 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
+
 ### T351 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4458,6 +4541,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T355 to T347 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T355 to T355 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T357 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4487,6 +4571,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 <!-- plan-archive: T359 to T358 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T359 to T359 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T352 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5353,6 +5438,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T139 to T393 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T392 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5392,6 +5478,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T394 to T394 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T399 (2 of the 30 conflicting carries of 2026-11-26 stopped on a line-per-record file both sides appended to or pruned, each resolved by hand and each hand resolution losing something; built with T300's part 2 as its rule (g))
 
 - **Approach**: built in T300's part 2, in the same code and the same landing: `### T300 part 2`, rule (g), holds the rule, why an identical appended record is kept, and the two real carries compared with the session's commits (`rust/gate/crates/land/src/land/carry/records.rs`; measured 2026-11-26 by the replay, `dev/measurements/2026-11-26/carry-replay/t300-job2.txt`: both carry, T298's skip log with the builder's record the hand lost, T250 batch 8's baseline byte-identical to the session's later hand prune 72fdac1313). `merge=union`, the task line's other option, was not taken: it cannot drop a record one side pruned, which is the baseline's whole case.
@@ -5658,32 +5745,33 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 <!-- plan-archive: T394 to T394 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T391 to T393 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T410 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T410 (five plan reviews of 2026-11-26/27 blocked a round on a section answering no to performance work of a measurement - T315, T274, T301 and two the session headed off by brief - against FR-013's measurement clause; built with T308's part 2 as its T308-D10)
+
+- **Approach**: built in T308's part 2, in the same code and the same landing: `### T308 part 2`, T308-D10, holds the template's new wording, the refusal at `make decide` (`rust/gate/crates/plan/src/plan/lint/perf_line.rs`), why the old stubs are still matched, and the replay over the committed plans.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the performance prompt and decide's refusal | `lint::tests::a_performance_line_answering_no_of_a_measurement_is_refused_at_decide` and `template::tests::a_stub_s_blocks_are_the_template_s_with_the_id_filled`, each red on the old code | n/a: tooling | none | none |
 
 ### T410 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A section for a task that measures where time goes answers yes to performance work before any review reads it.
+2. **The constraints.** FR-013's measurement clause; a stub matched byte for byte is not orphaned; no check refuses good work (constitution XIV), so the refusal prints the sentence to write and the way out.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 on measurement work, in request.md; O: this task's line, the five blocked reviews.
+4. **Do they describe the world here?** Yes: the prompt's old wording was read in `template.rs`, and the rule was replayed over the committed plans (T308's part 2).
+5. **The order.** With T308's part 2; before T302.
+6. **The exits.** Green: the plan crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, T308 part 2's.
+9. **Done, measured.** The plan crate's tests of the prompt and the refusal red on the old code and green on the new, as item 9 of T308's part 2 records with its counts and method.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A section answering no to performance work of a measurement is refused at `make decide`, where a plan review blocked a round on it; `make task-add` writes the prompt with the clause named.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster, a plan review round saved); not an engine-speed task, so the performance checklist's engine items do not apply.
 
 ### T407 (<why: the finding or measurement that files it>)
 

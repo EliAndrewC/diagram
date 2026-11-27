@@ -10,6 +10,7 @@ use fancy_regex::{Captures, Regex};
 use super::sections::re;
 
 mod deferral;
+mod perf_line;
 mod task_line;
 use crate::checks::{figure_pattern, one_shot_pattern};
 
@@ -186,6 +187,8 @@ enum Kind {
     DeferralClosed,
     /// A fix of a class of defect with no labeled line on how every instance was found (D15).
     ClassFix,
+    /// A "Performance work?" line that answers no and names a measurement (feature 451 T410: FR-013's measurement clause).
+    PerfLine,
 }
 
 impl Finding {
@@ -555,6 +558,7 @@ fn told(kind: Kind) -> String {
         Kind::Deferral => "a found-and-left item defers a defect without its form - fix it in this task by default; an item fixed here says `fixed here`, one that is not a defect says `not a defect` (constitution XIV); a deferral states `Not fixed here: <why>`, `filed as T<n>` (a box of tasks.md, `make task-add`) and `lands before T<m>` (another open task), as \"Not fixed here: it is in the wells stage, outside this task's files. Filed as T32; lands before T22.\" (feature 451 T17, D15). The unit: each `- ` item of the `**Found and left?**` answer, to the next item or bold line; an answer with no list is one item. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
         Kind::DeferralClosed => "a found-and-left deferral names a task that is not open - a ticked box or an entry of tasks-done.md defers to nothing: file it as an open task (`make task-add`) and order it before an open one (feature 451 T17, D15). Judged once, at `make decide`; `make plan-delta` asks only that the ids are filed. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
         Kind::ClassFix => "a fix of a class of defect (every writer, every form, every file of a kind, each of the ..., all the ...) with no line on how every instance was found - add `observed <YYYY-MM-DD>, method: <how every instance was found>` (or `measured <YYYY-MM-DD> (<method>)`) to it (feature 451 T17, D15). The unit: each `**Found and left?**` item, and item 12 (`Before any fix`) of each Approach block. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
+        Kind::PerfLine => format!("the section's `**Performance work?**` line answers no and names a measurement - a task that measures where time goes IS performance work for the ordering (451 FR-013's measurement clause: a measurement task counts, the GM 2026-11-20), and a plan review blocks a round on the no (five did, 2026-11-26/27; feature 451 T410). Write: \"{}\" - and tag the task's box `[perf]`. The unit: each line that opens `**Performance work?**`, refused where its answer's first word is `no` and the line holds the word `measurement`; a task that measures nothing about where time goes says so without that word", perf_line::WRITE),
     }
 }
 
@@ -585,6 +589,7 @@ pub(super) fn render(
         Kind::Deferral,
         Kind::DeferralClosed,
         Kind::ClassFix,
+        Kind::PerfLine,
     ] {
         let mut of: Vec<&Finding> = found.iter().filter(|f| f.kind == kind).collect();
         if of.is_empty() {
@@ -645,7 +650,7 @@ pub(super) fn plan_lines(plan: &str, section: &str) -> Vec<usize> {
 }
 
 /// Every finding `make decide` makes of `section`, the plan of `tasks`: the lint's, the GM's words on each task's own line that
-/// request.md lacks (feature 451 T308), and the deferrals to a task not open now (D15: judged at the decision).
+/// request.md lacks (feature 451 T308), a "Performance work?" line answering no of a measurement (451 T410), and the deferrals to a task not open now (D15: judged at the decision).
 pub(super) fn decide_findings(spec_dir: &Path, section: &str, tasks: &[String]) -> Vec<Finding> {
     let mut out = findings(spec_dir, section);
     out.extend(
@@ -659,6 +664,16 @@ pub(super) fn decide_findings(spec_dir: &Path, section: &str, tasks: &[String]) 
                     "{task}'s line of tasks.md: '{}'",
                     quote.trim().chars().take(160).collect::<String>()
                 ),
+            }),
+    );
+    out.extend(
+        perf_line::measured_no(section)
+            .into_iter()
+            .map(|(start, text)| Finding {
+                kind: Kind::PerfLine,
+                start,
+                end: start + text.len(),
+                text,
             }),
     );
     let boxes = deferral::boxes(spec_dir);
