@@ -1,0 +1,245 @@
+rust/gate/crates/land w (rust/gate/crates/land/src/land/carry.rs, 1 file(s)) load=11.34 cg_anon=1207 MiB: rc=0 wall=2.92 samples=133
+  targets    2.49 s  anon   178 MiB  rss   478 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_land:lib clippy-driver:l7r_gate_land:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        2.90 s  anon   178 MiB  rss   478 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/land 1 (rust/gate/crates/land/src/land/carry.rs, 1 file(s)) load=11.31 cg_anon=825 MiB: rc=0 wall=1.65 samples=77
+  targets    1.20 s  anon   123 MiB  rss   399 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_land:lib clippy-driver:l7r_gate_land:test
+  features   0.11 s  anon    34 MiB  rss    76 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        1.63 s  anon   123 MiB  rss   399 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/land 2 (rust/gate/crates/land/src/land/carry.rs, 1 file(s)) load=11.31 cg_anon=806 MiB: rc=0 wall=1.61 samples=75
+  targets    1.16 s  anon   123 MiB  rss   398 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_land:lib clippy-driver:l7r_gate_land:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        1.58 s  anon   123 MiB  rss   398 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/task w (rust/gate/crates/task/src/tick.rs, 1 file(s)) load=10.73 cg_anon=746 MiB: rc=0 wall=2.21 samples=102
+  targets    1.74 s  anon   154 MiB  rss   441 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_task:lib clippy-driver:l7r_gate_task:test
+  features   0.11 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        2.19 s  anon   154 MiB  rss   441 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/task 1 (rust/gate/crates/task/src/tick.rs, 1 file(s)) load=10.19 cg_anon=746 MiB: rc=0 wall=1.82 samples=85
+  targets    1.35 s  anon   137 MiB  rss   428 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_task:lib clippy-driver:l7r_gate_task:test
+  features   0.11 s  anon    34 MiB  rss    75 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        1.80 s  anon   137 MiB  rss   428 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/task 2 (rust/gate/crates/task/src/tick.rs, 1 file(s)) load=10.19 cg_anon=621 MiB: rc=0 wall=1.80 samples=85
+  targets    1.36 s  anon   136 MiB  rss   425 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_task:lib clippy-driver:l7r_gate_task:test
+  features   0.08 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        1.78 s  anon   136 MiB  rss   425 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/plan w (rust/gate/crates/plan/src/plan/record.rs, 1 file(s)) load=9.53 cg_anon=622 MiB: rc=0 wall=2.72 samples=128
+  targets    2.28 s  anon   174 MiB  rss   458 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_plan:lib clippy-driver:l7r_gate_plan:test
+  features   0.08 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        2.70 s  anon   174 MiB  rss   458 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/plan 1 (rust/gate/crates/plan/src/plan/record.rs, 1 file(s)) load=9.53 cg_anon=622 MiB: rc=0 wall=2.01 samples=95
+  targets    1.57 s  anon   151 MiB  rss   423 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_plan:lib clippy-driver:l7r_gate_plan:test
+  features   0.10 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        1.99 s  anon   151 MiB  rss   423 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/plan 2 (rust/gate/crates/plan/src/plan/record.rs, 1 file(s)) load=8.93 cg_anon=626 MiB: rc=0 wall=2.04 samples=96
+  targets    1.60 s  anon   150 MiB  rss   423 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_plan:lib clippy-driver:l7r_gate_plan:test
+  features   0.08 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        2.01 s  anon   150 MiB  rss   423 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/reviews w (rust/gate/crates/reviews/src/reviews/owed.rs, 1 file(s)) load=8.93 cg_anon=629 MiB: rc=0 wall=3.83 samples=179
+  targets    3.37 s  anon   244 MiB  rss   539 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        3.81 s  anon   244 MiB  rss   539 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/reviews 1 (rust/gate/crates/reviews/src/reviews/owed.rs, 1 file(s)) load=8.53 cg_anon=616 MiB: rc=0 wall=3.10 samples=143
+  targets    2.62 s  anon   210 MiB  rss   503 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.08 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        3.07 s  anon   210 MiB  rss   503 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/reviews 2 (rust/gate/crates/reviews/src/reviews/owed.rs, 1 file(s)) load=8.53 cg_anon=613 MiB: rc=0 wall=2.95 samples=138
+  targets    2.50 s  anon   210 MiB  rss   505 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.11 s  anon    33 MiB  rss    75 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        2.92 s  anon   210 MiB  rss   505 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/measure w (rust/gate/crates/measure/src/measure/where_time/columns.rs, 1 file(s)) load=7.93 cg_anon=617 MiB: rc=0 wall=12.67 samples=593
+  targets   12.17 s  anon   373 MiB  rss   586 MiB  compilers 2  linkers 0  max gap  24 ms  compiled: clippy-driver:l7r_gate_cohort:lib clippy-driver:l7r_gate_measure:lib clippy-driver:l7r_gate_measure:test clippy-driver:l7r_gate_plan:lib clippy-driver:l7r_gate_reviews:lib
+  features   0.15 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run       12.65 s  anon   373 MiB  rss   586 MiB  compilers 2  linkers 0  max gap  24 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/measure 1 (rust/gate/crates/measure/src/measure/where_time/columns.rs, 1 file(s)) load=6.81 cg_anon=615 MiB: rc=0 wall=4.69 samples=221
+  targets    4.20 s  anon   289 MiB  rss   590 MiB  compilers 2  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_measure:lib clippy-driver:l7r_gate_measure:test
+  features   0.11 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        4.66 s  anon   289 MiB  rss   590 MiB  compilers 2  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/measure 2 (rust/gate/crates/measure/src/measure/where_time/columns.rs, 1 file(s)) load=6.34 cg_anon=616 MiB: rc=0 wall=4.67 samples=220
+  targets    4.21 s  anon   288 MiB  rss   587 MiB  compilers 2  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_measure:lib clippy-driver:l7r_gate_measure:test
+  features   0.11 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        4.65 s  anon   288 MiB  rss   587 MiB  compilers 2  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard/shared w (rust/guard/shared/src/guards/set_down_hooks.rs, 1 file(s)) load=5.99 cg_anon=614 MiB: rc=0 wall=31.53 samples=1463
+  targets   16.38 s  anon   465 MiB  rss   647 MiB  compilers 1  linkers 0  max gap  25 ms  compiled: clippy-driver:l7r_shared:lib clippy-driver:l7r_shared:test
+  features   0.11 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  23 ms  compiled: nothing seen
+  lib        2.63 s  anon   167 MiB  rss   344 MiB  compilers 1  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_shared:lib
+  run       31.51 s  anon   497 MiB  rss   713 MiB  compilers 3  linkers 3  max gap  28 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard/shared 1 (rust/guard/shared/src/guards/set_down_hooks.rs, 1 file(s)) load=4.52 cg_anon=767 MiB: rc=0 wall=15.62 samples=731
+  targets    8.21 s  anon   251 MiB  rss   429 MiB  compilers 1  linkers 0  max gap  24 ms  compiled: clippy-driver:l7r_shared:lib clippy-driver:l7r_shared:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  lib        2.38 s  anon   158 MiB  rss   329 MiB  compilers 1  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_shared:lib
+  run       15.60 s  anon   296 MiB  rss   545 MiB  compilers 3  linkers 3  max gap  24 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard/shared 2 (rust/guard/shared/src/guards/set_down_hooks.rs, 1 file(s)) load=3.87 cg_anon=755 MiB: rc=0 wall=15.10 samples=712
+  targets    7.78 s  anon   251 MiB  rss   428 MiB  compilers 1  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_shared:lib clippy-driver:l7r_shared:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  lib        2.33 s  anon   157 MiB  rss   328 MiB  compilers 1  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_shared:lib
+  run       15.08 s  anon   307 MiB  rss   573 MiB  compilers 3  linkers 3  max gap  26 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard w (rust/guard/src/guards/review_round_hooks.rs, 1 file(s)) load=3.53 cg_anon=747 MiB: rc=0 wall=19.64 samples=913
+  targets    7.87 s  anon   364 MiB  rss   679 MiB  compilers 3  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_guard:bin clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test clippy-driver:l7r_shared:lib
+  features   0.11 s  anon    31 MiB  rss    75 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run       19.62 s  anon   490 MiB  rss   679 MiB  compilers 3  linkers 3  max gap  52 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard 1 (rust/guard/src/guards/review_round_hooks.rs, 1 file(s)) load=3.78 cg_anon=792 MiB: rc=0 wall=7.63 samples=360
+  targets    5.23 s  anon   344 MiB  rss   644 MiB  compilers 3  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_guard:bin clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test
+  features   0.11 s  anon    32 MiB  rss    75 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        7.60 s  anon   344 MiB  rss   644 MiB  compilers 3  linkers 0  max gap  23 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard 2 (rust/guard/src/guards/review_round_hooks.rs, 1 file(s)) load=3.50 cg_anon=801 MiB: rc=0 wall=7.70 samples=364
+  targets    5.31 s  anon   346 MiB  rss   642 MiB  compilers 3  linkers 0  max gap  24 ms  compiled: clippy-driver:l7r_guard:bin clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test
+  features   0.11 s  anon    32 MiB  rss    75 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        7.67 s  anon   346 MiB  rss   642 MiB  compilers 3  linkers 0  max gap  24 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed w (rust/gate/crates/owed/src/item_relabel.rs, 1 file(s)) load=2.28 cg_anon=774 MiB: rc=0 wall=16.88 samples=792
+  targets    8.21 s  anon   168 MiB  rss   344 MiB  compilers 1  linkers 0  max gap  24 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib clippy-driver:l7r_shared:lib
+  features   0.08 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  lib        6.21 s  anon   175 MiB  rss   350 MiB  compilers 1  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  run       16.86 s  anon   175 MiB  rss   350 MiB  compilers 1  linkers 0  max gap  24 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed 1 (rust/gate/crates/owed/src/item_relabel.rs, 1 file(s)) load=2.36 cg_anon=755 MiB: rc=0 wall=1.83 samples=86
+  targets    1.28 s  anon   102 MiB  rss   271 MiB  compilers 1  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_owed:test
+  features   0.08 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  lib        0.11 s  anon    32 MiB  rss    74 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  run        1.81 s  anon   102 MiB  rss   271 MiB  compilers 1  linkers 0  max gap  22 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed dep-edit (rust/gate/crates/core/src/difflib.rs, 1 file(s)) load=2.36 cg_anon=766 MiB: rc=0 wall=11.11 samples=518
+  targets    4.37 s  anon   121 MiB  rss   295 MiB  compilers 1  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  features   0.11 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  lib        2.96 s  anon   122 MiB  rss   295 MiB  compilers 1  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  no pass    1.23 s  anon   182 MiB  rss   411 MiB  compilers 3  linkers 3  max gap  43 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin
+  run       11.09 s  anon   182 MiB  rss   411 MiB  compilers 3  linkers 3  max gap  26 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed dep-put-back (rust/gate/crates/owed/src/item_relabel.rs, 1 file(s)) load=2.56 cg_anon=929 MiB: rc=0 wall=10.79 samples=507
+  targets    4.23 s  anon   121 MiB  rss   296 MiB  compilers 1  linkers 0  max gap  22 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  features   0.11 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  21 ms  compiled: nothing seen
+  lib        2.94 s  anon   121 MiB  rss   294 MiB  compilers 1  linkers 0  max gap  23 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  no pass    1.16 s  anon   197 MiB  rss   419 MiB  compilers 3  linkers 3  max gap  27 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin
+  run       10.77 s  anon   197 MiB  rss   419 MiB  compilers 3  linkers 3  max gap  27 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/reviews w (rust/gate/crates/reviews/src/reviews/owed.rs, 1 file(s)) load=2.55 cg_anon=947 MiB: rc=0 wall=3.33 samples=155
+  targets    2.91 s  anon   223 MiB  rss   524 MiB  compilers 2  linkers 0  max gap  24 ms  compiled: clippy-driver:l7r_gate_pool:lib clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        3.31 s  anon   223 MiB  rss   524 MiB  compilers 2  linkers 0  max gap  24 ms
+rust-checks: lint clean on 1 crate(s)
+PRE exit 0 (L7R_BUILD_SLOT_DIR=/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t355/slots make rust-test CRATE=rust/gate/crates/reviews; stat -c '%y %n' rust/gate/crates/core/src/difflib.rs /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/l7r-alone/rust_gate_crates_reviews-test >&2): 2026-11-26 20:40:51.105688094 -0500 /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/l7r-alone/rust_gate_crates_reviews-test
+rust/gate/crates/reviews dep-edit-after-test (rust/gate/crates/core/src/difflib.rs, 1 file(s)) load=3.18 cg_anon=808 MiB: rc=0 wall=3.99 samples=181
+  targets    3.55 s  anon   241 MiB  rss   553 MiB  compilers 2  linkers 0  max gap  26 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.10 s  anon    33 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  25 ms  compiled: nothing seen
+  run        3.97 s  anon   241 MiB  rss   553 MiB  compilers 2  linkers 0  max gap  26 ms
+rust-checks: lint clean on 1 crate(s)
+rust-checks: test on rust/gate/crates/reviews: test result: ok. 209 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.13s
+rust-checks: test clean on 1 crate(s)
+2026-11-26 20:40:47.496537502 -0500 rust/gate/crates/core/src/difflib.rs
+2026-11-26 20:40:51.105688094 -0500 /home/agent/.cache/l7r-cargo-target/diagram-backlog-t270/l7r-alone/rust_gate_crates_reviews-test
+"step":"lint" "code":0
+rust/gate/crates/reviews dep-put-back (rust/gate/crates/reviews/src/reviews/owed.rs, 1 file(s)) load=3.18 cg_anon=1004 MiB: rc=0 wall=13.25 samples=513
+  targets    6.31 s  anon   235 MiB  rss   532 MiB  compilers 2  linkers 0  max gap  54 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_reviews:test
+  features   0.15 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  26 ms  compiled: nothing seen
+  no pass    2.36 s  anon   188 MiB  rss   412 MiB  compilers 3  linkers 3  max gap 120 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin
+  run       13.23 s  anon   235 MiB  rss   532 MiB  compilers 3  linkers 3  max gap 120 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed w2 (rust/gate/crates/owed/src/record/leaves.rs, 1 file(s)) load=13.20 cg_anon=2408 MiB: rc=0 wall=19.08 samples=586
+  targets    9.68 s  anon   116 MiB  rss   284 MiB  compilers 1  linkers 0  max gap 102 ms  compiled: clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  features   0.16 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  28 ms  compiled: nothing seen
+  lib        8.32 s  anon   116 MiB  rss   281 MiB  compilers 1  linkers 0  max gap  48 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib
+  run       19.06 s  anon   116 MiB  rss   284 MiB  compilers 1  linkers 0  max gap 102 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed 2 (rust/gate/crates/owed/src/record/leaves.rs, 1 file(s)) load=16.96 cg_anon=2000 MiB: rc=0 wall=8.64 samples=299
+  targets    5.76 s  anon   103 MiB  rss   272 MiB  compilers 1  linkers 0  max gap  47 ms  compiled: clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test
+  features   0.10 s  anon    32 MiB  rss    74 MiB  compilers 0  linkers 0  max gap  30 ms  compiled: nothing seen
+  lib        1.54 s  anon    85 MiB  rss   252 MiB  compilers 1  linkers 0  max gap  59 ms  compiled: clippy-driver:l7r_gate_owed:lib
+  run        8.59 s  anon   103 MiB  rss   272 MiB  compilers 1  linkers 0  max gap  59 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/owed 3 (rust/gate/crates/owed/src/record/leaves.rs, 1 file(s)) load=18.19 cg_anon=994 MiB: rc=0 wall=6.56 samples=206
+  targets    4.35 s  anon   102 MiB  rss   273 MiB  compilers 1  linkers 0  max gap  77 ms  compiled: clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_owed:test
+  features   0.14 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  23 ms  compiled: nothing seen
+  lib        0.93 s  anon    85 MiB  rss   253 MiB  compilers 1  linkers 0  max gap  30 ms  compiled: clippy-driver:l7r_gate_owed:lib
+  run        6.53 s  anon   102 MiB  rss   273 MiB  compilers 1  linkers 0  max gap 101 ms
+rust-checks: lint clean on 1 crate(s)
+ALL rust/gate/crates/measure: 54 files
+rust/gate/crates/measure all-w (rust/gate/crates/measure/src/lib.rs, 54 file(s)) load=26.21 cg_anon=1519 MiB: rc=0 wall=10.38 samples=453
+  targets    9.83 s  anon   493 MiB  rss   807 MiB  compilers 3  linkers 0  max gap  36 ms  compiled: clippy-driver:l7r_gate_cohort:lib clippy-driver:l7r_gate_measure:lib clippy-driver:l7r_gate_measure:test clippy-driver:l7r_gate_owed:lib clippy-driver:l7r_gate_plan:lib clippy-driver:l7r_gate_reviews:lib clippy-driver:l7r_gate_tree:lib clippy-driver:l7r_gate_trials:lib
+  features   0.09 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  23 ms  compiled: nothing seen
+  run       10.36 s  anon   493 MiB  rss   807 MiB  compilers 3  linkers 0  max gap  36 ms
+rust-checks: lint clean on 1 crate(s)
+rust/gate/crates/measure all (rust/gate/crates/measure/src/lib.rs, 54 file(s)) load=22.94 cg_anon=1249 MiB: rc=0 wall=5.31 samples=236
+  targets    4.75 s  anon   310 MiB  rss   626 MiB  compilers 2  linkers 0  max gap  30 ms  compiled: clippy-driver:l7r_gate_measure:lib clippy-driver:l7r_gate_measure:test
+  features   0.15 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run        5.28 s  anon   310 MiB  rss   626 MiB  compilers 2  linkers 0  max gap  30 ms
+rust-checks: lint clean on 1 crate(s)
+ALL rust/guard: 86 files
+rust/guard all-w (rust/guard/src/guards.rs, 86 file(s)) load=21.51 cg_anon=803 MiB:   --> guard/src/guards/agent_stall_hooks.rs:61:5
+rc=1 wall=11.62 samples=519
+  targets    9.00 s  anon   556 MiB  rss   883 MiB  compilers 2  linkers 0  max gap  30 ms  compiled: clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test
+  run       11.59 s  anon   556 MiB  rss   883 MiB  compilers 2  linkers 0  max gap  30 ms
+rust-checks: lint FAILED on rust/guard
+rust-checks: 1 crate(s) failed lint - fix what clippy names (an exception is `#[expect(lint, reason = "...")]`)
+rust/guard all (rust/guard/src/guards.rs, 86 file(s)) load=18.73 cg_anon=662 MiB:   --> guard/src/guards/agent_stall_hooks.rs:61:5
+rc=1 wall=10.98 samples=509
+  targets    8.31 s  anon   555 MiB  rss   878 MiB  compilers 2  linkers 0  max gap  26 ms  compiled: clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test
+  run       10.96 s  anon   555 MiB  rss   878 MiB  compilers 2  linkers 0  max gap  26 ms
+rust-checks: lint FAILED on rust/guard
+rust-checks: 1 crate(s) failed lint - fix what clippy names (an exception is `#[expect(lint, reason = "...")]`)
+ALL rust/guard: 85 files
+rust/guard all2 (rust/guard/src/guards.rs, 85 file(s)) load=13.20 cg_anon=806 MiB: rc=0 wall=13.61 samples=595
+  targets   10.91 s  anon   529 MiB  rss   838 MiB  compilers 3  linkers 0  max gap  33 ms  compiled: clippy-driver:l7r_guard:bin clippy-driver:l7r_guard:lib clippy-driver:l7r_guard:test
+  features   0.11 s  anon    34 MiB  rss    76 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  run       13.59 s  anon   529 MiB  rss   838 MiB  compilers 3  linkers 0  max gap  33 ms
+rust-checks: lint clean on 1 crate(s)
+ALL rust/guard/shared: 81 files
+rust/guard/shared all-w (rust/guard/shared/src/attempts.rs, 81 file(s)) load=14.15 cg_anon=631 MiB: rc=0 wall=53.91 samples=2221
+  targets   25.96 s  anon   413 MiB  rss   601 MiB  compilers 1  linkers 0  max gap  69 ms  compiled: clippy-driver:l7r_shared:lib clippy-driver:l7r_shared:test
+  features   0.09 s  anon    34 MiB  rss    77 MiB  compilers 0  linkers 0  max gap  24 ms  compiled: nothing seen
+  lib        7.57 s  anon   283 MiB  rss   468 MiB  compilers 1  linkers 0  max gap  55 ms  compiled: clippy-driver:l7r_shared:lib
+  no pass   17.10 s  anon   659 MiB  rss  1041 MiB  compilers 4  linkers 3  max gap  45 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin rustc:l7r_shared:lib
+  run       53.88 s  anon   659 MiB  rss  1041 MiB  compilers 4  linkers 3  max gap  69 ms
+rust-checks: lint clean on 1 crate(s)
+rust/guard/shared all (rust/guard/shared/src/attempts.rs, 81 file(s)) load=12.70 cg_anon=979 MiB: rc=0 wall=38.10 samples=1450
+  targets   19.14 s  anon   263 MiB  rss   446 MiB  compilers 1  linkers 0  max gap  55 ms  compiled: clippy-driver:l7r_shared:lib clippy-driver:l7r_shared:test
+  features   0.11 s  anon    34 MiB  rss    78 MiB  compilers 0  linkers 0  max gap  22 ms  compiled: nothing seen
+  lib        3.88 s  anon   172 MiB  rss   350 MiB  compilers 1  linkers 0  max gap  47 ms  compiled: clippy-driver:l7r_shared:lib
+  no pass   10.19 s  anon   510 MiB  rss   795 MiB  compilers 3  linkers 3  max gap  46 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin rustc:l7r_shared:lib
+  run       38.07 s  anon   510 MiB  rss   795 MiB  compilers 3  linkers 3  max gap  55 ms
+rust-checks: lint clean on 1 crate(s)
+mode_a file: 
+rust/mode_a w (rust/mode_a/src/lib.rs, 1 file(s)) load=21.41 cg_anon=1297 MiB: rc=0 wall=93.05 samples=3480
+  targets   28.90 s  anon   624 MiB  rss   993 MiB  compilers 3  linkers 0  max gap  58 ms  compiled: clippy-driver:l7r_gate_core:lib clippy-driver:l7r_gate_pool:lib clippy-driver:l7r_gate_registry:lib clippy-driver:l7r_gate_research:lib clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test clippy-driver:l7r_shared:lib
+  features  21.07 s  anon   577 MiB  rss   946 MiB  compilers 3  linkers 0  max gap  52 ms  compiled: clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  no pass   33.57 s  anon   621 MiB  rss   991 MiB  compilers 4  linkers 3  max gap  60 ms  compiled: rustc:l7r_gate_core:lib rustc:l7r_gate_rustc:lib rustc:l7r_gate_tree:lib rustc:l7r_rust:bin rustc:l7r_shared:lib
+  run       93.02 s  anon   624 MiB  rss   993 MiB  compilers 4  linkers 3  max gap  58 ms
+rust-checks: lint clean on 1 crate(s)
+rust/mode_a 1 (rust/mode_a/src/lib.rs, 1 file(s)) load=24.21 cg_anon=1042 MiB: rc=0 wall=16.66 samples=655
+  targets    7.42 s  anon   377 MiB  rss   753 MiB  compilers 3  linkers 0  max gap  61 ms  compiled: clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  features   8.19 s  anon   377 MiB  rss   753 MiB  compilers 3  linkers 0  max gap  41 ms  compiled: clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  run       16.63 s  anon   377 MiB  rss   753 MiB  compilers 3  linkers 0  max gap  61 ms
+rust-checks: lint clean on 1 crate(s)
+ALL rust/mode_a: 96 files
+rust/mode_a all (rust/mode_a/src/audit.rs, 96 file(s)) load=24.70 cg_anon=934 MiB:   --> mode_a/src/caption_place/wrap.rs:17:5
+  --> mode_a/src/raster/encode.rs:18:5
+rc=1 wall=11.75 samples=510
+  targets   11.26 s  anon   633 MiB  rss  1020 MiB  compilers 2  linkers 0  max gap  38 ms  compiled: clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  run       11.73 s  anon   633 MiB  rss  1020 MiB  compilers 2  linkers 0  max gap  38 ms
+rust-checks: lint FAILED on rust/mode_a
+rust-checks: 1 crate(s) failed lint - fix what clippy names (an exception is `#[expect(lint, reason = "...")]`)
+ALL rust/mode_a: 94 files
+rust/mode_a all2 (rust/mode_a/src/audit.rs, 94 file(s)) load=20.42 cg_anon=1044 MiB: rc=0 wall=27.25 samples=1111
+  targets    9.86 s  anon   665 MiB  rss  1048 MiB  compilers 3  linkers 0  max gap  26 ms  compiled: clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  features  16.80 s  anon   674 MiB  rss  1079 MiB  compilers 3  linkers 0  max gap  91 ms  compiled: clippy-driver:l7r_mode_a:bin clippy-driver:l7r_mode_a:lib clippy-driver:l7r_mode_a:test
+  run       27.22 s  anon   674 MiB  rss  1079 MiB  compilers 3  linkers 0  max gap  91 ms
+rust-checks: lint clean on 1 crate(s)

@@ -2990,7 +2990,7 @@
    "declared": "spec-fidelity"
   },
   "### T355 Approach (checklist part A)": {
-   "sha256": "65e1e823caa83a03a1c659946631919e5ce1e903c2f38209631dbd4c34e558d4",
+   "sha256": "96fa7f5149f2fc19272d0a0f327a066c449e4e46f4d66a793dc7290c5259d777",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3525,6 +3525,12 @@
   },
   "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))": {
    "sha256": "9f5e3917fade0e72cedf8a88aea0eb8512ec3dfe235851850701f909f8c09103",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T355 (2026-11-27, found by 451 T347's build: a builder's lint took one of the machine's two wide build slots whatever it compiled; with both held, the lint of `rust/gate/crates/reviews` after a body edit waited 55.5 and 49.9 s for 2.6 s of work, measured 2026-11-27 (`dev/measurements/2026-11-27/lint-memory/lint-wait.sh`, rows `before1` and `before2`))": {
+   "sha256": "c3b114e1cef2eb021917cd8d320d022ea3723f5c78f22855470654ab1a3e2164",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32414,6 +32420,88 @@
      "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T355 (2026-11-27, found by 451 T347's build: a builder's lint took one of the machine's two wide build slots whatever it compiled; with both held, the lint of `rust/gate/crates/reviews` after a body edit waited 55.5 and 49.9 s for 2.6 s of work, measured 2026-11-27 (`dev/measurements/2026-11-27/lint-memory/lint-wait.sh`, rows `before1` and `before2`))",
+    "### T355 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T355-approach",
+     "summary": "Each clippy pass whose crate the telling can vouch for compiles alone takes T347's small lane; a pass it cannot vouch for stays wide",
+     "class": "within",
+     "why": "The task's line (the coordinating session's, under the GM's T284 words 'address that with some synchronization rather than pre-emptively limiting builders') asks exactly this once the lint is measured to be of the test build's class; measured 0.08-0.66 GiB a pass against the lane's 1.42 GiB sizing. Performance work, which the GM asked be prioritized (2026-11-20)."
+    },
+    {
+     "id": "T355-D1",
+     "summary": "Same lane, width and budget unmoved; SMALL_DEFAULT not moved",
+     "class": "within",
+     "why": "Reuses T347's lane whole; the lint's measured ceiling is under what the lane was sized for, so nothing the GM or the spec settled is changed."
+    },
+    {
+     "id": "T355-D2",
+     "summary": "One key a pass, of the test build's kind but never the test build's own key; key inputs unchanged",
+     "class": "within",
+     "why": "Measured that clippy's check units have their own fingerprints, so sharing the test build's key would tell wrong; a separate key a pass is the conservative implementation of the task, not a narrowing."
+    },
+    {
+     "id": "T355-D3",
+     "summary": "A red pass told alone keeps its key; a red wide pass keeps none, so later passes stay wide until green",
+     "class": "within",
+     "why": "Carries T347's Deviation 3; it errs to the wide (safe) side and leaves a residual wait stated with its cost. It narrows nothing the GM asked: the pre-change behavior was always wide."
+    },
+    {
+     "id": "T355-D4",
+     "summary": "Outside a repository nothing is told (wide); a FRESH=1 run is told like any other",
+     "class": "within",
+     "why": "The first is the safe side (no content id, no vouching). The second departs from T347-D4's outcome with a stated reason (the lint's telling reads no kept results and cargo fingerprints ignore FRESH=1); it widens the lane's use rather than narrowing the request."
+    },
+    {
+     "id": "T355-D5",
+     "summary": "No new step; the lint's slot-tell / slot-small lines are told from a test build's by the check span they lie in; a lane wait stays slot-wait",
+     "class": "within",
+     "why": "Keeps the readers' booking (FR-005's columns) as built; the time stays visible in make where-time / task-time. Implementation choice inside the spec."
+    },
+    {
+     "id": "T355-D6",
+     "summary": "The passes move to rustc/lint.rs; check's lint arm with no ids is a wide lint",
+     "class": "within",
+     "why": "File layout under the 1,000-line bar; callers outside a run keep the old (wide) behavior."
+    },
+    {
+     "id": "T355-D7",
+     "summary": "The build-slot audit's falsifier is reworded for a lint pass: more clippy-driver than the crate has targets (three at most here)",
+     "class": "within",
+     "why": "The old count (more than two rustc) would falsely fire on a legitimate three-target lint; the new bound is derived from an observed census with its method stated, and the memory falsifier stays. It keeps the audit doing its job rather than loosening it."
+    },
+    {
+     "id": "Deviation 1",
+     "summary": "The negative edits a dependency AND the crate, since a dependency's body edit alone re-lints nothing",
+     "class": "within",
+     "why": "A deviation from the coordinating session's brief, not from the GM's words or the spec; measured, and the negative still shows a changed dependency sends the lint wide (the red-first test pins it)."
+    },
+    {
+     "id": "Deviation 2",
+     "summary": "Two crates beyond the brief's seven measured (owed, mode_a)",
+     "class": "within",
+     "why": "Extra measurement so the third pass and the feature pass are seen; it enforces the brief's 'each pass accounted for' and changes no behavior."
+    },
+    {
+     "id": "NOT measured",
+     "summary": "Three passes in the lane on a real self-naming crate in the built tool, a lane pass beside two compiling wide holders, and the day's slot-wait minutes after the change are stated limits",
+     "class": "within",
+     "why": "Each is named with where it is read (the fixture, make sampler-report's memory falsifier, T380); the arithmetic (5.4 + 0.66 GiB against 7) is within the measured budget. Stated limits, not a carve-out from what was asked."
+    },
+    {
+     "id": "Found and left / T411",
+     "summary": "A builder's first lint of each crate after a handout (and after a red wide pass) is still wide; filed as T411, lands before T302; T367 not built here",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome) but a residual wait the lane cannot yet remove because no key exists before the first lint; it is the same first-run property as T347's test build (T367's). FR-009's form is met: why not fixed, the filed id, and its order."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -50278,6 +50366,86 @@
      "summary": "T307 is classed [perf] (it removes a wait from landings and builders), not engine speed, so the performance checklist's questions do not apply.",
      "class": "within",
      "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T355": {
+   "section_sha256": "f8276b3172633b4287603470f4a467fa7de9a3eb861008d639d0c1e97defa7b9",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T355-approach",
+     "summary": "Each clippy pass whose crate the telling can vouch for compiles alone takes T347's small lane; a pass it cannot vouch for stays wide",
+     "class": "within",
+     "why": "The task's line (the coordinating session's, under the GM's T284 words 'address that with some synchronization rather than pre-emptively limiting builders') asks exactly this once the lint is measured to be of the test build's class; measured 0.08-0.66 GiB a pass against the lane's 1.42 GiB sizing. Performance work, which the GM asked be prioritized (2026-11-20)."
+    },
+    {
+     "id": "T355-D1",
+     "summary": "Same lane, width and budget unmoved; SMALL_DEFAULT not moved",
+     "class": "within",
+     "why": "Reuses T347's lane whole; the lint's measured ceiling is under what the lane was sized for, so nothing the GM or the spec settled is changed."
+    },
+    {
+     "id": "T355-D2",
+     "summary": "One key a pass, of the test build's kind but never the test build's own key; key inputs unchanged",
+     "class": "within",
+     "why": "Measured that clippy's check units have their own fingerprints, so sharing the test build's key would tell wrong; a separate key a pass is the conservative implementation of the task, not a narrowing."
+    },
+    {
+     "id": "T355-D3",
+     "summary": "A red pass told alone keeps its key; a red wide pass keeps none, so later passes stay wide until green",
+     "class": "within",
+     "why": "Carries T347's Deviation 3; it errs to the wide (safe) side and leaves a residual wait stated with its cost. It narrows nothing the GM asked: the pre-change behavior was always wide."
+    },
+    {
+     "id": "T355-D4",
+     "summary": "Outside a repository nothing is told (wide); a FRESH=1 run is told like any other",
+     "class": "within",
+     "why": "The first is the safe side (no content id, no vouching). The second departs from T347-D4's outcome with a stated reason (the lint's telling reads no kept results and cargo fingerprints ignore FRESH=1); it widens the lane's use rather than narrowing the request."
+    },
+    {
+     "id": "T355-D5",
+     "summary": "No new step; the lint's slot-tell / slot-small lines are told from a test build's by the check span they lie in; a lane wait stays slot-wait",
+     "class": "within",
+     "why": "Keeps the readers' booking (FR-005's columns) as built; the time stays visible in make where-time / task-time. Implementation choice inside the spec."
+    },
+    {
+     "id": "T355-D6",
+     "summary": "The passes move to rustc/lint.rs; check's lint arm with no ids is a wide lint",
+     "class": "within",
+     "why": "File layout under the 1,000-line bar; callers outside a run keep the old (wide) behavior."
+    },
+    {
+     "id": "T355-D7",
+     "summary": "The build-slot audit's falsifier is reworded for a lint pass: more clippy-driver than the crate has targets (three at most here)",
+     "class": "within",
+     "why": "The old count (more than two rustc) would falsely fire on a legitimate three-target lint; the new bound is derived from an observed census with its method stated, and the memory falsifier stays. It keeps the audit doing its job rather than loosening it."
+    },
+    {
+     "id": "Deviation 1",
+     "summary": "The negative edits a dependency AND the crate, since a dependency's body edit alone re-lints nothing",
+     "class": "within",
+     "why": "A deviation from the coordinating session's brief, not from the GM's words or the spec; measured, and the negative still shows a changed dependency sends the lint wide (the red-first test pins it)."
+    },
+    {
+     "id": "Deviation 2",
+     "summary": "Two crates beyond the brief's seven measured (owed, mode_a)",
+     "class": "within",
+     "why": "Extra measurement so the third pass and the feature pass are seen; it enforces the brief's 'each pass accounted for' and changes no behavior."
+    },
+    {
+     "id": "NOT measured",
+     "summary": "Three passes in the lane on a real self-naming crate in the built tool, a lane pass beside two compiling wide holders, and the day's slot-wait minutes after the change are stated limits",
+     "class": "within",
+     "why": "Each is named with where it is read (the fixture, make sampler-report's memory falsifier, T380); the arithmetic (5.4 + 0.66 GiB against 7) is within the measured budget. Stated limits, not a carve-out from what was asked."
+    },
+    {
+     "id": "Found and left / T411",
+     "summary": "A builder's first lint of each crate after a handout (and after a red wide pass) is still wide; filed as T411, lands before T302; T367 not built here",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome) but a residual wait the lane cannot yet remove because no key exists before the first lint; it is the same first-run property as T347's test build (T367's). FR-009's form is met: why not fixed, the filed id, and its order."
     }
    ],
    "verdict": "CLEAR"

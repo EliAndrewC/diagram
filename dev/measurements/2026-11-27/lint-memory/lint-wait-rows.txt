@@ -1,0 +1,155 @@
+establish: make exit 0, wall 17.557422422 s, load 6.46
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.007 s
+   build ['rust/gate/crates/reviews'] code 0 5.742 s
+   test ['rust/gate/crates/reviews'] code 0 1.344 s
+   lint ['rust/gate/crates/reviews'] code 0 8.919 s
+   format ['rust/gate/crates/reviews'] code 0 0.356 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+establish2: make exit 0, wall 7.446592900 s, load 6.35
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.005 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   build ['rust/gate/crates/reviews'] code 0 2.206 s
+   test ['rust/gate/crates/reviews'] code 0 1.328 s
+   lint ['rust/gate/crates/reviews'] code 0 2.606 s
+   format ['rust/gate/crates/reviews'] code 0 0.348 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+before1: make exit 0, wall 65.787072834 s, load 18.84
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   build ['rust/gate/crates/reviews'] code 0 2.390 s
+   test ['rust/gate/crates/reviews'] code 0 1.557 s
+   slot-wait [] code 0 55.498 s
+   lint ['rust/gate/crates/reviews'] code 0 60.163 s
+   format ['rust/gate/crates/reviews'] code 0 0.502 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+before2: make exit 0, wall 63.899118776 s, load 15.50
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.010 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.003 s
+   build ['rust/gate/crates/reviews'] code 0 5.273 s
+   test ['rust/gate/crates/reviews'] code 0 3.909 s
+   slot-wait [] code 0 49.945 s
+   lint ['rust/gate/crates/reviews'] code 0 52.974 s
+   format ['rust/gate/crates/reviews'] code 0 0.348 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after-establish1: make exit 0, wall 7.884941025 s, load 14.75
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.005 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   build ['rust/gate/crates/reviews'] code 0 2.395 s
+   test ['rust/gate/crates/reviews'] code 0 1.325 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.010 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.009 s
+   lint ['rust/gate/crates/reviews'] code 0 2.767 s
+   format ['rust/gate/crates/reviews'] code 0 0.372 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after-establish2: make exit 0, wall 7.715591923 s, load 16.37
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.007 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   build ['rust/gate/crates/reviews'] code 0 2.231 s
+   test ['rust/gate/crates/reviews'] code 0 1.341 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.009 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   lint ['rust/gate/crates/reviews'] code 0 2.712 s
+   format ['rust/gate/crates/reviews'] code 0 0.361 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after1: make exit 0, wall 8.928035219 s, load 14.47
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.007 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   build ['rust/gate/crates/reviews'] code 0 2.629 s
+   test ['rust/gate/crates/reviews'] code 0 1.510 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.009 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   lint ['rust/gate/crates/reviews'] code 0 3.365 s
+   format ['rust/gate/crates/reviews'] code 0 0.362 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after2: make exit 0, wall 7.678309196 s, load 6.57
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   build ['rust/gate/crates/reviews'] code 0 2.333 s
+   test ['rust/gate/crates/reviews'] code 0 1.333 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.005 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   lint ['rust/gate/crates/reviews'] code 0 2.675 s
+   format ['rust/gate/crates/reviews'] code 0 0.357 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after3: make exit 0, wall 7.920319013 s, load 3.16
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.011 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.003 s
+   build ['rust/gate/crates/reviews'] code 0 2.334 s
+   test ['rust/gate/crates/reviews'] code 0 1.334 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.008 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.001 s
+   lint ['rust/gate/crates/reviews'] code 0 2.766 s
+   format ['rust/gate/crates/reviews'] code 0 0.349 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+negative: make exit 0, wall 69.865280816 s, load 7.33
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.005 s
+   slot-wait [] code 0 56.413 s
+   build ['rust/gate/crates/reviews'] code 0 60.705 s
+   test ['rust/gate/crates/reviews'] code 0 1.301 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.005 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.005 s
+   lint ['rust/gate/crates/reviews'] code 0 3.226 s
+   format ['rust/gate/crates/reviews'] code 0 0.341 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after-negative-1: make exit 0, wall 13.400304676 s, load 6.07
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.005 s
+   build ['rust/gate/crates/reviews'] code 0 4.182 s
+   test ['rust/gate/crates/reviews'] code 0 1.339 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.006 s
+   slot-tell ['rust/gate/crates/reviews'] code 1 0.007 s
+   lint ['rust/gate/crates/reviews'] code 0 3.213 s
+   format ['rust/gate/crates/reviews'] code 0 0.349 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+after-negative-2: make exit 0, wall 7.574521436 s, load 5.75
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   build ['rust/gate/crates/reviews'] code 0 2.266 s
+   test ['rust/gate/crates/reviews'] code 0 1.303 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.006 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   slot-tell ['rust/gate/crates/reviews'] code 0 0.005 s
+   slot-small ['rust/gate/crates/reviews'] code 0 0.002 s
+   lint ['rust/gate/crates/reviews'] code 0 2.641 s
+   format ['rust/gate/crates/reviews'] code 0 0.358 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)
+knob-off: make exit 0, wall 67.682521248 s, load 4.50
+   slot-wait [] code 0 60.033 s
+   build ['rust/gate/crates/reviews'] code 0 62.284 s
+   test ['rust/gate/crates/reviews'] code 0 1.416 s
+   lint ['rust/gate/crates/reviews'] code 0 2.667 s
+   format ['rust/gate/crates/reviews'] code 0 0.348 s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)

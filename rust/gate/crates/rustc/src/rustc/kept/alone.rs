@@ -24,6 +24,10 @@
 //! dependency moved, so it is still true, and a red build's next run is told alone again. A wide build that passes keeps its key;
 //! one that fails keeps none of its own.
 //!
+//! A LINT PASS IS TOLD THE SAME WAY, BY A KEY OF ITS OWN (feature 451 T355, `lint.rs`): clippy's check units have their own
+//! fingerprints, which a test build does not freshen, and one pass's are not another's, so each pass keeps a key named by its words
+//! (`<crate>-lint--all-targets`) and is told alone only by what that pass last built.
+//!
 //! Each telling writes a `Phase` line, `slot-tell`: its span is the telling's cost (some milliseconds: one `stat` a dependency's
 //! file), its code 0 where the build was told alone and 1 where not. With no lane (`L7R_BUILD_SLOTS_SMALL=0`, no wide slots)
 //! nothing is told and no key is kept.
@@ -123,7 +127,8 @@ impl Told {
         }
     }
 
-    /// The telling of `cmd`'s test build of `manifest`'s crate, whose words are `args`.
+    /// The telling of `cmd`'s build of `manifest`'s crate, whose words are `args`: a test build (`test`, `test-counters`) or one pass
+    /// of the lint (`lint--all-targets`, ...); `cmd` names the key's file.
     pub(in crate::rustc) fn of(
         world: &World,
         cmd: &str,
@@ -161,8 +166,19 @@ impl Told {
     /// The build, in the lane it was told: the small lane where it compiles its crate alone, its key left as it is; a wide slot
     /// otherwise, its key written before it starts and kept where it passes.
     pub(in crate::rustc) fn cargo(&self, world: &World, args: &[&str], manifest: &Path) -> Ran {
+        self.cargo_with(world, args, manifest, &[])
+    }
+
+    /// `cargo`, with the words `after` handed on to what cargo runs (a lint pass's `-D warnings`, feature 451 T355).
+    pub(in crate::rustc) fn cargo_with(
+        &self,
+        world: &World,
+        args: &[&str],
+        manifest: &Path,
+        after: &[&str],
+    ) -> Ran {
         if self.alone {
-            return cargo_small(world, args, manifest);
+            return cargo_small(world, args, manifest, after);
         }
         let new = self
             .at
@@ -172,7 +188,7 @@ impl Told {
             let _ = std::fs::create_dir_all(new.parent().unwrap_or(new));
             let _ = std::fs::write(new, &self.key);
         }
-        let ran = cargo(world, args, manifest, &[]);
+        let ran = cargo(world, args, manifest, after);
         if let (Some(at), Some(new)) = (&self.at, &new) {
             let _ = if ran.code == 0 {
                 std::fs::rename(new, at)

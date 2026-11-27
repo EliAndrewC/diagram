@@ -32,6 +32,11 @@
 //! wide slot as before, and so does every build where the lane is `0`; with no wide slots (`L7R_BUILD_SLOTS=0`, a run under a
 //! holder) there is no lane either. A wait in the lane is a `slot-wait` line like any other; each build that took the lane writes a
 //! `slot-small` line, its span the wait for it, which the readers book to no category, so it is there to count.
+//!
+//! THE LINT IN THE LANE (feature 451 T355, `lint.rs`). A clippy pass that compiles one crate alone is under that class - 0.08-0.37
+//! GiB anonymous after a body edit, 0.66 GiB at the most, one to three `clippy-driver` at once, no link, measured 2026-11-27
+//! (`dev/measurements/2026-11-27/lint-memory/results.md`) - so each pass told so by its own key takes the same lane, in a test
+//! build's place and never beside one: the lane's width and budget are as they were.
 
 use std::collections::BTreeMap;
 use std::fs::File;

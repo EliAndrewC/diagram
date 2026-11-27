@@ -62,7 +62,7 @@ fn a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_mor
     let profile = world.target.join("debug");
     cache(&profile);
     std::fs::write(world.target.join("link-error"), link_error(&profile)).unwrap();
-    let done = stepped(&world, "test", &a, false, false, &Told::wide());
+    let done = stepped(&world, "test", &a, false, (false, &Told::wide()), None);
     assert_eq!(done.code, 0, "{}", done.stderr);
     let builds = |w: &crate::rustc::World| {
         calls(w)
@@ -96,7 +96,7 @@ fn a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked() {
     let profile = world.target.join("debug");
     cache(&profile);
     std::fs::write(world.target.join("link-error"), link_error(&profile)).unwrap();
-    let done = stepped(&world, "test", &a, false, false, &Told::wide());
+    let done = stepped(&world, "test", &a, false, (false, &Told::wide()), None);
     assert_eq!(done.code, 101);
     assert_eq!(calls(&world).len(), 2, "{:?}", calls(&world));
     let twice = " and built again: that build failed too, in cargo's words below\nerror: linking with `cc` failed";

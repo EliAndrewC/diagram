@@ -25,6 +25,7 @@ mod assertline;
 mod cover;
 mod fmtfile;
 mod kept;
+mod lint;
 mod phase;
 mod prewarm;
 mod runlock;
@@ -201,9 +202,10 @@ fn cargo_in(
     run_in(Some(&world.root), &world.cargo, &all, &env)
 }
 
-/// `cargo`, for a test build told to compile its crate alone (feature 451 T347, `kept/alone.rs`): the small lane, never a wide slot.
-fn cargo_small(world: &World, args: &[&str], manifest: &Path) -> Ran {
-    let (all, mut env) = cargo_call(world, args, manifest, &[], None);
+/// `cargo`, for a test build or a lint pass told to compile its crate alone (feature 451 T347 and T355, `kept/alone.rs`): the small
+/// lane, never a wide slot.
+fn cargo_small(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
+    let (all, mut env) = cargo_call(world, args, manifest, after, None);
     let _slot = slot::around_small(world, manifest, &all, &mut env);
     run_in(Some(&world.root), &world.cargo, &all, &env)
 }
@@ -424,28 +426,8 @@ fn tail(text: &str) -> &str {
 
 fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> Ran {
     match cmd {
-        "lint" => {
-            let mut passes: Vec<&[&str]> = vec![
-                &["clippy", "--quiet", "--all-targets"],
-                &["clippy", "--quiet", "--all-targets", "--all-features"],
-            ];
-            // THE THIRD PASS (feature 451 T325): `--all-targets` reads `[dev-dependencies]`, so a crate that names itself there has
-            // its test-only feature on in both passes above, and its lines under that feature's `not(..)` - what the tools compile -
-            // would be linted by nothing. `--lib` reads no dev-dependency. Measured 2026-11-26 over the six such crates after a touch
-            // of `core` and `l7r_shared`: 7 check compiles and 12.8 s beside the two passes' 14 and 23.9 s
-            // (`dev/measurements/2026-11-26/feature-unify/lint-pass.sh`).
-            if names_itself(manifest) {
-                passes.push(&["clippy", "--quiet", "--lib"]);
-            }
-            let mut ran = cargo(world, passes[0], manifest, &["-D", "warnings"]);
-            for words in &passes[1..] {
-                if ran.code != 0 {
-                    break;
-                }
-                ran = cargo(world, words, manifest, &["-D", "warnings"]);
-            }
-            ran
-        }
+        // told nothing, so each pass a wide slot: a run's lint is `stepped`'s, which hands the run's content ids on (`lint.rs`)
+        "lint" => lint::linted(world, manifest, None),
         "test" | "test-counters" | "test-no-counters" => {
             let words = test_args(cmd, manifest, false);
             let args: Vec<&str> = words.iter().map(String::as_str).collect();
@@ -528,13 +510,15 @@ fn test_args(cmd: &str, manifest: &Path, no_run: bool) -> Vec<String> {
 /// binary key's build ran and passed (`built`: a build that named no binary), it wrote the `build` line and the run compiles nothing,
 /// so no build is asked again; where it failed, the build is asked again here, so the failure reads as cargo's and not as JSON -
 /// in the lane the binary key's build was told (`told`, feature 451 T347), so a red build of one crate alone waits on no wide slot.
+///
+/// A LINT IS TOLD PASS BY PASS (feature 451 T355, `lint.rs`), from the run's content ids (`inputs`), inside its `lint` line's span.
 fn stepped(
     world: &World,
     cmd: &str,
     manifest: &Path,
     formatting_check: bool,
-    built: bool,
-    told: &Told,
+    (built, told): (bool, &Told),
+    inputs: Option<&Kept>,
 ) -> Ran {
     if phase::step_of(cmd) == Some("test") && !built {
         let words = test_args(cmd, manifest, true);
@@ -548,7 +532,11 @@ fn stepped(
         }
     }
     let began = std::time::SystemTime::now();
-    let done = check(world, cmd, manifest, formatting_check);
+    let done = if cmd == "lint" {
+        lint::linted(world, manifest, inputs)
+    } else {
+        check(world, cmd, manifest, formatting_check)
+    };
     if let Some(step) = phase::step_of(cmd) {
         phase::wrote(world, step, &[manifest], began, done.code);
     }
@@ -719,10 +707,10 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             );
             continue;
         }
-        let built = verdict.built;
-        let done = together.remove(manifest).unwrap_or_else(|| {
-            stepped(world, cmd, manifest, formatting_check, built, &verdict.told)
-        });
+        let (lane, ids) = ((verdict.built, &verdict.told), inputs.as_ref());
+        let done = together
+            .remove(manifest)
+            .unwrap_or_else(|| stepped(world, cmd, manifest, formatting_check, lane, ids));
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }

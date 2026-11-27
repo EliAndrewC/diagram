@@ -22,7 +22,7 @@ use l7r_shared::tempdir::{Held, TempDir};
 const ARGS: [&str; 2] = ["test", "--no-run"];
 /// A fake cargo whose test builds fail while a file `fail` lies beside it.
 const FAILS: &str = "[ \"$1\" = test ] && [ -f \"$(dirname \"$0\")/fail\" ] && exit 101\nexit 0";
-const A_BUILDS_FROM_B: &str = "[package]\n[dependencies]\nb = { path = \"../b\" }\n";
+pub(super) const A_BUILDS_FROM_B: &str = "[package]\n[dependencies]\nb = { path = \"../b\" }\n";
 /// A fake cargo whose first test build after a file `link-error` lies beside it fails as the linker does, in that file's words.
 const LINKS_ONCE: &str = "d=$(dirname \"$0\")\nif [ \"$1\" = test ] && [ -f \"$d/link-error\" ] && [ ! -f \"$d/failed\" ]; then touch \"$d/failed\"; cat \"$d/link-error\" >&2; exit 101; fi\nexit 0";
 const B_COMPILES_IN: &str = "const T: &str = include_str!(\"../../../data/table.tsv\");\n";
@@ -33,7 +33,7 @@ fn at(path: &Path, when: SystemTime) {
 }
 
 /// `text` at `path`, written long before any build of the test's.
-fn put(root: &Path, path: &str, text: &str) {
+pub(super) fn put(root: &Path, path: &str, text: &str) {
     std::fs::write(root.join(path), text).unwrap();
     at(
         &root.join(path),
@@ -42,7 +42,7 @@ fn put(root: &Path, path: &str, text: &str) {
 }
 
 /// Crate `a`, which builds from `b`, which compiles in a table outside both; every file older than any build.
-fn fixture() -> (TempDir, PathBuf) {
+pub(super) fn fixture() -> (TempDir, PathBuf) {
     let (root, a, _) = kept_crates();
     std::fs::create_dir_all(root.join("data")).unwrap();
     for (path, text) in [
@@ -71,7 +71,7 @@ fn lane(dir: &Path, count: usize) -> Slots {
 
 /// A world with two wide slots, which a call that finds both held runs without at once (its wait a `slot-wait` line, code 1), and
 /// a lane one wide.
-fn lane_world(root: &Path, body: &str, dir: &Path) -> Held<World> {
+pub(super) fn lane_world(root: &Path, body: &str, dir: &Path) -> Held<World> {
     world_with(root, body).map(|w| World {
         slots: Slots {
             ceiling: Duration::ZERO,
@@ -91,7 +91,7 @@ fn alone(world: &World, a: &Path) -> bool {
 }
 
 /// The slot lines written past the first `before`, each as `<step> <code>`.
-fn since(root: &Path, before: usize) -> Vec<String> {
+pub(super) fn since(root: &Path, before: usize) -> Vec<String> {
     let all: Vec<Value> = phases(root);
     all[before..]
         .iter()
