@@ -4500,6 +4500,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))": {
+   "sha256": "46a50d776a8b3f167eaab452f920ed5dd512513155be47ee0647060665c7e7e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T501 Approach (checklist part A)": {
+   "sha256": "ca7af191b3ab0961e498c4a2dee4ddd72f97e14abb53af84bc82ad79ad4c338f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)": {
+   "sha256": "cd96df08c73dc01e2674050b6b09146657c34ee1d987bc2a30b0c24d77b1207e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T502 Approach (checklist part A)": {
+   "sha256": "87232aa832eb0edebe955e07a0de2fb5ea239dffe49d80595675e430ee5c4462",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41249,6 +41273,187 @@
      "summary": "Three more guards (engine_freeze_hooks plan engine-edit, pair_hooks/state stamp_fresh, builder_stop_hooks ask_within) start the launcher by bash outside the shared asker; left, filed as T504, landing before T501, with T500 ordered before T504.",
      "class": "within",
      "why": "Not a defect in the constitution's sense (no wrong outcome: every verdict and message is right; the cost is a missed walk saving of up to 17.5 ms where an earlier call exited 0). It is filed as its own performance task, which FR-013 puts first in the queue, with the why, task id and order FR-009 asks for; nothing the GM asked is dropped or deferred behind non-performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))",
+    "### T501 Approach (checklist part A)",
+    "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)",
+    "### T502 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T490",
+     "summary": "T490's two blocks are the unfilled template (placeholder heading, empty table, placeholder checklist)",
+     "class": "within",
+     "why": "They decide nothing: no approach, no decision, no deferral. Nothing to rule; a later fill changes the blocks and owes review then."
+    },
+    {
+     "id": "T501-approach",
+     "summary": "one read-only verb `l7r-gate plan section` behind `make plan-section T= [F=] [CITED=1]`, reading through the crate's own task_sections over plan.md then plan-done.md, each parsed once, named by one bullet in builder-brief.md",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 words on token cost (request.md lines 431, 479) and T499's measured plan reads; it is the lever those words reopened."
+    },
+    {
+     "id": "T501-D1",
+     "summary": "an id only mentioned in another task's heading is not that task's section; fall through to the next file, else say 'no section of its own'",
+     "class": "within",
+     "why": "Makes the command return the task's own section, which is its purpose; without it the tool would answer wrongly."
+    },
+    {
+     "id": "T501-D2",
+     "summary": "output form: '==> T<n> (<file>)' headers, archive marker lines dropped, a shared bundle heading printed once, exit 0 with a line saying which tasks had no section",
+     "class": "within",
+     "why": "Presentation convention; settles nothing the request or spec decides."
+    },
+    {
+     "id": "T501-D3a",
+     "summary": "CITED=1 (one level of cited sections) exists and is off by default",
+     "class": "within",
+     "why": "An option, off by default on the measurement (4.6 to 18 times the plain bytes); keeps the default at the fewest bytes, which is the GM's token-cost purpose."
+    },
+    {
+     "id": "T501-D3b",
+     "summary": "Known limit left: in '449 T92, T93' the T93 is read as this feature's T93, so CITED=1 prints feature 451's T93 section labeled 'cited by T<m>' when T<m> cites 449's T93",
+     "class": "narrowing",
+     "why": "NOT LEGITIMATE. A defect by constitution XIV's own test, not a difference: the tool answers wrongly, printing a section the requested task does not cite under a label saying it does, and spending bytes in a task whose purpose is fewer bytes. It is not impossible to fix (the same block fixed the sibling form, the hard-wrapped '449\\n T92', red-first), not implied by the GM's words, and fixing it does not defeat the request. It is also outside D15/FR-009's form: absent from 'Found and left?' (which lists only T502 and T503), with no 'fixed here' and no 'Not fixed here / Filed as T<n> / lands before T<m>'. Clears by either: fix it in this task with a red-first test (a feature-number prefix carries across a comma- or 'and'-list of ids), or carry it as a Found-and-left item in D15's form.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T501-D4",
+     "summary": "a bare number is its T id as tasks.md writes it, no zero padding (5 is T5, not T05)",
+     "class": "within",
+     "why": "Input convention; matches ids as filed."
+    },
+    {
+     "id": "T501-D5",
+     "summary": "T499-D1 (declining this lever at about 2.7% of a 300k cap, an ESTIMATE) reopened",
+     "class": "within",
+     "why": "Reopened on the GM's own words, request.md line 479 ('That's just as important as task throughput ... the real limit on throughput is often tokens') and line 431 ('efficient use of tokens is a huge project goal'). The block's 'the GM filed T501 on them' is not shown in this bundle; D5 stands on the quoted words without it."
+    },
+    {
+     "id": "T501-T503",
+     "summary": "the day-long before-and-after over builders briefed with the command is T503's, not this task's",
+     "class": "narrowing",
+     "why": "LEGITIMATE. Physically impossible inside this task: the 'after' needs a day of builders briefed with the command after it lands. The before (T499's 3.68 MB, 30,377 median) is recorded and the after is filed as its own task.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T502-approach",
+     "summary": "one line in the builder-brief block (builder_brief.rs plan_read) after the rules-file line: read plan sections with `make plan-section T=<task(s)>`, never by grep, sed or a Read over plan.md or plan-done.md",
+     "class": "within",
+     "why": "Puts T501's command in front of every builder; found by T501's build half, fixed in the same tree (fix as we go). An instruction, not a guard, so no enforcement scope is added."
+    },
+    {
+     "id": "T502-D1",
+     "summary": "every kind of brief gets the line",
+     "class": "within",
+     "why": "A measurement builder also reads its task's section; one fixed line serves the purpose for all."
+    },
+    {
+     "id": "T502-D2",
+     "summary": "the line names no CITED=1",
+     "class": "within",
+     "why": "Follows T501-D3a's default; the rules file says when to take it."
+    },
+    {
+     "id": "T502-cap",
+     "summary": "the block's 2,000-character cap kept; longest real block 1,942 with the line (58 characters of margin), a further line will need one shortened",
+     "class": "within",
+     "why": "Keeps an existing convention; the margin note is a forecast, not a defect left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))",
+    "### T501 Approach (checklist part A)",
+    "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)",
+    "### T502 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490 (both blocks)",
+     "summary": "An unfilled template: every field a placeholder; it decides nothing.",
+     "class": "within",
+     "why": "No decision is made, so nothing narrows the request or spec. Whether a placeholder may be decided is make decide's and the template lint's job, not fidelity's."
+    },
+    {
+     "id": "T501 approach",
+     "summary": "A new read-only verb l7r-gate plan section behind make plan-section, reading through the crate's own task_sections (plan.md first, plan-done.md only for a task plan.md lacks), named in builder-brief.md.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 question on builders re-reading plan text and his words putting token cost beside throughput (request.md lines 473-479); FR-013 counts it as performance work."
+    },
+    {
+     "id": "T501-D1",
+     "summary": "A section counts only where its first heading's leading_tasks holds the id; else the next file; else one line saying no section of its own.",
+     "class": "within",
+     "why": "A correctness choice so an archived task does not print another task's section; it narrows nothing asked."
+    },
+    {
+     "id": "T501-D2",
+     "summary": "Output form: ==> T<n> (<file>) headers, cited-by labels, archive lines dropped, bundle heading once, exit 0 either way.",
+     "class": "within",
+     "why": "Convention of output; no requirement settles it and none is narrowed."
+    },
+    {
+     "id": "T501-D3",
+     "summary": "CITED=1 off by default; one level of cited sections, other features' ids skipped including across a hard wrap and across a list of ids after another feature's number.",
+     "class": "within",
+     "why": "Default off follows from the measured 4.6x to 18x bytes, which would defeat the token purpose. Round 1's finding (T93 in '449 T92, T93' misread as this feature's, a wrong cited-by label) is now fixed here with a red-first test (6 passed 1 failed on the build half's code, 7 of 7 after), so no known defect is carried."
+    },
+    {
+     "id": "T501-D4",
+     "summary": "A bare number is its id, no zero padding.",
+     "class": "within",
+     "why": "Convention matching tasks.md's ids; nothing narrowed."
+    },
+    {
+     "id": "T501-D5",
+     "summary": "T499-D1 (declining this lever) reopened on the GM's token-cost words.",
+     "class": "within",
+     "why": "The reopening rests on the GM's own words, verbatim in request.md line 479. Round 1's unsupported clause 'and the GM filed T501 on them' is removed; what remains is the request's own text."
+    },
+    {
+     "id": "T501 day-long before/after to T503",
+     "summary": "The task line's before-and-after measurement over a day of builders is filed as T503; this task measures the bytes printed against T499's builder rows.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside this task: the after needs a day of builders briefed with the command, which exists only after this lands. The measurement is moved, not dropped (T503), and the before is recorded (T499's 3.68 MB, 30,377-byte median). It is a measurement, not a defect, so it is not a defect carried past the step."
+    },
+    {
+     "id": "T502 approach",
+     "summary": "One line in the builder brief's opening block naming make plan-section, never grep/sed/Read over plan.md or plan-done.md.",
+     "class": "within",
+     "why": "Puts T501's command where every builder reads it; serves the same token-cost purpose. Fixed here as a found item of T501."
+    },
+    {
+     "id": "T502-D1",
+     "summary": "Every kind of brief gets the line.",
+     "class": "within",
+     "why": "Every kind reads its task's plan section; widening to all kinds narrows nothing."
+    },
+    {
+     "id": "T502-D2",
+     "summary": "The line names no CITED=1; the rules file's bullet says when.",
+     "class": "within",
+     "why": "Follows T501-D3's default-off and keeps the block under its cap."
+    },
+    {
+     "id": "T502 cap",
+     "summary": "The block stays under the 2,000-character convention: longest real block 1,942 with the line, 58 margin, measured 2026-11-27.",
+     "class": "within",
+     "why": "Holds an existing convention; nothing narrowed."
     }
    ]
   }

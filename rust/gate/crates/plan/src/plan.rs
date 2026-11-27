@@ -20,6 +20,7 @@ pub use merge::merge_files;
 mod record;
 pub use record::{feature_task, task_ids, Accepted};
 mod sections;
+mod show;
 mod status;
 mod task;
 pub mod template;
@@ -558,6 +559,13 @@ pub fn section_wording_only(section: &str) -> bool {
     wording_only(section)
 }
 
+/// The verbs `answer` takes.
+pub(super) const USAGE: &str = "usage: l7r-gate plan owed <dir> | push [range] | merge-record <base> <ours> <theirs> | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | section <feature> <task[,task]> [--cited] | arbiter-accept | approach | door | engine-edit\n";
+
+#[expect(
+    clippy::too_many_lines,
+    reason = "one arm a verb, each delegating; it stood at the limit before 451 T501 added `section`"
+)]
 fn answer(
     words: &[String],
     root: &Path,
@@ -575,30 +583,62 @@ fn answer(
         ("arbiter-accept", 3) => match dir_of(&words[1], root, "arbiter-accept") {
             Err(r) => r,
             Ok(dir) => match record::arbiter_accept(&dir, &words[2], None) {
-                Ok(named) => said(format!("arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\n", named.blocks.len(), dir.file_name().unwrap_or_default().to_string_lossy(), words[2])),
+                Ok(named) => said(format!(
+                    "arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\n",
+                    named.blocks.len(),
+                    dir.file_name().unwrap_or_default().to_string_lossy(),
+                    words[2]
+                )),
                 Err(stop) => stop_reply("arbiter-accept", stop),
             },
         },
         ("decided", 4) => {
             let why = task::task_refusal(Path::new(&words[1]), &words[2], &words[3]);
-            reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
+            reply(
+                if why.is_empty() {
+                    why.clone()
+                } else {
+                    format!("{why}\n")
+                },
+                String::new(),
+                i32::from(!why.is_empty()),
+            )
         }
         ("decided", 1 | 2) => {
             let why = task::decision_refusal(Path::new(words.get(1).map_or(".", String::as_str)));
-            reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
+            reply(
+                if why.is_empty() {
+                    why.clone()
+                } else {
+                    format!("{why}\n")
+                },
+                String::new(),
+                i32::from(!why.is_empty()),
+            )
         }
         ("decide" | "section-sha", 3) => decide(words, root, out_root, claims, env),
         ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
+        ("section", 3 | 4) => show::cli(words, root),
         ("slim" | "archive" | "delta", 2) => {
             let Some(dir) = resolve(&words[1], root).filter(|d| d.join("plan.md").is_file()) else {
-                return fail(format!("{verb}: no single specs/{}* directory with a plan.md\n", words[1]), 2);
+                return fail(
+                    format!(
+                        "{verb}: no single specs/{}* directory with a plan.md\n",
+                        words[1]
+                    ),
+                    2,
+                );
             };
             match verb {
                 "slim" => slim(&dir),
                 "archive" => {
                     let ids = task::archive(&dir, None);
-                    let list = if ids.is_empty() { "none finished".to_owned() } else { ids.join(", ") };
+                    let list = if ids.is_empty() {
+                        "none finished".to_owned()
+                    } else {
+                        ids.join(", ")
+                    };
                     let name = dir.file_name().unwrap_or_default().to_string_lossy();
                     // ...AND THE TICKED TASKS (feature 449 T142): `make plan-archive` is the one-time archive of a feature's tasks
                     // ticked before the tick moved them, the tick's own step run by hand
@@ -606,14 +646,23 @@ fn answer(
                         Ok(moved) => moved,
                         Err(why) => return fail(format!("plan-archive: {why}\n"), 1),
                     };
-                    let tasks = if moved.is_empty() { "none ticked".to_owned() } else { moved.join(", ") };
+                    let tasks = if moved.is_empty() {
+                        "none ticked".to_owned()
+                    } else {
+                        moved.join(", ")
+                    };
                     said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {tasks}\n", ids.len(), moved.len()))
                 }
                 _ => plan_delta(&dir, out_root, claims, env),
             }
         }
         // GIT'S MERGE DRIVER FOR THE RECORD (451 T256): `%O %A %B`, the merge written to `%A`
-        ("merge-record", 4) => merge::merge_files(Path::new(&words[1]), Path::new(&words[2]), Path::new(&words[3]), None),
+        ("merge-record", 4) => merge::merge_files(
+            Path::new(&words[1]),
+            Path::new(&words[2]),
+            Path::new(&words[3]),
+            None,
+        ),
         ("owed", 2) => match owed(Path::new(&words[1])) {
             Some((rule, reason)) => reply(format!("{rule}\t{reason}\n"), String::new(), 1),
             None => said(""),
@@ -621,11 +670,14 @@ fn answer(
         ("push", 1 | 2) => {
             let range = words.get(1).map_or("origin/main...HEAD", String::as_str);
             let found = task::push_owed(root, range, "HEAD");
-            let lines: Vec<String> = found.iter().map(|(f, rule, reason)| format!("{f}\t{rule}\t{reason}\n")).collect();
+            let lines: Vec<String> = found
+                .iter()
+                .map(|(f, rule, reason)| format!("{f}\t{rule}\t{reason}\n"))
+                .collect();
             let lines = lines.concat();
             reply(lines, String::new(), i32::from(!found.is_empty()))
         }
-        _ => fail("usage: l7r-gate plan owed <dir> | push [range] | merge-record <base> <ours> <theirs> | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | arbiter-accept | approach | door | engine-edit\n", 2),
+        _ => fail(USAGE, 2),
     }
 }
 

@@ -147,6 +147,12 @@ fn sizing(a: &Ask, key: &str) -> Option<String> {
     })
 }
 
+/// The block's line naming the plan read (451 T502): `make plan-section` (T501) prints a task's sections, where builders read
+/// 3.68 MB of plan text by grep and sed in two days (T499), and a builder reads the rules file's line on it only if it opens that file.
+fn plan_read(task: &str) -> String {
+    format!("Read your plan sections with `make plan-section T={task}`, never by grep, sed or a Read over plan.md or plan-done.md.\n")
+}
+
 /// The block for `a`, in `tree`, of the feature directory named `name`, its handoff at `handoff`.
 fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String {
     // a bundle's scratch files carry its first task's prefix
@@ -187,12 +193,13 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
         ),
     };
     let mut out = format!(
-        "{}\nBlocks: {}\nTree (the pool's, held for {}): {} - `cd` into it in every command, work ONLY there, make or remove no worktree. `export SPECIFY_FEATURE={name} SPECIFY_FEATURE_DIRECTORY=specs/{name}`\nRead scripts/container/builder-brief.md first: the rules behind this block. Prefix scratch files `{}-`.\n",
+        "{}\nBlocks: {}\nTree (the pool's, held for {}): {} - `cd` into it in every command, work ONLY there, make or remove no worktree. `export SPECIFY_FEATURE={name} SPECIFY_FEATURE_DIRECTORY=specs/{name}`\nRead scripts/container/builder-brief.md first: the rules behind this block. Prefix scratch files `{}-`.\n{}",
         marker.line(),
         if a.blocks.is_empty() { "none" } else { a.blocks },
         a.task,
         tree.display(),
-        first.to_lowercase()
+        first.to_lowercase(),
+        plan_read(a.task)
     );
     if a.jobs > 1 {
         let _ = writeln!(out, "ORDER: the {} jobs in the order this brief names; if they will not fit, finish one whole, stop, and report the rest as not started.", a.jobs);

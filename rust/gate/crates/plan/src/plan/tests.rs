@@ -152,6 +152,7 @@ mod bundle;
 mod mention;
 mod parse;
 mod shared;
+mod show;
 mod stub;
 mod withdrawn;
 

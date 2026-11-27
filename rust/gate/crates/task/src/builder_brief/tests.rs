@@ -169,6 +169,8 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         "\nBlocks: none\n".to_owned(),
         format!("Tree (the pool's, held for T01): {t} - `cd` into it in every command, work ONLY there, make or remove no worktree. `export SPECIFY_FEATURE=9001-x SPECIFY_FEATURE_DIRECTORY=specs/9001-x`\n"),
         "Read scripts/container/builder-brief.md first: the rules behind this block. Prefix scratch files `t01-`.\n".to_owned(),
+        // 451 T502: the block names the plan read (T501), so a builder takes it without opening the rules file
+        "Read your plan sections with `make plan-section T=T01`, never by grep, sed or a Read over plan.md or plan-done.md.\n".to_owned(),
         "STOP POINT (fix): red-first - the test failing on the old code, its counts reported - then the plan section, `make decide`, the plan review (`make plan-delta F=9001`) and `make claims-triage`; you dispatch no claims-triage or impl-drift agent.\n".to_owned(),
         "CHECKS, the first tier only: `make builder-checks CRATE=\"<the crates you changed>\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n".to_owned(),
         "Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n".to_owned(),

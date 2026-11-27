@@ -122,6 +122,7 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   their CLEAR only to write the ids in (T251, T265) - each costing a filing by the session, an edit of the builder's section and
   another round (`dev/measurements/2026-11-26/plan-review-rounds/t308-results.md`). Do not write "do not file
   tasks" into a brief.
+- A builder reads its plan sections by `make plan-section T=<task[,task]>` (plan.md, else plan-done.md; a section it names, by `T=<that id>` when needed), never by grep, sed or a Read over plan.md or plan-done.md: those carried 3.68 MB of builders' tool results in two days, and `CITED=1` (every section named, one level) printed 4.6 to 18 times the plain bytes on 2026-11-27, so take it only when most of them are needed (451 T499, T501).
 - A builder's tree comes from `make builder-tree T=<task> [F=<feature>]` and nothing else: it prints the tree's path for the brief, `make land` releases it, and a hand `git worktree add` is refused (451 T285).
 - A warm handout's pre-warm no longer cuts a build (451 T336): it finishes the crate in flight and yields between crates, so hand trees out with it on (no `L7R_PREWARM=0`); a builder's first run can wait for the rest of one crate (median 2.0 s, longest measured 82.7 s), and a link failure after a killed build (`undefined hidden symbol`) is healed once by `make rust-test` itself.
 

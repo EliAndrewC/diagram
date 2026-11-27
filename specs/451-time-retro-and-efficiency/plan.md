@@ -6919,31 +6919,54 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T494 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T498 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T501 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md))
+
+- **Approach**: one new verb, `l7r-gate plan section <feature> <task[,task]> [--cited]` (`rust/gate/crates/plan/src/plan/show.rs`, its arm and `USAGE` in `plan.rs`), behind `make plan-section T=<task[,task]> [F=] [CITED=1]` (Makefile, F defaulting to `$(SPECIFY_FEATURE)`; `docs/make-targets.html` regenerated). It reads through the crate's own `sections::task_sections`, with no copy of the reader: plan.md first, plan-done.md only for a task plan.md has no section of, each file parsed at most once (pinned by `parses()`). One bullet in `scripts/container/builder-brief.md` names it; T502 puts it in the block every brief opens with. Built by the build half, its handoff `T501-build.md`; measured 2026-11-27.
+  - **T501-D1, an id only mentioned is no section** (deliberate: the reader's own rule would mislead here). `task_sections` hands a task with no heading of its own the first heading that mentions it, which is another task's section; so a section counts only where its first heading's `leading_tasks` holds the id, else the next file is tried, else one line says `T<n>: no section of its own in plan.md or plan-done.md`. Without it an archived task would print whichever live task's heading names it. Chosen by the build half.
+  - **T501-D2, the output form** (convention, chosen by the build half). Each task's text under `==> T<n> (<file>)`; a cited one `(<file>, cited by T<m>)`, the first requested task naming it; the archive's `<!-- plan-archive: ... -->` lines dropped; a bundle's shared heading printed once, a task whose blocks were all printed above told so in one line. Exit 0 whether or not a section is found: the line says which.
+  - **T501-D3, `CITED=1` stays off by default** (the measurement's verdict). It adds every section the requested tasks' own sections name, one level, skipping the requested tasks, repeats and an id preceded by another feature's number (also across a hard wrap, "449" ending a line); "451 T08" is kept. It printed 4.6 to 18 times the plain bytes and more than any one builder's whole plan read (the table below), so it is an option for a builder that needs most of them, and the brief's line says so. Another feature's number carries across a list of its ids ("449 T92, T93 and T94": all three 449's), a list's ids parted only by commas, dashes, spaces, line breaks, "and" or "or"; the build half had left T93 read as this feature's, a wrong `cited by` label, which the plan review's round 1 ruled a defect and which is fixed here. Chosen by the build half, the list rule by the closing half.
+  - **T501-D4, a bare number is its id** (convention, chosen by the build half: `92` is `T92`, with no zero padding, so `5` is not `T05`; ids are matched as tasks.md writes them).
+  - **T501-D5, T499-D1 reopened.** T499 declined this lever, about 2.7% of a 300k cap on the mean (an ESTIMATE from the bytes measured 2026-11-27, `plan-reads.py`), the GM's words above put token cost beside throughput, which is what reopens it.
+  - **Measured: bytes printed against builders' plan reads** (2026-11-27, `make -s plan-section ... | wc -c`, against T499's per-builder rows in `dev/measurements/2026-11-27/plan-reads/`):
+
+    | T= | plain | CITED=1 (cited sections) | T499's builder rows for that task |
+    |---|---|---|---|
+    | T487 | 4,819 | 86,821 (11) | - |
+    | T487,T486 | 7,616 | 101,343 (13) | 14,633 |
+    | T313 | 44,410 | 342,150 (33; three with no section) | 7; 83,600; 38,615; 7,253 |
+    | T443 | 15,900 | 73,099 (6) | 25,619; 38,392 |
+    | T465 | 8,068 | 52,793 (7) | 32,293; 25,133 |
+
+    Plain output is under 6 of the 9 builder rows; the three over it are T313's, whose section grew after its builders read it (four part Bs, 09:25Z to 09:53Z). The saving on the matching rows: 7.0 KB (T487,T486), 9.7 and 22.5 KB (T443), 24.2 and 17.1 KB (T465), 39.2 KB on T313's largest, each a difference of the measured bytes of 2026-11-27. Wall time 0.05 to 0.08 s, 16 MB RSS, measured 2026-11-27 (`make -s plan-section T=T487 CITED=1`, both files parsed).
+  - **The day-long before and after is T503's**, which its line asks for: it needs a day of builders who were briefed with the command, so it cannot run in this task. T499's 3.68 MB and 30,377-byte median are its before, measured 2026-11-27 (`plan-reads.py`).
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan`, the handoff's counts): `plan::tests::show`'s first 5 tests 0 passed, 5 failed before the verb (code 2, the usage), 5 passed after; the sixth (`cited_over_several_tasks_prints_each_once_under_its_first_naming_task`, the wrapped "449\n  T92") failed with the single-space check put back and passed after; the closing half's `another_feature_s_number_carries_across_a_list_of_its_ids`, 6 passed and 1 failed on the build half's code (T93, T94 and T95 read as this feature's), 7 of 7 after. `make builder-checks CRATE="rust/gate/crates/plan rust/gate/crates/task"` green, 2026-11-27.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `make plan-section`, a task's own sections printed from plan.md or plan-done.md | n/a: gate tooling, no map | n/a: tooling | none | none |
 
 ### T501 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder takes exactly its task's plan sections with one command, and the plan bytes in its context fall to those sections.
+2. **The constraints.** T501's line (read through the plan crate's `task_sections`, plan.md and plan-done.md, named in `scripts/container/builder-brief.md`, measured before and after); 451 FR-013; the GM's words on token cost (request.md, 2026-11-27).
+3. **Where each comes from.** G: the GM 2026-11-27 (request.md). O: T499's record. R: `rust/gate/crates/plan/src/plan/sections.rs`.
+4. **Do they describe the world here?** Yes: the five tasks above were printed from today's plan files and set against the builders' own rows.
+5. **The order.** After T499. Before T502 (the block names it) and T503 (the day after).
+6. **The exits.** Green: the command prints each task's section and the tests pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make -s plan-section T=T487` prints 4,819 bytes, its section alone (2026-11-27); the day's figure is T503's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: a new read-only command.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The block `make builder-brief` prints did not name the command, so a builder read the rules file's line only if it opened that file: fixed here, as T502 in this tree, its own section below, landing with this task.
+- The day's before and after over builders who used the command: not a defect (a measurement the task line asks for, which needs a day of builders briefed with the command after this lands), so it is a task of its own, T503.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: it cuts the plan bytes a builder carries as cached input on every later turn - token cost, the GM 2026-11-27, "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md); 7.0 to 39.2 KB a builder on the matching rows, measured 2026-11-27.
+
 
 ### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)
 
@@ -6991,6 +7014,64 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T504 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)
+
+- **Approach**: one line in the block (`rust/gate/crates/task/src/builder_brief.rs`, `plan_read`), after the rules file's line, for every kind: ``Read your plan sections with `make plan-section T=<task(s)>`, never by grep, sed or a Read over plan.md or plan-done.md.``, the brief's own task or bundle filled in. Measured 2026-11-27.
+  - **T502-D1, every kind gets the line** (chosen by the closing half): a measurement writes no plan section but reads its task's; one fixed line is simpler than a kind's branch, and no test then needs a branch's arm.
+  - **T502-D2, the line names no `CITED=1`** (chosen by the closing half): T501-D3 keeps it off by default, and the rules file's bullet says when to take it; the block stays short.
+  - **Red first** (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_brief::tests"`): the line added to `each_kind_s_block_opens_with_its_marker_and_stays_short`'s expected words, 5 passed and 1 failed (that test) on the old block; 6 of 6 after. `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/plan"`: task 147 passed, lint and format clean.
+  - **The cap** (2,000 characters, a CONVENTION: `agent-prefix-hooks`' shared block, pinned by the same test on the fixture's short paths): the longest real block - a bundle `T501,T502`, `JOBS=3`, `LOAD=1`, `BLOCKS=`, three crates, a build half with this clone's tree and handoff paths - is 1,942 characters with the line and about 1,823 without it, measured 2026-11-27 (`t501-len.py` in the scratchpad, a replica of the block's format). The margin is 58 characters, measured 2026-11-27 (the same replica), and a further line in the block will need one shortened.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the builder brief's block names `make plan-section` | n/a: gate tooling, no map | n/a: tooling | none | none |
+
+### T502 Approach (checklist part A)
+
+1. **The goal, in the world.** Every builder's brief tells it, in the block it opens with, to read its plan sections by `make plan-section`.
+2. **The constraints.** T502's line; the block under 2,000 characters (`agent-prefix-hooks`; the test's cap); 451 FR-013.
+3. **Where each comes from.** O: T501's build half's handoff. R: `builder_brief.rs`'s module doc (the cap), `builder_brief/tests.rs`.
+4. **Do they describe the world here?** Yes: the longest real block is 1,942 characters, measured 2026-11-27 (`t501-len.py`).
+5. **The order.** After T501 (the command it names), in the same tree.
+6. **The exits.** Green: the test holds the line and the cap. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, with T501.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/task ONLY="builder_brief::tests"` 6 of 6, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a: the line fits under the cap as it stands.
+12. **Before any fix.** Nothing a map shows: one line of a brief.
+
+**Found and left?** none
+
+**Performance work?** yes: it puts T501's command in front of every builder, so the plan bytes it saves (7.0 to 39.2 KB a builder on the matching rows, measured 2026-11-27) reach builders who never open the rules file - token cost, the GM 2026-11-27, "That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens" (request.md).
+
+
+### T503 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T503 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

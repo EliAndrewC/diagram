@@ -584,6 +584,10 @@ plan-delta:     ## [project] the review a plan owes since amendment 11: only its
 	@if [ -z "$(F)" ]; then printf 'make plan-delta: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan delta "$(F)"
 
+plan-section:   ## [project] print exactly a task's plan sections (its every own heading, a bundle heading naming it) from plan.md, or plan-done.md for an archived task; CITED=1 adds the sections they name by task id, one level - what a builder reads in place of grep or sed over the plan (451 T501)   T=<task[,task]> [F=<feature>, default SPECIFY_FEATURE] [CITED=1]
+	@if [ -z "$(or $(F),$(SPECIFY_FEATURE))" ] || [ -z "$(T)" ]; then printf 'make plan-section: T=<task[,task]> and F=<feature> (or SPECIFY_FEATURE) are required\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan section "$(or $(F),$(SPECIFY_FEATURE))" "$(T)" $(if $(CITED),--cited,)
+
 plan-archive:   ## [project] move a plan's finished sections (every task ticked, CLEAR) into plan-done.md, which no review reads (feature 375 FR-044), and the ticked tasks into tasks-done.md (449 T142) - the tick does both; this runs it by hand   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make plan-archive: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan archive "$(F)"

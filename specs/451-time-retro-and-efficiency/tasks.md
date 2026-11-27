@@ -334,3 +334,7 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T504 three more guards start the gate launcher by bash but outside tool::ask_gate's shared walk (451 T494, T500): engine_freeze_hooks.rs (plan engine-edit, on every Edit/Write in a review's tree, the same hook process as gate_write's preflight and record_edit's edit-route), pair_hooks/state.rs stamp_fresh (stamp --fresh diagram) and builder_stop_hooks.rs (ask_within with bash, a Stop's calls: ask_gate_within fits) - move each onto ask_gate/ask_gate_within so a later call rides an earlier fresh call's proof, 17.5 ms a walk in T388's sandbox; its tests' stubs already run by bash
       research: rendering
+- [ ] T502 make builder-brief's printed block (rust/gate/crates/task/src/builder_brief.rs) names no plan read, so a builder reads scripts/container/builder-brief.md's new plan-section line only if it opens that file: add 'read your sections with make plan-section T=<task>' to the block, under its 2,000-character cap (451 T501's build half)
+      research: rendering
+- [ ] T503 measure the plan bytes builders read after make plan-section (451 T501) over a day's builders, against T499's 3.68 MB / median 30,377 bytes a builder (dev/measurements/2026-11-27/plan-reads/plan-reads.py rerun on transcripts dated after T501 lands; plan-section's own output counted as plan bytes)
+      research: rendering
