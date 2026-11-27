@@ -34,6 +34,26 @@ lines() { # <clone> <log> <first> <last>: made-up event lines, 40 bytes each
   local i; for i in $(seq "$3" "$4"); do printf '{"t": %04d, "ev": "made-up-line-%04d"}\n' "$i" "$i" >> "$1/.git/l7r-events/$2"; done
 }
 run() { ( cd "$1" && shift && bash "$SYNC" "$@" ) 2>&1; }
+# A BACKGROUND RUN IS WAITED FOR BY ITS CONDITION, NEVER BY A COUNT OF SLEEPS (feature 451 T314): a detached push or a fresh clone's
+# restore ends when the machine lets it, and a wait of 100 short sleeps (about 11 s) ran out under a landing gate's load (2026-11-26
+# 18:27 UTC, the suite 94.7 s where it takes 4 to 6 s alone), silently, so the case after it went red on good work. The wait ends the
+# moment the condition holds; WAIT seconds is only how long a run that never ends is given, a GUESS knob (STATE_SYNC_WAIT): 120 s is
+# about 11 times the bound that ran out and 300 times the slowest background run alone (0.4 s). Past it the wait itself is a FAIL
+# that says what it waited for, so a wait that ran out never ends green.
+WAIT=${STATE_SYNC_WAIT:-120}
+await() { # <what it waits for> <condition...>: 0 once the condition holds; past WAIT seconds a FAIL naming what never came, and 1
+  local what=$1 end=$((SECONDS + WAIT)); shift
+  until "$@"; do
+    [ "$SECONDS" -lt "$end" ] || { no "waited $WAIT s for $what, which never came"; return 1; }
+    sleep 0.1
+  done
+}
+# THE LOCK IS PROBED LAST, after the sign that the run has taken and used it: the probe holds the lock for an instant, and a detached
+# push that met it there would be skipped by its own `flock -n`, logging nothing - the wait would then never end (T314).
+idle() { flock -n "$1/.git/tooling-state.lock" true 2>/dev/null; }  # <clone>: no run holds its lock
+failed_twice() { [ "$(grep -c '"outcome": "failed' "$A/.git/tooling-state.log")" -ge 2 ] && idle "$A"; }
+carried() { seen "$(rgit show 'alpha:record-checks/record-format%3A0007.json' 2>&1)" '"fa"'; }
+restored() { [ -f "$F/.git/record-checks/source-reader%3A0004.json" ] && idle "$F"; }
 
 A="$T/a/.clones/alpha"; clone "$A"
 answer "$A" "quote-check%3A0001" 2026-11-20T00:00:00Z f1 PASS
@@ -136,10 +156,10 @@ OUT=$(STATE_REMOTE="$T/gone.git" run "$A" push); RC=$?
 seen "$(tail -1 "$A/.git/tooling-state.log")" '"outcome": "failed' && ok "the failure is logged" || no "the failure is logged"
 OUT=$(STATE_REMOTE="$T/gone.git" run "$A" push --detach); RC=$?
 [ "$RC" = 0 ] && seen "$OUT" 'the last push FAILED' && seen "$OUT" 'in the background' && ok "a detached push returns at once and says the last one failed" || no "a detached push says the last failure" "rc=$RC $OUT"
-for _ in $(seq 100); do flock -n "$A/.git/tooling-state.lock" true 2>/dev/null && [ "$(grep -c '"outcome": "failed' "$A/.git/tooling-state.log")" -ge 2 ] && break; sleep 0.1; done
+await "the failed detached push to log its failure and free the lock" failed_twice  # or the next push is skipped by the lock
 OUT=$(run "$A" push --detach)
-for _ in $(seq 100); do seen "$(rgit show 'alpha:record-checks/record-format%3A0007.json' 2>&1)" '"fa"' && break; sleep 0.1; done
-seen "$(rgit show 'alpha:record-checks/record-format%3A0007.json' 2>&1)" '"fa"' && ok "the next detached push carries what the failed one could not" || no "the next detached push carries it" "$OUT"
+await "the next detached push to put record-format%3A0007 on the branch alpha" carried
+carried && ok "the next detached push carries what the failed one could not" || no "the next detached push carries it" "$OUT"
 OUT=$(STATE_REMOTE="$T/gone.git" run "$D" restore); RC=$?
 [ "$RC" = 1 ] && seen "$OUT" 'state-restore: FAILED' && ok "a restore that cannot reach its remote says so, exit 1" || no "a failed restore says so" "rc=$RC $OUT"
 
@@ -153,7 +173,7 @@ OUT=$(unset STATE_REMOTE; run "$E" restore --if-fresh); RC=$?
 echo "13. the session-clone setup: a fresh clone restores once, in the background"
 F="$T/f/.clones/alpha"; clone "$F"
 OUT=$(run "$F" restore --if-fresh); RC=$?
-for _ in $(seq 100); do [ -f "$F/.git/record-checks/source-reader%3A0004.json" ] && flock -n "$F/.git/tooling-state.lock" true 2>/dev/null && break; sleep 0.1; done
+await "the background restore to bring source-reader%3A0004 and free the lock" restored
 [ "$RC" = 0 ] && [ -f "$F/.git/record-checks/source-reader%3A0004.json" ] && ok "a clone with no mirror restores its branch" || no "a clone with no mirror restores" "rc=$RC $OUT"
 N=$(grep -c . "$F/.git/tooling-state.log")
 OUT=$(run "$F" restore --if-fresh)
@@ -168,6 +188,13 @@ MK=$(cat "$REPO/Makefile")
 seen "$(grep -A8 '^land:  ' <<< "$MK")" 'state-sync.sh" push --detach' && seen "$(grep -A3 '^land-tooling:' <<< "$MK")" 'state-sync.sh" push --detach' && ok "make land and make land-tooling push the state after their own push" || no "make land and make land-tooling push the state"
 seen "$(grep -A3 '^state-restore:' <<< "$MK")" 'state-sync.sh" restore' && ok "make state-restore restores" || no "make state-restore restores"
 seen "$(cat "$REPO/scripts/sync-with-main.sh")" 'state-sync.sh" restore --if-fresh' && ok "sync-in restores a fresh clone" || no "sync-in restores a fresh clone"
+
+echo "16. a wait on a background run ends on its condition, and one that never comes says what it waited for"
+echo x > "$T/late"; ( sleep 0.3; rm "$T/late" ) &
+OUT=$(await "the file to go" test ! -e "$T/late"); RC=$?
+[ "$RC" = 0 ] && [ -z "$OUT" ] && [ ! -e "$T/late" ] && ok "a condition that comes late is waited for, nothing said" || no "a late condition is waited for" "rc=$RC $OUT"
+OUT=$(WAIT=0 await "a file nobody writes" test -e "$T/never"); RC=$?
+[ "$RC" = 1 ] && seen "$OUT" 'FAIL    waited 0 s for a file nobody writes, which never came' && ok "a condition that never comes ends the wait as a FAIL, saying what it waited for" || no "a wait that runs out says what it waited for" "rc=$RC $OUT"
 
 echo
 echo "state-sync: $PASS passed, $FAIL failed"

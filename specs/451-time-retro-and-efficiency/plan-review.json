@@ -2702,7 +2702,7 @@
    "declared": "spec-fidelity"
   },
   "### T314 Approach (checklist part A)": {
-   "sha256": "c95c23b05aba3f8b6ac120144eaac356a8185fe4d0c8a5cd4fa93b23a2e99c5f",
+   "sha256": "4543522facd30e43e87b05485b1a7667ea39cab9ce61387097754381aaa7a9e0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3543,6 +3543,12 @@
   },
   "### T308 part 2 Approach (checklist part A)": {
    "sha256": "4d3603f6aca03e25f7997d4f918048eaa0aba1ef90ede5c260d802eb18450ff4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T314 (the batch gate of 2026-11-26 18:27 UTC: `tests/hooks/test-state-sync.sh` red beside three builders, 41 of 41 alone a minute later)": {
+   "sha256": "d57b29c16c246728f7d8618d3c735f8d6fdd5efb82e9edabd7d3a89e5ca89f32",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32630,6 +32636,64 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T314 (the batch gate of 2026-11-26 18:27 UTC: `tests/hooks/test-state-sync.sh` red beside three builders, 41 of 41 alone a minute later)",
+    "### T314 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 condition waits to a 120 s GUESS deadline",
+     "summary": "The suite's three silent 100 x sleep 0.1 waits (case 11 twice, case 13) become await-on-condition, ending the moment the condition holds, to a deadline of 120 s (STATE_SYNC_WAIT, a GUESS knob).",
+     "class": "within",
+     "why": "Fixes a check that refuses good work (a defect under constitution XIV; the GM's 2026-11-26 words on T104 prioritize fixing tests that fail under load). The departure from the brief's 'a few seconds' is from the coordinating session's brief, not the GM's words, and is argued from measurement: the bounds that failed were already about 11 s. A green run pays nothing; a run that never ends still reddens. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D2 a wait that runs out is its own FAIL, pinned by new case 16",
+     "summary": "await returns 1 with a FAIL line naming what never came; case 16 pins both directions (late condition waited for silently; WAIT=0 never-condition fails with its words). Pass count 41 to 43.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: delete the requested fix and case 16 has nothing to check. Previously a wait that ran out went on silently; making it say what it waited for serves the suite's job."
+    },
+    {
+     "id": "D3 the lock is probed after the run's own sign",
+     "summary": "failed_twice reads the log first and probes the lock (flock -n) only after, since the probe could make the detached push skip itself and log nothing.",
+     "class": "within",
+     "why": "A fourth race found while fixing the suite, shown red on the old order and green on the new with a probe-holding copy; fixed in the task that found it (fix as we go)."
+    },
+    {
+     "id": "D4 scripts/state-sync.sh not changed",
+     "summary": "The tool was read for a race of its own and none was found; a skipped detached push on a held lock is its designed behavior.",
+     "class": "within",
+     "why": "No defect found in the tool, so nothing owed there; T258's behavior (a push refuses no landing) is kept as the GM's tooling-state request has it."
+    },
+    {
+     "id": "D5 reproduced by a delay in scratch copies, not under load",
+     "summary": "The task line's 'under load by T99's method' was overruled by the brief (load loops froze the host); each race is made certain by a copy of state-sync.sh whose nth background launch sleeps 30 s holding the lock: old suite 9 of 9 red on the predicted lines, fixed suite 9 of 9 green; 30 of 30 real runs green.",
+     "class": "within",
+     "why": "A verification method set by the coordinating session's task line and brief, not by the GM's words; the substitute is stronger (deterministic) and still shows the fix works. Nothing of what the GM asked is narrowed."
+    },
+    {
+     "id": "D6 found and left: hooks-test keeps no output of a failed suite (T414, lands before T302)",
+     "summary": "The runner kept only an event line of the red run, so the failing case could not be read afterwards; left to T414 as the hooks-test runner's mechanism, ordered before T302.",
+     "class": "within",
+     "why": "Outside T314's scope (one suite's flaky waits); not a narrowing of what T314 was asked to do. Recorded per FR-009: why not fixed here, its filed task id, and its order."
+    },
+    {
+     "id": "D7 exits: first tier only, full gate at landing",
+     "summary": "Green is the suite itself 43 of 43 in the first tier; no crate is changed so builder-checks has nothing to run; the full gate is the landing's.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-26 two-tier ruling (T308): full rigor deferred to the session clone's landing gate."
+    },
+    {
+     "id": "D8 not performance work",
+     "summary": "Classed as a flaky-check defect, nothing made faster.",
+     "class": "within",
+     "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -50596,6 +50660,62 @@
      "summary": "The task is classed as performance work ([perf], FR-013: it makes the builders' loop faster by saving a plan review round), and the engine items of the performance checklist do not apply",
      "class": "within",
      "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work. The engine items cover engine speed, which this tooling task does not touch, so leaving them out excludes nothing the request asks of this task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T314": {
+   "section_sha256": "5838fe3706290176a47c3579f0e81e0321d79fcbaa491ce368ce6e47d8c02e43",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 condition waits to a 120 s GUESS deadline",
+     "summary": "The suite's three silent 100 x sleep 0.1 waits (case 11 twice, case 13) become await-on-condition, ending the moment the condition holds, to a deadline of 120 s (STATE_SYNC_WAIT, a GUESS knob).",
+     "class": "within",
+     "why": "Fixes a check that refuses good work (a defect under constitution XIV; the GM's 2026-11-26 words on T104 prioritize fixing tests that fail under load). The departure from the brief's 'a few seconds' is from the coordinating session's brief, not the GM's words, and is argued from measurement: the bounds that failed were already about 11 s. A green run pays nothing; a run that never ends still reddens. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D2 a wait that runs out is its own FAIL, pinned by new case 16",
+     "summary": "await returns 1 with a FAIL line naming what never came; case 16 pins both directions (late condition waited for silently; WAIT=0 never-condition fails with its words). Pass count 41 to 43.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: delete the requested fix and case 16 has nothing to check. Previously a wait that ran out went on silently; making it say what it waited for serves the suite's job."
+    },
+    {
+     "id": "D3 the lock is probed after the run's own sign",
+     "summary": "failed_twice reads the log first and probes the lock (flock -n) only after, since the probe could make the detached push skip itself and log nothing.",
+     "class": "within",
+     "why": "A fourth race found while fixing the suite, shown red on the old order and green on the new with a probe-holding copy; fixed in the task that found it (fix as we go)."
+    },
+    {
+     "id": "D4 scripts/state-sync.sh not changed",
+     "summary": "The tool was read for a race of its own and none was found; a skipped detached push on a held lock is its designed behavior.",
+     "class": "within",
+     "why": "No defect found in the tool, so nothing owed there; T258's behavior (a push refuses no landing) is kept as the GM's tooling-state request has it."
+    },
+    {
+     "id": "D5 reproduced by a delay in scratch copies, not under load",
+     "summary": "The task line's 'under load by T99's method' was overruled by the brief (load loops froze the host); each race is made certain by a copy of state-sync.sh whose nth background launch sleeps 30 s holding the lock: old suite 9 of 9 red on the predicted lines, fixed suite 9 of 9 green; 30 of 30 real runs green.",
+     "class": "within",
+     "why": "A verification method set by the coordinating session's task line and brief, not by the GM's words; the substitute is stronger (deterministic) and still shows the fix works. Nothing of what the GM asked is narrowed."
+    },
+    {
+     "id": "D6 found and left: hooks-test keeps no output of a failed suite (T414, lands before T302)",
+     "summary": "The runner kept only an event line of the red run, so the failing case could not be read afterwards; left to T414 as the hooks-test runner's mechanism, ordered before T302.",
+     "class": "within",
+     "why": "Outside T314's scope (one suite's flaky waits); not a narrowing of what T314 was asked to do. Recorded per FR-009: why not fixed here, its filed task id, and its order."
+    },
+    {
+     "id": "D7 exits: first tier only, full gate at landing",
+     "summary": "Green is the suite itself 43 of 43 in the first tier; no crate is changed so builder-checks has nothing to run; the full gate is the landing's.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-26 two-tier ruling (T308): full rigor deferred to the session clone's landing gate."
+    },
+    {
+     "id": "D8 not performance work",
+     "summary": "Classed as a flaky-check defect, nothing made faster.",
+     "class": "within",
+     "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
     }
    ],
    "verdict": "CLEAR"
