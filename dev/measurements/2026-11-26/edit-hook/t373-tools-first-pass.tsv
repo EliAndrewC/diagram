@@ -1,0 +1,20 @@
+dirty	sess	bash-true.PreToolUse hook(launcher+binary)	20	150.4	251.1	119.1	313.3	133.7	0	0/0	17.30-25.88	1
+dirty	sess	bash-true.PreToolUse binary, every guard	20	143.2	203.4	103.5	212.4	118.1	0	0/0	17.30-25.88	1
+dirty	sess	bash-true.PostToolUse hook(launcher+binary)	20	30.2	38.4	24.1	171.6	29.8	0	0/0	17.30-25.88	1
+dirty	sess	bash-true.PostToolUse binary, every guard	20	12.5	48.5	8.8	76.2	11.8	0	0/0	17.30-25.88	1
+dirty	sess	read.PreToolUse hook(launcher+binary)	20	26.4	51.4	18.3	90.8	25.8	0	0/0	17.30-25.88	1
+dirty	sess	read.PreToolUse binary, every guard	20	9.7	51.9	6.9	100.5	8.6	0	0/0	17.30-25.88	1
+dirty	sess	read.PostToolUse hook(launcher+binary)	20	24.9	43.9	15.9	123.5	24.5	0	0/0	17.30-25.88	1
+dirty	sess	read.PostToolUse binary, every guard	20	6.9	24.0	4.3	32.4	6.5	0	0/0	17.30-25.88	1
+dirty	sess	grep.PreToolUse hook(launcher+binary)	20	24.3	34.1	19.0	71.1	23.9	0	0/0	17.30-25.88	1
+dirty	sess	grep.PreToolUse binary, every guard	20	7.0	49.1	5.6	66.5	6.2	0	0/0	17.30-25.88	1
+dirty	sess	grep.PostToolUse hook(launcher+binary)	20	23.2	47.8	18.4	154.6	22.2	0	0/0	17.30-25.88	1
+dirty	sess	grep.PostToolUse binary, every guard	20	6.7	16.1	4.1	30.9	6.4	0	0/0	17.30-25.88	1
+dirty	sess	agent.PreToolUse hook(launcher+binary)	20	153.8	200.9	127.0	383.2	151.1	0,2	0/0;0/760	17.30-25.88	1
+dirty	sess	agent.PreToolUse binary, every guard	20	134.5	171.3	114.4	356.9	132.5	0,2	0/0;0/760	17.30-25.88	1
+dirty	sess	agent.PostToolUse hook(launcher+binary)	20	134.9	325.6	107.9	1104.0	122.3	0	0/0	17.30-25.88	1
+dirty	sess	agent.PostToolUse binary, every guard	20	137.0	285.2	91.2	1364.5	108.2	0	0/0	17.30-25.88	1
+dirty	sess	edit-doc.PreToolUse hook(launcher+binary)	20	896.7	1077.4	830.8	1619.8	1264.6	0	0/0	17.30-25.88	1
+dirty	sess	edit-doc.PreToolUse binary, every guard	20	1134.7	1662.9	803.3	1929.1	1288.9	0	0/0	17.30-25.88	1
+dirty	sess	edit-doc.PreToolUse hook(launcher+binary)@realhome	20	982.9	1738.7	853.3	3535.4	1285.9	0	0/0	17.30-25.88	1
+dirty	sess	edit-doc.PreToolUse binary, every guard@realhome	20	907.9	1736.4	824.0	2782.1	1265.2	0	0/0	17.30-25.88	1

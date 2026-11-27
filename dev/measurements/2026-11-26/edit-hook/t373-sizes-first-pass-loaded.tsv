@@ -1,0 +1,16 @@
+dirty	none	edit-doc.PreToolUse hook(launcher+binary)	20	483.2	777.6	431.1	1872.7	870.1	0	0/0	7.59-10.66	1
+dirty	none	edit-doc.PreToolUse binary, every guard	20	447.0	683.2	408.0	785.7	820.9	0	0/0	7.59-10.66	1
+dirty	tenth	edit-doc.PreToolUse hook(launcher+binary)	20	555.8	1074.6	458.9	1406.9	887.9	0	0/0	10.05-16.10	1
+dirty	tenth	edit-doc.PreToolUse binary, every guard	20	484.6	761.1	451.9	1003.4	852.7	0	0/0	10.05-16.10	1
+dirty	half	edit-doc.PreToolUse hook(launcher+binary)	20	939.7	1287.1	638.3	1719.8	1110.7	0	0/0	14.55-18.23	1
+dirty	half	edit-doc.PreToolUse binary, every guard	20	831.4	1160.4	611.0	1233.6	1052.2	0	0/0	14.55-18.23	1
+dirty	sess	edit-doc.PreToolUse hook(launcher+binary)	20	1197.0	1627.7	817.6	3027.5	1345.5	0	0/0	18.23-26.08	1
+dirty	sess	edit-doc.PreToolUse binary, every guard	20	1185.4	1674.5	826.1	2297.2	1299.7	0	0/0	18.23-26.08	1
+clean	none	edit-doc.PreToolUse hook(launcher+binary)	20	811.1	1375.2	543.8	1711.2	1000.2	0	0/0	23.88-25.71	0
+clean	none	edit-doc.PreToolUse binary, every guard	20	802.2	1143.5	528.1	1578.5	987.9	0	0/0	23.88-25.71	0
+clean	tenth	edit-doc.PreToolUse hook(launcher+binary)	20	1057.8	1515.6	590.4	4592.8	1107.3	0	0/0	23.47-30.02	0
+clean	tenth	edit-doc.PreToolUse binary, every guard	20	1166.9	1618.2	603.2	2409.8	1073.8	0	0/0	23.47-30.02	0
+clean	half	edit-doc.PreToolUse hook(launcher+binary)	20	1260.1	1741.5	748.4	3347.8	1244.5	0	0/0	27.63-30.96	0
+clean	half	edit-doc.PreToolUse binary, every guard	20	1163.0	1801.9	751.2	2757.2	1289.0	0	0/0	27.63-30.96	0
+clean	sess	edit-doc.PreToolUse hook(launcher+binary)	20	1020.2	2006.1	926.7	2498.3	1415.6	0	0/0	25.49-28.94	0
+clean	sess	edit-doc.PreToolUse binary, every guard	20	1360.2	2199.4	925.6	3544.0	1454.8	0	0/0	25.49-28.94	0

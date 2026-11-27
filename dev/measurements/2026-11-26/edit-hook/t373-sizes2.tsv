@@ -1,0 +1,24 @@
+dirty	none	edit-doc.PreToolUse binary --version (process start)	20	2.3	2.8	1.8	3.1	1.9	0	15/0	12.20-13.24	1
+dirty	none	edit-doc.PreToolUse --only clone-sync-hooks	20	96.6	107.7	88.1	117.0	514.4	0	0/0	12.20-13.24	1
+dirty	none	edit-doc.PreToolUse --only event-log-hooks	20	365.2	387.4	324.3	401.8	359.2	0	0/0	12.20-13.24	1
+dirty	tenth	edit-doc.PreToolUse binary --version (process start)	20	2.6	3.1	1.9	3.2	2.3	0	15/0	11.32-12.20	1
+dirty	tenth	edit-doc.PreToolUse --only clone-sync-hooks	20	148.2	164.6	127.0	217.4	540.5	0	0/0	11.32-12.20	1
+dirty	tenth	edit-doc.PreToolUse --only event-log-hooks	20	347.8	384.9	333.0	400.7	347.2	0	0/0	11.32-12.20	1
+dirty	half	edit-doc.PreToolUse binary --version (process start)	20	2.3	2.8	1.7	3.1	2.0	0	15/0	9.95-11.32	1
+dirty	half	edit-doc.PreToolUse --only clone-sync-hooks	20	297.7	315.1	279.3	327.2	692.0	0	0/0	9.95-11.32	1
+dirty	half	edit-doc.PreToolUse --only event-log-hooks	20	340.6	365.7	328.5	380.9	339.8	0	0/0	9.95-11.32	1
+dirty	sess	edit-doc.PreToolUse binary --version (process start)	20	2.2	2.9	1.9	8.5	1.9	0	15/0	9.95-13.08	1
+dirty	sess	edit-doc.PreToolUse --only clone-sync-hooks	20	572.5	913.3	467.5	1322.1	881.1	0	0/0	9.95-13.08	1
+dirty	sess	edit-doc.PreToolUse --only event-log-hooks	20	392.9	943.0	328.4	1978.3	354.2	0	0/0	9.95-13.08	1
+clean	none	edit-doc.PreToolUse binary --version (process start)	20	2.1	4.9	1.8	16.3	1.8	0	15/0	14.51-16.69	0
+clean	none	edit-doc.PreToolUse --only clone-sync-hooks	20	241.7	303.7	197.5	710.1	612.8	0	0/0	14.51-16.69	0
+clean	none	edit-doc.PreToolUse --only event-log-hooks	20	347.7	603.0	326.8	1140.8	345.3	0	0/0	14.51-16.69	0
+clean	tenth	edit-doc.PreToolUse binary --version (process start)	20	2.1	2.3	1.8	3.0	1.8	0	15/0	15.29-16.69	0
+clean	tenth	edit-doc.PreToolUse --only clone-sync-hooks	20	267.0	300.7	240.6	931.6	667.6	0	0/0	15.29-16.69	0
+clean	tenth	edit-doc.PreToolUse --only event-log-hooks	20	345.2	513.5	325.0	670.2	344.5	0	0/0	15.29-16.69	0
+clean	half	edit-doc.PreToolUse binary --version (process start)	20	2.0	2.4	1.7	2.9	1.8	0	15/0	12.77-15.29	0
+clean	half	edit-doc.PreToolUse --only clone-sync-hooks	20	410.6	464.4	386.9	583.0	808.8	0	0/0	12.77-15.29	0
+clean	half	edit-doc.PreToolUse --only event-log-hooks	20	340.2	362.9	324.2	1224.5	339.7	0	0/0	12.77-15.29	0
+clean	sess	edit-doc.PreToolUse binary --version (process start)	20	2.3	4.6	1.6	11.4	1.9	0	15/0	12.77-16.00	0
+clean	sess	edit-doc.PreToolUse --only clone-sync-hooks	20	650.0	1697.3	596.7	2995.8	1052.3	0	0/0	12.77-16.00	0
+clean	sess	edit-doc.PreToolUse --only event-log-hooks	20	356.9	868.0	335.6	2499.4	349.5	0	0/0	12.77-16.00	0

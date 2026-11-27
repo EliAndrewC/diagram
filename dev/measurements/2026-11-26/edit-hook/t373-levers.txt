@@ -1,0 +1,4 @@
+(a) transcript, every line (today's titled): median_ms=755.0 answer=4880
+(b) transcript, backwards to the last custom-title record: median_ms=0.0 answer=65536
+(c) event log, read whole and lines counted (no parse): median_ms=46.6 answer=157610
+(d) event log, read whole, lines holding the path kept: median_ms=67.6 answer=260

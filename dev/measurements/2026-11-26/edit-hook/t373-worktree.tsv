@@ -1,0 +1,83 @@
+dirty	wt	edit-doc.PreToolUse hook(launcher+binary)	20	402.0	640.3	359.8	777.1	400.3	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse binary, every guard	20	379.7	529.2	343.7	554.2	378.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse binary --version (process start)	20	2.0	2.4	1.5	3.0	1.7	0	15/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only measure-hooks	20	2.6	3.2	1.7	4.2	2.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only event-log-hooks	20	364.8	502.0	322.3	524.2	364.4	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only context-cap-hooks	20	2.2	3.0	1.7	5.6	1.9	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only clone-sync-hooks	20	2.2	2.7	1.5	6.7	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only engine-freeze-hooks	20	3.9	10.4	2.3	340.5	3.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only gm-tree-hooks	20	2.0	2.7	1.7	10.5	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only gate-write-hooks	20	4.7	7.1	3.3	113.0	4.3	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only claims-file-hooks	20	2.0	2.5	1.6	11.8	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only readme-hooks	20	1.9	2.4	1.7	5.0	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only download-copy-hooks	20	1.9	2.5	1.5	7.7	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only phase-source-hooks	20	2.1	2.7	1.6	6.2	1.9	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only source-block-hooks	20	3.1	3.7	2.2	4.5	2.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only house-style-hooks	20	2.0	3.0	1.6	4.1	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only guard-file-hooks	20	3.2	4.2	2.4	5.2	2.9	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PreToolUse --only record-edit-hooks	20	3.5	4.5	2.5	25.6	3.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PostToolUse hook(launcher+binary)	20	29.3	41.1	22.8	42.3	28.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PostToolUse binary, every guard	20	13.2	17.1	9.2	19.6	12.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PostToolUse binary --version (process start)	20	2.2	2.9	1.5	5.9	1.8	0	15/0	13.16-53.05	1
+dirty	wt	edit-doc.PostToolUse --only event-log-hooks	20	9.8	12.1	6.9	20.5	9.4	0	0/0	13.16-53.05	1
+dirty	wt	edit-doc.PostToolUse --only checks-hooks	20	7.6	16.3	4.8	21.4	7.0	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse hook(launcher+binary)	20	393.3	576.9	352.1	885.2	384.4	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse binary, every guard	20	392.7	517.8	332.3	697.3	365.6	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse binary --version (process start)	20	2.3	3.0	1.4	4.2	1.8	0	15/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only measure-hooks	20	2.6	3.4	1.7	5.1	2.0	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only event-log-hooks	20	364.9	539.5	332.3	577.4	364.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only context-cap-hooks	20	2.5	3.3	1.6	14.9	2.1	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only clone-sync-hooks	20	2.2	2.6	1.5	3.8	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only engine-freeze-hooks	20	3.7	17.6	2.8	133.6	3.5	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only gm-tree-hooks	20	1.9	2.7	1.6	10.3	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only gate-write-hooks	20	4.6	8.5	3.4	49.9	4.4	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only claims-file-hooks	20	2.1	2.7	1.5	14.3	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only readme-hooks	20	1.9	2.7	1.4	4.8	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only download-copy-hooks	20	1.9	3.3	1.5	4.9	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only phase-source-hooks	20	1.9	3.8	1.4	4.4	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only source-block-hooks	20	2.8	3.7	2.1	6.2	2.6	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only house-style-hooks	20	2.1	2.8	1.5	3.1	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only guard-file-hooks	20	3.5	4.4	2.4	4.9	3.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-rust.PreToolUse --only record-edit-hooks	20	3.7	6.4	2.4	9.7	3.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse hook(launcher+binary)	20	656.6	1229.7	483.5	2508.8	545.5	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse binary, every guard	20	750.7	2950.6	470.9	5077.8	599.2	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse binary --version (process start)	20	2.4	13.3	1.8	34.8	1.9	0	15/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only measure-hooks	20	2.5	19.2	1.9	32.5	2.1	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only event-log-hooks	20	409.3	635.2	331.0	1828.8	378.0	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only context-cap-hooks	20	2.7	5.8	1.6	21.6	2.0	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only clone-sync-hooks	20	2.4	10.3	1.5	24.5	2.0	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only engine-freeze-hooks	20	4.1	15.5	2.4	95.2	3.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only gm-tree-hooks	20	2.0	5.0	1.4	9.5	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only gate-write-hooks	20	4.4	79.6	2.9	306.3	4.1	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only claims-file-hooks	20	2.0	6.1	1.5	9.4	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only readme-hooks	20	1.9	5.8	1.5	5.9	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only download-copy-hooks	20	1.8	5.7	1.4	19.9	1.6	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only phase-source-hooks	20	1.9	4.8	1.5	40.5	1.7	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only source-block-hooks	20	3.5	11.0	2.6	19.0	3.3	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only house-style-hooks	20	2.1	8.9	1.5	10.7	1.8	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only guard-file-hooks	20	3.7	6.6	2.8	38.5	3.3	0	0/0	13.16-53.05	1
+dirty	wt	edit-plan.PreToolUse --only record-edit-hooks	20	188.6	934.3	130.2	6045.6	153.5	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse hook(launcher+binary)	20	31.2	60.1	23.5	323.0	29.5	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse binary, every guard	20	13.1	23.0	10.5	387.3	12.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse binary --version (process start)	20	2.0	2.6	1.4	4.3	1.7	0	15/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only measure-hooks	20	2.0	2.7	1.6	5.6	1.8	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only event-log-hooks	20	8.1	12.4	6.3	37.4	7.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only context-cap-hooks	20	1.8	2.6	1.5	6.6	1.6	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only clone-sync-hooks	20	1.9	2.5	1.3	6.9	1.6	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only engine-freeze-hooks	20	3.4	6.6	2.6	689.6	3.1	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only gm-tree-hooks	20	1.8	2.2	1.4	3.9	1.6	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only gate-write-hooks	20	4.0	11.4	3.1	11.7	3.8	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only claims-file-hooks	20	1.7	2.6	1.3	3.7	1.5	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only readme-hooks	20	1.9	3.0	1.5	5.4	1.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only download-copy-hooks	20	1.7	2.5	1.4	7.9	1.5	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only phase-source-hooks	20	1.8	2.5	1.4	7.2	1.6	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only new-file-hooks	20	1.9	2.3	1.5	5.7	1.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only source-block-hooks	20	1.9	2.8	1.4	4.5	1.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only house-style-hooks	20	1.9	2.4	1.4	12.1	1.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only guard-file-hooks	20	3.0	3.8	2.3	4.3	2.8	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PreToolUse --only record-edit-hooks	20	3.1	4.3	2.3	10.7	2.8	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PostToolUse hook(launcher+binary)	20	27.9	35.7	20.7	40.1	27.1	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PostToolUse binary, every guard	20	11.9	14.6	9.2	18.9	11.5	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PostToolUse binary --version (process start)	20	2.0	2.4	1.2	2.8	1.8	0	15/0	13.16-53.05	1
+dirty	wt	write-new.PostToolUse --only event-log-hooks	20	8.0	10.4	6.1	11.4	7.7	0	0/0	13.16-53.05	1
+dirty	wt	write-new.PostToolUse --only checks-hooks	20	6.5	7.7	4.3	8.9	6.0	0	0/0	13.16-53.05	1

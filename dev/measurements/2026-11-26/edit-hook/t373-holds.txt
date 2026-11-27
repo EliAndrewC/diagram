@@ -1,0 +1,6 @@
+fields of a SubagentStart: ['agent', 'aid', 'cat', 'ev', 'sid', 't', 'task']
+spec-fidelity runs paired: 63 (unpaired starts 1); merged intervals 52; held 186.7 min of the 18.4 h the log spans
+  Bash: 1176 of 4202 PreToolUse calls inside a hold (28%)
+  Edit: 35 of 214 PreToolUse calls inside a hold (16%)
+  Write: 23 of 92 PreToolUse calls inside a hold (25%)
+  Agent: 30 of 220 PreToolUse calls inside a hold (14%)

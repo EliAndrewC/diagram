@@ -1,0 +1,41 @@
+files with lines of the day: {'451-time-retro-and-efficiency.jsonl': 5086, '456-feature-size-friction.jsonl': 48, '457-builder-handoff-rate.jsonl': 42, '459-multi-session-builders.jsonl': 56, '460-test-writes-off-the-host-disk.jsonl': 38}
+PreToolUse lines by tool:
+    4202 Bash
+     386 Read
+     220 Agent
+     214 Edit
+      92 Write
+      70 Grep
+      24 WebSearch
+      22 ToolSearch
+      21 WebFetch
+       9 Monitor
+       6 SendMessage
+       4 TaskStop
+PostToolUse lines by tool: {'Bash': 4075, 'Read': 382, 'Agent': 212, 'Edit': 209, 'Write': 88, 'Grep': 68, 'WebSearch': 24, 'ToolSearch': 22}
+Edit/Write PreToolUse by file kind:
+     121 Edit   Rust source (rust/**)
+      39 Write  Rust source (rust/**)
+      35 Edit   tooling (scripts/, tests/, Makefile, .claude/)
+      27 Write  outside any clone (scratch, /tmp, ~)
+      23 Edit   other in a clone
+      19 Write  doc (docs/, dev/, *.md)
+      18 Edit   doc (docs/, dev/, *.md)
+       8 Edit   a spec's plan.md
+       7 Edit   a spec's tasks.md
+       4 Write  other in a clone
+       2 Write  dev/measurements record
+       1 Write  tooling (scripts/, tests/, Makefile, .claude/)
+       1 Edit   outside any clone (scratch, /tmp, ~)
+       1 Edit   dev/measurements record
+Edit/Write PreToolUse by where the file is:
+     184 Edit   a pool worktree (.git a file: clone-sync has no opinion)
+      46 Write  a pool worktree (.git a file: clone-sync has no opinion)
+      29 Edit   the clone itself (.git a directory: clone-sync judges it)
+      27 Write  outside any clone
+      19 Write  the clone itself (.git a directory: clone-sync judges it)
+       1 Edit   outside any clone
+left out, lines of measurement sessions: {'t304-probe': 9, 't365-measure-0000': 130, 't373-sess-0001': 1703, 't373-none-0000': 105, 't373-sess-0003': 97, 't373-sess-0002': 84}
+by who: {'sub-agent': 266, 'the session itself': 40}
+by session id: {'c6fd72d1-ab6': 271, '09724c5e-145': 15, 'a1bf10b9-937': 1, '349a1826-726': 5, 'd5b44531-0d5': 11, 'fa46df9e-eb3': 1, 'de6387b2-0d1': 2}
+by tree: {'diagram-backlog-t271': 97, 'diagram-backlog-t269': 58, 'diagram-backlog': 48, 'diagram-backlog-t270': 45, '(outside)': 28, 'diagram-backlog-b1': 14, 'diagram-backlog-t268': 9, 'diagram-backlog-t272': 7}

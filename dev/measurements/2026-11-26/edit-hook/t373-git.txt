@@ -1,0 +1,9 @@
+dirty (one tracked file changed)   status --porcelain (today)                              median_ms= 110.9 p90_ms= 209.5 exit,bytes=(0, 57)
+dirty (one tracked file changed)   status --porcelain -uno (tracked only)                  median_ms=  51.3 p90_ms= 104.6 exit,bytes=(0, 57)
+dirty (one tracked file changed)   diff-index --quiet HEAD -- (tracked only)               median_ms=  52.1 p90_ms=  81.5 exit,bytes=(1, 0)
+dirty (one tracked file changed)   ls-files --others --exclude-standard (untracked only)   median_ms=  75.5 p90_ms=  93.0 exit,bytes=(0, 0)
+clean                              status --porcelain (today)                              median_ms= 230.6 p90_ms= 316.1 exit,bytes=(0, 0)
+clean                              status --porcelain -uno (tracked only)                  median_ms=  87.0 p90_ms= 140.2 exit,bytes=(0, 0)
+clean                              diff-index --quiet HEAD -- (tracked only)               median_ms=  89.7 p90_ms= 129.9 exit,bytes=(0, 0)
+clean                              ls-files --others --exclude-standard (untracked only)   median_ms= 138.4 p90_ms= 208.8 exit,bytes=(0, 0)
+load1 18.28

@@ -1,0 +1,54 @@
+clean	none	edit-doc.PreToolUse hook(launcher+binary)	5	247.8	265.3	237.8	265.3	674.4	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse binary, every guard	5	222.9	258.9	213.9	258.9	651.8	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse binary --version (process start)	5	2.0	2.3	1.9	2.3	1.8	0	15/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only measure-hooks	5	2.2	2.5	1.7	2.5	2.0	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only event-log-hooks	5	16.0	16.3	15.5	16.3	15.7	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only context-cap-hooks	5	2.0	2.7	1.7	2.7	1.8	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only clone-sync-hooks	5	205.4	228.9	194.7	228.9	637.8	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only engine-freeze-hooks	5	1.8	2.5	1.5	2.5	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only gm-tree-hooks	5	1.9	2.3	1.6	2.3	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only gate-write-hooks	5	2.6	2.8	2.4	2.8	2.5	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only claims-file-hooks	5	1.7	2.0	1.4	2.0	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only readme-hooks	5	1.7	1.8	1.6	1.8	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only download-copy-hooks	5	1.6	1.7	1.5	1.7	1.5	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only phase-source-hooks	5	1.7	1.8	1.5	1.8	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only source-block-hooks	5	2.5	3.2	2.0	3.2	2.4	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only house-style-hooks	5	1.7	2.0	1.6	2.0	1.6	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only guard-file-hooks	5	2.8	3.0	2.7	3.0	2.7	0	0/0	6.10-6.11	0
+clean	none	edit-doc.PreToolUse --only record-edit-hooks	5	2.7	2.9	2.7	2.9	2.6	0	0/0	6.10-6.11	0
+clean	sess	edit-doc.PreToolUse hook(launcher+binary)	5	479.3	504.3	473.4	504.3	896.8	2	0/1228	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse binary, every guard	5	467.7	474.3	461.9	474.3	887.5	2	0/1228	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse binary --version (process start)	5	1.8	3.0	1.6	3.0	1.5	0	15/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only measure-hooks	5	1.9	2.8	1.7	2.8	1.7	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only event-log-hooks	5	16.1	16.3	13.7	16.3	15.8	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only context-cap-hooks	5	2.4	3.2	1.8	3.2	2.1	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only clone-sync-hooks	5	462.5	463.7	446.3	463.7	882.1	2	0/1228	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only engine-freeze-hooks	5	2.9	4.1	1.9	4.1	2.7	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only gm-tree-hooks	5	2.0	2.2	1.6	2.2	1.7	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only gate-write-hooks	5	2.5	2.8	2.2	2.8	2.4	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only claims-file-hooks	5	1.6	4.0	1.5	4.0	1.5	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only readme-hooks	5	1.7	1.8	1.5	1.8	1.6	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only download-copy-hooks	5	1.7	1.8	1.6	1.8	1.6	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only phase-source-hooks	5	1.6	1.7	1.5	1.7	1.5	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only source-block-hooks	5	2.5	3.2	2.1	3.2	2.4	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only house-style-hooks	5	1.7	1.8	1.5	1.8	1.7	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only guard-file-hooks	5	2.8	3.2	2.5	3.2	2.7	0	0/0	5.55-6.10	0
+clean	sess	edit-doc.PreToolUse --only record-edit-hooks	5	2.7	2.9	2.4	2.9	2.6	0	0/0	5.55-6.10	0
+dirty	sess	edit-doc.PreToolUse hook(launcher+binary)	5	510.6	883.2	490.2	883.2	937.9	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse binary, every guard	5	505.3	589.2	468.6	589.2	905.4	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse binary --version (process start)	5	2.3	3.2	1.7	3.2	2.1	0	15/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only measure-hooks	5	2.5	3.0	2.1	3.0	2.3	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only event-log-hooks	5	17.2	22.5	16.3	22.5	16.8	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only context-cap-hooks	5	2.8	5.1	2.0	5.1	2.3	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only clone-sync-hooks	5	479.6	872.8	467.2	872.8	912.1	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only engine-freeze-hooks	5	3.3	3.8	2.1	3.8	2.6	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only gm-tree-hooks	5	1.8	3.1	1.6	3.1	1.7	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only gate-write-hooks	5	3.6	7.1	2.9	7.1	3.4	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only claims-file-hooks	5	1.8	2.5	1.4	2.5	1.7	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only readme-hooks	5	1.9	2.7	1.7	2.7	1.8	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only download-copy-hooks	5	1.6	2.0	1.4	2.0	1.4	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only phase-source-hooks	5	1.8	1.9	1.5	1.9	1.6	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only source-block-hooks	5	2.8	3.9	2.6	3.9	2.6	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only house-style-hooks	5	1.8	2.0	1.7	2.0	1.6	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only guard-file-hooks	5	3.0	3.4	2.3	3.4	2.8	0	0/0	5.23-5.55	1
+dirty	sess	edit-doc.PreToolUse --only record-edit-hooks	5	2.8	3.5	2.3	3.5	2.6	0	0/0	5.23-5.55	1
