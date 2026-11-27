@@ -127,7 +127,10 @@ fn an_agent_launch_no_check_or_hold_names_writes_nothing() {
 /// A return concerns the state where a wave's row still waits: pending, or returned with no reply yet (451 T387's `concerns`).
 #[test]
 fn a_return_concerns_a_wave_row_that_waits_for_its_reply() {
-    let row = |state: &str, reply: Value| json!({"dispatches": {"t1": {"aid": "x", "wave": true, "state": state, "reply": reply}}});
+    let row = |state: &str, reply: Value| {
+        let s = json!({"dispatches": {"t1": {"aid": "x", "wave": true, "state": state, "reply": reply}}});
+        super::Part::parse(s.to_string(), true)
+    };
     let ret = json!({"agent_id": "y"});
     assert!(super::concerns(
         "returned",
@@ -147,6 +150,26 @@ fn a_return_concerns_a_wave_row_that_waits_for_its_reply() {
         &row("returned", json!("done")),
         &ret
     ));
+}
+
+/// A call that reads no row parses no row (451 T490): a Bash call under a hold, its end, an Agent call no check or hold names and
+/// its return each parsed the whole 3.0 MB state, the 2.29 MB of `dispatches` and 0.51 MB of `versions` none of them reads.
+#[test]
+fn a_call_that_reads_no_row_parses_no_row() {
+    let root = held("part-rows");
+    assert_eq!(handle("edit", &bash(&root, "b1"), Some(1000.0)), "");
+    assert_eq!(handle("after", &bash(&root, "b1"), Some(1000.0)), "");
+    crate::checks::PARSES.with(|n| n.set(0));
+    assert_eq!(handle("edit", &bash(&root, "b2"), Some(1001.0)), "");
+    assert_eq!(handle("after", &bash(&root, "b2"), Some(1001.0)), "");
+    let explore = json!({"cwd": root, "tool_name": "Agent", "tool_use_id": "x1", "tool_input": {"subagent_type": "Explore", "prompt": "p"}});
+    assert_eq!(handle("dispatch", &explore, Some(1001.0)), "");
+    let mut launched = explore.clone();
+    launched["tool_response"] = json!({"status": "completed", "agentId": "agx"});
+    assert_eq!(handle("launched", &launched, Some(1001.0)), "");
+    let stop = json!({"cwd": root, "agent_id": "agx", "hook_event_name": "SubagentStop"});
+    assert_eq!(handle("returned", &stop, Some(1001.0)), "");
+    assert_eq!(crate::checks::PARSES.with(std::cell::Cell::get), 0);
 }
 
 /// A running hold past `HOLD_MAX_S` is purged at the next call's start (451 T489): kept, every Bash call of the clone loaded the

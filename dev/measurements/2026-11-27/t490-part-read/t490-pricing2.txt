@@ -1,0 +1,22 @@
+## stripped: versions
+# load at start 12.1, state 2619265 bytes, 20 counted runs a case and binary
+before	bash-pre	wall median 38.2	p90 41.1	min 28.0	cpu median 37.4	writes 0/22	state 2618685
+after	bash-pre	wall median 33.5	p90 37.2	min 28.3	cpu median 32.9	writes 0/22	state 2111291
+before	bash-post	wall median 34.2	p90 36.2	min 31.5	cpu median 33.7	writes 1/22	state 2618656
+after	bash-post	wall median 33.3	p90 36.9	min 27.5	cpu median 32.8	writes 1/22	state 2111262
+before	agent-post	wall median 48.1	p90 53.9	min 36.4	cpu median 47.4	writes 0/22	state 2618656
+after	agent-post	wall median 45.8	p90 49.7	min 34.8	cpu median 45.0	writes 0/22	state 2111262
+before	agent-pre	wall median 27.9	p90 29.2	min 25.9	cpu median 27.4	writes 0/22	state 2618656
+after	agent-pre	wall median 27.4	p90 28.8	min 23.7	cpu median 27.0	writes 0/22	state 2111262
+# load at end 10.8
+## stripped: dispatches
+# load at start 10.8, state 2619265 bytes, 20 counted runs a case and binary
+before	bash-pre	wall median 34.6	p90 38.9	min 30.1	cpu median 34.2	writes 0/22	state 2618685
+after	bash-pre	wall median 11.5	p90 13.5	min 8.6	cpu median 10.9	writes 0/22	state 632432
+before	bash-post	wall median 32.0	p90 34.2	min 29.4	cpu median 31.5	writes 1/22	state 2618656
+after	bash-post	wall median 9.3	p90 10.1	min 8.1	cpu median 8.7	writes 1/22	state 632403
+before	agent-post	wall median 44.6	p90 48.0	min 37.3	cpu median 44.2	writes 0/22	state 2618656
+after	agent-post	wall median 25.7	p90 27.4	min 20.5	cpu median 25.2	writes 0/22	state 632403
+before	agent-pre	wall median 28.4	p90 30.2	min 27.2	cpu median 28.0	writes 0/22	state 2618656
+after	agent-pre	wall median 7.6	p90 10.0	min 6.1	cpu median 7.2	writes 0/22	state 632403
+# load at end 9.5

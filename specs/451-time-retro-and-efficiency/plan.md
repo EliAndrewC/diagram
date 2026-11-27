@@ -6887,31 +6887,62 @@ that batch; the red was not in its change.
 <!-- plan-archive: T486 to T485 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T495 to T487 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T490 (<why: the finding or measurement that files it>)
+### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: route (b), the hot hooks read the state in part. `checks::handle` reads the state through `handle/part.rs`'s `Part`, not `load`. Measured 2026-11-27 (`dev/measurements/2026-11-27/t490-part-read/`).
+  - **T490-D1, the routes priced; (b) built.** Each route's ceiling was measured on the before binary, with one copy of the clone's state stripped. Bash `true` PreToolUse under a hold, CPU median, measured 2026-11-27 (`t490-time.py`, 20 runs, load 10 to 12, `t490-pricing2.txt`):
+    - (a) moves settled rows to a second file. Its ceiling is the `dispatches`-dropped arm: 34.2 to 10.9 ms, measured 2026-11-27 (`t490-time.py`, 20 runs, `t490-pricing2.txt`).
+    - (c) prunes old versions. Its ceiling is the `versions`-dropped arm: 37.4 to 32.9 ms, measured 2026-11-27 (`t490-time.py`, 20 runs, `t490-pricing2.txt`). It also changes an answer, because `versions()` already keeps 12 a subject and `oscillation` reads that history, so pruning moves the reversal tripwire.
+    - (b) the partial read: 37.1 to 18.4 ms, measured 2026-11-27 (`t490-time.py`, 20 runs, `t490-time-run1.txt`; below).
+
+    (a) saves about 7 ms a hook more than (b), measured 2026-11-27 (the two arms above, at different loads). Its price is the file's contract. The state lives in the clone's common git dir, which every pool tree shares (`planhold.rs`'s header, `state_path`), and each tree runs a guard and a gate built from its own sources (`l7r-guard.sh`'s `$TARGET`). So a tree not yet at the new HEAD would read a state with its settled rows gone and answer differently, in `settled.rs`, the earlier-rounds bundle and cascade's count. It would also need eight cold readers taught to read two files (observed 2026-11-27, method: T387's reader table). (b) changes no file and no cold reader.
+  - **T490-D2, what is read in part, and when the rest is parsed.** `Part::read` parses every top-level key but `dispatches`, `versions` and `seen` as values. Those three are scanned, never made values. For a launch or a return it also keeps each dispatch's `aid`, `state` and the truth of its `wave` and `reply` (`Row`), which `concerns` reads. `Part::whole` parses the three from the same text the moment a call reads a row or saves:
+    - every `save` and `keep_trips` in `handle` takes `st.whole()`;
+    - a counted check's dispatch, and spec-fidelity's hold;
+    - the freeze, on an `apply-edits` command (`APPLY` names that word) or on an Edit, Write or MultiEdit of a path with a subject (`subject_of_path`);
+    - a booked launch or return.
+
+    The calls before `whole` change only other keys (the hold's snapshot and restore, the feature switch, `switch_feature` split out), so the merged state is the whole parse plus the call's changes, and `save`'s bytes are the old ones by construction. `load` is unchanged, and every cold caller keeps it (`close`, `drop_run`, `record_answer`, the gate).
+  - **T490-D3, every text reads as the whole parse.** The scan is a visitor (`Skip`) that parses every token through `deserialize_any`, as `Value` does, not `IgnoredAny`'s scan, which takes a number past f64 (451 T493's `1e400`). So a text it takes is one the whole parse takes. A text the partial read cannot take falls back to the whole parse at once: not JSON, an empty file, a non-object at the top, `dispatches` or a row that is not an object, or trailing bytes. A duplicate key keeps the last, as `Value` does. The cheaper scan is priced and left: Filed as T506 (below).
+  - **Red first.** `handle/hold_writes.rs` `a_call_that_reads_no_row_parses_no_row` failed on the old code: 1 failed of 8, `left: 5, right: 0`. Its five calls were a Bash call under a hold, its end, an Explore's dispatch, its launch and its return, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::handle::hold_writes"`, counting `checks::parsed`'s whole parses on the thread). Green after. `handle/part/tests.rs` holds three more tests:
+    - each row truth is `!falsy`, over 19 JSON values;
+    - 14 shapes read as the whole parse, both with and without rows: not JSON, empty, `[]`, `1`, trailing bytes, a non-object `dispatches` and row, `1e400` in a skipped row and in `versions`, a lone surrogate in `seen`, and duplicate keys at three levels;
+    - every hook mode answers and saves byte for byte as a forced whole read (`WHOLE`), over 13 calls on a state with a running check, a pending row, a waiting wave row and a hold, and again on a state that is not JSON.
+
+    `make builder-checks CRATE="rust/guard/shared rust/guard"` is clean: 593 and 598 tests passed, measured 2026-11-27 (`make builder-checks`).
+  - **Every answer unchanged, on a copy of the clone's state.** `t490-diff.py` ran 15 calls on each binary's own copy and compared the exit code, stdout, stderr and the state's bytes after every call: 15 of 15 the same, and 15 of 15 on a state that is not JSON, measured 2026-11-27 (`t490-diff.txt`). The calls were a hold's first call (its save) and end, a steady one, a frozen page's Edit, the held plan's Edit, an `apply-edits`, an Explore's dispatch, launch and return, a pending dispatch launched, a running check's return, the hold's review's return, a TaskStop and a quote-check's dispatch. The state's bytes are the same after every call, so every cold reader of T387's table reads what it read. Its code is unchanged too.
+  - **Before and after**, CPU median ms, run 1 then run 2, measured 2026-11-27 (`t490-time.py`, 20 interleaved runs, load 3.2 to 4.8 and 4.5 to 4.7):
+    - a Bash `true` under a hold, PreToolUse (record-edit-hooks): 37.1 -> 18.4, and 38.3 -> 19.5;
+    - its PostToolUse (checks-hooks): 32.7 -> 15.0, and 31.9 -> 15.7;
+    - a non-check Agent's PostToolUse (checks-hooks): 45.9 -> 29.6, and 46.2 -> 29.1;
+    - that Agent's PreToolUse (check-bundle-hooks): 28.7 -> 10.2, and 29.4 -> 10.1.
+
+    A Bash call under a hold pays both hooks: about 70 to 34 ms, measured 2026-11-27 (the two rows above summed). Each Agent call pays about 35 ms less over its two hooks, so about 296 x 0.035 = 10 s a day, measured 2026-11-27 (T388's count of 2026-11-26's Agent calls times the saving above). The SubagentStop arm did not move (93.7 -> 92.0), because every return there is booked and saved: Filed as T505 (below).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the check state read in part on the hot hooks (`checks/handle/part.rs`, `checks/handle.rs`, `checks.rs` `parsed`) | n/a: guard tooling, no map | n/a: tooling | none | none |
 
 ### T490 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A hook call that reads no check row parses none, and every call's answer and every saved state are what they were.
+2. **The constraints.** The brief: the route that cuts the most hot-path CPU and leaves every reader's answer unchanged, proved on a copy of the clone's state, red first, and no guard message changed. 451 T387 (the hold writes only where it changed) and T489 (a dead hold purged). The two tiers.
+3. **Where each comes from.** O: T387's record and its reader inventory. O: the pricing arms, the differential and the timings above. R: `checks/handle.rs`, `checks/rounds.rs` (`APPLY`, `subject_of_path`) and `checks/planhold.rs` (no row read).
+4. **Do they describe the world here?** Yes. The timings and the differential run the real binaries on a copy of the clone's own state (2,619,265 bytes, 3,054 dispatches), with its live pending and running rows, measured 2026-11-27 (`t490-time.py`, `t490-diff.py`).
+5. **The order.** After T387 and T489. Before T505 and T506, which build on `Part`.
+6. **The exits.** Green: the red test passes, the differential is 15 of 15 on both states, and the hot hooks' CPU drops. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A Bash call under a hold went from 37.1 and 38.3 ms to 18.4 and 19.5 (PreToolUse), and an Agent's PreToolUse from 28.7 and 29.4 to 10.2 and 10.1 (CPU medians, 20 runs each, 2026-11-27). 15 of 15 calls answered and saved the same, measured 2026-11-27 (`t490-diff.py`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every answer and every saved byte are unchanged. Only the parse of rows no call reads is gone.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Every SubagentStop books and rewrites the whole state, 92 to 95 ms of CPU a return with 22 of 22 calls writing, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs). The cause is 14 check-wave rows that are `returned` with no reply, 861 to 863 hours old, which `concerns` takes as a wave still waiting to be paired (observed 2026-11-27, method: counting with Python's `json` the rows of a copy of the clone's state that `concerns`' wave test holds). Not fixed here: it is an age limit on a waiting wave row, or a save only where a booking changed a row, which is a change to the rounds' rules beyond this brief. Filed as T505; lands before T302.
+- The partial read's exact scan costs about 5 to 8 ms a hook more than `IgnoredAny`'s: 18.4 to 19.5 ms against 10.9 with no `dispatches` at all, measured 2026-11-27 (`t490-pricing2.txt`, `t490-time-run1/2.txt`). The visible effect is that time on every hot hook. Not fixed here: the cheaper scan takes texts the whole parse refuses, which the brief's "every reader's answer unchanged" rules out without a decision. Filed as T506; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it takes about 18 ms of CPU off each of a Bash call's two hooks under a plan hold, and 16 to 19 ms off each of an Agent call's two, measured 2026-11-27 (`t490-time.py`, 20 runs). Not an engine-speed task: no checklist answers owed.
 
 
 <!-- plan-archive: T491 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -6956,6 +6987,60 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T503 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T505 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T505 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T506 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T506 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

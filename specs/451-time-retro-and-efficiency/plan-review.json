@@ -4460,7 +4460,7 @@
    "declared": "spec-fidelity"
   },
   "### T490 Approach (checklist part A)": {
-   "sha256": "911393973811015973e41b39f753892c28bd1e8daa73991b296fa2edecd5aa82",
+   "sha256": "0017e2660b560e8816066b6b0171d79adf504aa57941fe965a5927595712a6f6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4521,6 +4521,12 @@
   },
   "### T502 Approach (checklist part A)": {
    "sha256": "87232aa832eb0edebe955e07a0de2fb5ea239dffe49d80595675e430ee5c4462",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))": {
+   "sha256": "516939f317f264b37716139a82332dca96cddc77c5997974aadd07afaeff5c27",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -41454,6 +41460,52 @@
      "summary": "The block stays under the 2,000-character convention: longest real block 1,942 with the line, 58 margin, measured 2026-11-27.",
      "class": "within",
      "why": "Holds an existing convention; nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))",
+    "### T490 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490-D1",
+     "summary": "Route (b), a partial read of the check state on the hot hooks, is built; (a) moving settled rows to a second file and (c) pruning old versions are priced and not taken.",
+     "class": "within",
+     "why": "The GM asked that performance work come first (FR-013, 2026-11-20) and named no route. Picking between routes is a design choice inside that request. (b) takes about 18 ms off each hot hook. (a) would save about 7 ms more, but the state lives in the common git dir that pool trees on different HEADs share, so an older tree would answer wrongly in settled.rs, the earlier-rounds bundle and cascade's count. (c) moves the oscillation tripwire. Neither one is a narrowing of what the GM asked."
+    },
+    {
+     "id": "T490-D2",
+     "summary": "Part::read parses every top-level key except dispatches, versions and seen, plus a small Row per dispatch for concerns. Part::whole parses the rest at every save, keep_trips, counted-check dispatch, spec-fidelity hold, freeze path and booked launch or return. load is unchanged for the cold callers.",
+     "class": "within",
+     "why": "This is how the partial read is built. It drops nothing the GM asked for, and every call that reads a row or saves still gets the whole parse."
+    },
+    {
+     "id": "T490-D3",
+     "summary": "The skipped keys are scanned with an exact visitor (Skip, through deserialize_any), and malformed shapes fall back to the whole parse. The cheaper IgnoredAny scan (about 5 to 8 ms a hook more saved) is priced and filed as T506, to land before T302.",
+     "class": "within",
+     "why": "This defers a further speedup. It is not a defect: no answer is wrong, nothing crashes, and no valid input is refused. It is filed as T506 with an order before T302 (FR-009) and is scheduled first as perf work under FR-013, so nothing the GM asked for is cut. The block names no wrong outcome under the cheaper scan on a state that can occur. Its only stated reason is acceptance parity on texts no writer produces (1e400, a lone surrogate), and that parity is the brief's wording, not the GM's. Under the no-exactness standard, parity is not a reason to refuse the cheaper scan. T506 must be judged on whether everything works, for example whether a hot hook could pass on a state the gate refuses in practice. Differing acceptance of texts no writer emits is not a ground to keep the slower scan. The exact scan stands for now only because the deferral loses nothing."
+    },
+    {
+     "id": "T490-verify",
+     "summary": "Red-first test (no row parsed on calls that read none). A differential of 15 calls on a copy of the clone's state, comparing exit code, stdout, stderr and the saved state's bytes, also run on a non-JSON state. Part tests compare against a forced whole read.",
+     "class": "within",
+     "why": "These tests check that a pure refactor of the reader changes no outcome. Because the shared state file is read by trees at other HEADs, unchanged saved bytes are what shows that every cold reader still works. This is enforcement that serves the request, not an exactness standard used to block a port, and nothing is refused or narrowed for a difference."
+    },
+    {
+     "id": "T490-found-T505",
+     "summary": "Every SubagentStop still books and rewrites the whole state (92 to 95 ms), because 14 old returned-without-reply wave rows are taken by concerns as still waiting. Left here and filed as T505, to land before T302.",
+     "class": "within",
+     "why": "The observed effect is CPU time per return, not a wrong answer. Fixing it needs an age limit on wave rows or a booking-only save, which changes the rounds' rules and so is a separate decision. It is filed with an id, a reason and an order before the next step (T302), which meets FR-009 and fix-as-we-go. Nothing the GM asked for is cut."
+    },
+    {
+     "id": "T490-order",
+     "summary": "Lands after T387 and T489, before T505 and T506. One landing. The step table marks no map and no pool manifest moved.",
+     "class": "within",
+     "why": "This is ordering and bookkeeping inside the feature, consistent with FR-013's perf-first ordering."
     }
    ]
   }

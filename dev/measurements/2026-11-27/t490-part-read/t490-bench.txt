@@ -1,0 +1,4 @@
+light rows 3.20
+skip-any 2.38
+read 0.72 full-Value 10.57 raw-top 1.72 ignored 1.67 raw-top+light 1.76
+# load 14.21, in-process medians ms of 20, a copy of the clone's 2,619,265-byte state, 2026-11-27

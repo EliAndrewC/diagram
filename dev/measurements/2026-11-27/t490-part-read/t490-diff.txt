@@ -1,0 +1,32 @@
+the clone's state	bash under the hold, first (its save)	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618686 B
+the clone's state	its end	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	bash under the hold, steady	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	its end	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	Edit of a frozen page	SAME	exit 2	stdout 0 B	stderr 170 B	state 2618662 B
+the clone's state	Edit of the held plan	SAME	exit 2	stdout 0 B	stderr 221 B	state 2618662 B
+the clone's state	apply-edits on a reply	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	Explore dispatch	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	Explore launch	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	Explore return	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618662 B
+the clone's state	a pending dispatch launched	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618683 B
+the clone's state	a running check returns	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618779 B
+the clone's state	the hold's review returns	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618494 B
+the clone's state	TaskStop	SAME	exit 0	stdout 0 B	stderr 0 B	state 2618545 B
+the clone's state	quote-check dispatch	SAME	exit 2	stdout 0 B	stderr 244 B	state 2618545 B
+# the clone's state: 15 of 15 calls the same
+a state that is not JSON	bash under the hold, first (its save)	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	its end	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	bash under the hold, steady	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	its end	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	Edit of a frozen page	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	Edit of the held plan	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	apply-edits on a reply	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	Explore dispatch	SAME	exit 0	stdout 0 B	stderr 0 B	state 8 B
+a state that is not JSON	Explore launch	SAME	exit 0	stdout 0 B	stderr 0 B	state 42 B
+a state that is not JSON	Explore return	SAME	exit 0	stdout 0 B	stderr 0 B	state 42 B
+a state that is not JSON	a pending dispatch launched	SAME	exit 0	stdout 0 B	stderr 0 B	state 42 B
+a state that is not JSON	a running check returns	SAME	exit 0	stdout 0 B	stderr 0 B	state 42 B
+a state that is not JSON	the hold's review returns	SAME	exit 0	stdout 0 B	stderr 0 B	state 42 B
+a state that is not JSON	TaskStop	SAME	exit 0	stdout 0 B	stderr 0 B	state 61 B
+a state that is not JSON	quote-check dispatch	SAME	exit 2	stdout 0 B	stderr 495 B	state 678 B
+# a state that is not JSON: 15 of 15 calls the same

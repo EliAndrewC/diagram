@@ -19,6 +19,9 @@ fn parent_of(p: &Path) -> &Path {
 }
 use crate::log;
 
+mod part;
+use part::{Part, Row};
+
 /// Every check a dispatch is counted for: the page checks freeze their subject; `impl-drift` counts to FR-010 only.
 fn is_check_kind(check: &str) -> bool {
     PAGE_CHECKS.contains(&check) || check == "impl-drift"
@@ -227,57 +230,47 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
 }
 
 fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
-    if mode == "returned" || mode == "launched" {
+    let booking = mode == "returned" || mode == "launched";
+    if booking {
         passes::log_pass(parent_of(path), mode, payload, t);
     }
-    let mut state = load(path);
-    if mode == "edit" && !falsy(state.get("plan_holds")) {
-        let was = hold_part(&state);
-        planhold::snapshot(&mut state, call_root(payload).as_deref(), t);
-        if hold_part(&state) != was {
-            let _ = save(path, &state);
+    // the rows are parsed only where this call reads them or saves (451 T490: 36 to 43 ms of CPU a hook, the 3.0 MB parsed whole)
+    let mut st = Part::read(path, booking);
+    if mode == "edit" && !falsy(st.value().get("plan_holds")) {
+        let was = hold_part(st.value());
+        planhold::snapshot(st.value_mut(), call_root(payload).as_deref(), t);
+        if hold_part(st.value()) != was {
+            let _ = save(path, st.whole());
         }
     }
     let feature = current_feature(path, payload);
-    let switched = state.get("feature").and_then(Value::as_str) != Some(feature.as_str());
-    if switched {
-        // A RECORD CHECK'S COUNT FOLLOWS ITS UNIT, whatever feature is active (451 T227): a change of feature wiped every count, so
-        // record-format's rounds on 0097 in one feature were unseen in the next and no third round was held (2026-11-24). Nothing is
-        // wiped now; a unit counted before keeps the feature it was counted in as its home, where its triggers are filed and ruled.
-        let old = text(&state, "feature").to_owned();
-        let units: Vec<String> = state
-            .get("rounds")
-            .and_then(Value::as_object)
-            .map(|m| m.keys().cloned().collect())
-            .unwrap_or_default();
-        let homes = map_mut(&mut state, "round_home");
-        for unit in units.into_iter().filter(|_| !old.is_empty()) {
-            homes.entry(unit).or_insert_with(|| json!(old));
-        }
-        state["feature"] = json!(feature);
-    }
+    let switched = switch_feature(st.value_mut(), &feature);
     let ti = tool_input(payload);
     let tool = text(payload, "tool_name");
     let mut out = String::new();
     match (mode, tool) {
-        ("dispatch", "Agent") => match dispatch_mode(&mut state, payload, &ti, path, t) {
+        ("dispatch", "Agent") => match dispatch_mode(&mut st, payload, &ti, path, t) {
             Flow::Return(msg) => return msg,
             Flow::Continue(said) => out = said,
         },
         ("launched", "Agent" | "TaskStop") | ("returned", _) => {
             // a launch or return no dispatch or hold names changes nothing: neither booked nor saved (451 T387: 98 ms on every Agent
             // call's end; a clone and compare of the 3.0 MB state to find that out cost 55 ms of it, measured 2026-11-27)
-            if !switched && !concerns(mode, tool, &state, payload) {
+            if !switched && !concerns(mode, tool, &st, payload) {
                 return out;
             }
-            book_keep(mode, tool, &mut state, payload, &ti, path);
+            book_keep(mode, tool, st.whole(), payload, &ti, path);
         }
         ("after", _) => {
             let root = call_root(payload);
-            let was = hold_part(&state);
-            let msg = planhold::restore(&mut state, root.as_deref(), text(payload, "tool_use_id"));
-            if switched || hold_part(&state) != was {
-                let _ = save(path, &state);
+            let was = hold_part(st.value());
+            let msg = planhold::restore(
+                st.value_mut(),
+                root.as_deref(),
+                text(payload, "tool_use_id"),
+            );
+            if switched || hold_part(st.value()) != was {
+                let _ = save(path, st.whole());
             }
             if !msg.is_empty() {
                 if let Some(r) = root.as_deref() {
@@ -287,16 +280,38 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             return msg;
         }
         ("edit", _) => {
-            return edit_mode(&state, payload, &ti, tool, t);
+            return edit_mode(&mut st, payload, &ti, tool, t);
         }
         _ => return String::new(),
     }
     if out.is_empty() {
-        let _ = save(path, &state);
+        let _ = save(path, st.whole());
     } else {
-        keep_trips(path, &state);
+        keep_trips(path, st.whole());
     }
     out
+}
+
+/// A state counted under another feature than `feature` switched to it; whether it was. Reads and writes no row (451 T490).
+fn switch_feature(state: &mut Value, feature: &str) -> bool {
+    let switched = state.get("feature").and_then(Value::as_str) != Some(feature);
+    if switched {
+        // A RECORD CHECK'S COUNT FOLLOWS ITS UNIT, whatever feature is active (451 T227): a change of feature wiped every count, so
+        // record-format's rounds on 0097 in one feature were unseen in the next and no third round was held (2026-11-24). Nothing is
+        // wiped now; a unit counted before keeps the feature it was counted in as its home, where its triggers are filed and ruled.
+        let old = text(state, "feature").to_owned();
+        let units: Vec<String> = state
+            .get("rounds")
+            .and_then(Value::as_object)
+            .map(|m| m.keys().cloned().collect())
+            .unwrap_or_default();
+        let homes = map_mut(state, "round_home");
+        for unit in units.into_iter().filter(|_| !old.is_empty()) {
+            homes.entry(unit).or_insert_with(|| json!(old));
+        }
+        state["feature"] = json!(feature);
+    }
+    switched
 }
 
 /// What the plan hold reads and writes of the state - its holds and their kept text - compared around a call's snapshot and restore,
@@ -311,29 +326,27 @@ fn hold_part(state: &Value) -> (Option<Value>, Option<Value>) {
 /// Whether a launch or a return books anything: an Agent launch whose call id is a dispatch's or a hold's; a return whose agent is
 /// a dispatch's or a hold's, or that a wave dispatch still waiting for its agent could be paired with (`rounds::pair_wave`); a
 /// `TaskStop`, always (451 T387).
-fn concerns(mode: &str, tool: &str, state: &Value, payload: &Value) -> bool {
-    let rows = |key: &str| {
-        state
-            .get(key)
-            .and_then(Value::as_object)
-            .into_iter()
-            .flatten()
-    };
+fn concerns(mode: &str, tool: &str, st: &Part, payload: &Value) -> bool {
+    // the dispatches' rows as the partial read keeps them (451 T490), and the holds', read the same way
+    let holds: Vec<(&String, Row)> = st
+        .value()
+        .get("plan_holds")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flatten()
+        .map(|(k, d)| (k, Row::of(d)))
+        .collect();
+    let mut rows = st.rows.iter().chain(holds.iter().map(|(k, r)| (*k, r)));
     if mode == "launched" && tool == "Agent" {
         let tid = text(payload, "tool_use_id");
-        return rows("dispatches")
-            .chain(rows("plan_holds"))
-            .any(|(k, _)| k == tid);
+        return rows.any(|(k, _)| k == tid);
     }
     if mode == "launched" {
         return true;
     }
     let aid = text(payload, "agent_id");
-    rows("dispatches").chain(rows("plan_holds")).any(|(_, d)| {
-        text(d, "aid") == aid
-            || (!falsy(d.get("wave"))
-                && (text(d, "state") == "pending"
-                    || (text(d, "state") == "returned" && falsy(d.get("reply")))))
+    rows.any(|(_, d)| {
+        d.aid == aid || (d.wave && (d.state == "pending" || (d.state == "returned" && !d.reply)))
     })
 }
 
@@ -362,7 +375,7 @@ enum Flow {
     Continue(String),
 }
 
-fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t: f64) -> Flow {
+fn dispatch_mode(st: &mut Part, payload: &Value, ti: &Value, path: &Path, t: f64) -> Flow {
     let check = text(ti, "subagent_type").to_owned();
     let root = clone_root(&cwd_of(payload));
     let prompt = text(ti, "prompt").to_owned();
@@ -387,8 +400,8 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
         } else {
             tid.to_owned()
         };
-        planhold::hold(state, &id, &prompt, t, root.as_deref());
-        let _ = save(path, state);
+        planhold::hold(st.whole(), &id, &prompt, t, root.as_deref());
+        let _ = save(path, st.whole());
     }
     if check == "work-budget" && root.is_some() && !escaped("ARBITER_OK", &prompt) {
         let r = root.as_deref().map_or(Path::new("."), |d| d);
@@ -404,6 +417,8 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
     if !is_check_kind(&check) {
         return Flow::Return(String::new());
     }
+    // a counted check reads and writes the rows: the whole state from here (451 T490)
+    let state = st.whole();
     let (manifest, body) = manifest_of(&prompt);
     let freeze_ok = escaped("FREEZE_OK", &prompt);
     let arbiter_ok = escaped("ARBITER_OK", &prompt);
@@ -576,8 +591,20 @@ pub fn batch_said(check: &str, kinds: &[String]) -> String {
     )
 }
 
-fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> String {
+fn edit_mode(st: &mut Part, payload: &Value, ti: &Value, tool: &str, t: f64) -> String {
     let root = clone_root(&cwd_of(payload));
+    // the freeze reads the rows only for `apply-edits` (its pattern names it) or a page with a subject (451 T490)
+    let rows = match tool {
+        "Bash" => text(ti, "command").contains("apply-edits"),
+        "Edit" | "Write" | "MultiEdit" => {
+            !rounds::subject_of_path(text(ti, "file_path")).is_empty()
+        }
+        _ => false,
+    };
+    if rows {
+        st.whole();
+    }
+    let state = st.value();
     let held = planhold::refusal(state, call_root(payload).as_deref(), tool, ti, t);
     if !held.is_empty() {
         return held;

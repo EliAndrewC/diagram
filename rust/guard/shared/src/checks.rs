@@ -113,10 +113,20 @@ pub fn clone_root(cwd: &str) -> Option<PathBuf> {
 /// A JSON file, `{}` where it is missing or unreadable (`hm_checks.load`, `hm_arbiter._load`).
 #[must_use]
 pub fn load(path: &Path) -> Value {
-    std::fs::read_to_string(path)
-        .ok()
-        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-        .unwrap_or_else(empty)
+    parsed(&std::fs::read_to_string(path).unwrap_or_default())
+}
+
+/// `text` parsed whole, `{}` where it is not JSON (an unreadable file reads as "", so as `{}`).
+pub(crate) fn parsed(text: &str) -> Value {
+    #[cfg(test)]
+    PARSES.with(|n| n.set(n.get() + 1));
+    serde_json::from_str::<Value>(text).unwrap_or_else(|_| empty())
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The whole parses of a state on this thread, which a test counts (451 T490).
+    pub(crate) static PARSES: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 /// An empty object.
