@@ -16,6 +16,8 @@ use std::time::Instant;
 
 use serde_json::Value;
 
+use l7r_shared::tool::ask_git_private;
+
 use crate::cohort::git as git_said;
 use crate::Reply;
 
@@ -89,7 +91,10 @@ pub fn tree(root: &Path) -> BTreeMap<String, String> {
         "HEAD".to_owned(),
         git(root, &["rev-parse", "HEAD"]).trim().to_owned(),
     );
-    let listed = git(root, &["diff", "--name-only", "HEAD"]);
+    // on a private index: the gate-write guard asks this of the clone while the gate runs, and a work-tree diff takes the clone's
+    // index lock where an entry is stale, so the gate's own commit there died on it (451 T446)
+    let at = root.to_string_lossy();
+    let listed = ask_git_private(Path::new("/"), &at, &["diff", "--name-only", "HEAD"]).out;
     let paths: Vec<String> = listed
         .lines()
         .filter(|p| !p.is_empty() && !GATE_WRITES.contains(p))

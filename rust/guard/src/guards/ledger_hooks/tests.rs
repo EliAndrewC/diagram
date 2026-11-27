@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::json;
 
-use super::{commit_root, decide, judge, Ctx};
+use super::{commit_root, decide, judge, stages_ledger, Ctx};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::ask;
@@ -248,4 +248,28 @@ fn a_commit_is_read_however_git_is_spelled() {
         Some(".")
     );
     assert_eq!(commit_root("/tmp/mygit commit -m x"), None);
+}
+
+/// 451 T446: a commit's reading of what it stages leaves the tree's index as it was where an entry is stale, so a commit of another
+/// call's in the same tree does not meet the guard's lock.
+#[test]
+fn what_a_commit_stages_is_read_without_rewriting_the_index() {
+    let (_d, at, tree) = world("stale");
+    crate::shared::tool::stale(&Path::new(&at).join("other.md"));
+    std::fs::write(
+        format!("{at}/dev/review-ledger.md"),
+        format!("{HEAD}{GOOD}\n{GOOD}\n"),
+    )
+    .unwrap();
+    let index = || std::fs::read(format!("{at}/.git/index")).unwrap();
+    let before = index();
+    let c = ctx(&at, &tree);
+    assert!(stages_ledger(" git commit -a -m x ", &at, false, &c));
+    assert!(stages_ledger(
+        " git add -u && git commit -m x ",
+        &at,
+        false,
+        &c
+    ));
+    assert!(index() == before, "the commit's reading rewrote the index");
 }

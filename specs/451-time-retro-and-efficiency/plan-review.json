@@ -3860,7 +3860,7 @@
    "declared": "spec-fidelity"
   },
   "### T446 Approach (checklist part A)": {
-   "sha256": "f151262785cd772f04acbe146c760f3e86c535b4f3304093ac7324b7ee094efc",
+   "sha256": "d0cd5db812cbeebe84b2b260ce5a8b5ce51e57edb2b4b542d0fa2dbd24555710",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4101,6 +4101,12 @@
   },
   "### T465 Approach (checklist part A)": {
    "sha256": "241dfc2758426bc62a5f81a3d83c4fab0ba860e4cd861dec86d07f4ba10ba0ee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))": {
+   "sha256": "012215fbb1c57920b8eed590a4fea29ffd0e1ec954813df1f6760f3d928cc978",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36819,6 +36825,144 @@
      "why": "Removing an empty template takes away no decision and no requested behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1-private-index",
+     "summary": "The guards' work-tree reads run on a private copy of the tree's index (GIT_INDEX_FILE), through one new asker shared::tool::ask_git_private, found by rev-parse --git-path index so a linked worktree's index is the one copied.",
+     "class": "within",
+     "why": "This is the mechanism of the fix the task line asks for: a guard read that no longer takes the tree's index lock. It was measured on the same git version beside a held lock, and in a 200-commit loop it went from 125 and 200 refusals to 0. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "D2-mtime-kept",
+     "summary": "The copy keeps the index file's mtime (cp -p), so git's racy-entry test answers as it does on the real index.",
+     "class": "within",
+     "why": "This is a correctness detail of D1. It keeps the private read equal to the plain one, including on a same-size edit, and does not narrow the request."
+    },
+    {
+     "id": "D3-no-index-plain",
+     "summary": "Where there is no index to copy (none yet, or no repository), the plain call answers.",
+     "class": "within",
+     "why": "With no index there is no tree lock for the read to meet, so the defect cannot happen. The asker's pinning test covers this case."
+    },
+    {
+     "id": "D4-changed-lines-autorefresh",
+     "summary": "freeze.rs changed_lines uses -c diff.autoRefreshIndex=false diff --numstat <base> instead of a private copy.",
+     "class": "within",
+     "why": "It was measured to give the plain call's lines and write nothing. A stale entry whose content is unchanged adds 0 lines, so the sum is the same. The read no longer rewrites the index, which is the goal, and leaving out a copy is an implementation choice, not a narrowing."
+    },
+    {
+     "id": "D5-cached-reads-left",
+     "summary": "stages_ledger's diff --cached and rev-parse stay on Ctx::git; every git_lines call in conflict_marker_hooks (add --dry-run, diff --cached, diff, status -- <paths>) takes the private asker.",
+     "class": "within",
+     "why": "diff --cached was measured to neither write nor fail with the lock standing, so leaving it on the plain call leaves no defect. Putting all of conflict_marker's calls on the private index goes no further than the sites the task changes."
+    },
+    {
+     "id": "D6-copy-cost",
+     "summary": "At most three index copies per judged add or commit are accepted, about 25 ms on the clone.",
+     "class": "within",
+     "why": "The cost is measured and the trade fits the GM's direction (time saved over other resources; a refused commit costs a retry). Cost is not a fidelity finding."
+    },
+    {
+     "id": "D7-no-message-change",
+     "summary": "No guard message changes.",
+     "class": "within",
+     "why": "The task concerns how the guards read, not what they say, so leaving the messages unchanged narrows nothing."
+    },
+    {
+     "id": "D8-gate-scripts-status-unchanged",
+     "summary": "The gate's and the scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read and none was changed.",
+     "class": "within",
+     "why": "The task line covers the guards' work-tree reads, so these calls are outside its class, and no wrong outcome is shown for them. That keeps this decision within. A gap stays on record: the block judged them on whether each asks the right tree, not on the lock. Every lock probe ran with GIT_OPTIONAL_LOCKS=0, so 'takes the lock as the session's own work' is not measured, even though the block itself says a backgrounded make land or make carry commits beside the session's own calls. If any of these calls is shown to refuse a concurrent commit, it is a defect for a filed task."
+    },
+    {
+     "id": "D9-site-set",
+     "summary": "The fix covers four guard sites (static_runs delta_crates, freeze changed_lines, ledger stages_ledger, conflict_marker added/committed). Item 12 states the search behind that list as 'every work-tree git read the task line names and every ask in conflict_marker_hooks.rs'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Part A's goal 1 is 'No guard's read makes a session's git add or git commit die on index.lock'. The block's own probes found two forms that take the lock whatever GIT_OPTIONAL_LOCKS says: a work-tree git diff (any of --name-only, <base>, --numstat) and git add (--dry-run, with . and -u). The census does not cover that class. The diff form was taken only from the task line's own list, and the add form, a new finding of this task, was looked for in one file (conflict_marker_hooks.rs). No line states a search of every guard's git calls for either form, so the fix is limited to the instances that happened to be named, under a goal that covers all of them. Any guard site the search missed would be a refused commit, a wrong outcome under the block's own item 2 (constitution XIV), and FR-009 asks a fix that names a class of defect to say how every instance was found. To clear this, add an observation line with its method: the command run over every guard and the shared asker (for example a grep over rust/guard for the git-asking calls and their arguments, plus any guard that calls a script holding a git call), its hits, and for each hit of a work-tree diff or an add, either the change or why it cannot meet another writer's commit. If that search finds only these four sites, the decision becomes within. The other way to clear it is to narrow goal 1 to the named sites, and that narrowing would itself need a ruling."
+    }
+   ],
+   "tasks": [
+    "T446"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T446-D1",
+     "summary": "The guards' work-tree reads at the four named sites (static_runs delta_crates, ledger stages_ledger, conflict_marker git_lines) run on a private copy of the tree's index through one new asker, shared::tool::ask_git_private (GIT_INDEX_FILE on an mtime-kept copy).",
+     "class": "within",
+     "why": "Fixes the task's defect (a guard read makes the session's add or commit die on index.lock, and the conflict guard reads an empty add beside another writer's lock) at every named site; a wrong outcome under constitution XIV, and performance work under FR-013 (a refused commit is a retry)."
+    },
+    {
+     "id": "T446-D2",
+     "summary": "A fifth site found by the stated search, the gate's preflight.rs tree (git diff --name-only HEAD) which the gate-write guard asks, is changed the same way.",
+     "class": "within",
+     "why": "Same defect, same class, found by a search whose space is stated (grep of rust/guard/src and rust/guard/shared/src for the git verbs, then every script and gate subcommand a guard asks); fixing every instance of the class widens nothing the task asked for."
+    },
+    {
+     "id": "T446-D3",
+     "summary": "freeze.rs changed_lines takes -c diff.autoRefreshIndex=false instead of a private copy.",
+     "class": "within",
+     "why": "Same outcome by a lighter means: a sum of added and deleted lines is unchanged by a stat-only stale entry, measured to give the plain call's lines and to refuse 0 of 200 commits beside a committer against 151 of 200 for the plain form."
+    },
+    {
+     "id": "T446-D4",
+     "summary": "Where there is no index to copy (no index yet, or no repository) the asker runs the plain call.",
+     "class": "within",
+     "why": "No tree lock exists there to meet; the defect cannot arise, and the read still answers."
+    },
+    {
+     "id": "T446-D5",
+     "summary": "The copy keeps the index file's mtime so git's racy-entry test is unchanged.",
+     "class": "within",
+     "why": "Keeps the read's answer the same as the plain call's (a copy stamped now could miss a same-size edit); implementation detail of the fix."
+    },
+    {
+     "id": "T446-D6",
+     "summary": "The gate's and scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs status_lines, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read for the tree each asks and none changed.",
+     "class": "within",
+     "why": "The task is the guards' work-tree diff and add reads; git status under T304's GIT_OPTIONAL_LOCKS=0 was measured neither to write nor to fail, and those run as the session's own work or under that variable where a guard asks them. Nothing defective is left: no wrong tree, no lock taken by a guard read."
+    },
+    {
+     "id": "T446-D7",
+     "summary": "Tree-to-tree and --cached diffs and the non-git matches found by the search are left as they are.",
+     "class": "within",
+     "why": "They take no index lock (diff --cached measured neither to write nor fail), so they carry no instance of the defect."
+    },
+    {
+     "id": "T446-D8",
+     "summary": "No guard message changes; tool.rs's command comment names what GIT_OPTIONAL_LOCKS does not cover and where it goes.",
+     "class": "within",
+     "why": "The fix changes how the reads take the lock, not what any guard says; the comment records the class for later writers."
+    },
+    {
+     "id": "T446-D9",
+     "summary": "Exits: first tier green in the builder's tree with each site's test red on the old code; the full gate and coverage are the landing's. Order after T304, before T302; one landing; performance work: yes.",
+     "class": "within",
+     "why": "Matches the GM's two-tier checking (2026-11-26, a builder runs no coverage) and FR-013's ordering of performance work first."
+    },
+    {
+     "id": "T446-D10",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -55998,6 +56142,74 @@
      "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
      "class": "within",
      "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T446": {
+   "section_sha256": "eb95755c021c8cfd24a889b777f33badc27e94bcd239d3d0104504dd75605382",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T446-D1",
+     "summary": "The guards' work-tree reads at the four named sites (static_runs delta_crates, ledger stages_ledger, conflict_marker git_lines) run on a private copy of the tree's index through one new asker, shared::tool::ask_git_private (GIT_INDEX_FILE on an mtime-kept copy).",
+     "class": "within",
+     "why": "Fixes the task's defect (a guard read makes the session's add or commit die on index.lock, and the conflict guard reads an empty add beside another writer's lock) at every named site; a wrong outcome under constitution XIV, and performance work under FR-013 (a refused commit is a retry)."
+    },
+    {
+     "id": "T446-D2",
+     "summary": "A fifth site found by the stated search, the gate's preflight.rs tree (git diff --name-only HEAD) which the gate-write guard asks, is changed the same way.",
+     "class": "within",
+     "why": "Same defect, same class, found by a search whose space is stated (grep of rust/guard/src and rust/guard/shared/src for the git verbs, then every script and gate subcommand a guard asks); fixing every instance of the class widens nothing the task asked for."
+    },
+    {
+     "id": "T446-D3",
+     "summary": "freeze.rs changed_lines takes -c diff.autoRefreshIndex=false instead of a private copy.",
+     "class": "within",
+     "why": "Same outcome by a lighter means: a sum of added and deleted lines is unchanged by a stat-only stale entry, measured to give the plain call's lines and to refuse 0 of 200 commits beside a committer against 151 of 200 for the plain form."
+    },
+    {
+     "id": "T446-D4",
+     "summary": "Where there is no index to copy (no index yet, or no repository) the asker runs the plain call.",
+     "class": "within",
+     "why": "No tree lock exists there to meet; the defect cannot arise, and the read still answers."
+    },
+    {
+     "id": "T446-D5",
+     "summary": "The copy keeps the index file's mtime so git's racy-entry test is unchanged.",
+     "class": "within",
+     "why": "Keeps the read's answer the same as the plain call's (a copy stamped now could miss a same-size edit); implementation detail of the fix."
+    },
+    {
+     "id": "T446-D6",
+     "summary": "The gate's and scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs status_lines, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read for the tree each asks and none changed.",
+     "class": "within",
+     "why": "The task is the guards' work-tree diff and add reads; git status under T304's GIT_OPTIONAL_LOCKS=0 was measured neither to write nor to fail, and those run as the session's own work or under that variable where a guard asks them. Nothing defective is left: no wrong tree, no lock taken by a guard read."
+    },
+    {
+     "id": "T446-D7",
+     "summary": "Tree-to-tree and --cached diffs and the non-git matches found by the search are left as they are.",
+     "class": "within",
+     "why": "They take no index lock (diff --cached measured neither to write nor fail), so they carry no instance of the defect."
+    },
+    {
+     "id": "T446-D8",
+     "summary": "No guard message changes; tool.rs's command comment names what GIT_OPTIONAL_LOCKS does not cover and where it goes.",
+     "class": "within",
+     "why": "The fix changes how the reads take the lock, not what any guard says; the comment records the class for later writers."
+    },
+    {
+     "id": "T446-D9",
+     "summary": "Exits: first tier green in the builder's tree with each site's test red on the old code; the full gate and coverage are the landing's. Order after T304, before T302; one landing; performance work: yes.",
+     "class": "within",
+     "why": "Matches the GM's two-tier checking (2026-11-26, a builder runs no coverage) and FR-013's ordering of performance work first."
+    },
+    {
+     "id": "T446-D10",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
     }
    ],
    "verdict": "CLEAR"

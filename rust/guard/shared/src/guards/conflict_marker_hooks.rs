@@ -20,7 +20,7 @@ use crate::protocol::{Answer, Event, Guard};
 use crate::session::Session;
 use crate::shape::shlex;
 use crate::state::field;
-use crate::tool::ask;
+use crate::tool::ask_git_private;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -102,13 +102,11 @@ fn assignments(cmd: &str) -> Vec<(String, String)> {
     out
 }
 
+/// `git -C <repo> <args>`'s lines, read on a private index: a work-tree diff, and every `add --dry-run`, takes the tree's index lock,
+/// and the dry run died where another held it, so a conflict went unseen (451 T446).
 fn git_lines(repo: &str, args: &[&str]) -> Vec<String> {
-    let all: Vec<&str> = ["-C", repo]
-        .into_iter()
-        .chain(args.iter().copied())
-        .collect();
     let dir = if Path::new(repo).is_dir() { repo } else { "." };
-    ask(Path::new(dir), "git", &all, "")
+    ask_git_private(Path::new(dir), repo, args)
         .out
         .lines()
         .filter(|l| !l.is_empty())

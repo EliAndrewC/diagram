@@ -176,6 +176,26 @@ fn the_tree_records_what_differs_and_not_what_the_gate_writes() {
     assert_eq!(tree(&root)["notes.md"], "?", "a path that cannot be hashed");
 }
 
+/// 451 T446: the gate-write guard asks this tree of the clone while the gate runs, on an add or a commit; with an entry's stat data
+/// stale, the read leaves the clone's index as it was, so the gate's own commit there does not meet its lock.
+#[test]
+fn the_tree_is_read_without_rewriting_the_index() {
+    let root = repo("pf-tree-stale");
+    std::fs::write(root.join("kept.md"), "k\n").unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "kept"]);
+    let old = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_secs(1_000_000_000);
+    let file = std::fs::File::options()
+        .write(true)
+        .open(root.join("kept.md"))
+        .unwrap();
+    file.set_modified(old).unwrap();
+    let index = || std::fs::read(root.join(".git/index")).unwrap();
+    let before = index();
+    assert_eq!(tree(&root).len(), 1);
+    assert!(index() == before, "the tree's read rewrote the index");
+}
+
 fn change(path: &str, old: Option<&[u8]>, new: Option<&[u8]>) -> super::Change {
     (
         path.to_owned(),

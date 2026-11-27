@@ -1,5 +1,6 @@
 //! The decider over a real tree (`tests/hooks/test-conflict-marker-hooks.sh`, replayed through the shim, is the verdict).
 
+use std::collections::BTreeSet;
 use std::path::Path;
 
 use serde_json::json;
@@ -200,4 +201,22 @@ fn the_escape_needs_a_reason_and_the_entry_reads_the_cwd() {
         input: json!({"tool_input": {"command": "echo hi"}}),
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
+}
+
+/// 451 T446: what an add or a commit stages is read on a private index - with another's `index.lock` standing, the dry run no longer
+/// dies and leaves a conflicted file unseen, and with a stale entry the tree's index is left as it was.
+#[test]
+fn what_is_staged_is_read_with_the_index_locked_and_leaves_it_as_it_was() {
+    let r = repo("locked");
+    let at = r.as_str();
+    std::fs::write(format!("{at}/a.md"), triple()).unwrap();
+    crate::tool::stale(&Path::new(at).join("sub/ok.md"));
+    let index = || std::fs::read(format!("{at}/.git/index")).unwrap();
+    let before = index();
+    let want = BTreeSet::from([format!("{at}/a.md")]);
+    std::fs::write(format!("{at}/.git/index.lock"), "").unwrap();
+    assert_eq!(staged_by("git add .", at), want);
+    std::fs::remove_file(format!("{at}/.git/index.lock")).unwrap();
+    assert_eq!(staged_by("git commit -a -m x", at), want);
+    assert!(index() == before, "the staged read rewrote the index");
 }

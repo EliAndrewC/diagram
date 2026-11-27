@@ -33,8 +33,10 @@ impl Said {
 /// times on 2026-11-26; in a clone of this repository, three loops of that status beside 200 rounds of add and commit refused 190
 /// of them, and 0 with the variable. A lock a command NEEDS (an add, a commit, a merge) is still taken: the variable names only
 /// the optional ones. NOT covered: `git diff` against the work tree, which in git 2.53 writes its refresh back whatever the
-/// variable says, where a file's stat data is stale and its content unchanged (142 of 200 rounds refused with it, 154 without).
-/// The guards' direct `Command::new("git")` calls refresh no index (`rev-parse`, `for-each-ref`, a tree-to-tree diff).
+/// variable says, where a file's stat data is stale and its content unchanged (142 of 200 rounds refused with it, 154 without),
+/// and `git add --dry-run`, which takes the lock on every call and dies where it is held: those reads go through
+/// [`ask_git_private`] (451 T446). The guards' direct `Command::new("git")` calls refresh no index (`rev-parse`, `for-each-ref`, a
+/// tree-to-tree diff).
 fn command(program: &str) -> Command {
     let mut asked = Command::new(program);
     asked.env("GIT_OPTIONAL_LOCKS", "0");
@@ -50,6 +52,55 @@ pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
     })
 }
 
+/// `git -C <repo> <args>` run from `dir` on a private copy of the repository's index (`GIT_INDEX_FILE`), so the read takes no
+/// `index.lock` of the tree's own and leaves its index as it was; the answer is the plain call's. WHY (451 T446): a work-tree
+/// `git diff` writes its refresh back whatever `GIT_OPTIONAL_LOCKS` says where a file's stat data is stale, and `git add
+/// --dry-run` takes the lock on every call and dies where another holds it (measured 2026-11-27 in a scratch repository: both
+/// wrote or refused, `diff.autoRefreshIndex=false`, `diff-index` and `diff-files` each listed the stale file, and the copy's
+/// answers matched the plain ones for a stale, a modified, a staged, a deleted and an untracked file in a linked worktree). The
+/// copy keeps the index's mtime, which git's racy-entry test reads. Where no index can be copied (none yet, no repository) the
+/// plain call answers: there is then no lock of the tree's for it to meet. A copy of the session clone's 3.7 MB index cost
+/// 8.5 ms (20 copies, 2026-11-27).
+#[must_use]
+pub fn ask_git_private(dir: &Path, repo: &str, args: &[&str]) -> Said {
+    let index = ask(
+        dir,
+        "git",
+        &[
+            "-C",
+            repo,
+            "rev-parse",
+            "--path-format=absolute",
+            "--git-path",
+            "index",
+        ],
+        "",
+    )
+    .out;
+    let scratch = crate::tempdir::TempDir::new("private-index");
+    let copy = scratch.path().join("index");
+    let mut all = vec!["-C", repo];
+    all.extend_from_slice(args);
+    let mut git = command("git");
+    if copied(Path::new(&index), &copy) {
+        git.env("GIT_INDEX_FILE", &copy);
+    }
+    asked(git, dir, &all, "").unwrap_or(Said {
+        code: -1,
+        ..Said::default()
+    })
+}
+
+/// `from` copied to `to` with its mtime kept; false where any step failed.
+fn copied(from: &Path, to: &Path) -> bool {
+    let kept = std::fs::metadata(from).and_then(|m| m.modified());
+    kept.and_then(|t| {
+        std::fs::copy(from, to)?;
+        File::options().write(true).open(to)?.set_modified(t)
+    })
+    .is_ok()
+}
+
 /// [`ask`], for a caller that tells a program that could not START from one that ran and failed (451 T268): `ask` answers both -1
 /// with nothing, so the clone-sync notice of a sync script the kernel refused to run ("Text file busy", T263) ended `FAILED: ` with
 /// no reason after it. A code of -1 with no output is not the test for it: a program a signal killed answers the same.
@@ -58,7 +109,12 @@ pub fn ask(dir: &Path, program: &str, args: &[&str], stdin: &str) -> Said {
 ///
 /// The program could not be started: what the spawn said (a missing file, one not executable, one open for writing).
 pub fn ask_started(dir: &Path, program: &str, args: &[&str], stdin: &str) -> std::io::Result<Said> {
-    let mut child = command(program)
+    asked(command(program), dir, args, stdin)
+}
+
+/// [`ask_started`] for a command already made, its environment set.
+fn asked(mut program: Command, dir: &Path, args: &[&str], stdin: &str) -> std::io::Result<Said> {
+    let mut child = program
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::piped())
@@ -220,12 +276,66 @@ pub fn flock_within(path: &Path, timeout: f64) -> std::io::Result<Option<File>> 
     Ok(Some(file))
 }
 
+/// `file`'s mtime moved to 2001 with its content kept, so the index's stat data for it goes stale: the case in which a work-tree
+/// `git diff` writes its refresh back (451 T446's fixtures).
+///
+/// # Panics
+///
+/// Where `file` cannot be opened or its mtime set: the fixture would prove nothing.
+#[cfg(any(test, feature = "test-env"))]
+pub fn stale(file: &Path) {
+    let old = std::time::SystemTime::UNIX_EPOCH + Duration::from_secs(1_000_000_000);
+    let set = File::options()
+        .write(true)
+        .open(file)
+        .and_then(|f| f.set_modified(old));
+    assert!(set.is_ok(), "{} could not be made stale", file.display());
+}
+
 #[cfg(test)]
 mod tests {
     use std::path::Path;
     use std::time::Duration;
 
-    use super::{ask, ask_started, ask_within, within};
+    use super::{ask, ask_git_private, ask_started, ask_within, stale, within};
+
+    #[test]
+    fn a_git_read_on_a_private_index_leaves_the_index_and_meets_no_lock() {
+        let dir = crate::tempdir::TempDir::new("tool-private-index");
+        let repo = dir.path();
+        let at = repo.to_string_lossy();
+        let index = || std::fs::read(repo.join(".git/index")).unwrap();
+        let git = |args: &[&str]| ask(repo, "git", args, "");
+        assert!(git(&["init", "-q"]).ok());
+        std::fs::write(repo.join("a"), "a\n").unwrap();
+        // no index yet: the plain call answers
+        assert_eq!(
+            ask_git_private(repo, &at, &["status", "--porcelain"]).out,
+            "?? a"
+        );
+        std::fs::write(repo.join("b"), "b\n").unwrap();
+        assert!(git(&["add", "a", "b"]).ok());
+        std::fs::write(repo.join("b"), "b2\n").unwrap();
+        stale(&repo.join("a"));
+        let before = index();
+        let dry = ["add", "--dry-run", "--ignore-missing", "."];
+        std::fs::write(repo.join(".git/index.lock"), "").unwrap();
+        assert_eq!(git(&dry).code, 128);
+        assert_eq!(ask_git_private(repo, &at, &dry).out, "add 'b'");
+        std::fs::remove_file(repo.join(".git/index.lock")).unwrap();
+        assert_eq!(
+            ask_git_private(repo, &at, &["diff", "--name-only"]).out,
+            "b"
+        );
+        assert!(index() == before, "a private read rewrote the index");
+        // the fixture does go stale: the plain diff rewrites this index
+        assert_eq!(git(&["diff", "--name-only"]).out, "b");
+        assert!(index() != before, "the fixture's index was never stale");
+        assert_ne!(
+            ask_git_private(Path::new("/"), "/no/such/repo", &["status"]).code,
+            0
+        );
+    }
 
     /// RED FIRST (451 T304): with a bare `Command::new`, each asker's `git status` rewrites the index it refreshed - under
     /// `index.lock`, which a commit beside it dies on. The file is rewritten with its own content and another mtime, so the index's

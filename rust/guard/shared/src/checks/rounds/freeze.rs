@@ -188,7 +188,16 @@ pub fn changed_lines(root: &Path) -> u64 {
         merge
     };
     let mut total = 0;
-    for raw in git_stdout(root, &["diff", "--numstat", &base]).lines() {
+    // no refresh written back: a work-tree diff takes the clone's index lock where an entry is stale, and a commit there dies on
+    // it; the count is the same, since a file whose content is unchanged adds 0 lines either way (451 T446)
+    let diff = [
+        "-c",
+        "diff.autoRefreshIndex=false",
+        "diff",
+        "--numstat",
+        &base,
+    ];
+    for raw in git_stdout(root, &diff).lines() {
         let parts: Vec<&str> = raw.split('\t').collect();
         if parts.len() == 3 && !GEN.is_match(parts[2]).unwrap_or(false) {
             if let (Ok(a), Ok(b)) = (parts[0].parse::<u64>(), parts[1].parse::<u64>()) {

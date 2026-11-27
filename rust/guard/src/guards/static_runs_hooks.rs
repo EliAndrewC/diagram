@@ -41,6 +41,7 @@ use crate::shared::log::fire;
 use crate::shared::make::invoked;
 use crate::shared::session::Session;
 use crate::shared::state::field;
+use crate::shared::tool::ask_git_private;
 use crate::shared::tree::walk;
 
 mod order;
@@ -358,7 +359,9 @@ fn delta_crates(root: &Path) -> Vec<String> {
     let base = git_stdout(root, &["merge-base", "HEAD", "origin/main"]);
     let mut paths = String::new();
     if !base.is_empty() {
-        paths = git_stdout(root, &["diff", "--name-only", &base]);
+        // on a private index: a work-tree diff takes the tree's index lock where an entry is stale (451 T446)
+        let at = root.to_string_lossy();
+        paths = ask_git_private(Path::new("/"), &at, &["diff", "--name-only", &base]).out;
     }
     paths.push('\n');
     paths.push_str(&git_stdout(

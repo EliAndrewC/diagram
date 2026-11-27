@@ -398,6 +398,12 @@ fn the_crates_are_the_packages_above_the_deltas_rust_files() {
     git(&["update-ref", "refs/remotes/origin/main", "HEAD"]);
     std::fs::write(d.join("rust/b/src/lib.rs"), "// changed\n").unwrap();
     assert_eq!(delta_crates(&d), ["rust/a", "rust/b"]);
+    // a stale entry: the delta's read leaves the tree's index as it was (451 T446)
+    crate::shared::tool::stale(&d.join("docs.md"));
+    let index = || std::fs::read(d.join(".git/index")).unwrap();
+    let before = index();
+    assert_eq!(delta_crates(&d), ["rust/a", "rust/b"]);
+    assert!(index() == before, "the delta's read rewrote the index");
 }
 
 /// THE WHOLE CHAIN: the event log writes the call's own line before this guard reads, and that line is not a run; the crate-scoped

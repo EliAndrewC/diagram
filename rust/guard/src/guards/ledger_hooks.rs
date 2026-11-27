@@ -19,7 +19,7 @@ use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::spelled::names;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, ask_git_private};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -58,6 +58,12 @@ impl Ctx {
             .chain(args.iter().copied())
             .collect();
         ask(&self.here, "git", &all, "").out
+    }
+
+    /// [`Ctx::git`] on a private index, for a read of the work tree: a work-tree `git diff` takes the tree's index lock where an
+    /// entry is stale, and a commit of another call's in the tree dies on it (451 T446).
+    fn git_private(&self, root: &str, args: &[&str]) -> String {
+        ask_git_private(&self.here, root, args).out
     }
 }
 
@@ -123,13 +129,13 @@ fn stages_ledger(cmd: &str, root: &str, row: bool, c: &Ctx) -> bool {
     let mut staged = c.git(root, &["diff", "--cached", "--name-only"]);
     if has(&[" -a ", " -am ", " --all "]) {
         staged.push(' ');
-        staged += &c.git(root, &["diff", "--name-only"]);
+        staged += &c.git_private(root, &["diff", "--name-only"]);
     }
     if spaced.contains(" add ")
         && (spaced.contains(LEDGER) || has(&[" -A ", " --all ", " -u ", " . ", " dev ", " dev/ "]))
     {
         staged.push(' ');
-        staged += &c.git(root, &["diff", "--name-only"]);
+        staged += &c.git_private(root, &["diff", "--name-only"]);
         if row {
             staged.push(' ');
             staged += LEDGER;

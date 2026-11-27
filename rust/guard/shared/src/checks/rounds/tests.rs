@@ -714,6 +714,8 @@ fn oscillation_finds_a_block_that_came_back() {
 #[test]
 fn the_cascade_counts_dispatches_and_changed_lines() {
     let mut root = clone_at("cascade-lines");
+    std::fs::write(root.join("c.txt"), "kept\n").unwrap();
+    git(&root, &["add", "c.txt"]);
     git(
         &root,
         &[
@@ -735,6 +737,12 @@ fn the_cascade_counts_dispatches_and_changed_lines() {
     std::fs::write(root.join("b.json"), "1\n").unwrap();
     git(&root, &["add", "-A"]);
     assert_eq!(changed_lines(&root), 2);
+    // a stale entry: the count leaves the clone's index as it was (451 T446)
+    crate::tool::stale(&root.join("c.txt"));
+    let index = || std::fs::read(root.join(".git/index")).unwrap();
+    let before = index();
+    assert_eq!(changed_lines(&root), 2);
+    assert!(index() == before, "the count rewrote the index");
     let state = json!({"dispatches": {"a": {"t": 10.0}, "b": {"t": 1.0}, "c": {"t": 10.0, "prewrite": true}}});
     assert_eq!(dispatches_since(&state, 5.0), 1);
     root = clone_at("no-commit");
