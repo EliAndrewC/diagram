@@ -18,7 +18,9 @@ fn words(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
 }
 
-/// A clone's git directory with fixture cgroup and `/proc` files: 2 GiB anonymous of 10, two `rustc`, two pool trees held.
+/// A clone's git directory with fixture cgroup and `/proc` files: 2 GiB anonymous of 10, two `rustc`, two pool trees held - and the
+/// lane's tree, which `held` leaves out (461 T59: the sampler started 09:44:04Z on 2026-11-27, before T13 landed, listed `lane` in 215
+/// samples).
 fn world(tag: &str) -> (TempDir, Env) {
     let dir = TempDir::new(&format!("sampler-{tag}"));
     let (common, cgroup, proc) = (dir.join("git"), dir.join("cgroup"), dir.join("proc"));
@@ -57,6 +59,10 @@ fn world(tag: &str) -> (TempDir, Env) {
             tree("b1", &["T274"]),
             tree("b2", &[]),
             tree("b3", &["T1", "T2"]),
+            Tree {
+                feature: String::new(),
+                ..tree("land", &[builder_pool::LANE])
+            },
         ],
     )
     .unwrap();

@@ -36,7 +36,6 @@ nf = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(nf)
 ts, iso, opener = nf.ts, nf.iso, nf.opener
 
-LANE_TREE_SUFFIX = '-land'   # the lane's own worktree (adopted `lane` 21:08:09Z): no builder's tree, so never "held"
 JOIN_BEFORE_S, JOIN_AFTER_S = 5, 60
 
 
@@ -258,9 +257,9 @@ def figures(w0s, w1s, kept=None):
     print(f'tasks landed by those attempts: {landed_tasks}')
 
     # -- concurrency (FR-010)
-    builder_pool = [r for r in pool if not r['tree'].endswith(LANE_TREE_SUFFIX)]
-    tree_h, held, per = nf.concurrency(builder_pool, w0, w1)
-    _, held_all, _ = nf.concurrency(pool, w0, w1)
+    # the lane's own tree (adopted `lane` 21:08:09Z) is no builder's: night-figures.py leaves it out since 461 T59
+    tree_h, held, per = nf.concurrency(pool, w0, w1)
+    _, held_all, _ = nf.concurrency(pool, w0, w1, lane=True)
     print('\n## Concurrency (FR-010)')
     print(f'trees held, time-weighted (pool log, the lane tree left out): {held:.2f}; with it: {held_all:.2f}')
     print(f'tree-hours held: {tree_h:.2f} - ' + ', '.join(

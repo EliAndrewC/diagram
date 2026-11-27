@@ -100,7 +100,8 @@ pub struct Checked {
 /// The first pass's question of every task in `dir`, its tasks.md read once (`land_check` in the Python, one process for every task as
 /// `land.py`'s import asked them in one; in the land's own process since feature 449 T131).
 ///
-/// `section` says whether the tasks' plan sections are owed ([`Section`]): `Later` only at a build half's or a measurement's hand-in.
+/// `section` says whether the tasks' plan sections are owed ([`Section`]): `Later` only at a measurement's hand-in, `Closing` at a build
+/// half's, which also puts off the feature-close check ([`close_owed`], 461 T60).
 ///
 /// # Errors
 /// What the Python raised: tasks.md missing or unreadable, a refusal that could not be asked.
@@ -142,7 +143,10 @@ pub fn checks(
         };
         out.push(row);
     }
-    close_owed(root, dir, &text, note, env, &mut out)?;
+    // a build half's feature close is its closing half's to answer, as the section is (461 T60): put off with it, the landing asking
+    if section != Section::Closing {
+        close_owed(root, dir, &text, note, env, &mut out)?;
+    }
     Ok(out)
 }
 

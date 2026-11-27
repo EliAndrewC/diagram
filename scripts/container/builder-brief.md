@@ -95,7 +95,10 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   in once its handoff is written and a `measurement` builder once its record is (461 T44): neither writes a plan section, so their
   hand-in puts off the two asks a stub section fails - the plan gate's of the task and its Approach block's - reading the kind from
   the brief's line of the pool's log, never from the builder; a measurement's hand-in is refused while its work holds nothing under
-  `dev/measurements/`, the record standing in for the section. Every other ask stands, and the landing asks both whatever the kind.
+  `dev/measurements/`, the record standing in for the section. A build half's feature-close check (`report.md`, the close's
+  ledger rows) is put off with them, its closing half's to answer (461 T60: 451 T537's build half refused so at 22:06Z on
+  2026-11-27); a measurement has no closing half, so its hand-in still asks it. Every other ask stands, and the landing asks all
+  three whatever the kind.
   WHY: the tick check's approach refusal refused a stub's Approach block, so from T08 to T44 neither kind could hand in, whoever ran
   it. The block's CHECKS line names the coverage-repair exception in a fix's block alone (a repair is briefed as a fix): with the
   hand-in line, a build half's block with every option given ran past the 2,000-character cap (2,256 in the test, 2026-11-27).

@@ -730,6 +730,43 @@ fn a_build_half_hands_in_with_its_section_still_to_come() {
     );
 }
 
+/// 461 T60: a build half's hand-in of the feature's last open box is not asked the feature-close check (`report.md` owed), which its
+/// closing half answers (451 T537's build half refused so at 22:06:03Z on 2026-11-27); a fix's and a measurement's hand-in (no closing
+/// half follows a measurement) and the landing still ask it.
+#[test]
+fn a_build_half_of_the_feature_s_last_task_hands_in_with_its_close_still_to_come() {
+    let last = |tag: &str, kind: &str| {
+        let (fx, tree) = briefed_as(tag, kind);
+        put(
+            &tree,
+            "specs/449-x/tasks.md",
+            "# Tasks\n\n- [ ] T1 one\n      verify: \n- [x] T2 two\n",
+        );
+        (fx, tree)
+    };
+    let (fx, tree) = last("hand-in-build-half-last", "build-half");
+    let stops = fx
+        .land
+        .cheap_refusals(
+            &tree.join("specs/449-x"),
+            &["T1".to_owned()],
+            "449 T1: the work",
+            &super::super::Pass::Landing,
+            None,
+        )
+        .unwrap()
+        .join("\n");
+    has(&stops, CLOSE);
+    landed(&handed_in(&fx, &tree));
+    for kind in ["fix", "measurement"] {
+        let (fx, tree) = last(&format!("hand-in-{kind}-last"), kind);
+        has(&handed_in(&fx, &tree).stderr, CLOSE);
+    }
+}
+
+/// The feature-close ask's refusal.
+const CLOSE: &str = "this tick would close the feature, and:\n  449-x has no report.md";
+
 #[test]
 fn a_fix_a_closing_half_and_an_unbriefed_tree_still_owe_the_section_at_hand_in() {
     for kind in ["fix", "closing-half", ""] {

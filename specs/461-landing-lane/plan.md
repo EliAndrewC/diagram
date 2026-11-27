@@ -2303,41 +2303,125 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T59 (<why: the finding or measurement that files it>)
+### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in pool tree `diagram-backlog-t271`, bundled with T60.
+  - **Measured** (observed 2026-11-27, method: `night-figures.py`'s `concurrency` and `load_figures` over 19:57:00Z-23:03:20Z, the pool
+    log from T10's kept extract and the live samples, a probe script in the scratchpad): trees held 3.55, the sampler's held mean 3.18 over
+    1,065 samples, on the old script - the pool log's `adopt` of `/diagram/.clones/diagram-backlog-land` with detail `lane` (21:08:09Z, never
+    released) replayed as a hold, and `len(held)` counting `lane`.
+  - **The script** (`dev/measurements/2026-11-27/461-t01-night-tokens/night-figures.py`): `LANE = 'lane'`, the guard's
+    `shared::builder_pool::LANE`; `held_spans` treats an `adopt` of `lane` as no hold and as the end of one (a tree adopted for the lane
+    is no builder's from then), unless `lane=True` asks for it; `concurrency` passes that through; `sample_rows` counts `held` without
+    `lane`. `phase1.py` (T10's) drops its own `-land` suffix filter and asks `concurrency(..., lane=True)` for its "with it" figure, so
+    T10's outputs re-derive. After: trees held 2.94, the sampler's mean 2.98 (same method); T10's two kept figures runs, `phase1.py figures`
+    over 19:57Z and 21:06:47Z with `--kept`, byte for byte their recorded outputs; T02's night, `figures` 04:30Z-14:29Z with `--kept`, its
+    output and `ref-0430-1429.json` unchanged (no lane then); `like` over 19:57Z-23:03:20Z reads trees held 2.94 (observed 2026-11-27,
+    method: those commands, diffed against the recorded files).
+  - **The sampler** (`rust/gate/crates/measure/src/measure/sampler.rs`'s `sample`): already reads `shared::builder_pool::read`, which
+    leaves the lane out since T13 (landed 20:52Z). The 215 samples naming `lane` (21:08:12Z to 21:43:55Z) came from pid 3387947, started
+    09:44:04Z, before T13, which ran until its `L7R_SAMPLE_MAX_H` ended at 21:44:05Z; the sampler started 21:52:53Z lists no `lane`
+    (observed 2026-11-27, method: `sampler.log` and each sample's `held` in `mem-samples.jsonl`). So no code change: the sampler test's
+    fixture now holds a lane tree, and `a_sample_reads_the_cgroup_and_proc_and_leaves_out_what_its_file_does_not_give` pins `held`
+    without it. Not red first: the code it pins was right from T13; the red is the script's, above.
+  - **Decision: the lane told by its holder, not its path.** `lane` is the registry's reserved word (T13) and the pool log's adopt detail;
+    the `-land` suffix is a naming habit. Label: the algorithmically easier route, one word shared with the guard.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: a measurement script and a test fixture | - | - | - | - |
 
 ### T59 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The likeness test's trees held, and its sampler cross-check, count builders' trees only, so T31's like window
+   is judged against the night's 3.19 on the same footing.
+2. **The constraints.** Plan D12 (the likeness test), FR-010 (every figure beside its concurrency), T13 (the lane's reserved holder), T10's
+   record kept re-derivable.
+3. **Where each comes from.** R: plan D12, T13's section; O: the runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the live pool log, the live samples and T10's kept extracts.
+5. **The order.** After T10; before T31, which reads the like window.
+6. **The exits.** Green: 2.94 and 2.98 from the script, T10's outputs re-derived. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The sampler's half was a stale process, not code: named above and filed.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The probe's figures 2.94 and 2.98; `make builder-checks CRATE="rust/gate/crates/measure"` green (observed 2026-11-27,
+   method: those commands).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T31's like window would read about 0.6 tree high against the night's 3.19, its band 0.5 (GUESS, plan D12),
+   enough to pass or fail a window wrongly (observed 2026-11-27, method: the probe above): fixed here.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H` (12 h), so a change to what it reads reaches its
+  samples only at its next start: 215 samples listed `lane` after T13 had left it out (observed 2026-11-27, method: `sampler.log` against
+  T13's landing). Not fixed here: a restart-on-rebuild is a mechanism of its own, past this fix's size. Filed as T61; lands before T31.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a measurement script of where the builders' concurrency goes (451 FR-013: a measurement task counts).
 
 
-### T60 (<why: the finding or measurement that files it>)
+### T60 (phase 1: a build half's hand-in refused for the feature-close ask; found by T10's measurement)
+
+- **Approach**: in pool tree `diagram-backlog-t271`, bundled with T59.
+  - **What refused, measured** (observed 2026-11-27, method: T10's record, `dev/measurements/2026-11-27/461-t10-phase1/output-1957-2303.txt`,
+    the call's own tool result): 451 T537's build half at 22:06:03Z, "this tick would close the feature, and: 451 has no report.md ... review
+    passes with no ledger row" - the closing check `tick::checks`' `close_owed` joins to the last task's refusal where the tasks asked are the
+    feature's last open boxes (451 T307 part 2). Its closing half answered both and handed in on the same tree at 22:44:14Z.
+  - **The change** (`rust/gate/crates/task/src/tick/refusal.rs`, `Section`; `tick.rs`, `checks`; `land/hand_in.rs`, `section_of`): T44's
+    `Later` splits in two - `Closing`, a build half's hand-in, puts off the section's two asks and the close (`close_owed` not asked);
+    `Later`, a measurement's, puts off the section's two asks alone, its close still asked. A fix's or a closing half's hand-in
+    (`Owed`), `make tick`, `l7r-gate tick --land-check` and the landing (`Pass::Landing`, always `Owed`) ask everything. The first
+    pass's own ledger-row row (`land/cheap.rs`, a pass with no row) is not the close's and stands at every kind.
+  - **Decision: the close put off for a build half alone, not for a measurement.** The close's reasons (a report, the close's ledger
+    rows, the implementation check) are the closing half's work, and a closing half always follows a build half; nothing follows a
+    measurement, so its builder answers its feature's close at hand-in, as before (the plan review's round 1, BLOCKED on the
+    measurement limb, SC-002: a hand-in submitted once it is ready to land). This narrows the task line's "a build half and a
+    measurement" to the half the reason covers. Label: the algorithmically easier route that cannot loosen the landing.
+  - **The docs**: `refusal.rs`'s `Section` doc, `checks`' doc, `hand_in.rs`'s step 6 and `section_of`, and `scripts/container/builder-brief.md`'s
+    THE BUILDER HANDS IN ITSELF (the close put off with the two asks, the landing asking all three).
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/task ONLY="tick::tests"` and `CRATE=rust/gate/crates/land
+    ONLY="land::hand_in::tests"` with the new assertions on the old code): task 13 passed, 1 failed
+    (`the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded`, its new `Section::Later` assertion); land 27 passed, 1
+    failed (`a_build_half_of_the_feature_s_last_task_hands_in_with_its_close_still_to_come`, at the hand-in: the landing's half of it, the
+    close still asked of `Pass::Landing`, passed on the old code, as it must, and so do the fix's and the measurement's hand-ins still
+    refused, added after round 1). After: `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"`: task 160 passed,
+    land 223, lint and format clean (`rust/gate/crates/measure` 307 for T59).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the hand-in's close put off | n/a - no map | n/a | none | n/a |
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** A build half hands its own work in when its task is the feature's last open box; the closing half, a
+   measurement's own hand-in and the landing still owe the close.
+2. **The constraints.** US2 (a refusal a builder can answer is answered by the builder that has the context), T44's mode and its rule that the
+   landing asks everything, FR-002 (no coverage at hand-in).
+3. **Where each comes from.** R: US2 (spec.md), T44's section; O: T10's record (2026-11-27).
+4. **Do they describe the world here?** Yes: the refusal is the real call's, and the tests run the real first pass through the hand-in.
+5. **The order.** After T44 and T10; before T31.
+6. **The exits.** Green: the task and land crates' tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"` green (observed 2026-11-27, method:
+   that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A build half of a feature's last task refused at hand-in for work only its closing half does, 38 minutes and a second
+   builder's run (451 T537, observed 2026-11-27, method: T10's record): fixed here.
+
+**Found and left?** none.
+
+**Performance work?** yes - it makes the builders' loop faster (451 FR-013): a build half of a feature's last task hands in without
+waiting on its closing half.
+
+
+### T61 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T60 Approach (checklist part A)
+### T61 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

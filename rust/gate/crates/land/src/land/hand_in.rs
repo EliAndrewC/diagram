@@ -37,7 +37,8 @@
 //!    HEAD the base, the work applied, the commit's subject its note - asked, a refusal printing every reason with its fixing command
 //!    and committing nothing - the next run resumes at step 5. The tree's builder's kind, from its brief's line of the pool's log
 //!    (`Found::kind`, 461 T44), says what the plan section owes: a build half's and a measurement's asks of it are put off
-//!    ([`section_of`]), a measurement's record under `dev/measurements/` asked in their place;
+//!    ([`section_of`]), a build half's feature-close check with them (461 T60), a measurement's record under `dev/measurements/`
+//!    asked in their place;
 //! 7. EVERYTHING staged again (`git add -A`: the verified end reads the working tree, not the index, T05; and the records a clear
 //!    first pass writes into the tree go into the commit with the work, D4) and committed with the scratch
 //!    commit's message (`git commit -C`), its parent the base; a base already holding every change hands nothing in, said with the
@@ -83,12 +84,14 @@ pub(super) struct Asked<'a> {
 const RECORDS: &str = "dev/measurements/";
 
 /// WHAT A BUILDER'S KIND OWES OF ITS PLAN SECTION AT HAND-IN (461 T44): a build half's section is its closing half's to write, and a
-/// measurement writes none, so both hand in with the section's asks put off ([`Section::Later`]); a fix, a closing half and a tree
-/// no brief names owe it, as a landing does. The kind is read from the pool's log, written by `make builder-brief`, never named by
+/// measurement writes none, so both hand in with the section's asks put off ([`Section::Later`]), a build half's feature-close check
+/// with them, its closing half's to answer ([`Section::Closing`], 461 T60); a fix, a closing half and a tree no brief names owe it, as
+/// a landing does. The kind is read from the pool's log, written by `make builder-brief`, never named by
 /// the builder.
 pub(super) fn section_of(kind: &str) -> Section {
     match kind {
-        "build-half" | "measurement" => Section::Later,
+        "build-half" => Section::Closing,
+        "measurement" => Section::Later,
         _ => Section::Owed,
     }
 }

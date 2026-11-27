@@ -12,11 +12,13 @@ Usage (from the clone's root; KEPT is a directory of extracts this script wrote,
 
 Sources, all under the common git directory (`git rev-parse --git-common-dir`, so a pool worktree reads the clone's):
   builder-pool.log                       replayed from its first line: `take`, `make` and an `adopt` naming a task hold a
-                                         tree; `release`, `landed` and an `adopt` of `free` free it
+                                         tree; `release`, `landed` and an `adopt` of `free` free it; an `adopt` of `lane`
+                                         (the landing lane's own tree, 461 T13) is no builder's hold and ends one (461 T59)
   l7r-events/*.jsonl                     the `make land` Phase rows: each `end` row is one landing attempt; the `gate` row
                                          inside its span says the gate ran, and its code whether it was red
   l7r-events/samples/mem-samples*.jsonl  the memory sampler: `load1` (the median over the window is the machine's load) and
-                                         `held` (the trees held at the sample: a cross-check of the pool log's replay)
+                                         `held` (the trees held at the sample, `lane` left out: a cross-check of the
+                                         pool log's replay)
 
 The likeness test (plan D12; phase 5 reruns it): a window is LIKE the reference when its wall span is at least LIKE_MIN_H hours,
 its time-weighted trees held is within LIKE_TREES_BAND of the reference's, and its median load is within LIKE_LOAD_BAND times
@@ -40,6 +42,10 @@ LIKE_MIN_H = float(os.environ.get('LIKE_MIN_H', '8'))
 LIKE_TREES_BAND = float(os.environ.get('LIKE_TREES_BAND', '0.5'))
 LIKE_LOAD_BAND = tuple(float(x) for x in os.environ.get('LIKE_LOAD_BAND', '0.75,1.25').split(','))
 STEP_S = 600
+# THE LANE'S RESERVED HOLDER (461 T13, `shared::builder_pool::LANE`): its tree is the landing lane's, never a builder's, so neither the
+# replay nor the sampler's `held` counts it (461 T59: with it, 19:57Z-23:03Z on 2026-11-27 read 3.55 trees held against 2.94 builder
+# trees, and the sampler's mean 3.18, its binary started before T13 listing `lane` in 215 of 1,065 samples).
+LANE = 'lane'
 
 
 def ts(s):
@@ -102,19 +108,22 @@ def sample_rows(kept, files=None):
                     r = json.loads(line)
                 except ValueError:
                     continue
-                out.append((ts(r['utc']), float(r['load1']), int(r['cores']), len(r.get('held') or [])))
+                out.append((ts(r['utc']), float(r['load1']), int(r['cores']),
+                            sum(1 for h in r.get('held') or [] if h != LANE)))
     return sorted(set(out))
 
 
 # ---- the figures ---------------------------------------------------------------------------------------------------------
 
-def held_spans(rows):
-    """Replay the pool log from its first line: per tree, the [start, end) spans it was held, and by what."""
+def held_spans(rows, lane=False):
+    """Replay the pool log from its first line: per tree, the [start, end) spans it was held, and by what - the lane's tree
+    (an `adopt` of LANE) held only where `lane` asks for it, as a figure beside the builders'."""
     state, spans = {}, C.defaultdict(list)
     for r in rows:
         t, tree, ev, det = ts(r['utc']), r['tree'], r['event'], r.get('detail', '')
-        hold = ev in ('take', 'make') or (ev == 'adopt' and det != 'free')
-        free = ev in ('release', 'landed') or (ev == 'adopt' and det == 'free')
+        lanes = ev == 'adopt' and det == LANE and not lane
+        hold = ev in ('take', 'make') or (ev == 'adopt' and det != 'free' and not lanes)
+        free = ev in ('release', 'landed') or (ev == 'adopt' and det == 'free') or lanes
         if hold:
             if tree in state:                       # a take over a held tree closes the old span
                 spans[tree].append((state[tree][0], t, state[tree][1]))
@@ -125,8 +134,8 @@ def held_spans(rows):
     return spans, state
 
 
-def concurrency(rows, w0, w1):
-    spans, open_ = held_spans(rows)
+def concurrency(rows, w0, w1, lane=False):
+    spans, open_ = held_spans(rows, lane)
     per = {}
     for tree in set(spans) | set(open_):
         L = list(spans.get(tree, []))

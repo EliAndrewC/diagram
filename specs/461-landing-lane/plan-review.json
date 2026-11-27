@@ -642,6 +642,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)": {
+   "sha256": "b970a4acfa4bfcb40262c2cd608084393d6cee9c9e965c025b889a8c7b751a71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T59 Approach (checklist part A)": {
+   "sha256": "7bff55acc15e22a2ac4c85061f1336592ed196376abaf53c273c58961ee0b051",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T60 (phase 1: a build half's hand-in refused for the feature-close ask; found by T10's measurement)": {
+   "sha256": "f735f5e5264886940edda83a4b09dc232c637bc64a25407fbb90cf5e53e29d81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Approach (checklist part A)": {
+   "sha256": "8360dce65a611a67ac234ff2f6d9468aa47e77db9832f9fb83cb36b4bd2f2166",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4117,6 +4141,116 @@
      "summary": "The dead-runner-pid race in work_cli/holder (a stop could signal a killed runner's group; runner::tests red 1 of 60) is not fixed in T58 but filed as T62, ordered to land before T23.",
      "class": "within",
      "why": "The defect is not dropped or carried past the next dependent step: it is filed as its own task in this feature and ordered before T23. It sits outside T58's brief (runner/tests.rs, work_cli, holder, beside T15's closing half's edits), so splitting it off is task partitioning, not a narrowing of FR-003/FR-008. Fix-as-we-go is honored by the ordering before T23."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)",
+    "### T59 Approach (checklist part A)",
+    "### T60 (phase 1: a build half's hand-in refused for the feature-close ask; found by T10's measurement)",
+    "### T60 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T59-lane-out-of-trees-held",
+     "summary": "The likeness test's trees held (night-figures.py held_spans/concurrency/sample_rows) leaves the landing lane's tree out, so a like window counts builders' trees only; phase1.py asks lane=True for its 'with it' figure",
+     "class": "within",
+     "why": "FR-010 compares a window's concurrency with the night of 2026-11-27's 3.19 trees held, a night with no lane tree; counting the lane's adopted tree as a builder's reads about 0.6 tree high and breaks the like-for-like comparison the GM's seventh process-reviewer message asks for. Measuring the same thing on both sides serves FR-010 directly, and the with-lane figure stays available. T10's outputs re-deriving 'byte for byte' is re-derivation of a kept measurement record from the same data (reproducibility, still exact), not the struck exactness standard."
+    },
+    {
+     "id": "T59-D-lane-by-holder",
+     "summary": "The lane is told by its holder word 'lane' (the registry's reserved word since T13, the pool log's adopt detail), not by a '-land' path suffix",
+     "class": "within",
+     "why": "An implementation choice of how to identify the lane's tree that neither request nor spec settles; it narrows nothing asked."
+    },
+    {
+     "id": "T59-sampler-no-code-change-not-red-first",
+     "summary": "The sampler's code is left as it is (it leaves the lane out since T13); its test fixture gains a lane tree and the existing test pins held without it, not red first because the code it pins was already right",
+     "class": "within",
+     "why": "The 215 samples naming the lane were measured to come from a process started before T13, so there is no defect in the sampler's code; the assertion fails only if the lane were counted, which enforces FR-010's like-window figure. Not red first is truthful for code already correct; the red is the script's, shown above."
+    },
+    {
+     "id": "T59-found-and-left-T61",
+     "summary": "The sampler running its start-time code for its whole 12 h run is filed as T61, ordered to land before T31, not fixed in T59",
+     "class": "within",
+     "why": "Filed in this feature and ordered before T31, the only task that reads the like window, so the defect is not carried past the step it would harm; T59's own figures already count held without the lane and do not depend on it."
+    },
+    {
+     "id": "T59-performance-yes",
+     "summary": "T59 is classed performance work under 451 FR-013",
+     "class": "within",
+     "why": "FR-013's measurement limb counts work that measures where the time goes; the likeness test's concurrency figure is what every before-and-after throughput and token figure of this feature is read beside (FR-010), so it falls in that limb."
+    },
+    {
+     "id": "T60-D-close-put-off-build-half",
+     "summary": "close_owed asked only at Section::Owed, so a BUILD HALF's hand-in (Section::Later) puts the feature-close asks off with the section's two asks; the closing half's hand-in, make tick, --land-check and the landing (Pass::Landing, always Owed) still ask it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows FR-002 ('runs the landing's cheap first pass') and SC-002 ('a hand-in the landing's first pass would refuse is refused at hand-in') by one ask for build halves. The purpose, in the GM's sketch item 2, is that 'conflicts and bookkeeping refusals then get fixed by the builder that has the context, in its own tree' before the lane. For a build half the literal rule defeats that purpose: the close's asks (report.md, the close's ledger rows, the implementation check) are its closing half's work, 451 T537's build half was refused for exactly that (38 minutes and a second builder run, T10's record), and the closing half, which always follows a build half and handed in on the same tree, still has the close asked at its own hand-in. So the refusal is still met before the lane by the builder whose work it is, and the landing still asks it (FR-008: no check dropped). The first pass's ledger-row row that is not the close's still stands at every hand-in."
+    },
+    {
+     "id": "T60-D-close-put-off-measurement",
+     "summary": "The same put-off applied to a MEASUREMENT task's hand-in (Section::Later, 'a build half or a measurement'), with no closing half named for it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Adjudicated separately from the build half: the block's whole argument is that the close is 'the closing half's work', and a measurement has no closing half the block names. When a measurement task is the feature's last open box, the block does not say who answers the report, the close's ledger rows and the implementation check before the lane; read as written, that hand-in now passes and Pass::Landing then refuses it, which is the outcome SC-002 and the sketch's item 2 ('Builders submit only once their change is ready to land') exist to prevent, and which the pre-T60 code caught at hand-in. That T44 already puts a measurement's section asks off is not in this bundle and does not show who answers the close; completing that for the plan is what this check refuses. To clear: either limit the put-off to build halves (a measurement's hand-in keeps asking the close), or state in T60 who answers a measurement's close before the lane and pin it with a test."
+    },
+    {
+     "id": "T60-docs",
+     "summary": "refusal.rs Section doc, checks doc, hand_in.rs step 6 and section_of, and builder-brief.md's THE BUILDER HANDS IN ITSELF say the close is put off with the two asks",
+     "class": "within",
+     "why": "Documentation of the decisions above; it follows whatever the measurement limb becomes."
+    },
+    {
+     "id": "T60-performance-no",
+     "summary": "T60 is classed not performance work ('it lets a build half hand in, and measures no time')",
+     "class": "within",
+     "why": "No effect on what was asked: T60 is bundled with T59, a performance task, in one pool tree and one landing, so 451 FR-013's ordering is not changed by the answer. The answer understates it, though: FR-013 also counts a task that makes 'the landings or the builders' loop faster', and T60's own item 12 justifies itself by removing a 38-minute refusal and a second builder run; the line should read yes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)",
+    "### T59 Approach (checklist part A)",
+    "### T60 (phase 1: a build half's hand-in refused for the feature-close ask; found by T10's measurement)",
+    "### T60 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T59-lane-by-holder",
+     "summary": "The likeness script tells the lane's tree by its pool-log holder word `lane` (T13's reserved word, shared with the guard), not by a `-land` path suffix; held_spans ends a hold at an adopt for the lane, and sample_rows counts held without it.",
+     "class": "within",
+     "why": "An implementation choice of how to leave the lane out of trees held. Counting builders' trees only is what FR-010's like window compares, and it keeps the night's 3.19 and the next window on the same footing. It narrows nothing the GM asked or the spec requires."
+    },
+    {
+     "id": "T59-sampler-no-code-change",
+     "summary": "The sampler already leaves the lane out since T13; the 215 lane samples came from a process started before T13. No code change, and a fixture pins held without the lane.",
+     "class": "within",
+     "why": "The block measured why the samples listed the lane (a stale process, not code) and pins the right behavior with a test. That test is enforcement of FR-010's figure, not unrequested scope."
+    },
+    {
+     "id": "T59-T61-filed",
+     "summary": "Restarting the sampler on rebuild is left out of T59, filed as T61, and lands before T31 reads the like window.",
+     "class": "within",
+     "why": "This is a known defect, so it is filed and ordered ahead of the only consumer it affects (T31), not carried past it. Nothing the request or the spec asks is narrowed."
+    },
+    {
+     "id": "T60-close-put-off-for-build-half-only",
+     "summary": "T44's Later mode splits in two. Closing (a build half's hand-in) puts off the section's two asks and the feature close; Later (a measurement's) puts off the two asks only and still asks the close. A fix, a closing half, make tick, tick --land-check and Pass::Landing ask everything, and the first pass's own ledger-row check stands at every kind.",
+     "class": "within",
+     "why": "Request item 2 and SC-002 say a builder hands in once its change is ready to land, and a refusal is fixed by the builder that has the context. A feature's report and close rows are the closing half's work, and a closing half always follows a build half, so asking them of the build half refused work that no fix of its own could answer (451 T537, 38 minutes and a second builder). The landing still asks the close, so FR-008 holds. This round also removes the measurement limb that round 1 BLOCKED: a measurement has no closing half after it, so its hand-in still owes the close, as SC-002 requires. The block calls this a narrowing of the task line, but the task line is the session's own wording, not the GM's request or the accepted spec. Against those it is no narrowing, and it is closer to SC-002 than the earlier text was."
+    },
+    {
+     "id": "T60-performance-classification",
+     "summary": "T60 is now classed as performance work under 451 FR-013 (it makes the builders' loop faster). The earlier text said no.",
+     "class": "within",
+     "why": "451 FR-013 counts a task that makes the builders' loop faster. Removing a refusal that cost a second builder's run fits that wording. This is a scheduling label and narrows nothing that was asked."
     }
    ]
   }
