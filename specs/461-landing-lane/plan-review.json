@@ -630,6 +630,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T58 (T51's stale-launcher start test red 2 of 30 under load, \"holds no lock after 0.3 s\", measured 2026-11-27 (T15's build half, 3x10 at once), filed there)": {
+   "sha256": "d949ea5939b4c303dfd53f2ff7388aa725e7c0be0ba7d411e5049cf4e48abe63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Approach (checklist part A)": {
+   "sha256": "2d103bc631c80fab362039dedf722e89741e6d1892145b1ce1da4f13daeb5e2c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4071,6 +4083,40 @@
      "summary": "The suite and row readers read the attempt file, which make land's stdout and stderr go to; the --src hooks Phase lines stay an unbuilt fallback.",
      "class": "within",
      "why": "Which record the attribution reads, measured by reading the code. It narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T58 (T51's stale-launcher start test red 2 of 30 under load, \"holds no lock after 0.3 s\", measured 2026-11-27 (T15's build half, 3x10 at once), filed there)",
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T58 Decision 1",
+     "summary": "Fix the start test's own bound (0.3 s and 2.0 s -> WAIT_S 3.0 s GUESS, fake build 3.5 s, fake runner sleeps 0.5 s before the lock); runner.rs and START_WAIT_S unchanged; the child-state wait the task line offered is declined.",
+     "class": "within",
+     "why": "A load-flaky false red in the lane crate's tests is a defect in the gate's own checks (FR-003, FR-008: changes land through the same gate, which a false red blocks). The measured record shows no production start failing (0 of 300 at START_WAIT_S, longest spawn-to-lock 0.749 s against 5.0 s), so the wrong outcome is the test's bound, not the start. The check still does its job: red 10 of 10 against the slowed spawn at the old bound, and still red against a start without its prebuild at the new bound. Declining an alternative mechanism the task line offered narrows nothing the GM asked."
+    },
+    {
+     "id": "T58 WAIT_S knob",
+     "summary": "The tests' two hard-coded waits become one test-module constant WAIT_S, a GUESS carrying its measured margin; the fake's build kept longer than the wait so it still mirrors the lane tree's rebuild outlasting START_WAIT_S.",
+     "class": "within",
+     "why": "Test-internal constant choice; costs a green run nothing since a seen lock ends the wait. No request clause or FR touched."
+    },
+    {
+     "id": "T58 order",
+     "summary": "After T51 and T55, before T23; budget one landing.",
+     "class": "within",
+     "why": "Sequencing inside the feature's own task list; no requirement narrowed."
+    },
+    {
+     "id": "T58 Found-and-left (T62)",
+     "summary": "The dead-runner-pid race in work_cli/holder (a stop could signal a killed runner's group; runner::tests red 1 of 60) is not fixed in T58 but filed as T62, ordered to land before T23.",
+     "class": "within",
+     "why": "The defect is not dropped or carried past the next dependent step: it is filed as its own task in this feature and ordered before T23. It sits outside T58's brief (runner/tests.rs, work_cli, holder, beside T15's closing half's edits), so splitting it off is task partitioning, not a narrowing of FR-003/FR-008. Fix-as-we-go is honored by the ordering before T23."
     }
    ]
   }

@@ -2231,14 +2231,59 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T58 (<why: the finding or measurement that files it>)
+### T58 (T51's stale-launcher start test red 2 of 30 under load, "holds no lock after 0.3 s", measured 2026-11-27 (T15's build half, 3x10 at once), filed there)
+
+- **Approach**: the defect is the TEST's own bound, not the runner's start; `rust/gate/crates/lane/src/runner/start_tests.rs` alone
+  changes, `runner.rs` not at all. The tests' starts take `WAIT_S` (3.0 s, a GUESS knob of the test module with its measured why) in
+  place of 0.3 s and the stopped-carry tests' 2.0 s (each a GUESS of T51's and T55's), and the fake launcher's build is 3.5 s, so the build still outlasts the start's
+  wait, as the lane tree's rebuild outlasts `START_WAIT_S`, and in its runner mode it sleeps 0.5 s before the lock, a loaded
+  machine's slow spawn pinned. A lock seen ends the wait at once, so the longer bound costs a green run nothing; the build costs
+  the one test 3.5 s, measured 2026-11-27 (make rust-test).
+- **Measured** (method for each figure: the lane test binary run whole-crate, ten at once, under `uptime`'s load on 22 cores, the
+  start's wait timed by a scratch `eprintln!` in `start_built`, removed after, 2026-11-27):
+  - Before, 0 red of 30 at load 15-47, then 2 red of 60 at load 31-86, measured 2026-11-27 (the lane binary 6x10): this test 1 ("holds no lock after 0.3 s", 0.623 s with no lock) and one other, below.
+  - Spawn to lock over the 419 starts that came up: median 0.066 s, 99th percentile 0.471 s, longest 0.749 s, measured 2026-11-27 (the timed wait), and at `START_WAIT_S` (5.0 s) not one of 300 real starts failed, measured 2026-11-27 (the timed wait).
+  - The runner's own take against the probe (a scratch test: `work_cli` run 20 times beside a thread calling `held()` every 20 ms, the binary 3x10 at once, load 17-35): 0 quiet leaves of 600 takes, measured 2026-11-27 (the scratch race test, removed after), so `TAKE_S` (1.0 s) is not lost to `free()`'s brief lock.
+- **Decision 1 - fix the test, not the start; no wait read against the child's state.** The task line offered the child's state.
+  The measurements above show no production start failing: `START_WAIT_S` holds 6.7 times the longest spawn to lock at load 86,
+  and the runner's take never lost to the probe. A wait on the child would add a ceiling knob and was priced and declined by T51
+  (Decision 1) for hiding a failed build; with no wrong outcome in the start (constitution XIV) the test's bound is the defect.
+  Label: the algorithmically easier route, the record silent (tooling, no research question).
+- Red first, measured 2026-11-27 (make rust-test): the fake's spawn slowed 0.5 s against the old 0.3 s bound, 10 of 10 red, "holds
+  no lock after 0.3 s". After, measured 2026-11-27 (make rust-test): `runner::start_tests` 5 of 5; the start without its prebuild
+  still red ("holds no lock after 3 s", measured 2026-11-27 (make rust-test)), so the test still tells T51's fix, and the lane binary 6x10 at once at load 19-61, 0 red of 60, measured 2026-11-27 (the lane binary 6x10).
+
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** The lane crate's start tests are green at load, and stay red against a start that skips its build.
+2. **The constraints.** T51's start (the prebuild, `START_WAIT_S`), T14's lock probe (`free`, `TAKE_S`), the brief's scope
+   (runner.rs's start path and start_tests.rs; T15's closing half edits `runner/run.rs`), the crate's own-tests coverage.
+3. **Where each comes from.** R: tasks.md T58, plan.md T51 and T14. O: the load runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the runs used the crate's own test binary, whole, ten at once on the shared machine
+   at the loads named.
+5. **The order.** After T51 and T55 (their tests); before T23.
+6. **The exits.** Green: the 6x10 run at load clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one constant and the fake's timings.
+8. **The budget.** One landing.
+9. **Done, measured.** 10 of 10 red before, 0 of 60 red after at load, measured 2026-11-27 (the lane binary 6x10).
+10. **Before moving a constant.** `START_WAIT_S` unmoved; the tests' 0.3 s and 2.0 s were no claim's, now `WAIT_S` (a GUESS with its measured margin).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a red batch gate's false red from this test is gone; the start itself behaves as before.
+
+**Found and left?**
+
+- A start or a stop can name a dead runner's pid: `holder` reads the lock file while it is held, and a new runner holds the lock before `work_cli`'s `set_len(0)` and pid write, so the file still names the last killed runner; `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 (pid 884049, the killed runner, against 887300), and a stop would signal that dead pid's group. Not fixed here: the race is in `work_cli` and `holder` and its test in `runner/tests.rs`, outside this brief's start path, and T15's closing half edits beside it. Filed as T62; lands before T23.
+
+**Performance work?** no
+
+### T62 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T58 Approach (checklist part A)
+### T62 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

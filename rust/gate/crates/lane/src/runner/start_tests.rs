@@ -10,9 +10,16 @@ use l7r_gate_core::ci::fixtures::repo;
 
 use super::{holder, start, stop};
 
-/// A stand-in for `scripts/gates/l7r-gate.sh`: with `L7R_GATE_PRINT_FRESH` it "builds" - 0.6 s where `<it>.stale` exists, a line
+/// The start's wait in these tests (461 T58): 0.3 s was red 2 of 30 whole-crate runs ten at once (2026-11-27), and with the fake's
+/// spawn slowed 0.5 s, 10 of 10. Measured 2026-11-27 (the lane test binary 6x10 at once, load 31 to 86 on 22 cores, the start's
+/// wait timed): a spawn to the lock took 0.066 s at the median and 0.749 s at the most of 419 starts that came up, so 3.0 s holds
+/// that worst plus the fake's 0.5 s near 2.4 times; a lock seen ends the wait at once, so it costs a green run nothing.
+const WAIT_S: f64 = 3.0;
+
+/// A stand-in for `scripts/gates/l7r-gate.sh`: with `L7R_GATE_PRINT_FRESH` it "builds" - 3.5 s where `<it>.stale` exists, a line
 /// in `<it>.builds` - and prints its path, or fails as cargo does where `<it>.fail` exists; without it, it runs as the runner (the
-/// same build first where still stale), taking the lock and holding it.
+/// same build first where still stale), taking the lock and holding it after a slow spawn of 0.5 s, as a loaded machine's (see [`WAIT_S`]).
+/// Every start of it gets [`WAIT_S`], which the build outlasts.
 fn fake_launcher(dir: &Path) -> PathBuf {
     let gates = dir.join("gates");
     std::fs::create_dir_all(&gates).unwrap();
@@ -22,10 +29,11 @@ fn fake_launcher(dir: &Path) -> PathBuf {
         "#!/bin/sh\n\
          if [ -n \"$L7R_GATE_PRINT_FRESH\" ]; then\n\
            [ -e \"$0.fail\" ] && { echo 'error[E0425]: cannot find value `x`' >&2; exit 1; }\n\
-           [ -e \"$0.stale\" ] && { sleep 0.6; rm -f \"$0.stale\"; echo built >> \"$0.builds\"; }\n\
+           [ -e \"$0.stale\" ] && { sleep 3.5; rm -f \"$0.stale\"; echo built >> \"$0.builds\"; }\n\
            echo \"$0\"; exit 0\n\
          fi\n\
-         [ -e \"$0.stale\" ] && { sleep 0.6; rm -f \"$0.stale\"; }\n\
+         [ -e \"$0.stale\" ] && { sleep 3.5; rm -f \"$0.stale\"; }\n\
+         sleep 0.5\n\
          exec 9<>\"$3/l7r-lane/lane.lock\"\nflock -w 1 9 || exit 0\necho $$ > \"$3/l7r-lane/lane.lock\"\nexec sleep 30\n",
     );
     exe
@@ -48,8 +56,8 @@ fn a_stale_launcher_is_built_before_the_spawn_so_a_long_build_is_no_failed_start
     let common = dir.path().join(".git");
     let exe = fake_launcher(dir.path());
     std::fs::write(exe.with_extension("sh.stale"), "").unwrap();
-    // the build (0.6 s) outlasts the wait (0.3 s), as the lane tree's rebuild outlasts START_WAIT_S
-    let started = start(&common, &exe, "setsid", 0.3);
+    // the build (3.5 s) outlasts the wait (WAIT_S), as the lane tree's rebuild outlasts START_WAIT_S
+    let started = start(&common, &exe, "setsid", WAIT_S);
     let pid = holder(&common);
     reap(&common);
     assert_eq!(started.stderr, "");
@@ -70,7 +78,7 @@ fn a_build_that_fails_or_a_launcher_that_cannot_run_starts_nothing_and_says_why(
     let common = dir.path().join(".git");
     let exe = fake_launcher(dir.path());
     std::fs::write(exe.with_extension("sh.fail"), "").unwrap();
-    let failed = start(&common, &exe, "setsid", 0.3);
+    let failed = start(&common, &exe, "setsid", WAIT_S);
     reap(&common);
     assert_eq!(failed.code, 1);
     let said = failed.stderr.as_str();
@@ -78,7 +86,7 @@ fn a_build_that_fails_or_a_launcher_that_cannot_run_starts_nothing_and_says_why(
     assert!(said.contains("error[E0425]: cannot find value `x`"));
     assert!(!super::lock_path(&common).exists());
     let gone = dir.path().join("nowhere/l7r-gate.sh");
-    let missing = start(&common, &gone, "setsid", 0.3);
+    let missing = start(&common, &gone, "setsid", WAIT_S);
     assert_eq!(missing.code, 1);
     let named = format!("lane: {}: ", gone.display());
     assert!(missing.stderr.starts_with(&named));
@@ -219,7 +227,7 @@ impl Stopped {
     fn start(&self) -> l7r_gate_core::Reply {
         let exe = super::runner_exe(&self.common, Path::new("/nowhere/l7r-gate"));
         assert_eq!(exe, self.land.join("scripts/gates/l7r-gate.sh"));
-        start(&self.common, &exe, "setsid", 2.0)
+        start(&self.common, &exe, "setsid", WAIT_S)
     }
 }
 
