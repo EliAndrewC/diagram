@@ -616,8 +616,8 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             };
             let _ = writeln!(stderr, "{said}\n{}{}", done.stdout, done.stderr);
         } else {
-            // a pipe a leftover process held past its program's exit is said on a green crate too (451 T364, `drain.rs`)
-            stderr.push_str(&drain::held_on(&shown, &done.stderr));
+            // since 451 T363 a run that left a holder of its pipe is red, its HELD line shown with its red output above, so a green
+            // crate carries none to say
             keep_green(
                 world,
                 cmd,

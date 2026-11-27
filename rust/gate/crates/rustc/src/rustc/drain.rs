@@ -141,12 +141,3 @@ fn holders(inodes: &[u64]) -> Vec<String> {
     found.sort();
     found
 }
-
-/// The `HELD` lines of a green crate's run, each after the crate's name, for `answer` to say: a green run's stderr is not shown.
-pub(super) fn held_on(shown: &str, stderr: &str) -> String {
-    stderr
-        .lines()
-        .filter(|l| l.starts_with(HELD))
-        .map(|l| format!("{shown}: {l}\n"))
-        .collect()
-}
