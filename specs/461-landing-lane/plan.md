@@ -1983,32 +1983,64 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** no - it removes a foreground wait that does not yet happen (dormant until T22's base), and it times nothing.
 
 
-### T55 (<why: the finding or measurement that files it>)
+### T55 (T54's Found and left: a stopped carry's conflict in the lane's tree fails every later start's build, and only the runner's resume resets that tree; filed at T54)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`: `start`, after its lock check (no runner lives) and before T51's `prebuild`,
+  asks `stopped_carry`: the registry's lane tree has `CHERRY_PICK_HEAD` (`git -C <tree> rev-parse -q --verify`, which a linked
+  tree answers for itself) AND the lane's log's last batch is open with its last `carry` line's code not 0. Where both hold,
+  `reset_stopped` makes the resume's own call, `builder-tree lane` (`l7r_gate_task::builder_tree::cli`, as `run_batch` calls it),
+  which fetches and brings the tree to `origin/main` (`reset --hard`, `clean -fdq`, `checkout --detach`), and says so in a stdout line
+  before the start's own. A reset that fails is the reply's stderr and the start goes on, so the build's own words follow it. The
+  rest of `start` moves unchanged into `start_built`. `start`'s signature and its callers (`lane.rs`, `on_hand_in`) are unchanged;
+  `run.rs` is not touched (T15's).
+- **Decision 1 - the reset first, not the prebuild skipped.** Read 2026-11-27 in `scripts/gates/l7r-gate.sh`: the launcher builds
+  where stale in both modes (the `elif stale` branch runs whether or not `L7R_GATE_PRINT_FRESH` is set), and it never falls back to
+  the binary it has. So a skipped prebuild only moves the failed build into the detached child, whose streams are `/dev/null`, and the
+  start says "holds no lock". Spawning with `L7R_GATE_STALE_OK` instead would leave that variable in the runner's environment, and
+  through it in every `make carry` and `make land` the runner runs. `run::STRIPPED` (run.rs, T15's file) does not remove it. The
+  reset is what the resume does at once anyway (`run_batch`'s first step), so it removes nothing the runner needs. Label: the
+  algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - both halves of the condition.** `state_of` reads any `carry` line as gating, so the code is asked of the line. The
+  log half matters because `scripts/land-alone.sh` shares the lane's tree: a pick in progress there with no stopped carry open is
+  not the lane's to discard, and is left alone (pinned by a test).
+- **After the reset** the runner starts, resumes the batch and carries again. A conflict with `origin/main` still there stops the
+  carry again, and the runner stops with the batch open as before. That repeat is T25's (phase 3: a carry conflict becomes a repair
+  entry), not a deadlock: each start makes one more attempt and says why it stopped.
+- Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::start_tests"`), the three new tests
+  against the old `start`: 3 passed, 2 failed. The stopped carry's start returned the deadlock's own words, "lane: the runner's
+  program could not be built (exit 1), so no runner started ... error: this file contains an unclosed delimiter". The failing reset
+  said nothing of the reset. The test world is a real one: a bare `origin`, a clone, and the lane's tree in the pool's registry with
+  a hand-in's `rust/x.rs` cherry-picked onto a moved `origin/main` and stopped in conflict. The lane's log holds `batch`, `carry` (code
+  2) and the runner's `stop`. A stand-in launcher fails on conflict markers under `rust/` in both modes, as cargo would. After,
+  measured 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`): the lane crate 43 of 43 (40 before), lint and format
+  clean.
 
 ### T55 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** After a batch's carry stops in a file the gate builds from, the next `make lane-start` (or, from
+   T22's base, a hand-in's start) starts a runner that resumes the open batch, where every start had failed to build.
+2. **The constraints.** T51's start (its lock check first, its prebuild and its words), T54's build at the reset, T14's batch run and
+   Recovery (the resume brings the tree to `origin/main`), T13's `builder-tree lane`, `land`'s carry ("the stop leaves the pick in
+   progress"), `land-alone.sh`'s shared use of the tree, the crate's own-tests coverage (rust/gate/CLAUDE.md), the brief's scope (the
+   start path in runner.rs; T15 edits run.rs).
+3. **Where each comes from.** R: plan.md T51, T54, T14, T13; tasks.md T55; `scripts/gates/l7r-gate.sh` (`stale`, both modes),
+   `rust/gate/crates/land/src/land/carry.rs`, `rust/gate/crates/task/src/builder_tree.rs` (`lane_start`). O: the red and green runs
+   above (2026-11-27).
+4. **Do they describe the world here?** Yes: the tests drive `start` through `runner_exe` and `setsid` against a real conflicted
+   cherry-pick in a registered lane tree, a bare origin, and the real `builder-tree lane`.
+5. **The order.** After T51 and T54; before T22, which makes every hand-in start the runner; beside T15 (run.rs, untouched here).
+6. **The exits.** Green: the three new tests and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one check and one call before the build.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `runner::start_tests`: 3 of 5 on the old code, 5 of 5 after; the lane crate 43 of 43, measured 2026-11-27 (make rust-test, make builder-checks).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. A start after a stopped carry now resets the lane's tree and starts the runner, where it
+    failed on the conflict markers and no batch was ever resumed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the resumed batch stopping again on the same conflict is T25's planned work (phase 3), not a defect left here.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 ### T56 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

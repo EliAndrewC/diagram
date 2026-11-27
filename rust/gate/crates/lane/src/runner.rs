@@ -228,8 +228,45 @@ fn prebuild(exe: &Path) -> Result<(), String> {
     ))
 }
 
+/// The open batch whose carry stopped in the lane's tree, with that tree, where the tree still holds the stopped pick (461 T55): the
+/// registry's lane tree has `CHERRY_PICK_HEAD` (asked of the linked tree by `rev-parse`, never a path), and the lane's log's last
+/// batch is open with its last `carry` line's code not 0 (`state_of` reads any `carry` as gating, so the code is asked here). Both
+/// halves: a pick in that tree with no such batch is no stopped carry's - `land-alone.sh` shares the tree - and is left alone.
+fn stopped_carry(common: &Path) -> Option<(String, PathBuf)> {
+    let tree = l7r_shared::builder_pool::read_all(common)
+        .into_iter()
+        .find(l7r_shared::builder_pool::Tree::lane)?
+        .tree;
+    crate::lane::git(&tree, &["rev-parse", "-q", "--verify", "CHERRY_PICK_HEAD"])?;
+    let b = log::batches(&log::read(common)).pop().filter(Batch::open)?;
+    let carry = b.lines.iter().rev().find(|l| l["event"] == "carry")?;
+    (carry["code"] != 0).then_some((b.id, tree))
+}
+
+/// THE STOPPED CARRY'S TREE RESET BEFORE THE BUILD (461 T55): a carry that stopped leaves its pick in progress in the lane's tree
+/// (`land`'s `carry.rs`), and where its conflict is in a file the gate builds from, [`prebuild`] - and the spawned launcher, which
+/// builds where stale in either mode - fails on the markers, so no runner starts; yet only the runner's resume brings that tree to
+/// `origin/main` again (`builder-tree lane`), so every later start failed the same way. With no runner (the lock asked first), the
+/// start makes that same call itself; the resume makes it again. Its stdout line says so; a reset that fails is its stderr, and
+/// the start goes on, so the build's own words follow it.
+fn reset_stopped(common: &Path) -> (String, String) {
+    let Some((id, tree)) = stopped_carry(common) else {
+        return (String::new(), String::new());
+    };
+    let clone = common.parent().unwrap_or(common);
+    let brought = l7r_gate_task::builder_tree::cli(&["lane".to_owned()], clone);
+    if brought.code != 0 {
+        return (String::new(), brought.stderr);
+    }
+    (
+        format!("lane: the lane's tree {} held batch {id}'s stopped carry (a cherry-pick in progress): brought to origin/main before the build, as the runner's resume brings it\n", tree.display()),
+        String::new(),
+    )
+}
+
 /// `make lane-start`: the runner of `common` started detached through `launcher`, or the one running named. Exit 0 either way; 1
-/// where the runner's program could not be built ([`prebuild`]), the spawn failed or the runner took no lock within `wait_s`.
+/// where the runner's program could not be built ([`prebuild`]), the spawn failed or the runner took no lock within `wait_s`. A
+/// stopped carry's tree is reset first ([`reset_stopped`]).
 #[must_use]
 pub fn start(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
     if let Some(pid) = holder(common) {
@@ -239,6 +276,17 @@ pub fn start(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
             0,
         );
     }
+    let (reset, reset_err) = reset_stopped(common);
+    let started = start_built(common, exe, launcher, wait_s);
+    reply(
+        reset + &started.stdout,
+        reset_err + &started.stderr,
+        started.code,
+    )
+}
+
+/// [`start`] past its lock and its reset: the build, the spawn and the wait for the lock.
+fn start_built(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
     if let Err(e) = prebuild(exe) {
         return reply(String::new(), e, 1);
     }

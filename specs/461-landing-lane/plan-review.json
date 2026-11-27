@@ -570,6 +570,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T55 (T54's Found and left: a stopped carry's conflict in the lane's tree fails every later start's build, and only the runner's resume resets that tree; filed at T54)": {
+   "sha256": "662190d470d3e2b2d1911d42ab07d33107747d94434cf7de6bf3a05d3a550d20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T55 Approach (checklist part A)": {
+   "sha256": "64809e2a7458c19ff2045cd1f0a054ba037a092eb5f1e77853510dbde5f1ddd5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3417,6 +3429,52 @@
      "summary": "A stopped carry whose conflict is in a file the gate builds from makes every later start's prebuild fail and the open batch never resume; filed as T55, ordered to land before T22.",
      "class": "within",
      "why": "The defect is real and known, and it is not carried past the step in which it becomes live: it is dormant until T22 makes every hand-in start the runner, and T55 is ordered before T22, so it is fixed before the next step depends on it (the GM's 2026-11-18 fix-as-we-go rule). Splitting it into its own task is scheduling, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T55 (T54's Found and left: a stopped carry's conflict in the lane's tree fails every later start's build, and only the runner's resume resets that tree; filed at T54)",
+    "### T55 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-approach",
+     "summary": "start, after its lock check and before T51's prebuild, detects a stopped carry and runs the resume's own builder-tree lane reset of the lane's tree to origin/main, saying so on stdout; the rest of start moves into start_built; start's signature, callers and run.rs unchanged",
+     "class": "within",
+     "why": "Fixes a deadlock in the landing lane itself (no runner can ever start after a carry stops in a gate-built file), which FR-003's lane running and FR-004's red-batch handling both need; the reset is the resume's own first step, so nothing the request or spec asks for is dropped or narrowed."
+    },
+    {
+     "id": "T55-D1",
+     "summary": "Reset the tree first rather than skip the prebuild or spawn with L7R_GATE_STALE_OK",
+     "class": "within",
+     "why": "A choice of mechanism among routes to the same outcome; it keeps every check (FR-008) and avoids leaking a stale-ok variable into the runner's make carry / make land, which would weaken the gate. No requested behavior narrowed."
+    },
+    {
+     "id": "T55-D2",
+     "summary": "Reset only when BOTH the tree has CHERRY_PICK_HEAD AND the lane's log has an open batch whose last carry exited non-zero; a land-alone.sh pick in progress is left alone",
+     "class": "within",
+     "why": "Restricting the reset to the lane's own stopped carry does not narrow anything the GM asked; it keeps the fix from discarding another process's work in a shared tree. It is the scope of a bug fix, not a carve-out from a requested rule."
+    },
+    {
+     "id": "T55-failed-reset",
+     "summary": "A reset that fails is reported on stderr and the start proceeds so the build's own error follows",
+     "class": "within",
+     "why": "Error reporting detail; no requested behavior affected."
+    },
+    {
+     "id": "T55-repeat-conflict",
+     "summary": "A conflict with origin/main that persists after the reset stops the carry again; turning it into a repair entry is left to T25 (phase 3)",
+     "class": "within",
+     "why": "Sequencing to an already-planned task, not a narrowing: FR-004's repair-entry behavior is still delivered, by T25, and this block neither removes nor weakens it. Each start makes one more attempt and states why it stopped, so no deadlock or silent failure is carried forward as a defect."
+    },
+    {
+     "id": "T55-checklist-A",
+     "summary": "Checklist part A: goal, constraints, sources, order (after T51/T54, before T22, beside T15), exits, budget, done-measure; Found and left: none",
+     "class": "within",
+     "why": "Restates the approach above and decides nothing beyond it; the one item deferred is T25's planned work, judged above."
     }
    ]
   }
