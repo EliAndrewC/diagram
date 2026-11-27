@@ -60,3 +60,13 @@ T364 fix crates=rust/gate/crates/rustc files=- note=[perf] the gate's test phase
 T365 measurement measures=2 crates=- files=dev/measurements note=[perf] rust/guard's test binary 5.3-6.0 s under /tmp against 2.0 s fresh: measure which of TempDir's sweep or the fixtures' scans; its fix is a line added after it
 T22 measurement measures=6 crates=- files=dev/measurements,docs/guards.md waits=GM note=[perf] the feature's close. It waits on a full day of work after T02-T21 land, not on the GM: no waits= word says so (T401's stand-in) - edit GM out when that day has passed
 T394 fix crates=- files=- waits=T401 note=[perf] built (make builder-done, the next dispatch first, T313's Stop guard); what is left is its line's re-measure over a like window, which is T401's line: it closes on T401's figures
+T425 fix crates=rust/gate/crates/rustc files=-
+T426 fix crates=rust/gate/crates/rustc,rust/gate/crates/measure files=-
+T392 fix crates=rust/guard/shared files=-
+T371 fix crates=- files=- waits=GM
+T377 fix crates=- files=- waits=GM
+T378 fix crates=- files=- waits=GM
+T379 fix crates=- files=- waits=GM
+T373 fix crates=- files=- waits=GM
+T420 fix crates=- files=- waits=GM
+T417 fix crates=- files=- waits=GM
