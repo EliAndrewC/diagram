@@ -105,7 +105,7 @@ kept=$(printf '%s\n' "$out" | sed 's/\x1b\[[0-9;]*m//g' | sed -n 's/^HOOK TESTS 
 check "the FAIL line names the kept log, in the common git directory" 'case $kept in "$A/.git/l7r-hooks-failed/"*-fx-hooks.sh-p*.log) true ;; *) echo "$out"; false ;; esac'
 check "the kept log holds the suite's whole log" '[ -f "$kept" ] && grep -q "case 7: the state-sync case FAILED" "$kept"'
 check "only the red suite's log is kept" '[ "$(ls "$A/.git/l7r-hooks-failed" | wc -l)" -eq 1 ]'
-check "the event line's span carries the kept log" 'grep "event-log phase" "$D/gate-calls" | tr " " "\n" | grep -qx "suite:[0-9.]*:[0-9.]*:1:fx-hooks.sh:l7r-hooks-failed/${kept##*/}"'
+check "the event line's span carries the kept log" 'grep -qx "suite:[0-9.]*:[0-9.]*:1:fx-hooks.sh:l7r-hooks-failed/${kept##*/}" <<<"$(grep "event-log phase" "$D/gate-calls" | tr " " "\n")"'
 
 echo "parts.3: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
