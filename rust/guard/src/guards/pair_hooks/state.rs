@@ -7,6 +7,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::{json, Map, Value};
 
+use crate::guards::event_log_hooks::{common_git_dir, own_git_dir};
 use crate::shared::sha256;
 use crate::shared::tool::ask;
 
@@ -35,7 +36,8 @@ fn dumps(v: &Value, indent: usize) -> String {
 /// The pairing state file of `clone`.
 #[must_use]
 pub fn pairing_file(clone: &Path) -> PathBuf {
-    clone.join(".git/pairing-state.json")
+    // the clone's review state, read there by the reviews crate (451 T275), from any tree of it (451 T441)
+    common_git_dir(clone).join("pairing-state.json")
 }
 
 /// Set `field` to `value` in the pairing state (`write_pairing`).
@@ -125,7 +127,7 @@ fn feature(clone: &Path) -> String {
 #[must_use]
 pub fn round_number(clone: &Path, unit: &str, key: &str) -> usize {
     let f = feature(clone);
-    let d = object(&clone.join(".git/review-rounds.json"));
+    let d = object(&common_git_dir(clone).join("review-rounds.json"));
     let landed = ask(
         clone,
         "git",
@@ -166,7 +168,7 @@ pub fn round_number(clone: &Path, unit: &str, key: &str) -> usize {
 
 /// Count this dispatch's round of `unit` at `key` (`record_round`).
 pub fn record_round(clone: &Path, unit: &str, key: &str, at: i64) {
-    let p = clone.join(".git/review-rounds.json");
+    let p = common_git_dir(clone).join("review-rounds.json");
     let f = feature(clone);
     let mut d = object(&p);
     let mut units = d
@@ -219,7 +221,8 @@ pub fn engine_key(clone: &Path) -> String {
     if !clone.is_dir() {
         return String::new();
     }
-    let cache = clone.join(".git/pairing-key");
+    // the TREE's cache (451 T441): the key is of its working files, so a linked worktree keeps its own
+    let cache = own_git_dir(clone).join("pairing-key");
     let kept = std::fs::read_to_string(&cache).unwrap_or_default();
     let stamp = std::fs::metadata(&cache).and_then(|m| m.modified()).ok();
     if !kept.is_empty()
@@ -263,8 +266,8 @@ pub fn snapshot_key(clone: &Path, unit: &str) -> Option<String> {
         return None;
     }
     let rec = object(
-        &clone
-            .join(".git/review-snapshot")
+        &common_git_dir(clone)
+            .join("review-snapshot")
             .join(unit)
             .join("tree.json"),
     );
@@ -307,7 +310,8 @@ pub fn gate_green(clone: &Path, key: &str) -> bool {
     if clone.join("scripts/gates/l7r-gate.sh").is_file() {
         return stamp_fresh(clone);
     }
-    object(&clone.join(".git/verification-state.json"))
+    // the tree's own record, where `tree::state` writes it (451 T441)
+    object(&own_git_dir(clone).join("verification-state.json"))
         .get("engine_key")
         .and_then(Value::as_str)
         == Some(key)

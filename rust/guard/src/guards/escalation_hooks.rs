@@ -412,7 +412,8 @@ pub(crate) fn judge_ask(input: &Value, clone: &Path) -> Option<(&'static str, St
 }
 
 fn state_path(clone: &Path) -> PathBuf {
-    clone.join(".git/escalation-state.json")
+    // the session's, so a linked worktree of the clone keeps it in the common git dir (451 T441)
+    crate::guards::event_log_hooks::common_git_dir(clone).join("escalation-state.json")
 }
 
 fn read_state(clone: &Path) -> Map<String, Value> {

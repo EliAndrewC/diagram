@@ -75,9 +75,8 @@ fn multi_unit(cx: &Ctx, atype: &str, named: &[String]) -> Answer {
         named.len()
     );
     for m in named {
-        let pf = cx
-            .clone
-            .join(".git/review-snapshot")
+        let pf = crate::guards::event_log_hooks::common_git_dir(&cx.clone)
+            .join("review-snapshot")
             .join(m)
             .join("dispatch.md");
         let _ = if pf.is_file() {

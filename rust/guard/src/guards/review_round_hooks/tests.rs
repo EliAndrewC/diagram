@@ -697,3 +697,28 @@ fn inside_a_repository_the_clone_is_its_top_level() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+/// 451 T441, RED FIRST: a review's rounds are the feature's, so a first dispatch from a linked worktree of the clone (a pool tree,
+/// its `.git` a file; the clone `git rev-parse --show-toplevel` names is the tree) keeps its snapshot and round in the clone's
+/// common git dir, and `state` reads them from either tree; before, nothing could be written there.
+#[test]
+fn a_round_taken_in_a_linked_worktree_is_the_clones() {
+    let d = world("linked");
+    let (clone, tree) = crate::guards::linked_worktree(&d);
+    std::fs::create_dir_all(tree.join("specs/301-x")).unwrap();
+    std::fs::write(tree.join("specs/301-x/spec.md"), "# 301\n").unwrap();
+    let c = plain(&tree);
+    assert_eq!(spec("MODE 2 of specs/301-x", &tree, &c).rule, "first-round");
+    assert!(clone
+        .join(".git/review-round/301-x/snapshot/spec.md")
+        .is_file());
+    let args = |a: &Path| {
+        vec![
+            "state".to_owned(),
+            a.to_string_lossy().into_owned(),
+            "301-x".to_owned(),
+        ]
+    };
+    assert_eq!(cli(&args(&tree)).stdout, "round=1 snapshot=yes");
+    assert_eq!(cli(&args(&clone)).stdout, "round=1 snapshot=yes");
+}

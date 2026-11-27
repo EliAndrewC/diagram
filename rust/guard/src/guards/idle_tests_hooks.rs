@@ -214,11 +214,21 @@ fn locate(cwd: &str) -> Option<(PathBuf, String)> {
     let top = Path::new(cwd)
         .ancestors()
         .find(|d| d.join(".git").exists())?;
+    // A LINKED WORKTREE IS ITS CLONE'S (451 T441): a session standing in a pool tree, whose `.git` is a file, arms, disarms and runs
+    // its clone's idle tests, the common git dir's tree, so every path below - and `idle_context`'s read of `.git/idle-tests.running`
+    // in the tree the run's make stands in - is that clone's `.git`, under the clone's session name.
+    let top = if top.join(".git").is_file() {
+        crate::guards::event_log_hooks::common_git_dir(top)
+            .parent()?
+            .to_path_buf()
+    } else {
+        top.to_path_buf()
+    };
     if !top.to_string_lossy().contains("/.clones/") {
         return None;
     }
     let name = top.file_name()?.to_string_lossy().into_owned();
-    Some((top.to_path_buf(), name))
+    Some((top, name))
 }
 
 /// The seams' warning, as the shell said it on stderr.

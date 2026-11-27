@@ -171,3 +171,44 @@ fn a_green_gate_is_the_stamp_else_the_recorded_key() {
     .unwrap();
     assert!(gate_green(&c, "other"));
 }
+
+/// 451 T441, RED FIRST: in a linked worktree of the clone (a pool tree, its `.git` a file) the pair guard's review state - the
+/// dispatches, the rounds, the review tree's snapshots - is the clone's common git dir's, as the reviews crate reads it (451 T275);
+/// the engine key's cache and the verification record are the TREE's (its working files, `tree::state`'s own record), so they live
+/// in the tree's own git dir and the clone's are never read for it.
+#[test]
+fn in_a_linked_worktree_review_state_is_the_clones_and_the_trees_keys_are_its_own() {
+    let d = clone("linked");
+    let (main, tree) = crate::guards::linked_worktree(&d);
+    let own = crate::guards::event_log_hooks::own_git_dir(&tree);
+    assert_eq!(pairing_file(&tree), main.join(".git/pairing-state.json"));
+    assert_eq!(record_dispatch(&tree, "m1", "k", 5, &[]), "");
+    assert_eq!(
+        read(&pairing_file(&main))["dispatched"]["m1"]["key"],
+        json!("k")
+    );
+    record_round(&tree, "u", "k1", 50);
+    assert_eq!(round_number(&main, "u", "k2"), 2);
+    let snap = main.join(".git/review-snapshot/m1");
+    std::fs::create_dir_all(&snap).unwrap();
+    std::fs::write(snap.join("tree.json"), r#"{"commit": "c", "key": "SK"}"#).unwrap();
+    assert_eq!(super::snapshot_key(&tree, "m1").as_deref(), Some("SK"));
+    std::fs::write(tree.join("Makefile"), "engine-key:\n\t@echo treekey\n").unwrap();
+    std::fs::write(main.join(".git/pairing-key"), "clonekey").unwrap();
+    assert_eq!(engine_key(&tree), "treekey");
+    assert_eq!(
+        std::fs::read_to_string(own.join("pairing-key")).unwrap(),
+        "treekey"
+    );
+    std::fs::write(
+        own.join("verification-state.json"),
+        r#"{"engine_key": "t"}"#,
+    )
+    .unwrap();
+    std::fs::write(
+        main.join(".git/verification-state.json"),
+        r#"{"engine_key": "c"}"#,
+    )
+    .unwrap();
+    assert!(gate_green(&tree, "t") && !gate_green(&tree, "c"));
+}

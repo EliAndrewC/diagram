@@ -480,3 +480,16 @@ fn outside_a_repository_nothing_is_said() {
     };
     assert!(decide(&bash, &Session::from_input(&bash.input)).is_empty());
 }
+
+/// 451 T441, RED FIRST: the escalation state is the SESSION's, so a review armed from a linked worktree of the clone (a pool tree,
+/// its `.git` a file) is kept in the clone's common git dir and read from either tree; before, the arming was lost.
+#[test]
+fn a_review_armed_in_a_linked_worktree_is_the_clones() {
+    let d = world("linked");
+    let (clone, tree) = crate::guards::linked_worktree(&d);
+    ledger(&tree, "");
+    agent("building-review", "go", &tree);
+    assert_eq!(armed(&clone), "building-review");
+    assert_eq!(armed(&tree), "building-review");
+    assert!(clone.join(".git/escalation-state.json").is_file());
+}

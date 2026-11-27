@@ -332,6 +332,7 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
             .flatten()
             .unwrap_or_default();
         let clone = PathBuf::from(&claimed);
+        // `.is_dir()` on purpose, as below (451 T441): a linked worktree (a pool tree, its `.git` a file) is no session clone
         if !claimed.is_empty() && clone.join(".git").is_dir() && dirty(&clone) {
             return behind_main(cx, &clone)
                 .map(|n| vec![Answer::Notice(n)])
@@ -351,6 +352,8 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
         .main
         .join(".clones")
         .join(rest.split('/').next().unwrap_or(""));
+    // `.is_dir()` on purpose (451 T441): an edit in a pool tree, a linked worktree whose `.git` is a file, must not claim that tree
+    // as the session's clone
     if !clone.join(".git").is_dir() {
         return Vec::new();
     }
@@ -549,6 +552,7 @@ fn prompt(cx: &Ctx) -> Vec<String> {
     let Some(clone) = claimed(cx) else {
         return unnamed(cx, sid);
     };
+    // `.is_dir()` on purpose (451 T441): a claim naming a linked worktree (its `.git` a file) is no session clone to sync
     if !clone.join(".git").is_dir() {
         return Vec::new();
     }

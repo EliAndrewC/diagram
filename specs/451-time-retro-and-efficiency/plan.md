@@ -7332,32 +7332,47 @@ batch; the red was not in its change.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the gate and the builders' loop faster). A red gate whose cause no line named cost a batch gate's 8 minutes and a hand repair, observed 2026-11-27, method: the session's repair of the clone. The heal costs one from-nothing build of two crates, 40 s on the night, measured 2026-11-27 (the session's set-aside build), and only where the link has already failed. Not an engine-speed task: no checklist answers owed.
 
-### T441 (<why: the finding or measurement that files it>)
+### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every state path the task names is resolved through the guard's own resolvers in `l7r_shared::guards::event_log_hooks`: `common_git_dir` (existing, the one T275 reused) for state that is the SESSION's or the CLONE's, and `own_git_dir` (new, beside it: the git dir the tree's `.git` file names, `<clone>/.git/worktrees/<name>`, else `<root>/.git`) for state that is the TREE's. Neither runs a git process. In a plain clone both are `<root>/.git`, so no path moves there. No guard message changed.
+  - **DECISION, which state is whose** (rendering; the brief left it to the builder: "where a site's state is per-tree on purpose, keep it so and say why"):
+    - COMMON: `escalation_hooks.rs` `escalation-state.json` (the session's arming of a returned review); `review_round_hooks.rs` `review-round/<feature>` at every site, observed 2026-11-27, method: `grep -n review-round` over the guard (the guard's two and its `state` entry - the feature's rounds); `pair_hooks/state.rs` `pairing-state.json`, `review-rounds.json` and `review-snapshot/`, and `pair_hooks/review.rs`' `review-snapshot/<unit>/dispatch.md` - the readers T275 moved to the common dir (`reviews::prereq`, `arbiter::bundle::sections`) read these, so the writers must agree.
+    - PER TREE (the tree's own git dir): `finished_run_hooks.rs` `finished-run.seen` (it names the newest file of the TREE's `dev/run-log`, a tracked directory each tree adds to) and `live-run.told` (it lists the runs `live_runs` finds by the TREE's path, and its empty-list branch deletes the mark - one shared file would let a Stop from one tree clear or overwrite the other's, and the reminder would repeat whenever the session's cwd moved between them); `pair_hooks/state.rs` `pairing-key` (a cache of the TREE's engine key, invalidated by its own files' mtimes - a pool tree answering with the clone's key would be a wrong outcome) and `verification-state.json` (read where its writer `rust/gate/crates/tree/src/state.rs` `state_file` puts it: "a worktree's `.git` is a file naming its own git directory, so two worktrees of one repository never share a record").
+    - IDLE TESTS, mapped to the clone: `idle_tests_hooks.rs` `locate` takes a tree whose `.git` is a FILE to its clone (the common git dir's parent), so the arming, the timer's run, a prompt's disarming and the seen mark - every `.git/idle-tests.*` join (lines 274, 285, 329, 333, 341, 585, 586, 658 of the task line) - are the clone's, under the clone's session name. Why not per tree: the module's rule is one arming per idle session, which a prompt from either tree must disarm; and the gate reads the run's mark at `<make's top>/.git/idle-tests.running` (`rust/gate/crates/ci/src/ci/switches.rs` `idle_context`), so a timer started in a pool tree could never be seen as idle (a `.git` file cannot hold it). Why not skipped: the session's own clone would then go unarmed while it stood in a pool tree. Mapped, a pool tree's own name (`diagram-backlog-t269`) no longer becomes the session's name in the stagger and the `dev/idle-log/*-<session>.json` record. Arming stays disabled by the GM's switch (`DEF_ARM`).
+  - **Left as they are, said beside them**: `clone_sync_hooks.rs`' three `.join(".git").is_dir()` probes (a pool tree is no session clone to claim or sync; comments added at each); `stall_watchdog_hooks/pass.rs:280,457` `page-sessions` (its clone is read from the claim map, a session clone - never a linked worktree; untouched).
+  - **Red first** (2026-11-27, `make rust-test CRATE=rust/guard ONLY="guards::finished_run_hooks guards::idle_tests_hooks guards::escalation_hooks guards::review_round_hooks guards::pair_hooks"` on the old code with `own_git_dir` and the fixture added): 107 passed, 5 failed - each new test on a real `git worktree add` of a scratch repository (`guards::linked_worktree`, a test helper in `guards.rs`), each failing at its first assertion on the state's place:
+    - `in_a_linked_worktree_each_mark_is_kept_in_the_trees_own_git_dir` (finished-run: a finished run told twice; a run refused twice; each mark in the tree's own dir, the clone's apart);
+    - `a_linked_worktree_is_located_at_its_clone` (idle-tests: a Stop in the tree arms the clone, a prompt in the clone disarms it; a worktree of a repository outside `.clones/` is located nowhere);
+    - `a_review_armed_in_a_linked_worktree_is_the_clones` (escalation: armed from the tree, read from both);
+    - `a_round_taken_in_a_linked_worktree_is_the_clones` (review-round: the first round's snapshot in the clone, `state` reads round 1 from both trees);
+    - `in_a_linked_worktree_review_state_is_the_clones_and_the_trees_keys_are_its_own` (pair: the dispatch, the round and the snapshot key the clone's; the engine key's cache and the verification record the tree's, the clone's values never read for it).
+    - `own_git_dir` is pinned in the shared crate's `the_feature_and_the_git_dir_are_read_as_the_tool_reads_them` (a linked tree, a plain clone, a dangling name).
+  - **After the fix** (2026-11-27): the same run 141 ran, 0 failed (with `guards::clone_sync_hooks`); `make builder-checks CRATE="rust/guard rust/guard/shared"` green - rust/guard 579 passed, rust/guard/shared 565 passed, lint and format clean; the changed guards' suites through the shim: finished-run 84/0, idle-tests 39/0, escalation 67/0, review-round 91/0, pair 104/0, clone-sync all passed, event-log 25/0.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a - tooling, no engine step | n/a | n/a | none | n/a |
 
 ### T441 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A coordinating session cd'ed into a pool tree is told a finished run once, refused over an unwatched run once, keeps its escalation arming, its review rounds and its pairing state, and arms (when armed at all) its clone's idle tests - as it does in its clone.
+2. **The constraints.** Reuse the existing resolver (the brief); no guard message changes; a plain clone's paths unchanged; the readers T275 moved to the common dir agree with these writers; `tree::state`'s per-tree verification record stays per tree.
+3. **Where each comes from.** O: T275's census and the task line's sites, each read for what it stores and who else reads it (`grep -rnE` over `scripts/`, the Makefile and `rust/` for each state file's name, 2026-11-27); G: the brief's words for the resolver and the per-tree exception.
+4. **Do they describe the world here?** Yes: this tree is a linked worktree (`.git` names `/diagram/.clones/diagram-backlog/.git/worktrees/diagram-backlog-t269`), and the red tests build the same shape with `git worktree add`.
+5. **The order.** After T275 (its readers); beside T442 (the gate's other sites); before T22.
+6. **The exits.** Green: the five new tests pass with the crates' suites and the changed guards' own suites. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard rust/guard/shared"` green and the changed guards' suites above green, measured 2026-11-27 (their runs above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** In a pool tree the session was told the same finished run on every turn and refused over the same unwatched run on every Stop, and its review arming, rounds and pairing state were dropped (the writes failed on a `.git` file), so a returned review's filter and a spec-fidelity round count were lost. Wrong outcomes; this task fixes them.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A pool tree's name was taken as the session's name by the idle-tests guard (its stagger, its records' suffix): fixed here, by `locate`'s mapping above. Observed 2026-11-27, method: `locate` read.
+- Every other reader or writer of the same state files agrees: not a defect. The class (every guard site of the task line, and every other reader or writer of the same state files) observed 2026-11-27, method: T275's census of the guard's `.git` joins, then `grep -rnE 'verification-state\.json|pairing-key|idle-tests\.|escalation-state|finished-run\.seen|live-run\.told|review-round/|review-rounds\.json|pairing-state\.json'` over `scripts/`, the Makefile and `rust/`, each hit read; the gate crates' remaining sites are T442's.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no - a defect class.
 
 ### T442 (<why: the finding or measurement that files it>)
 

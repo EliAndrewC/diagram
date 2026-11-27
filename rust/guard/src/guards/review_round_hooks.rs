@@ -11,6 +11,7 @@ use fancy_regex::Regex;
 use serde_json::{json, Value};
 
 use crate::guards::agent_prefix_hooks::lines_kept;
+use crate::guards::event_log_hooks::common_git_dir;
 use crate::protocol::{Answer, Event, Guard, Reply};
 use crate::shared::checks;
 use crate::shared::difflib::unified;
@@ -717,7 +718,7 @@ fn escaped(input: &Value, prompt: &str, feature: &str, root: Option<&Path>) -> O
     if let Some(root) = root {
         let feature_dir = root.join("specs").join(feature);
         if !feature.is_empty() && feature_dir.is_dir() {
-            let state = root.join(".git/review-round").join(feature);
+            let state = common_git_dir(root).join("review-round").join(feature);
             take_snapshot(&feature_dir, &state.join("snapshot"));
             if accepted_pass(input, feature, &feature_dir.join("spec.md"), root, &state) {
                 write_state(&state, 1);
@@ -770,7 +771,8 @@ pub(crate) fn verdict(input: &Value, tool: &str, clone: &str, ctx: &Ctx) -> Opti
         return Some(outcome("permitted", "no-feature", detail));
     };
     let feature_dir = root.join("specs").join(&feature);
-    let state = root.join(".git/review-round").join(&feature);
+    // the feature's rounds, so a linked worktree of the clone keeps them in the common git dir (451 T441)
+    let state = common_git_dir(root).join("review-round").join(&feature);
     let snap = state.join("snapshot");
     if !snap.is_dir() {
         take_snapshot(&feature_dir, &snap);
@@ -856,7 +858,9 @@ pub fn cli(args: &[String]) -> Reply {
     let arg = |i: usize| args.get(i).map_or("", String::as_str);
     match arg(0) {
         "state" => {
-            let state = Path::new(arg(1)).join(".git/review-round").join(arg(2));
+            let state = common_git_dir(Path::new(arg(1)))
+                .join("review-round")
+                .join(arg(2));
             let snapshot = if state.join("snapshot").is_dir() {
                 "yes"
             } else {

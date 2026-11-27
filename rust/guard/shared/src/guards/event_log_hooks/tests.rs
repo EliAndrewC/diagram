@@ -275,6 +275,13 @@ fn the_feature_and_the_git_dir_are_read_as_the_tool_reads_them() {
     std::fs::create_dir_all(&wt).unwrap();
     std::fs::write(wt.join(".git"), "gitdir: ../.git/worktrees/wt\n").unwrap();
     std::fs::write(d.join(".git/worktrees/wt/commondir"), "../..\n").unwrap();
+    // 451 T441: the tree's own git dir is the one its `.git` file names; a plain clone's is its `.git`; a dangling name is kept
+    let own = std::fs::canonicalize(d.join(".git/worktrees/wt")).unwrap();
+    assert_eq!(super::own_git_dir(&wt), own);
+    assert_eq!(super::own_git_dir(&d), d.join(".git"));
+    std::fs::write(wt.join(".git"), "gitdir: gone\n").unwrap();
+    assert_eq!(super::own_git_dir(&wt), wt.join("gone"));
+    std::fs::write(wt.join(".git"), "gitdir: ../.git/worktrees/wt\n").unwrap();
     assert_eq!(
         common_git_dir(&wt),
         std::fs::canonicalize(d.join(".git")).unwrap()

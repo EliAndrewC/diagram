@@ -3752,7 +3752,7 @@
    "declared": "spec-fidelity"
   },
   "### T441 Approach (checklist part A)": {
-   "sha256": "045d2a57af96cd94a4c4ff3f9cab53bfce5bbb87d182f40630e581ad67587ec5",
+   "sha256": "4bae56129ee9d438bbd172c353f33756dc99e54311273002317c7c41abfab586",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4137,6 +4137,12 @@
   },
   "### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)": {
    "sha256": "e2d5f1fbb2fe3472c5d3d8615e441f413660a965653ecd6d88dd97206054dfba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)": {
+   "sha256": "81e0e90235bcbca4414df077b1ed9354e019329d5320270c462d565426ccc332",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37553,6 +37559,70 @@
      "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)",
+    "### T441 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 two resolvers",
+     "summary": "State paths resolved through common_git_dir (existing) for session/clone state and a new own_git_dir for tree state; no git process; plain clone paths unchanged; no guard message changed.",
+     "class": "within",
+     "why": "The defect is guard state lost because a linked worktree's .git is a file; resolving each path to a real git dir is the fix itself. A second resolver only serves state that is the tree's; it narrows nothing the GM asked (request.md 291: worktree tooling should perform the correct behavior; 415/427: fix what was found and do the worktree tasks)."
+    },
+    {
+     "id": "D2 COMMON set",
+     "summary": "escalation-state.json, review-round/<feature>, pairing-state.json, review-rounds.json, review-snapshot/ and the dispatch.md snapshot are kept in the clone's common git dir.",
+     "class": "within",
+     "why": "Each is the session's or the feature's state; the readers T275 already moved to the common dir read them, so writers in the common dir are what keeps a returned review's filter and a feature's round count from being lost in a pool tree. No outcome is narrowed."
+    },
+    {
+     "id": "D3 finished-run.seen and live-run.told per tree",
+     "summary": "Both marks kept in the tree's own git dir.",
+     "class": "within",
+     "why": "Each names something of the tree (its dev/run-log, runs found by the tree's path); kept per tree they work in a pool tree (told once, refused once), and a shared file would let one tree's Stop clear the other's mark - a wrong outcome. Kept, not dropped: nothing asked is narrowed."
+    },
+    {
+     "id": "D4 pairing-key per tree",
+     "summary": "The engine key's cache is kept in the tree's own git dir.",
+     "class": "within",
+     "why": "It caches the tree's own engine key, invalidated by the tree's files; the clone's key answering for a pool tree would be a wrong outcome. Per tree is the correct behavior, not a carve-out."
+    },
+    {
+     "id": "D5 verification-state.json per tree",
+     "summary": "Read where its writer (tree::state state_file) puts it, the tree's own git dir.",
+     "class": "within",
+     "why": "Reader is made to agree with its existing writer, which is per tree by design; the alternative would read a record that is never written. Fixes the loss, narrows nothing."
+    },
+    {
+     "id": "D6 idle tests mapped to the clone",
+     "summary": "locate maps a tree whose .git is a file to its clone, so arming, run, disarm and seen mark are the clone's under the clone's session name; a worktree of a repository outside .clones/ is located nowhere; arming still off by the GM's DEF_ARM switch.",
+     "class": "within",
+     "why": "Nothing in request.md speaks to idle tests in a worktree. Per tree is impossible as stated (the gate reads <make's top>/.git/idle-tests.running, which a .git file cannot hold), skipping would leave the clone unarmed while the session stood in a pool tree, and the session-name change fixes a found wrong outcome (a pool tree's name taken as the session's). A repository outside .clones/ is no session clone, so locating it nowhere matches the module's existing scope; the GM's switch is untouched."
+    },
+    {
+     "id": "D7 clone_sync probes left",
+     "summary": "clone_sync_hooks.rs' three .join(\".git\").is_dir() probes left as they are, with comments.",
+     "class": "within",
+     "why": "A pool tree is no session clone to claim or sync, so the probe answering false there is the right outcome; leaving a non-defect as it is is not a narrowing (WHAT A DEFECT IS, 2026-11-19)."
+    },
+    {
+     "id": "D8 page-sessions left",
+     "summary": "stall_watchdog_hooks/pass.rs page-sessions left as is.",
+     "class": "within",
+     "why": "Its clone comes from the claim map, always a session clone, never a linked worktree; as stated it cannot lose state in a pool tree, so no defect is left."
+    },
+    {
+     "id": "D9 gate sites to T442",
+     "summary": "The gate crates' remaining .git sites are left to T442, filed beside this task.",
+     "class": "within",
+     "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -57250,6 +57320,68 @@
      "summary": "No guard message changes; 449 T93's kept-results location unchanged; red-first test a_target_directory_given_is_the_run_s_target pinned, green with make builder-checks on the rustc crate; a claim it cannot be done goes to make arbiter-ask.",
      "class": "within",
      "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T441": {
+   "section_sha256": "2f54ebaefb9683b516f19955754252df355fc48560dbfe2961dde6123f6fdfa3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 two resolvers",
+     "summary": "State paths resolved through common_git_dir (existing) for session/clone state and a new own_git_dir for tree state; no git process; plain clone paths unchanged; no guard message changed.",
+     "class": "within",
+     "why": "The defect is guard state lost because a linked worktree's .git is a file; resolving each path to a real git dir is the fix itself. A second resolver only serves state that is the tree's; it narrows nothing the GM asked (request.md 291: worktree tooling should perform the correct behavior; 415/427: fix what was found and do the worktree tasks)."
+    },
+    {
+     "id": "D2 COMMON set",
+     "summary": "escalation-state.json, review-round/<feature>, pairing-state.json, review-rounds.json, review-snapshot/ and the dispatch.md snapshot are kept in the clone's common git dir.",
+     "class": "within",
+     "why": "Each is the session's or the feature's state; the readers T275 already moved to the common dir read them, so writers in the common dir are what keeps a returned review's filter and a feature's round count from being lost in a pool tree. No outcome is narrowed."
+    },
+    {
+     "id": "D3 finished-run.seen and live-run.told per tree",
+     "summary": "Both marks kept in the tree's own git dir.",
+     "class": "within",
+     "why": "Each names something of the tree (its dev/run-log, runs found by the tree's path); kept per tree they work in a pool tree (told once, refused once), and a shared file would let one tree's Stop clear the other's mark - a wrong outcome. Kept, not dropped: nothing asked is narrowed."
+    },
+    {
+     "id": "D4 pairing-key per tree",
+     "summary": "The engine key's cache is kept in the tree's own git dir.",
+     "class": "within",
+     "why": "It caches the tree's own engine key, invalidated by the tree's files; the clone's key answering for a pool tree would be a wrong outcome. Per tree is the correct behavior, not a carve-out."
+    },
+    {
+     "id": "D5 verification-state.json per tree",
+     "summary": "Read where its writer (tree::state state_file) puts it, the tree's own git dir.",
+     "class": "within",
+     "why": "Reader is made to agree with its existing writer, which is per tree by design; the alternative would read a record that is never written. Fixes the loss, narrows nothing."
+    },
+    {
+     "id": "D6 idle tests mapped to the clone",
+     "summary": "locate maps a tree whose .git is a file to its clone, so arming, run, disarm and seen mark are the clone's under the clone's session name; a worktree of a repository outside .clones/ is located nowhere; arming still off by the GM's DEF_ARM switch.",
+     "class": "within",
+     "why": "Nothing in request.md speaks to idle tests in a worktree. Per tree is impossible as stated (the gate reads <make's top>/.git/idle-tests.running, which a .git file cannot hold), skipping would leave the clone unarmed while the session stood in a pool tree, and the session-name change fixes a found wrong outcome (a pool tree's name taken as the session's). A repository outside .clones/ is no session clone, so locating it nowhere matches the module's existing scope; the GM's switch is untouched."
+    },
+    {
+     "id": "D7 clone_sync probes left",
+     "summary": "clone_sync_hooks.rs' three .join(\".git\").is_dir() probes left as they are, with comments.",
+     "class": "within",
+     "why": "A pool tree is no session clone to claim or sync, so the probe answering false there is the right outcome; leaving a non-defect as it is is not a narrowing (WHAT A DEFECT IS, 2026-11-19)."
+    },
+    {
+     "id": "D8 page-sessions left",
+     "summary": "stall_watchdog_hooks/pass.rs page-sessions left as is.",
+     "class": "within",
+     "why": "Its clone comes from the claim map, always a session clone, never a linked worktree; as stated it cannot lose state in a pool tree, so no defect is left."
+    },
+    {
+     "id": "D9 gate sites to T442",
+     "summary": "The gate crates' remaining .git sites are left to T442, filed beside this task.",
+     "class": "within",
+     "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
     }
    ],
    "verdict": "CLEAR"

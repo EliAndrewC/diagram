@@ -568,6 +568,21 @@ fn clone_root(cwd: &Path) -> Option<PathBuf> {
         .map(Path::to_path_buf)
 }
 
+/// The git dir of the working tree at `root` alone (`own_git_dir`): `<root>/.git`, or the directory a linked worktree's `.git` file
+/// names (`<clone>/.git/worktrees/<name>`), where git keeps that tree's own HEAD and index - the place for state that is the tree's,
+/// never its clone's (451 T441).
+#[must_use]
+pub fn own_git_dir(root: &Path) -> PathBuf {
+    let g = root.join(".git");
+    let Some(dir) = std::fs::read_to_string(&g)
+        .ok()
+        .and_then(|t| first_group(&GITDIR, t.trim()))
+    else {
+        return g;
+    };
+    std::fs::canonicalize(root.join(dir.trim())).unwrap_or_else(|_| root.join(dir.trim()))
+}
+
 /// The git dir a worktree shares with its clone (`common_git_dir`).
 #[must_use]
 pub fn common_git_dir(root: &Path) -> PathBuf {

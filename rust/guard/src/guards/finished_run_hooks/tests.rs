@@ -679,3 +679,36 @@ fn a_running_command_is_found_by_its_command_line() {
     assert_eq!(w.ctx().running("/c/run.log; do sleep 60; done"), vec![400]);
     assert!(w.ctx().running("nothing runs this").is_empty());
 }
+
+/// 451 T441, RED FIRST: in a linked worktree (a pool tree, its `.git` a file) the finished-run and live-run marks could not be
+/// written, so a finished run was told on every turn and an unwatched run refused on every Stop. Each mark is the TREE's - the run
+/// log it names and the runs it lists are that tree's - so it lives in the tree's own git dir, and the clone's marks are apart.
+#[test]
+fn in_a_linked_worktree_each_mark_is_kept_in_the_trees_own_git_dir() {
+    let mut w = world("linked");
+    let (clone, tree) = crate::guards::linked_worktree(&w.root.join("git"));
+    let own = crate::guards::event_log_hooks::own_git_dir(&tree);
+    w.clone = tree.clone();
+    w.record("a.json", "2001-09-09T01:46:40Z", "green");
+    assert!(report(&tree, true, 1_000_000_060).is_some());
+    assert!(report(&tree, true, 1_000_000_060).is_none());
+    assert_eq!(
+        std::fs::read_to_string(own.join("finished-run.seen")).unwrap(),
+        "a.json"
+    );
+    let log = clone.join("dev/run-log/2026-11");
+    std::fs::create_dir_all(&log).unwrap();
+    std::fs::write(log.join("a.json"), r#"{"result": "green"}"#).unwrap();
+    assert!(report(&clone, true, 1_000_000_060).is_some());
+    assert!(report(&tree, true, 1_000_000_060).is_none());
+    let out = w.root.join("run.log");
+    std::fs::write(&out, "").unwrap();
+    w.add(100, "make", 1, &tree, &["make", "sleeper"], Some(&out));
+    assert!(!refused(&w.run("Stop")).is_empty());
+    assert!(w.run("Stop").is_empty());
+    assert_eq!(
+        std::fs::read_to_string(own.join("live-run.told")).unwrap(),
+        "100"
+    );
+    assert!(!clone.join(".git/live-run.told").exists());
+}

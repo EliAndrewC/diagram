@@ -153,7 +153,8 @@ fn newest(dir: &Path) -> Option<PathBuf> {
 pub(crate) fn report(clone: &Path, mark: bool, now: i64) -> Option<String> {
     let last = newest(&clone.join("dev/run-log"))?;
     let name = last.file_name()?.to_string_lossy().into_owned();
-    let seen = clone.join(".git/finished-run.seen");
+    // the TREE's mark (451 T441): the run log it names is this tree's, so a linked worktree keeps it in its own git dir
+    let seen = crate::guards::event_log_hooks::own_git_dir(clone).join("finished-run.seen");
     if std::fs::read_to_string(&seen).is_ok_and(|s| s == name) {
         return None;
     }
@@ -330,7 +331,8 @@ fn hold(
     lines: &mut Vec<String>,
     fire: &dyn Fn(&str, &str, &str),
 ) -> Option<String> {
-    let told = clone.join(".git/live-run.told");
+    // the TREE's mark (451 T441): the runs it lists are this tree's, and another tree's empty list would clear a shared one
+    let told = crate::guards::event_log_hooks::own_git_dir(clone).join("live-run.told");
     let live = c.procs.live_runs(clone);
     if live.is_empty() {
         let _ = std::fs::remove_file(&told);

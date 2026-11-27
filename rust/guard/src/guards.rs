@@ -33,6 +33,55 @@ pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
     std::fs::remove_file(&draft).unwrap();
 }
 
+/// A real clone at `<base>/clone` and a linked worktree of it at `<base>/tree` (`git worktree add`, as a builder's pool tree is), both
+/// canonical (451 T441): the tree's `.git` is a FILE, so a guard that joins its state onto `<tree>/.git` loses it.
+#[cfg(test)]
+pub(crate) fn linked_worktree(base: &std::path::Path) -> (std::path::PathBuf, std::path::PathBuf) {
+    let (clone, tree) = (base.join("clone"), base.join("tree"));
+    std::fs::create_dir_all(&clone).unwrap();
+    let git = |args: &[&std::ffi::OsStr]| {
+        let done = std::process::Command::new("git")
+            .args([
+                "-c",
+                "user.name=t",
+                "-c",
+                "user.email=t@t",
+                "-c",
+                "commit.gpgsign=false",
+            ])
+            .args(args)
+            .env_remove("GIT_DIR")
+            .env_remove("GIT_WORK_TREE")
+            .output()
+            .unwrap();
+        assert!(
+            done.status.success(),
+            "{}",
+            String::from_utf8_lossy(&done.stderr)
+        );
+    };
+    git(&["init".as_ref(), "-q".as_ref(), clone.as_os_str()]);
+    git(&[
+        "-C".as_ref(),
+        clone.as_os_str(),
+        "commit".as_ref(),
+        "-q".as_ref(),
+        "--allow-empty".as_ref(),
+        "-m".as_ref(),
+        "x".as_ref(),
+    ]);
+    git(&[
+        "-C".as_ref(),
+        clone.as_os_str(),
+        "worktree".as_ref(),
+        "add".as_ref(),
+        "-q".as_ref(),
+        "--detach".as_ref(),
+        tree.as_os_str(),
+    ]);
+    (clone.canonicalize().unwrap(), tree.canonicalize().unwrap())
+}
+
 /// A hang pin's deadline (451 T103's form, T113): the test `name` (its path in this crate) run again as a child with `var` set, which
 /// does the work and prints its answer; whether it passed within `secs`, and what it printed. A search that never ends is killed at
 /// the deadline and fails its test, rather than holding the run.

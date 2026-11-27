@@ -494,3 +494,25 @@ fn a_state_file_being_rewritten_is_read_whole() {
     write_json(Path::new("/no/such/dir/state.json"), &state);
     assert!(!Path::new("/no/such/dir").exists());
 }
+
+/// 451 T441, RED FIRST: a session standing in a linked worktree of its clone (a pool tree, its `.git` a file) could write no arming;
+/// it is located at its CLONE, the common git dir's tree, so the arming, the timer's run and a prompt's disarming are the clone's
+/// from either tree, under the clone's session name.
+#[test]
+fn a_linked_worktree_is_located_at_its_clone() {
+    let (sess, mut c) = world("linked");
+    let (clone, tree) = crate::guards::linked_worktree(sess.parent().unwrap());
+    assert_eq!(
+        locate(tree.to_str().unwrap()),
+        Some((clone.clone(), "clone".to_owned()))
+    );
+    c.arm = true;
+    assert!(judge(&event("Stop", &tree), &c, "/").is_empty());
+    let sf = clone.join(".git/idle-tests.json");
+    assert_eq!(state_of(&sf, "session"), "clone");
+    assert!(judge(&event("UserPromptSubmit", &clone), &c, "/").is_empty());
+    assert!(!sf.exists());
+    let (_, other) =
+        crate::guards::linked_worktree(&sess.ancestors().nth(3).unwrap().join("outside"));
+    assert_eq!(locate(other.to_str().unwrap()), None);
+}
