@@ -7071,31 +7071,38 @@ batch; the red was not in its change.
 
 **Performance work?** yes: a `[perf]` task, 451 FR-013 - it makes the builders' loop faster (their iteration test runs), not the gate.
 
-### T437 (<why: the finding or measurement that files it>)
+### T437 (found by 451 T369 by reading, 2026-11-27, no case observed: a start mark whose tree no longer exists - a pool tree dropped, a worktree removed - stays until its task lands, and before this every reader took it as a live start)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one predicate, `marks::gone(common, mark)` (`rust/guard/shared/src/speckit/marks.rs`), asked by the three readers that treat a mark as a start; `marks::all` stays whole.
+  - **DECISION, a tree is GONE only on a positive finding** (label: tooling convention): its path is no directory, or `git rev-parse --git-common-dir --show-toplevel` run there fails or names another top or another common directory (a plain directory where the worktree stood resolves to the enclosing clone, so the top is compared, not the common directory alone). FAILS CLOSED: a mark naming no tree (read as this tree's by the hold, 405 D4) and a mark of the main worktree are never gone. Cost: one `git rev-parse` for each mark of another tree whose directory still stands (20 marks in the clone's common directory, observed 2026-11-27, method: `find task-marks -name '*.json' | wc -l`).
+  - **DECISION, the hold** (`speckit::holding_with`, `rust/guard/shared/src/speckit.rs`): a gone tree's mark joins neither `started` nor `own`, so it holds no push, this tree's or another's. `all` still feeds `touch::prefixes`: a removed worktree's paths must still resolve its edit lines (the comment there says so).
+  - **DECISION, the withdrawal** (`rust/gate/crates/task/src/task_withdraw.rs`): `Read.marks` is `all` less the gone, so a gone tree's mark is no "started" refusal; its other refusals (carried code, a review, the pool registry) stand.
+  - **DECISION, the unstart** (`rust/gate/crates/task/src/task_unstart.rs`): the mark taken is this tree's, else a gone tree's, else a live other tree's (refused, its message unchanged). A gone tree's mark is removed from any tree - its file found by `own_file` under the tree the mark names, so the layout of before T369 too - and its `unstart` row names that tree, so `live_starts` drops that tree's start rows as well (pinned by the test's `holders` reading empty after it).
+  - **Not changed, on purpose**: `land/ready.rs`'s `started_tasks` reads the start log for the landing's OWN tasks' readiness, not for a hold, and `others_in_delta` asks open tasks, not started ones; `set_down_hooks/stalls.rs` reads marks for a stall's report, not a hold or a withdrawal.
+  - **Red first**, on the old code (2026-11-27, `make rust-test ... ONLY=`): `rust/gate/crates/task` `task_unstart task_withdraw` 7 passed, 2 failed (`a_mark_of_a_tree_gone_is_unstarted_from_any_tree`: refused, code 2, with `make -C <the removed tree>`; `a_task_worked_started_or_carried_is_refused_and_nothing_is_written`: the dead mark's "is started" refusal in place of the carried code's); `rust/guard/shared` `speckit::tests` 14 passed, 1 failed (`this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_carries`: a removed worktree's task still held the push). Green after the change. Two fixtures that named never-made trees as live were moved to real worktrees: `another_tree_s_mark_is_refused_and_a_phase_hold_is_lifted` (was `/another/tree`) and `the_hold_outside_a_repository_and_without_a_delta_is_none` (was a never-made `other`), each still reaching its branch.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a gone tree's mark: no hold, no withdrawal refusal, unstarted from any tree | n/a: tooling, pinned by the three tests above (observed 2026-11-27, method: the red and green runs) | n/a: tooling | none | n/a |
 
 ### T437 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task whose tree is gone holds no push and blocks no withdrawal, and the session can unstart it from the tree it is in.
+2. **The constraints.** 451 T254 and T369 (one mark a task a tree, another tree's mark that tree's to remove while it stands); 405 D4 (this tree's start, and a mark naming no tree, hold whatever the delta carries); no guard message changes.
+3. **Where each comes from.** O: T369's reading of 2026-11-27 (the task line); the brief's words for the rule.
+4. **Do they describe the world here?** Yes: the fixtures make the real cases - a `git worktree remove`d tree, a plain directory where one stood, a path never made.
+5. **The order.** After T369. None before it.
+6. **The exits.** Green: the tests above green and `make builder-checks` green on `rust/guard/shared` and `rust/gate/crates/task`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: the red runs above fail on the old code and pass on the new.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a session would see: a push no longer held by a task whose tree was dropped, and `make task-unstart` working where it printed a `make -C` that could not run. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T438 (<why: the finding or measurement that files it>)
@@ -7260,31 +7267,36 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T440 (<why: the finding or measurement that files it>)
+### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `world_here` (`rust/gate/crates/rustc/src/rustc.rs`) takes the run's `target` from `target_of(home, tree, CARGO_TARGET_DIR)`: the directory given where it is set and not empty, else `$HOME/.cache/l7r-cargo-target/<tree>` as before.
+  - **The claim restated** (constitution XIV): the task line says the run "shares the build cache but not the live run's lock". The code read otherwise: `runlock::dirs_of` already took the override's directory beside the home one, so the override was locked; the defect is the extra directory - the HOME-derived `world.target` - that every such run also locked and wrote its record into, a directory its cargo never built in. The task line's "measure whether the lock should follow CARGO_TARGET_DIR": it should, since every write a run makes under `world.target` follows with it.
+  - **DECISION, the target itself follows, not only the lock's list** (label: tooling convention): dropping `world.target` from `dirs_of` alone would leave `cover_dir`'s `<target>/cover-<family>` (where `L7R_RUST_COVER_WORK` is unset) and the pre-warm's `prewarm.lock` written under the home cache, unlocked - the collision T23 fixed. With `target` resolved once, the coverage families, the pre-warm's lock, the run record and every `target_override.unwrap_or(target)` reader (`side.rs`, `times.rs`, `stale.rs`, `kept/alone.rs`) name one directory, and `dirs_of`'s dedup leaves one entry.
+  - **What it stops serializing**: runs in ONE tree with DIFFERENT targets no longer wait on each other through the home directory. They share only the clone's `.git/rust-checks/` kept results, each a read-modify-write of one crate's file (`kept.rs`'s `keep_line`); a lost or torn line there is a key that matches nothing, so the next run re-runs that check - a cost, not a wrong green. Every real caller of the checks leaves `CARGO_TARGET_DIR` unset or sets it to the home path itself (`tests/hooks/guard-cases.sh`, the Makefile's `HAMLET_RUN`, which runs cargo, not the checks), so the normal runs are unchanged.
+  - **Red first**, on the old code (2026-11-27, `make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::runlock"`, `target_of` added with the old body first): 10 passed, 1 failed (`a_target_directory_given_is_the_run_s_target`: `"/h/.cache/l7r-cargo-target/b1"` where `"/s/t"` was given). Green after the change.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the run's target from `CARGO_TARGET_DIR` where given | n/a: tooling, pinned by `rustc::tests::runlock::a_target_directory_given_is_the_run_s_target` (observed 2026-11-27, method: the red and green runs) | n/a: tooling | none | n/a |
 
 ### T440 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A run of the Rust checks given a target directory writes its lock, its record and its coverage builds there, and nothing under the HOME cache.
+2. **The constraints.** 451 T23 (one run at a time in every directory a run writes); 449 T93 (the kept results in the clone's `.git/rust-checks/`, unchanged); no guard message changes.
+3. **Where each comes from.** O: T312's empty-HOME proof, observed 2026-11-27 (the task line).
+4. **Do they describe the world here?** Yes: the writes under `world.target` were read in the code (`runlock.rs`'s `dirs_of`, `cover.rs`'s `cover_dir`, `prewarm.rs`'s lock).
+5. **The order.** After T312. None before it.
+6. **The exits.** Green: the test green and `make builder-checks` green on `rust/gate/crates/rustc`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: the red run above fails on the old body and passes on the new.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a session would see: a scratch-HOME or scratch-target run leaving nothing in the real cache. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)

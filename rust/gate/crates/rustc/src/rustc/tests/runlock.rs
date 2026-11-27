@@ -246,6 +246,28 @@ fn every_directory_a_run_writes_is_taken_once_in_order() {
     assert_eq!(dirs_of(&world).len(), 2);
 }
 
+/// RED FIRST (451 T440): a run given `CARGO_TARGET_DIR` takes that directory as its target - its run lock and record there, its
+/// coverage families under it - and the home cache only where none (or an empty one) is given: a test run with HOME elsewhere and a
+/// scratch target wrote both files under HOME's `.cache/l7r-cargo-target/<tree>/` (451 T312's empty-HOME proof, 2026-11-27).
+#[test]
+fn a_target_directory_given_is_the_run_s_target() {
+    let home = Path::new("/h");
+    let cache = Path::new("/h/.cache/l7r-cargo-target/b1");
+    assert_eq!(crate::rustc::target_of(home, "b1", None), cache);
+    assert_eq!(crate::rustc::target_of(home, "b1", Some("")), cache);
+    assert_eq!(
+        crate::rustc::target_of(home, "b1", Some("/s/t")),
+        Path::new("/s/t")
+    );
+    // so a run under such a world writes its lock where cargo builds, and nothing under the home cache
+    let (root, _, _) = two_crates();
+    let mut world = world_with(&root, "exit 0");
+    let scratch_target = world.target.join("given");
+    world.target = scratch_target.clone();
+    world.target_override = Some(scratch_target.display().to_string());
+    assert_eq!(dirs_of(&world), [scratch_target]);
+}
+
 #[test]
 fn a_directory_that_cannot_be_made_or_locked_is_said() {
     let dir = scratch("runlock-bad");

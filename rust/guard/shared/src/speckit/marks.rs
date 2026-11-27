@@ -15,7 +15,8 @@
 //! - EVERY STARTED TASK ([`all`]): each mark, the legacy one as the main worktree's - what the push's hold asks
 //!   (`speckit::holding_with`: this tree's started tasks, and another tree's whose files the delta touches) and the stall check reads.
 //! - A mark goes when its task lands ([`remove`], `make land`'s sweep) or its feature is set down in its tree ([`clear`]). A mark
-//!   of a ticked task left behind holds nothing: every reader asks for an open box.
+//!   of a ticked task left behind holds nothing: every reader asks for an open box. A mark of a tree that no longer exists holds
+//!   nothing either ([`gone`], 451 T437), and any tree's `make task-unstart` removes it.
 
 use std::path::{Path, PathBuf};
 
@@ -100,6 +101,24 @@ pub fn places(dir: &Path) -> Option<(PathBuf, PathBuf)> {
 pub fn same_tree(a: &Path, b: &Path) -> bool {
     a == b
         || matches!((std::fs::canonicalize(a), std::fs::canonicalize(b)), (Ok(x), Ok(y)) if x == y)
+}
+
+/// Is `mark`'s tree GONE (451 T437) - its path missing, or no longer a worktree of the repository under `common` (git names another
+/// top or another common directory for it, or none)? A pool tree dropped or a worktree removed keeps its marks until the task lands
+/// ([`remove`]); read as a start, such a mark held another tree's push and refused a withdrawal with a `make -C` that cannot run.
+/// So the hold and the withdrawal ask this, and `make task-unstart` removes a gone tree's mark from any tree. FAILS CLOSED: a mark
+/// naming no tree, and the main worktree, are never gone. [`all`] still lists a gone tree's marks: the edit lines name its paths
+/// (`touch::prefixes`). Its cost: one `git rev-parse` a mark of another tree that still has a directory.
+#[must_use]
+pub fn gone(common: &Path, mark: &Value) -> bool {
+    let tree = tree_of(mark);
+    if tree.as_os_str().is_empty() || same_tree(tree, &main_top(common)) {
+        return false;
+    }
+    if !tree.is_dir() {
+        return true;
+    }
+    !matches!(places(tree), Some((c, top)) if same_tree(&top, tree) && same_tree(&c, common))
 }
 
 /// The main worktree's top: the common directory's parent (`<clone>/.git`).

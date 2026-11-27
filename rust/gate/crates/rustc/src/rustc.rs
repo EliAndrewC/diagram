@@ -850,6 +850,17 @@ fn cargo_exe(installed: &Path) -> String {
     }
 }
 
+/// The run's target directory: the one `CARGO_TARGET_DIR` gives (not empty), else the tree's in the home cache. WHY THE GIVEN ONE
+/// (451 T440): the run lock and its record (`runlock.rs`), the coverage families' directories and the pre-warm's lock are written under
+/// this; taken from home whatever was given, a run with HOME elsewhere and a scratch target wrote them under the real HOME's cache, a
+/// directory its cargo never built in (451 T312's empty-HOME proof, 2026-11-27).
+fn target_of(home: &Path, tree: &str, set: Option<&str>) -> PathBuf {
+    set.filter(|s| !s.is_empty()).map_or_else(
+        || home.join(".cache/l7r-cargo-target").join(tree),
+        PathBuf::from,
+    )
+}
+
 fn world_here(make: String) -> World {
     let tree = std::env::var_os("L7R_GATE_TREE").map_or_else(crate::top, PathBuf::from);
     let home = PathBuf::from(std::env::var_os("HOME").unwrap_or_default());
@@ -864,7 +875,11 @@ fn world_here(make: String) -> World {
     World {
         slots: slot::Slots::of(root.reader(), &home),
         small: slot::Slots::small(root.reader(), &home),
-        target: home.join(".cache/l7r-cargo-target").join(name),
+        target: target_of(
+            &home,
+            &name,
+            std::env::var("CARGO_TARGET_DIR").ok().as_deref(),
+        ),
         cargo: cargo_exe(&cargo_bin),
         path_dir: home.join(".cargo/bin"),
         target_override: std::env::var("CARGO_TARGET_DIR").ok(),

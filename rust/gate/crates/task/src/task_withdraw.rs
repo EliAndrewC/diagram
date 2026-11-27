@@ -134,6 +134,15 @@ fn record(root: &Path, name: &str, tasks: &[String], why: &str, env: Env) -> Str
     log.map_or_else(String::new, |p| format!("; recorded in {}", p.display()))
 }
 
+/// Every start mark under `common` but a gone tree's: a mark of a tree that no longer exists is no start (451 T437), its
+/// `make -C` one that could not run.
+fn started(common: &Path) -> Vec<Value> {
+    let all = marks::all(common);
+    all.into_iter()
+        .filter(|m| !marks::gone(common, m))
+        .collect()
+}
+
 /// The tasks withdrawn: what was printed, or the refusal.
 fn withdraw(
     cwd: &Path,
@@ -176,7 +185,7 @@ fn withdraw(
             .ok()
             .and_then(|t| serde_json::from_str(&t).ok())
             .unwrap_or(Value::Null),
-        marks: marks::all(&PathBuf::from(common_text(&root))),
+        marks: started(&PathBuf::from(common_text(&root))),
         pool: builder_pool::read(&PathBuf::from(common_text(&root))),
         subjects: String::from_utf8_lossy(
             &git(&root, &["log", "--format=%s", "origin/main..HEAD"]).1,

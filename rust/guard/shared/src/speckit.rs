@@ -503,7 +503,8 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
         .count())
 }
 
-/// The open boxes that hold the landing: each started task of this feature (a mark of any tree, [`marks::all`]), open, not ticked by
+/// The open boxes that hold the landing: each started task of this feature (a mark of any tree still there, [`marks::all`] but
+/// [`marks::gone`], 451 T437), open, not ticked by
 /// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101) - this tree's own whatever the delta
 /// carries (feature 405 D4), another tree's only where the push's delta carries its edits ([`touch`], 451 T254); every other open
 /// box holds nothing.
@@ -542,9 +543,10 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     // each started task, and whether THIS tree started it: a mark naming no tree is read as this tree's, so the hold fails closed
     let mut started: Vec<String> = Vec::new();
     let mut own: Vec<String> = Vec::new();
+    // a mark of a tree that no longer exists is no start (451 T437); `all` itself stays whole, for the edit lines' trees below
     for m in all
         .iter()
-        .filter(|m| m["feature"].as_str() == Some(name.as_str()))
+        .filter(|m| m["feature"].as_str() == Some(name.as_str()) && !marks::gone(&common, m))
     {
         let ours = m["tree"]
             .as_str()

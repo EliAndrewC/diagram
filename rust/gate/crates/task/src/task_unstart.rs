@@ -9,6 +9,9 @@
 //! once has no mark, and reads as not started). The row names its feature and task under `unstart`, never at its top:
 //! a reader that has not met the filter then reads it as no task's row, not as a second start.
 //!
+//! A MARK OF A TREE THAT NO LONGER EXISTS (a pool tree dropped, a worktree removed: `marks::gone`, 451 T437) is removed from any
+//! tree, its `unstart` row naming the tree the mark named; before T437 it was refused with a `make -C` that could not run.
+//!
 //! REFUSED: a mark another tree wrote (run there: the command is printed), a task with no mark, and a bundle's member that is not
 //! its first task - the bundle's one mark is its first task's (451 T141), and unstarting that unstarts every member. A phase task's
 //! hold on its stage's old code (`phase-sources.json`) goes with its start. `.specify/feature.json` stays: it names the tree's
@@ -50,6 +53,9 @@ fn unstart(cwd: &Path, feature: &str, task: &str) -> Raise<Result<String, String
         |m: &&Value| marks::same_tree(Path::new(m["tree"].as_str().unwrap_or_default()), &root);
     let exact = |m: &&Value| m["task"].as_str() == Some(task);
     let found = all.iter().filter(ours).filter(exact).find(here);
+    // ...else a mark of a tree that no longer exists, any tree's to remove (451 T437), before a live tree's, which is refused
+    let gone = |m: &&Value| marks::gone(&common, m);
+    let found = found.or_else(|| all.iter().filter(ours).filter(exact).find(gone));
     let Some(mark) = found.or_else(|| all.iter().filter(ours).find(exact)) else {
         let bundle = all
             .iter()
@@ -64,12 +70,13 @@ fn unstart(cwd: &Path, feature: &str, task: &str) -> Raise<Result<String, String
         }));
     };
     let tree = mark["tree"].as_str().unwrap_or_default();
-    if !marks::same_tree(Path::new(tree), &root) {
+    if !marks::same_tree(Path::new(tree), &root) && !marks::gone(&common, mark) {
         return Ok(Err(format!("task-unstart: refused - {name} {task} was started in {tree}, not in this tree ({}): its mark is that tree's to remove - make -C {tree} task-unstart F={number} T={task}\n", root.display())));
     }
-    // this tree's own mark of the task, else the one-mark file of before T254, which `marks::all` reads as the main worktree's
-    let file =
-        marks::own_file(&common, &name, task, &root).unwrap_or_else(|| common.join(marks::LEGACY));
+    // the mark's own tree's file of the task (this tree's, or a gone tree's), else the one-mark file of before T254, which
+    // `marks::all` reads as the main worktree's
+    let file = marks::own_file(&common, &name, task, Path::new(tree))
+        .unwrap_or_else(|| common.join(marks::LEGACY));
     std::fs::remove_file(&file).map_err(|e| format!("{}: {e}", file.display()))?;
     let utc = utc_text(now_secs());
     let members = marks::tasks_of(mark);

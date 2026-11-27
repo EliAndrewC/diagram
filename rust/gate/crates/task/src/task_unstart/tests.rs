@@ -95,11 +95,15 @@ fn another_tree_s_mark_is_refused_and_a_phase_hold_is_lifted() {
     let root = root_of(&dir);
     let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
     let common = root.join(".git");
-    put(&root, ".git/task-marks/9001-x/T02.json", "{\"feature\": \"9001-x\", \"task\": \"T02\", \"tree\": \"/another/tree\", \"utc\": \"2026-11-26T00:00:00Z\"}\n");
+    // a tree that still stands (451 T437: a mark of a tree gone is any tree's to remove)
+    let (other_top, _) = other_tree(&dir, &root);
+    assert_eq!(start(&words(&["9001", "T02"]), &other_top, &env).code, 0);
+    let theirs = marks::all(&common)[0]["tree"].as_str().unwrap().to_owned();
     let other = cli(&words(&["9001", "T02"]), &root);
     assert_eq!(other.code, 2);
-    assert_eq!(other.stderr, format!("task-unstart: refused - 9001-x T02 was started in /another/tree, not in this tree ({}): its mark is that tree's to remove - make -C /another/tree task-unstart F=9001 T=T02\n", root.display()));
-    assert!(common.join("task-marks/9001-x/T02.json").exists());
+    assert_eq!(other.stderr, format!("task-unstart: refused - 9001-x T02 was started in {theirs}, not in this tree ({}): its mark is that tree's to remove - make -C {theirs} task-unstart F=9001 T=T02\n", root.display()));
+    assert_eq!(marks::all(&common).len(), 1);
+    assert_eq!(cli(&words(&["9001", "T02"]), &other_top).code, 0);
     // the legacy mark, the main worktree's
     put(
         &root,
@@ -131,7 +135,6 @@ fn another_tree_s_mark_is_refused_and_a_phase_hold_is_lifted() {
     assert!(!common.join("phase-sources.json").exists());
     // a mark whose file is not its task's own name, in a tree with no one-mark file: nothing to remove, a raise
     put(&root, ".git/task-marks/9001-x/odd.json", &format!("{{\"feature\": \"9001-x\", \"task\": \"T02\", \"tree\": \"{}\", \"utc\": \"2026-11-26T00:00:00Z\"}}\n", root.display()));
-    std::fs::remove_file(common.join("task-marks/9001-x/T02.json")).unwrap();
     assert_eq!(cli(&words(&["9001", "T02"]), &root).code, 1);
     std::fs::remove_file(common.join("task-marks/9001-x/odd.json")).unwrap();
     // the log not writable: the mark removed, then the raise
@@ -245,5 +248,33 @@ fn a_released_pool_tree_s_start_outlives_the_clone_s_undo_until_the_landing() {
     assert_eq!(start(&words(&["9001", "T01"]), &root, &env).code, 0);
     assert_eq!(marks::all(&common).len(), 2);
     marks::remove(&common, "9001", &["T01".to_owned()]);
+    assert!(marks::all(&common).is_empty());
+}
+
+/// RED FIRST (451 T437): a mark of a tree that no longer exists - a worktree removed, or a path never made, in the layout of before
+/// T369 - is any tree's to remove: unstarted from this tree, its unstart row naming the tree the mark named, so its start rows go too.
+#[test]
+fn a_mark_of_a_tree_gone_is_unstarted_from_any_tree() {
+    let dir = repo("unstart-gone");
+    let root = root_of(&dir);
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    let common = root.join(".git");
+    let (other, _) = other_tree(&dir, &root);
+    assert_eq!(start(&words(&["9001", "T01"]), &other, &env).code, 0);
+    let theirs = marks::all(&common)[0]["tree"].as_str().unwrap().to_owned();
+    let (code, _) = crate::git(
+        &root,
+        &["worktree", "remove", "--force", &other.to_string_lossy()],
+    );
+    assert_eq!(code, Some(0));
+    let said = cli(&words(&["9001", "T01"]), &root);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert!(said.stdout.starts_with(&format!(
+        "task-unstart: 9001-x T01 is no longer started in {theirs} - its mark removed ("
+    )));
+    assert_eq!(holders(&common, "T01"), (vec![], vec![]));
+    let never = dir.join("never-made").to_string_lossy().into_owned();
+    put(&root, ".git/task-marks/9001-x/T02.json", &format!("{{\"feature\": \"9001-x\", \"task\": \"T02\", \"tree\": \"{never}\", \"utc\": \"2026-11-26T00:00:00Z\"}}\n"));
+    assert_eq!(cli(&words(&["9001", "T02"]), &root).code, 0);
     assert!(marks::all(&common).is_empty());
 }

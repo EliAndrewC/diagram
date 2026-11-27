@@ -3554,7 +3554,7 @@
    "declared": "spec-fidelity"
   },
   "### T437 Approach (checklist part A)": {
-   "sha256": "6be9012b663b8e82e3ba75c9d4b79a013e43e940c99a68a3ac452cc2d4ffc71f",
+   "sha256": "cb2108e1052b659ae3d8cea2360b44f7499a14996b61e23235bef3784c31098d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3734,7 +3734,7 @@
    "declared": "spec-fidelity"
   },
   "### T440 Approach (checklist part A)": {
-   "sha256": "ce11017b749416fc45c46c512b56177fb3adb85143b7b88a205c595f6e63ab99",
+   "sha256": "cab6ab0de942423af5d489ed36d9e5335105d553ed4f9aaf7e601e6c177e8fb8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4125,6 +4125,18 @@
   },
   "### T464 (after T457 a landing's tick checks still cost about 2.4 s a task outside plan.md's history: 92 s for the 35 tasks of the 06:43Z batch, 9.4 s of it in History, measured 2026-11-27, method: T457's traced runs over a scratch clone of diagram-backlog at 98b632638d)": {
    "sha256": "5aa7aa7ffbf521eb165d80c05e2469622433da7208c99ffede693e7f64faab3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T437 (found by 451 T369 by reading, 2026-11-27, no case observed: a start mark whose tree no longer exists - a pool tree dropped, a worktree removed - stays until its task lands, and before this every reader took it as a live start)": {
+   "sha256": "94def712fc26ee5608983ead0a1d3064d8923455d7568bb159590fd0d71d78f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)": {
+   "sha256": "e2d5f1fbb2fe3472c5d3d8615e441f413660a965653ecd6d88dd97206054dfba",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37455,6 +37467,92 @@
      "why": "What is left is a cost, not a wrong outcome (constitution XIV v2.36.0's definition of a defect): every verdict stays correct. So leaving it is not a narrowing and needs no ruling. It is still filed with its reason and its order, as FR-009 asks, and as a performance task it is scheduled first under FR-013."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T437 (found by 451 T369 by reading, 2026-11-27, no case observed: a start mark whose tree no longer exists - a pool tree dropped, a worktree removed - stays until its task lands, and before this every reader took it as a live start)",
+    "### T437 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T437 gone-on-positive-finding",
+     "summary": "A tree is gone only when its path is no directory or git rev-parse there fails or names another top/common dir; a mark naming no tree and a main-worktree mark are never gone (fails closed).",
+     "class": "within",
+     "why": "The predicate that carries the task's goal (a gone tree's mark holds nothing). Failing closed keeps 405 D4's reading of a tree-less mark as this tree's, which the session can still unstart from here; no wrong outcome is left and nothing the GM asked (T285: tooling that does the right thing with worktrees, 2026-11-27 go-ahead) is narrowed."
+    },
+    {
+     "id": "T437 the hold",
+     "summary": "A gone tree's mark joins neither started nor own in speckit::holding_with; marks::all still feeds touch::prefixes so a removed worktree's edit lines still resolve.",
+     "class": "within",
+     "why": "Directly the fix: a dropped tree's task no longer holds any push; keeping the path prefixes is needed for edit lines to resolve and holds nothing."
+    },
+    {
+     "id": "T437 the withdrawal",
+     "summary": "task_withdraw reads marks less the gone, so a gone tree's mark gives no 'started' refusal; its other refusals (carried code, review, pool registry) stand.",
+     "class": "within",
+     "why": "Removes only the false refusal the defect produced; the other refusals are untouched behavior, not part of the defect."
+    },
+    {
+     "id": "T437 the unstart",
+     "summary": "task-unstart takes this tree's mark, else a gone tree's (removable from any tree, both mark layouts, its unstart row naming that tree so live_starts drops it), else refuses a live other tree's with its message unchanged.",
+     "class": "within",
+     "why": "Fixes the printed make -C into a removed tree that could not run; T369's rule (a live other tree's mark is that tree's to remove) is kept for live trees only, which is what the rule is for."
+    },
+    {
+     "id": "T437 not changed on purpose",
+     "summary": "land/ready.rs started_tasks, others_in_delta and set_down_hooks/stalls.rs are left as they are.",
+     "class": "within",
+     "why": "None of them holds a push or refuses a withdrawal or unstart: readiness of the landing's own tasks, open (not started) tasks, and a stall report, where a task whose tree vanished is plausibly a stall worth reporting. No wrong outcome is shown left, so nothing here is a deferred defect."
+    },
+    {
+     "id": "T437 fixtures moved to real worktrees",
+     "summary": "Two tests that named never-made trees as live are moved to real worktrees, each still reaching its branch.",
+     "class": "within",
+     "why": "Under the new predicate a never-made path is gone, so the fixtures had to make the live case real; enforcement and tests of the requested behavior, not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)",
+    "### T440 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T440 Approach: the run's target from CARGO_TARGET_DIR",
+     "summary": "world_here resolves the run's target by target_of(home, tree, CARGO_TARGET_DIR): the given directory where set and non-empty, else $HOME/.cache/l7r-cargo-target/<tree> as before.",
+     "class": "within",
+     "why": "The task as filed: a wrong outcome the feature's own proof (T312's empty-HOME run) observed - a run given a scratch target wrote its lock and record into the HOME cache, a directory its cargo never built in - fixed as found (constitution XIV, fix as we go, the GM 2026-11-18). It narrows nothing in the request or the spec: where CARGO_TARGET_DIR is unset the run keeps the shared HOME build cache, which the GM endorsed reusing (request.md 2026-11-22, T155/T158), and no request passage or FR asks for the home cache location or per-tree serialization."
+    },
+    {
+     "id": "The claim restated",
+     "summary": "The task line's 'shares the build cache but not the live run's lock' is restated from the code: the override's directory was already locked; the defect is the extra HOME-derived world.target also locked and written. The task line's 'measure whether the lock should follow CARGO_TARGET_DIR' is answered yes.",
+     "class": "within",
+     "why": "Restating a task line's reading to match what the code was observed to do (constitution XIV) narrows nothing; the task's own open question is answered in the direction that removes the observed wrong outcome, not in a direction that keeps it."
+    },
+    {
+     "id": "DECISION: the target itself follows, not only the lock's list",
+     "summary": "Rather than dropping world.target from runlock::dirs_of alone, target is resolved once so the coverage directory, the pre-warm's prewarm.lock, the run record and every target_override.unwrap_or(target) reader name one directory.",
+     "class": "within",
+     "why": "The narrower alternative (lock list only) would have left cover_dir's builds and prewarm.lock under the HOME cache unlocked, a new collision; choosing the whole fix over a partial one widens nothing beyond the defect - every write moved is a write the defect put in the wrong directory - and stays inside the task."
+    },
+    {
+     "id": "What it stops serializing",
+     "summary": "Runs in one tree with different targets no longer wait on each other through the HOME directory; they share only .git/rust-checks/ kept results (keep_line's read-modify-write), where a lost or torn line is a key matching nothing, so the next run re-runs that check. Real callers leave CARGO_TARGET_DIR unset or set to the home path.",
+     "class": "within",
+     "why": "Not a narrowing of anything the GM or the spec asked: no request passage or FR requires runs with different targets in one tree to serialize (T23 appears in neither request.md nor the spec index; it is the plan's own constraint), and the serialization dropped was incidental to the defect - a lock on a directory such runs never build in. The plan's premise that a lost or torn kept line only causes a re-run (a cost, not a wrong green) is taken as stated; the bundle rule keeps kept.rs out of this review. Where the variable is unset or set to the home path, behavior is unchanged."
+    },
+    {
+     "id": "Constraints and exits",
+     "summary": "No guard message changes; 449 T93's kept-results location unchanged; red-first test a_target_directory_given_is_the_run_s_target pinned, green with make builder-checks on the rustc crate; a claim it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -57070,6 +57168,88 @@
      "summary": "ruled_tasks' per-section task_sections re-parse (about 1.8 s per whole-plan judgment) is paid once per first pass now but still paid by plan push, make decide, the push table's plan row and the tick's archive; filed as T466, lands before T22; the history's single indexing pass is T465.",
      "class": "within",
      "why": "What is left is a cost, not a wrong outcome (constitution XIV v2.36.0's definition of a defect): every verdict stays correct. So leaving it is not a narrowing and needs no ruling. It is still filed with its reason and its order, as FR-009 asks, and as a performance task it is scheduled first under FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T437": {
+   "section_sha256": "2918375a6d7fe623a9560c0c2606ba328f4b9d6dd6f496bae1bfb524cce24a7a",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T437 gone-on-positive-finding",
+     "summary": "A tree is gone only when its path is no directory or git rev-parse there fails or names another top/common dir; a mark naming no tree and a main-worktree mark are never gone (fails closed).",
+     "class": "within",
+     "why": "The predicate that carries the task's goal (a gone tree's mark holds nothing). Failing closed keeps 405 D4's reading of a tree-less mark as this tree's, which the session can still unstart from here; no wrong outcome is left and nothing the GM asked (T285: tooling that does the right thing with worktrees, 2026-11-27 go-ahead) is narrowed."
+    },
+    {
+     "id": "T437 the hold",
+     "summary": "A gone tree's mark joins neither started nor own in speckit::holding_with; marks::all still feeds touch::prefixes so a removed worktree's edit lines still resolve.",
+     "class": "within",
+     "why": "Directly the fix: a dropped tree's task no longer holds any push; keeping the path prefixes is needed for edit lines to resolve and holds nothing."
+    },
+    {
+     "id": "T437 the withdrawal",
+     "summary": "task_withdraw reads marks less the gone, so a gone tree's mark gives no 'started' refusal; its other refusals (carried code, review, pool registry) stand.",
+     "class": "within",
+     "why": "Removes only the false refusal the defect produced; the other refusals are untouched behavior, not part of the defect."
+    },
+    {
+     "id": "T437 the unstart",
+     "summary": "task-unstart takes this tree's mark, else a gone tree's (removable from any tree, both mark layouts, its unstart row naming that tree so live_starts drops it), else refuses a live other tree's with its message unchanged.",
+     "class": "within",
+     "why": "Fixes the printed make -C into a removed tree that could not run; T369's rule (a live other tree's mark is that tree's to remove) is kept for live trees only, which is what the rule is for."
+    },
+    {
+     "id": "T437 not changed on purpose",
+     "summary": "land/ready.rs started_tasks, others_in_delta and set_down_hooks/stalls.rs are left as they are.",
+     "class": "within",
+     "why": "None of them holds a push or refuses a withdrawal or unstart: readiness of the landing's own tasks, open (not started) tasks, and a stall report, where a task whose tree vanished is plausibly a stall worth reporting. No wrong outcome is shown left, so nothing here is a deferred defect."
+    },
+    {
+     "id": "T437 fixtures moved to real worktrees",
+     "summary": "Two tests that named never-made trees as live are moved to real worktrees, each still reaching its branch.",
+     "class": "within",
+     "why": "Under the new predicate a never-made path is gone, so the fixtures had to make the live case real; enforcement and tests of the requested behavior, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T440": {
+   "section_sha256": "0ab106f4b003697017ff0bcf5c7215a7b9c2b663ee7d0bc1c669d9c023642add",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T440 Approach: the run's target from CARGO_TARGET_DIR",
+     "summary": "world_here resolves the run's target by target_of(home, tree, CARGO_TARGET_DIR): the given directory where set and non-empty, else $HOME/.cache/l7r-cargo-target/<tree> as before.",
+     "class": "within",
+     "why": "The task as filed: a wrong outcome the feature's own proof (T312's empty-HOME run) observed - a run given a scratch target wrote its lock and record into the HOME cache, a directory its cargo never built in - fixed as found (constitution XIV, fix as we go, the GM 2026-11-18). It narrows nothing in the request or the spec: where CARGO_TARGET_DIR is unset the run keeps the shared HOME build cache, which the GM endorsed reusing (request.md 2026-11-22, T155/T158), and no request passage or FR asks for the home cache location or per-tree serialization."
+    },
+    {
+     "id": "The claim restated",
+     "summary": "The task line's 'shares the build cache but not the live run's lock' is restated from the code: the override's directory was already locked; the defect is the extra HOME-derived world.target also locked and written. The task line's 'measure whether the lock should follow CARGO_TARGET_DIR' is answered yes.",
+     "class": "within",
+     "why": "Restating a task line's reading to match what the code was observed to do (constitution XIV) narrows nothing; the task's own open question is answered in the direction that removes the observed wrong outcome, not in a direction that keeps it."
+    },
+    {
+     "id": "DECISION: the target itself follows, not only the lock's list",
+     "summary": "Rather than dropping world.target from runlock::dirs_of alone, target is resolved once so the coverage directory, the pre-warm's prewarm.lock, the run record and every target_override.unwrap_or(target) reader name one directory.",
+     "class": "within",
+     "why": "The narrower alternative (lock list only) would have left cover_dir's builds and prewarm.lock under the HOME cache unlocked, a new collision; choosing the whole fix over a partial one widens nothing beyond the defect - every write moved is a write the defect put in the wrong directory - and stays inside the task."
+    },
+    {
+     "id": "What it stops serializing",
+     "summary": "Runs in one tree with different targets no longer wait on each other through the HOME directory; they share only .git/rust-checks/ kept results (keep_line's read-modify-write), where a lost or torn line is a key matching nothing, so the next run re-runs that check. Real callers leave CARGO_TARGET_DIR unset or set to the home path.",
+     "class": "within",
+     "why": "Not a narrowing of anything the GM or the spec asked: no request passage or FR requires runs with different targets in one tree to serialize (T23 appears in neither request.md nor the spec index; it is the plan's own constraint), and the serialization dropped was incidental to the defect - a lock on a directory such runs never build in. The plan's premise that a lost or torn kept line only causes a re-run (a cost, not a wrong green) is taken as stated; the bundle rule keeps kept.rs out of this review. Where the variable is unset or set to the home path, behavior is unchanged."
+    },
+    {
+     "id": "Constraints and exits",
+     "summary": "No guard message changes; 449 T93's kept-results location unchanged; red-first test a_target_directory_given_is_the_run_s_target pinned, green with make builder-checks on the rustc crate; a claim it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
     }
    ],
    "verdict": "CLEAR"

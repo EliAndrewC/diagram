@@ -161,12 +161,16 @@ fn a_task_worked_started_or_carried_is_refused_and_nothing_is_written() {
     let tree = root.to_string_lossy();
     assert_eq!(started.stderr, format!("task-withdraw: refused, nothing written (451 T359):\n  T02 is started in {tree} (make task-start): unstart it there first - make -C {tree} task-unstart F=9001 T=T01\n"));
     std::fs::remove_dir_all(root.join(".git/task-marks")).unwrap();
+    // 451 T437: a mark of a tree that no longer exists is no start - the refusal is the carried code's alone
+    let gone = dir.join("removed-tree").to_string_lossy().into_owned();
+    put(&root, ".git/task-marks/9001-x/T02.json", &format!("{{\"feature\": \"9001-x\", \"task\": \"T02\", \"tree\": \"{gone}\", \"utc\": \"2026-11-26T00:00:00Z\"}}\n"));
     // its code carried: a commit since origin/main whose head names the feature's number and the task
     put(&root, "scripts/b.py", "y = 2\n");
     git(&root, &["add", "scripts/b.py"]);
     git(&root, &["commit", "-qm", "9001 T02: the second, built"]);
     let carried = cli_with(&words(&["9001", "T02"]), &root, WHY, &env);
     assert!(carried.stderr.contains("  T02's code is carried in the clone (the commit \"9001 T02: the second, built\", since origin/main): a task with code closes by a landing - make land F=9001 T=T02\n"), "{}", carried.stderr);
+    assert!(!carried.stderr.contains("is started"), "{}", carried.stderr);
     git(&root, &["push", "-q", "origin", "main"]);
     // the feature's last open boxes: the closing check is the last tick's
     put(

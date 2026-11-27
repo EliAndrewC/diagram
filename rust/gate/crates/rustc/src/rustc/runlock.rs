@@ -172,8 +172,9 @@ impl Taker {
     }
 }
 
-/// The directories a run writes: the clone's target directory (the coverage families' own directories are under it), and the
-/// cargo target and coverage directory an override names, sorted, so two runs take them in one order.
+/// The directories a run writes: its target directory (the coverage families' own directories are under it; the one
+/// `CARGO_TARGET_DIR` gives where given, 451 T440, so then it is the override itself), and the cargo target and coverage directory
+/// an override names, sorted, so two runs take them in one order.
 pub(super) fn dirs_of(world: &World) -> Vec<PathBuf> {
     let mut dirs = vec![world.target.clone()];
     dirs.extend(world.target_override.as_ref().map(PathBuf::from));

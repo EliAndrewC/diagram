@@ -374,6 +374,15 @@ fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_ca
         holding(&d).unwrap(),
         ["T7707 the other tree's  <- started (make task-start), its edit of b.rs in this push: land it with make land F=7 T=T7707"]
     );
+    // 451 T437: once that worktree is removed its mark holds nothing - nor once its path is a plain directory again, a tree of
+    // this repository no more
+    git(
+        &at,
+        &["worktree", "remove", "--force", &other.to_string_lossy()],
+    );
+    assert!(holding(&d).unwrap().is_empty());
+    std::fs::create_dir_all(&other).unwrap();
+    assert!(holding(&d).unwrap().is_empty());
     // a mark naming no tree is read as this tree's: the hold fails closed
     let bare = at.join(".git/task-marks/007-x/T7701.json");
     std::fs::write(
@@ -381,7 +390,7 @@ fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_ca
         r#"{"feature": "007-x", "task": "T7701", "utc": "2026-11-25T12:30:00Z"}"#,
     )
     .unwrap();
-    assert_eq!(holding(&d).unwrap().len(), 2);
+    assert_eq!(holding(&d).unwrap().len(), 1);
     std::fs::remove_file(bare).unwrap();
     let e = at.join("specs/000-y");
     put(&e, "tasks.md", "- [ ] T7705 x\n");
@@ -436,6 +445,22 @@ fn the_hold_outside_a_repository_and_without_a_delta_is_none() {
     let d = at.join("specs/7-x");
     put(&at, "specs/7-x/tasks.md", "- [ ] T1 x\n");
     let other = at.join("other");
+    // a worktree that still stands (451 T437: a mark of a tree gone holds nothing before the delta is asked)
+    let id = ["-c", "user.email=t@t", "-c", "user.name=t"];
+    git(
+        &at,
+        &[&id[..], &["commit", "-q", "--allow-empty", "-m", "b"]].concat(),
+    );
+    git(
+        &at,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &other.to_string_lossy(),
+        ],
+    );
     mark(&at, &other, "7-x", "T1", "2026-11-25T10:00:00Z");
     put(
         &at,
