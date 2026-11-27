@@ -1,0 +1,42 @@
+test phases: 4779, 2026-11-20T11:57:29.691Z to 2026-11-27T06:51:27.031Z; T364 at 2026-11-27T05:24:05Z
+
+before T364: 4658 phases, 20 past max(60 s, 10 x their crate's median), 3853 s
+  2026-11-22T06:09:33.582Z     86.4 s  median 2.15  diagram-backlog  rust-test  task  code 0  T141
+  2026-11-22T06:45:13.352Z     61.8 s  median 0.80  diagram-backlog  rust-test  plan  code 101  T203
+  2026-11-24T16:29:34.561Z    143.4 s  median 0.99  diagram-backlog  rust-test  phases  code 101  T423
+  2026-11-24T16:32:14.107Z    162.7 s  median 0.99  diagram-backlog  rust-test  phases  code 0  T423
+  2026-11-24T16:38:36.874Z    167.4 s  median 0.99  diagram-backlog  rust-test  phases  code 0  T418
+  2026-11-24T16:41:53.188Z    160.9 s  median 0.99  diagram-backlog  rust-test  phases  code 0  T418
+  2026-11-24T16:44:39.151Z    160.8 s  median 0.99  diagram-backlog  rust-test  phases  code 101  T418
+  2026-11-25T07:15:34.139Z    126.3 s  median 0.99  diagram-backlog  rust-test  phases  code 101  T432
+  2026-11-26T01:11:18.072Z     63.3 s  median 4.04  diagram-backlog-t254  rust-test  land  code 0  
+  2026-11-26T06:08:12.283Z     79.4 s  median 4.04  diagram-backlog-m9  rust-test  land  code 0  
+  2026-11-26T07:00:56.558Z     61.0 s  median 4.04  diagram-backlog-m9  rust-test  land  code 0  
+  2026-11-26T18:25:37.496Z     85.4 s  median 0.53  diagram-backlog-t270  rust-test  pool  code 0  T292
+  2026-11-26T19:03:32.158Z    403.1 s  median 1.59  diagram-backlog-t269  builder-checks  rustc  code 101  T285
+  2026-11-26T19:25:47.021Z     60.1 s  median 1.59  diagram-backlog-t269  rust-test  rustc  code 101  T285
+  2026-11-26T19:46:30.245Z    600.3 s  median 1.59  diagram-backlog-t269  rust-test  rustc  code 101  T285
+  2026-11-26T20:55:55.038Z    243.4 s  median 0.65  diagram-backlog-b1  rust-test  measure  code 1  T256
+  2026-11-26T21:46:25.034Z    510.3 s  median 1.59  diagram-backlog-t270  rust-test  rustc  code 101  T292
+  2026-11-26T22:10:52.573Z    543.4 s  median 1.59  diagram-backlog  builder-checks  rustc  code 101  T334
+  2026-11-27T04:21:43.587Z     61.1 s  median 1.59  diagram-backlog-t271  rust-test  rustc  code 0  T424
+  2026-11-27T04:55:44.255Z     72.5 s  median 4.04  diagram-backlog-b1  rust-test  land  code 0  
+
+since T364: 121 phases, 3 past max(60 s, 10 x their crate's median), 924 s
+  2026-11-27T05:32:02.950Z    101.8 s  median 4.04  diagram-backlog-t271  rust-test  land  code 0  T312
+  2026-11-27T05:35:55.267Z    757.4 s  median 6.18  diagram-backlog-b1  rust-test  shared  code 0  
+  2026-11-27T06:16:46.234Z     64.6 s  median 4.04  diagram-backlog-t271  builder-checks  land  code 0  T296
+
+longest since T364, by crate (runs, median s, max s):
+  shared: 12, 7.29, 757.4
+  land: 14, 7.46, 101.8
+  guard: 10, 3.74, 21.2
+  rustc: 9, 3.21, 17.1
+  task: 30, 2.40, 16.7
+  reviews: 8, 1.76, 7.3
+  mode_a: 1, 6.43, 6.4
+  measure: 9, 0.66, 4.2
+  bundle: 6, 1.06, 3.6
+  plan: 5, 1.13, 3.1
+  cohort: 5, 0.61, 1.5
+  pool: 1, 0.56, 0.6

@@ -3835,20 +3835,14 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T445 (<why: the finding or measurement that files it>)": {
-   "sha256": "79f663ec0c9e3ed86577b154403e07bd0fd63d7f107dc3f8de98f162f4c4c86c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T445 Approach (checklist part A)": {
-   "sha256": "1cb4c8623c4ce4171ad1f7416b74313882d1f117736d6e27ed1d3e935b60275a",
+   "sha256": "1739d12c8d4273261124629c52c70b22fb666699dc8f7d6d4e19348dc0af8dad",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "e32dad641e72571188c9a51de6fbfae905756d9496048624bfc6c2ce6b662917",
+   "sha256": "990897d4211d3ec1a9020546b19df36aec29abf689c874ccf1a200862ef9a704",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4005,6 +3999,36 @@
   },
   "### T453 Approach (checklist part A)": {
    "sha256": "e537aa33df82971a4b0f8aeceaff497710175b6bf3362746783a5586bfa42613",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)": {
+   "sha256": "c3e3c0ae8e001b3b2fb8615d475f09ea304cad0d8d2dccfff7b55c4e90aeece0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T454 (<why: the finding or measurement that files it>)": {
+   "sha256": "b251940772d7e014c0edd8e46d121d12ba7415d203ca061503b91676036df603",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T454 Approach (checklist part A)": {
+   "sha256": "e5ec84a8819a2a0af4ab5e6c20d8b9f6ac79b780d402eb07233203cbb8de5d6a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T455 (<why: the finding or measurement that files it>)": {
+   "sha256": "b55a5976e06306f588bc59eb95dfb6d5f788e8a536d0a8cfa3465efe4410bf90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T455 Approach (checklist part A)": {
+   "sha256": "796be7e2f61d84b974ceef60e6d4a3a55716b65ad05650daef4fe21cca8087af",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35877,6 +35901,94 @@
      "summary": "T453's section and Approach are the unfilled template.",
      "class": "within",
      "why": "A just-filed task's placeholders decide nothing; its decisions are judged when the section is written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)",
+    "### T445 Approach (checklist part A)",
+    "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "### T454 (<why: the finding or measurement that files it>)",
+    "### T454 Approach (checklist part A)",
+    "### T455 (<why: the finding or measurement that files it>)",
+    "### T455 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T445 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T445-measure-only",
+     "summary": "T445 is a read-only measurement: no source changed; its record is dev/measurements/2026-11-27/hung-test-runs/results.md, from the event log, sampler, transcripts, scratch logs and the code, plus one shell run of the stand-in cargo (no load generator).",
+     "class": "within",
+     "why": "T445's line asks which test hung in each run, from the builders' transcripts, before any change; FR-013 and the GM's 2026-11-20 words count a measurement task as performance work; feature 460 forbids a load generator."
+    },
+    {
+     "id": "T445-tests-named",
+     "summary": "Names the pre-warm test holding each of the three hangs T342 found, and a fourth T342's pool-only scan missed (session clone, 543.4 s); hang 3's test is INFERRED from the code (one of three panicking at line 135) and labeled as inferred.",
+     "class": "within",
+     "why": "Answers the task line's question for every run, and goes wider than T342's scan rather than narrower. Hang 3's inference is stated, not passed off as measured, and does not defeat the purpose: the cause is common to all three scoped tests and the fix filed (T454) covers all three."
+    },
+    {
+     "id": "T445-not-T364",
+     "summary": "Rules T364's pipe-hold fix out for all four on libtest's own 'finished in' times versus each phase's wall, the live test binaries, and run_in's uncapped child.wait().",
+     "class": "within",
+     "why": "Part of identifying what held each run; a measured finding, no change made."
+    },
+    {
+     "id": "T445-HEAD-bound",
+     "summary": "The HEAD case is derived from reading the code at aefcced086 (390a2914fa's 600-poll bound, 1783cf6eed's --version exemption), not reproduced; the remaining cost is bounded at about 45 to 90 s a red from a timed run of the stand-in (44.45 s at load1 25 to 31).",
+     "class": "within",
+     "why": "The code read at HEAD is an observation, labeled as derived from reading and not reproduced; the cost figure is measured with its method and load. Not reproducing a hang on HEAD is consistent with the task line's 'before any change' and the read-only scope."
+    },
+    {
+     "id": "T445-since-T364-scan",
+     "summary": "Counts every crate's test phases since T364's commit (121 phases, 3 far past, none a hang) with hangs.py's threshold max(60 s, 10x crate median).",
+     "class": "within",
+     "why": "Measures whether the class recurs; extends the measurement, narrows nothing."
+    },
+    {
+     "id": "T445-defer-fix-T454",
+     "summary": "The remaining bounded hold (a red assertion inside a scope before 'slow' is removed) is not fixed here: filed as T454 (a drop guard removing 'slow' and the scoped runs' ceiling at knobs(60_000)), lands before T435.",
+     "class": "within",
+     "why": "A defect (a tool that holds where it should fail at once), deferred in D15/FR-009's form to an open task ordered before T435; the task line itself puts the measurement before any change, so a measurement task that files the fix is what was asked, not a carve-out."
+    },
+    {
+     "id": "T445-file-T455",
+     "summary": "The land crate's test binary running 61 to 100 s green against a 4.04 s median, cause unmeasured, filed as T455, lands before T435.",
+     "class": "within",
+     "why": "Not this class and not a hang; filing it as a separate task with its figures widens the record and narrows nothing."
+    },
+    {
+     "id": "T445-phase-task-attribution",
+     "summary": "The Phase lines naming the clone's started task (T285, T292) rather than the tree's holder (T316, T336) is pointed at the already filed T332.",
+     "class": "within",
+     "why": "A known issue already filed; nothing left unaccounted."
+    },
+    {
+     "id": "T445-perf",
+     "summary": "T445 marked performance work, a measurement task that speeds nothing itself; its performance checklist answered (no after: nothing built; savings attributed to T454 and 390a2914fa).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as performance work for scheduling."
+    },
+    {
+     "id": "templates-T443-T449-T454-T455",
+     "summary": "T443, T449, T454 and T455 blocks are the unfilled template, deciding nothing yet.",
+     "class": "within",
+     "why": "No decision is made in a placeholder."
+    },
+    {
+     "id": "removed-T311-T392-T445-header",
+     "summary": "Removes the empty template blocks of T311 and T392 and T445's placeholder header block, the last replaced by T445's filled header.",
+     "class": "within",
+     "why": "The removed blocks were unfilled templates (earlier.md) holding no decision, so removing them drops nothing that was decided."
     }
    ]
   }

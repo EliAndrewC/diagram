@@ -7451,42 +7451,48 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T445 (<why: the finding or measurement that files it>)
+### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no source changed. Its record is `dev/measurements/2026-11-27/hung-test-runs/results.md`, measured 2026-11-27 read-only from the clone's event log (the `Phase` lines of step `test`), the memory sampler's samples, the builders' and the session's transcripts, the builders' scratch logs (their failure blocks copied to `failures.txt`) and the code at each commit; plus one shell run of the stand-in cargo's script (no load generator, feature 460).
+  - **Which test held each**, measured 2026-11-27 (the record's section 1: the transcripts read with `find.py` and `dump.py`, the failure blocks, `pstree` and `etime` lines the builders took): every run was held by a pre-warm test of `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` (451 T316) that failed an assertion inside a `std::thread::scope` before it removed the stand-in cargo's `slow` file, so the scope joined a pre-warm run waiting on a stand-in looping `sleep 0.05` with no bound. Hang 1 (403.06 s, T316's builder, measured 2026-11-27 (the record's section 1)): `a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after` and `a_real_run_in_its_tree_ends_it_at_once`, their stand-ins looping on `cargo --version`. Hang 2 (600.25 s, T316's closing builder's red-first run, measured 2026-11-27 (the record's section 1)): `it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after`, bounded by its `knobs(600_000)` ceiling. Hang 3 (510.25 s, T336's builder's red-first run, measured 2026-11-27 (the record's section 1)): one of three panicking at line 135, INFERRED from the code as `it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight`. A fourth of the class, which T342's pool-only scan missed: 543.4 s in the session clone at 22:10Z on landed code, measured 2026-11-27 (the record's section 1), `it_starts_a_crate...`'s racy `real.waited.is_none()`. Together 2,057 s, measured 2026-11-27 (the record's section 1). The Phase lines' task (T285, T292) is the clone's started task, not the tree's holder (T316, T336): already filed as T332.
+  - **Not the pipe-hold class T364 fixed**, measured 2026-11-27 (the record's section 2): libtest's own `finished in` (399.95, 600.18, 510.14, 543.41 s) is within 3.1 s of each phase's wall, and hangs 1 and 3 show the test binary alive (`pstree`, `etime` 08:30); `run_in` (`rust/gate/crates/rustc/src/rustc.rs`) waits on a living program with `child.wait()` and no cap, before T364 and after, so T364 covers none of the four.
+  - **On HEAD (aefcced086)**, derived from reading the code, not reproduced (the record's section 3): 390a2914fa bounded `SLOW` to 600 polls of a `test` build and dropped hang 4's race, and the `--version` exemption landed in 1783cf6eed, so the unbounded hold cannot recur; but the three scoped tests still assert inside the scope before removing `slow`, under a 600 s ceiling (`knobs(600_000)`, a test's knob, read at HEAD 2026-11-27), so a red there holds the suite for each `SLOW` build the run asks. The stand-in alone with `slow` present took 44.45 s for one `test` build, measured 2026-11-27 with `/usr/bin/time` at load1 25 to 31 (22 cores): about 45 to 90 s a red against the crate's median test phase of 1.59 s.
+  - **Any crate since T364's commit**, measured 2026-11-27 (the record's section 4, `hangs.py`: a phase far past is over max(60 s, 10 x its crate's median test phase), over 4,779 deduplicated test phases of every tree, 2026-11-20 to 11-27T06:51Z; the cutoff is the commit's time, 05:24:05Z, a pool tree taking it at its next handout): 121 phases since, 3 far past, none a hang, measured 2026-11-27 (the record's section 4) - 757.4 s of `guard/shared` was T392's temporary `t392_differential` measuring test, and two `land` runs of 101.8 s and 64.6 s were green with libtest's `finished in` 100.24 and 64.41 s; no `rustc` test phase since ran over 17.1 s (9 phases), measured 2026-11-27 (the record's section 4).
+  - **The finding**: the cause remains in a bounded form; its fix is filed as T454 (a guard value removing `slow` on drop, so an unwinding test frees the stand-in within one poll, and the scoped runs' ceiling at `knobs(60_000)`), apart from this measurement.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the four hangs' tests named, the T364 ruling, the HEAD bound and the count since T364 recorded | n/a: a measurement, no code (`dev/measurements/2026-11-27/hung-test-runs/results.md`) | n/a: tooling | none | n/a |
 
 ### T445 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The session knows which test held each long `rustc` test run, whether 451 T364's fix covers it, and whether the same hold can still cost a builder minutes on HEAD; what remains is filed with the test's name and the fix's shape.
+2. **The constraints.** T445's line (find the test before any change, a measurement); 451 FR-013 (performance work, measured first); feature 460 (no load generator); the brief's read-only scope.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting a measurement task as performance work. O: the record's sections 1 to 4, measured 2026-11-27.
+4. **Do they describe the world here?** Yes: the four runs' own failure blocks, process listings and transcripts, and 4,779 real test phases, measured 2026-11-27 (the record's sections 1 and 4).
+5. **The order.** After T342, which found the hangs; before T454, the fix it files, and before T435.
+6. **The exits.** Green: the record written and the remaining cause filed (T454). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: the record names the test of each of the four runs (hang 3's inferred, said so), rules T364 out on the binaries' own times, bounds the HEAD case at about 45 to 90 s a red, and counts no hang since T364's commit; T454 is filed with its figures.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: a measurement, no defect fixed here, no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A red assertion in one of the three scoped pre-warm tests still holds the `rustc` suite about 45 to 90 s at load 25 to 31 where it should fail at once, observed 2026-11-27, method: the code read at HEAD and the stand-in timed alone (the record's section 3). Not fixed here: a measurement task, no source changed. Filed as T454; lands before T435.
+- The `land` crate's test binary ran 61.0 to 100.2 s green six times against a median test phase of 4.04 s (2026-11-26T01:11Z to 2026-11-27T06:16Z), cause unmeasured, observed 2026-11-27, method: `hangs.py` over every test phase (the record's section 4). Not fixed here: not a hang and not this class, its cause unknown. Filed as T455; lands before T435.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
 
 ### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** Four `rustc` test phases held 2,057 s of builder and session wall on 2026-11-26, each by a failed pre-warm test's scope waiting on an unbounded stand-in, measured 2026-11-27 (the record's section 1).
+2. **Removes work, or only moves it?** Nothing is built here; T454 removes the wait (a red test ends at its assertion).
+3. **What do you expect it to save, and why?** About 45 to 90 s of a builder's wall a red pre-warm test, from the stand-in's 44.45 s a build, measured 2026-11-27 (the record's section 3, `/usr/bin/time` at load1 25 to 31), times the one or two builds a red run asks; the 2,057 s of 2026-11-26, measured 2026-11-27 (the record's section 1), is already saved by 390a2914fa's bound.
+4. **How does the work grow with the settlement?** n/a: tooling, no settlement; it grows with red runs of the pre-warm tests.
+5. **What did the before and after show, and under what conditions?** No after: nothing is built here. Since T364's commit, 121 test phases of every crate, none a hang, measured 2026-11-27 (the record's section 4).
+6. **Did any map move, and does it still keep the research?** No map moves: tooling only.
 
 ### T446 (<why: the finding or measurement that files it>)
 
@@ -7627,6 +7633,59 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T453 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T454 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T454 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T455 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T455 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

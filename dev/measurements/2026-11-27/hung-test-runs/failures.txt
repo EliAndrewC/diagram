@@ -1,0 +1,159 @@
+# 451 T445: the failure blocks of the four hung rustc test runs, copied 2026-11-27 from the builders' scratch logs and the session transcript (the scratchpad is volatile)
+
+## hang 1 - /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t316-checks-1.log (T316's builder, diagram-backlog-t269, phase 2026-11-26T19:03:32Z, 403.06 s)
+.....test rustc::tests::prewarm::a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after has been running for over 60 seconds
+test rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once has been running for over 60 seconds
+ 100/102
+rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once --- FAILED
+rustc::tests::prewarm::a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after --- FAILED
+
+failures:
+
+---- rustc::tests::prewarm::it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothing stdout ----
+
+thread 'rustc::tests::prewarm::it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothing' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:253:5:
+assertion failed: none.stdout.contains("rust/a - cargo test --no-run exited 127")
+
+---- rustc::tests::prewarm::the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents stdout ----
+
+thread 'rustc::tests::prewarm::the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:97:5:
+assertion `left == right` failed
+  left: ["--version", "test --no-run --quiet --manifest-path /tmp/l7r-rust-tests-rustc-p1829904-0/l7r-gate-check-rustc-p1879053-108/rust/b/Cargo.toml"]
+ right: ["test --no-run --quiet --manifest-path /tmp/l7r-rust-tests-rustc-p1829904-0/l7r-gate-check-rustc-p1879053-108/rust/b/Cargo.toml"]
+
+---- rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling stdout ----
+
+thread 'rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:204:5:
+assertion failed: calls(&world).is_empty() && !waited_for(&world.slots)
+
+---- rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once stdout ----
+
+thread 'rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:136:5:
+assertion failed: began.elapsed() < Duration::from_secs(120)
+
+---- rustc::tests::prewarm::a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after stdout ----
+
+thread 'rustc::tests::prewarm::a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:164:68:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    rustc::tests::prewarm::a_call_waiting_on_a_slot_takes_its_slot_and_it_builds_the_crate_again_after
+    rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_at_once
+    rustc::tests::prewarm::it_is_off_at_the_knob_one_a_tree_and_a_crate_that_does_not_build_fails_nothing
+    rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling
+    rustc::tests::prewarm::the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents
+
+test result: FAILED. 97 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 399.95s
+
+## hang 2 - /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t316f-red-spare.log (T316's closing builder, diagram-backlog-t269, phase 19:46:30Z, 600.25 s; slot.rs sabotaged by hand for a red-first run)
+"$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test --crate "rust/gate/crates/rustc"
+rust-checks: test FAILED on rust/gate/crates/rustc
+
+running 102 tests
+..................................................................... 69/102
+rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling --- FAILED
+...............................test rustc::tests::prewarm::it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after has been running for over 60 seconds
+ 101/102
+rustc::tests::prewarm::it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after --- FAILED
+
+failures:
+
+---- rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling stdout ----
+
+thread 'rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:205:5:
+prewarm: 1 crate(s) whose build moved since b812f0f9fe7ed544cc43245444ec4f6e43cf4c68
+prewarm: rust/b - its test build is warm (0.0 s)
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- rustc::tests::prewarm::it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after stdout ----
+
+thread 'rustc::tests::prewarm::it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:179:13:
+assertion failed: began.elapsed().as_secs() < 60
+
+
+failures:
+    rustc::tests::prewarm::it_holds_a_slot_only_while_another_is_spare_and_builds_the_crate_again_after
+    rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling
+
+test result: FAILED. 100 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 600.18s
+
+
+## hang 3 - /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t336-red.log (T336's builder, diagram-backlog-t270, phase 21:46:25Z, 510.25 s; the old prewarm.rs put back for a red-first run)
+rust-checks: test FAILED on rust/gate/crates/rustc
+
+running 106 tests
+............................................................................ 76/106
+rustc::tests::stale::a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked --- FAILED
+... 80/106
+rustc::tests::stale::a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more --- FAILED
+................... 100/106
+rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done --- FAILED
+rustc::tests::prewarm::the_ceiling_passing_mid_build_ends_it_after_that_build --- FAILED
+...test rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight has been running for over 60 seconds
+ 105/106
+rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight --- FAILED
+
+failures:
+
+---- rustc::tests::stale::a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked stdout ----
+
+thread 'rustc::tests::stale::a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked' panicked at gate/crates/rustc/src/rustc/tests/stale.rs:99:5:
+assertion `left == right` failed: ["test --no-run --quiet --manifest-path /tmp/l7r-rust-tests-rustc-p811676-0/l7r-gate-check-rustc-p812232-169/rust/a/Cargo.toml"]
+  left: 1
+ right: 2
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- rustc::tests::stale::a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more stdout ----
+
+thread 'rustc::tests::stale::a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more' panicked at gate/crates/rustc/src/rustc/tests/stale.rs:66:5:
+assertion `left == right` failed: error: linking with `cc` failed: exit status: 1
+  = note: rust-lld: error: undefined hidden symbol: anon.1.llvm.2
+          >>> referenced by u1
+          >>>               /tmp/l7r-rust-tests-rustc-p811676-0/l7r-gate-check-rustc-target-p812232-168/debug/deps/k-0123456789abcdef.u1.rcgu.o:(k::f)
+          >>> referenced by u2
+          >>>               /tmp/l7r-rust-tests-rustc-p811676-0/l7r-gate-check-rustc-target-p812232-168/debug/deps/libdep-fedcba9876543210.rlib(dep-fedcba9876543210.u2.rcgu.o):(dep::g)
+
+  left: 101
+ right: 0
+
+---- rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done stdout ----
+
+thread 'rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:135:5:
+[130]
+
+---- rustc::tests::prewarm::the_ceiling_passing_mid_build_ends_it_after_that_build stdout ----
+
+thread 'rustc::tests::prewarm::the_ceiling_passing_mid_build_ends_it_after_that_build' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:135:5:
+[130]
+
+---- rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight stdout ----
+
+thread 'rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:135:5:
+[130]
+
+
+failures:
+    rustc::tests::prewarm::a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done
+    rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
+    rustc::tests::prewarm::the_ceiling_passing_mid_build_ends_it_after_that_build
+    rustc::tests::stale::a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more
+    rustc::tests::stale::a_second_failed_link_is_the_builds_answer_and_no_third_build_is_asked
+
+test result: FAILED. 101 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 510.14s
+
+warning: constant `SIGN` is never used
+
+## hang 4 - the coordinating session's transcript (c6fd72d1-ab6c-4736-b723-0697a1f5ca51.jsonl), builder-checks in the session clone diagram-backlog during T334's landing, phase 2026-11-26T22:10:52Z, 543.4 s; the stand-in's slow file removed by hand at 22:19:55Z
+slot-1
+1:rust-checks: test on rust/gate/crates/task: test result: ok. 105 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.18s
+2:rust-checks: test on rust/guard/shared: test result: ok. 506 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.76s
+3:rust-checks: test on rust/guard: test result: ok. 548 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.77s
+4:rust-checks: test on rust/gate: test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+5:rust-checks: test FAILED on rust/gate/crates/rustc
+11:rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight --- FAILED
+17:thread 'rustc::tests::prewarm::it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight' panicked at gate/crates/rustc/src/rustc/tests/prewarm.rs:190:9:
+18:assertion failed: real.hold.is_some() && real.waited.is_none()
+25:test result: FAILED. 105 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 543.41s
