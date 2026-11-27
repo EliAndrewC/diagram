@@ -14906,3 +14906,87 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 **Performance work?** no. It is process tooling: it makes no engine, check, gate, landing or builder's loop faster by FR-013's test (the GM 2026-11-20: "can we in general priotitize performance improvements going forward?"). What it saves is a hand step - a full landing asked of a task that was no task, a mark moved by hand - neither of which was timed.
 
+<!-- plan-archive: archived 2026-11-27 -->
+### T324, T345 (bundle) (the 451 log's own start and stop lines against `make task-time`, 2026-11-26: T303's builder read 7.6 of its 7.9 min, T309's 13.9 of 15.2, T289's 8.8 of 13.7, and 21 of the 94 agents started since 08:00Z were resumed, measured 2026-11-26 (the task lines' Python passes over the log's start, stop and by lines))
+
+- **Approach**: the reader keeps every start and stop of an agent, the booking reads an agent of several spans, and a builder's stopped time is a wait and no turn.
+  - **T324, the cause.** `load_all` (`rust/gate/crates/measure/src/measure/events.rs`) keyed a line with an agent's id and no call's id - only a `SubagentStart` or `SubagentStop` is one, 466 of 466 such lines in the 451 log since 2026-11-26T08:00Z, measured 2026-11-26 (a Python count of the log's lines by kind, `id` and `aid`) - by its kind and the agent alone, so every start and stop after an agent's first was dropped.
+  - **T324, the rule.** Such a line is keyed by the agent, the kind and the SECOND (`Key::Agent`), as the task line says: a resumed agent's later starts and stops are lines of their own, and a line two logs hold, in one second, is still kept once.
+  - **T324, the booking read one span an agent until now.** `task_time::load` reads through `load_all`, so `book.rs` had never met an agent of two spans. A wait was cut only at an agent's first start and last stop (`Ix::span`) while `active` asked for ONE span to hold the whole piece, so with the key alone fixed a session's wait across a resumed agent's stop read it as not in flight for the whole piece (the red test booked 220 s to "after the work its Stop named had ended" where the builder ran, measured 2026-11-26 (the test's failure message)). `descend` and `beside` now cut at every span's end and at the ends of what an agent started (`Ix::edges`).
+  - **T324, the other readers of the stream**, each read 2026-11-26 for what repeated starts and stops do to it. `task_phases::windows` kept an agent's FIRST start for every later stop, so each later window ran across the time between its runs and a session's own call there, with no transcript found, was marked the agent's: fixed here, a stop ends its run (`a_subagent_call_is_told_by_its_transcript_hook_or_window`, red on the old code). `subagent_runs` already removes a start at its stop and now yields each run; `foreground_spans` keeps every stop already; `feature_report/tables.rs` (`waiting`, `verdicts`, `task_rows`, `check_rows`) and `task_phases::cuts` count each return and cut at each ruling, which a later round's return is; `where_time`'s walk passes over an agent's start or stop as it did. `stepback_bundle` and `tool_yield` read the logs themselves and are untouched. `make where-time`'s agent spans came from `events::lines_of`, which never dropped a line.
+  - **T324, the live view** (`make task-progress`). `Scene` clears an agent's stop at any later line of it, so a resumed builder is RUNNING and one stopped again is stopped at its LAST stop (`a_resumed_agent_is_read_to_its_last_stop`). The hedge is dropped everywhere: its rows are the booking's turns and runs, read from the builder's own lines and never from its spans, so with the stopped time a wait (T345) nothing of a resumed builder is missing from them. The state line reads `RUNNING, resumed after a stop`; `make task-time`'s footnote says the builder minutes are every span, the stopped time between them left out, and are a floor where T382's lines are.
+  - **T345, the cause.** `segments()` (`task_time/book.rs`) had no case for a builder's `SubagentStop` followed by a later line of it: the time to that line fell to the model-turn branch, a wait only up to the end of its own background work and a turn after it - named by the next call's tool, or `writing its reply` once T324 keeps the start line that follows.
+  - **T345, the rule.** From a builder's stop to its next line - and to a start from the line before it, where no log read holds the stop - the builder is STOPPED: a wait on everything it started (`What::Wait`), with the fallback `builders: stopped, waiting to be resumed`. A wait carries no minutes in this ledger (a main session's `waiting: ...` rows have none either), so the time LEAVES the builders' turn rows; its blocking goes to what was in flight.
+  - **T345, the category chosen.** One new name, `builders: stopped, waiting to be resumed` (`book/cats.rs`, `STOPPED`), for the time nothing of the builder's own is in flight; where its own run or agent is in flight the wait is booked to that, as a builder's waits already are (its test's `tests`, its review's `plan review: agents`). Why not an existing one: `builders: waiting on its background work` says something of its own is running, and the `waiting: nothing in flight - ...` names are the main session's and are special-cased by their prefix in `descend`. Why this wording: it is what the log shows - a stop, then a start - and it does not say who resumed it, which the lines do not tell (the session's message, or the notification of work already ended).
+  - **T345, the session's side.** A wait on a builder reached its segments only inside a span, so the stopped time would have fallen to "after the work its Stop named had ended". A builder is now in flight from its first start to its last stop (`active`; a review agent between two rounds is not), its stopped piece booked through its stop's wait. A builder stopped with nothing of its own in flight is what a wait is on only where nothing else in flight blocks the task (`stopped`, the last rank in `each_task` and `descend`): beside a claims round the session waits on the round, though the builder, resumed later, ends last (`a_wait_beside_a_stopped_builder_is_on_what_else_is_in_flight`, red with the rank switched off, the round's 70 s of blocking reading 0, measured 2026-11-26 (the test's failure message)). `stopped` looks one level down - the runs and agents the builder itself started - which is as far as a builder's dispatches go (it dispatches review agents, not builders).
+  - **The re-measurement, read-only**, on the clone's real logs: `l7r-gate measure task-time --root /diagram/.clones/diagram-backlog --since 2026-11-26T17:00:00Z --until 2026-11-26T23:40:00Z`, the old build's binary kept as a copy and run on the same pinned window, measured 2026-11-26 (the two reports, `t324-before.md` and `t324-after.md` in the session's scratchpad; no `SINCE=last`, the GM's marker untouched). The landed tasks' rows, builder minutes the fourth column:
+
+    | task (before) | landed | builders | builder minutes | minutes | blocking |
+    |---|---|---|---|---|---|
+    | T303 | 17:37 | 1 | 7.6 | 7.7 | 0.1 |
+    | T309 | 18:38 | 1 | 13.9 | 22.2 | 1.7 |
+    | T289 | 18:38 | 1 | 8.8 | 21.2 | 2.6 |
+    | T298 | 20:03 | 2 | 45.6 | 57.9 | 0.3 |
+    | T316 | 20:03 | 2 | 47.8 | 85.3 | 2.3 |
+    | T339 | 22:28 | 1 | 10.4 | 24.9 | 0.2 |
+    | T336 | 22:28 | 2 | 43.7 | 184.1 | 15.6 |
+
+    | task (after) | landed | builders | builder minutes | minutes | blocking |
+    |---|---|---|---|---|---|
+    | T303 | 17:37 | 1 | 7.9 | 7.9 | 0.1 |
+    | T309 | 18:38 | 1 | 15.2 | 22.5 | 1.7 |
+    | T289 | 18:38 | 1 | 13.7 | 21.5 | 2.6 |
+    | T298 | 20:03 | 2 | 46.7 | 58.5 | 0.3 |
+    | T316 | 20:03 | 2 | 52.0 | 85.8 | 2.3 |
+    | T339 | 22:28 | 1 | 17.1 | 25.4 | 0.2 |
+    | T336 | 22:28 | 2 | 47.0 | 163.3 | 15.6 |
+
+    The three builders the task line names now read what the log's lines give: T303's 7.9 min over 2 stops, T309's 15.2 over 2, T289's 13.7 over 3, measured 2026-11-26 (a Python pass over the 451 log summing each start to its stop from 17:00Z). The 18 landed tasks' builder minutes sum to 630.1 where they summed to 605.6, 26 builders both times, measured 2026-11-26 (the fourth column of each report's "The landed tasks" table, summed). The window's builder rows:
+
+    | category | minutes before | blocking before | minutes after | blocking after |
+    |---|---|---|---|---|
+    | builders: running a command (the model's turn) | 475.8 | 68.1 | 447.1 | 68.6 |
+    | builders: writing code | 50.3 | 8.0 | 50.3 | 8.0 |
+    | builders: writing its reply | 8.1 | 1.4 | 14.9 | 1.4 |
+    | builders: reading code | 4.2 | 0.3 | 4.2 | 0.3 |
+    | builders: dispatching an agent | 3.1 | 0.3 | 3.1 | 0.3 |
+    | builders: other tools (ToolSearch) | 1.1 | 0.2 | 1.1 | 0.2 |
+    | builders: other tools (Monitor) | 0.6 | 0.1 | 0.6 | 0.1 |
+    | all, every category | 2270.2 | 418.8 | 2248.3 | 432.7 |
+
+    28.7 min left `builders: running a command (the model's turn)`, time after a stop that had been booked as the turn of the Bash call that followed it, measured 2026-11-26 (the two reports' "The window, every category" tables, row by row). Of it 25.6 min was the builders STOPPED, T345's own effect, now in no turn row, measured 2026-11-26 (a third report on the same window from a build with the reader's fix and the old booking of a stop, `builders: writing its reply` 40.5 and all 2273.9, against the after report's 14.9 and 2248.3), and the other 3.1 min was replies before later stops, now named so, measured 2026-11-26 (a third report on the same window from a build with the reader's fix and the old booking of a stop, `builders: writing its reply` 40.5 and all 2273.9, against the after report's 14.9 and 2248.3). 6.8 min came into `builders: writing its reply`, the replies before the later stops T324 now reads, measured 2026-11-26 (the two reports' "The window, every category" tables, row by row). No other minutes row moved, so the window's minutes fell by the difference, 21.9, measured 2026-11-26 (the two reports' "The window, every category" tables, row by row). The stopped time has no minutes row of its own (a wait has none). Blocking rose 13.9 min - `wait loops (held open, no work)` 55.2 to 64.7, `plan review: agents` 30.2 to 33.5, `python3` 8.1 to 8.6 and the builders' command turns 68.1 to 68.6 - the session's waits on a resumed builder's later spans and on what a stopped builder had in flight, now each a piece of the task they block, measured 2026-11-26 (the two reports' "The window, every category" tables, row by row). `builders: stopped, waiting to be resumed` has no row in this window: no wait of a session fell on a stopped builder with nothing of its own and nothing else in flight.
+  - **What the open tasks still distort in these figures.** T346 (a carry booked to the task that retook the tree): the "its own table ends" column and where a task's minutes and blocking stop, for a task whose tree was retaken in its carry's last second. T332 and T344 (a pool tree's Phase lines carrying an old task): each task's compile, test and hook-suite phase minutes and blocking, booked to the task the tree's mark named - the `minutes` and `blocking` columns above, T336's 163.3 among them, hold or lack other tasks' phases. Neither touches the builder-minutes column, which is each agent's spans under the task its own lines name, nor the builders' turn rows of the whole window.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| every start and stop of an agent kept, a repeat in one second once | `events_load_deduplicated_and_in_time_order`, restated, red on the old code | n/a: tooling | none | n/a |
+| a wait cut at every span of a resumed agent | `a_wait_across_a_resumed_review_is_cut_at_every_span`, red on the old booking | n/a: tooling | none | n/a |
+| a builder's stopped time a wait, in both shapes, and the session's wait on it | `a_resumed_builder_is_booked_in_every_span_and_stopped_between_them`, red on the old booking; `a_start_after_a_line_of_its_own_is_a_resumption` | n/a: tooling | none | n/a |
+| a stopped builder ranked last | `a_wait_beside_a_stopped_builder_is_on_what_else_is_in_flight`, red with the rank switched off | n/a: tooling | none | n/a |
+| a subagent's window ends at its stop | `a_subagent_call_is_told_by_its_transcript_hook_or_window`, extended, red on the old code | n/a: tooling | none | n/a |
+| the live view reads a resumed agent to its last stop, no hedge | `a_resumed_agent_is_read_to_its_last_stop`, `a_resumed_builder_runs_its_stopped_time_no_turn_and_a_model_turn_is_a_row` | n/a: tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T324, T345 Approach (checklist part A)
+
+1. **The goal, in the world.** `make task-time`, `make feature-report` and `make task-progress` give a resumed builder its whole time - every span from the log's own start and stop lines - and the time it stood stopped between them is a wait, never a turn of its model.
+2. **The constraints.** The task lines of T324 and T345; the booking's rules in `book.rs`'s doc (451 T243: a wait is booked to what was in flight, each task its own piece); a line two logs hold is kept once; no category the report's reader would not understand.
+3. **Where each comes from.** O: the task lines' measurements of 2026-11-26. G: the GM's words of 2026-11-20 on measurement work, in `request.md`, which count this as performance work.
+4. **Do they describe the world here?** Yes: the old build's report on the pinned window read 7.6, 13.9 and 8.8 min for the three builders, the task line's figures, measured 2026-11-26 (`t324-before.md`).
+5. **The order.** T324 before T345 in one section: T345's wait is told by the stop and start lines T324 keeps. T346, T332 and T344 stay open and separate; T382 (found here) follows.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/measure"` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST, measured 2026-11-26 (`make rust-test CRATE=rust/gate/crates/measure`, each run's result line). The restated events test on the old reader: 261 passed, 1 failed. The two booking tests with the reader fixed and the booking old: 262 passed, 2 failed. The extended window test on the old `windows`: 263 passed, 1 failed. The rank's test with `stopped` switched off: 265 passed, 1 failed. After: 267 passed, 0 failed, lint and format clean. And the three builders' minutes equal the log's, above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the report the GM reads to decide how the work is run misstated builders' minutes - a resumed builder's later spans dropped, and its stopped time booked as its model's turn, 25.6 min of the window from 17:00Z, measured 2026-11-26 (the three reports' builder rows, above). No map changes.
+
+**Found and left?**
+
+- `task_phases::windows` ran a resumed agent's later windows from its first start, so a session's own call between its runs could be marked the agent's: fixed here.
+- A builder's own lines after a stop with no `SubagentStart` between, or with no start at all, are in no span (`columns::flight` opens a span only at a start line), so the builder-minutes column and "Working at once" leave them out, while their turns and runs are booked from the lines: 64 of the 1,390 agents with own lines in the 451 log since 2026-11-20, 1,981 of 94,136 own lines, measured 2026-11-26 (a Python pass over the log's start, stop and by lines). Not fixed here: it is `flight`'s span rule, a third change to a second reader, past this bundle's two jobs. Filed as T382; lands before T346.
+
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
+
+
