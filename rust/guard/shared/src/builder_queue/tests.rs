@@ -218,15 +218,23 @@ fn a_task_just_done_and_the_two_halves_of_one_task_are_never_ready_too_soon() {
             &State::Waiting("T1's earlier entry, line 1".to_owned())
         )
     );
-    // the build half done, its commit not carried: built, and the closing half waits on the carry
+    // the build half done, its commit not carried: built, and the closing half READY - its handout builds on that commit (461 T09,
+    // T48), so its own task's carry no longer holds it
     let s = states(&q, &facts_of(&[], Vec::new(), &[("T1", 1)], &["T1"]));
     assert_eq!(
-        s[0],
-        State::Built("the carry of T1's done commit owed".to_owned())
+        (&s[0], &s[1]),
+        (
+            &State::Built("the carry of T1's done commit owed".to_owned()),
+            &State::Ready
+        )
     );
+    // a later entry that waits= on T1 still waits for that carry: only its own task's handout builds on the commit
+    let w =
+        parse("T1 build-half files=a\nT1 closing-half files=a\nT2 fix files=b waits=T1\n").unwrap();
+    let s = states(&w, &facts_of(&[], Vec::new(), &[("T1", 1)], &["T1"]));
     assert_eq!(
-        s[1],
-        State::Waiting("the carry of T1's done commit (make builder-trees)".to_owned())
+        (&s[1], &s[2]),
+        (&State::Ready, &State::Waiting("T1".to_owned()))
     );
     // carried: the closing half is ready, then in flight, then built
     let s = states(&q, &facts_of(&[], Vec::new(), &[("T1", 1)], &[]));
@@ -417,6 +425,31 @@ fn a_free_tree_with_a_ready_entry_under_the_count_is_idle() {
     // the free tree gone from disk
     std::fs::remove_dir(dir.join("c-b1")).unwrap();
     assert_eq!(idle(&clone, 3), Verdict::Quiet);
+}
+
+/// 461 T48: a closing half whose build half is done, its commit still under its done ref, is what a free tree is idle over - so
+/// `make builder-next`, `make builder-done`'s next dispatch and the pool-idle guard all offer it before the carry.
+#[test]
+fn a_closing_half_before_its_build_half_s_carry_is_what_a_free_tree_is_idle_over() {
+    let (dir, clone) = world(
+        "idle-closing",
+        "T3 build-half files=a\nT3 closing-half files=a\n",
+        POOL,
+    );
+    git(&clone, &["commit", "-q", "--allow-empty", "-m", "one"]);
+    git(&clone, &["update-ref", "refs/l7r/done/451-T3", "HEAD"]);
+    put(
+        &clone.join(".git").join(LOG),
+        "{\"event\":\"done\",\"detail\":\"451 T3\"}\n",
+    );
+    let idles = Idle {
+        tree: dir.join("c-b1"),
+        tasks: "451 T3".to_owned(),
+        command: "make builder-brief T=T3 F=451 KIND=closing-half ENTRY=2".to_owned(),
+        flag: String::new(),
+        unlisted: Vec::new(),
+    };
+    assert_eq!(idle(&clone, 3), Verdict::Idle(idles));
 }
 
 #[test]

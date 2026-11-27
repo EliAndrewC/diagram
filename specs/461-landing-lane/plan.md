@@ -1696,29 +1696,53 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T48 (<why: the finding or measurement that files it>)
+### T48 (T09's found-and-left: the queue read a closing half as waiting on its own task's carry)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in pool tree `diagram-backlog-t271`, in the guard's shared crate only. `builder_queue::state()` loses its
+  item-5 branch that returned `waiting` on "the carry of <task>'s done commit (make builder-trees)" for an entry whose OWN task's
+  done ref still stands: since T09 `make builder-tree` applies that commit onto the handout uncommitted and the entry's
+  `make builder-done` supersedes the ref, so the wait guarded nothing. A `waits=` task's carry still holds an entry (the
+  `waits` closure's `uncarried` test, unchanged): only the entry's own task's handout builds on the commit. The `built` state's
+  words ("the carry of <task>'s done commit owed") are kept - the build half's own entry still owes its carry, and
+  `make builder-trees` still lists it. `make builder-next`, `make builder-done`'s next-dispatch line and the pool-idle Stop
+  guard all read `shared::builder_queue` (`next`, `idle`), so the one branch removed changes all three; no gate or guard file
+  edited. The module doc's item 5 restated.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/guard/shared ONLY="builder_queue::tests"` on the old
+    `state()` with the tests below written): 17 passed, 2 failed -
+    `a_task_just_done_and_the_two_halves_of_one_task_are_never_ready_too_soon` (its closing half asserted READY while T1's
+    done commit is uncarried; beside it a `waits=T1` entry asserted still `waiting` on T1) and the new
+    `a_closing_half_before_its_build_half_s_carry_is_what_a_free_tree_is_idle_over` (a real clone with the done ref standing
+    and one `done` line: `idle` says the free tree is idle over `make builder-brief T=T3 F=451 KIND=closing-half ENTRY=2`; it
+    said `Quiet`). After: 19 passed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the queue's state of a closing half before its carry | n/a - no map | n/a | none | n/a |
 
 ### T48 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A closing half whose build half is done but not yet carried is READY in `make queue`, offered by
+   `make builder-next` and `make builder-done`, and held over by the pool-idle guard; an entry that `waits=` on that task still
+   waits for its carry.
+2. **The constraints.** D14 (T09's handout half: a closing half no longer waits for its build half's carry); the queue's
+   overlap rule and `waits=` semantics unchanged; no history rewritten.
+3. **Where each comes from.** G: the GM's request behind FR-002 (spec.md); R: D14 and T09's section; O: the tests above
+   (2026-11-27).
+4. **Do they describe the world here?** Yes: the idle test builds a real clone with a done ref under `refs/l7r/done/` and a
+   pool log, as `facts` reads them (observed 2026-11-27, method: the crate's `world` fixture).
+5. **The order.** After T09 (whose handout makes the wait needless); before T16.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared rust/guard"` and the pool-idle suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/guard"` green - shared 603 passed, guard 629, 0
+   failed - and `tests/hooks/test-pool-idle-hooks.sh` 33 passed, 0 failed (observed 2026-11-27, method: those commands, their
+   logs' tails).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A coordinator would see the closing half offered at once, where it was listed `waiting` until the
+    carry and a free tree stood idle (the visible effect T09 named); no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - its line carries no `[perf]` tag; it removes a wait in the builders' loop as D14 decides.
 

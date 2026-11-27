@@ -30,8 +30,9 @@
 //!    TASK IS LANDED - removing a line renames the entries after it - and a task that needs another builder gets another line;
 //! 3. `waiting` on an earlier entry of one of its tasks that is not yet built (a closing half behind its build half);
 //! 4. `in flight` - a pool tree is held for one of its tasks;
-//! 5. `waiting` on the carry of a done commit of one of its tasks (`make builder-tree` refuses that handout, 451 T398), on a task
-//!    its `waits=` names that is neither ticked nor carried, or on the GM (`waits=GM`, ended by editing the word out);
+//! 5. `waiting` on a task its `waits=` names that is neither ticked nor carried, or on the GM (`waits=GM`, ended by editing the
+//!    word out) - never on the carry of a done commit of one of its own tasks: `make builder-tree` applies that commit onto the
+//!    handout uncommitted and the entry's done supersedes its ref (461 T09, T48; 451 T398 made it wait);
 //! 6. `READY`.
 //!
 //! "Carried" is read from the refs alone: a task's done commit waits while `refs/l7r/done/<feature>-<task>` stands, which `make
@@ -387,11 +388,7 @@ fn state(
     if let Some(tree) = f.held.iter().find(holds) {
         return State::InFlight(tree.tree.clone());
     }
-    if let Some(t) = owed {
-        return State::Waiting(format!(
-            "the carry of {t}'s done commit (make builder-trees)"
-        ));
-    }
+    // its own tasks' uncarried done commits hold it no longer: its handout builds on them (461 T09, T48); a `waits=` task's do
     let waits = |t: &&String| !f.ticked.contains(*t) && (done(t) == 0 || f.uncarried.contains(*t));
     let mut on: Vec<String> = e.waits.iter().filter(waits).cloned().collect();
     on.extend(e.gm.then(|| "the GM".to_owned()));

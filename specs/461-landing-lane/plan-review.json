@@ -408,6 +408,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T48 (T09's found-and-left: the queue read a closing half as waiting on its own task's carry)": {
+   "sha256": "4a1eeec83fecdda4dfdc0b76c4eaa1e4112e88b96de89bb1866d96c1fb86a066",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T48 Approach (checklist part A)": {
+   "sha256": "30a3f9efe38e11b488b3453c6ebd4740b5851f7f14a36c1cfad78a37c5ebcaed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T12 (<why: the finding or measurement that files it>)": {
+   "sha256": "2eb69bae2090c6ffc5a13e5f1604f515371ae6a9100930a0d8d97510837588cb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "f04d7237d2d7a231d379628003251be70ee1a7e17ee28dbba93b14b59274462b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2307,6 +2331,55 @@
      "why": "Measurement against a like window is FR-006/FR-010/SC-005's phase; this task does not claim a figure it has not measured."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T48 (T09's found-and-left: the queue read a closing half as waiting on its own task's carry)",
+    "### T48 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T48-1 remove item-5 branch",
+     "summary": "builder_queue::state() no longer returns waiting for an entry whose OWN task's done commit is uncarried; the closing half is READY once its build half is done.",
+     "class": "within",
+     "why": "Fixes a found-and-left defect (a free tree stood idle over work that was ready, since T09's builder-tree applies the done commit onto the handout). Removing a needless wait in the builders' loop serves the request's throughput/blocking concern (the GM's 84%-of-blocking message) and D14; it removes no check FR-008 protects - the gate and push are untouched."
+    },
+    {
+     "id": "T48-2 waits= carry still holds",
+     "summary": "An entry that waits= on another task still waits for that task's carry (the waits closure's uncarried test unchanged).",
+     "class": "within",
+     "why": "Not a carve-out from the change: the removed wait was needless only because the entry's own handout builds on the commit; a waits= entry's tree does not, so its wait still guards something. Keeping it narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T48-3 built state words kept",
+     "summary": "The built state's text ('the carry of <task>'s done commit owed') and make builder-trees' listing are unchanged.",
+     "class": "within",
+     "why": "The build half's entry does still owe its carry; the wording stays true. Nothing asked is left undone."
+    },
+    {
+     "id": "T48-4 one branch, three readers",
+     "summary": "Change confined to the guard's shared crate; make builder-next, builder-done's next-dispatch line and the pool-idle Stop guard change through shared::builder_queue (next, idle); no gate or guard file edited; module doc item 5 restated.",
+     "class": "within",
+     "why": "Implementation placement; consistent with FR-008 (no check dropped) and with the goal stated in part A item 1."
+    },
+    {
+     "id": "T48-5 red-first tests and exits",
+     "summary": "Two tests pin the behavior (closing half READY with T1 uncarried while a waits=T1 entry still waits; a real-clone idle test); exits are builder-checks for shared and guard plus the pool-idle hook suite.",
+     "class": "within",
+     "why": "Enforcement of the decided behavior, carrying one-shot labels on every figure (17/2 red, 19 after, 603/629/33 passed). Verification of what was asked, not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T12 (<why: the finding or measurement that files it>)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
   }
  ],
  "tasks": {
@@ -2493,6 +2566,44 @@
      "summary": "The exits run the crates' tests and make builder-checks. Coverage runs at the landing.",
      "class": "within",
      "why": "FR-002 says so verbatim, following the struck 'coverage for its own crates'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T48": {
+   "section_sha256": "acf24ec9fab0e63ceb7a821558f228884da00d5ba3bb77bccdbc99da5d603446",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T48-1 remove item-5 branch",
+     "summary": "builder_queue::state() no longer returns waiting for an entry whose OWN task's done commit is uncarried; the closing half is READY once its build half is done.",
+     "class": "within",
+     "why": "Fixes a found-and-left defect (a free tree stood idle over work that was ready, since T09's builder-tree applies the done commit onto the handout). Removing a needless wait in the builders' loop serves the request's throughput/blocking concern (the GM's 84%-of-blocking message) and D14; it removes no check FR-008 protects - the gate and push are untouched."
+    },
+    {
+     "id": "T48-2 waits= carry still holds",
+     "summary": "An entry that waits= on another task still waits for that task's carry (the waits closure's uncarried test unchanged).",
+     "class": "within",
+     "why": "Not a carve-out from the change: the removed wait was needless only because the entry's own handout builds on the commit; a waits= entry's tree does not, so its wait still guards something. Keeping it narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T48-3 built state words kept",
+     "summary": "The built state's text ('the carry of <task>'s done commit owed') and make builder-trees' listing are unchanged.",
+     "class": "within",
+     "why": "The build half's entry does still owe its carry; the wording stays true. Nothing asked is left undone."
+    },
+    {
+     "id": "T48-4 one branch, three readers",
+     "summary": "Change confined to the guard's shared crate; make builder-next, builder-done's next-dispatch line and the pool-idle Stop guard change through shared::builder_queue (next, idle); no gate or guard file edited; module doc item 5 restated.",
+     "class": "within",
+     "why": "Implementation placement; consistent with FR-008 (no check dropped) and with the goal stated in part A item 1."
+    },
+    {
+     "id": "T48-5 red-first tests and exits",
+     "summary": "Two tests pin the behavior (closing half READY with T1 uncarried while a waits=T1 entry still waits; a real-clone idle test); exits are builder-checks for shared and guard plus the pool-idle hook suite.",
+     "class": "within",
+     "why": "Enforcement of the decided behavior, carrying one-shot labels on every figure (17/2 red, 19 after, 603/629/33 passed). Verification of what was asked, not new scope."
     }
    ],
    "verdict": "CLEAR"
