@@ -690,6 +690,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T19 (phase 2's failed push: a green batch whose push fails runs again once on the new `origin/main`, and a second failure is one `integrate` repair entry)": {
+   "sha256": "83f74f588a02c08e69026bdfd9c96a0f69ac986375e2672f07388f2583c29b51",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "603d1657557d27aab7a7dc9458af42c5f0e01259137e1d8e348e640b096e88fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4390,6 +4402,64 @@
      "summary": "An unfilled template block for T47 removed, its content now carried by the filled T47 block and T47 Approach.",
      "class": "within",
      "why": "The removed text held only placeholders and decided nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T19 (phase 2's failed push: a green batch whose push fails runs again once on the new `origin/main`, and a second failure is one `integrate` repair entry)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19 Decision 1",
+     "summary": "A failed push is recognized by the landing's own 'land: the push failed (exit ' line in the attempt output plus the set not on origin/main after fetch, not by the event log's push Phase line; if the wording ever changed, a push failure would fall back to the pre-T19 unplaced-red path.",
+     "class": "within",
+     "why": "How the lane detects a push failure is an implementation route the request and spec leave open. The Phase line would also fire on a failed tick commit, which is not a push. The fallback leaves no present defect, because the line is the land crate's current wording. It changes nothing about the gate or push checks (FR-008)."
+    },
+    {
+     "id": "T19 Decision 2",
+     "summary": "'Once' means once per batch, counted over the batch's push lines with failed:true, so a batch resumed after the first failure files the integrate entry at its next failure instead of retrying again.",
+     "class": "within",
+     "why": "This is the literal reading of 'runs again once'. It holds the bound on retries across a resume, so it does not let a batch retry more than once, and a test pins it."
+    },
+    {
+     "id": "T19 Decision 3",
+     "summary": "The integrate case writes the landed line and then ONE owed line, and that owed line replaces the batch's end line, never stopped.",
+     "class": "within",
+     "why": "FR-005 wakes the coordinator once per landed batch and otherwise only for US5's cases. A second push failure needs integration (US5, proposal item 3: 'a fresh agent per batch'), so one wake that hands the work to a fresh builder serves the request and suppresses no wake."
+    },
+    {
+     "id": "T19 Decision 4",
+     "summary": "The repair entry's units field holds the push's own line, and the attempt file holds the full output (labeled GUESS, a reading aid).",
+     "class": "within",
+     "why": "This adds information for the fresh builder and narrows nothing asked for. data-model.md names attempt for a push entry, and units sits alongside it."
+    },
+    {
+     "id": "T19 implicit: no attribution on a failed-push attempt",
+     "summary": "An attempt whose push failed runs no attribution or bisect, and its run line records red as empty.",
+     "class": "within",
+     "why": "A failed push is not a red result. FR-004's attribute/bisect/eject path is for red batches, and the gate still ran in full on the attempt. This fixes the wrong outcome named in item 12, where a green set was ejected whole and its tasks pinned."
+    },
+    {
+     "id": "T19 implicit: the retry runs the full landing on the new main",
+     "summary": "The first failure re-runs the same set through the landing on a tree brought to the new origin/main.",
+     "class": "within",
+     "why": "Proposal item 1 says the lane carries, gates and pushes. The retry goes through the same make land checks and the same push route (FR-003, FR-008), so nothing is skipped."
+    },
+    {
+     "id": "T19 implicit: helpers moved for clippy's line cap",
+     "summary": "note_of, attempt_file and ended move out of land/run_batch, with the landed line's wording unchanged.",
+     "class": "within",
+     "why": "A code-structure choice with no change in behavior and nothing the request settles."
+    },
+    {
+     "id": "T19 Approach item 4: a real failed push is observed under T23",
+     "summary": "The end-to-end tests use a stand-in landing whose push fails. Observing a real push failure in the lane is left to T23.",
+     "class": "within",
+     "why": "This sends the observation to another task already in the plan and drops nothing from the requirements. The stand-in fails its push the way land.rs reports one."
     }
    ]
   }

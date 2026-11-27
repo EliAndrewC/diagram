@@ -3,7 +3,8 @@
 //! hand-ins, one batch, one push, both ticked, both done refs deleted, one `owed` line; a killed runner's batch resumed as attempt 2;
 //! a resumed batch already on `origin/main` landed with no run; a carry that stops; the errors. T15's red path: a red the gate's
 //! record places ejected as a repair entry and the other change landed on the next run; a red it cannot place ejecting the whole
-//! batch as one entry; a killed `make` stopping the runner with the batch open.
+//! batch as one entry; a killed `make` stopping the runner with the batch open. T19's failed push: twice, one `integrate` entry and
+//! one `owed` line; once, the set run again on the new `origin/main` and landed; a resumed batch's earlier failure counted.
 
 use std::fmt::Write as _;
 use std::path::PathBuf;
@@ -33,7 +34,16 @@ const RED_LINES: &str = concat!(
     "\n"
 );
 
-const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
+/// A `push-fail` file in the common directory: the push fails after a green gate, as the landing's own push says it (`land: the
+/// push failed (exit 1) - ...`, `land.rs`); with `push-fail-once`, at the first attempt alone, another writer's commit pushed to
+/// `origin/main` meanwhile, so only a tree brought to the new main pushes the second time.
+const PUSH_LINES: &str = concat!(
+    "\t",
+    r#"@c=$$(git rev-parse --path-format=absolute --git-common-dir); if [ -f "$$c/push-fail" ]; then echo "land: the push failed (exit 1) - its ticks reverted" >&2; if [ -f "$$c/push-fail-once" ]; then rm "$$c/push-fail" "$$c/push-fail-once"; git -C "$$c/.." commit -q --allow-empty -m other; git -C "$$c/.." push -q origin HEAD:main; fi; exit 1; fi"#,
+    "\n"
+);
+
+const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n@PUSH@\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
 
 struct World {
     dir: TempDir,
@@ -60,7 +70,13 @@ fn world(tag: &str) -> World {
     git(&clone, &["init", "-q", "-b", "main"]);
     git(&clone, &["config", "user.email", "t@t"]);
     git(&clone, &["config", "user.name", "t"]);
-    put(&clone, "Makefile", &MAKEFILE.replace("@RED@", RED_LINES));
+    put(
+        &clone,
+        "Makefile",
+        &MAKEFILE
+            .replace("@RED@", RED_LINES)
+            .replace("@PUSH@", PUSH_LINES),
+    );
     put(
         &clone,
         "specs/461-x/tasks.md",
@@ -730,4 +746,130 @@ fn a_reset_with_nothing_to_carry_leaves_the_lane_tree_s_launcher_built_so_the_ne
     resume(&l, &open(&w), &[one]).unwrap();
     assert_eq!(&w.events()[9..], ["batch", "landed", "owed"]);
     assert_eq!(w.builds().len(), before);
+}
+
+/// The push's own line the stand-in prints, as a repair entry of kind `integrate` names it.
+const PUSH_FAILED: &str = "land: the push failed (exit 1) - its ticks reverted";
+
+#[test]
+fn a_green_batch_whose_push_fails_twice_files_one_integrate_entry_and_one_owed_line() {
+    let w = world("lane-run-push-twice");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let two = w.hand_in("461", "T02", "b.txt", "b\n");
+    std::fs::write(w.common.join("push-fail"), "").unwrap();
+    let l = lane_of(&w);
+    assert_eq!(step(&l), Ok(true));
+    assert_eq!(
+        w.events(),
+        [
+            "batch", "carry", "run", "push", "carry", "run", "push", "eject", "eject", "landed",
+            "owed"
+        ]
+    );
+    let lines = w.lane();
+    for (run, push, n) in [(&lines[2], &lines[3], 1), (&lines[5], &lines[6], 2)] {
+        assert_eq!(run["n"], n);
+        assert_eq!(run["red"], json!([]));
+        assert_eq!(push["failed"], true);
+        assert_eq!(push["set"], json!([&one[..10], &two[..10]]));
+    }
+    let attempt = lines[5]["attempt"].as_str().unwrap().to_owned();
+    assert!(attempt.ends_with("l7r-lane/attempts/461-1-2.log"));
+    for (line, sha) in [(&lines[7], &one), (&lines[8], &two)] {
+        assert_eq!(line["change"], json!(sha));
+        assert_eq!(line["repair"], "r1");
+        assert_eq!(line["why"], "push");
+    }
+    let owed: Vec<&Value> = lines.iter().filter(|x| x["event"] == "owed").collect();
+    assert_eq!(owed.len(), 1);
+    assert_eq!(owed[0].get(crate::wake::STOPPED), None);
+    assert_eq!(
+        owed[0]["line"],
+        format!("lane: batch 461-1 green but its push failed twice - 461 T01 T02 filed as repair r1 (integrate, push: {PUSH_FAILED}) - make builder-next hands it to a fresh builder: {attempt}")
+    );
+    assert_eq!(lines[9]["landed"], json!([]));
+    assert_eq!(lines[9]["ejected"], json!([one, two]));
+    assert_eq!(lines[9]["runs"], 2);
+    let entries = repairs::read(&w.common);
+    assert_eq!(entries.len(), 1);
+    let mut entry = entries[0].clone();
+    entry.as_object_mut().unwrap().remove("utc");
+    assert_eq!(
+        entry,
+        json!({"repair": "r1", "feature": "461-x", "tasks": ["T01", "T02"], "kind": "integrate", "ejected": [one, two],
+            "batch": "461-1", "why": "push", "units": [PUSH_FAILED], "attempt": attempt})
+    );
+    // the batch ended, not stopped: nothing ticked on origin, both refs kept for the repair, no batch formed again
+    assert!(w
+        .origin_holds("specs/461-x/tasks.md")
+        .starts_with("- [ ] T01 one\n- [ ] T02 two"));
+    assert_eq!(w.refs(), "refs/l7r/done/461-T01\nrefs/l7r/done/461-T02");
+    assert!(!log::batches(&w.lane()).iter().any(Batch::open));
+    std::fs::remove_file(w.common.join("push-fail")).unwrap();
+    assert_eq!(step(&l), Ok(false));
+}
+
+#[test]
+fn a_push_that_fails_once_runs_the_batch_again_on_the_new_origin_main_and_lands() {
+    let w = world("lane-run-push-once");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    for f in ["push-fail", "push-fail-once"] {
+        std::fs::write(w.common.join(f), "").unwrap();
+    }
+    assert_eq!(step(&lane_of(&w)), Ok(true));
+    assert_eq!(
+        w.events(),
+        ["batch", "carry", "run", "push", "carry", "run", "push", "landed", "owed"]
+    );
+    let lines = w.lane();
+    assert_eq!(lines[3]["failed"], true);
+    assert_eq!(lines[6].get("failed"), None);
+    assert_eq!(lines[7]["landed"], json!([one]));
+    assert_eq!(
+        lines[8]["line"],
+        "lane: batch 461-1 landed - 461 T01 (1 change(s), 2 run(s), 0 minutes)"
+    );
+    // another writer's commit, pushed while the first push failed, is under the landing: the tree was brought to the new main
+    assert_eq!(w.origin_holds("a.txt"), "a");
+    git(&w.clone, &["fetch", "-q", "origin"]);
+    assert_eq!(
+        git(&w.clone, &["log", "--format=%s", "-3", "origin/main"]),
+        "461-x: T01 ticked (make land)\n461 T01: work\nother"
+    );
+    assert!(repairs::read(&w.common).is_empty());
+}
+
+#[test]
+fn a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_next_failure() {
+    let w = world("lane-run-push-resumed");
+    let one = w.hand_in("461", "T01", "a.txt", "a\n");
+    let set = json!([&one[..10]]);
+    for (event, fields) in [
+        ("batch", json!({"batch": "461-1", "changes": [one]})),
+        (
+            "run",
+            json!({"batch": "461-1", "n": 1, "set": set, "code": 2}),
+        ),
+        (
+            "push",
+            json!({"batch": "461-1", "set": set, "code": 2, "failed": true}),
+        ),
+    ] {
+        log::append(&w.common, "t", event, &fields).unwrap();
+    }
+    std::fs::write(w.common.join("push-fail"), "").unwrap();
+    let b = open(&w);
+    resume(&lane_of(&w), &b, &b.changes).unwrap();
+    assert_eq!(
+        &w.events()[3..],
+        ["carry", "run", "push", "eject", "landed", "owed"]
+    );
+    let entries = repairs::read(&w.common);
+    assert_eq!(entries.len(), 1);
+    assert_eq!(entries[0]["kind"], "integrate");
+    assert_eq!(entries[0]["why"], "push");
+    assert!(entries[0]["attempt"]
+        .as_str()
+        .unwrap()
+        .ends_with("461-1-2.log"));
 }

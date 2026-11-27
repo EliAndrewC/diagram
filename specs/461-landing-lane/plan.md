@@ -1064,32 +1064,39 @@ measurement task counts).
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T19 (<why: the finding or measurement that files it>)
+### T19 (phase 2's failed push: a green batch whose push fails runs again once on the new `origin/main`, and a second failure is one `integrate` repair entry)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs`. `land()` now returns an `Attempt` - `Pushed`, `PushFailed` or `Red` - and tells a failed push by the landing's own line `land: the push failed (exit ` (`PUSH_FAILED`, `land.rs`'s warning, which reaches the attempt file as its stderr) in the attempt's output, with the set not on `origin/main` once fetched; such an attempt runs no attribution, writes its `run` line (`red` empty) and a `push` line with `"failed": true` (data-model.md's `push` row amended). `run_batch` counts the batch's failed pushes, a resumed batch's earlier ones from its `push` lines: the first runs the same set again on the tree brought to the new `origin/main` (`bring`, which fetches); the second calls `integrate()`, which files ONE repair entry (`kind` `integrate`, `why` `push`, `tasks` every change's, `ejected` every sha, `units` the push line, `attempt` the second attempt file) before its `eject` lines (`why` `push`), and the batch ends with its `landed` line and ONE `owed` line, the entry's, never `stopped`. To keep `land` and `run_batch` under clippy's `too_many_lines` cap (102 and 117 lines measured 2026-11-27, `make builder-checks`'s lint), `note_of`, `attempt_file` and `ended` (the landed line's wording, unchanged) moved out. Measured 2026-11-27: red first, the three new tests of `runner::run::tests` failed on the old code - each push failure was read as a red the record could not place and the whole set ejected as an `unplaced` `fix` entry (which PINS its tasks, data-model.md) - and 19 of 19 of the module pass after (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`); `make builder-checks CRATE="rust/gate/crates/lane"` clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A failed push is told by the landing's own line in the attempt's output** (`land: the push failed (exit `), not by the `push` Phase line of the event log. Label: the algorithmically easier route, the reading T15's Decision 11 already takes for the suites and the first pass's rows (the runner points the landing's stdout and stderr at the attempt file); the `push` Phase line's code also covers a tick commit that failed (`land.rs`, "the tick's commit failed"), which is no push. A landing whose push failed without that line (the land crate's wording changed) reads as an unplaced red, as before T19.
+2. **"Once" is once a batch**, counted over the batch's `push` lines with `"failed": true`, so a runner killed after the first failure files the entry at the resumed batch's next failure rather than retrying again. Label: the literal reading of the plan's "runs the batch again once; a second failure files"; pinned by `a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_next_failure`.
+3. **One `owed` line for the integrate case, written after the `landed` line**: the entry's line stands in for the batch's end line, so the coordinator is woken once, after the batch is closed. Label: the task line's "one `integrate` entry and one owed line" read literally (FR-005, one wake an event); T15's red path keeps its line an entry plus the end line.
+4. **`units` holds the push's own line**, the attempt file its full output. Label: GUESS, a reading aid for the fresh builder; data-model.md names only `attempt` for a `push` entry.
 
 ### T19 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A green batch that cannot push - main moved under it, as a DIRECT push from the coordinator can make it - lands on the second try without anyone, and where it still cannot, the coordinator gets one line and dispatches a fresh builder; it never pushes, carries or resolves it.
+2. **The constraints.** plan.md Risks, "Two writers of main"; D7's table (the `integrate` entry for a fresh builder); data-model.md's repair entry (`push`: `tasks` every change of the set, `attempt` the push's output) and its states (a push failed twice is not `stopped`); FR-005.
+3. **Where each comes from.** R: plan.md D7, Risks; data-model.md. O: the red-first counts above; `land.rs`'s push-failed warning read.
+4. **Do they describe the world here?** The stand-in landing of the end-to-end tests fails its push as `land.rs` says it, and the once case pushes another writer's commit to `origin/main` meanwhile, so only a tree brought to the new main pushes (its stand-in push is not forced). A real failed push in the lane is T23's to observe.
+5. **The order.** After T15 (the repairs writer, `eject` lines, the owed-line rule); beside T18 (the tripwire, another tree), this task's edits kept to the push path.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `runner::run::tests` 19 of 19, the crate's builder checks clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a green batch whose push failed was ejected whole as an `unplaced` `fix` repair, pinning its tasks toward the round arbiter's second-pin stop for no red, and was never retried on the new main.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)
 

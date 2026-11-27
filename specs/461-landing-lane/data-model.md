@@ -93,7 +93,7 @@ naming several crates (a `cover-build` of a family) one unit over all of them, `
 | `carry` | the batch's carries end | `code`, `conflict` (files) |
 | `run` | a gate attempt ends | `n`, `set`, `code`, `minutes`, `attempt`, `red` (the attributed units) |
 | `attribute` | a red is read | `candidates` (the changes it names), `how` (`record`, `none`) |
-| `push` | a set is pushed | `set`, `code` (0, 3 merged, other) |
+| `push` | a set is pushed, or its push failed after a green gate | `set`, `code` (0, 3 merged, other); `failed: true` where the push failed (461 T19: the batch's first runs the set again on the new `origin/main`, its second files the `integrate` entry) |
 | `eject` | a change leaves the batch | `change`, `repair`, `why` |
 | `landed` | the batch is done | `landed`, `ejected`, `runs`, `minutes` |
 | `owed` | the coordinator is owed a line | `line` (the status `make lane-wait` prints); `stopped: true` on the runner's own line that it stopped with the batch open (461 T15), which no death line follows |
