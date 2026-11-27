@@ -33,3 +33,9 @@
 <!-- SOURCE: GM NOTES -->
 > For what it's worth, I would like to prioritize the orchestration work. So when you talk about working those tasks as soon as builders free up, then I guess that should be true in the sense that you might not have the full complement of builders worth of tasks that relate to the orchestrator that can be worked in parallel. So to the extent that you do, then I would like that to be the priority, but when you find yourselves in are able to be occupied with feature tasks, then yes, that does seem like a good time to begin working these disk tasks.
 <!-- END SOURCE -->
+
+2026-11-27, on the clones' naming once one session coordinates (the words behind 462's clone-naming task):
+
+<!-- SOURCE: GM NOTES -->
+> And if it is reasonably cheap for us to divest ourselves of our weird historical legacy of clones named for session titles, then that might be worth doing in favor of more industry standard naming conventions. What do you think? My instinct is that this doesn't matter all that much, but that it might matter just enough to be worth doing, but I'm curious to hear your take on it.
+<!-- END SOURCE -->
