@@ -465,6 +465,95 @@ fn a_blank_stub_s_rounds_count_nothing_and_its_written_section_counts_from_zero(
     assert_eq!(plan_rounds(&dir, "T48"), 1);
 }
 
+/// 451 T493: the count reads the block reviews' `blocks` and `verdict` alone - the 4.7 MB file was parsed whole into values, 40 ms of
+/// a plan review's dispatch. What it skips is never made a value: a number past f64 there (which a whole parse refuses, counting 0)
+/// leaves the count as it is.
+#[test]
+fn a_plan_round_count_reads_the_block_reviews_alone() {
+    let d = world("plan-slim");
+    let dir = d.join("specs/301-x");
+    let text = r####"{"feature": "301-x", "block_reviews": [{"verdict": "BLOCKED", "blocks": ["### T14 D"], "decisions": [{"n": 1e400}]}, {"reviewed": 1e400, "verdict": "BLOCKED", "blocks": ["### T14 A"]}], "tasks": {"T14": 1e400}}"####;
+    std::fs::write(dir.join("plan-review.json"), text).unwrap();
+    assert_eq!(plan_rounds(&dir, "T14"), 2);
+}
+
+/// The count before 451 T493, the whole file parsed: the reference every shape below is held to.
+fn plan_rounds_whole(feature_dir: &std::path::Path, task: &str) -> u64 {
+    let Some(doc) = std::fs::read_to_string(feature_dir.join("plan-review.json"))
+        .ok()
+        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+    else {
+        return 0;
+    };
+    let head = super::re(&format!(
+        r"^#{{2,4}}\s+(?:T\d+[a-z]?,\s*)*{}\b",
+        fancy_regex::escape(task)
+    ));
+    let reviews = doc
+        .get("block_reviews")
+        .and_then(Value::as_array)
+        .map_or(&[][..], Vec::as_slice);
+    let names = |r: &&Value| {
+        r.get("blocks").and_then(Value::as_array).is_some_and(|b| {
+            b.iter()
+                .filter_map(Value::as_str)
+                .any(|s| super::hit(&head, s))
+        })
+    };
+    let stub = format!("### {task} {}", crate::shared::plan_text::STUB_TITLE);
+    let unwritten = |r: &&Value| {
+        r.get("blocks")
+            .and_then(Value::as_array)
+            .is_some_and(|b| b.iter().any(|s| s.as_str() == Some(stub.as_str())))
+    };
+    let n = reviews
+        .iter()
+        .rev()
+        .filter(names)
+        .take_while(|r| crate::shared::state::field(r, "verdict") != "CLEAR" && !unwritten(r))
+        .count();
+    u64::try_from(n).unwrap_or(0)
+}
+
+/// 451 T493: every shape the file can take - a wrong type at each level, duplicate keys, a truncated or trailing file - counts as the
+/// whole parse counted it.
+#[test]
+fn a_plan_round_count_is_the_whole_parse_s_on_every_shape() {
+    let d = world("plan-shapes");
+    let dir = d.join("specs/301-x");
+    let stub = format!("### T48 {}", crate::shared::plan_text::STUB_TITLE);
+    let good = json!({"feature": "301-x", "blocks": {"### T14 D": "x"}, "block_reviews": [
+        {"verdict": "CLEAR", "blocks": ["### T14 D"], "decisions": [{"id": "a"}]},
+        {"verdict": "BLOCKED", "blocks": ["### T14 D", "### T48 D"], "tasks": ["T14"], "declared": {"a": [1, 2.5, null, true]}},
+        {"verdict": "BLOCKED", "blocks": ["### T05, T14 (bundle)", stub]},
+        {"verdict": "BLOCKED", "blocks": ["### T48 D"]}], "tasks": {"T14": {"rounds": 3}}})
+    .to_string();
+    let shapes = [
+        good.clone(),
+        good[..good.len() / 2].to_owned(),
+        format!("{good} x"),
+        String::new(),
+        "not json".to_owned(),
+        "[1, 2]".to_owned(),
+        r#"{"block_reviews": 5}"#.to_owned(),
+        r#"{"block_reviews": null}"#.to_owned(),
+        r####"{"block_reviews": [5, {"verdict": "BLOCKED", "blocks": ["### T14 D"]}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": "BLOCKED", "blocks": "### T14 D"}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": "BLOCKED", "blocks": [3, "### T14 D", null]}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": ["CLEAR"], "blocks": ["### T14 D"]}, {"blocks": ["### T14 D"]}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": "CLEAR", "blocks": ["### T14 D"]}], "block_reviews": [{"verdict": "BLOCKED", "blocks": ["### T14 D"]}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": "CLEAR", "verdict": "BLOCKED", "blocks": ["### T14 D"]}]}"####.to_owned(),
+        r####"{"block_reviews": [{"verdict": "BLOCKED", "blocks": ["### T14 D"]}], "tasks": "####.to_owned(),
+    ];
+    for text in &shapes {
+        std::fs::write(dir.join("plan-review.json"), text).unwrap();
+        for task in ["T14", "T140", "T48", "T05"] {
+            let (slim, whole) = (plan_rounds(&dir, task), plan_rounds_whole(&dir, task));
+            assert_eq!(slim, whole, "{task} on {text}");
+        }
+    }
+}
+
 /// A bundle's rounds (451 T141): its one heading's reviews, counted once, whichever member the mark names.
 #[test]
 fn a_bundle_s_plan_rounds_are_counted_once_under_any_member() {

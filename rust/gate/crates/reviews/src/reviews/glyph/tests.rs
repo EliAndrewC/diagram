@@ -114,6 +114,27 @@ fn a_phase_or_a_bgend_line_is_never_the_feature_s_start() {
     assert_eq!(first_event(&r, "900-y"), None);
 }
 
+/// The start is read from the log's first lines alone (451 T491): a 50 MB log was read whole for its first event on every Agent call.
+/// Past the first event the log is never read - bytes no reader of the whole file could take (not UTF-8) do not move the answer.
+#[test]
+fn the_start_reads_the_log_only_to_its_first_event() {
+    let r = repo("start-first-line");
+    let path = r.join(".git/l7r-events/900-x.jsonl");
+    put(&r, ".git/l7r-events/900-x.jsonl", "");
+    let mut bytes = b"{\"ev\": \"Phase\", \"t\": \"1970-01-01T00:00:30Z\"}\n{\"t\": \"1970-01-01T00:01:00Z\"}\n".to_vec();
+    bytes.extend_from_slice(b"\xff\xfe not text\n");
+    std::fs::write(&path, &bytes).unwrap();
+    assert_eq!(first_event(&r, "900-x"), Some(60.0));
+    // a first line that is not text is still the find rule's unparseable line: no start
+    std::fs::write(&path, b"\xff\n{\"t\": \"1970-01-01T00:01:00Z\"}\n").unwrap();
+    assert_eq!(first_event(&r, "900-x"), None);
+    // a last line with no newline is read as one, and a blank line is unparseable
+    std::fs::write(&path, b"{\"t\": \"1970-01-01T00:01:00Z\"}").unwrap();
+    assert_eq!(first_event(&r, "900-x"), Some(60.0));
+    std::fs::write(&path, b"\n{\"t\": \"1970-01-01T00:01:00Z\"}\n").unwrap();
+    assert_eq!(first_event(&r, "900-x"), None);
+}
+
 /// The reopening read from the feature's history (split from the test above, feature 449 T167: the two on one repository took 107 ms
 /// against FR-008's tenth of a second).
 #[test]

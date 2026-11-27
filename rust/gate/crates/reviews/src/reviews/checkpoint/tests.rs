@@ -326,6 +326,27 @@ fn past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back() {
     assert_eq!(due(&nogit, "Agent", "x", t), "");
 }
 
+/// An off switch answers "not due" before the feature's start is read (451 T491): the start's read of the whole event log, and the
+/// reopening walk that keeps its answer in the clock, cost every Agent call 50 ms for an answer the switch had already given. The
+/// clock left unwritten is the sign the start was never asked; a dispatch is still admitted (its mark written), as when not due.
+#[test]
+fn an_off_switch_answers_not_due_without_reading_the_start() {
+    let r = repo("due-off");
+    feature(&r, "900-x", "- [ ] T1\n");
+    super::super::tests::commit(&r, "filed");
+    worked(&r, 7200);
+    put(&r, "dev/step-back.json", r#"{"state": "off"}"#);
+    let t = now();
+    assert_eq!(due(&r, "Bash", "", t), "");
+    assert_eq!(due(&r, "Agent", "x", t), "");
+    assert!(r.join(".git").join(ADMITTED).is_file());
+    assert!(!r.join(".git").join(CLOCK).exists());
+    // switched on, the same tree is due, and the start was read (its reopening kept in the clock)
+    std::fs::remove_file(r.join("dev/step-back.json")).unwrap();
+    assert!(due(&r, "Bash", "", t).starts_with("the feature's hour is up"));
+    assert!(clock_of(&r)["900-x"].get("reopened").is_some());
+}
+
 #[test]
 fn the_hour_opens_once_and_its_ruling_closes_it() {
     let r = repo("open");

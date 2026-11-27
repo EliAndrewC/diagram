@@ -4344,6 +4344,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T491 (451 T388: pair-hooks spent 50 of its 92 ms on every Agent call reading the feature's whole 50 MB event log for its first line, measured 2026-11-27 (T388's sandbox arms), to answer \"not due\" for a step-back switched off since 2026-10-21)": {
+   "sha256": "a20b96352a0d508eb9215cf46a8b68d375721a2ef2b70cbda9d83cbedbef449e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T491 Approach (checklist part A)": {
+   "sha256": "50286469a4f5e723a7d537086c6ee62a27083d6dbdefd0d6333883ba48f11e61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))": {
+   "sha256": "bd5330d6a96e08560a13b3d6471162477233d9c138c4291004055a3c30fe6011",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T493 Approach (checklist part A)": {
+   "sha256": "13497e813e1ee3a171888746ae9fa84a3f72345ccd0159a867a6b48c18d80033",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -40650,6 +40674,91 @@
      "summary": "Classed performance work (FR-013): two refused landings each cost a whole batch gate's wait.",
      "class": "within",
      "why": "FR-013 counts work that makes the landings faster; refused landings with a green gate are that cost. Classing it in widens nothing the request excluded."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T470 (<why: the finding or measurement that files it>)",
+    "### T470 Approach (checklist part A)",
+    "### T484 (<why: the finding or measurement that files it>)",
+    "### T484 Approach (checklist part A)",
+    "### T491 (451 T388: pair-hooks spent 50 of its 92 ms on every Agent call reading the feature's whole 50 MB event log for its first line, measured 2026-11-27 (T388's sandbox arms), to answer \"not due\" for a step-back switched off since 2026-10-21)",
+    "### T491 Approach (checklist part A)",
+    "### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))",
+    "### T493 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T491-D1",
+     "summary": "checkpoint `due` reads the off switch before `state_in` and takes the not-due branch without reading the event log, the reopening walk or git log; the checkpoint-admitted mark is still written; `status`, `open_checkpoint` and `hold_in` (once per make tick, not per Agent call) keep reading `state_in`.",
+     "class": "within",
+     "why": "A performance fix (FR-013; the GM 2026-11-20 'prioritize performance improvements') that keeps due/status/hold/open verdicts and guard messages. Leaving hold_in alone narrows nothing the GM asked: no request clause asks every reader of state_in to be sped up, and the task's stated target is the per-Agent-call cost."
+    },
+    {
+     "id": "T491-D2",
+     "summary": "glyph `first_event` reads the log line by line up to its first non-ASIDE line instead of reading the whole file; find rule unchanged; one answer changes: non-UTF-8 bytes after the first event no longer void the answer.",
+     "class": "within",
+     "why": "Performance work under FR-013. The one changed output (a corrupt tail no longer hides a start that was always readable) is a differing output that still works, which the GM's 2026-11-18 rule says is not a regression and needs no exception."
+    },
+    {
+     "id": "T493-D1",
+     "summary": "review_round_hooks `plan_rounds` reads `plan-review.json` through hand-written serde visitors keeping only each block review's `blocks` and `verdict`, skipping everything else with IgnoredAny; the count's code (heading regex, T462 stub rule, walk to last CLEAR) runs unchanged; a writer-kept count beside the file was rejected as a second writer's state.",
+     "class": "within",
+     "why": "Performance work under FR-013; the round count, PLAN_ROUND_CAP, the T141 bundle rule and the T462 stub rule are kept, checked against the old body on 15 shapes and the real file's 501 task ids. Choosing reader-only over a sidecar is a design choice, not a narrowing of anything requested."
+    },
+    {
+     "id": "T493-D2",
+     "summary": "the whole file is still parsed as JSON (truncation and trailing bytes still fail); a shape the visitors cannot read falls back to the old whole-file parse; a file whose skipped fields the old parse refused (a number past f64) now counts its rounds instead of 0.",
+     "class": "within",
+     "why": "Keeps malformed-file behavior; the one changed count corrects an undercount (0 rounds where rounds exist would let the round cap be skipped), a differing output that works better, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T491 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T491-1",
+     "summary": "pair-hooks skips reading the event log while the step-back switch is off; the feature's start reads only the log's first lines",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013); takes measured time off every Agent call's PreToolUse."
+    },
+    {
+     "id": "T491-2",
+     "summary": "Constraints: due/status/hold/open verdicts unchanged, checkpoint-admitted mark still written, first_event's find rule kept, no guard message changes",
+     "class": "within",
+     "why": "Preserves every existing answer; narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T491-3",
+     "summary": "The one changed answer (a log whose bytes after its first event are not UTF-8) is left as D2's",
+     "class": "within",
+     "why": "A difference in output on a malformed-log edge, not a wrong outcome a reader sees; under the GM's 2026-11-18 no-exactness standard a differing output that still works is the rule, not an exception needing a ruling."
+    },
+    {
+     "id": "T491-4",
+     "summary": "Exits: green at below 40 ms with the two red tests and the crate green; red recorded and set down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Exit criteria for the task's own performance goal; no part of a request is dropped."
+    },
+    {
+     "id": "T491-5",
+     "summary": "Shares a landing with T493 as a bundle; independent of T492-T494",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling of small tasks ('let's do that then')."
+    },
+    {
+     "id": "T491-6",
+     "summary": "Changed since the CLEAR verdict: item 9's timing provenance restated (the runs' end times), and the Performance work line no longer claims the 53 ms saving as measured for make done - stated as expected, 'not timed'",
+     "class": "within",
+     "why": "A correction that withdraws an unmeasured claim and labels it as such; it changes no decision and narrows nothing asked. Figures carry date and method (one-shot labels)."
     }
    ]
   }

@@ -420,12 +420,79 @@ fn spec_cap_refusal(root: &Path, feature: &str, round_no: u64, pass_no: u64) -> 
     format!("BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, not the GM. Nothing was dispatched and no round was counted.\n{refusal}")
 }
 
+/// `plan-review.json` as the round count reads it, `{"block_reviews": [{blocks, verdict}, ...]}`: every other key and field skipped, never
+/// made a value (451 T493: the 4.7 MB file parsed whole was 40 ms of a plan review's dispatch, `block_reviews`' decisions and `tasks` most
+/// of it). The whole file is still read and checked as JSON; a file of another shape than the writer's is parsed whole, so every count
+/// stays the whole parse's.
+fn block_reviews(path: &Path) -> Option<Value> {
+    let text = std::fs::read_to_string(path).ok()?;
+    serde_json::from_str::<SlimDoc>(&text)
+        .map(|s| json!({ "block_reviews": s.0 }))
+        .or_else(|_| serde_json::from_str::<Value>(&text))
+        .ok()
+}
+
+/// The block reviews of [`block_reviews`], each `{blocks, verdict}` as the file has them.
+struct SlimDoc(Vec<Value>);
+
+/// One block review's `blocks` and `verdict`, its other fields skipped.
+struct SlimReview(Value);
+
+/// Which of the two a map is read as.
+struct Slim<T>(std::marker::PhantomData<T>);
+
+impl<'de> serde::de::Visitor<'de> for Slim<SlimDoc> {
+    type Value = SlimDoc;
+    fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str("a plan review file")
+    }
+    fn visit_map<A: serde::de::MapAccess<'de>>(self, mut m: A) -> Result<SlimDoc, A::Error> {
+        let mut reviews = Vec::new();
+        while let Some(k) = m.next_key::<String>()? {
+            if k == "block_reviews" {
+                let kept: Vec<SlimReview> = m.next_value()?;
+                reviews = kept.into_iter().map(|r| r.0).collect();
+            } else {
+                m.next_value::<serde::de::IgnoredAny>()?;
+            }
+        }
+        Ok(SlimDoc(reviews))
+    }
+}
+
+impl<'de> serde::de::Visitor<'de> for Slim<SlimReview> {
+    type Value = SlimReview;
+    fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str("a block review")
+    }
+    fn visit_map<A: serde::de::MapAccess<'de>>(self, mut m: A) -> Result<SlimReview, A::Error> {
+        let mut kept = serde_json::Map::new();
+        while let Some(k) = m.next_key::<String>()? {
+            if k == "blocks" || k == "verdict" {
+                kept.insert(k, m.next_value()?);
+            } else {
+                m.next_value::<serde::de::IgnoredAny>()?;
+            }
+        }
+        Ok(SlimReview(Value::Object(kept)))
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for SlimDoc {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        d.deserialize_map(Slim::<Self>(std::marker::PhantomData))
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for SlimReview {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        d.deserialize_map(Slim::<Self>(std::marker::PhantomData))
+    }
+}
+
 /// The rounds `task`'s plan blocks have had since their last CLEAR.
 pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
-    let Some(doc) = std::fs::read_to_string(feature_dir.join("plan-review.json"))
-        .ok()
-        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-    else {
+    let Some(doc) = block_reviews(&feature_dir.join("plan-review.json")) else {
         return 0;
     };
     // the task's own heading, or a bundle's heading listing it (451 T141): one review of the bundle is one round of each of its tasks

@@ -444,7 +444,13 @@ fn due(root: &Rooted, tool: &str, atype: &str, at: f64) -> String {
         return String::new();
     }
     let mark = gitdir(root).map(|g| g.join(ADMITTED));
-    let st = state_in(root, Some(at));
+    // the switch first (451 T491): off, the answer is "not due" whatever the clock says, and `state_in` would read the feature's whole
+    // start (its event log, its reopening walk) to say so - 50 ms of every Agent call while the step-back has been off since 2026-10-21
+    let st = if suspended(root).is_empty() {
+        state_in(root, Some(at))
+    } else {
+        Map::new()
+    };
     if st.get("due") != Some(&json!(true)) || !text(&st, "open").is_empty() {
         if let Some(m) = mark.as_deref().filter(|_| tool == "Agent") {
             let _ = std::fs::write(m, format!("{}\n", l7r_shared::pyjson::py_float(at)));

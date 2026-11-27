@@ -6986,31 +6986,36 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T491 (<why: the finding or measurement that files it>)
+### T491 (451 T388: pair-hooks spent 50 of its 92 ms on every Agent call reading the feature's whole 50 MB event log for its first line, measured 2026-11-27 (T388's sandbox arms), to answer "not due" for a step-back switched off since 2026-10-21)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two changes in the gate's `reviews` crate. Measured 2026-11-27.
+  - **T491-D1, `due` asks the switch first.** `checkpoint.rs` `due` reads `suspended(root)` before `state_in`. With the switch off it skips `state_in` and goes down the not-due branch: no event log read, no reopening walk, no `git log`. That branch still writes the `checkpoint-admitted` mark for an Agent call, as before. The check goes in `due` only, not in `state_in`. `status` prints `state_in`'s map, and `open_checkpoint`'s off-switch message reads it, so both stay as they were. `hold_in` also reads `state_in` while off and returns "". It runs once per `make tick`, not on every Agent call, so it is left as it is.
+  - **T491-D2, `first_event` reads line by line up to its first event.** `glyph.rs` `first_event` uses a `BufReader` and `read_until(b'\n')` in place of `read_to_string` on the whole log. The find rule is unchanged: the answer is the first line that does not parse (a blank line counts) or that is not an `ASIDE` line. A line that does not parse gives None, as before. A file that cannot be opened or read gives None, as before. One answer changes: bytes that are not UTF-8 *after* the first event used to make the whole read fail (None). They now leave the start as read. That is a corrupt log's tail, and the start was always the first event's.
+  - **Red first.** Two tests failed on the old code (0 passed, 2 failed), measured 2026-11-27 (`make rust-test ONLY=` on the two tests before the fix): `glyph::tests::the_start_reads_the_log_only_to_its_first_event` (a log whose third line is not UTF-8: `left: None, right: Some(60.0)`) and `checkpoint::tests::an_off_switch_answers_not_due_without_reading_the_start` (with the switch off and a commit to `specs/900-x`, the old `due` wrote the reopening into the clock: `assertion failed: !...CLOCK.exists()`). Both pass after the change. The crate's 216 tests pass, measured 2026-11-27 (`make builder-checks`).
+  - **Before and after, on T388's sandbox.** Method: `t388-time.py` copied as `t491-time.py`, with `T491_BIN` and `T491_GATE` aiming it at copies of this tree's own guard and gate binaries built before and after the change. The arm is `gp.PreToolUse:only=pair`, 20 runs after a warm-up, measured 2026-11-27 (t491-time.py). Results, median / 90th centile, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 84.7 / 119.1 ms (load 8.8 to 10.0), after 33.5 / 37.0 (load 12.4 to 13.1). Run again, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 88.1 / 94.7 (load 11.9 to 12.4), after 31.5 / 36.2 (load 11.1 to 11.9). That is about 53 ms off every Agent call, a little more than T388's 50 (its `+shortlog` arm still read 2,000 lines), measured 2026-11-27 (the medians above). About 296 x 0.053 = 16 s a day, measured 2026-11-27 (T388's count of 2026-11-26's Agent calls times the saving above).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the switch first in `due`; `first_event` by line | n/a: gate tooling, no map | n/a: tooling | none | none |
 
 ### T491 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An Agent call's `pair-hooks` does not read the event log while the step-back is off, and the feature's start never costs more than its first lines.
+2. **The constraints.** The verdicts of `due`, `status`, `hold` and `open` do not change. The `checkpoint-admitted` mark is still written. `first_event`'s find rule is kept (451 T05's `ASIDE`). No guard message changes.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`, lever A). R: `checkpoint.rs`, `glyph.rs`. O: the before and after timings above.
+4. **Do they describe the world here?** Yes. `dev/step-back.json` reads `off` in this tree, and `scripts/gates/l7r-gate.sh reviews checkpoint status --root .` printed `"suspended": true` (2026-11-27).
+5. **The order.** Independent of T492 to T494. It shares this landing with T493 (a bundle).
+6. **The exits.** Green: the two red tests pass, the crate is green, and pair-hooks is below 40 ms on the sandbox, measured 2026-11-27 (t491-time.py, 20 runs). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** pair-hooks went from 84.7 and 88.1 ms to 33.5 and 31.5 ms (medians, 20 runs each, in turn: before ending 07:01:18, then after, before and after ending 07:08:07, 07:08:12 and 07:08:15, measured 2026-11-27 by t491-time.py). `make builder-checks CRATE="rust/gate/crates/reviews rust/guard"` is clean. `tests/hooks/test-pair-hooks.sh` gave 104 passed, 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every answer is the same while the switch is off, and with it on the start is the same first event. The one changed answer, a log with bytes after its first event that are not UTF-8, is D2's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: it takes 53 ms off every Agent call's PreToolUse (pair-hooks), measured 2026-11-27 (t491-time.py, 20 runs); a `make done` that pair-hooks gates asks the same `checkpoint due` and should save the same, not timed.
 
 
 ### T492 (<why: the finding or measurement that files it>)
@@ -7040,14 +7045,46 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T493 (<why: the finding or measurement that files it>)
+### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))
+
+- **Approach**: the reader-only route. `review_round_hooks.rs` `plan_rounds` reads the file through `block_reviews`. Measured 2026-11-27.
+  - **T493-D1, read only the two fields the count needs; no count is kept beside the file.** Two hand-written serde visitors (`Slim<SlimDoc>`, `Slim<SlimReview>`; the guard's `serde` has no `derive`) keep each block review's `blocks` and `verdict` as values. Every other key is skipped with `IgnoredAny` and never made a value: the top-level `feature`, `blocks` and `tasks`, and each review's `decisions`, `reviewed`, `tasks` and `declared`. The count's own code (the heading regex, the stub rule of 451 T462, the walk back to the last CLEAR) then runs unchanged on `{"block_reviews": [...]}`. Why not a count the writer keeps beside the file: it is a second writer's state to keep in step with `plan-review.json` (`make carry` merges that file by entry), and the brief preferred the reader-only route.
+  - **T493-D2, the whole file is still read and checked as JSON.** It is parsed through `serde_json::from_str`, so a truncated file or one with trailing bytes still fails, as before. A file the visitors cannot read (an array at the top, a review that is not an object, `block_reviews` not an array) falls back to the old whole-file parse, so its count is the old count.
+  - **Red first.** `a_plan_round_count_reads_the_block_reviews_alone` failed on the old code (1 failed: `left: 0, right: 2`). Its file holds `1e400`, past f64, in a skipped field. The old parse refused the whole file and counted 0; the new read counts the two rounds. `a_plan_round_count_is_the_whole_parse_s_on_every_shape` checks the new count against the old body, kept in the tests as `plan_rounds_whole`. It covers 15 shapes (a wrong type at each level, duplicate keys at both levels, a truncated file, trailing bytes, an empty file, a file that is not JSON) for 4 tasks each, and every count matches. A one-off test, run and then removed, compared the two over this tree's real `plan-review.json` (4,728,854 bytes) for every task id in `tasks.md` and `tasks-done.md`: 501 of 501 equal, measured 2026-11-27 (the one-off test's count). In a debug build that took 9.4 ms a call against 26.3, measured 2026-11-27 (the same one-off test's clock). The guard's 597 tests pass, and `tests/hooks/test-review-round-hooks.sh` gave 91 passed, 0 failed, measured 2026-11-27 (`make builder-checks`, the suite run).
+  - **Before and after, on T388's sandbox**, by the T491 method above with the arm `sf.PreToolUse:only=review-round`, 20 runs, measured 2026-11-27 (t491-time.py). Results, median / 90th centile, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 82.8 / 175.2 ms, after 62.9 / 67.1. Run again, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 85.2 / 94.2, after 61.5 / 66.3. The loads are those in T491's section. That saves about 22 ms, short of T388's estimate of 35 of 40, measured 2026-11-27 (the medians above). The rest, not timed apart, is the file's read and the skipped JSON's scan. About 98 x 0.022 = 2 s a day, measured 2026-11-27 (T388's count of 2026-11-26's plan reviews times the saving above).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `plan_rounds` reads two fields of each block review | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T493 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review's dispatch counts its task's rounds without building the whole review file in memory.
+2. **The constraints.** The round count, its cap (`PLAN_ROUND_CAP`), the bundle rule (451 T141) and the stub rule (451 T462) do not change. No guard message changes. A malformed file counts as it did.
+3. **Where each comes from.** O: 451 T388's record (lever C). R: `review_round_hooks.rs`. O: the differential tests and the timings above.
+4. **Do they describe the world here?** Yes. The real file has `block_reviews` (531 entries, each with `reviewed`, `blocks`, `verdict` and `decisions`; 52 with `tasks`, 15 with `declared`) beside `feature`, `blocks` and `tasks`, measured 2026-11-27 (read with Python's `json`).
+5. **The order.** Independent of T491. It shares this landing with T491 (a bundle).
+6. **The exits.** Green: the red test passes and every shape's and the real file's counts equal the old ones. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** review-round-hooks went from 82.8 and 85.2 ms to 62.9 and 61.5 ms (medians, 20 runs each, 2026-11-27). 501 of 501 real task counts are unchanged. `make builder-checks CRATE="rust/gate/crates/reviews rust/guard"` is clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every count is the old count, except for a file whose skipped fields the old parse refused (a number past f64), which used to count 0.
+
+**Found and left?** none
+
+**Performance work?** yes: it takes about 22 ms off every spec-fidelity plan review's PreToolUse (review-round-hooks), measured 2026-11-27 (t491-time.py, 20 runs).
+
+
+### T494 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T493 Approach (checklist part A)
+### T494 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -7067,14 +7104,41 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T494 (<why: the finding or measurement that files it>)
+### T497 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T494 Approach (checklist part A)
+### T497 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T498 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T498 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

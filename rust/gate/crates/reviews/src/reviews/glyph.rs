@@ -58,19 +58,25 @@ pub fn is_event(line: &Value) -> bool {
 }
 
 /// When the feature began in this clone: the first event of `<git dir>/l7r-events/<feature>.jsonl`, the lines no hook wrote passed
-/// over (`ASIDE`), or None.
+/// over (`ASIDE`), or None. The first line unparseable (a blank one, or one not UTF-8) or not `ASIDE` decides it, and the log is read
+/// line by line only to there (451 T491: the whole 50 MB log was read for its first line, 50 ms of every Agent call's pair-hooks); a
+/// line past that one is never read, so bytes there that are not text no longer make the answer None.
 #[must_use]
 pub fn first_event(root: &Path, feature: &str) -> Option<f64> {
+    use std::io::BufRead;
     let path = gitdir(root)?
         .join("l7r-events")
         .join(format!("{feature}.jsonl"));
-    let text = std::fs::read_to_string(path).ok()?;
-    let first: Value = text
-        .split_inclusive('\n')
-        .map(serde_json::from_str::<Value>)
-        .find(|line| line.as_ref().ok().is_none_or(is_event))?
-        .ok()?;
-    iso_seconds(first.get("t"))
+    let mut log = std::io::BufReader::new(std::fs::File::open(path).ok()?);
+    let mut line = Vec::new();
+    while log.read_until(b'\n', &mut line).ok()? > 0 {
+        let parsed = serde_json::from_slice::<Value>(&line).ok();
+        if parsed.as_ref().is_none_or(is_event) {
+            return iso_seconds(parsed?.get("t"));
+        }
+        line.clear();
+    }
+    None
 }
 
 /// When the feature was last REOPENED (feature 375 amendment 10, FR-042): the newest commit to `specs/<feature>` after which its
