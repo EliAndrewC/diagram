@@ -11,6 +11,7 @@ pub mod passes;
 pub mod planhold;
 pub mod reply;
 pub mod rounds;
+pub mod scan;
 
 use std::fs::File;
 use std::path::{Path, PathBuf};

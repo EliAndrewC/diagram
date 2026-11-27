@@ -1,0 +1,4 @@
+clean	pre	exit 0	stdout b''	file unchanged
+clean	post	exit 0	stdout b''	file unchanged
+B	pre	exit 0	stdout b''	file unchanged
+B	post	exit 0	stdout b''	file unchanged

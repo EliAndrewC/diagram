@@ -1,0 +1,6 @@
+# load at start 10.9, state copy 2618222 bytes, 20 counted runs, builds ['clean', 'A', 'B', 'C']
+# load at end 10.9
+bash-pre	hold	cpu median ms: clean 17.37	A 16.36	B 14.67	C 13.84	saved vs clean: A +1.02	B +2.71	C +3.54	outputs 1 distinct
+bash-pre	nohold	cpu median ms: clean 7.29	A 5.34	B 3.32	C 5.38	saved vs clean: A +1.95	B +3.97	C +1.92	outputs 1 distinct
+bash-post	hold	cpu median ms: clean 14.89	A 14.74	B 13.67	C 15.73	saved vs clean: A +0.15	B +1.22	C -0.84	outputs 1 distinct
+bash-post	nohold	cpu median ms: clean 5.72	A 5.33	B 3.42	C 5.17	saved vs clean: A +0.39	B +2.30	C +0.55	outputs 1 distinct

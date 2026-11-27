@@ -6899,14 +6899,64 @@ that batch; the red was not in its change.
 **Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
 
 
-### T508 (<why: the finding or measurement that files it>)
+### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))
+
+- **Approach**: both prefilters stream the state (`rust/guard/shared/src/checks/scan.rs`, new: `after_first`, `held_after`, `holds`, `snaps`). `record_edit_gate::holding` calls `checks::scan::holds`, and `checks_hooks::state_holds_snaps` calls `checks::scan::snaps`. The old `holds_text` is gone; its test oracle is kept in `checks/scan/tests.rs`. No guard message changed. The record is `dev/measurements/2026-11-27/t508-prefilter-stream/results.md`.
+  - **T508-D1, the stream.** The file is read `CHUNK` (64 KiB, a GUESS knob: item 10) at a time into one reused buffer, and `memchr`'s `memmem` (a dependency of `rust/guard/shared` since 451 T392) searches the bytes. The last `needle.len() - 1` bytes are carried over, so a key cut by a chunk's edge is found whole on the next read. After `"plan_holds":`, the bytes are decoded to their UTF-8 prefix and asked the old test (`trim_start`, `{`, `trim_start`, not `}`), reading on only while that text cannot yet answer.
+  - **T508-D2, UTF-8 checked as `read_to_string` checked it.** Every byte is checked as it is read, the bytes of a character cut by a chunk's edge held for the next. So a file with one bad byte anywhere is a no to both prefilters, as before. The read stops early only on a no; a yes reads on to the end to check the rest. Leaving the check out was measured to change an outcome: on a copy of the state under a hold with one bad byte, checks-hooks' `PostToolUse` ran `handle`, which wrote its empty reading over the file, where HEAD left it unchanged, measured 2026-11-27 (`t508-nonutf8.py`, one call a build). With the check, both builds leave the file unchanged, measured 2026-11-27 (the same script).
+  - **T508-D3, the route.** B, the stream, was chosen over A (`memmem` over the whole string) and C (A, with the string handed on to `handle` under a hold). All three were priced on the same arms, measured 2026-11-27 (`t508-time.py`, 20 interleaved runs, a copy of the clone's state, B as built, runs 3 and 4, load 9.6 to 10.9). Savings in ms of CPU against HEAD, run 3 and run 4, measured 2026-11-27 (`t508-time.py`, 20 runs):
+
+    | case | A | B | C |
+    |---|---|---|---|
+    | bash-pre, no hold | 1.95, 1.14 | **3.97, 3.52** | 1.92, 1.38 |
+    | bash-pre, under a hold | 1.02, 1.65 | 2.71, 3.34 | **3.54, 3.79** |
+    | bash-post, no hold | 0.39, 0.44 | **2.30, 2.47** | 0.55, 0.35 |
+    | bash-post, under a hold | 0.15, 0.74 | **1.22, 2.11** | -0.84, -0.10 |
+
+    C beats B only on bash-pre under a hold, and only if more than 71 to 83% of Bash calls ran under a hold would it win there, while with bash-post counted B wins every case, measured 2026-11-27 (`t508-time.py`, runs 3 and 4). Runs 1 and 2, of the first B without the UTF-8 check, ranked the routes the same, measured 2026-11-27 (`t508-time.py`, 20 runs, load 4.9 to 6.8). Under a hold B as built already reads the whole file, so C's saving can be had beside it: filed as T509.
+  - **T508-D4, no prefix read.** The key is searched in the WHOLE file. The writer sorts the top-level keys (`checks::save`), so `plan_holds` and `plan_snaps` sit after `dispatches`, the bulk of the file: byte 1,999,829 of 2,618,222, observed 2026-11-27, method: `grep -bo` on the copy. Every other key's size moves them.
+  - **T508-D5, every verdict unchanged.** A differential compared the old `split_once` test and `contains` with the stream, measured 2026-11-27 (`t508-differential.rs`, in build B's scratch source): 0 differing. It ran over five copies of the clone's state: the state as it is, a hold after its snapshot, no hold, a hold ended with its snapshot left, and no `plan_holds` key. Each copy was read at 71 to 95 chunk sizes, including every size that cuts either key at each of its bytes, and through `holds` and `snaps` themselves. The crate's test holds the stream to the old whole-string read on 27 fixtures, 6 of them not UTF-8, at every chunk size, measured 2026-11-27 (`make rust-test`). In the timing runs every call's exit code and stdout agreed across the four builds: 1 distinct output in each case, measured 2026-11-27 (`t508-time.py`).
+  - **Other readers of the state**, observed 2026-11-27, method: a grep of the guards for `checks-open.json`, `state_path` and calls into `checks::`, each caller's matcher read. None reads the whole state to find one key on a hot path:
+    - `event_log_hooks` and pair-hooks' review reach `checks::arbiter`, which reads `arbiter-owed.json` and `arbiter.jsonl`, on a reversal Edit or a gate's third round alone;
+    - `escalation_hooks` reads `escalation-state.json`, on Agent calls;
+    - `check_bundle_hooks` and `checks_hooks`' launched and returned need the contents, through `handle`'s partial parse, on Agent calls and SubagentStops;
+    - `rounds::drop_run` runs on a refused `check-wave` alone, and `rounds::record_answer` and `handle::close` run from the gate's commands.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the prefilter holds one chunk and stops early on a no | `the_read_holds_one_chunk_and_stops_early_only_on_a_no`, red on the old whole-file read behind the new seam (4 passed, 1 failed), measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::scan"`) | n/a: tooling | none | n/a |
+| no key cut by a chunk's edge, and UTF-8 as before | `the_stream_answers_as_the_whole_string_did_at_every_chunk_size` (27 fixtures, every chunk size from 1 byte to past each one's length, against the old read), red on a mutant that carries no bytes across the edge and on one that checks no UTF-8 (4 passed, 1 failed each), measured 2026-11-27 (the same command) | n/a: tooling | none | n/a |
+| a state that is not UTF-8 is left as it is | `guards::checks_hooks::tests::a_state_that_is_not_utf8_is_left_as_it_is`, red on the mutant that checks no UTF-8 (5 passed, 1 failed), measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY="guards::checks_hooks"`) | n/a: tooling | none | n/a |
+
+### T508 Approach (checklist part A)
+
+1. **The goal, in the world.** A Bash call's hooks no longer read the whole check state into memory to find one key.
+2. **The constraints.** The brief: price T507's three routes on the same arms, build the one that saves most, keep every verdict, copies of the state only, red first, no guard message changed, the two tiers. T392's chunked `memmem` read (its precedent and its dependency).
+3. **Where each comes from.** O: T507's split and this task's pricing, differential and red runs. R: `guards/record_edit_gate.rs`, `guards/checks_hooks.rs`, `checks.rs` (`save`, the sorted keys).
+4. **Do they describe the world here?** Yes. A copy of the clone's own state (2,618,222 bytes) was used, with T507's fixtures and four scratch builds of the tree, measured 2026-11-27 (`t508-time.py`, 20 runs, four runs).
+5. **The order.** After T507. Before T509 and T302.
+6. **The exits.** Green: the stream lands with the differential at 0 and the hook's CPU down. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** Outside a hold, a Bash call's record-edit-hooks `PreToolUse` went from 7.29 and 6.98 ms to 3.32 and 3.46, and its checks-hooks `PostToolUse` from 5.72 and 5.90 to 3.42 and 3.43, measured 2026-11-27 (`t508-time.py`, CPU medians of 20 runs, runs 3 and 4).
+10. **Before moving a constant.** `CHUNK` is a new GUESS knob (64 KiB), a speed constant that no claim states.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of a map sees: it is time on every Bash call, not a defect.
+
+**Found and left?**
+- Under a plan hold the stream reads the whole file and `handle` then reads it again, 0.45 to 0.83 ms of bash-pre against route C, measured 2026-11-27 (`t508-time.py`, 20 runs, runs 3 and 4). Its visible effect is that time on a Bash call while a plan review holds text. Not fixed here: it is a new mechanism (`handle`'s read seam and the file's identity under the lock), two builders by the sizing rule. Filed as T509; lands before T302.
+
+**Performance work?** yes: the session's and the builders' loop, every Bash call's two hooks. About 6 ms of CPU a Bash call outside a hold (3.5 to 4.0 on the pre call and 2.3 to 2.5 on the post), or about 37 s a day at 2026-11-26's 6,141 Bash calls (T507's count), measured 2026-11-27 (`t508-time.py`, 20 runs, runs 3 and 4). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
+
+
+### T509 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T508 Approach (checklist part A)
+### T509 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

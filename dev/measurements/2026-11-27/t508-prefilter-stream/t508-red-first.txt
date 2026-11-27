@@ -1,0 +1,4 @@
+old-read: thread 'checks::scan::tests::the_read_holds_one_chunk_and_stops_early_only_on_a_no' panicked test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 595 filtered out; finished in 0.01s
+no-carry: thread 'checks::scan::tests::the_stream_answers_as_the_whole_string_did_at_every_chunk_size' panicked test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 595 filtered out; finished in 0.01s
+no-utf8: thread 'checks::scan::tests::the_stream_answers_as_the_whole_string_did_at_every_chunk_size' panicked test result: FAILED. 4 passed; 1 failed; 0 ignored; 0 measured; 595 filtered out; finished in 0.01s
+guard-no-utf8: thread 'guards::checks_hooks::tests::a_state_that_is_not_utf8_is_left_as_it_is' panicked test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 601 filtered out; finished in 0.03s

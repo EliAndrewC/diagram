@@ -4572,6 +4572,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T503 (<why: the finding or measurement that files it>)": {
+   "sha256": "3dc862c0df53a5b15612f6ddcb515cae98218bba4727cd0042c72343fb4cf27e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T503 Approach (checklist part A)": {
+   "sha256": "f4b33585c0683865301d67aa27239d0a4c6c07be323ce794ed5938aa84b5b490",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))": {
+   "sha256": "7b210ec1f3492048142f69ecd797bbc7b1817ef390baf26915b8c58d63573b50",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T508 Approach (checklist part A)": {
+   "sha256": "6afecd84f87e140caebe357063058f2211e49daa2704892162a7f27bbc7df767",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41985,6 +42009,130 @@
      "summary": "No red test, nothing built; the tree's sources unchanged.",
      "class": "within",
      "why": "FR-012's red-first tests are for refusals; this task adds none and changes no source."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T503 (<why: the finding or measurement that files it>)",
+    "### T503 Approach (checklist part A)",
+    "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))",
+    "### T508 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T503 (both blocks)",
+     "summary": "Both T503 blocks are the unfilled section template (placeholders only); they make no decision.",
+     "class": "within",
+     "why": "Nothing is decided, so nothing narrows the request or FR-013; there is nothing to rule on until the section is written."
+    },
+    {
+     "id": "T508-D1",
+     "summary": "Both Bash-hook prefilters stream the check state in CHUNK-sized reads with memchr memmem, carrying needle.len()-1 bytes across chunk edges, stopping at the first match, then applying the old plan_holds emptiness test to the decoded prefix.",
+     "class": "within",
+     "why": "An implementation of performance work on the builders' loop, which FR-013 and the GM's 2026-11-20 words ('prioritize performance improvements') ask for; it narrows nothing asked."
+    },
+    {
+     "id": "T508-D2",
+     "summary": "Route B (stream) chosen over A (memmem on the whole string) and C (A plus handing the string to handle under a hold), all three priced on the same arms; B saves most outside a hold and on every bash-post case.",
+     "class": "within",
+     "why": "A choice among implementations of the same speed-up, made by measurement. Design merit is not a fidelity question, and no part of the request is given up."
+    },
+    {
+     "id": "T508-D3",
+     "summary": "The key is searched in the whole file, with no prefix-only read, because the sorted keys put plan_holds/plan_snaps after dispatches at a position that moves.",
+     "class": "within",
+     "why": "A correctness choice that keeps every verdict; it narrows nothing."
+    },
+    {
+     "id": "T508-D4",
+     "summary": "Every verdict unchanged, shown by a differential over five state copies and many chunk sizes; the one changed internal path (a non-UTF-8 byte before the key now lets handle run) gives the same hook answer.",
+     "class": "within",
+     "why": "Outcomes are kept; a differing internal path that still answers the same is the rule (constitution XIII, GM 2026-11-18), not an exception."
+    },
+    {
+     "id": "T508 other readers",
+     "summary": "No other hot-path reader of the whole state found (search stated: grep of the guards for checks-open.json and state_path, 2026-11-27); nothing filed.",
+     "class": "within",
+     "why": "A census with its search space stated. Filing nothing narrows nothing the GM asked."
+    },
+    {
+     "id": "T508 CHUNK knob",
+     "summary": "CHUNK = 64 KiB, a new GUESS speed knob that no claim states.",
+     "class": "within",
+     "why": "A tuning constant inside the requested work."
+    },
+    {
+     "id": "T508 found-and-left",
+     "summary": "Under a plan hold, handle still reads the state a second time after the stream (0.50 to 1.02 ms against route C on bash-pre); classed as not a defect and not filed.",
+     "class": "within",
+     "why": "It is time, not a wrong outcome, so under constitution XIV v2.36.0 (GM 2026-11-19) it is not a defect, and no known defect is carried forward. It is a measured tradeoff against the larger saving outside a hold, not a carve-out from what was asked."
+    },
+    {
+     "id": "T508 order and classification",
+     "summary": "Lands after T507 and before T302; tagged performance work (the builders' loop), not an engine-speed task, so the engine checklist does not apply.",
+     "class": "within",
+     "why": "Consistent with FR-013's definition of performance work and its ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))",
+    "### T508 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T508-D1",
+     "summary": "Stream the state in 64 KiB chunks (CHUNK, a GUESS knob) with memmem, carrying needle.len()-1 bytes across chunk edges; after \"plan_holds\": apply the old trim/{/not-} test on the decoded prefix. The read no longer stops at the first match (a yes reads on to check UTF-8).",
+     "class": "within",
+     "why": "Implements the task's own goal (a Bash call's hooks stop reading the whole state for one key), which is performance work FR-013 puts first; the GUESS knob is declared as the project's rules require. No verdict or message changes."
+    },
+    {
+     "id": "T508-D2",
+     "summary": "UTF-8 is checked over every byte as read_to_string did, so a file with a bad byte anywhere stays a no to both prefilters; a yes reads to the end. Measured that leaving the check out let checks-hooks' PostToolUse overwrite a non-UTF-8 state where HEAD left it alone.",
+     "class": "within",
+     "why": "Keeps every verdict as the brief requires and removes a wrong outcome the earlier draft would have introduced (the earlier block's claim that the hook answers the same was contradicted by measurement). Fixing a found defect within its own step is what the GM's fix-as-we-go rule asks; this narrows nothing."
+    },
+    {
+     "id": "T508-D3",
+     "summary": "Route B (stream) chosen over A (whole-string memmem) and C (A plus handing the string to handle under a hold), priced on the same arms in runs 3 and 4 with the UTF-8 check built; C's under-a-hold saving can be had beside B and is filed as T509.",
+     "class": "within",
+     "why": "The brief is to price T507's three routes and build the one that saves most; B saves most in every case but bash-pre under a hold, and the remaining saving is not dropped but filed as further performance work, consistent with FR-013 and the GM's 2026-11-20 priority."
+    },
+    {
+     "id": "T508-D4",
+     "summary": "No prefix read: the key is searched in the whole file because sorted keys put plan_holds/plan_snaps after the bulk (byte 1,999,829 of 2,618,222).",
+     "class": "within",
+     "why": "A correctness choice that keeps every verdict; unchanged from the block's earlier CLEAR text."
+    },
+    {
+     "id": "T508-D5",
+     "summary": "Every verdict unchanged: differential over five state copies at 71 to 95 chunk sizes, 0 differing; crate test on 27 fixtures (6 non-UTF-8) at every chunk size; timing runs show one distinct output per case.",
+     "class": "within",
+     "why": "Verification that enforces the brief's keep-every-verdict constraint; serves the request."
+    },
+    {
+     "id": "T508-other-readers",
+     "summary": "A grep of the guards for checks-open.json, state_path and calls into checks:: finds no other hot-path reader that reads the whole state for one key; search space stated.",
+     "class": "within",
+     "why": "A census with its search space and method named; it decides nothing beyond scope of this task and leaves nothing a defect."
+    },
+    {
+     "id": "T508-order-and-found-left",
+     "summary": "Order: after T507, before T509 and T302. Under a hold the stream reads the whole file and handle reads it again (0.45 to 0.83 ms against C); not fixed here, filed as T509, lands before T302.",
+     "class": "within",
+     "why": "The double read is time, not a wrong outcome, so it is not a defect deferral; it is filed as performance work ordered ahead of the next task, which is what the GM's performance-first rule asks. The earlier text left it unfiled; filing it widens, not narrows, what is done."
+    },
+    {
+     "id": "T508-approach-checklist",
+     "summary": "Checklist part A: goal, constraints, sources, exits (green: differential 0 and CPU down; red: recorded and ruled via arbiter-ask), one landing, done measured (PreToolUse 7.29/6.98 to 3.32/3.46 ms, PostToolUse 5.72/5.90 to 3.42/3.43), CHUNK a GUESS knob, not a defect.",
+     "class": "within",
+     "why": "Restates the task's brief and measured outcome; no clause of the request is narrowed."
     }
    ]
   }

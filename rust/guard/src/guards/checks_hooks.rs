@@ -22,11 +22,10 @@ pub const GUARD: Guard = Guard {
 const AFTER_TOOLS: [&str; 4] = ["Bash", "Write", "Edit", "MultiEdit"];
 
 /// Whether the call's check state holds a snapshot: read at the call's `cwd`, or where it names none at `handle`'s (451 T123: a test
-/// build's no tree, so no test's call reads a live clone's state).
+/// build's no tree, so no test's call reads a live clone's state). Streamed to the key, not read whole: this runs on every Bash call
+/// (451 T508, `checks::scan`).
 fn state_holds_snaps(input: &Value) -> bool {
-    checks::state_path(&handle::cwd_of(input))
-        .and_then(|p| std::fs::read_to_string(p).ok())
-        .is_some_and(|s| s.contains("\"plan_snaps\""))
+    checks::state_path(&handle::cwd_of(input)).is_some_and(|p| checks::scan::snaps(&p))
 }
 
 fn decide(event: &Event, _session: &Session) -> Vec<Answer> {

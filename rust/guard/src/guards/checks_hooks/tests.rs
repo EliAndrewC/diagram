@@ -65,6 +65,22 @@ fn a_call_with_no_cwd_reads_only_the_tree_its_test_names() {
     assert!(plan.contains("before"), "{plan}");
 }
 
+/// A state that is not UTF-8 holds no snapshot, as the whole-string read found (451 T508): a stream that skipped the check let
+/// `handle` run on it, and its empty reading was written over the file's bytes.
+#[test]
+fn a_state_that_is_not_utf8_is_left_as_it_is() {
+    let root = clone_at("not-utf8");
+    let path = root.join(".git/checks-open.json");
+    let mut planted = b"{\"feature\": \"\xff\", ".to_vec();
+    planted.extend_from_slice(br#""plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 1.0, "state": "running", "aid": "ag"}}, "plan_snaps": {"e": {"h": ["x"]}}}"#);
+    std::fs::write(&path, &planted).unwrap();
+    let got = run(
+        "PostToolUse",
+        &json!({"cwd": root, "tool_name": "Bash", "tool_use_id": "e", "tool_input": {}}),
+    );
+    assert!(got.is_empty() && std::fs::read(&path).unwrap() == planted);
+}
+
 #[test]
 fn a_write_back_is_refused_on_the_post_call() {
     let root = clone_at("after");

@@ -29,22 +29,11 @@ fn found(pattern: &Regex, text: &str) -> bool {
     pattern.is_match(text).unwrap_or(false)
 }
 
-/// `plan_holds` non-empty, as `hm_checks._handle` asks (the key stays, empty, after every hold; a snapshot's copy of this text is escaped, so it does not match). A scan, not a
-/// pattern: the state file can be large, and this runs on every Bash call.
-fn holds_text(state: &str) -> bool {
-    state
-        .split_once("\"plan_holds\":")
-        .is_some_and(|(_, rest)| {
-            rest.trim_start()
-                .strip_prefix('{')
-                .is_some_and(|inner| !inner.trim_start().starts_with('}'))
-        })
-}
-
-/// Whether a plan review holds text now (`checks-hooks.sh after` asks the same of the same file); with no repository there is no state, so no hold.
+/// Whether a plan review holds text now: `plan_holds` non-empty, as `hm_checks._handle` asks (a snapshot's copy of the key is escaped, so
+/// it does not match); with no repository there is no state, so no hold. The state streamed to its key, not read whole: this runs on
+/// every Bash call (451 T508, `checks::scan`).
 fn holding(from: &Path) -> bool {
-    checks::state_path(&from.to_string_lossy())
-        .is_some_and(|p| std::fs::read_to_string(p).is_ok_and(|s| holds_text(&s)))
+    checks::state_path(&from.to_string_lossy()).is_some_and(|p| checks::scan::holds(&p))
 }
 
 /// `pretool-bash` or `pretool`, or None for a call that cannot concern the guard.

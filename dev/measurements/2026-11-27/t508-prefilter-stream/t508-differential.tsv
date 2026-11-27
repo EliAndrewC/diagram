@@ -1,0 +1,6 @@
+copy.json	2618222 bytes	plan_holds at 1999829	plan_snaps at 0	old holds false snaps false	file holds false snaps false	83 chunk sizes
+hold-ended.json	2618386 bytes	plan_holds at 1999800	plan_snaps at 1999819	old holds false snaps true	file holds false snaps true	95 chunk sizes
+hold.json	2618641 bytes	plan_holds at 1999800	plan_snaps at 2000074	old holds true snaps true	file holds true snaps true	95 chunk sizes
+no-key.json	2618203 bytes	plan_holds at 0	plan_snaps at 0	old holds false snaps false	file holds false snaps false	71 chunk sizes
+nohold.json	2618222 bytes	plan_holds at 1999829	plan_snaps at 0	old holds false snaps false	file holds false snaps false	83 chunk sizes
+differing 0
