@@ -41,8 +41,10 @@ fn a_start_is_undone_and_the_log_s_pair_reads_as_no_start() {
     );
     // started a second time in this tree: one mark, two rows - and the open task holds this tree's landings
     assert_eq!(start(&words(&["9001", "T01"]), &root, &env).code, 0);
+    // the landing's ticks handed in as none: `holding` reads a `make land`'s `L7R_LAND_TICKS` from the process (451 T143: these two
+    // tests red with `L7R_LAND_TICKS=T01` exported, measured 2026-11-27)
     let holds_it = || {
-        let all = l7r_shared::speckit::holding(&root.join("specs/9001-x")).unwrap();
+        let all = l7r_shared::speckit::holding_with(&root.join("specs/9001-x"), "").unwrap();
         all.iter().any(|h| h.starts_with("T01 "))
     };
     assert!(holds_it());
@@ -205,7 +207,7 @@ fn a_task_started_in_two_trees_keeps_each_tree_s_mark() {
     let first = vec![theirs.clone()];
     assert_eq!(holders(&common, "T01"), (first.clone(), first));
     let holds = |tree: &std::path::Path| {
-        let all = l7r_shared::speckit::holding(&tree.join("specs/9001-x")).unwrap();
+        let all = l7r_shared::speckit::holding_with(&tree.join("specs/9001-x"), "").unwrap();
         all.iter()
             .any(|h| h.starts_with("T01 ") && h.contains("<- the active task"))
     };

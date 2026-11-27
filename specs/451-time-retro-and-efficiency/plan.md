@@ -1622,31 +1622,41 @@ engine speed, so no checklist.
 <!-- plan-archive: T142 to T142 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T141 to T141 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 
-### T143 (<why: the finding or measurement that files it>)
+### T143 (found by 451 T94, measured 2026-11-22: the task crate's `task_add` tests read `QUICK_OK` from the process, 3 red with it exported, and three crates' tests wrote rows into the live guard log, which `make audit` counts as real; re-checked 2026-11-27 against the code after 451 T309 and T312)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each named site re-measured first on today's code, by running its crate's tests with the variable exported, or with `HOME` an empty scratch directory (`RUSTUP_HOME`, `CARGO_HOME`, `CARGO_TARGET_DIR` and `L7R_BUILD_SLOT_DIR` the account's own, T312's method) and listing what was written under it; then each still present fixed in its tests alone, no production line changed.
+  - **What is gone since the line was written**, observed 2026-11-27, method: the empty-`HOME` run of the arbiter and cohort crates on the old code, and the live log read by guard and date. The arbiter crate's `checks_door close_answers_its_usage_and_its_verdict` writes nothing outside its own log (451 T309's `quiet_log`): 43 of 43 passed, no row under the scratch `HOME`; its `check-closed` rows on the live log (2,230, "nothing to close here") stop at 2026-11-26. The task crate's quick-red rows no longer reach the live log (451 T312: `quick_repo` builds on `repo`, which sets the crate's census first); the live log's 10 such rows are of 2026-11-20 and 21.
+  - **`QUICK_OK`, still present**, measured 2026-11-27 (`QUICK_OK="an exported escape reason" scripts/gates/l7r-gate.sh rust test --crate rust/gate/crates/task`, the old code): 130 passed, 3 failed - `a_line_quick_refuses_is_withdrawn_and_a_clean_line_stays`, `a_refused_line_is_withdrawn_and_another_writer_s_lines_stay`, `an_earlier_red_check_does_not_hide_the_line_s_own`, each at its first refusal, which the exported reason turned into a taken escape. The fix: `task_add/tests.rs` calls a local `cli` that is `cli_with` over an environment naming nothing (`env_of(&[])`), so none of its 30 calls reads the process, observed 2026-11-27, method: `grep -c` of ` cli(` in the file, less the wrapper's own line; a test that wants a variable names it to `cli_with`, as the lock-wait and quick tests already did. The production `task_add::cli` line is still reached by the crate dispatch's usage test (`crate::cli("task-add", ...)`).
+  - **`L7R_LAND_TICKS`, the same class, found here**, measured 2026-11-27 (each of the crate's escape variables exported alone, then together; red only with `L7R_LAND_TICKS=T01`): 131 passed, 2 failed - `task_unstart`'s `a_start_is_undone_and_the_log_s_pair_reads_as_no_start` and `a_task_started_in_two_trees_keeps_each_tree_s_mark`, whose `holds_it` asked `shared::speckit::holding`, which reads a `make land`'s ticks from the process in a gate crate's build. They now ask `holding_with(.., "")`, the ticks handed in as none. Shown red with the variable exported only: whether a real landing's gate runs these tests under a tick of `T01` was not measured. Fixed here.
+  - **The cohort crate, still present**, measured 2026-11-27 (the empty-`HOME` run, old code): 71 of 71 passed and two `sync-with-main` `closing-owes` rows written under the scratch `HOME`'s `.claude/guard-log`, one process - `a_closing_refusal_ends_the_run` and `a_run_of_every_row_says_each_refusal_and_keeps_what_passed` (its rows hold `CLOSING` since 451 T307 part 2), so 2 rows a run where the line counted 1. The fix: the push tests' `repo()`, which every push fixture builds on, first calls `quiet_log()`, which sets `GUARD_LOG_DIR` to the process's own `beside_binary("gate-cohort-log")` once. `a_closing_refusal_ends_the_run` now pins it: the log `l7r_shared::log::dir()` names is not under `HOME` and holds the closing row. Red first, measured 2026-11-27 (the scratch `HOME`, the pin without `quiet_log`): 70 passed, 1 failed, at the `HOME` assertion.
+  - **DECISION, the cohort crate's log is set once a process, as 451 T312 decided for the land, plan and task crates** (label: tooling convention; the brief's "no process-wide `set_var`" is for an escape variable a test reads). The value is what the closing row's `log_write` reads and what a script a test spawns inherits; the `OnceLock` sets one value before any fixture, and the empty-`HOME` run after the fix found no row that escaped it. T312's evidence and reasoning carry over unchanged.
+  - **The rows already on the live log**, measured 2026-11-27 (read-only over `~/.claude/guard-log`, 126,774 rows, 2026-08-30 to 11-27, by guard, rule, detail and date; `l7r-gate measure audit guards` for the rates). `make audit` cannot tell a fixture's row by any field: its session is `unknown` and its `cwd` and `transcript` empty, as every row a gate tool writes outside a hook - real `claims-gate`, `review-gate` and `plan-gate` escapes among them - and no row names its tree. Content tells some classes apart, measured 2026-11-27 (the same read): `checks` `check-closed` "nothing to close here", 2,230 rows (2026-11-10 to 11-26); `plan-gate` rows naming a feature with no `specs/` directory (`449-x`, `600-x`, `444-x`), 982 blocked and 15 escaped (to 2026-11-22); `task-add` `quick-red`, 10. The `sync-with-main` `closing-owes` rows, 1,015 (2026-10-25 to 11-27, 25 of them on 11-27 alone), are a real refusal's row byte for byte. The plan gate's escape rate reads 48% today with the fixture-slug rows and 69.1% without (1,560 escaped of 2,259), measured 2026-11-27 (`l7r-gate measure audit guards`, and the same read less those rows). `audit.rs` is left as it is and the live log untouched: Not fixed here: no field marks a fixture's row, and setting the classes apart by their content is a classifier of its own in the measure crate, past this fix's size. Filed as T444; lands before T22.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the `task_add` tests read no session's `QUICK_OK` | the `task_add` tests named above, red with `QUICK_OK` exported without the local `cli` | n/a: tooling | none | n/a |
+| the `task_unstart` tests read no landing's ticks | the `task_unstart` tests named above, red with `L7R_LAND_TICKS=T01` exported without `holding_with` | n/a: tooling | none | n/a |
+| the cohort tests write no live guard log | `a_closing_refusal_ends_the_run`, red under the scratch `HOME` without `quiet_log` | n/a: tooling | none | n/a |
 
 ### T143 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No test of the task, cohort or arbiter crate reads a session's escape or a landing's export, or writes a row into the live guard log, so `make audit`'s escape rates count the sessions' own firings.
+2. **The constraints.** 100% line coverage from each crate's own tests; 451 T94, T207, T309 and T312 (a test's guard log is never the live one; T312's DECISION on `GUARD_LOG_DIR`); no production behavior changed; the live log never edited.
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-27. O: the exported-variable runs, the empty-`HOME` runs and the live log's read above.
+4. **Do they describe the world here?** In part: the arbiter's and the quick test's writes were gone (T309, T312); `QUICK_OK` and the cohort writes were real; a dependence the line did not name, `L7R_LAND_TICKS`, was too (two red).
+5. **The order.** After 451 T312, whose census and `quiet_census` it builds on.
+6. **The exits.** Green: `make builder-checks` over the task and cohort crates green, those and the arbiter crate green with every escape variable exported, and nothing written under an empty `HOME`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27, after the fix: under an empty `HOME` the arbiter 43 of 43, cohort 71 of 71 and task 133 of 133 passed and no `.claude/` was written (only T440's run lock and kept results under `.cache`); with `QUICK_OK`, `L7R_LAND_TICKS=T01`, `CLOSE_OK`, `HOLD_OK`, `PERF_LATER_OK`, `PLAN_REVIEW_OK`, `SET_DOWN_OK` and `TICK_NOTE` exported, the same 43, 71 and 133 passed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: tests whose verdict turns on a session's exports (five red), and tests that wrote fixture rows into the log `make audit` reads (two a cohort run), which moved the plan gate's audited escape rate. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The fixture rows already on the live guard log: `make audit` counts them, and only some classes can be told apart by content (the figures above), observed 2026-11-27, method: the live log read by guard, rule, detail and date. Not fixed here: no field marks a fixture's row, and a content classifier is a measure-crate change past this fix's size. Filed as T444; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - test isolation, a defect.
 
 
 ### T144 (<why: the finding or measurement that files it>)
@@ -4537,42 +4547,49 @@ Built here: T421 - an open performance task the queue has no line for
 <!-- plan-archive: T339 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T340 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T342 (<why: the finding or measurement that files it>)
+### T342 (found by 451 T315, measured 2026-11-26 in the pool tree diagram-backlog-t269: the checks' tool takes a crate and nothing narrower, so every run of `rust/gate/crates/land` starts 4,177 processes for 21 s of processor time, where its tests filtered to one module took 0.8 to 1.4 s; the line asks for a filtered run measured beside working builders first, then the build if it holds)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no source changed. Its record is `dev/measurements/2026-11-27/test-selection/results.md`, measured 2026-11-27 read-only from the clone's event log, the memory sampler's samples, the gate's run records, the landing logs and the builders' transcripts, plus one `make rust-test` of `rust/gate/crates/land` and 24 direct runs of its test binary in the pool tree `diagram-backlog-t271` beside the other builders (no load generator, feature 460).
+  - **Every first-tier test phase in the pool trees**, measured 2026-11-27 (the record's section 1, `runs.py` over the `Phase` lines with `step: test` and `make` `rust-test` or `builder-checks` in the four pool trees, from 2026-11-26T17:19Z to 11-27T04:54Z, 11.6 h, each run's load the highest `load1` within 15 s, 22 cores): 676 runs (476 `rust-test`, 197 `builder-checks`, 3 hung). The 673 not hung spent 3,156 s of test wall (2,303 s `rust-test`, 853 s `builder-checks`), median 2.3 s and 90th centile 8.8 s, measured 2026-11-27 (the same lines). At `load1` 44 and over, 54 runs had a median of 7.92 s and a 90th centile of 24.8 s, measured 2026-11-27 (the same lines).
+  - **The share of a crate's tests a real diff reaches**, measured 2026-11-27 (the record's section 2, `share.py` over five landed builder commits, nine crate diffs, tests counted by `#[test]` in the touched top modules): mean 14% by module. A file at the crate's root reaches every module, so 3 of the 9 run the whole crate, 41% with those, measured 2026-11-27 (the same count).
+  - **A filtered run timed loaded**, measured 2026-11-27 (the record's section 3, the land test binary run directly, unfiltered, `land::carry` and `land::writers` alternated, 8 rounds, `/usr/bin/time`, the load read from `/proc/loadavg` before each): at `load1` 34 the whole crate's 155 tests took 9.16, 1.87 and 2.02 s of wall and 22.8 to 24.6 s of processor, `land::carry`'s 39 tests 0.62 to 0.92 s and 5.0 to 5.7 s, `land::writers`'s 9 tests 0.17 to 0.28 s and 0.7 to 0.8 s. The processor share follows the test-count share, and the `make rust-test` run's build phase was 77 s against a 7.3 s test phase, so the saving is in the test phase alone, measured 2026-11-27 (the same runs).
+  - **The estimate**, measured 2026-11-27 (the record's section 4, `estimate.py`, saved = wall - max(0.25 s, r x wall), r 0.46 LOW and 0.15 HIGH, the LOW bound counting 3 of 9 diffs as saving nothing): filtering the iteration `rust-test` runs alone, builder-checks staying the whole crate, saves 828 to 1,942 s - 13.8 to 32.4 builder-minutes in the 11.6 h window, summed over four trees, not the session's wall and not scaled to a day. The median run saves 0.8 to 1.8 s, measured 2026-11-27 (the same estimate). The record says it leans high (it counts runs of a crate its builder was not changing).
+  - **The risk**, measured 2026-11-27 (the record's section 5, the gate's run records and the builders' transcripts): of 13 red batch gates from 2026-11-26T17:00Z (17 red `make done` runs on 2026-11-26/27 in the run records, each classed by the repair that followed), none was a builder's change breaking a test in another module; of 33 builders whose transcripts hold a failing Rust test, none saw one only in a module of a changed crate it had not touched (75 IN, 5 OUT, the 5 explained by a no-write measurement and an edit the event log missed). Both are floors while builders run the whole crate.
+  - **The finding**: the lever holds - the lowest bound, 13.8 minutes in 11.6 h, measured 2026-11-27 (the record's section 4), is well over a minute a day. **Its build is filed as T435** (`make rust-test CRATE=<dir> ONLY=<module filter>`, the result never kept as the crate's green, its Phase line marked; builder-checks the whole crate at a builder's end, said in `scripts/container/builder-brief.md`), apart from this measurement so the two are two builders.
+  - **DECISION, builder-checks stays the whole crate; filtering it too is declined** (label: tooling convention; the record's verdict). Filtering `builder-checks` as well would add 5.1 to 12.0 minutes in the window, measured 2026-11-27 (the record's section 4), but move the whole crate's run to the batch gate, where today's exposure is 0 cross-module reds of 13; its risk is measured only as floors (0 of 33 red builders, 0 of 13 red gates) while builders run the whole crate. What would reopen it: a re-measure under T435's selection that still shows no builder's change breaking another module's test.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the test phases, the diff shares, the loaded timings and the estimate recorded | n/a: a measurement, no code (`dev/measurements/2026-11-27/test-selection/results.md`) | n/a: tooling | none | n/a |
 
 ### T342 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder knows, with figures, whether running only the tests its change reaches while it iterates would save builder time on a loaded machine, and the build, if it pays, is filed.
+2. **The constraints.** 451 FR-013 (performance work first, measured before built); feature 460 (no load generator: measured beside working builders); `scripts/container/builder-brief.md`'s two tiers (builder-checks the whole crate at a builder's end); the line's own clause that a part of a suite is no green for the crate.
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting a measurement task as performance work. O: the record's five sections, measured 2026-11-27.
+4. **Do they describe the world here?** Yes: 476 real `rust-test` runs over 11.6 h, nine real crate diffs and 24 loaded runs beside the other builders, measured 2026-11-27 (the record's sections 1 to 3).
+5. **The order.** Before T435, its build.
+6. **The exits.** Green: the record written and the build filed (T435). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-27: the record holds the four estimates and the two risk floors; T435 is filed with its figures.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: a measurement, no defect, no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together (403 s and 600 s in T285's tree, 510 s in T292's, 2026-11-26), more builder wall than this lever's whole estimate, observed 2026-11-27, method: the `Phase` lines of the clone's event log (the record's section 1). Not fixed here: a measurement task, and which test hung in each is not yet known (the pipe-hold class T364 names is a likely cause, unchecked). Filed as T445; lands before T435.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
 
 ### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** The builders' first-tier test phases: 3,156 s of test wall over 673 pool runs in 11.6 h, 2,303 s of it `rust-test` while iterating, measured 2026-11-27 (the record's section 1), a whole crate's run where a change reaches 14% of its tests by module, measured 2026-11-27 (the record's section 2).
+2. **Removes work, or only moves it?** Removes it: the tests a change cannot reach are not run while iterating; the whole crate still runs once at the builder's end.
+3. **What do you expect it to save, and why?** 13.8 to 32.4 builder-minutes in the 11.6 h window, measured 2026-11-27 (the record's section 4, r 0.46 to 0.15 of a run's wall, a 0.25 s floor).
+4. **How does the work grow with the settlement?** n/a: tooling, no settlement; it grows with the number of builder test runs.
+5. **What did the before and after show, and under what conditions?** No after: nothing is built here. The loaded timings at `load1` 34 and 7 to 10, measured 2026-11-27 (the record's section 3): the land crate whole 1.68 to 9.16 s, `land::carry` 0.54 to 0.92 s, `land::writers` 0.17 to 0.28 s.
+6. **Did any map move, and does it still keep the research?** No map moves: tooling only.
 
 
 <!-- plan-archive: T347 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -6778,4 +6795,68 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T444 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T444 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T445 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T445 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

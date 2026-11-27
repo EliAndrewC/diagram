@@ -4,8 +4,14 @@
 use l7r_gate_core::ci::fixtures::put;
 use l7r_gate_plan::plan::template::TEMPLATE;
 
-use super::{cli, lacks_red_exit, next_id, Insert};
-use crate::tests::{repo, root_of};
+use super::{lacks_red_exit, next_id, Insert};
+use crate::tests::{env_of, repo, root_of};
+
+/// [`super::cli`] with an environment of its own that names nothing (451 T143): `QUICK_OK` exported by a session turned three of
+/// these tests red, measured 2026-11-27 (130 passed, 3 failed). A test that wants a variable names it to `cli_with`.
+fn cli(words: &[String], cwd: &std::path::Path, title: &str) -> crate::Reply {
+    super::cli_with(words, cwd, title, &env_of(&[]))
+}
 
 /// The test's files committed and pushed, so `main` and `origin/main` hold the ids its tree does (451 T255 reads both).
 fn landed(root: &std::path::Path) {

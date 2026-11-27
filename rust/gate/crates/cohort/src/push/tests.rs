@@ -22,11 +22,23 @@ fn git(repo: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
+/// The guard log of these tests, never the live one (451 T143): one directory for the process, set once before any fixture, as the
+/// arbiter, land, plan and task crates' tests set theirs - a value the closing row's `log_write` and any script a test spawns both read.
+fn quiet_log() {
+    static DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+    DIR.get_or_init(|| {
+        let dir = l7r_shared::tempdir::beside_binary("gate-cohort-log");
+        std::env::set_var("GUARD_LOG_DIR", &dir);
+        dir
+    });
+}
+
 /// A clone at its first commit with `origin/main` there, written by `crate::fixture::built`. The ref is set where it was pushed to a bare
 /// origin and fetched back (the push reads only `origin/main`), and the history written in one `git fast-import` where `git init`, an
 /// add, a commit, a push and a fetch started git a dozen times, most of a test's time against FR-008's tenth of a second (feature 449
 /// T167).
 fn repo() -> l7r_shared::tempdir::Held<PathBuf> {
+    quiet_log();
     let (dir, _) = crate::fixture::built(
         "push",
         &[&[("scripts/g.sh", "gate\n"), ("l7r/a.py", "x = 1\n")]],
@@ -365,6 +377,8 @@ fn a_passed_rust_self_test_is_kept_until_the_binary_or_the_scripts_change() {
     assert!(binary_id(&root.join("no-binary")).is_none());
 }
 
+/// The closing row's refusal ends the run, and its guard-log row lands in the crate's scratch log, never under `$HOME` (451 T143: this
+/// test and the every-row run wrote two `closing-owes` rows into `~/.claude/guard-log` a run, measured 2026-11-27 under an empty HOME).
 #[test]
 fn a_closing_refusal_ends_the_run() {
     let root = tree();
@@ -372,6 +386,15 @@ fn a_closing_refusal_ends_the_run() {
         run_checks(&tools(&root, true), &[CLOSING], &root, &[]).code,
         1
     );
+    let dir = l7r_shared::log::dir();
+    let home = std::env::var("HOME").unwrap_or_default();
+    let outside = home.is_empty() || !dir.starts_with(&home);
+    assert!(outside, "{}", dir.display());
+    let rows = std::fs::read_dir(&dir).into_iter().flatten().flatten();
+    let texts: Vec<String> = rows
+        .map(|e| std::fs::read_to_string(e.path()).unwrap_or_default())
+        .collect();
+    assert!(texts.iter().any(|t| t.contains("closing-owes")));
 }
 
 #[test]

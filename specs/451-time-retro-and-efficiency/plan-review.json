@@ -511,16 +511,10 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T143 (<why: the finding or measurement that files it>)": {
-   "sha256": "8077afe88a911c90537da7570d0852285ab245ced673b40e5e2af32893a59188",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T143 Approach (checklist part A)": {
-   "sha256": "e4b8092c7c92f4b990a19bb494d6457c3b72d3952794a508752733706fb1f202",
+   "sha256": "f763897a674485ceba16464d33622687e878f1e29a1c0be2f14ac518b6f1ae48",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
+   "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T144 (<why: the finding or measurement that files it>)": {
@@ -2899,20 +2893,14 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T342 (<why: the finding or measurement that files it>)": {
-   "sha256": "9029210bb5e1c5e6c682054c9cc3e4e11845c4fc54d58efd0ebf3b1cd7d08fbd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T342 Approach (checklist part A)": {
-   "sha256": "056a3cdc114d9f460d639cb62c84629dd7a46cb4f51b0c995ecc30460802a805",
+   "sha256": "2bef83ed7cee3acb588a2e04ca4a43286816af1873b4f5dfdfc20b628e48dc21",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "e35499a72a8a628061b65a20e395663fc5bb3e9a4bfd9bdb88aa6521c09d903f",
+   "sha256": "668e35345c06828b8483f6f8dcc1213acce3ed4110197cd6c1c79005373bf5b4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3879,6 +3867,48 @@
   },
   "### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was \"not ticked\" rather than while its line was open)": {
    "sha256": "4c32b3554affb8df78deaa9f0af4516be72a5c90978fd7686837504369e25f08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T143 (found by 451 T94, measured 2026-11-22: the task crate's `task_add` tests read `QUICK_OK` from the process, 3 red with it exported, and three crates' tests wrote rows into the live guard log, which `make audit` counts as real; re-checked 2026-11-27 against the code after 451 T309 and T312)": {
+   "sha256": "e6e5d4ea6d6b8aa2d9c4e876c400d8fb8e143fc8ccf164807fcfd325b7f0dda6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 (found by 451 T315, measured 2026-11-26 in the pool tree diagram-backlog-t269: the checks' tool takes a crate and nothing narrower, so every run of `rust/gate/crates/land` starts 4,177 processes for 21 s of processor time, where its tests filtered to one module took 0.8 to 1.4 s; the line asks for a filtered run measured beside working builders first, then the build if it holds)": {
+   "sha256": "537c13b18f10c69034cef1035b6bd1f3133c7f8d3777d807915d208d9128a47e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T444 (<why: the finding or measurement that files it>)": {
+   "sha256": "bcb9041052c95b45f876167c8960d76ca2589393eb758ebb8691c61ff79e434e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T444 Approach (checklist part A)": {
+   "sha256": "269f8497271f5b380483f05e39eeaaba2acb4a93cb4c2b7d0cbda4db7920ac72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 (<why: the finding or measurement that files it>)": {
+   "sha256": "79f663ec0c9e3ed86577b154403e07bd0fd63d7f107dc3f8de98f162f4c4c86c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 Approach (checklist part A)": {
+   "sha256": "1cb4c8623c4ce4171ad1f7416b74313882d1f117736d6e27ed1d3e935b60275a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "e32dad641e72571188c9a51de6fbfae905756d9496048624bfc6c2ce6b662917",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34976,6 +35006,80 @@
      "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
      "class": "within",
      "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T143 (found by 451 T94, measured 2026-11-22: the task crate's `task_add` tests read `QUICK_OK` from the process, 3 red with it exported, and three crates' tests wrote rows into the live guard log, which `make audit` counts as real; re-checked 2026-11-27 against the code after 451 T309 and T312)",
+    "### T143 Approach (checklist part A)",
+    "### T342 (found by 451 T315, measured 2026-11-26 in the pool tree diagram-backlog-t269: the checks' tool takes a crate and nothing narrower, so every run of `rust/gate/crates/land` starts 4,177 processes for 21 s of processor time, where its tests filtered to one module took 0.8 to 1.4 s; the line asks for a filtered run measured beside working builders first, then the build if it holds)",
+    "### T342 Approach (checklist part A)",
+    "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T444 (<why: the finding or measurement that files it>)",
+    "### T444 Approach (checklist part A)",
+    "### T445 (<why: the finding or measurement that files it>)",
+    "### T445 Approach (checklist part A)",
+    "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T143 (<why: the finding or measurement that files it>)",
+    "(removed) ### T342 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T143-QUICK_OK",
+     "summary": "task_add tests call a local cli = cli_with over an empty environment, so none of their 30 calls reads the process's QUICK_OK; a test wanting a variable names it to cli_with; no production line changed",
+     "class": "within",
+     "why": "Fixes the found defect (three tests whose verdict turns on a session's export) in the tests alone, the T143 line's own aim; re-measured red first on today's code."
+    },
+    {
+     "id": "T143-L7R_LAND_TICKS",
+     "summary": "Two task_unstart tests found red with L7R_LAND_TICKS=T01 exported; holds_it now asks holding_with(.., \"\") - fixed here",
+     "class": "within",
+     "why": "Same class of defect found while fixing; fixing it in the task is the fix-as-we-go default, not added scope."
+    },
+    {
+     "id": "T143-cohort-quiet_log",
+     "summary": "Cohort push tests' repo() calls quiet_log(), a OnceLock that sets GUARD_LOG_DIR once a process to a log beside the binary, as T312 did for land/plan/task; a_closing_refusal_ends_the_run pins that the log is not under HOME",
+     "class": "within",
+     "why": "Test-isolation mechanism following an earlier accepted convention (T312); the 'no process-wide set_var' it departs from is the coordinating session's brief for escape variables, not the GM's words; the pin only fails when the requested isolation is absent."
+    },
+    {
+     "id": "T143-arbiter-and-quick-rows-gone",
+     "summary": "Arbiter crate's check-closed writes and task crate's quick-red live-log writes already gone (T309, T312), shown by empty-HOME runs; nothing changed for them",
+     "class": "within",
+     "why": "Measured on today's code rather than assumed; nothing left to fix."
+    },
+    {
+     "id": "T143-live-log-left-T444",
+     "summary": "Fixture rows already on the live guard log left in place, audit.rs unchanged; a content classifier for make audit filed as T444, lands before T22",
+     "class": "within",
+     "why": "Not editing the live record is a constraint (the audit reads real history); the remaining effect on make audit's rates is a known defect deferred in the spec's own D15/FR-009 form (reason, open task id, order), not left unfixed and not a carve-out from anything the GM asked for in this task. The block measures the distortion (48% vs 69.1%) so T444 starts from figures."
+    },
+    {
+     "id": "T342-measurement-only-build-T435",
+     "summary": "T342 is a measurement with no source change; the filtered-iteration build is filed as its own task T435 (make rust-test CRATE= ONLY=, never kept as the crate's green)",
+     "class": "within",
+     "why": "The line asks for a measurement beside working builders first and the build if it holds; it held, and the build is filed. Measurement counts as performance work (the GM 2026-11-20); splitting measurement and build into two builders narrows nothing."
+    },
+    {
+     "id": "T342-builder-checks-stays-whole",
+     "summary": "Filtering builder-checks too is declined (5.1-12.0 min more in the window) because it would move the whole-crate run to the batch gate; reopen condition stated",
+     "class": "within",
+     "why": "Nothing the GM said or the line asked requires filtering builder-checks; keeping it whole preserves the two-tier shape of builder-brief.md. It is a declined option with its logic, measurement and falsifier recorded, as the GM asked declined decisions be recorded (2026-11-25)."
+    },
+    {
+     "id": "T342-hung-rustc-T445",
+     "summary": "Three hung rustc-crate pool test runs (1,514 s) deferred to T445, lands before T435",
+     "class": "within",
+     "why": "A tool hanging is a defect; deferred in D15 form with reason (measurement task, hanging test not yet identified), an open task and an order ahead of the build it would most distort."
+    },
+    {
+     "id": "T444-T445-templates",
+     "summary": "New template sections for T444 and T445; the old T143/T342 template headings removed as their sections were filled",
+     "class": "within",
+     "why": "Placeholders decide nothing; the removals are the headings replaced by real sections."
     }
    ]
   }
