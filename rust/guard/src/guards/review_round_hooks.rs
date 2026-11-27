@@ -441,11 +441,19 @@ pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
             .and_then(Value::as_array)
             .is_some_and(|b| b.iter().filter_map(Value::as_str).any(|s| hit(&head, s)))
     };
+    // a round of the task's unfilled stub (its first heading `### <task> (<why: ...>)`, `make task-add`'s) is no round of a section:
+    // the count stops there as at a CLEAR (451 T462: T448's stub rode in other tasks' bundles and its BLOCKED rounds tripped its cap)
+    let stub = format!("### {task} {}", l7r_shared::plan_text::STUB_TITLE);
+    let unwritten = |r: &&Value| {
+        r.get("blocks")
+            .and_then(Value::as_array)
+            .is_some_and(|b| b.iter().any(|s| s.as_str() == Some(stub.as_str())))
+    };
     let n = reviews
         .iter()
         .rev()
         .filter(names)
-        .take_while(|r| field(r, "verdict") != "CLEAR")
+        .take_while(|r| field(r, "verdict") != "CLEAR" && !unwritten(r))
         .count();
     u64::try_from(n).unwrap_or(0)
 }

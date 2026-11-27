@@ -101,6 +101,11 @@ fn section_spans(plan: &str) -> Vec<(String, Vec<(usize, usize)>)> {
     mentioned
 }
 
+/// The title after the id of the first heading `make task-add` writes in a task's unfilled section (`plan::template::TEMPLATE`, whose
+/// test pins this copy): a heading `### <task> STUB_TITLE` stands only in a section nobody has written. The review-round guard reads it
+/// to count no round of a stub (451 T462).
+pub const STUB_TITLE: &str = "(<why: the finding or measurement that files it>)";
+
 /// The task id a title opens with, if it opens with one.
 #[must_use]
 pub fn leading_task(title: &str) -> Option<&str> {

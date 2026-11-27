@@ -7763,31 +7763,36 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T462 (<why: the finding or measurement that files it>)
+### T462 (the round arbiter's process-fault on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27T08:00Z: a blank task stub counted plan-review rounds)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a task section whose every own block is still a block of the `make task-add` template byte for byte (`plan::template::stub_block`, the one stub test) is UNWRITTEN (`plan::status::unwritten`; a bundle's heading is no stub, and one block written makes the whole section written). Three places read it. (1) `make plan-delta`'s keys drop an unwritten section's blocks (`status::written_only`, in `plan.rs`'s `plan_delta`, after the BLOCKED keys are merged in, since T448's stub kept riding because a BLOCKED bundle verdict named it), so the bundle, its `blocks-<tasks>` name and the round the review-round guard counts from that name all leave it out; the feature-wide judgment (`judge_held` with no scope) drops it too, so `plan owed` and `plan-delta` agree, while a scoped judgment keeps its tasks' stubs owed - the tick of the stub's own task still owes it (and the approach gate refuses its `<...>` answers anyway). (2) The guard's round counter (`review_round_hooks::plan_rounds`) stops at a review row that names the task's stub first heading, `### <task> (<why: ...>)`, as it stops at a CLEAR: a stub-era round is no round of the section, so a section filled after riding in bundles counts from zero. The title is one copy, `l7r_shared::plan_text::STUB_TITLE`, pinned to the template by `template.rs`'s test. (3) The arbiter's accept or process-fault on a plan round records no verdict for a named task whose section is unwritten (`record::split_unwritten`; `Accepted.unwritten`), and `make arbiter-ruled` says `no verdict recorded - <task>'s section is still the make task-add template ... owes its first plan review once written`. Measured 2026-11-27 on `specs/451-time-retro-and-efficiency/plan-review.json` (a script over `block_reviews`, the guard's own count rule): T446, T447, T448, T450 and T452-T455 count 0 trailing rounds, T451 counts 1 - a stub-era round that, on the old counter, would have made its first real BLOCKED round its second and tripped the cap a round early.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| plan-delta and the whole-plan judgment drop an unwritten section | `tests/stub.rs` `a_blank_stub_rides_in_no_bundle_until_its_text_differs`, `a_stub_beside_a_written_block_of_its_own_is_written_...` | new | none (no engine code) | `make arbiter-ask` |
+| the round counter stops at a stub-era row | guard test `a_blank_stub_s_rounds_count_nothing_and_its_written_section_counts_from_zero` | new | none | `make arbiter-ask` |
+| no verdict recorded for an unwritten section | `tests/stub.rs` `a_process_fault_on_a_stub_s_round_records_no_verdict_...`, arbiter `a_process_fault_on_an_unwritten_section_s_round_records_no_verdict` | new | none | `make arbiter-ask` |
 
 ### T462 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A blank stub holds no other task's plan review: it rides in no `make plan-delta` bundle, counts no round, and gets no verdict, and when it is written its first review is owed and counted from one.
+2. **The constraints.** The round arbiter's `tooling_fix` on T448 (arbiter.jsonl, 2026-11-27T08:00:04Z) and T462's line; FR-043 (a changed block is owed its review); feature 385 T16 and 451 T92 (an accept or process-fault stands as the named task's verdict); 451 T359's one stub test; no guard message changes.
+3. **Where each comes from.** R: the ruling's `why`, `what` and `tooling_fix`; O: the trailing-round count above; O: T448's four rows in `block_reviews` (indexes 450-453, three BLOCKED on other tasks' points, and the arbiter's CLEAR row 459), measured 2026-11-27 (a script over the record's `block_reviews`).
+4. **Do they describe the world here?** Yes: T448's rows name `### T448 (<why: ...>)` and `### T448 Approach (checklist part A)` beside the tasks whose points blocked them, read 2026-11-27 from the record.
+5. **The order.** Before the next `make plan-delta F=451` dispatch (the ruling's own order); no other task waits on it.
+6. **The exits.** Green: the five tests above red on the old code (plan crate: 3 failed, 204 passed; guard: 1 failed, 573 passed, the stop disabled) and green now, with `make builder-checks` clean on the four crates and the review-round guard's suite (91 passed), measured 2026-11-27 (`make rust-test` and `tests/hooks/test-review-round-hooks.sh`, their summary lines). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one stub test (`stub_block`), reused; the guard reads one shared constant.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above; on the real plan, `make plan-delta F=451` no longer lists a stub's blocks.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The tripwire refused correct work: every plan-delta dispatch of feature 451 was held behind T448's four empty rounds.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (the brief's second exit: why "no verdict" cannot be the rule for every process-fault). The plan round counter stops at a CLEAR row, and the arbiter's CLEAR row is the only thing that restarts a written section's count; without it, a process-faulted written section re-trips at the same round on its next dispatch, since only a `continue` lifts the cap. An unwritten section needs no reset, because its stub-era rows count nothing under (2), so it gets no verdict. Either way a filled section owes its own first review: block verdicts are keyed by digest and the task verdict by its section's digest, so filled text is owed even where an older record holds the stub CLEAR, as T448's does today (pinned by the second half of `a_process_fault_on_a_stub_s_round_records_no_verdict_and_the_filled_section_owes_its_review`). Accepted limitation (the builder's choice, 2026-11-27): a section whose first heading keeps the template's `(<why: ...>)` while its body is written counts no rounds until the heading changes - a lenience in the reviewer's favor, since the decide lint already refuses a `<...>` placeholder. The other choice priced, a row's text digest, was not taken: rows carry keys only.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?** none - T448's stub CLEAR verdicts, already in plan-review.json, are left: they change no outcome (its filled text is owed by digest, and an unfilled tick is refused by the approach gate's placeholder check), so no defect.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: a held plan-delta dispatch is every builder's waiting - this unblocks the builders' loop).
 
 ### T458 (<why: the finding or measurement that files it>)
 

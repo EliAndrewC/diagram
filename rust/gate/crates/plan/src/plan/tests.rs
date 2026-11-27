@@ -150,6 +150,7 @@ pub(super) fn write_json(dir: &Path, name: &str, value: &Value) -> String {
 
 mod bundle;
 mod mention;
+mod stub;
 mod withdrawn;
 
 #[test]

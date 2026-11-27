@@ -14,7 +14,9 @@ use super::history::{keep, History};
 use super::sections::{
     block_digest, blocks, digest, heading_text, leading_task, re, task_sections, typo_only, TASK_ID,
 };
-use super::status::{block_status, reviewed_blocks, text_of, RECORD, REMOVED};
+use super::status::{
+    block_status, reviewed_blocks, text_of, unwritten, written_only, RECORD, REMOVED,
+};
 use super::{pretty, today};
 
 const REVIEWER: &str = "spec-fidelity";
@@ -484,6 +486,8 @@ pub struct Accepted {
     pub blocks: Vec<String>,
     pub tasks: Vec<String>,
     pub whole: bool,
+    /// The named tasks whose section is still the `make task-add` template (451 T462): no verdict recorded for them.
+    pub unwritten: Vec<String>,
 }
 
 /// The tasks a plan round's question names (feature 451 T92), read from its trigger alone and never from its prose (T33's ask names T49
@@ -627,6 +631,15 @@ fn write_task_verdicts(
     }
 }
 
+/// (the named tasks whose section is unwritten, the rest). AN UNWRITTEN SECTION GETS NO VERDICT (451 T462): T448's process-fault
+/// recorded its stub's blocks and task CLEAR as an accept would, a verdict on text nobody wrote. Its stub-era rounds count for nothing
+/// (the review-round guard's `plan_rounds`), so no reset is owed, and it owes its first review once written. A written section's
+/// process-fault still stands as its verdict: its CLEAR row is what restarts the round count, which without it would trip again.
+fn split_unwritten(tasks: Vec<String>, text: &str) -> (Vec<String>, Vec<String>) {
+    let blank = unwritten(text);
+    tasks.into_iter().partition(|t| blank.contains(t))
+}
+
 /// Past the plan-round cap (feature 385 T16), the round arbiter's accept on the plan round stands as the plan's verdict, recorded CLEAR
 /// at each block's digest now - but only for the blocks its question names (feature 451 T92): a question that names tasks (its trigger,
 /// [`named_tasks`]) clears the owed or BLOCKED blocks inside those tasks' sections and records each task's verdict CLEAR, declared
@@ -668,11 +681,22 @@ pub(super) fn arbiter_accept(
     let Some((tasks, whole)) = accept_scope(spec_dir, trigger, &text) else {
         return Ok(Accepted::default());
     };
+    let (unwritten, tasks) = split_unwritten(tasks, &text);
+    if tasks.is_empty() && !whole {
+        return Ok(Accepted {
+            unwritten,
+            ..Accepted::default()
+        });
+    }
     let spans: Vec<(usize, usize)> = tasks.iter().flat_map(|t| section_spans(&text, t)).collect();
     let asked =
         |at: usize, len: usize| whole || spans.iter().any(|(lo, hi)| *lo <= at && at + len <= *hi);
     let mut out = starting_record(spec_dir);
     let (owed_keys, blocked) = block_status(&out, &text, &BTreeSet::new(), None, "");
+    let (owed_keys, blocked) = (
+        written_only(owed_keys, &text, &BTreeSet::new()),
+        written_only(blocked, &text, &BTreeSet::new()),
+    );
     let cleared: Vec<(String, String)> = blocks(&text)
         .into_iter()
         .filter(|(k, b, at)| (owed_keys.contains(k) || blocked.contains(k)) && asked(*at, b.len()))
@@ -729,6 +753,7 @@ pub(super) fn arbiter_accept(
         blocks: sorted,
         tasks,
         whole,
+        unwritten,
     })
 }
 

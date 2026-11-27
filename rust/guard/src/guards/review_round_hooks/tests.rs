@@ -445,6 +445,26 @@ fn a_tasks_plan_rounds_are_counted_back_to_its_clear() {
     assert_eq!(plan_rounds(&d.join("none"), "T14"), 0);
 }
 
+/// 451 T462: T448's stub rode in other tasks' bundles, BLOCKED three times on their points; those are no rounds of its section, written
+/// or not, and its first round once written counts from one. A real section's BLOCKED rounds beside it still count.
+#[test]
+fn a_blank_stub_s_rounds_count_nothing_and_its_written_section_counts_from_zero() {
+    let d = world("plan-stub");
+    let dir = d.join("specs/301-x");
+    let stub = format!("### T48 {}", crate::shared::plan_text::STUB_TITLE);
+    let both = |v: &str| json!({"verdict": v, "blocks": ["### T05 D", stub, "### T48 Approach (checklist part A)"]});
+    let stub_era = [both("BLOCKED"), both("BLOCKED"), both("BLOCKED")];
+    let reviews = json!({"block_reviews": stub_era});
+    std::fs::write(dir.join("plan-review.json"), reviews.to_string()).unwrap();
+    assert_eq!((plan_rounds(&dir, "T48"), plan_rounds(&dir, "T05")), (0, 3));
+    // the section written (its heading no longer the template's) and reviewed once since
+    let written = json!({"verdict": "BLOCKED", "blocks": ["### T48 (the handout)", "### T48 Approach (checklist part A)"]});
+    let reviews =
+        json!({"block_reviews": [both("BLOCKED"), both("BLOCKED"), both("BLOCKED"), written]});
+    std::fs::write(dir.join("plan-review.json"), reviews.to_string()).unwrap();
+    assert_eq!(plan_rounds(&dir, "T48"), 1);
+}
+
 /// A bundle's rounds (451 T141): its one heading's reviews, counted once, whichever member the mark names.
 #[test]
 fn a_bundle_s_plan_rounds_are_counted_once_under_any_member() {

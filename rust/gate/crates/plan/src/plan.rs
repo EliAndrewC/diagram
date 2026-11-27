@@ -365,6 +365,8 @@ fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>)
             keys.push(key);
         }
     }
+    // a section still the `make task-add` template rides in no bundle (451 T462): no reviewer judges it, no round is counted for it
+    let keys = status::written_only(keys, &text, &std::collections::BTreeSet::new());
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     if keys.is_empty() {
         return said(format!(

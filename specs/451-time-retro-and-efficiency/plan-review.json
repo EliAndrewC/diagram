@@ -4134,6 +4134,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T462 (the round arbiter's process-fault on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27T08:00Z: a blank task stub counted plan-review rounds)": {
+   "sha256": "3ad33d669245057002354c327e9062b91a293a9814d14204ca24df63a9b6fec1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T462 Approach (checklist part A)": {
+   "sha256": "72e2c63313049aabd1b5fa0c740350ece1092185792bb2782e658430c28563fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -37102,6 +37114,70 @@
      "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T462 (the round arbiter's process-fault on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27T08:00Z: a blank task stub counted plan-review rounds)",
+    "### T462 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T462-a",
+     "summary": "A task section is UNWRITTEN when every one of its own blocks is byte for byte a block of the make task-add template (plan::template::stub_block); writing one block makes the whole section written.",
+     "class": "within",
+     "why": "Neither the GM's request nor 451's spec says anything about stub sections or about how plan-review rounds are counted. This is the definition the fix depends on, and it errs toward review: one changed block makes the whole section owed. It narrows nothing that was asked."
+    },
+    {
+     "id": "T462-b",
+     "summary": "make plan-delta's keys drop an unwritten section's blocks, after the BLOCKED keys are merged in, so the stub leaves the bundle, its blocks-<tasks> name and the guard's round count.",
+     "class": "within",
+     "why": "The defect fixed is a check refusing good work: T448's empty stub held every 451 plan-delta dispatch behind its rounds. Fixing it serves 'Fewer plan re-rounds' (improvement 4) and FR-013's builders' loop. A stub has no plan text to review. Its review is still owed once it is written, because verdicts are keyed by digest."
+    },
+    {
+     "id": "T462-c",
+     "summary": "The feature-wide judgment (judge_held with no scope) also drops unwritten sections, so plan owed and plan-delta agree. A scoped judgment keeps its own tasks' stubs owed, so ticking a stub's own task still owes its review.",
+     "class": "within",
+     "why": "This keeps the two readers consistent and keeps enforcement where it matters: the stub's own tick is still refused. Nothing unreviewed can be ticked. Within."
+    },
+    {
+     "id": "T462-d",
+     "summary": "The guard's plan round counter (review_round_hooks::plan_rounds) stops at a review row that names the task's stub first heading, as it stops at a CLEAR. A section filled after riding in bundles counts its rounds from zero.",
+     "class": "within",
+     "why": "A round in which the section was the template judged none of its text, so counting it against the section's cap counted a round that never happened. That is the arbiter's process-fault and the T451 case the section measured. Removing the miscount narrows nothing the GM asked, and the cap on the section's real rounds is unchanged. Within."
+    },
+    {
+     "id": "T462-e",
+     "summary": "Accepted limitation: stub-era rows are recognized by the stub's first heading, not by block bytes. So a section whose heading still reads (<why: ...>) while its body is written counts no rounds until the heading changes. A row text digest was priced and not taken.",
+     "class": "within",
+     "why": "What goes uncounted: plan-review rounds of a section whose body is written but whose first heading is still the template's. For those rounds the five-round cap does not trip and arbiter escalation is delayed. Nothing passes unreviewed. Verdicts are keyed by the section's digest, so the filled text is still owed its review. The block also states that the approach gate's placeholder check refuses the tick while a <...> placeholder stands. I did not measure that state, and T448's rows show that placeholder text does ride in bundles. The cost is delayed escalation, never bad work passing or good work refused, so it is no defect under XIV v2.36.0. Neither the request nor the spec reaches round-counter granularity. So it is within, not a narrowing of anything asked. This is a second stub test (the heading) beside the one stub_block test that items 2 and 7 name; that is a note, not a finding."
+    },
+    {
+     "id": "T462-f",
+     "summary": "An arbiter accept or process-fault on a plan round records no verdict for a named task whose section is unwritten (record::split_unwritten). make arbiter-ruled reports no verdict recorded and says the section owes its first review once written.",
+     "class": "within",
+     "why": "This carves an exception into 451 T92 / 385 T16, which make an accept or process-fault stand as the named task's verdict. Those are earlier tasks' rules; the GM's request and 451's spec say nothing about them, so this is within what was asked. On substance, a verdict on template text would approve no plan, and D1 explains why an unwritten section needs no count reset. No outcome the GM asked for is narrowed."
+    },
+    {
+     "id": "T462-D1",
+     "summary": "A process-fault on a WRITTEN section still records its verdict, because that CLEAR row is what restarts a written section's round count. Without it the section re-trips the cap at the same round.",
+     "class": "within",
+     "why": "The plan declines to widen T462-f to every process-fault, which keeps the existing rule. A filled section still owes its own first review by digest. Within."
+    },
+    {
+     "id": "T462-h",
+     "summary": "Found and left: T448's stub CLEAR verdicts already in plan-review.json stay as they are.",
+     "class": "within",
+     "why": "They change no outcome: the filled text is owed by digest, and an unfilled tick is refused by the approach gate. By XIV's definition a record that changes no outcome is no defect, so leaving it is within."
+    },
+    {
+     "id": "T462-i",
+     "summary": "T462 is filed as performance work ([perf], 451 FR-013), because a held plan-delta dispatch is builders waiting.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -56458,6 +56534,68 @@
      "summary": "the fix covers the three places T450's line names (Found and left: none); classed 'Performance work: no'",
      "class": "within",
      "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T462": {
+   "section_sha256": "16dd47ac289c2ac77ebd2646c2b397d06604a03542b64d4f827b04a9df78e544",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T462-a",
+     "summary": "A task section is UNWRITTEN when every one of its own blocks is byte for byte a block of the make task-add template (plan::template::stub_block); writing one block makes the whole section written.",
+     "class": "within",
+     "why": "Neither the GM's request nor 451's spec says anything about stub sections or about how plan-review rounds are counted. This is the definition the fix depends on, and it errs toward review: one changed block makes the whole section owed. It narrows nothing that was asked."
+    },
+    {
+     "id": "T462-b",
+     "summary": "make plan-delta's keys drop an unwritten section's blocks, after the BLOCKED keys are merged in, so the stub leaves the bundle, its blocks-<tasks> name and the guard's round count.",
+     "class": "within",
+     "why": "The defect fixed is a check refusing good work: T448's empty stub held every 451 plan-delta dispatch behind its rounds. Fixing it serves 'Fewer plan re-rounds' (improvement 4) and FR-013's builders' loop. A stub has no plan text to review. Its review is still owed once it is written, because verdicts are keyed by digest."
+    },
+    {
+     "id": "T462-c",
+     "summary": "The feature-wide judgment (judge_held with no scope) also drops unwritten sections, so plan owed and plan-delta agree. A scoped judgment keeps its own tasks' stubs owed, so ticking a stub's own task still owes its review.",
+     "class": "within",
+     "why": "This keeps the two readers consistent and keeps enforcement where it matters: the stub's own tick is still refused. Nothing unreviewed can be ticked. Within."
+    },
+    {
+     "id": "T462-d",
+     "summary": "The guard's plan round counter (review_round_hooks::plan_rounds) stops at a review row that names the task's stub first heading, as it stops at a CLEAR. A section filled after riding in bundles counts its rounds from zero.",
+     "class": "within",
+     "why": "A round in which the section was the template judged none of its text, so counting it against the section's cap counted a round that never happened. That is the arbiter's process-fault and the T451 case the section measured. Removing the miscount narrows nothing the GM asked, and the cap on the section's real rounds is unchanged. Within."
+    },
+    {
+     "id": "T462-e",
+     "summary": "Accepted limitation: stub-era rows are recognized by the stub's first heading, not by block bytes. So a section whose heading still reads (<why: ...>) while its body is written counts no rounds until the heading changes. A row text digest was priced and not taken.",
+     "class": "within",
+     "why": "What goes uncounted: plan-review rounds of a section whose body is written but whose first heading is still the template's. For those rounds the five-round cap does not trip and arbiter escalation is delayed. Nothing passes unreviewed. Verdicts are keyed by the section's digest, so the filled text is still owed its review. The block also states that the approach gate's placeholder check refuses the tick while a <...> placeholder stands. I did not measure that state, and T448's rows show that placeholder text does ride in bundles. The cost is delayed escalation, never bad work passing or good work refused, so it is no defect under XIV v2.36.0. Neither the request nor the spec reaches round-counter granularity. So it is within, not a narrowing of anything asked. This is a second stub test (the heading) beside the one stub_block test that items 2 and 7 name; that is a note, not a finding."
+    },
+    {
+     "id": "T462-f",
+     "summary": "An arbiter accept or process-fault on a plan round records no verdict for a named task whose section is unwritten (record::split_unwritten). make arbiter-ruled reports no verdict recorded and says the section owes its first review once written.",
+     "class": "within",
+     "why": "This carves an exception into 451 T92 / 385 T16, which make an accept or process-fault stand as the named task's verdict. Those are earlier tasks' rules; the GM's request and 451's spec say nothing about them, so this is within what was asked. On substance, a verdict on template text would approve no plan, and D1 explains why an unwritten section needs no count reset. No outcome the GM asked for is narrowed."
+    },
+    {
+     "id": "T462-D1",
+     "summary": "A process-fault on a WRITTEN section still records its verdict, because that CLEAR row is what restarts a written section's round count. Without it the section re-trips the cap at the same round.",
+     "class": "within",
+     "why": "The plan declines to widen T462-f to every process-fault, which keeps the existing rule. A filled section still owes its own first review by digest. Within."
+    },
+    {
+     "id": "T462-h",
+     "summary": "Found and left: T448's stub CLEAR verdicts already in plan-review.json stay as they are.",
+     "class": "within",
+     "why": "They change no outcome: the filled text is owed by digest, and an unfilled tick is refused by the approach gate. By XIV's definition a record that changes no outcome is no defect, so leaving it is within."
+    },
+    {
+     "id": "T462-i",
+     "summary": "T462 is filed as performance work ([perf], 451 FR-013), because a held plan-delta dispatch is builders waiting.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
     }
    ],
    "verdict": "CLEAR"

@@ -747,6 +747,10 @@ fn accepted_line(got: &crate::plan::Accepted) -> String {
     if got.whole {
         return format!("arbiter-ruled: {n} plan block(s) recorded CLEAR, the question the whole plan's{listed} - the accept is the plan's verdict\n");
     }
+    if got.tasks.is_empty() && !got.unwritten.is_empty() {
+        let blank = got.unwritten.join(" and ");
+        return format!("arbiter-ruled: no verdict recorded - {blank}'s section is still the `make task-add` template, which decides nothing; it owes its first plan review once written (451 T462)\n");
+    }
     if got.tasks.is_empty() {
         return "arbiter-ruled: 0 plan block(s) recorded CLEAR - the task the question names has no section in plan.md (archived to plan-done.md, or not this feature's), so nothing is the accept's to record\n".to_owned();
     }

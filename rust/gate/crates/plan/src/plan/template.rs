@@ -153,6 +153,9 @@ mod tests {
             stub_block("T07", old_block) && old_block != &plain[plain.find(approach).unwrap()..]
         );
         assert_eq!(plain, TEMPLATE.replace("{T}", "T07"));
+        // the guard's copy of the first heading's title (451 T462) is this template's
+        let first = format!("### T07 {}\n", l7r_shared::plan_text::STUB_TITLE);
+        assert!(plain.starts_with(&first), "{plain}");
         assert_eq!(
             perf,
             format!("{plain}{}", PERFORMANCE.replace("{T}", "T07"))

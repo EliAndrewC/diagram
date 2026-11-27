@@ -92,3 +92,35 @@ fn a_batch_s_plan_accept_stands_as_that_review_s_verdict() {
     );
     assert_eq!(review(&root)["tasks"]["T02"]["verdict"], "CLEAR");
 }
+
+/// 451 T462: a process-fault on the round of a section still the `make task-add` template records no verdict, and says so.
+#[test]
+fn a_process_fault_on_an_unwritten_section_s_round_records_no_verdict() {
+    let root = clone_at("plan-stub");
+    python_tools(&root);
+    let [_, stub, ..] = crate::plan::template::stubs("T02");
+    std::fs::write(root.join("specs/999-x/plan.md"), format!("# p\n\n{stub}")).unwrap();
+    std::fs::write(root.join("specs/999-x/tasks.md"), TASKS).unwrap();
+    let trigger = "round:spec-fidelity|plan:999-x#T02@3";
+    owe(
+        &root,
+        &json!({trigger: {"kind": "round", "unit": "spec-fidelity|plan:999-x#T02", "feature": "999-x", "t": 1}}),
+    );
+    let fault = rule_file(
+        &root,
+        "f.json",
+        &json!({"ruling": "process-fault", "why": "a blank stub", "tooling_fix": "the stub rides in no bundle", "fix_minutes": 15}),
+    );
+    let said = run(&root, &["ruled", trigger, &fault, "--as", "round-arbiter"]);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let line =
+        "arbiter-ruled: no verdict recorded - T02's section is still the `make task-add` template";
+    assert!(said.stdout.contains(line), "{}", said.stdout);
+    let path = root.join("specs/999-x/plan-review.json");
+    assert!(
+        !path.exists()
+            || review(&root)
+                .get("tasks")
+                .is_none_or(|t| t.get("T02").is_none())
+    );
+}

@@ -208,6 +208,40 @@ pub(super) fn block_status(
     (owed, blocked)
 }
 
+/// The tasks whose own blocks are, every one, a block of the task's unfilled `make task-add` stub ([`super::template::stub_block`]):
+/// sections nobody has written (451 T462). A bundle's heading is no task's stub, and one block written makes the whole section written.
+pub(super) fn unwritten(plan: &str) -> BTreeSet<String> {
+    let mut own: BTreeMap<String, bool> = BTreeMap::new();
+    for (key, body, _) in blocks(plan) {
+        let title = heading_text(&key);
+        if let [task] = leading_tasks(&title)[..] {
+            let stub = super::template::stub_block(task, &body);
+            *own.entry(task.to_owned()).or_insert(true) &= stub;
+        }
+    }
+    own.into_iter()
+        .filter(|(_, s)| *s)
+        .map(|(t, _)| t)
+        .collect()
+}
+
+/// `keys` without the blocks of an unwritten section ([`unwritten`]) but those of `kept`'s tasks. WHY (the round arbiter's process-fault
+/// on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27): T448's section, the template verbatim, was owed
+/// in every `make plan-delta F=451` bundle, four reviewers ruled that it decided nothing, and those four rounds held every plan-delta
+/// dispatch of the feature. A stub decides nothing until it is written; the tick of its own task still owes it (`kept`).
+pub(super) fn written_only(keys: Vec<String>, plan: &str, kept: &BTreeSet<String>) -> Vec<String> {
+    let blank = unwritten(plan);
+    if blank.is_empty() {
+        return keys;
+    }
+    keys.into_iter()
+        .filter(|key| {
+            let title = heading_text(key);
+            !matches!(&leading_tasks(&title)[..], [t] if blank.contains(*t) && !kept.contains(*t))
+        })
+        .collect()
+}
+
 /// Each recorded block plan.md no longer has and the archive does not hold, as `(removed) <key>`: an archived block is judged as a live
 /// one is (feature 385 T65), and a re-dated heading is the same block (feature 444 T20, D4).
 fn removed_blocks(
@@ -468,6 +502,10 @@ pub(super) fn judge_held(
     }
     let ruled = ruled_tasks(&review, &text, history);
     let (mut owed_keys, mut blocked) = block_status(&review, &text, &ruled, history, done);
+    // an unwritten section is owed by no judgment but its own task's (451 T462)
+    let kept = scope.map_or_else(BTreeSet::new, |s| s.tasks.clone());
+    owed_keys = written_only(owed_keys, &text, &kept);
+    blocked = written_only(blocked, &text, &kept);
     if let Some(scope) = scope {
         owed_keys = in_scope(owed_keys, &review, &text, scope, history);
         blocked = in_scope(blocked, &review, &text, scope, history);
