@@ -4195,12 +4195,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T475 (<why: the finding or measurement that files it>)": {
-   "sha256": "8e93981a4fb0a2bb4bc333713378bb1bc2e57edd3ed1d82085e8b99dd8bbe492",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T475 Approach (checklist part A)": {
    "sha256": "6b67b7e200273b2c3ac3436c09f3bba7da7cdc878c8c57f656762ac95ac400cc",
    "verdict": "CLEAR",
@@ -40164,6 +40158,21 @@
      "summary": "Classed as performance work through its measurement clause: it books a pool builder's checks to its task. It is not an engine-speed task.",
      "class": "within",
      "why": "FR-013 and the GM's words of 2026-11-20 count measurement work as performance work for scheduling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-removed",
+     "summary": "The plan block for T475 is deleted. As last judged it was the unfilled section template: its heading still carries the placeholder '<why: the finding or measurement that files it>', its Approach is the placeholder '<what changes, where, and how it was measured ...>', and its step table has a header and no rows.",
+     "class": "within",
+     "why": "The block made no decision: no approach, no step, no requirement cited, no figure. Deleting a placeholder that said nothing removes no work the request or the spec asks for, narrows no FR (no FR-001..FR-013 or SC is named by it or depends on it), and T475 appears nowhere in the GM's request. It is housekeeping of the plan file, not a narrowing."
     }
    ]
   }
