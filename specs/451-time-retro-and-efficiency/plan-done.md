@@ -19094,3 +19094,205 @@ transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t3
 
 
 <!-- plan-archive: T487 to T487 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T491 (451 T388: pair-hooks spent 50 of its 92 ms on every Agent call reading the feature's whole 50 MB event log for its first line, measured 2026-11-27 (T388's sandbox arms), to answer "not due" for a step-back switched off since 2026-10-21)
+
+- **Approach**: two changes in the gate's `reviews` crate. Measured 2026-11-27.
+  - **T491-D1, `due` asks the switch first.** `checkpoint.rs` `due` reads `suspended(root)` before `state_in`. With the switch off it skips `state_in` and goes down the not-due branch: no event log read, no reopening walk, no `git log`. That branch still writes the `checkpoint-admitted` mark for an Agent call, as before. The check goes in `due` only, not in `state_in`. `status` prints `state_in`'s map, and `open_checkpoint`'s off-switch message reads it, so both stay as they were. `hold_in` also reads `state_in` while off and returns "". It runs once per `make tick`, not on every Agent call, so it is left as it is.
+  - **T491-D2, `first_event` reads line by line up to its first event.** `glyph.rs` `first_event` uses a `BufReader` and `read_until(b'\n')` in place of `read_to_string` on the whole log. The find rule is unchanged: the answer is the first line that does not parse (a blank line counts) or that is not an `ASIDE` line. A line that does not parse gives None, as before. A file that cannot be opened or read gives None, as before. One answer changes: bytes that are not UTF-8 *after* the first event used to make the whole read fail (None). They now leave the start as read. That is a corrupt log's tail, and the start was always the first event's.
+  - **Red first.** Two tests failed on the old code (0 passed, 2 failed), measured 2026-11-27 (`make rust-test ONLY=` on the two tests before the fix): `glyph::tests::the_start_reads_the_log_only_to_its_first_event` (a log whose third line is not UTF-8: `left: None, right: Some(60.0)`) and `checkpoint::tests::an_off_switch_answers_not_due_without_reading_the_start` (with the switch off and a commit to `specs/900-x`, the old `due` wrote the reopening into the clock: `assertion failed: !...CLOCK.exists()`). Both pass after the change. The crate's 216 tests pass, measured 2026-11-27 (`make builder-checks`).
+  - **Before and after, on T388's sandbox.** Method: `t388-time.py` copied as `t491-time.py`, with `T491_BIN` and `T491_GATE` aiming it at copies of this tree's own guard and gate binaries built before and after the change. The arm is `gp.PreToolUse:only=pair`, 20 runs after a warm-up, measured 2026-11-27 (t491-time.py). Results, median / 90th centile, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 84.7 / 119.1 ms (load 8.8 to 10.0), after 33.5 / 37.0 (load 12.4 to 13.1). Run again, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 88.1 / 94.7 (load 11.9 to 12.4), after 31.5 / 36.2 (load 11.1 to 11.9). That is about 53 ms off every Agent call, a little more than T388's 50 (its `+shortlog` arm still read 2,000 lines), measured 2026-11-27 (the medians above). About 296 x 0.053 = 16 s a day, measured 2026-11-27 (T388's count of 2026-11-26's Agent calls times the saving above).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the switch first in `due`; `first_event` by line | n/a: gate tooling, no map | n/a: tooling | none | none |
+
+### T491 Approach (checklist part A)
+
+1. **The goal, in the world.** An Agent call's `pair-hooks` does not read the event log while the step-back is off, and the feature's start never costs more than its first lines.
+2. **The constraints.** The verdicts of `due`, `status`, `hold` and `open` do not change. The `checkpoint-admitted` mark is still written. `first_event`'s find rule is kept (451 T05's `ASIDE`). No guard message changes.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`, lever A). R: `checkpoint.rs`, `glyph.rs`. O: the before and after timings above.
+4. **Do they describe the world here?** Yes. `dev/step-back.json` reads `off` in this tree, and `scripts/gates/l7r-gate.sh reviews checkpoint status --root .` printed `"suspended": true` (2026-11-27).
+5. **The order.** Independent of T492 to T494. It shares this landing with T493 (a bundle).
+6. **The exits.** Green: the two red tests pass, the crate is green, and pair-hooks is below 40 ms on the sandbox, measured 2026-11-27 (t491-time.py, 20 runs). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** pair-hooks went from 84.7 and 88.1 ms to 33.5 and 31.5 ms (medians, 20 runs each, in turn: before ending 07:01:18, then after, before and after ending 07:08:07, 07:08:12 and 07:08:15, measured 2026-11-27 by t491-time.py). `make builder-checks CRATE="rust/gate/crates/reviews rust/guard"` is clean. `tests/hooks/test-pair-hooks.sh` gave 104 passed, 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every answer is the same while the switch is off, and with it on the start is the same first event. The one changed answer, a log with bytes after its first event that are not UTF-8, is D2's.
+
+**Found and left?** none
+
+**Performance work?** yes: it takes 53 ms off every Agent call's PreToolUse (pair-hooks), measured 2026-11-27 (t491-time.py, 20 runs); a `make done` that pair-hooks gates asks the same `checkpoint due` and should save the same, not timed.
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))
+
+- **Approach**: the reader-only route. `review_round_hooks.rs` `plan_rounds` reads the file through `block_reviews`. Measured 2026-11-27.
+  - **T493-D1, read only the two fields the count needs; no count is kept beside the file.** Two hand-written serde visitors (`Slim<SlimDoc>`, `Slim<SlimReview>`; the guard's `serde` has no `derive`) keep each block review's `blocks` and `verdict` as values. Every other key is skipped with `IgnoredAny` and never made a value: the top-level `feature`, `blocks` and `tasks`, and each review's `decisions`, `reviewed`, `tasks` and `declared`. The count's own code (the heading regex, the stub rule of 451 T462, the walk back to the last CLEAR) then runs unchanged on `{"block_reviews": [...]}`. Why not a count the writer keeps beside the file: it is a second writer's state to keep in step with `plan-review.json` (`make carry` merges that file by entry), and the brief preferred the reader-only route.
+  - **T493-D2, the whole file is still read and checked as JSON.** It is parsed through `serde_json::from_str`, so a truncated file or one with trailing bytes still fails, as before. A file the visitors cannot read (an array at the top, a review that is not an object, `block_reviews` not an array) falls back to the old whole-file parse, so its count is the old count.
+  - **Red first.** `a_plan_round_count_reads_the_block_reviews_alone` failed on the old code (1 failed: `left: 0, right: 2`). Its file holds `1e400`, past f64, in a skipped field. The old parse refused the whole file and counted 0; the new read counts the two rounds. `a_plan_round_count_is_the_whole_parse_s_on_every_shape` checks the new count against the old body, kept in the tests as `plan_rounds_whole`. It covers 15 shapes (a wrong type at each level, duplicate keys at both levels, a truncated file, trailing bytes, an empty file, a file that is not JSON) for 4 tasks each, and every count matches. A one-off test, run and then removed, compared the two over this tree's real `plan-review.json` (4,728,854 bytes) for every task id in `tasks.md` and `tasks-done.md`: 501 of 501 equal, measured 2026-11-27 (the one-off test's count). In a debug build that took 9.4 ms a call against 26.3, measured 2026-11-27 (the same one-off test's clock). The guard's 597 tests pass, and `tests/hooks/test-review-round-hooks.sh` gave 91 passed, 0 failed, measured 2026-11-27 (`make builder-checks`, the suite run).
+  - **Before and after, on T388's sandbox**, by the T491 method above with the arm `sf.PreToolUse:only=review-round`, 20 runs, measured 2026-11-27 (t491-time.py). Results, median / 90th centile, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 82.8 / 175.2 ms, after 62.9 / 67.1. Run again, measured 2026-11-27 (t491-time.py on T388's sandbox, 20 runs): before 85.2 / 94.2, after 61.5 / 66.3. The loads are those in T491's section. That saves about 22 ms, short of T388's estimate of 35 of 40, measured 2026-11-27 (the medians above). The rest, not timed apart, is the file's read and the skipped JSON's scan. About 98 x 0.022 = 2 s a day, measured 2026-11-27 (T388's count of 2026-11-26's plan reviews times the saving above).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `plan_rounds` reads two fields of each block review | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T493 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review's dispatch counts its task's rounds without building the whole review file in memory.
+2. **The constraints.** The round count, its cap (`PLAN_ROUND_CAP`), the bundle rule (451 T141) and the stub rule (451 T462) do not change. No guard message changes. A malformed file counts as it did.
+3. **Where each comes from.** O: 451 T388's record (lever C). R: `review_round_hooks.rs`. O: the differential tests and the timings above.
+4. **Do they describe the world here?** Yes. The real file has `block_reviews` (531 entries, each with `reviewed`, `blocks`, `verdict` and `decisions`; 52 with `tasks`, 15 with `declared`) beside `feature`, `blocks` and `tasks`, measured 2026-11-27 (read with Python's `json`).
+5. **The order.** Independent of T491. It shares this landing with T491 (a bundle).
+6. **The exits.** Green: the red test passes and every shape's and the real file's counts equal the old ones. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** review-round-hooks went from 82.8 and 85.2 ms to 62.9 and 61.5 ms (medians, 20 runs each, 2026-11-27). 501 of 501 real task counts are unchanged. `make builder-checks CRATE="rust/gate/crates/reviews rust/guard"` is clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every count is the old count, except for a file whose skipped fields the old parse refused (a number past f64), which used to count 0.
+
+**Found and left?** none
+
+**Performance work?** yes: it takes about 22 ms off every spec-fidelity plan review's PreToolUse (review-round-hooks), measured 2026-11-27 (t491-time.py, 20 runs).
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)
+
+- **Approach**: `planhold::purge` (`rust/guard/shared/src/checks/planhold.rs`) drops every dead hold - a pending one past `PENDING_S`, as before, and now a running one past `HOLD_MAX_S` (`dead`). It runs in `snapshot`, at a call's `PreToolUse` whenever `plan_holds` is non-empty, and `handle` saves the state where the hold part moved (451 T387), so the first call after the limit purges and saves once, and `record_edit_gate`'s prefilter (`plan_holds` empty) sends every later call past the load.
+  - **It puts back nothing it does not own.** `prune_snaps` drops the purged hold's kept text with it, so a call begun under the hold and ending after the purge finds no kept text and writes nothing back; a call-keyed snapshot of an older build (T387-D2) is skipped for a hold gone (`restore` asks `plan_holds`). Said where it is purged: `purge`'s doc comment, and the escape column of `docs/guards.md`'s `record_edit_hooks.rs` row.
+  - **A late return is harmless.** The review's `SubagentStop` names no hold or dispatch, so `handle::concerns` books nothing and nothing is saved; `planhold::returned` would drop nothing. Its verdict is still checked by `make plan-verdict`, which refuses a section changed while it was reviewed.
+  - **The figures.** A Bash `true`'s `record-edit-hooks` `PreToolUse` with a running hold taken 4,000 s ago, CPU median of 20 interleaved, on a copy of the clone's state (2,994,673 bytes): 7.8 ms after against 95.4 ms on the clone's build from before 451 T387, its `checks-hooks` `PostToolUse` 5.4 against 6.8, state writes 0 of 20 against 20 of 20, measured 2026-11-27 (`dev/measurements/2026-11-27/t489-dead-hold/t489-time.py`, `results.txt`). A build with T387 and not T489 was not timed (no worktree for it); T387's own figure for a Bash call under a hold is 42.6 + 38.2 ms, measured 2026-11-27 (`t387-time.py`).
+  - **Red first**, 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::handle::hold_writes"`, the test only added): `a_running_hold_past_its_limit_is_purged` failed, 5 passed of 6 (`plan_holds` still holding the hold). Green after: 6 of 6; `planhold/tests.rs`'s `a_hold_is_live_or_dead_by_its_age` now pins the running hold's purge, and `a_snapshot_is_written_back_when_held_text_changes` checks its kept-once case at a call inside the limit, where it read one far past it.
+
+**T489-D1 - Held text is editable without `PLAN_EDIT_OK` once its hold is past `HOLD_MAX_S`.** The task line: "a purge changes that refusal and needs its own ruling"; the brief: purge it. A review returns well inside the limit (`HOLD_MAX_S`'s own comment), and past it its hold already counted as dead and `PLAN_EDIT_OK` passed it, so the purge drops only the token's ceremony. What still guards a review that is merely late: `make plan-verdict` refuses a verdict on a section changed while it was reviewed. Chosen by the builder on the brief.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a running hold past `HOLD_MAX_S` purged with its kept text (`checks/planhold.rs`; tests `handle/hold_writes.rs`, `planhold/tests.rs`; `docs/guards.md`), red first 1 of 6, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
+
+### T489 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review whose return never came stops costing every Bash call of the clone a load of the check state, and stops holding its text, once it is past its limit.
+2. **The constraints.** T489's line and the brief (red first; nothing put back that the purge does not own, said where it is purged; a late return harmless; no guard message changed); feature 385 T85 and 451 T78, T80, T123, T387 (the hold, its write-back, its tree, its kept text); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: T387's figures, measured 2026-11-26/27; this task's red-first run and `t489-time.py`, measured 2026-11-27.
+4. **Do they describe the world here?** Yes: the timing runs the real binaries' `--only record-edit-hooks` and `--only checks-hooks` on a copy of the clone's own state.
+5. **The order.** After T387, which found it; before T490.
+6. **The exits.** Green: the red-first test passing, both crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** A Bash call after a dead running hold writes the state 0 of 20 times and its `PreToolUse` costs 7.8 ms of CPU, measured 2026-11-27 (`t489-time.py`); `make builder-checks CRATE="rust/guard/shared rust/guard"` clean.
+10. **Before moving a constant.** n/a: `HOLD_MAX_S` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The check it breaks at HEAD: the plan hold, which held a dead review's text and loaded the state on every Bash call for as long as no return or `TaskStop` named it.
+
+**Found and left?**
+- `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the "its dispatch looks dead: PLAN_EDIT_OK" tail - is reached now only by `planhold/tests.rs`'s direct calls: the purge runs in `snapshot` before `edit_mode`, so a hooked call never meets a dead hold. No wrong outcome, a message no hooked call shows. Not fixed here: retiring it changes a guard message, which the brief rules out. Filed as T496; lands before T490.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it makes the guards' hooks faster - a Bash call's `PreToolUse` under a dead running hold 95.4 ms of CPU on the build before T387 to 7.8, its state writes 20 of 20 to 0, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)
+
+- **Approach**: `rounds::pair_wave` (`rust/guard/shared/src/checks/rounds.rs`), on pairing a wave agent, applies the reading marks - the fresh round's edits reset, the seen sentences, the notes read - of every row of the agent's `check-wave` run still carrying them (`same_run`: `wave:<run>:<tag>`), once; where a dispatch outside the run has returned on a fresh subject, the reset keeps the blocks that dispatch's kept reply holds and drops the rest (`outside_edits`). `rounds::returned` now also drops `marks` from a rounded row (T387's prune, which left it while this task was open).
+  - **Why the run, at its first return** (T488-D1). No `PostToolUse` launches a wave row - the Workflow replays each unit's `PreToolUse` and the agent is paired at its `SubagentStop` - so the pairing is the wave's launch. Applied per row at its own return, a fresh row returning after a sibling of its run had recorded its EDIT blocks on the same subject reset them, and the freeze (`freeze::edit_refusal`) then refuses the session's applying of that sibling's block: two units of one quote-check wave on one page, split by notes, are the shape.
+  - **Why not across runs** (T488-D2). The same reset at a run's first return would empty `edits[s]` that a check outside the run (record-format on the same `q:` page, the shape the wave units' `q:` pages pair, observed 2026-11-27, method: a Python read of the clone's `checks-open.json`, `dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`) recorded since the wave's dispatch, and the freeze would then refuse the applying of that check's blocks; where one has returned unanswered on the subject, the reset keeps the blocks its kept reply holds (`reply::blocks` of `reply::reply_file`, the reply `rounds::returned` keeps for every reply it records edits from) and drops the earlier round's.
+  - **What the 362 rows become** (observed 2026-11-27, method: as above). Their own counts do not move: a row's `counted` is fixed at its dispatch, observed 2026-11-27, method: reading `rounds::dispatch`. The unapplied marks only ever OVER-counted the next round: without `seen` or `notes_read`, `first_look` and `fresh_reading` are both false, so a later dispatch read as a repeat - early cap trips, never missed ones. The rows touch 27 units (13 modal-depiction pop-ups, 7 quote-check and 7 record-format questions), 37 runs from 2026-10-19 to 2026-11-22, observed 2026-11-27, method: a Python read of the clone's `checks-open.json`, `dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`; `rounds` holds none of the 27 today, so no live count moves. 341 of the 362 are rounded, and the next return drops their marks unapplied (applying a month-old reading now would be wrong); 21 never rounded keep theirs, inert. Observed 2026-11-27 on the clone's state (`dev/measurements/2026-11-27/t488-wave-marks/wave-units.txt`, a Python read of the clone's `checks-open.json`).
+  - **Did a past ruling read a wrong count?** Of the 15 arbiter rulings in `specs/*/arbiter.jsonl` on round triggers of the 27 units, 14 (2026-10-10 to 10-12) precede every wave row the state holds (its earliest dispatch 2026-10-10 21:08, its first wave row 2026-10-19), so read no wave's miscount. The 15th, `round:quote-check|q:0004@3` (449, 2026-11-22, `accept`), is the footnote-flag trip of `fixloop::hold` (a footnote flagged in rounds in a row, counted from replies), not the round cap: only its `@3` comes from the count. `arbiter-owed.json` holds no `round:` trigger. The `first_look` side is not replayed here: it would need each round's page text rebuilt from git history, and the one ruling in range is the footnote trip.
+  - **Red first**, 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::rounds"`, the test only added): `a_wave_applies_its_reading_marks_once_for_its_run` failed, 19 passed of 20 (the fresh round's edits left at the pairing). Green after with the outside-run case added: 20 of 20; `make builder-checks CRATE="rust/guard/shared rust/guard"` 584 and 595 passed, lint and format clean; the hook suites checks-hooks 22, record-edit-gate 9, record-edit-hooks 14 passed.
+
+**T488-D1 - A wave's marks are applied for its whole run at its first return.** The brief: "apply them as the single dispatch's return does". A single dispatch applies them at its launch, before any return of its round records edits; a wave's only hooked moment per row is its return, so the run's marks are applied at the run's first, before any of its returns records edits. Rows of the run never paired (an agent with no return) have their `seen` and `read` applied anyway: the Workflow launched them. Chosen by the builder.
+
+**T488-D2 - A fresh reset keeps another check's returned edits.** At a run's first return, on a subject where a dispatch outside the run has returned unanswered, `edits` is cut to the EDIT blocks that dispatch's kept reply holds: reset whole, the freeze would refuse the applying of that check's blocks, a guard firing on correct work; left whole, an earlier round's edits would stay listed, which the fresh round is to drop. A block an earlier round proposed word for word again is kept, as the returned check proposed it too. Chosen by the builder.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a wave's reading marks applied for its run at its first return, a fresh reset keeping another check's returned blocks, a rounded row's `marks` pruned (`checks/rounds.rs`; tests `rounds/tests.rs`), red first 1 of 20, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
+
+### T488 Approach (checklist part A)
+
+1. **The goal, in the world.** A check wave's round is counted as a single dispatch's is: its sentences seen and its notes read count at the next round, and its fresh round starts with no earlier round's edits.
+2. **The constraints.** T488's line and the brief (red first; say what the unapplied rows' counts become and whether a past ruling read a wrong count; no guard message changed); feature 375 FR-003 (the freeze and its round's edits), 374 wave 120 and 451 T227 (`first_look`), 451 T387 (the prune); the two tiers.
+3. **Where each comes from.** O: the clone's state and `specs/*/arbiter.jsonl`, read 2026-11-27; this task's red-first run.
+4. **Do they describe the world here?** Yes: the counts are of the clone's own state, and the test drives `pair_wave` on the rows' own shape.
+5. **The order.** After T387, which found it; before T490.
+6. **The exits.** Green: the red-first test passing, both crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** A wave row paired has no `marks` left and its run's `seen` and `notes_read` written; `make builder-checks CRATE="rust/guard/shared rust/guard"` clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The check it breaks at HEAD: the round cap, which read a wave's round as unread and so counted the next one early.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+<!-- plan-archive: T489 to T387 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)
+
+- **Approach**: the record's merge (`rust/gate/crates/plan/src/plan/merge.rs`) now takes the merged plan.md where it is known: where the two sides' entries for a key differ and the plan holds one's digest for that key and not the other's (`blocks` by the block's `sha256`, `tasks` by the section's `section_sha256`, both from `sections::digests::of`), that entry wins; else the old rule, the later `reviewed` day, a tie theirs. The merged plan is known only to `make carry`: git's driver (`merge-record %O %A %B`) is given none, and mid-merge the work tree holds ours' plan.md and no `CHERRY_PICK_HEAD` exists (probed 2026-11-27, method: a scratch repo whose driver dumped its env, `.git` and the work tree's plan.md during a `git cherry-pick`, git 2.53.0). So the carry (`rust/gate/crates/land/src/land/carry.rs`) runs its pick with `-c merge.plan-review.driver=false`: a record both sides changed stops unmerged, and `resolve_all` merges it after the other paths, given its feature's plan.md as this pass resolved it by section, or as the pick wrote it where it merged clean. The clone's driver is what merged T310's carry (the clone's git config defines it; no landing log names the record among a carry's resolved files).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the merge prefers the entry on the text the plan holds | `merge::tests::the_entry_whose_digest_the_merged_plan_holds_wins_a_same_day_tie` (and the mirror), `where_the_plan_holds_neither_or_both_the_newer_wins_a_tie_theirs` | n/a | none | a review of the block again |
+| the carry merges the record in process, beside the merged plan | `carry::tests::record::a_carry_keeps_the_verdict_on_the_text_the_merged_plan_holds`, `a_plan_both_sides_changed_is_merged_first_and_its_text_decides_the_record` | n/a | none | a review of the block again |
+
+### T495 Approach (checklist part A)
+
+1. **The goal, in the world.** A carry keeps, for each block and task, the verdict on the text its merged plan.md holds.
+2. **The constraints.** 451 T256's merge (an entry whole, never field by field; the log of rows append-only), kept; 451 T292's carry (one command, verified at its end); 451 FR-013 (landing speed).
+3. **Where each comes from.** O: 451 T487's trace of cec429b447 (its plan section); O: the driver probe above; G: the brief's words for T495.
+4. **Do they describe the world here?** Yes: the carry test, run on HEAD's `merge.rs`, `plan.rs` and `carry.rs` with the fixture's driver `cp %B %A` (the incoming side, as the real driver takes a same-day tie), failed with the record holding `BLOCKED` where `CLEAR` was owed, 1 of 1 run, measured 2026-11-27 (`make rust-test ONLY=land::carry::tests::record`); with the change the land crate's 44 carry tests and the plan crate's 12 merge tests pass, measured 2026-11-27 (`make rust-test ONLY=`).
+5. **The order.** After 451 T487; before T484.
+6. **The exits.** Green: the five new tests pass and the plan and land crates' first-tier checks are clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture of tonight's order - the clone's CLEAR on a filled block, a pool tree's same-day verdict on its stub, the clone's driver defined - carries with the CLEAR kept.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A carry replaced a CLEAR with a verdict on text no longer in the plan, and the orphaned block refused a 12-task landing's ticks (451 T487).
+
+**Found and left?**
+- git's own merges of a record outside the carry (`scripts/sync-with-main.sh`'s pull) still take the day rule, since no merged plan reaches the driver; a wrong pick there owes a review again, as before (451 T256-D2). Not a defect: no wrong outcome measured; not filed.
+
+**Performance work?** no.
+
+<!-- plan-archive: T488 to T387 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)
+
+- **Approach**: `cascade_check` (`rust/guard/shared/src/checks/handle.rs`) asks the cheap half of the trip first: `arbiter::cascade_can_trip(n, last)` (`arbiter.rs`, the `n - last >= CASCADE_MIN` that `cascade` now asks too, one predicate) from the dispatch count and the last cascade ruling, and only where it holds counts the changed lines (`rounds::changed_lines`, `freeze.rs`: a merge-base and a work-tree `git diff --numstat`). The trip is decided by the same numbers wherever it can fire. Both the sandbox's and the real clone's check state hold 0 dispatches since their window opened (3,054 rows, all older; observed 2026-11-27 07:17, method: `checks-open.json` read against `merge-base HEAD origin/main`'s commit time), and a landing reopens the window, so nearly every record check is under the minimum. A record check's (`rf`) PreToolUse, 20 runs each, the two builds alternated in blocks of 5, load 4.7 to 6.5: `--only check-bundle-hooks` 241.6 to 194.8 ms median (p90 266.6 to 220.5), every guard 343.9 to 284.2 (p90 406.2 to 305.9), measured 2026-11-27 (T388's sandbox and `t388-time.py`, its binary taken from `T492_BIN` and its raw values kept, HEAD's guard source against this task's, each built by `scripts/hooks/l7r-guard.sh`). 65 such dispatches a day x about 50 ms = about 3 s a day, measured 2026-11-27 (T388's dispatch count times the median above).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the minimum asked before the diff | `handle::tests::a_count_below_the_cascade_minimum_runs_no_work_tree_diff` | n/a | none | the old order (a slower dispatch, the same trip) |
+
+### T492 Approach (checklist part A)
+
+1. **The goal, in the world.** A record check's dispatch runs no git diff the cascade tripwire does not need.
+2. **The constraints.** Feature 375 FR-010 (the cascade: `CASCADE_MIN` 10, `CASCADE_RATIO` 1), unchanged; 451 FR-013; no guard message changes.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`, `t388-git.txt`); O: the timing above.
+4. **Do they describe the world here?** Yes: the red test, on HEAD's `cascade_check`, counted the changed lines once for 9 dispatches where 0 was owed (`left: 1, right: 0`), measured 2026-11-27 (`make rust-test ONLY=checks::handle::tests::a_count_below`); with the change it counts none for 9 and one for 10, which trips `cascade@1` with the detail `10 check dispatches over 0 changed lines` as before, measured 2026-11-27 (the same test).
+5. **The order.** After 451 T388; before T302.
+6. **The exits.** Green: the test passes, the shared crate's first-tier checks are clean, and the sandbox's dispatch is faster. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** 46.8 ms off `check-bundle-hooks`' median and 59.7 off the whole PreToolUse, measured 2026-11-27 (the timing in the Approach).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: the same trip, sooner.
+
+**Found and left?** none.
+
+**Performance work?** yes - a record check's dispatch hook, about 50 ms each, measured 2026-11-27 (the timing in the Approach; 451 FR-013).
+
+
+<!-- plan-archive: T493 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
