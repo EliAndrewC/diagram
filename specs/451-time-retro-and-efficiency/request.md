@@ -499,3 +499,7 @@ The GM, on the same task (T512), 2026-11-27:
 The GM on disk space, 2026-11-27 (the afternoon after), the words that file T515:
 
 > My main question is about disk space. I thought that we had some disk space cleanup tasks based on what had been reported to us by a session on the host, but I'm looking at our disk space usage and it looks like it's back up to over 80%, which leads me to believe that there are still some holes in our cleaning up. I wonder if perhaps what's happening is that we might have implemented some cleanup that occurs when a builder worktree is cleaned up, but then since we are reusing builder worktrees for efficiency, then maybe that means that a lot of the cleanup that we are relying on never actually happens? That's just a guess though. it does seem like we are leaving things around that are causing my hard drive to slowly fill up in a way which our current tooling is not preventing from happening.
+
+The GM on what T515 leaves, 2026-11-27:
+
+> I'm actually somewhat surprised to hear that you think it will only clear about 83 gigabytes. Because that will still leave over 250 gigabytes of disk space in use, of which I think something close to 200 would be just this container, and that is more than what I would have expected.
