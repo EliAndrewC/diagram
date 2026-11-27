@@ -614,3 +614,60 @@ fn the_session_waiting_on_its_clone_s_live_lane_runner_is_exempt_and_nothing_els
     assert!(!lane_works(&w.p, &c, Some(me)));
     assert!(judge(&w.p, &e, t).is_some());
 }
+
+/// RED FIRST (461 T47): the coordinator's backgrounded `make lane-wait` runs for as long as a batch does, by design (D9), so the
+/// long-run warning passes it over while the session's lane works (`lane_works`: the runner live, the wait the session's) - and
+/// only it: a long `make static` beside it is still told, and with the runner gone the wait is told too.
+#[test]
+fn a_long_make_lane_wait_is_not_told_while_the_session_s_lane_works() {
+    let mut w = world("long-lane");
+    w.session("s", &json!({"tmux": "@1.%1"}), 1);
+    w.screen("❯ ");
+    let clone = w.clone.clone();
+    let me = std::process::id();
+    process(&mut w, "7", "make", &clone, 7000);
+    std::fs::write(w.root.join("proc/7/cmdline"), "make\0lane-wait\0").unwrap();
+    // the runner of the clone and the session's own wait
+    let (runner, waits) = (w.p.proc.join("4343"), w.p.proc.join("4344"));
+    std::fs::create_dir_all(&runner).unwrap();
+    std::fs::create_dir_all(&waits).unwrap();
+    let argv = format!(
+        "/x/l7r-gate\0lane\0--work\0{}\0",
+        clone.join(".git").display()
+    );
+    std::fs::write(runner.join("cmdline"), argv).unwrap();
+    std::fs::write(waits.join("cmdline"), "/x/l7r-gate\0lane\0wait\0").unwrap();
+    std::fs::write(waits.join("stat"), format!("4344 (l7r-gate) S {me} 1 1\n")).unwrap();
+    std::os::unix::fs::symlink(&clone, waits.join("cwd")).unwrap();
+    assert!(run_pass(&w.p, now()).is_empty());
+    // another long make beside it is told, the wait passed over though it is the older
+    process(&mut w, "8", "make", &clone, 5000);
+    let said = run_pass(&w.p, now());
+    assert!(said.len() == 1 && said[0].contains("make static (pid 8)"));
+    std::fs::remove_dir_all(w.p.proc.join("8")).unwrap();
+    // the runner gone: the wait is a long make like any other
+    std::fs::remove_dir_all(&runner).unwrap();
+    let said = run_pass(&w.p, now());
+    assert!(said.len() == 1 && said[0].contains("make lane-wait (pid 7)"));
+}
+
+#[test]
+fn a_make_lane_wait_is_its_one_target_past_flags_and_assignments() {
+    let argv = |words: &[&str]| words.iter().map(|w| (*w).to_owned()).collect::<Vec<_>>();
+    for yes in [
+        &["make", "lane-wait", ""][..],
+        &["/usr/bin/make", "-s", "LANE_WAIT_POLL_S=2", "lane-wait"],
+        &["make", "-C", "/c", "lane-wait"],
+    ] {
+        assert!(super::lane_wait_make(&argv(yes)));
+    }
+    for no in [
+        &[][..],
+        &["make", "lane-wait", "static"],
+        &["make", "lane"],
+        &["make", "-s", "/c", "lane-wait"],
+        &["cargo", "lane-wait"],
+    ] {
+        assert!(!super::lane_wait_make(&argv(no)));
+    }
+}

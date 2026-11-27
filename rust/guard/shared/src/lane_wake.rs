@@ -12,10 +12,12 @@
 //!
 //! It creates nothing where the lane has no log: a clone with no lane prints nothing and is left as it was.
 
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
 
+use crate::builder_queue::{DONE_REFS, LOG as POOL_LOG};
 use crate::tool::{flock, flock_within};
 
 /// The lane's directory, in the git common directory.
@@ -95,5 +97,170 @@ fn owed(bytes: &[u8]) -> Vec<String> {
         .collect()
 }
 
+// WHAT THE LANE HOLDS FOR ITS COORDINATOR (feature 461 T21, D9's Stop rule, read by `pool-idle-hooks`): an open batch, or a waiting
+// hand-in while the runner lives - the cases in which a line owed to the coordinator will come, so its `make lane-wait` must run.
+// A READING PARALLEL TO THE LANE CRATE'S `log.rs` (`batches`/`state_of`, `hand_ins`/`on_lane`/`state`), which the guard cannot
+// reach (the checks' `guard_deps`): the easier route, its unification filed as its own task. Two of its parts are read the
+// easier way, each labeled:
+// - "landed" is a `landed` line listing the hand-in, or its done ref gone; `origin/main` holding it (the lane's `held_by`) is not
+//   asked, a git walk a Stop hook would pay every turn. Cost: a hand-in landed on `origin/main` by hand while its done ref still
+//   stands reads as waiting - which `make carry` (the ref deleted at its end) does not leave.
+// - a waiting hand-in counts ONLY WHILE THE RUNNER LIVES (a deliberate deviation from D9's literal "a waiting hand-in", for phase
+//   1): before T22 flips `HAND_IN_BASE` no hand-in starts the runner (T12 Decision 6), the coordinator lands each by hand, and a wait
+//   over it could never wake (`wake::dead` is quiet there on purpose). So no second reading of the knob is made here; from T22's
+//   base, a waiting hand-in no runner serves is T56's case.
+
+/// The runner's lock, in [`DIR`] (the lane crate's `runner::LOCK`): held by `flock` while a runner lives.
+pub const RUNNER_LOCK: &str = "lane.lock";
+
+/// The events that move a batch's state (the lane crate's `state_of`); every other line of a batch changes nothing.
+const MOVES: [&str; 8] = [
+    "batch",
+    "carry",
+    "eject",
+    "run",
+    "attribute",
+    "push",
+    "landed",
+    "stop",
+];
+
+/// Whether a runner holds the lane's lock: the file opened (never made) and the lock asked for at once, let go at once.
+#[must_use]
+pub fn runner_lives(common: &Path) -> bool {
+    std::fs::File::open(dir(common).join(RUNNER_LOCK)).is_ok_and(|f| {
+        let free = flock(&f, "-n");
+        // let go by `flock -u`, not the close: a child another thread forks holds a copy of the descriptor (461 T14)
+        let _ = free && flock(&f, "-u");
+        !free
+    })
+}
+
+/// The open batches' ids, in the order formed: a batch whose last state-moving line is neither `landed` nor `stop`, its lines
+/// those carrying its id from its `batch` line on, as the lane crate's `batches` routes them.
+fn open_batches(lane: &[Value]) -> Vec<String> {
+    let mut last: Vec<(String, String)> = Vec::new();
+    for l in lane {
+        let (Some(id), Some(event)) = (l["batch"].as_str(), l["event"].as_str()) else {
+            continue;
+        };
+        if event == "batch" {
+            last.push((id.to_owned(), event.to_owned()));
+        } else if let Some(b) = last.iter_mut().rev().find(|b| b.0 == id) {
+            if MOVES.contains(&event) {
+                event.clone_into(&mut b.1);
+            }
+        }
+    }
+    last.into_iter()
+        .filter(|(_, e)| e != "landed" && e != "stop")
+        .map(|(id, _)| id)
+        .collect()
+}
+
+/// Whether `named` (a commit as a line writes it, whole or short) is `sha`: the shorter a prefix of the longer, at least seven.
+fn names(sha: &str, named: &str) -> bool {
+    let short = sha.len().min(named.len());
+    short >= 7 && sha.get(..short) == named.get(..short)
+}
+
+/// The commits a line lists under `key`.
+fn listed<'a>(line: &'a Value, key: &str) -> impl Iterator<Item = &'a str> {
+    line[key]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+}
+
+/// Whether a line names `commit`: a batch's `changes`, a `set`, a `landed` line's lists, an ejection's `change`.
+fn mentions(line: &Value, commit: &str) -> bool {
+    let mut all = ["changes", "set", "landed", "ejected"]
+        .into_iter()
+        .flat_map(|k| listed(line, k))
+        .chain(line["change"].as_str());
+    all.any(|s| names(commit, s))
+}
+
+/// The hand-ins waiting, with no batch open, each as `<feature> <tasks> (<sha>)`: the pool log's `handed_in` done lines (a commit's
+/// first), still the lane's (a done ref names it, or a lane line does), neither landed by a `landed` line, ejected (the last line
+/// naming it an `eject`, or a `landed` line listing it ejected) nor superseded (a later hand-in of its feature shares a task).
+fn waiting(pool: &[Value], refs: &BTreeSet<String>, lane: &[Value]) -> Vec<String> {
+    let mut seen = BTreeSet::new();
+    let ins: Vec<(&str, Vec<&str>, &str)> = pool
+        .iter()
+        .filter(|l| l["event"] == "done" && l["handed_in"] == true)
+        .filter_map(|l| {
+            let (feature, tasks) = l["detail"].as_str()?.split_once(' ')?;
+            Some((feature, tasks.split(',').collect(), l["commit"].as_str()?))
+        })
+        .filter(|h| seen.insert(h.2))
+        .collect();
+    let on_lane = |c: &str| refs.contains(c) || lane.iter().any(|l| mentions(l, c));
+    ins.iter()
+        .enumerate()
+        .filter(|(_, (_, _, c))| on_lane(c))
+        .filter(|(_, (_, _, c))| {
+            !lane
+                .iter()
+                .any(|l| l["event"] == "landed" && listed(l, "landed").any(|s| names(c, s)))
+        })
+        .filter(|(_, (_, _, c))| {
+            let last = lane.iter().rev().find(|l| mentions(l, c));
+            !last.is_some_and(|l| {
+                l["event"] == "eject"
+                    || l["event"] == "landed" && listed(l, "ejected").any(|s| names(c, s))
+            })
+        })
+        .filter(|(i, (f, tasks, _))| {
+            !ins[i + 1..]
+                .iter()
+                .any(|o| o.0 == *f && o.1.iter().any(|t| tasks.contains(t)))
+        })
+        .map(|(_, (f, tasks, c))| format!("{f} {} ({})", tasks.join(","), c.get(..10).unwrap_or(c)))
+        .collect()
+}
+
+/// What the lane under the git common directory `common` holds for its coordinator, said in a few words: its first open batch, else
+/// (while the runner lives) its first waiting hand-in; none where the lane has no log or holds neither.
+#[must_use]
+pub fn holds(common: &Path) -> Option<String> {
+    let lane = lines(&dir(common).join(FILE));
+    if lane.is_empty() {
+        return None;
+    }
+    if let Some(b) = open_batches(&lane).first() {
+        return Some(format!("batch {b} is open"));
+    }
+    if !runner_lives(common) {
+        return None;
+    }
+    let pool = lines(&common.join(POOL_LOG));
+    let refs = std::process::Command::new("git")
+        .arg("-C")
+        .arg(common)
+        .args(["for-each-ref", "--format=%(objectname)", DONE_REFS])
+        .output()
+        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
+        .unwrap_or_default();
+    let refs: BTreeSet<String> = refs.lines().map(str::to_owned).collect();
+    waiting(&pool, &refs, &lane)
+        .first()
+        .map(|h| format!("hand-in {h} waiting"))
+}
+
+/// A JSON-lines file's objects; none for a missing file, a line that does not parse skipped.
+fn lines(file: &Path) -> Vec<Value> {
+    std::fs::read_to_string(file)
+        .unwrap_or_default()
+        .lines()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(Value::is_object)
+        .collect()
+}
+
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod holds_tests;

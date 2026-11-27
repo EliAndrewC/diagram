@@ -109,6 +109,25 @@ expect_block 'a refused fix command is flagged' "FLAG: T3 (line 1) is typed fix,
 expect_block 'with the build-half command' 'make builder-brief T=T3 F=451 KIND=build-half ENTRY=1'
 rm "$C/specs/451-x/queue.txt"
 expect_allow 'no queue'
+# --- 461 T21 (D9): the lane holds an open batch and no make lane-wait of this clone runs: blocked with the command; the wait's
+# make in the clone, the lane's escape with its reason, and the batch landed pass
+P="$W/proc"; mkdir -p "$P/self" "$C/.git/l7r-lane"
+export POOL_IDLE_PROC="$P"
+printf '{"event": "batch", "batch": "461-1", "changes": ["abcdef1"]}\n' > "$C/.git/l7r-lane/lane.jsonl"
+expect_block 'an open batch with no wait' "the lane holds batch 461-1 is open and no make lane-wait of this clone runs"
+expect_block 'with the command to start' "make -C $C lane-wait"
+expect_block 'the bare lane escape' 'LANE_WAIT_OK with no reason' 'LANE_WAIT_OK: later'
+expect_allow 'the lane escape' $'Stopping.\nLANE_WAIT_OK: the GM asked to stop'
+grep -rqs '"rule": *"LANE_WAIT_OK"' "$W/log" && pass=$((pass+1)) || { fail=$((fail+1)); echo "FAIL: the lane escape's use is not in the guard log"; }
+expect_allow 'a subagent over an open batch' 'done' '{"agent_id": "a1b2"}'
+mkdir -p "$P/12"; printf 'make\0lane-wait\0' > "$P/12/cmdline"; ln -s /elsewhere "$P/12/cwd"
+expect_block 'a wait of another tree' 'the lane holds batch 461-1 is open'
+rm "$P/12/cwd"; ln -s "$C" "$P/12/cwd"
+expect_allow 'the wait runs in the clone'
+rm -r "$P/12"
+printf '{"event": "landed", "batch": "461-1"}\n' >> "$C/.git/l7r-lane/lane.jsonl"
+expect_allow 'the batch landed'
+unset POOL_IDLE_PROC
 printf '{}' | "$HOOK" stop >/dev/null 2>&1
 [ $? -eq 0 ] && pass=$((pass+1)) || { fail=$((fail+1)); echo "FAIL: empty input should be a no-op"; }
 

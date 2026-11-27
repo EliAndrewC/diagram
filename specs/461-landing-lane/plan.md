@@ -1188,32 +1188,79 @@ measurement task counts).
 **Performance work?** no
 
 
-### T21 (<why: the finding or measurement that files it>)
+### T21 (D9, FR-005: the Stop rule that keeps the coordinator's `make lane-wait` armed; lands after T20)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/guard/src/guards/pool_idle_hooks.rs` gains a second rule beside the free-tree rule (`judge_lane`,
+  `lane_refusal`, `Lane`), the lane's state read in `l7r_shared::lane_wake::holds` (`rust/guard/shared/src/lane_wake.rs`, its
+  tests in `lane_wake/holds_tests.rs`), because the guard cannot reach the lane crate (T20's "Not here"). Tests:
+  `pool_idle_hooks/tests.rs` (three new) and `tests/hooks/test-pool-idle-hooks.sh` (ten new cases).
+- **Decision 1 - what the lane holds, read in `l7r_shared`, parallel to the lane crate's `log.rs`.** `holds(common)` says, in a few
+  words, the lane's first open batch (a batch whose last state-moving line - `MOVES`, `state_of`'s events - is neither `landed` nor
+  `stop`, its lines routed as `batches` routes them, so a batch resumed after a `stop` is open again), else its first waiting
+  hand-in; none where the lane has no log. The waiting reading follows `log::state` with no batch open (in-batch cannot hold):
+  the pool log's `handed_in` done lines, a commit's first, still the lane's (a done ref or a lane line names it), not landed by a
+  `landed` line, not ejected (the last line naming it an `eject`, or a `landed` line listing it ejected), not superseded. "Landed"
+  by `origin/main` (`held_by`) is not asked: a git walk a Stop hook would pay each turn; cost, a hand-in landed on `origin/main` by
+  hand while its done ref still stands reads as waiting, which `make carry` (the ref deleted at its end) does not leave. Label: the
+  easier route; the duplication is filed as T63 (one reading, `log.rs`'s pure readers moved to `l7r_shared` and re-exported).
+- **Decision 2 - a waiting hand-in counts only while the runner lives.** A deliberate deviation from D9's literal "a waiting
+  hand-in", for phase 1: until T22 flips `HAND_IN_BASE` no hand-in starts the runner (T12 Decision 6), the coordinator lands each by
+  hand, and a wait over it could never wake (`wake::dead` is quiet there on purpose, T20 Decision 3) - so the rule would refuse
+  every stop after a hand-in and arm a wait with nothing coming. The runner's lock (`lane.lock`, `RUNNER_LOCK`) is probed as
+  `runner::held` probes it (`flock -n`, let go by `flock -u`). No second reading of the knob is made. From T22's base a waiting
+  hand-in no runner serves (T56's case) holds no stop: Not fixed here: the base and its one reading are T22's. Filed as T64; lands
+  with T22 and T56.
+- **Decision 3 - "a `make lane-wait` of this clone runs": its `make` or the wait itself, any process of the clone.** A `/proc`
+  process whose argv is `l7r-gate lane wait` (T12's `waits_on_lane`) or a `make` whose one target is `lane-wait` past its flags,
+  a valued flag's value and `VAR=` words (`pass::lane_wait_make`, shared with T47), its working directory in the clone. The make
+  counts from its start, while `l7r-gate.sh` may still build the binary (T54: 2 to 112 s, measured 2026-11-27 (T54's scratch-clone rebuilds)), so a stop in that gap is not refused.
+  Any process of the clone, not only the session's own (as T12's `lane_works` asks): the plan's Scale is one session a clone,
+  several sessions feature 459's, and a Stop hook has no registry pid to walk from. On the reviewer's note that T20's Decisions 2
+  and 4 assume one session: not found in `plan-review.json` or the ledger; the same assumption is taken here, as D9's "of this
+  clone" words it. `/proc` is `POOL_IDLE_PROC` in a suite. Label: the easier route.
+- **Decision 4 - one block, and an escape of its own.** Where both rules hold, the free tree's block and the lane's are said in ONE
+  Stop block (each refused stop is a wake, 540k-966k tokens, D9). `POOL_IDLE_OK` waives the tree rule only: a turn that keeps a
+  tree free for the GM still owes its wait; the lane rule's escape is a line starting `LANE_WAIT_OK: <reason>`, checked first and
+  recorded (rule `LANE_WAIT_OK`; a bare one `LANE_WAIT_OK-no-reason`; a held stop `lane-unwatched`). The block names the exact
+  command, `make -C <clone> lane-wait`, with `run_in_background: true`. NEW GUARD MESSAGES: the lane block and the bare-escape block
+  (the session runs their check). The escape parser is shared by both rules (`reason`). Label: convention (`POOL_IDLE_OK`'s form).
+- Red first (2026-11-27): `l7r_shared` `lane_wake::holds_tests` against a stub `holds` returning none, 0 passed, 2 failed; after,
+  `lane_wake` 7 of 7. The guard's `pool_idle_hooks::tests` against stub `judge_lane`/`lane_refusal` (quiet, none), 6 passed, 3
+  failed; after, 9 of 9. `tests/hooks/test-pool-idle-hooks.sh` with `judge_lane` returning quiet at its top (the rule deleted), 37
+  passed, 5 failed; restored, 42 of 42. `make builder-checks CRATE="rust/guard rust/guard/shared"`: 636 and 617 tests, lint and
+  format clean, observed 2026-11-27, method: that run's log.
 
 ### T21 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A coordinator cannot end its turn while the lane holds work whose line will come and nothing would
+   wake it; told the one command, it starts `make lane-wait` in the background and is woken once by the line. Phase 1's hand-ins,
+   landed by hand, hold nothing.
+2. **The constraints.** D9 (the Stop rule, its message the exact command with `run_in_background: true`, its suite case and quiet
+   case, XVIII), FR-005 (no wake it does not list), D8 (the states computed from the logs), T12 Decision 6 (no runner before T22's
+   base), T20's mark and Decision 3, the plan's Scale (one session a clone).
+3. **Where each comes from.** G: FR-005's words. R: plan.md D8, D9; data-model.md; T12's and T20's sections. O: the red-first
+   counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with done refs and the pool and lane logs, a fake
+   `/proc`. Not on the real clone's lane, which has no `l7r-lane/`: T23 runs the real batch.
+5. **The order.** After T20 (the wait it arms); with T47; before T22 (with T64 and T56) and T23.
+6. **The exits.** Green: the changed crates' tests, `make builder-checks`, the pool-idle suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the literal rule refuses every stop in phase 1 (Decision 2), found by reading T12 Decision 6 and
+   `wake::dead`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: no constant moved; `RUNNER_LOCK` mirrors `runner::LOCK`.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** New rule: without it a coordinator ends its turn over an open batch with no wait armed and is woken by
+   nothing until the GM prompts it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- The lane's states read twice, in `log.rs` and `lane_wake` (Decision 1): a later change to either drifts the Stop rule.
+  Not fixed here: the lane crate is outside this task's crates. Filed as T63; lands before T26.
+- From T22's base a waiting hand-in no runner serves holds no stop (Decision 2). Not fixed here: the base's one reading is T22's.
+  Filed as T64; lands before T23 (with T22 and T56).
 
+**Performance work?** no
 
 ### T22 (<why: the finding or measurement that files it>)
 
@@ -1748,33 +1795,46 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** no
 
-### T47 (<why: the finding or measurement that files it>)
+### T47 (D9, FR-005: the watchdog's long-run warning passes over the coordinator's own `make lane-wait`; lands with T20, before T22)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/guard/src/guards/stall_watchdog_hooks/pass.rs`: `long_run` takes `waits` and drops a `make lane-wait` from its
+  candidates where it holds; `long_run_line` asks T12's `lane_works(p, clone, pid)` for it; `LongRun` keeps the make's argv (from
+  its `cmdline`'s NUL-split words); `lane_wait_make(argv)` is the matcher, shared with T21's Stop rule. Tests in `pass/tests.rs`.
+- **Decision 1 - exempt the one make, not the check.** Only a `make` whose one target is `lane-wait` (past its flags, a valued
+  flag's value - `-C <clone>`, T21's command - and `VAR=` words) is passed over, and only while `lane_works` holds: the clone's
+  runner live and the wait the session's own. A long `make static` beside the wait is still told (skipping the whole check while a
+  wait runs would hide it for as long as a wait is armed, which in phase 2 is nearly always), and with the runner gone the wait is
+  a long make like any other: then nothing will end it but a dead-runner line or the GM, and `LONG_RUN`'s 30 minutes (CONVENTION, a knob) is a fair moment to say so.
+  Why: the wait runs as long as a batch by design (D9), and each warning past `LONG_RUN` (1800 s, CONVENTION, a knob) types a nudge into the session -
+  a wake FR-005 does not list (540k-966k tokens a wake, measured 2026-11-27 (the transcript's usage fields), D9). Label: the easier route (T12's predicate reused).
+- Red first (2026-11-27): `pass::tests::a_long_make_lane_wait_is_not_told_while_the_session_s_lane_works` on the old `long_run`,
+  0 passed, 1 failed (the wait warned); after, the module's 23 of 23 with it and
+  `a_make_lane_wait_is_its_one_target_past_flags_and_assignments`. `tests/hooks/test-stall-watchdog-hooks.sh` 29 of 29, unchanged
+  (the Rust test is the red one). No guard message changed.
 
 ### T47 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The coordinator's backgrounded `make lane-wait` over a long batch types no watchdog nudge into its
+   pane, while any other make that runs too long is still told.
+2. **The constraints.** D9 (the wait, no ceiling), FR-005, T12's `lane_works` (narrowed at its plan review to the session's own
+   wait and a live runner), the long-run warning's purpose (the GM 2026-11-09).
+3. **Where each comes from.** G: FR-005's words, the GM's long-run words. R: plan.md D9; T12's and T20's sections. O: the red-first
+   counts.
+4. **Do they describe the world here?** On a fake `/proc`; the live argv of `make lane-wait` (`make lane-wait`, its child
+   `l7r-gate lane wait`) read from the Makefile's recipe and T20's live run.
+5. **The order.** With T20 and T21; before T22.
+6. **The exits.** Green: the module's tests, `make builder-checks`, the stall-watchdog suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: `LONG_RUN` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect fixed before it is live: a long batch's wait would have been told as a stuck make, a wake FR-005
+   does not list and a nudge that invites killing the wait.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-<!-- plan-archive: T48 to T09 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+**Performance work?** no
 
 ### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)
 
@@ -2422,6 +2482,60 @@ waiting on its closing half.
 |---|---|---|---|---|
 
 ### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T63 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T64 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T64 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

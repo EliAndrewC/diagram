@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{judge, refusal, Said, GUARD};
+use super::{judge, judge_lane, lane_refusal, refusal, Lane, Said, GUARD};
 use crate::protocol::{run, Event};
 use crate::shared::builder_queue::Idle;
 use crate::shared::tempdir::TempDir;
@@ -213,4 +213,125 @@ fn a_ready_fix_entry_whose_line_names_a_mechanism_is_flagged_in_the_block() {
     );
     let block = refusal(&judge(&stop("done"), Some(&clone), 3)).unwrap();
     assert!(!block.contains("FLAG"), "{block}");
+}
+
+/// A clone (no pool) whose lane's log holds an open batch, and a `/proc` with no process.
+fn lane_world(tag: &str) -> (TempDir, PathBuf, PathBuf) {
+    let dir = TempDir::new(&format!("guard-pool-idle-lane-{tag}"));
+    let clone = dir.join("c");
+    let batch = json!({"event": "batch", "batch": "461-1", "changes": ["abcdef1"]});
+    put(
+        &clone.join(".git/l7r-lane/lane.jsonl"),
+        &format!("{batch}\n"),
+    );
+    let proc = dir.join("proc");
+    std::fs::create_dir_all(&proc).unwrap();
+    (dir, clone, proc)
+}
+
+/// A process of the fake `/proc`: its argv and working directory.
+fn process(proc: &Path, pid: &str, argv: &str, cwd: &Path) {
+    let at = proc.join(pid);
+    std::fs::create_dir_all(&at).unwrap();
+    std::fs::write(at.join("cmdline"), argv).unwrap();
+    let link = at.join("cwd");
+    let _ = std::fs::remove_file(&link);
+    std::os::unix::fs::symlink(cwd, &link).unwrap();
+}
+
+/// RED FIRST (461 T21, D9): the coordinator's stop while the lane holds an open batch and no `make lane-wait` of its clone runs is
+/// held with the one command; the wait running (its `make`, or `l7r-gate lane wait` itself) in the clone quiets it, one elsewhere
+/// or a process that is no wait does not.
+#[test]
+fn a_stop_over_an_open_batch_with_no_lane_wait_is_held_with_the_command() {
+    let (_dir, clone, proc) = lane_world("held");
+    let said = judge_lane(&stop("The batch runs."), Some(&clone), &proc);
+    assert_eq!(
+        said,
+        Lane::Held {
+            why: "batch 461-1 is open".to_owned(),
+            clone: clone.clone()
+        }
+    );
+    let want = format!("pool-idle: the lane holds batch 461-1 is open and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: LANE_WAIT_OK: <why not, two words or more>\n", clone.display());
+    assert_eq!(lane_refusal(&said), Some(want));
+    // no wait: another process, a wait of another clone
+    process(&proc, "10", "make\0static\0", &clone);
+    process(
+        &proc,
+        "11",
+        "/x/l7r-gate\0lane\0wait\0",
+        Path::new("/elsewhere"),
+    );
+    std::fs::create_dir_all(proc.join("self")).unwrap();
+    assert!(matches!(
+        judge_lane(&stop("done"), Some(&clone), &proc),
+        Lane::Held { .. }
+    ));
+    // the wait's make, or the wait itself, in the clone
+    for argv in ["make\0-C\0/c\0lane-wait\0", "/x/l7r-gate\0lane\0wait\0"] {
+        process(&proc, "12", argv, &clone.join("sub"));
+        assert_eq!(judge_lane(&stop("done"), Some(&clone), &proc), Lane::Quiet);
+    }
+}
+
+#[test]
+fn a_subagent_no_clone_a_quiet_lane_and_the_lane_s_escape_pass() {
+    let (_dir, clone, proc) = lane_world("quiet");
+    let mut sub = stop("done");
+    sub["agent_id"] = json!("a1");
+    assert_eq!(judge_lane(&sub, Some(&clone), &proc), Lane::Quiet);
+    assert_eq!(judge_lane(&stop("done"), None, &proc), Lane::Quiet);
+    let escaped = judge_lane(
+        &stop("Stopping.\nLANE_WAIT_OK: the GM asked to stop"),
+        Some(&clone),
+        &proc,
+    );
+    assert_eq!(escaped, Lane::Escaped("the GM asked to stop".to_owned()));
+    assert_eq!(lane_refusal(&escaped), None);
+    let bare = judge_lane(&stop("LANE_WAIT_OK: later"), Some(&clone), &proc);
+    assert_eq!(bare, Lane::NoReason);
+    assert!(lane_refusal(&bare)
+        .unwrap()
+        .starts_with("pool-idle: LANE_WAIT_OK with no reason. Start a line with: LANE_WAIT_OK: <"));
+    // the batch landed: nothing held, the escape not asked
+    put(
+        &clone.join(".git/l7r-lane/lane.jsonl"),
+        "{\"event\": \"batch\", \"batch\": \"461-1\"}\n{\"event\": \"landed\", \"batch\": \"461-1\"}\n",
+    );
+    assert_eq!(judge_lane(&stop("done"), Some(&clone), &proc), Lane::Quiet);
+}
+
+#[test]
+fn the_guard_says_the_free_tree_and_the_lane_in_one_block_and_records_each() {
+    crate::shared::log::quiet();
+    let (_dir, clone) = world("both", "T3 fix crates=rust/guard files=-\n");
+    let batch = json!({"event": "batch", "batch": "461-1", "changes": ["abcdef1"]});
+    put(
+        &clone.join(".git/l7r-lane/lane.jsonl"),
+        &format!("{batch}\n"),
+    );
+    let proc = clone.join("proc");
+    std::fs::create_dir_all(&proc).unwrap();
+    crate::shared::env::set("POOL_IDLE_ROOT", &clone);
+    crate::shared::env::set("POOL_IDLE_PROC", &proc);
+    let ask = |message: &str| {
+        let mut event = Event {
+            name: "Stop".to_owned(),
+            input: stop(message),
+        };
+        run(&mut event, &[GUARD]).stdout
+    };
+    let both = ask("done");
+    assert!(both.contains("make builder-brief T=T3") && both.contains("lane-wait"));
+    let lane = ask("POOL_IDLE_OK: the count is held for a measurement");
+    assert!(!lane.contains("builder-brief") && lane.contains("lane-wait"));
+    let lane = ask("POOL_IDLE_OK: the count is held\nLANE_WAIT_OK:");
+    assert!(lane.contains("LANE_WAIT_OK with no reason"));
+    assert_eq!(
+        ask("POOL_IDLE_OK: the count is held\nLANE_WAIT_OK: the GM asked to stop"),
+        ""
+    );
+    crate::shared::env::unset("POOL_IDLE_PROC");
+    crate::shared::env::unset("POOL_IDLE_ROOT");
 }

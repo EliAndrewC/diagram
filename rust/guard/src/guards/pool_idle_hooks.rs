@@ -27,15 +27,17 @@
 // GUARD_EDIT_OK: feature 451 T313 - adding a guard, the pool-idle Stop check over the builders' queue
 
 use std::fmt::Write as _;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use serde_json::Value;
 
+use crate::guards::stall_watchdog_hooks::pass;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::builder_queue::{self, Idle, Verdict};
 use crate::shared::escape::enough;
+use crate::shared::lane_wake;
 use crate::shared::log::fire;
 use crate::shared::session::Session;
 use crate::shared::state::field;
@@ -74,6 +76,95 @@ pub(crate) enum Said {
     Held(Idle),
 }
 
+/// The lane rule's escape, which starts its line as [`ESCAPE`] does.
+static LANE_ESCAPE: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?m)^[ \t]*LANE_WAIT_OK[ \t]*[=:][ \t]*(.*)$"));
+
+const LANE_TOKEN: &str = "LANE_WAIT_OK";
+
+/// What the lane rule (461 T21, D9) says of one stop.
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) enum Lane {
+    /// Not held, nothing recorded.
+    Quiet,
+    /// Not held, recorded: the escape's reason.
+    Escaped(String),
+    /// The escape with no reason: held.
+    NoReason,
+    /// Held: what the lane holds, and the clone whose `make lane-wait` would wake the session.
+    Held { why: String, clone: PathBuf },
+}
+
+/// The verdict of the lane rule on one stop of the session whose clone is `clone`, `/proc` at `proc`: held where the clone's lane holds
+/// an open batch or a waiting hand-in (`shared::lane_wake::holds`) and no `make lane-wait` of the clone runs - its `make` (from its
+/// start, while `l7r-gate.sh` may still build the binary) or `l7r-gate lane wait` itself, its working directory in the clone. Any
+/// process of the clone counts, not only the session's own: one session a clone (the plan's Scale; several, feature 459).
+pub(crate) fn judge_lane(input: &Value, clone: Option<&Path>, proc: &Path) -> Lane {
+    if !field(input, "agent_id").is_empty() {
+        return Lane::Quiet;
+    }
+    let Some(clone) = clone else {
+        return Lane::Quiet;
+    };
+    if let Some(why) = reason(&LANE_ESCAPE, field(input, "last_assistant_message")) {
+        return if enough(&why) {
+            Lane::Escaped(why)
+        } else {
+            Lane::NoReason
+        };
+    }
+    let Some(why) = lane_wake::holds(&clone.join(".git")) else {
+        return Lane::Quiet;
+    };
+    if waits(proc, clone) {
+        return Lane::Quiet;
+    }
+    Lane::Held {
+        why,
+        clone: clone.to_path_buf(),
+    }
+}
+
+/// Whether a `make lane-wait`, or the `l7r-gate lane wait` it runs, works in `clone` (461 T47's and T12's matchers).
+fn waits(proc: &Path, clone: &Path) -> bool {
+    let all = std::fs::read_dir(proc).into_iter().flatten().flatten();
+    all.filter(|d| {
+        d.file_name()
+            .to_string_lossy()
+            .starts_with(|c: char| c.is_ascii_digit())
+    })
+    .any(|d| {
+        let bytes = std::fs::read(d.path().join("cmdline")).unwrap_or_default();
+        let argv: Vec<String> = bytes
+            .split(|c| *c == 0)
+            .map(|a| String::from_utf8_lossy(a).into_owned())
+            .collect();
+        (pass::waits_on_lane(&argv) || pass::lane_wait_make(&argv))
+            && std::fs::read_link(d.path().join("cwd")).is_ok_and(|c| c.starts_with(clone))
+    })
+}
+
+/// The lane rule's block; none where the stop passes.
+pub(crate) fn lane_refusal(lane: &Lane) -> Option<String> {
+    match lane {
+        Lane::Quiet | Lane::Escaped(_) => None,
+        Lane::NoReason => Some(format!(
+            "pool-idle: {LANE_TOKEN} with no reason. Start a line with: {LANE_TOKEN}: <why nothing need wake this session, two words or more>\n"
+        )),
+        Lane::Held { why, clone } => Some(format!(
+            "pool-idle: the lane holds {why} and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: {LANE_TOKEN}: <why not, two words or more>\n",
+            clone.display()
+        )),
+    }
+}
+
+/// The reason after an escape token that starts a line of `message`, quotes trimmed; none where no line starts with it.
+fn reason(escape: &Regex, message: &str) -> Option<String> {
+    let m = escape.captures(message).ok().flatten()?;
+    let why = m.get(1).map_or("", |g| g.as_str()).trim();
+    Some(why.trim_matches(['"', '\'']).to_owned())
+}
+
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     // a suite names its clone; a session's is the one it resolves to
     let root = crate::shared::env::opt("POOL_IDLE_ROOT").map(std::path::PathBuf::from);
@@ -98,7 +189,28 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
             "tree-idle",
         ),
     }
-    refusal(&said).map(Answer::StopBlock).into_iter().collect()
+    // the lane rule (461 T21, D9): a suite names its `/proc`
+    let proc = crate::shared::env::opt("POOL_IDLE_PROC").unwrap_or_else(|| "/proc".to_owned());
+    let lane = judge_lane(&event.input, clone, Path::new(&proc));
+    match &lane {
+        Lane::Quiet => {}
+        Lane::Escaped(why) => log("escaped", why, LANE_TOKEN),
+        Lane::NoReason => log(
+            "blocked",
+            "LANE_WAIT_OK with no reason",
+            "LANE_WAIT_OK-no-reason",
+        ),
+        Lane::Held { why, .. } => log("blocked", why, "lane-unwatched"),
+    }
+    // ONE block for both rules: each refused stop is a wake of the coordinator's whole context (540k-966k tokens, D9)
+    let block: String = [refusal(&said), lane_refusal(&lane)]
+        .into_iter()
+        .flatten()
+        .collect();
+    (!block.is_empty())
+        .then_some(Answer::StopBlock(block))
+        .into_iter()
+        .collect()
 }
 
 /// The verdict on one stop of the session whose clone is `clone`, the settled count `builders`.
@@ -110,15 +222,9 @@ pub(crate) fn judge(input: &Value, clone: Option<&Path>, builders: usize) -> Sai
     let Some(clone) = clone else {
         return Said::Quiet;
     };
-    let message = field(input, "last_assistant_message");
-    if let Ok(Some(m)) = ESCAPE.captures(message) {
-        let why = m
-            .get(1)
-            .map_or("", |g| g.as_str())
-            .trim()
-            .trim_matches(['"', '\'']);
-        return if enough(why) {
-            Said::Escaped(why.to_owned())
+    if let Some(why) = reason(&ESCAPE, field(input, "last_assistant_message")) {
+        return if enough(&why) {
+            Said::Escaped(why)
         } else {
             Said::NoReason
         };

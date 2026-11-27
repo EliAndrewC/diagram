@@ -523,14 +523,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T47 (<why: the finding or measurement that files it>)": {
-   "sha256": "7a542fe3838b569ed543db98b25fa8ea26791ca2493f70658406a81b3572dc9d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T47 Approach (checklist part A)": {
-   "sha256": "325f8ad08a015ac903963ad22f473d958c20989453d890d52a17d17511385dad",
+   "sha256": "4a0a190c281f4094d9ff4a94344aa59308d951379839d831ab8fdd047af002ef",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -675,6 +669,24 @@
   },
   "### T62 Approach (checklist part A)": {
    "sha256": "70e8a8926a77c81468aee29b6196710d1e68f9bea362b015ee37732c7e032c63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T21 (D9, FR-005: the Stop rule that keeps the coordinator's `make lane-wait` armed; lands after T20)": {
+   "sha256": "a2de1dc66216713c9cc515660bff76dc9d2bd49ee9316af6f35a7ba1286dbecb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Approach (checklist part A)": {
+   "sha256": "65873f5cd96eefcceca9db25206d0dedf0ac3b59cf4e85d122f0c8b1532ccebe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T47 (D9, FR-005: the watchdog's long-run warning passes over the coordinator's own `make lane-wait`; lands with T20, before T22)": {
+   "sha256": "5040339a4c64c0db8f36a5d86c9711c345c2bd4c9deff156f1b133a02a97bd22",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4291,6 +4303,93 @@
      "summary": "Tests only, for the three lines the pre-gate coverage named: a work_cli test that reaches the real sleep, wake/tests.rs's n == 50 guard made an assert, and rustc/run.rs line 205 reached through the side::run_built and cover::run_job instances of leak_checked.",
      "class": "within",
      "why": "Tests that make the existing gate's coverage pass for code this feature wrote. They enforce the landing through unchanged checks (FR-008) and add no behavior. This is not the builder hand-in coverage that the spec struck from sketch item 2: no coverage step is added to builder-done."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T21 (D9, FR-005: the Stop rule that keeps the coordinator's `make lane-wait` armed; lands after T20)",
+    "### T21 Approach (checklist part A)",
+    "### T47 (D9, FR-005: the watchdog's long-run warning passes over the coordinator's own `make lane-wait`; lands with T20, before T22)",
+    "### T47 Approach (checklist part A)",
+    "(removed) ### T47 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T21 D1a",
+     "summary": "The lane's held state (first open batch, else first waiting hand-in) is read by a parallel reader in l7r_shared::lane_wake::holds, since the guard cannot reach the lane crate; the duplication with log.rs is filed as T63.",
+     "class": "within",
+     "why": "An implementation route to D8's 'states computed from the logs'; the duplication is a drift risk, not a wrong outcome, and is filed anyway (T63, lands before T26)."
+    },
+    {
+     "id": "T21 D1b",
+     "summary": "'Landed' is read from the lane's landed lines, not from origin/main (no git walk per Stop turn); a hand-in landed on origin/main by hand while its done ref stands would read as waiting.",
+     "class": "within",
+     "why": "Cost choice inside the rule's reach; the admitted case is not left by make carry (it deletes the ref), and under D2 a waiting hand-in only holds while the runner lives, so it does not narrow what the coordinator is held to by FR-005."
+    },
+    {
+     "id": "T21 D1c",
+     "summary": "A batch resumed after a stop counts as open again.",
+     "class": "within",
+     "why": "Follows the lane log's own state reading; it keeps the rule holding over work whose line will come."
+    },
+    {
+     "id": "T21 D2 (phase 1)",
+     "summary": "A waiting hand-in holds a stop only while the runner's lock is held; in phase 1 (before T22 flips HAND_IN_BASE) no hand-in starts the runner, so phase-1 hand-ins, landed by hand, hold nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Self-declared deviation from D9's literal 'a waiting hand-in' (D9's wording taken from the block's own quotation; D9 is not in the bundle). Applied literally in phase 1 the rule would refuse every stop after a hand-in and arm a wait nothing can end (wake::dead quiet by design, T20 D3): each refusal a wake FR-005 does not list, and a wait that never fires defeats the rule's purpose (be woken by the line). Literal application defeats the purpose, concretely."
+    },
+    {
+     "id": "T21 D2 (from T22's base)",
+     "summary": "From T22's base, a waiting hand-in no runner serves (T56's case) would hold no stop; not fixed here, filed as T64, landing with T22 and T56, before T23.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from phase 1: here the gap would be a defect (coordinator could end its turn over work nothing wakes it for), but it is not live until T22 changes the base, and T64 is ordered to land with T22 and T56, before T23. A defect fixed before it goes live is not one carried into the next step. The order must hold: T64 may not land after T22."
+    },
+    {
+     "id": "T21 D3a",
+     "summary": "The make lane-wait counts from its start, while l7r-gate.sh may still be building the binary (2-112 s, measured 2026-11-27, T54's scratch-clone rebuilds).",
+     "class": "within",
+     "why": "The wait is armed once its command runs; refusing a stop during the build would be a wake FR-005 does not list."
+    },
+    {
+     "id": "T21 D3b",
+     "summary": "Any process of the clone running the wait satisfies the rule, not only the session's own (T47 uses T12's narrower session's-own lane_works for the exemption).",
+     "class": "within",
+     "why": "Follows D9's 'of this clone' words; the request has one coordinator and the plan's Scale is one session a clone, so the two predicates coincide in every case the feature runs. The asymmetry with T47 errs on each side toward fewer unlisted wakes (FR-005)."
+    },
+    {
+     "id": "T21 D4a",
+     "summary": "Where the free-tree rule and the lane rule both hold, one Stop block says both.",
+     "class": "within",
+     "why": "Each refused stop is a wake; one block for both serves FR-005."
+    },
+    {
+     "id": "T21 D4b",
+     "summary": "POOL_IDLE_OK waives the tree rule only, not the lane rule.",
+     "class": "within",
+     "why": "Keeps the lane rule whole; tightening, not narrowing."
+    },
+    {
+     "id": "T21 D4c",
+     "summary": "The lane rule has its own escape, a line starting LANE_WAIT_OK: <reason>, recorded; a bare one refused.",
+     "class": "within",
+     "why": "The project's standing guard form (POOL_IDLE_OK's), reasoned and recorded, not a carve-out of a case; it lets a turn the GM ends stand without arming a wait, and carries no class of exempted work."
+    },
+    {
+     "id": "T47 D1",
+     "summary": "The long-run watchdog passes over only a make whose one target is lane-wait, and only while lane_works holds (runner live, the session's own wait); other long makes and a wait with no runner are still told.",
+     "class": "within",
+     "why": "Each long-run nudge into a wait that runs as long as a batch by design is a wake FR-005 does not list; the exemption is scoped to that one make so the GM's long-run warning keeps its purpose for everything else, and with the runner dead it warns again. LONG_RUN unchanged."
+    },
+    {
+     "id": "(removed) T47 template",
+     "summary": "An unfilled template block for T47 removed, its content now carried by the filled T47 block and T47 Approach.",
+     "class": "within",
+     "why": "The removed text held only placeholders and decided nothing."
     }
    ]
   }

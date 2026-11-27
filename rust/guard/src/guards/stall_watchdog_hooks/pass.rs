@@ -326,6 +326,25 @@ pub(crate) fn waits_on_lane(argv: &[String]) -> bool {
     matches!(argv, [exe, verb, wait] if exe.rsplit('/').next() == Some("l7r-gate") && verb == "lane" && wait == "wait")
 }
 
+/// Is `argv` (a make's, its trailing NUL's empty word kept or not) `make lane-wait` - its one target `lane-wait`, past its flags and
+/// `VAR=` words, a valued flag's value too (feature 461 T21, T47)? It stands for the wait from its start, while `l7r-gate.sh` may still be building the binary
+/// that runs `l7r-gate lane wait` (461 T54: 2 to 112 s).
+pub(crate) fn lane_wait_make(argv: &[String]) -> bool {
+    let Some((exe, rest)) = argv.split_first() else {
+        return false;
+    };
+    // a flag that takes the next word as its value (`make -C <clone> lane-wait`, the Stop rule's command)
+    let valued = ["-C", "-f", "-I", "-o", "-W"];
+    let targets: Vec<&String> = rest
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| *i == 0 || !valued.contains(&rest[i - 1].as_str()))
+        .map(|(_, a)| a)
+        .filter(|a| !a.is_empty() && !a.starts_with('-') && !a.contains('='))
+        .collect();
+    exe.rsplit('/').next() == Some("make") && targets == ["lane-wait"]
+}
+
 /// Does the session whose process is `session` wait on `clone`'s landing lane by design (461 T12, narrowed at its plan review)?
 /// D9: the coordinator ends its turn on a backgrounded `make lane-wait` while a batch runs, so its silence is not a stall. Both hold:
 /// the clone's runner lives (its exact argv, [`runs_lane`]); and a `l7r-gate lane wait` THIS session started (a descendant of its
@@ -597,6 +616,7 @@ struct LongRun {
     pid: String,
     seconds: u64,
     command: String,
+    argv: Vec<String>,
 }
 
 /// The make at `dir` (a `/proc/<pid>`), when it is one and runs inside `clone`.
@@ -622,11 +642,15 @@ fn make_in(dir: &Path, clone: &str, boot: u64, now: f64) -> Option<LongRun> {
         pid: dir.file_name()?.to_string_lossy().into_owned(),
         seconds: whole(now).saturating_sub(boot + ticks / 100),
         command: command.trim().to_owned(),
+        argv: bytes
+            .split(|c| *c == 0)
+            .map(|a| String::from_utf8_lossy(a).into_owned())
+            .collect(),
     })
 }
 
-/// The oldest `make` in the clone that has run past the limit.
-fn long_run(p: &Paths, clone: &str, now: f64) -> Option<LongRun> {
+/// The oldest `make` in the clone that has run past the limit; a `make lane-wait` passed over where `waits` (461 T47).
+fn long_run(p: &Paths, clone: &str, now: f64, waits: bool) -> Option<LongRun> {
     let stat = std::fs::read_to_string(p.proc.join("stat")).ok()?;
     let boot: u64 = stat
         .lines()
@@ -638,6 +662,7 @@ fn long_run(p: &Paths, clone: &str, now: f64) -> Option<LongRun> {
         .iter()
         .filter_map(|d| make_in(d, clone, boot, now))
         .filter(|r| r.seconds >= whole(p.long_run))
+        .filter(|r| !(waits && lane_wait_make(&r.argv)))
         .max_by_key(|r| r.seconds)
 }
 
@@ -683,7 +708,11 @@ fn long_run_line(p: &Paths, entry: &Value, regs: &[Value], now: f64) -> Option<S
     if clone.is_empty() {
         return None;
     }
-    let run = long_run(p, &clone, now)?;
+    // THE COORDINATOR'S `make lane-wait` RUNS AS LONG AS A BATCH, BY DESIGN (461 T47, D9): passed over while its lane works - the
+    // runner live and the wait the session's own (T12's `lane_works`) - or each long batch would cost a wake FR-005 does not list
+    // (540k-966k tokens a wake, D9). Only that make: another long make beside it is told, and with the runner gone the wait is too.
+    let waits = lane_works(p, &clone, entry.get("pid").and_then(Value::as_u64));
+    let run = long_run(p, &clone, now, waits)?;
     if p.dry {
         return Some(format!(
             "would warn {} of {} (pid {})",
