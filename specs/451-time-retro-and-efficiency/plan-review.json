@@ -3727,20 +3727,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T441 (<why: the finding or measurement that files it>)": {
-   "sha256": "f1357c64c1e430424c8d5308db4a1c030f92cdfb34d005b5bac3a7e8315c7b7c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T441 Approach (checklist part A)": {
    "sha256": "4bae56129ee9d438bbd172c353f33756dc99e54311273002317c7c41abfab586",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T442 (<why: the finding or measurement that files it>)": {
-   "sha256": "76b8087c71ba86bce08ff5ab2d3be4d5ccfecdf1927f19a5b199a823aa16b14e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38076,6 +38064,28 @@
      "summary": "The empty template stubs for T437, T440, T444 and T464 are removed.",
      "class": "within",
      "why": "Each held only the unfilled section template, with no approach and no decision. Removing them decides nothing about scope, and T444's real section stands in its place."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T441-skeleton",
+     "summary": "Delete the T441 plan block, which held only the unfilled template (placeholder heading, placeholder Approach line, an empty table).",
+     "class": "within",
+     "why": "The block as last judged made no decision: every field is a template placeholder and the table has no rows. Removing it narrows nothing the request or spec asks for; it removes no approach, no figure and no scope."
+    },
+    {
+     "id": "remove-T442-skeleton",
+     "summary": "Delete the T442 plan block, which held only the unfilled template (placeholder heading, placeholder Approach line, an empty table).",
+     "class": "within",
+     "why": "Same as T441: the earlier text is an empty skeleton with no decision in it, so its removal decides nothing the spec left open and narrows nothing asked for."
     }
    ]
   }
