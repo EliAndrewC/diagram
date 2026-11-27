@@ -27,3 +27,9 @@
 <!-- SOURCE: GM NOTES -->
 > Okay, that's fine, though I would still like the disk cleanup tasks to be a higher priority than most of the rest of that new feature, since while it's not a current blocker or problem for anyone, it has been in the past so I want to make sure we get to that sooner than some of the other tasks in that feature, which are more long term in nature.
 <!-- END SOURCE -->
+
+2026-11-27, the order across features:
+
+<!-- SOURCE: GM NOTES -->
+> For what it's worth, I would like to prioritize the orchestration work. So when you talk about working those tasks as soon as builders free up, then I guess that should be true in the sense that you might not have the full complement of builders worth of tasks that relate to the orchestrator that can be worked in parallel. So to the extent that you do, then I would like that to be the priority, but when you find yourselves in are able to be occupied with feature tasks, then yes, that does seem like a good time to begin working these disk tasks.
+<!-- END SOURCE -->
