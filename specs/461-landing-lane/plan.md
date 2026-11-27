@@ -806,31 +806,133 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** no
 
 <!-- plan-archive: T12 to T11 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T14 (<why: the finding or measurement that files it>)
+### T14 (D5, D6 step 1, D8, D14: phase 2's batch, the runner's step and resume that T12 left as stand-ins; lands after T12 and T13)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/batch.rs` (new, with `batch/tests.rs`) forms the batch; `runner/run.rs` (new, with
+  `run/tests.rs`) runs it as the step and resume T12's `work_cli` calls; `runner.rs`'s spawn strips the caller's environment and
+  runs the lane tree's own wrapper (T12's "For T14"). Built in two halves (2026-11-27); the build half's handoff is
+  `<clone git dir>/l7r-handoffs/T14-build.md`. `dev/audits/lane-batch-cap.md` covers `LANE_MAX`; the lane crate's row in
+  `rust/gate/CLAUDE.md` names the modules.
+- **Decision 1 - D5's formation, literally.** `form(&World, LANE_MAX)` takes the `waiting` hand-ins in hand-in order, starts at
+  the oldest, and takes the run of its feature straight after it, cut at the first hand-in of another feature, at one D14 holds,
+  or at `LANE_MAX` changes. D14's open-batch half: a hand-in is held while an open batch carries another hand-in of its feature
+  sharing one of its tasks; where the OLDEST waiting hand-in is held, no batch forms (none jumps ahead of it). `next_id` is
+  `<feature>-<n>`, n one past the feature's highest `batch` line. A batch reads its changes' full shas once, on its `batch` line, so
+  a later hand-in moves no batch. Label: the literal order (D5); the cut at a held hand-in the easier route (D5's own label).
+- **Decision 2 - `LANE_MAX` = 6.** GUESS knob, beside its constant and in `dev/audits/lane-batch-cap.md` (seed: the two-tier
+  threshold's "about six tasks", `docs/process-decisions.md`; trial 458's verdict resets it). `LANE_WAIT_S` = 0 has no constant: the
+  step forms as soon as no batch is open. Label: GUESS.
+- **Decision 3 - the run's four steps** (`run_batch`): (1) the lane's tree brought to `origin/main` by T13's `builder_tree::cli(["lane"])`,
+  and the changes `origin/main` already holds dropped (a resume after the push lands with no run); (2) each remaining change carried
+  by `make carry COMMIT=<sha>` in the lane's tree, oldest first, one `carry` line - the lane carries the batch's OWN shas, since
+  `make land`'s `carry_done` reads the done refs live; (3) `make land F=<feature> T="<tasks>" NOTE="<subjects; ...> - landed by the
+  lane, batch <b>"` there, its stdout and stderr the attempt's own file `l7r-lane/attempts/<b>-<n>.log`, n continuing from the
+  batch's `run` lines (D6 step 1, never overwritten), one `run` line and a `push` line where it pushed; (4) each done ref deleted
+  only where it still names the batch's sha (`update-ref -d <ref> <sha>`: a later hand-in keeps its ref; the linked tree's carry
+  keeps the refs, 451 T404), then the `landed` line and ONE `owed` line, `lane: batch <b> landed - <feature> <tasks> (<k>
+  change(s), <r> run(s), <m> minutes)`, which T20 prints. A carry that stops, or a landing that ends red or refused, writes its line
+  (a red one also ONE `owed` line naming the attempt file) and returns an error: the runner stops with `error: ...` and the batch
+  stays OPEN, so nothing re-runs each poll and the next `make lane-start` resumes it as attempt n+1. A make that cannot start counts
+  as exit -1 on the same path. Label: the easier route (D6 step 1's green path; T15, phase 3 and T19 replace the red, the carry's
+  and the push's branches).
+- **Decision 4 - a non-zero exit is read against `origin/main`.** GNU make ends 2 for any failed recipe, so the landing's own exit 3
+  (pushed, other sessions' edits merged) reaches the runner as 2, never 3 (observed 2026-11-27, a scratch Makefile under GNU Make
+  4.4.1: a recipe's `exit 3` printed `Error 3` and make ended 2). On any exit but 0 the runner fetches `origin main` in the
+  lane's tree and asks `held_by(tree, "refs/remotes/origin/main", <the batch's shas>)`: every change there is a push (a `push` line
+  with the observed code), and the batch goes on to step 4; otherwise it is the red branch. The push's own code is not separable from
+  make land's today (T19's). Label: the easier route (main's content is the truth, as Recovery already asks it).
+- **Decision 5 - the stripped environment.** `run::STRIPPED`, removed from both the runner's spawn (`spawn_command`) and each
+  `make` the run starts: T12's five (`MSG`, `GUARD`, `T`, `F`, `L7R_GATE_TREE`) and make's own `MAKEFLAGS`, `MAKEOVERRIDES`,
+  `MFLAGS`, `MAKELEVEL`, because a runner a hand-in started inherits `make builder-done T= F= MSG=`'s environment and a variable on
+  that make's command line reaches a grandchild make through `MAKEFLAGS`. Observed 2026-11-27, method: a scratch Makefile under GNU
+  Make 4.4.1 (`make -f outer.mk T=T14 F=461`, its recipe running `sh -c "$(MAKE) -f inner.mk show"`): the grandchild printed
+  `T=[T14] F=[461]`, and `env -u MAKEFLAGS -u MAKEOVERRIDES -u MFLAGS -u MAKELEVEL` left its child an empty `MAKEFLAGS`. Label:
+  convention (GNU make's own variable passing, observed).
+- **Decision 6 - the lane tree's own wrapper.** `runner_exe(common, fallback)` returns the registry's lane tree's
+  `scripts/gates/l7r-gate.sh` when the lane's tree and that file exist, else `fallback` (`current_exe()`: phase 1, a scratch
+  repository); both `lane start` and `on_hand_in` use it. The wrapper `exec`s `<target>/tool/l7r-gate lane --work <common>`, so the
+  stall watchdog's `runs_lane` still matches. Label: the easier route (T12's "For T14"). Its rebuild may outlast `START_WAIT_S`:
+  filed as T51 (Found and left).
+- **Decision 7 - `NOTE=` on make's command line.** The Makefile's `land: export LAND_NOTE = $(NOTE)` overwrites an inherited
+  `LAND_NOTE`, so the run passes `NOTE=` as a make argument; it reaches the binary as `LAND_NOTE`, as contracts/lane-cli.md names
+  it. `SPECIFY_FEATURE`, `SPECIFY_FEATURE_DIRECTORY` and `L7R_LANE_BATCH` go in the environment. Label: convention (the Makefile's
+  own route for the variable).
+- **Decision 8 - `L7R_LAND_ALONE=1` and `SYNC_BACKUP=off`, as `land-alone.sh` sets them** for its own landing in this same `-land`
+  worktree (its line 572). Their non-test readers (found by grep, 2026-11-27): `land/alone.rs`'s `INNER` (the tree is not sent to
+  land alone again - it is the landing); `core/build.rs`'s `LANDING` (a claims answer from a mixed build owed again, right for a
+  clean lane tree); `sync-with-main.sh` line 564 (no backup push from a worktree that is no clone). Both kept. Label: convention
+  (`land-alone.sh`'s own settings for the same tree).
+- **The flake the build half saw.** `runner::tests::a_second_start_is_a_no_op_naming_the_first_s_pid_and_stop_now_ends_it` failed
+  once in the build half's first `make builder-checks` (its last `stop NOW` found a runner). Measured 2026-11-27, `make rust-test
+  CRATE=rust/gate/crates/lane ONLY="runner"` ten times in a row at load 16-27 on 22 cores: 2 red of 10 - that test once (its last
+  `stop NOW` reading `stopped at once` for the runner killed before) and `the_work_command_holds_the_lock_..._leaves_quietly` once
+  (`held` true after `work_cli` returned). The cause: a `flock` lock belongs to the open file description, so a close frees it only
+  once every copy is closed, and the test binary's other threads fork `git`, `make` and `sh` all the while, each child holding a
+  copy of every descriptor until its `exec` - so the probe's own lock (`held` takes it for an instant where it is free) and the ended
+  runner's lock outlived their close. Fixed in `runner.rs`: `free` (the probe) and `release` (the runner's end) let the lock go by
+  `flock -u` before the close, which frees it whatever copies exist; `held`'s doc no longer says it is let go as the file closes. The
+  wrong outcome fixed: `make lane-stop` or `make lane-start` reading a runner that has ended (a stop naming a dead pid, a start
+  saying `already runs`) where the caller is a threaded process. Red first in
+  `runner::tests::a_probe_and_an_ended_runner_leave_no_lock_behind_a_copy_of_their_descriptor`, which keeps a `try_clone` of the
+  descriptor alive across the probe and across the release: on the old code 0 passed, 1 failed (at the probe's assertion); with only
+  the probe fixed, 0 passed, 1 failed (at the release's); after both, 1 of 1, and `ONLY="runner"` 23 of 23. After the fix,
+  the same `ONLY="runner"` run thirty times in a row at load 22-52 on 22 cores: 30 green of 30 (0 red, against 2 of 10 before).
+  Label: convention (`flock(1)`'s `-u`; the lock's ownership by the open file description is `flock(2)`'s).
+- **Two things the build half changed beside its own modules.** T12's test
+  `the_work_command_sees_a_real_hand_in_and_resumes_an_open_batch_of_the_log` now expects, with no lane's tree in the pool, the
+  resume to fail: the runner exits 1 with `stop why "error: lane: batch 461-1: builder-tree lane: ..."` and the batch stays open
+  (T12's stand-in resume had succeeded). `log::names` became `pub(crate)` for `batch.rs`.
+- **Phase 1's base.** A phase-1 hand-in's base is the clone's HEAD, so carried onto `origin/main` it may conflict; by design until
+  T22, since in phase 1 the runner starts only by `make lane-start` (T12's Decision 6), and a conflict ends the step on the carry's
+  seam above.
+- Red first (2026-11-27, the build half): `batch::tests` against stubs, 0 passed, 3 failed; after, 3 of 3. `runner::run::tests`
+  against stubs, 0 passed, 6 failed; after, 6 of 6; the exit-3-as-2 test under the old `code == 0 || code == 3` rule, 6 passed, 1
+  failed; after, 7 of 7. `runner::tests::the_runner_runs_the_lane_tree_s_own_wrapper_...` with `runner_exe` returning the fallback
+  and no stripping, 0 passed, 1 failed; after, 1 of 1. The lane crate 36 of 36, the land crate 219 of 219. Not run red: nothing
+  against a real lane tree or a real `make land` (the end-to-end test's `make land` is a stand-in recipe in the scratch clone's
+  Makefile that ticks and pushes); T23 is the real batch.
 
 ### T14 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A runner that, with no batch open, forms D5's batch from the waiting hand-ins, lands it in the
+   lane's own tree with one gate run, each attempt's output kept, the landed done refs deleted and one status line owed; a killed
+   or red batch left open and resumed as the next attempt.
+2. **The constraints.** D5 (the formation and `LANE_MAX`), D6 step 1 (the attempt files), D8 (a JSON line a transition, the done
+   refs deleted after the push), D14 (shas read once; a later hand-in waits), FR-003 ("in order"), US3, data-model.md ("Recovery"),
+   contracts/lane-cli.md (`LAND_NOTE`, `L7R_LANE_BATCH`), T12's "For T14".
+3. **Where each comes from.** R: plan.md D5, D6, D8, D14; data-model.md; contracts/lane-cli.md; T12's plan section; the Makefile's
+   `land` recipe; `land-alone.sh` line 572. O: the red-first counts above; GNU make's documented `MAKEFLAGS` and exit 2.
+4. **Do they describe the world here?** Yes for the scratch world: the end-to-end test builds a clone, a bare `origin` and two pool
+   trees, hands in two changes, and sees one batch, one push, both ticked, both done refs deleted, one `owed` line. Not yet for the
+   real clone's lane tree: T23 measures that.
+5. **The order.** After T12 (the runner) and T13 (the lane's tree); before T15 (the red's attribution), T19 (the push), T20 (the
+   wake-up), T22 (the base flipped) and T23 (the real batch); T52 before T22.
+6. **The exits.** Green: the lane crate's tests, the end-to-end batch among them, and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Two: the exit-3-as-2 reading (Decision 4), found by reading make's exit rule after the first green, fixed
+   red-first; and the lock's flake, 2 red in 10, traced to a descriptor copy and fixed red-first (above).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27; the runner's tests' flake, 2 red of 10 before the lock fix, and the runs
+   after it, above.
+10. **Before moving a constant.** n/a: `LANE_MAX` is new, labeled GUESS and audited.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** One defect fixed: a probe or an ended runner leaving the lock held behind a copy of its descriptor, so a
+   threaded caller read a runner that had ended (the flake above: 2 red runs in 10). The rest is new code.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- In the lane's tree `make land`'s `carry_done` reads the done refs live, so a task whose ref a later hand-in moved after the
+  batch's `batch` line is carried again at the new sha on top: a hand-in lands inside a batch that never named it, against D14.
+  Not fixed here: `make land`'s carry is the land crate's, and the stand-in `make land` of the end-to-end test carries nothing, so
+  the fix needs its own red test there. Filed as T52; lands before T22.
+- The runner's start waits `START_WAIT_S` for the lock while the lane tree's wrapper may first rebuild that tree's `l7r-gate`, so a
+  start can report `holds no lock` while the runner comes up after the build. Not fixed here: the rebuild is unmeasured. Filed as
+  T51; lands before T22.
+- `make lane` shows an earlier hand-in of a task in an OPEN batch as `superseded`, not `in batch <b>`, once a later hand-in of the
+  task exists (`log::state`, T11's order), though the batch's `batch` line names and lands the earlier sha (D14): the lane's view
+  misstates what a batch carries (D8's states). Not fixed here: `log::state` is T11's reading and the batch's formation does not
+  depend on it. Filed as T53; lands before T20.
+
+**Performance work?** no
 
 
 ### T15 (<why: the finding or measurement that files it>)
@@ -1730,4 +1832,31 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Found and left?** none.
 
 **Performance work?** no.
+
+
+### T53 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

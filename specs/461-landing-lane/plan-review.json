@@ -498,6 +498,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T14 (D5, D6 step 1, D8, D14: phase 2's batch, the runner's step and resume that T12 left as stand-ins; lands after T12 and T13)": {
+   "sha256": "159c6c85a49012056cbf7012030dbd2ab8e1d4838c327c3c11f5804a61994354",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Approach (checklist part A)": {
+   "sha256": "282222bc8d38f4bf08a607cf5f16ea6193c32f920355f366e669fe4b51946f70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T16 (<why: the finding or measurement that files it>)": {
+   "sha256": "4cd06ce60c4cd39c7773d2c4587ac4cc2bf81f3241560dd8c795afb0c9ca70f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Approach (checklist part A)": {
+   "sha256": "0dac4fa8f3bf704b54096fde11dfca20592b77611837d1ea4233be136080f3b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T47 (<why: the finding or measurement that files it>)": {
+   "sha256": "7a542fe3838b569ed543db98b25fa8ea26791ca2493f70658406a81b3572dc9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T47 Approach (checklist part A)": {
+   "sha256": "325f8ad08a015ac903963ad22f473d958c20989453d890d52a17d17511385dad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3140,6 +3176,98 @@
      "summary": "Measured done is the red-then-green tests now; in use, the lane's first real batch (T23) with a later hand-in left waiting and its left line in the attempt file.",
      "class": "within",
      "why": "A verification schedule for the requested behavior; defers no requested part and leaves no known defect (Found and left: none)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T14 (D5, D6 step 1, D8, D14: phase 2's batch, the runner's step and resume that T12 left as stand-ins; lands after T12 and T13)",
+    "### T14 Approach (checklist part A)",
+    "### T16 (<why: the finding or measurement that files it>)",
+    "### T16 Approach (checklist part A)",
+    "### T47 (<why: the finding or measurement that files it>)",
+    "### T47 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T14 Decision 1",
+     "summary": "D5's formation: oldest waiting hand-in and the run of its feature after it, cut at another feature, a D14-held hand-in or LANE_MAX; an oldest held hand-in forms no batch; shas read once on the batch line",
+     "class": "within",
+     "why": "Carries FR-003's 'takes hand-ins from the done refs in order' literally: nothing jumps the oldest, and a later hand-in moves no batch. Nothing the request or spec asked is narrowed."
+    },
+    {
+     "id": "T14 Decision 2",
+     "summary": "LANE_MAX = 6, a GUESS knob audited in dev/audits/lane-batch-cap.md; LANE_WAIT_S = 0",
+     "class": "within",
+     "why": "A batch cap the spec leaves to the plan (D5), labeled and audited; it narrows no requirement."
+    },
+    {
+     "id": "T14 Decision 3",
+     "summary": "The run's four steps: lane tree to origin/main, make carry of the batch's own shas, the existing make land in the lane tree with each attempt's log kept, done refs deleted only where they still name the batch's sha, one owed line; a red or refused landing leaves the batch open as an interim stand-in for FR-004's bisect/eject, which T15, phase 3 and T19 build",
+     "class": "within",
+     "why": "Runs the existing make land checks in the lane's own worktree (FR-003, FR-008) and owes one status line per landed batch (FR-005). The red branch's halt is a sequencing stage, not a carve-out: FR-004's attribute/bisect/eject/land-the-rest stays owed by named later tasks, and nothing here declares it unneeded."
+    },
+    {
+     "id": "T14 Decision 4",
+     "summary": "Any non-zero exit of make land is read against a fresh origin/main: all the batch's changes there is a push, else the red branch (GNU make turns the landing's exit 3 into 2, observed 2026-11-27)",
+     "class": "within",
+     "why": "Changes reach origin/main only through make land's own gate and push, so reading main's content drops no check (FR-008); it only stops a pushed batch being misread as red."
+    },
+    {
+     "id": "T14 Decision 5",
+     "summary": "The runner's spawn and each make it starts strip T12's five variables and make's MAKEFLAGS, MAKEOVERRIDES, MFLAGS, MAKELEVEL (observed 2026-11-27, scratch Makefile)",
+     "class": "within",
+     "why": "Keeps a hand-in's command-line variables from leaking into the lane's landing; implementation of FR-003, narrows nothing."
+    },
+    {
+     "id": "T14 Decision 6",
+     "summary": "The runner runs the lane tree's own scripts/gates/l7r-gate.sh wrapper where it exists, else current_exe; the start-wait race filed as T51 before T22",
+     "class": "within",
+     "why": "Implementation choice under FR-003; the known start-wait defect is filed and ordered before the phase where it would bite."
+    },
+    {
+     "id": "T14 Decision 7",
+     "summary": "NOTE= passed as a make argument (the Makefile's land recipe overwrites an inherited LAND_NOTE); SPECIFY_FEATURE, SPECIFY_FEATURE_DIRECTORY, L7R_LANE_BATCH in the environment",
+     "class": "within",
+     "why": "Follows the Makefile's own route for the variable; no requirement touched."
+    },
+    {
+     "id": "T14 Decision 8",
+     "summary": "L7R_LAND_ALONE=1 and SYNC_BACKUP=off, as land-alone.sh sets them for its own landing in the same -land worktree; readers found by grep 2026-11-27",
+     "class": "within",
+     "why": "These are today's settings for a landing in this worktree: LAND_ALONE stops re-sending the tree to land-alone, LANDING makes a mixed build's claims answer owed again (stricter, not looser), SYNC_BACKUP skips a backup push from a non-clone worktree. None is a gate or push check, so FR-008 holds."
+    },
+    {
+     "id": "T14 flake fix",
+     "summary": "runner.rs's probe and release free the flock by flock -u before the close, fixing a runner read as alive after it ended (2 red of 10 before, 30 green of 30 after, 2026-11-27), red-first",
+     "class": "within",
+     "why": "A defect (a wrong outcome: a stop or start misreading an ended runner) fixed in the step that found it, as the fix-as-we-go rule asks."
+    },
+    {
+     "id": "T14 T12 test expectation",
+     "summary": "T12's resume test now expects, with no lane tree in the pool, the resume to fail and the batch to stay open; log::names made pub(crate)",
+     "class": "within",
+     "why": "The stand-in it replaced succeeded vacuously; the new expectation follows Decision 3's open-on-error rule. Nothing asked is narrowed."
+    },
+    {
+     "id": "T14 phase 1 base",
+     "summary": "In phase 1 a hand-in's base is the clone's HEAD and may conflict when carried; by design until T22 flips the base",
+     "class": "within",
+     "why": "A staging of FR-002's rebase onto current main, which T22 carries; in phase 1 the runner starts only by make lane-start, and a conflict ends the step on the carry's seam rather than landing anything wrongly."
+    },
+    {
+     "id": "T14 Found and left (T52, T51, T53)",
+     "summary": "make land's carry_done reading done refs live (a later hand-in can land inside a batch, against D14) filed as T52 before T22; the start-wait race T51 before T22; make lane's 'superseded' misstatement T53 before T20",
+     "class": "within",
+     "why": "Each is a defect deferred with its reason, filed as an open task and ordered before the phase where it reaches real hand-ins or the wake-up line; none is declared not-a-defect or left unowned, so no requirement is narrowed."
+    },
+    {
+     "id": "T14 Performance work? no",
+     "summary": "T14 classed as not performance work under 451 FR-013",
+     "class": "within",
+     "why": "The classification only places T14 behind open performance tasks in make task-start's ordering; it lets nothing escape an obligation and narrows no requirement of 461."
     }
    ]
   }

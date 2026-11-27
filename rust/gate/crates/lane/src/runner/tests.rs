@@ -10,8 +10,8 @@ use l7r_gate_core::ci::fixtures::repo;
 use serde_json::json;
 
 use super::{
-    argv, held, holder, lock_path, on_hand_in, remaining, start, stop, stop_path, work, work_cli,
-    Resume, Run, STOP,
+    argv, free, held, holder, lock_path, on_hand_in, release, remaining, start, stop, stop_path,
+    work, work_cli, Resume, Run, STOP,
 };
 use crate::log::{self, BatchState};
 
@@ -570,4 +570,30 @@ fn the_runner_runs_the_lane_tree_s_own_wrapper_and_inherits_none_of_the_hand_in_
     for k in ["MSG", "GUARD", "T", "F", "L7R_GATE_TREE", "MAKEFLAGS"] {
         assert!(removed.iter().any(|r| r == k), "{k}");
     }
+}
+
+/// A copy of the probe's or the runner's descriptor kept past its close - as a child another thread forks holds one until its `exec`
+/// (the test binary's other tests spawn `git`, `make` and `sh` all the while) - must not keep the lock: a probe that found no runner,
+/// and a runner that ended, each let the lock go themselves (461 T14: 2 red runs in 10 of `make rust-test ONLY="runner"`, load 20-27,
+/// at this module's `stop NOW` and `work_cli` tests).
+#[test]
+fn a_probe_and_an_ended_runner_leave_no_lock_behind_a_copy_of_their_descriptor() {
+    let dir = repo("lane-lock-copies");
+    let common = common_of(dir.path());
+    std::fs::create_dir_all(lock_path(&common).parent().unwrap()).unwrap();
+    std::fs::write(lock_path(&common), "").unwrap();
+    let probe = std::fs::File::open(lock_path(&common)).unwrap();
+    let copy = probe.try_clone().unwrap();
+    assert!(free(&probe));
+    drop(probe);
+    assert!(!held(&common));
+    drop(copy);
+    let lock = l7r_shared::tool::flock_within(&lock_path(&common), 1.0)
+        .unwrap()
+        .unwrap();
+    let copy = lock.try_clone().unwrap();
+    assert!(held(&common));
+    release(lock);
+    assert!(!held(&common));
+    drop(copy);
 }

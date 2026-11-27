@@ -68,10 +68,28 @@ pub fn stop_path(common: &Path) -> PathBuf {
     common.join(log::DIR).join(STOP)
 }
 
-/// Whether a runner holds the lock: the file opened (never made) and asked for the lock at once; got, it is let go as the file closes.
+/// Whether a runner holds the lock: the file opened (never made) and [`free`] asked of it.
 #[must_use]
 pub fn held(common: &Path) -> bool {
-    std::fs::File::open(lock_path(common)).is_ok_and(|f| !flock(&f, "-n"))
+    std::fs::File::open(lock_path(common)).is_ok_and(|f| !free(&f))
+}
+
+/// The probe: the lock asked for at once on `f`; true where it was got, and then let go at once by `flock -u` rather than by the
+/// file's close, which frees it only once every copy of the descriptor is closed - and a child another thread of the caller forks
+/// holds one until its `exec` (461 T14: the runner's tests read a runner that had ended, 2 runs in 10 under load).
+fn free(f: &std::fs::File) -> bool {
+    let got = flock(f, "-n");
+    if got {
+        let _ = flock(f, "-u");
+    }
+    got
+}
+
+/// The runner's lock let go by `flock -u` before the file closes, for [`free`]'s reason: a copy of the descriptor in a child forked
+/// meanwhile would otherwise hold it past the runner's end.
+fn release(lock: std::fs::File) {
+    let _ = flock(&lock, "-u");
+    drop(lock);
 }
 
 /// The live runner's pid: the lock held, and the pid it wrote there.
@@ -449,7 +467,7 @@ pub fn work_cli(common: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
         step: &mut step,
     };
     let done = work(&mut run);
-    drop(lock);
+    release(lock);
     match done {
         Ok(why) => reply(
             format!("lane: the runner stopped ({why})\n"),
