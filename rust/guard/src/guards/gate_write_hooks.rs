@@ -133,33 +133,46 @@ fn masked(body: &[u8]) -> Vec<u8> {
 /// `make`, so `make land NOTE=tick` read as a tick).
 const MAKE_WRITE: [&str; 3] = ["record-checked", "tick", "accept"];
 
-/// What one decision reads.
+/// What one decision reads: the processes, and the tree the hook's own process stands in.
 pub(crate) struct Ctx {
     pub procs: Procs,
     pub top: PathBuf,
 }
 
-/// Whether a make of this target runs in this tree (`own-make.sh`): the program by its name, the tree by its cwd.
-fn runs_here(c: &Ctx, target: &str) -> bool {
-    let wanted = format!("make {target}");
-    let top = format!("{}/", c.top.display());
-    c.procs.pids().into_iter().any(|p| {
+/// One tree where a gate runs, as a decision judges a command against it: `top` the gated tree, `here` the tree the hook's process
+/// stands in (where a command stands when its event names no `cwd`), `own` whether they are one.
+struct Gate<'a> {
+    top: PathBuf,
+    here: &'a Path,
+    own: bool,
+}
+
+/// Every work tree where a `make done` runs (`own-make.sh`'s question, asked of every tree, 451 T406): the program by its name and
+/// its target as before, the tree by its cwd's work tree. WHY: the guard asked only of the tree its own process stood in, so `git -C
+/// <the gated clone> commit` sent from a session standing in a pool tree passed while the clone's gate ran (found by 451 T307, by
+/// reading). A directory in no work tree runs no gate.
+fn gated(c: &Ctx) -> Vec<PathBuf> {
+    let wanted = ["make --no-print-directory done", "make done"];
+    let mut trees: Vec<PathBuf> = Vec::new();
+    for p in c.procs.pids() {
         let raw = c.procs.read(p, "cmdline");
         let program = raw.split('\0').next().unwrap_or("");
         let name = program.rsplit('/').next().unwrap_or("");
         let is_make = ["make", "gmake"]
             .iter()
             .any(|m| name == *m || name.starts_with(&format!("{m} ")));
-        is_make
-            && raw.replace('\0', " ").contains(&wanted)
-            && c.procs
-                .link(p, "cwd")
-                .is_some_and(|d| format!("{}/", d.display()).starts_with(&top))
-    })
-}
-
-fn running(c: &Ctx, target: &str) -> bool {
-    runs_here(c, &format!("--no-print-directory {target}")) || runs_here(c, target)
+        let line = raw.replace('\0', " ");
+        if !(is_make && wanted.iter().any(|w| line.contains(w))) {
+            continue;
+        }
+        let Some(tree) = c.procs.link(p, "cwd").map(|d| top_of(&realpath(&d))) else {
+            continue;
+        };
+        if tree.join(".git").exists() && !trees.contains(&tree) {
+            trees.push(tree);
+        }
+    }
+    trees
 }
 
 /// The escape's verdict: `Some(answers)` when it decides the call.
@@ -210,7 +223,7 @@ fn file_of(event: &Event) -> &str {
 }
 
 /// The question the gate itself asks: exit 0 when the change is one it does not see.
-fn unseen(c: &Ctx, extra: &[&str]) -> bool {
+fn unseen(c: &Gate, extra: &[&str]) -> bool {
     let top = c.top.to_string_lossy();
     let gate_dir = ask(&c.top, "git", &["rev-parse", "--absolute-git-dir"], "").out;
     let snap = format!("{gate_dir}/gate-tree.json");
@@ -258,10 +271,11 @@ fn after_edit(event: &Event, file: &str) -> Option<String> {
     }
 }
 
-/// What a running gate refuses: a change it would see.
-fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
+/// What a running gate refuses: a change it would see. In a gated tree the hook's process does not stand in, only a commit, an
+/// add or a record-writing make the walk places there (451 T406); an edit or a shell write there is judged in its own tree alone.
+fn gate_refusal(event: &Event, c: &Gate) -> Option<String> {
     let tool = event.tool();
-    if FILE_TOOLS.contains(&tool) {
+    if FILE_TOOLS.contains(&tool) && c.own {
         let file = file_of(event);
         // a file under the tree's `.git` is no file of the tree: the gate's snapshot never holds one (451 T307)
         let rel = relative_in(&c.top, file)
@@ -302,6 +316,9 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
     {
         return Some(format!("make {found} (it writes a tracked record)"));
     }
+    if !c.own {
+        return None;
+    }
     shell_write(event, cmd, c)
 }
 
@@ -334,11 +351,11 @@ fn head_of(head: &str) -> (&str, &str) {
     (head, sub)
 }
 
-/// Where the command's shell stands as it starts (the event's `cwd`, else the gated tree) and the home.
-fn standing(event: &Event, c: &Ctx) -> (String, String) {
+/// Where the command's shell stands as it starts (the event's `cwd`, else the tree the hook's process stands in) and the home.
+fn standing(event: &Event, c: &Gate) -> (String, String) {
     let given = field(&event.input, "cwd");
     let here = if given.is_empty() {
-        c.top.to_string_lossy().into_owned()
+        c.here.to_string_lossy().into_owned()
     } else {
         given.to_owned()
     };
@@ -348,10 +365,12 @@ fn standing(event: &Event, c: &Ctx) -> (String, String) {
 /// Does a command of this kind (its name and, for git, its subcommand) run in THE GATED TREE (451 T307)? WHY: the guard asked only
 /// whether the command line held a commit, an add or a record-writing make, wherever it ran - so on 2026-11-26 07:51 the session,
 /// standing in the clone while its gate ran, was refused `cd <a builder's worktree> && git add -u; git commit`, which moves that
-/// worktree's HEAD and index and nothing the clone's gate compares. Each such command is placed by the walk (its `cd`s and git's `-C`;
-/// a make's own `-C` is not read, so it stands where its shell does); it is held where one stands in this tree, where the walk cannot say where one stands, and where the walk finds
-/// none at all (the pattern's match with no command placed: held as before).
-fn stands_here(event: &Event, cmd: &str, c: &Ctx, kind: &dyn Fn(&str, &str) -> bool) -> bool {
+/// worktree's HEAD and index and nothing the clone's gate compares. Each such command is placed by the walk (its `cd`s, git's `-C`
+/// and a make's own, 451 T409); it is held where one stands in this tree, where the walk cannot say where one stands, and where the walk finds
+/// none at all (the pattern's match with no command placed: held as before). Those two fail closed in the tree the hook's process
+/// stands in alone: in another gated tree a command is held only where the walk places it there (451 T406), or a quoted `git commit`
+/// would be refused wherever any session's gate ran.
+fn stands_here(event: &Event, cmd: &str, c: &Gate, kind: &dyn Fn(&str, &str) -> bool) -> bool {
     let (here, home) = standing(event, c);
     let top = realpath(&c.top);
     let walk = crate::shared::tree::walk_judged(cmd, Some(&here), "", &home);
@@ -363,11 +382,11 @@ fn stands_here(event: &Event, cmd: &str, c: &Ctx, kind: &dyn Fn(&str, &str) -> b
             kind(head, sub)
         })
         .peekable();
-    placed.peek().is_none()
+    (c.own && placed.peek().is_none())
         || placed.any(|t| {
             t.path
                 .as_deref()
-                .is_none_or(|p| top_of(&realpath(Path::new(p))) == top)
+                .map_or(c.own, |p| top_of(&realpath(Path::new(p))) == top)
         })
 }
 
@@ -382,7 +401,7 @@ fn stands_here(event: &Event, cmd: &str, c: &Ctx, kind: &dyn Fn(&str, &str) -> b
 /// `placed`): an f-string's placeholder, a glob, a URL or a literal joined onto a base the program computes is a path not
 /// resolved, which fails open (the round-3 replay's false refusals, measured 2026-11-20), and so does a literal handed to a
 /// function of the program's own (`own_args`), which make-only, fail-closed, still counts.
-fn shell_write(event: &Event, cmd: &str, c: &Ctx) -> Option<String> {
+fn shell_write(event: &Event, cmd: &str, c: &Gate) -> Option<String> {
     let (here, home) = standing(event, c);
     let top = realpath(&c.top).to_string_lossy().into_owned();
     // the path's place in the tree when the gate would see a write of it: "" the tree itself
@@ -466,13 +485,25 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 
 pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let cmd = input_field(event, "command");
-    if !running(c, "done") {
+    let gates = gated(c);
+    if gates.is_empty() {
         return Vec::new();
     }
     if let Some(answers) = escaped(event, session, cmd) {
         return answers;
     }
-    let Some(what) = gate_refusal(event, c) else {
+    let mine = top_of(&realpath(&c.top));
+    let Some(what) = gates.into_iter().find_map(|top| {
+        let own = top == mine;
+        gate_refusal(
+            event,
+            &Gate {
+                top,
+                here: &c.top,
+                own,
+            },
+        )
+    }) else {
         return Vec::new();
     };
     log::fire(

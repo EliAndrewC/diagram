@@ -406,3 +406,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T431 make builder-brief's mechanism test reads a bare 'make -' in a task line as a new make target (451 T369's line: 'make -' with no target, refused as a new mechanism and passed only by SIZING_OK, 2026-11-27): rust/gate/crates/task/src/builder_brief.rs mechanism - a hyphenated make target needs at least one letter after the hyphen; red-first with T369's line as the fixture
       research: rendering
+- [ ] T430 gate-write guard: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree is not held (rust/guard/src/guards/gate_write_hooks.rs, gate_refusal and shell_write judge only the tree the hook's process stands in; T406 extended only the commit, add and record-writing make rules to every gated tree, pinned by a_commit_sent_into_a_gated_tree_from_another_is_held's let-through Write); found by 451 T406, 2026-11-26, by reading, no firing observed
+      research: rendering

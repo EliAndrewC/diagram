@@ -3523,30 +3523,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T406 (<why: the finding or measurement that files it>)": {
-   "sha256": "15a18945cffe287c9d0252281ccb575eb0a27dd7601e0ec55be2876318302f26",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T406 Approach (checklist part A)": {
-   "sha256": "5cbc66b3497d62831fa6530bcf11c9f207436621a06e06cd22e8be40502e9c34",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T409 (<why: the finding or measurement that files it>)": {
-   "sha256": "9bb0235979b6b8800e0c6178643a0c3b01d6340b514ba3935b6e20e834a0c64f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T409 Approach (checklist part A)": {
-   "sha256": "0a0a6d002ea0353353c05656690ef2f23da3277a402a4f70f631bb1130909098",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)": {
    "sha256": "340c553e941e491638578be1b544aaf6c65d6e81fe49f5b406b300f4d33a5a1c",
    "verdict": "CLEAR",
@@ -3699,6 +3675,30 @@
   },
   "### T428 Approach (checklist part A)": {
    "sha256": "5afa7f96c689a25970e4e62ae427982ae120e3eed1348d5f1e13bf81b473221b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T409, T406 (bundle) (two gaps in the gate-write guard and the walk it reads, found by 451 T307 by reading, no firing observed: the walk read no `make -C`, so `make -C <another tree> tick` was placed where its shell stood, and the guard asked only whether a gate ran in the tree its own process stood in, so `git -C <the gated clone> commit` sent from a pool tree passed while the clone's gate ran (observed 2026-11-26, method: read from `rust/guard/shared/src/tree.rs`'s make branch and `gate_write_hooks.rs`'s `decide` and `running`))": {
+   "sha256": "15d1523bc1508673971d3e70dcfb6d3c0df97c00f6140991ffd4130ef9f1e9ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T409, T406 Approach (checklist part A)": {
+   "sha256": "9c075542250a647c72886ebf11c68dd72af049087b5126fcbfaa97ebf18afa77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T430 (<why: the finding or measurement that files it>)": {
+   "sha256": "f7521876dab1b32f8671593aa20e99fb66f95e9eb505115ca7446cebbe0bd8dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T430 Approach (checklist part A)": {
+   "sha256": "c850150db8813a7ef2d07162a454953bf70971d2c1916a21827248c4ad3f74e1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -33428,6 +33428,71 @@
      "summary": "Nine blocks deleted (T352, T404, T417, T419 heading and part A; T424 heading), each judged CLEAR earlier as the same unfilled template.",
      "class": "within",
      "why": "Per earlier.md each removed block carried only template placeholders, so its removal withdraws no decision, approach, constraint or deferral; nothing the GM asked for is narrowed by deleting text that held no content."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T409, T406 (bundle) (two gaps in the gate-write guard and the walk it reads, found by 451 T307 by reading, no firing observed: the walk read no `make -C`, so `make -C <another tree> tick` was placed where its shell stood, and the guard asked only whether a gate ran in the tree its own process stood in, so `git -C <the gated clone> commit` sent from a pool tree passed while the clone's gate ran (observed 2026-11-26, method: read from `rust/guard/shared/src/tree.rs`'s make branch and `gate_write_hooks.rs`'s `decide` and `running`))",
+    "### T409, T406 Approach (checklist part A)",
+    "### T430 (<why: the finding or measurement that files it>)",
+    "### T430 Approach (checklist part A)",
+    "(removed) ### T406 (<why: the finding or measurement that files it>)",
+    "(removed) ### T406 Approach (checklist part A)",
+    "(removed) ### T409 (<why: the finding or measurement that files it>)",
+    "(removed) ### T409 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "bundle",
+     "summary": "T406's and T409's placeholder sections removed and replaced by one bundled section for both",
+     "class": "within",
+     "why": "The GM asked on 2026-11-22 (T141) for small defects to be bundled and worked together; the removed blocks were unfilled templates, so their removal drops no decision."
+    },
+    {
+     "id": "T409-rule",
+     "summary": "The tree walk places a make where its own directory options (-C, -CD, --directory, prefixes, clusters, composition) put it, per GNU make 4.4.1's measured reading",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a make aimed at another tree judged in the shell's tree) so existing guards judge the tree actually written; the forms were measured, not assumed."
+    },
+    {
+     "id": "T409-readers",
+     "summary": "Effects on the walk's readers: main-tree refuses make -C <mirror> from a clone and passes make -C <clone> from the mirror; gm-tree refuses make -C <gm-assistant tree>; static-runs drops its own -C read to avoid joining it twice; other readers read the -C place",
+     "class": "within",
+     "why": "Each is the existing rule of that guard applied to the tree a make really writes; no new rule or reach is added, and the search space for the readers and for the project's own make -C uses is named (grep over rust/, over the Makefile and scripts/)."
+    },
+    {
+     "id": "T406-rule",
+     "summary": "gate-write guard judges a commit, add or record-writing make against every tree where a make done runs, not only the hook process's tree",
+     "class": "within",
+     "why": "Enforces D13 / FR-004's purpose (no write the gate would see while it runs) for the parallel-builder layout the GM approved; refusal text and escape unchanged."
+    },
+    {
+     "id": "T406-failclosed",
+     "summary": "Fail-closed cases (unreadable place, pattern match with no placed command) hold only in the hook process's own tree; in another gated tree only a positive placement holds",
+     "class": "within",
+     "why": "D13 was written for the session's own tree, so this keeps its reach there and widens it elsewhere; holding fail-closed everywhere would refuse correct work (a quoted git commit) in every session whenever any gate ran, which is a defect, not protection."
+    },
+    {
+     "id": "T406-scope-T430",
+     "summary": "Edit, Write and shell writes into another gated tree are not extended here; the gap is deferred to T430, which lands before T307",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect (a gate voidable by an Edit from another tree) is left open in this task, so it is a narrowing. It is legitimate because the GM's rule is to fix all known bugs in each step before moving to the next (2026-11-18), and T430 is filed and ordered before T307 within this same step; the deferral carries the reason, the filed id and the order D15/FR-009 require, and the gap is pinned by the new test's let-through Write. The purpose of the request (no known defect carried forward) is not gutted."
+    },
+    {
+     "id": "T430-section",
+     "summary": "T430's plan section is filed as the unfilled template",
+     "class": "within",
+     "why": "A filed task's placeholder decides nothing; its approach is decided when it is started."
+    },
+    {
+     "id": "order-exits",
+     "summary": "T409 then T406 in one section, before T307's tick; green is the builder's crate-scoped checks and the changed guards' suites, the full gate at landing; red-first tests for both",
+     "class": "within",
+     "why": "Follows the two-tier checking the GM approved and the feature's red-first test rule; enforcement of the requested fix, not added scope."
     }
    ]
   }

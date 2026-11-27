@@ -187,26 +187,15 @@ fn refusals(said: Option<Said>, log: &dyn Fn(&str, &str, &str)) -> Vec<Answer> {
 /// runs counted, in the session's clone (451 T74), while a builder's `cd <worktree> && make closing-checks` runs in its worktree,
 /// so the refusal read the clone's delta and said "changes no Rust crate" of a worktree whose crates were edited (seen 2026-11-26;
 /// the edits being uncommitted was not the cause - `delta_crates` reads the working tree and the untracked files). `make -C <dir>`,
-/// the way a target is run in another tree, names its directory itself.
+/// the way a target is run in another tree, names its directory itself: the walk places the make there (451 T409; this guard
+/// read the `-C` itself before, and would now join it twice).
 fn run_tree(cmd: &str, start: &Path, home: &str) -> Option<PathBuf> {
     let walk = walk(cmd, Some(&start.to_string_lossy()), "", home);
     let dir = walk
         .targets
         .iter()
         .find(|t| invoked(&t.head).iter().any(|g| is_run(g)))
-        .and_then(|t| {
-            // `make -C <dir>` runs in <dir>, read from where the make stands
-            let words: Vec<&str> = t.head.split_whitespace().collect();
-            let words = &words[crate::shared::spelled::command_at(&words)..];
-            let named = words
-                .iter()
-                .position(|w| *w == "-C")
-                .and_then(|at| words.get(at + 1));
-            let stands = t.path.clone()?;
-            Some(named.map_or(stands.clone(), |d| {
-                Path::new(&stands).join(d).to_string_lossy().into_owned()
-            }))
-        })?;
+        .and_then(|t| t.path.clone())?;
     let top = git_stdout(Path::new(&dir), &["rev-parse", "--show-toplevel"]);
     (!top.is_empty()).then(|| PathBuf::from(top))
 }

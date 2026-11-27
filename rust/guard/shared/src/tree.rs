@@ -14,6 +14,7 @@ use super::shape::strip_heredocs;
 
 mod bind;
 mod git;
+mod make_dir;
 pub mod program;
 mod py_c;
 mod python;
@@ -617,7 +618,8 @@ fn writes_in(
         if base == "git" {
             found_writes.extend(git::git_write(&toks, env, home, eff));
         } else if base == "make" {
-            found_writes.push((eff.map(str::to_owned), "shell", Known::Shell));
+            // where its own `-C`s put it (451 T409)
+            found_writes.push(make_dir::make_place(&toks, env, home, eff));
         } else if let Some(at) = python_c(&toks).filter(|_| PYTHON.is_match(base)) {
             // 451 T31: a program that only reads stays in the walk MARKED "read" - no guard's verdict counts it a write, and the
             // guards that read a walk's targets for where a command lands (house style, gm-tree) see what they saw before

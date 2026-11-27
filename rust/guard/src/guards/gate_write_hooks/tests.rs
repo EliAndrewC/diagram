@@ -78,6 +78,26 @@ impl World {
         self.run("Bash", &json!({"command": cmd}))
     }
 
+    /// A call from a session whose hook process stands in `here`, the event naming no `cwd`.
+    fn run_from(&self, here: &Path, tool: &str, input: &Value) -> Vec<Answer> {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: json!({"tool_name": tool, "tool_input": input}),
+        };
+        let s = Session::from_input(&e.input);
+        judge(
+            &e,
+            &s,
+            &Ctx {
+                procs: Procs {
+                    root: self.proc.clone(),
+                    mine: 99_999,
+                },
+                top: here.to_path_buf(),
+            },
+        )
+    }
+
     fn file(&self, rel: &str) -> String {
         self.top.join(rel).to_string_lossy().into_owned()
     }
@@ -95,6 +115,10 @@ fn nothing_is_refused_with_no_gate_running_here() {
     assert!(w.bash("git commit -qm x").is_empty());
     w.make(50, "make", "done", Path::new("/elsewhere"));
     w.make(51, "/usr/bin/python3", "make done", &w.top);
+    // a gate whose cwd cannot be read stands in no tree (451 T406)
+    let gone = w.proc.join("52");
+    std::fs::create_dir_all(&gone).unwrap();
+    std::fs::write(gone.join("cmdline"), "make\0done\0").unwrap();
     assert!(w.bash("git commit -qm x").is_empty());
 }
 
@@ -148,6 +172,8 @@ fn a_commit_in_another_tree_is_not_held() {
         format!("git -C {there} commit -qm x"),
         format!("git -C {there} add -A"),
         format!("cd {there} && make tick F=1 T=T1 NOTE=x"),
+        // a make's own `-C` places it (451 T409)
+        format!("make -C {there} accept X=1"),
     ] {
         assert_eq!(w.bash(&cmd), Vec::new(), "{cmd}");
     }
@@ -162,8 +188,8 @@ fn a_commit_in_another_tree_is_not_held() {
         // ...and a commit the walk does not find where the pattern does
         "echo 'a; git commit -qm x'".to_owned(),
         format!("cd {there}; cd {top} && make tick F=1 T=T1 NOTE=x"),
-        // the walk reads no `make -C`: such a make stands where its shell does, and is held there
-        format!("make -C {there} accept X=1"),
+        // ...and a make sent back into the gated tree by its own `-C` is held (451 T409)
+        format!("cd {there} && make -C {top} tick F=1 T=T1 NOTE=x"),
     ] {
         let held = refused(&w.bash(&cmd), "while this tree's `make done` runs");
         assert!(held, "{cmd}");
@@ -179,6 +205,47 @@ fn a_commit_in_another_tree_is_not_held() {
         ),
         "an Write of l7r/x/a.py"
     ));
+}
+
+/// 451 T406: the guard asked whether a gate ran in the tree its own process stood in, so `git -C <the gated clone> commit` sent
+/// from a session standing in a pool tree passed while the clone's gate ran. A commit, an add or a record-writing make is held in
+/// ANY tree where a gate runs that the walk places it in; a command it cannot place is held only in the tree it stands in.
+#[test]
+fn a_commit_sent_into_a_gated_tree_from_another_is_held() {
+    let w = world("into-gated");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    // two of the tree's makes, one tree gated
+    w.make(61, "make", "--no-print-directory done", &w.top.join("l7r"));
+    let pool = w.top.parent().unwrap().join("pool-b1");
+    std::fs::create_dir_all(&pool).unwrap();
+    let (top, there) = (w.top.display().to_string(), pool.display().to_string());
+    assert!(ask(Path::new("/"), "git", &["init", "-q", &there], "").ok());
+    let from_pool = |cmd: &str| w.run_from(&pool, "Bash", &json!({"command": cmd}));
+    for cmd in [
+        format!("git -C {top} commit -qm x"),
+        format!("git -C {top} add -A"),
+        format!("cd {top}/l7r && git commit -qm x"),
+        format!("make -C {top} tick F=1 T=T1 NOTE=x"),
+        format!("cd {top} && make record-checked X=1"),
+    ] {
+        let held = refused(&from_pool(&cmd), "while this tree's `make done` runs");
+        assert!(held, "{cmd}");
+    }
+    // the pool tree's own writes, and what the walk cannot place, are not the gated tree's
+    for cmd in [
+        "git commit -qm x".to_owned(),
+        format!("git -C {there} add -A"),
+        "make tick F=1 T=T1 NOTE=x".to_owned(),
+        "cd \"$T406_SOMEWHERE\" && git commit -qm x".to_owned(),
+        "echo 'a; git commit -qm x'".to_owned(),
+    ] {
+        assert_eq!(from_pool(&cmd), Vec::new(), "{cmd}");
+    }
+    // an Edit in the gated tree from the pool tree is judged in its own tree alone (filed as T430)
+    let write = json!({"file_path": w.file("l7r/x/a.py"), "content": "x"});
+    assert_eq!(w.run_from(&pool, "Write", &write), Vec::new());
+    // from the gated tree, a commit sent into the pool tree passes, as T307 built
+    assert_eq!(w.bash(&format!("git -C {there} commit -qm x")), Vec::new());
 }
 
 #[test]

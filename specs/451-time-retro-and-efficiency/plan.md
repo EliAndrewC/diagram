@@ -5791,58 +5791,44 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T406 (<why: the finding or measurement that files it>)
+### T409, T406 (bundle) (two gaps in the gate-write guard and the walk it reads, found by 451 T307 by reading, no firing observed: the walk read no `make -C`, so `make -C <another tree> tick` was placed where its shell stood, and the guard asked only whether a gate ran in the tree its own process stood in, so `git -C <the gated clone> commit` sent from a pool tree passed while the clone's gate ran (observed 2026-11-26, method: read from `rust/guard/shared/src/tree.rs`'s make branch and `gate_write_hooks.rs`'s `decide` and `running`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T406 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T409 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the walk places a make where its own directory options put it, and the guard judges a commit, an add or a record-writing make against every tree where a gate runs.
+  - **T409, the rule built.** `rust/guard/shared/src/tree/make_dir.rs` (`make_place`, called from `writes_in`'s make branch in `tree.rs`): a make's place is where its shell stands, moved by each directory option in turn, each relative to the one before and an absolute one afresh; "named" once an absolute one frees it from the shell's place, and a directory the walk cannot read is judged by what it knows of it, as git's `-C` is (451 T79's one rule, through `path_write`). The forms are GNU make 4.4.1's, measured 2026-11-26 on a scratch Makefile echoing `$(CURDIR)` (`t409-make` in the builders' scratchpad, 15 forms then 5 more): `-C D`, `-CD`, `--directory=D`, `--directory D`, `--di=D` (an unambiguous prefix: no other long option opens `di`, read from `make --help`), `-C a -C b` is `a/b`, `x -C a` (after a goal), `-sC a` and `-sCa` (in a cluster), none past `--`; `-f -C a` reads `-C` as the makefile; `-j -C a` is `a` and `-j4C a` refuses (an optional value takes only what is joined to it). The option lists that take a value are `make --help`'s: short `C E f I o W` required, `j l O` optional, and ten long ones beside `--directory`.
+  - **T409, the walk's other readers, and what moves for each** (read 2026-11-26, method: `grep -rln "tree::walk\|walk_judged\|tree::judge"` over `rust/`, each make reader read):
+    - `main_tree_hooks` (through `tree::judge`): `make -C <the mirror> X` sent from a clone is now `named-main` and refused, where it passed; `make -C <a clone> X` sent from the mirror now writes no mirror and passes, where it was rewritten into the clone. No command of the Makefile or `scripts/` runs `make -C` (observed 2026-11-26, method: `grep -rn "make -C\|make --directory"` over both), so no command of the project's own is moved. Pinned in `tree/tests/make_dir.rs`.
+    - `gm_tree_hooks`: `make -C <gm-assistant's tree> X` is now a write in gm-assistant's main tree and refused; it passed from any other place.
+    - `static_runs_hooks::run_tree` read the `-C` itself and joined it onto the make's place; with the walk placing the make there it would join it twice (`cd w && make -C rust/a static` to `w/rust/a/rust/a`), so its own read is removed and the walk's place taken as is.
+    - `gate_write_hooks`: `make -C <another tree> accept` passes from the gated tree (the case `a_commit_in_another_tree_is_not_held` held, T307's section naming it owed here), and `cd <another tree> && make -C <the gated tree> tick` is held.
+    - `house_style_hooks`, `make_only_hooks`, `event_log_hooks` (`writes` on a Bash line), `readme_hooks`, `builder_pool_hooks` and the bench read a make target's place as where the make runs; each now reads its `-C` place. Their suites pass unchanged.
+  - **T406, the rule built.** `gated` in `rust/guard/src/guards/gate_write_hooks.rs` replaces `running` and `runs_here`: one pass over `/proc` finds every work tree where a `make done` runs (the program and the target matched as before, the tree the work tree of the process's cwd; a directory in no work tree, or a cwd that cannot be read, runs no gate). Each gated tree is judged in turn (`Gate`): a commit, an add or a record-writing make the walk places in it is held. The fail-closed cases T307 kept - a place the walk cannot read (`cd "$VAR"`) and a pattern's match with no command placed (`echo 'a; git commit'`) - hold in the tree the hook's process stands in alone; in another gated tree only a positive placement holds, or a quoted `git commit` would be refused wherever any session's gate ran. A command with no `cwd` in its event stands in the hook process's tree, as before. T307's rule stands: a write in another, ungated tree passes. The refusal's text is unchanged, so no message-check is owed.
+  - **T406, kept to the brief's three kinds.** An Edit, a Write and a shell write are still judged in the hook process's tree alone: the same gap for them is filed as T430, pinned by the new test's let-through Write.
+  - **The tests.** `tree::tests::make_dir::a_make_runs_where_its_own_directory_options_say` (16 forms placed in `sub`, 2 composed, 4 that read no directory, 2 with the shell's place unknown, 1 unreadable, 2 main-tree verdicts); `guards::gate_write_hooks::tests::a_commit_sent_into_a_gated_tree_from_another_is_held` (5 commands held from a pool tree, 5 let through, a Write let through, and the gated tree's commit into the pool tree let through); `a_commit_in_another_tree_is_not_held` now 5 let through and 9 held; `nothing_is_refused_with_no_gate_running_here` gains a gate whose cwd cannot be read; 2 new cases of `tests/hooks/test-gate-write-hooks.sh` (from another tree, `git -C <the gated tree> commit` and `make -C <the gated tree> tick` refused), counted in the files' text, observed 2026-11-26, method: read from the files after the last edit.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T409, the walk reads a make's own `-C` | `a_make_runs_where_its_own_directory_options_say`, red on the old code | n/a: tooling | none: tooling | the walk's make branch as before |
+| T406, a commit held in every gated tree | `a_commit_sent_into_a_gated_tree_from_another_is_held`, red on the old code | n/a: tooling | none: tooling | `GATE_WRITE_OK` with a reason |
 
-### T409 Approach (checklist part A)
+### T409, T406 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** While a tree's gate runs, a commit, an add or a record-writing make sent into it from any tree is held, and one sent from it into another tree - by `cd`, git's `-C` or make's own `-C` - passes.
+2. **The constraints.** Feature 385 plan D13 (no write the gate would see while it runs), feature 375 FR-004 (a gate vouches for none of a tree that moved), T307 part 1's rule (a write in another, ungated tree passes); the refusal's text is not changed.
+3. **Where each comes from.** O: T307 part 1's Found and left (`plan.md`, `### T307`), read 2026-11-26; GNU make 4.4.1's own reading of its options, measured 2026-11-26 as above.
+4. **Do they describe the world here?** Yes: on the old code the walk placed `make -C sub x` where its shell stood and the guard let `git -C <the gated tree> commit` through from another tree, each shown by its new test failing (item 9).
+5. **The order.** T409 then T406, one section; both before T307's tick; T430 and T405 stay open.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard rust/guard/shared"` and the changed guards' suites in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-26 (`make rust-test`, each run's result line): T409's test on the old walk, `rust/guard/shared` 519 passed, 1 failed; T406's test on the old guard, `rust/guard` 554 passed, 1 failed. After, measured 2026-11-26 (`make builder-checks CRATE="rust/guard rust/guard/shared"`): `rust/guard` 555 passed, 0 failed, `rust/guard/shared` 520 passed, 0 failed, lint and format clean; `tests/hooks/test-gate-write-hooks.sh` 32 passed, 0 failed; the walk's readers' suites, run once after T409, measured 2026-11-26 (`bash tests/hooks/test-<guard>-hooks.sh`, each suite's last line): main-tree 104, gm-tree 24, make-only 144, static-runs 42, event-log 25, readme 87, builder-pool 17 passed, house-style passed, 0 failed in each.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome, not a difference: a gate voided by a commit sent into its tree from another, and a record-writing make aimed at another tree refused (or, for main-tree and static-runs, placed in the wrong tree).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- An Edit, a Write or a shell write into a gated tree from a session standing in another tree is not held (T406 extended only the commit, add and record-writing make rules). Visible effect: a gate voided; found by reading, no firing observed. Not fixed here: the brief held this bundle to those three kinds, and an Edit's rule asks the gated tree's own tree check, a widening with its own cases. Filed as T430; lands before T307.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - two gaps in a guard, a defect.
 
 ### T413 (<why: the finding or measurement that files it>)
 
@@ -6148,6 +6134,33 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T431 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T430 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T430 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
