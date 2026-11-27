@@ -181,7 +181,7 @@ mod tests {
     /// The one stub test (451 T307 part 2: moved here from `make task-withdraw`, which the tick of a task built inside another asks too).
     #[test]
     fn a_plan_without_a_stub_is_the_plan_with_the_template_alone_removed() {
-        let [perf, plain] = stubs("T07");
+        let [perf, plain, ..] = stubs("T07");
         assert_eq!(without_stub("### T08 (names T07)\n\nx\n", "T07"), Ok(None));
         let whole = format!("### T06 (a)\n\nx\n\n{plain}\n### T08 (b)\n\ny\n");
         assert_eq!(
