@@ -9,9 +9,19 @@ T435 T443 T433 T436 T457 T446 T455 T460 T450 T462 T458 T464 T437 T440 T441 T442 
 gates red before it (06:33Z, 09:06Z, 09:39Z and the attempts between), each ruled continue by the round arbiter, each repaired
 in the clone (45792d53b7, 5b2bf5b0d3, 7057dc718b, e1d2fe230d).
 
-**In the clone, waiting for the next landing (its plan review running):** T463 T452 T448 T451 T465 T474 T467 T468 T439.
+**Landed after it:** T463 T452 T448 T451 T465 T474 T467 T468 T439 (aa716ded17, about 11:00Z), then T412 T418 T431 T432
+T430 T384 T469 T456 T477 T472 (c3b5e8f433, about 12:10Z) - 85 tasks on main overnight in all. Each later batch was gated after
+running its changed crates' coverage first (the round arbiter's 09:39Z ruling allowed it), which caught three would-be reds
+before they cost a gate.
 
-**Still building:** T431 with T432, T430, T412 with T418, T384.
+**Still building at that time:** T353 with T360 (builders escaping the brief guard), T478 with T473 (pruning two stores),
+T479 with T481 (a landing's ticks scoped to its feature; the pool-idle block's flag). Open and unbuilt in 451 besides those:
+T447 (superseded by T397, to close), T470, T475, T480, T482, the gate-write message's cut, T310, T363, T386-T388, and the
+GM-held T302, T405, T307 part 3, T321, T415, T308, T401, T354.
+
+**Two more of my mistakes, besides those listed below:** a red-gate trigger id derived by hand, 3 s off the guard's (an arbiter
+ruling under it discharged nothing; T477 now refuses such an id), and three coverage repairs reshaped without running coverage,
+which returned red (the arbiter ruled continue; coverage run before each gate since).
 
 **The earlier text below (written 08:30Z) said nothing had landed since 2988fee630; that is no longer so. Its lists of what
 was waiting are the 63 above.**
