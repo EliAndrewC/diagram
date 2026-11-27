@@ -16,10 +16,11 @@ spellings, hyphens only.
 **Ready now** (nothing blocks them): T01, T03, T04, T05. T02 is ready once T01 lands. Every other phase-1 task waits on T05, the
 baseline taken before the first code edit (plan, XIII).
 
-**The 451 parts this feature takes over** (spec, "Taken over from feature 451"), each closed in 451 with a pointer here by the task
-named: T302 part 1 (T03 confirms it), T302 part 4 (T30; T302's box stays open in 451 for its parts 2 and 3), T307 part 2 (T06),
-T307 part 3 (T14), T307 part 1 and the T307 box (T27), T308 (T16), T405 (T28), T415 (T26). Not taken over but answered: 451 T525,
-its removal replaced by D1, closed with a pointer by T30.
+**The 451 parts this feature takes over** (spec, "Taken over from feature 451"), each carried by the task named: T302 part 1 (T03
+confirms it), T302 part 4 (T30), T307 part 2 (T06), T307 part 3 (T14), T307 part 1 and the T307 box (T27), T308 (T16), T405 (T28),
+T415 (T26). Not taken over but answered: 451 T525, its removal replaced by D1, carried by T30. Their 451 boxes were closed at the move
+of 2026-11-27 (feature 462, FR-003), each pointing to the task here that carries it; T302's parts 2 and 3 moved to feature 462 as
+`451 T302`.
 
 ## Occasions
 
