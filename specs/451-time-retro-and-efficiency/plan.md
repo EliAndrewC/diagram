@@ -7350,31 +7350,59 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T443 (<why: the finding or measurement that files it>)
+### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a DERIVED INDEX of the log's `PreToolUse` Edit lines (path, `old`), kept by the reader alone (`rust/guard/shared/src/guards/event_log_hooks/reversal/index.rs`, new; `reversal.rs` now calls `index::olds`). The tripwire's answer is the index's rows for the bytes it covers plus T392's chunked scan (`scan`, factored out of T392's loop word for word) of the log from there to its end, both read from ONE open file through a positional reader (`read_at`), so the answer never depends on the index's write. T383's screen and T392's full read (`needle`, `candidate`, `Kept`, `replaced`) are now built for the tests alone, as the ORACLE the index is held to. No guard message changed.
+  - **DECISION, where it lives: `<events dir>/reversal/<feature>.idx`** (rendering, CONVENTION of this repository's state). A subdirectory of the log's own events directory under the common git dir, so no commit carries it, and it follows `L7R_EVENTS_DIR`. Not a plain file beside the logs: `scripts/state-sync.sh`'s `commit` pushes every regular file of the events directory as a log and its `merge_in` line-merges them back with `>>`, which would append another clone's rows to an index, and `measure/events.rs`' `lines_of` reads every name there as a log; both pass a directory over, as they pass `samples/`, observed 2026-11-27, method: both read. The name ends `.idx`, never `.jsonl`, so no `jsonl` filter takes it.
+  - **DECISION, the format** (rendering): one self-describing file - a header `l7r-reversal-index 1 <dev> <ino> <covered> <head_len> <tail_len> <rows_len> <rows_n>`, the raw first and last `min(WINDOW, covered)` bytes of the covered prefix, then one row a line, `<path JSON>\t<old JSON>`. A wrong magic or version, an unparsable header, a body of the wrong length or row count, or a last row with no newline is no index, and is rebuilt.
+  - **DECISION, the tie to the log** (rendering): checked against the OPEN file's `fstat`, not the path - the same device and inode, `covered` at most the log's length, and both windows re-read from the log and byte-equal (raw bytes, not a hash, so no collision argument). Any mismatch is a rebuild by a full scan: a rotation, refile's temporary file and rename, `sed -i` or a new file (each a new inode), a truncation (shorter), a rewrite in place (a window differs).
+  - **DECISION, an ACCEPTED LIMITATION: the one change the tie cannot see** (rendering; chosen by the builder, within the GM's go-ahead of 2026-11-27). A file with the same device and inode NUMBER (changed in place, or a new file given a freed inode's number), at least `covered` long, both 4 KiB windows (`WINDOW`, a GUESS knob) byte-equal, and bytes between them changed. What it costs: in that case alone an index kept over the change answers from the old rows, and a reversal among the changed lines could be missed. Why it is accepted: no writer makes it, observed 2026-11-27, method: every file of `rust/`, `scripts/` and the Makefile naming `l7r-events`, `events_dir` or `L7R_EVENTS_DIR` (23 files) searched for a write (`append(true)`, `fs::write`, `rename(`, `set_len`, `File::create`, `>>`, `mv`, `sed -i`) and each hit read. The writers of a feature's log are four: `event_log_hooks.rs`' one append (`write_line`, which the gate's `append_row*` family reaches too) appends; state-sync's `merge_in` appends with `>>`, or `cp`s a log the clone lacks (a new inode); `make events-refile` appends to its target, and replaces its source by a temporary file and a rename (`write_back`), whose dropped or moved lines shift the last window even under a reused inode number; its retask changes a line's task, never its `path` or `old`, so an index kept over it still answers as the full read. The other hits write elsewhere (the sampler's `samples/`, a report, a marker). There is no backfill of the logs: the backfill T392 priced was a writer-kept side file's, never built. The alternative priced: a digest of the whole covered prefix would see it, but computing it is reading every byte of the prefix on every Edit - T392's full read again, the 28 to 29 ms this task removes, measured 2026-11-27 (`t392-results.md`). Pinned by `a_change_in_place_between_the_windows_at_the_same_length_is_the_one_it_cannot_see`, and said in `index.rs`' module doc.
+  - **DECISION, the build rule is the full parse's test** (rendering): `indexed` keeps a line that is UTF-8 and holds `"Edit"` (T383's screen), parses as JSON after `trim`, has `ev == PreToolUse` and `tool == Edit`, and has a `path` key (a line with no `path` matches no path, as `e.get("path") == Some(path)` behaved); a missing `old` is stored as null. At the ask (`matching`) a string path is compared as its one serde spelling, byte for byte, at a row's start, never as a substring (a path holding `\"` could match mid-row); any other path is parsed and compared as a value.
+  - **DECISION, the partial last line** (rendering): `covered` always ends just after a newline; an unterminated last line is answered for this call, as the full read answers it, but never stored.
+  - **DECISION, when it writes** (rendering): on a rebuild, and when the tail since `covered` passes `STALE`; otherwise the hook only reads, and never writes after a read that failed. The write is a temporary file unique to the process and call (`.<name>.<pid>.<seq>.tmp`) and a rename; a failed rename removes it. Two hooks racing lose at most one's work: both candidates are whole, true indexes.
+  - **Two GUESS knobs**, no verdict depending on either, only time: `WINDOW` (4096 bytes: the last 10 to 15 lines of a log whose lines run 250 to 400 bytes, observed 2026-11-27 on the 451 log) and `STALE` (1 MiB: the tail is scanned on every call either way, about 0.5 ms a MB, so this trades that scan against a write of the index).
+  - **The proof on the real logs**, measured 2026-11-27 (a temporary test inside the crate, removed after, its source `dev/measurements/2026-11-27/edit-hook/t443-differential.rs`, over read-only copies of all 34 logs of the clone's `.git/l7r-events/`, 485,165 lines, 9,176 PreToolUse Edit lines over 1,937 paths, the oracle the full JSON parse of every line, by path, in order): COLD (the index deleted before every path's ask), WARM (the index covering the whole log) and GROWN (each log cut at 37%, 71% + 13 bytes and its length - 5, mid-line and mid-character included, the prefix indexed, the rest appended to the same inode, the prefix's index put back before every ask), 0 of 1,937 lists differing in each (`t443-differential.tsv`).
+  - **Before and after**, measured 2026-11-27 (T373's sandbox; `t443-time.py`, T392's timer unchanged; the tree's HEAD binary `aefcced086` before, the binary with T443 after, interleaved arms, 20 counted runs after a warm-up; median / 90th centile in ms; 22 cores). Every call exited 0 with no output. Two runs, measured 2026-11-27 (`t443-time.py`), both LOADED and good for the comparison only: the build half's at load1 30.6 to 35.3 (`t443-timing.tsv`), and the closing half's at load1 15.4 to 17.9 (`t443-timing-rerun.tsv`), the lowest load the machine had that day.
+
+    | PreToolUse Edit of a doc | load1 30.6 to 35.3: before | after | load1 15.4 to 17.9: before | after |
+    |---|---|---|---|---|
+    | pool worktree: hook (launcher + binary) | 68.1 / 149.0 | 41.5 / 105.8 | 51.9 / 219.4 | 30.9 / 71.2 |
+    | pool worktree: binary, every guard | 48.0 / 77.5 | 21.0 / 54.8 | 33.2 / 83.4 | 15.4 / 43.3 |
+    | pool worktree: `event-log-hooks` alone | 39.1 / 70.1 | 16.1 / 34.3 | 31.2 / 79.6 | 11.8 / 30.3 |
+    | clone (dirty): hook | 253.9 / 559.5 | 239.8 / 640.5 | 137.9 / 148.2 | 115.7 / 123.1 |
+    | clone (dirty): binary, every guard | 229.2 / 581.9 | 191.4 / 585.6 | 117.0 / 123.6 | 101.4 / 113.7 |
+    | clone (dirty): `event-log-hooks` alone | 46.6 / 129.7 | 14.2 / 68.2 | 31.3 / 33.2 | 9.7 / 10.6 |
+
+    The clone's hook is dominated by `clone-sync-hooks` (its `git status`, 89.8 to 91.5 ms at the lower load, measured 2026-11-27 (`t443-timing-rerun.tsv`)). COLD against WARM, measured 2026-11-27 (`t443-cold.py`, `t443-cold.tsv`, the after binary's `event-log-hooks`, the index deleted before each call and then the next call, 20 pairs, load1 23.3 to 24.8): 101.6 / 180.4 cold, 20.5 / 30.5 warm - the rebuild parses every line holding `"Edit"` (6,609 rows, 0.73 MB, in the sandbox), once per new, refiled or rotated log. No real state was touched (`t443-leak-check.txt`; re-checked after the closing half's run: no `reversal/` directory under any real events directory, the sandbox clone clean).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the tie (inode, length, both windows) | `a_rotated_log_is_not_read_through_the_old_index`, `a_truncated_log_is_rebuilt`, `a_log_rewritten_in_place_at_the_same_length_is_rebuilt`, all three red on a mutant whose load ignores dev, ino and windows, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared`, 555 passed, 3 failed) | n/a: tooling | none | n/a |
+| an unterminated last line never stored | `a_log_cut_at_every_byte_and_grown_again_answers_as_the_full_parse`, `a_partial_last_line_is_answered_and_kept_only_once_its_newline_comes`, red on a mutant that stores it (556 passed, 2 failed), measured 2026-11-27 (the same command) | n/a: tooling | none | n/a |
+| the stale rewrite | `a_log_grown_past_stale_rewrites_the_index_and_one_grown_less_only_reads_it`, red on a mutant that never rewrites (557 passed, 1 failed), measured 2026-11-27 (the same command) | n/a: tooling | none | n/a |
+| a torn index rebuilt, its temporary file removed | `an_index_unreadable_torn_or_of_another_form_is_rebuilt`, red on each of three mutants - no body-length check, no row-count check, no removal on a failed rename (557 passed, 1 failed each) - after it was strengthened: first written with each tear cut from another log's inode, it passed both length mutants, so each tear is now made from its own log's true index, measured 2026-11-27 (the same command) | n/a: tooling | none | n/a |
+| the accepted limit | `a_change_in_place_between_the_windows_at_the_same_length_is_the_one_it_cannot_see` pins what the index answers there | n/a: tooling | none | n/a |
 
 ### T443 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An Edit's hook does not make the session or a builder wait on a read of the feature's whole log: the reversal tripwire reads a kept index of the log's Edit lines and the log's tail since it, and catches every reversal the full read caught.
+2. **The constraints.** The reversal tripwire must not miss a put-back (feature 375's round arbiter; T383's screen and T392's read, kept as the oracle). No writer of the log (its append, state-sync's merge, refile) keeps the index in step, and no backfill is owed - T392's decision against a writer-kept side file. No guard message changes. Constitution XIII: no known regression; the one case the tie cannot see is said, pinned and accepted (the Approach).
+3. **Where each comes from.** O: T392's after-figures and Found and left, and the task line's derived-index design; O: this task's differential and before and after. G: the GM's go-ahead of 2026-11-27 for the work; the limit's choice within it is the builder's.
+4. **Do they describe the world here?** Yes: the before arms give T392's after-figures back at a comparable size (`event-log-hooks` 31.2 and 31.3 ms at load1 15 to 18 against T392's 29.4 and 28.3 at 10 to 13), measured 2026-11-27 (`t443-time.py`).
+5. **The order.** After T392 (its `scan` is the index's catch-up and rebuild); T458 (the rebuild's cost) and T459 (the temporary-file sweep) after this.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared"` and `tests/hooks/test-event-log-hooks.sh` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared`; six mutants of `index.rs`, each swapped in and put back by `cmp`, logs `t443-mut-*.log` in the builder's scratch): the step table's failures, against 558 passed, 0 failed after. `tests/hooks/test-event-log-hooks.sh` 25 passed, 0 failed; `make builder-checks CRATE="rust/guard/shared"` green. The differential 0 of 1,937 differing cold, warm and grown; `event-log-hooks` alone 31.2 to 11.8 ms in a worktree and 31.3 to 9.7 in the clone at load1 15.4 to 17.9, measured 2026-11-27 (the Approach's runs). Not run red: the race test's threads half (no mutant fails it deterministically; a race only costs time by the invariant) and the unreadable-index test (it passes on the old code too, as a rename replaces an unreadable file).
+10. **Before moving a constant.** n/a: `WINDOW` (4096) and `STALE` (1 MiB) are new GUESS knobs no verdict depends on (the every-byte cut test and the differential answer as the full parse whatever the index holds); `CHUNK` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of outcome: no map, verdict or message changes; the speed is the change. The gate's crates that list `.git/l7r-events` meet a new `reversal/` directory only where an Edit `PreToolUse` line reaches a fixture's existing log: five read every entry with `unwrap_or_default` or count entries before any such line; `pages/runner/work/tests.rs` and `pool/cache/phases/tests.rs` unwrap every entry's read but write Phase lines only, so cannot meet it, observed 2026-11-27, method: each `l7r-events` listing in `rust/gate/crates` read (not run: only the batch gate runs those crates).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The rebuild (a new, refiled or rotated log's first Edit) is 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 (`t443-cold.tsv`): it parses every line holding `"Edit"`, so that one call is slower than T392's full read was (`event-log-hooks` 31.2 and 31.3 ms before, measured 2026-11-27, `t443-timing-rerun.tsv`). Its visible effect is one slow Edit per new log. Not fixed here: a second literal screen before the parse is its own pricing against its spelling risk. Filed as T458; lands before T302.
+- A hook killed between the index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` file nothing removes (0 seen in this task's runs, observed 2026-11-27). Its visible effect is disk left behind. Not fixed here: a sweep is its own mechanism. Filed as T459; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the builders' loop and the session's own, every Edit's hook. Before and after: the PreToolUse hook on an Edit of a doc 51.9 / 219.4 ms to 30.9 / 71.2 ms for a builder in a pool worktree and 137.9 / 148.2 ms to 115.7 / 123.1 ms for the session in its clone at load1 15.4 to 17.9, and 68.1 / 149.0 to 41.5 / 105.8 and 253.9 / 559.5 to 239.8 / 640.5 at load1 30.6 to 35.3 (median / 90th centile, 20 runs each, LOADED), measured 2026-11-27 (`t443-time.py` in T373's sandbox, the old binary and the new as interleaved arms). At T373's day's counts (185 Edits in a worktree or outside, 29 in the clone) that is 185 x 0.0210 + 29 x 0.0222 = 4.5 s a day at the lower load, measured 2026-11-27 (this run's medians times T373's counts of 2026-11-26), and the tripwire's share no longer grows with the log but with its tail since the index (at most `STALE`). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 ### T444 (<why: the finding or measurement that files it>)
 
@@ -7692,6 +7720,59 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T462 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T458 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T458 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T459 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T459 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

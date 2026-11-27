@@ -19,9 +19,14 @@
 //! (`dev/measurements/2026-11-27/edit-hook/t392-results.md`): the whole-file read alone took about 33 ms and its UTF-8 check only
 //! a few more, while the same bytes read [`CHUNK`] at a time took about 12 ms - the cost is the one large buffer, not the decode. So
 //! the log is read a chunk at a time, only its whole lines searched (a line is never cut by a chunk's edge), the rarer of the two
-//! texts found by `memchr`'s `memmem` over the bytes, and only a line holding it decoded, screened and parsed as before. Every line is
-//! still read: no second file or kept offset (the options priced against this) can drift from the log, so a line missed is
-//! impossible by construction. A line that is not UTF-8 is passed over alone, where the whole-string read lost the log's every line.
+//! texts found by `memchr`'s `memmem` over the bytes, and only a line holding it decoded, screened and parsed as before. T392 declined
+//! a second file kept by the log's WRITERS (a side file or kept offset each writer must keep in step), because a line missing from it is
+//! a missed reversal. A line that is not UTF-8 is passed over alone, where the whole-string read lost the log's every line.
+//!
+//! WHY A DERIVED INDEX NOW (451 T443): the chunked read still read every byte - 28 to 29 ms of an Edit's hook on the 42 MB log,
+//! growing about 0.5 ms a MB. [`index`] keeps the log's Edit lines beside it, the READER's and never a writer's, so no writer, refile or
+//! backfill keeps it in step; a log that is not the one it was built from is rebuilt by the same scan, so a stale index costs time,
+//! never a line.
 
 use std::io::{ErrorKind, Read};
 use std::path::Path;
@@ -32,14 +37,18 @@ use serde_json::Value;
 use super::truthy;
 
 /// The Edit tool's name as a line's JSON holds it, whatever the writer puts around the colon.
-const EDIT: &str = "\"Edit\"";
+pub(super) const EDIT: &str = "\"Edit\"";
 
 /// The bytes read from the log at a time (a GUESS knob, 451 T392): 64, 256 and 1,024 KiB read the 44.4 MB log in 10.7 to 17.2 ms
 /// alone, within the noise of one another, against 33 to 59 ms for the whole file at once, measured 2026-11-27
 /// (`t392-pricing.tsv`); any size reads the same lines.
 const CHUNK: usize = 256 * 1024;
 
+// THE FULL READ (T383's screen and T392's chunked read) is the index's ORACLE since 451 T443: the tests and the differential hold the
+// index's answer to it, so it is built for them alone.
+
 /// The text every log line naming `path` holds, where the path has one JSON spelling; None where it may have several.
+#[cfg(test)]
 fn needle(path: &Value) -> Option<String> {
     let plain = |b: u8| (0x20..0x7f).contains(&b) && b != b'"' && b != b'\\';
     path.as_str()
@@ -48,11 +57,13 @@ fn needle(path: &Value) -> Option<String> {
 }
 
 /// Whether a log line could be an Edit of the path whose [`needle`] this is: the screen, before any parse.
+#[cfg(test)]
 fn candidate(line: &str, needle: Option<&str>) -> bool {
     line.contains(EDIT) && needle.is_none_or(|n| line.contains(n))
 }
 
 /// What a read of the log keeps: the `old` digest of each earlier Edit of the path, and how many lines were parsed to find them.
+#[cfg(test)]
 struct Kept<'a> {
     path: &'a Value,
     needle: Option<String>,
@@ -60,6 +71,7 @@ struct Kept<'a> {
     parsed: usize,
 }
 
+#[cfg(test)]
 impl Kept<'_> {
     /// One line of the log: decoded, screened and, if it passes, parsed as the read before the screen parsed every line.
     fn line(&mut self, bytes: &[u8]) {
@@ -80,24 +92,73 @@ impl Kept<'_> {
             self.olds.push(e.get("old").cloned().unwrap_or(Value::Null));
         }
     }
+}
 
-    /// Whole lines of the log (no line cut at either end): each line holding `key` handed to [`Kept::line`] once.
-    fn lines(&mut self, key: &Finder, text: &[u8]) {
-        let mut done = 0;
-        for at in key.find_iter(text) {
-            if at < done {
-                continue;
+/// Whole lines of the log (no line cut at either end): each line holding `key` handed to `on` once.
+fn lines(key: &Finder, text: &[u8], whole: bool, on: &mut impl FnMut(&[u8], bool)) {
+    let mut done = 0;
+    for at in key.find_iter(text) {
+        if at < done {
+            continue;
+        }
+        let start = memchr::memrchr(b'\n', &text[..at]).map_or(0, |i| i + 1);
+        done = memchr::memchr(b'\n', &text[at..]).map_or(text.len(), |i| at + i);
+        on(&text[start..done], whole);
+    }
+}
+
+/// What a [`scan`] read: the bytes of its whole lines (each ended by a newline), and whether it read to the end without failing.
+pub(super) struct Scanned {
+    pub(super) whole: u64,
+    pub(super) to_end: bool,
+}
+
+/// The log read `chunk` bytes at a time (451 T392): each line holding `key` handed to `on` once, with whether a newline ends it (a
+/// last line with none, which a writer may be appending to, is handed over `false`). A read that fails ends it with its whole lines.
+pub(super) fn scan(
+    mut log: impl Read,
+    key: &Finder,
+    chunk: usize,
+    mut on: impl FnMut(&[u8], bool),
+) -> Scanned {
+    let mut buf: Vec<u8> = Vec::new();
+    let mut whole = 0;
+    loop {
+        let held = buf.len();
+        buf.resize(held + chunk, 0);
+        let read = log.read(&mut buf[held..]);
+        buf.truncate(held + *read.as_ref().unwrap_or(&0));
+        match read {
+            Ok(0) => {
+                lines(key, &buf, false, &mut on);
+                return Scanned {
+                    whole,
+                    to_end: true,
+                };
             }
-            let start = memchr::memrchr(b'\n', &text[..at]).map_or(0, |i| i + 1);
-            done = memchr::memchr(b'\n', &text[at..]).map_or(text.len(), |i| at + i);
-            self.line(&text[start..done]);
+            Ok(_) => {
+                // the new bytes' last newline ends the whole lines held; what follows it waits for the next chunk
+                if let Some(end) = memchr::memrchr(b'\n', &buf[held..]) {
+                    lines(key, &buf[..held + end], true, &mut on);
+                    buf.drain(..=held + end);
+                    whole += (held + end + 1) as u64;
+                }
+            }
+            Err(e) if e.kind() == ErrorKind::Interrupted => {}
+            Err(_) => {
+                return Scanned {
+                    whole,
+                    to_end: false,
+                }
+            }
         }
     }
 }
 
 /// The text each earlier Edit of `path` replaced (its `old` digest), from a log read `chunk` bytes at a time, and how many lines were
-/// parsed to find them. A read that fails ends it with what its whole lines held.
-fn replaced(mut log: impl Read, path: &Value, chunk: usize) -> (Vec<Value>, usize) {
+/// parsed to find them: the full read, which the index's answer must equal. A read that fails ends it with what its whole lines held.
+#[cfg(test)]
+fn replaced(log: impl Read, path: &Value, chunk: usize) -> (Vec<Value>, usize) {
     let mut kept = Kept {
         path,
         needle: needle(path),
@@ -107,37 +168,19 @@ fn replaced(mut log: impl Read, path: &Value, chunk: usize) -> (Vec<Value>, usiz
     // the rarer text of the two a candidate holds: the path's where it has one spelling, else the tool's
     let key = kept.needle.clone().unwrap_or_else(|| EDIT.to_owned());
     let key = Finder::new(key.as_bytes()).into_owned();
-    let mut buf: Vec<u8> = Vec::new();
-    loop {
-        let held = buf.len();
-        buf.resize(held + chunk, 0);
-        let read = log.read(&mut buf[held..]);
-        buf.truncate(held + *read.as_ref().unwrap_or(&0));
-        match read {
-            Ok(0) => {
-                kept.lines(&key, &buf);
-                break;
-            }
-            Ok(_) => {
-                // the new bytes' last newline ends the whole lines held; what follows it waits for the next chunk
-                if let Some(end) = memchr::memrchr(b'\n', &buf[held..]) {
-                    kept.lines(&key, &buf[..held + end]);
-                    buf.drain(..=held + end);
-                }
-            }
-            Err(e) if e.kind() == ErrorKind::Interrupted => {}
-            Err(_) => break,
-        }
-    }
+    scan(log, &key, chunk, |l, _| kept.line(l));
     (kept.olds, kept.parsed)
 }
 
-/// Whether an Edit of `path` puts back text an earlier Edit of that file replaced (`hm_arbiter.reversal`).
+/// Whether an Edit of `path` puts back text an earlier Edit of that file replaced (`hm_arbiter.reversal`): read through the log's
+/// derived index (451 T443, [`index`]), whose answer is the full read's.
 pub(super) fn reversal(log: &Path, path: &Value, old: &Value, new: &Value) -> bool {
     truthy(new)
         && new != old
-        && std::fs::File::open(log).is_ok_and(|f| replaced(f, path, CHUNK).0.contains(new))
+        && std::fs::File::open(log).is_ok_and(|f| index::olds(&f, log, path, CHUNK).contains(new))
 }
+
+mod index;
 
 #[cfg(test)]
 mod tests;

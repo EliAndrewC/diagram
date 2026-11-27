@@ -1,0 +1,2 @@
+wt	after: --only event-log-hooks, cold (index deleted first)	20	101.6	180.4	66.5	276.9	[(0, 0)]	23.34-24.76
+wt	after: --only event-log-hooks, warm (the next call)	20	20.5	30.5	9.9	56.9	[(0, 0)]	23.34-24.76

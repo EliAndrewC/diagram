@@ -1,0 +1,30 @@
+451 T443 leak check, 2026-11-27T07:35:49Z
+== the real logs' copies used by the differential match the real logs as copied (sha256, first 34 lines of the before list re-checked against the copies):
+copies == the real logs at copy time: 34 of 34
+== no index anywhere under a real events directory:
+/diagram/.git: none
+/diagram/.clones/diagram-backlog/.git: none
+no clone or worktree holds one
+== no t443 or t373 session line in the real logs:
+/diagram/.clones/diagram-backlog/.git/l7r-events/451-time-retro-and-efficiency.jsonl
+== sandbox log lines: 160483 before, 160777 after
+== sandbox clone status:
+(empty = clean)
+== correction: a line whose sid is a sandbox session ("sid":"t373-...): 0 in the real clone's and the mirror's logs; the real logs name the sandbox's tree in 2 lines, all of them this and earlier sessions' own commands (the timer's command lines), none a hook line of the sandbox
+
+== 451 T443 leak check, run LAST (after the hook suite and the final builder-checks), 2026-11-27T07:46:29Z, T392's method plus the index:
+the real logs only grew: each real log's first <its copy's size> bytes equal its copy (cmp -n):
+  34 of 34 equal over the copied length, 0 differing
+a reversal index under /diagram/.git/l7r-events*: 0
+a reversal index under /diagram/.clones/diagram-backlog/.git/l7r-events*: 0
+a reversal index in any clone or worktree outside the scratchpad: 0
+real event-log lines whose sid is a t373 session: 0
+real claim-map entries named t373-* or t443-*: 0
+/diagram/.git/checks-open.json naming the sandbox or a t373 id: 0
+/diagram/.clones/diagram-backlog/.git/checks-open.json naming the sandbox or a t373 id: 0
+/diagram/.git/arbiter-owed.json naming the sandbox or a reversal of a sandbox path: 0
+/diagram/.clones/diagram-backlog/.git/arbiter-owed.json naming the sandbox or a reversal of a sandbox path: 0
+/diagram/.clones/diagram-backlog/.git/worktrees/diagram-backlog-land/arbiter-owed.json naming the sandbox or a reversal of a sandbox path: 0
+/diagram/.clones/diagram-backlog/.git/worktrees/diagram-backlog-review/arbiter-owed.json naming the sandbox or a reversal of a sandbox path: 0
+real guard-log files naming the sandbox, written since this task began (02:13 local): 0
+sandbox clone changed files: 0

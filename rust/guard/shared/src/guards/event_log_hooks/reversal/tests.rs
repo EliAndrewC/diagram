@@ -6,13 +6,13 @@ use serde_json::{json, Value};
 use super::{candidate, needle, replaced, reversal, CHUNK};
 
 /// One log line as the hook's writer writes it (`write_line`: serde's compact text).
-fn row(ev: &str, tool: &str, path: &Value, old: &str) -> String {
+pub(super) fn row(ev: &str, tool: &str, path: &Value, old: &str) -> String {
     json!({"t": "T", "sid": "s", "ev": ev, "tool": tool, "id": "i", "path": path, "old": old, "new": "n"})
         .to_string()
 }
 
 /// The `old` digests the parse of EVERY line keeps for `path`: the read before the screen, the oracle.
-fn parse_all(text: &str, path: &Value) -> Vec<Value> {
+pub(super) fn parse_all(text: &str, path: &Value) -> Vec<Value> {
     text.lines()
         .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
         .filter(|e| {
@@ -25,7 +25,7 @@ fn parse_all(text: &str, path: &Value) -> Vec<Value> {
 }
 
 /// The paths a screen could get wrong: plain, a quote, a backslash, non-ASCII, a control character, DEL, empty, and no string at all.
-fn odd_paths() -> Vec<Value> {
+pub(super) fn odd_paths() -> Vec<Value> {
     vec![
         json!("/c/docs/usage.md"),
         json!("/c/a \"quoted\" name.md"),
@@ -168,7 +168,7 @@ impl std::io::Read for Halting {
 
 /// A log whose lines a chunk's edge can cut anywhere: a line longer than most chunks, a `\r\n` ending, spaces round a line, a blank
 /// line, and a last Edit with no newline after it.
-fn edged(p: &Value) -> String {
+pub(super) fn edged(p: &Value) -> String {
     let long = "x".repeat(700);
     [
         row("PreToolUse", "Edit", p, "A"),

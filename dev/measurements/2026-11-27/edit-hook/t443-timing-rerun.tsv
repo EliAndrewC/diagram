@@ -1,0 +1,16 @@
+wt	before: hook (launcher + binary)	20	51.9	219.4	38.0	282.9	0	0/0	16.76-17.87
+wt	before: binary, every guard	20	33.2	83.4	25.9	179.7	0	0/0	16.76-17.87
+wt	before: --only event-log-hooks	20	31.2	79.6	25.5	143.7	0	0/0	16.76-17.87
+wt	before: --only clone-sync-hooks	20	2.7	7.0	1.7	15.5	0	0/0	16.76-17.87
+wt	after: hook (launcher + binary)	20	30.9	71.2	22.6	170.9	0	0/0	16.76-17.87
+wt	after: binary, every guard	20	15.4	43.3	10.5	88.3	0	0/0	16.76-17.87
+wt	after: --only event-log-hooks	20	11.8	30.3	9.2	85.6	0	0/0	16.76-17.87
+wt	after: --only clone-sync-hooks	20	2.6	5.1	1.8	15.8	0	0/0	16.76-17.87
+sess	before: hook (launcher + binary)	20	137.9	148.2	118.4	150.8	0	0/0	15.44-17.42
+sess	before: binary, every guard	20	117.0	123.6	105.8	130.1	0	0/0	15.44-17.42
+sess	before: --only event-log-hooks	20	31.3	33.2	24.9	40.6	0	0/0	15.44-17.42
+sess	before: --only clone-sync-hooks	20	91.5	103.3	81.3	104.3	0	0/0	15.44-17.42
+sess	after: hook (launcher + binary)	20	115.7	123.1	103.5	128.4	0	0/0	15.44-17.42
+sess	after: binary, every guard	20	101.4	113.7	89.9	124.0	0	0/0	15.44-17.42
+sess	after: --only event-log-hooks	20	9.7	10.6	7.1	11.0	0	0/0	15.44-17.42
+sess	after: --only clone-sync-hooks	20	89.8	98.8	80.1	103.4	0	0/0	15.44-17.42
