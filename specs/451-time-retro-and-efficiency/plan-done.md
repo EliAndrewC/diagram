@@ -19296,3 +19296,174 @@ transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t3
 
 
 <!-- plan-archive: T493 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)
+
+- **Approach**: a read-only count (`dev/measurements/2026-11-27/plan-reads/plan-reads.py`, `results.md`, measured 2026-11-27): the bytes of text the Read and Bash calls naming plan.md or plan-done.md returned to each of the 114 builders of 2026-11-26/27 (the subagent transcripts whose first prompt has a `BUILDER-BRIEF` line, deduplicated by agent id).
+  - **The sum** (measured 2026-11-27, `plan-reads.py`): 3,683,572 bytes of 24,977,891 tool-result bytes, 14.7%, and 110 of 114 builders read some.
+  - **Per builder** (measured 2026-11-27, `plan-reads.py`): median 30,377 bytes, 90th centile 63,808, max 116,795 (T296,T297, 58.5% of its tool results).
+  - **By shape** (measured 2026-11-27, `plan-reads.py`): grep 563 calls 1,830,901 bytes (49.7%), sed range 114 calls 1,206,194 (32.7%), Read with offset/limit 64 calls 411,273 (11.2%), cat/head/tail 146 calls 154,440 (4.2%), awk 7 calls 60,080 (1.6%), other Bash 19 calls 20,684 (0.6%), Read whole file 0 calls.
+  - **Tokens** (an ESTIMATE at 4 bytes a token, from the measured bytes of 2026-11-27): about 8,000 a builder on the mean and 29,000 the worst, against a 300k cap about 2.7% and 10%. A Bash call's whole output is counted where its command names a plan file, so every figure is an upper bound.
+  - **No lever filed** (T499-D1): a target printing one task's section could save only what a builder reads beyond its own section, a third of the sum at most (an estimate from the measured sum of 2026-11-27), about 2,500 tokens a builder (ESTIMATE) of a 300k cap.
+
+**T499-D1 - No `make` target or brief line for a task's plan section is filed.** The task line: "file a lever only if it pays". The mean is 2.7% of the cap (an ESTIMATE from the measured bytes of 2026-11-27) and a third of it recoverable at most, and the builders' own section reads are needed; the cost of a new command (a builder of its own, per the brief rules) exceeds it. What would reopen it: a builder reaching the cap with plan reads above 25% of its tool results (the worst, T296,T297, measured 2026-11-27 at 58.5%, did not reach it). Chosen by the builder on the brief.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a count of plan bytes in 114 builders' tool results (`plan-reads.py`), measured 2026-11-27 | n/a: measurement, no map drawn | n/a | none | n/a |
+
+### T499 Approach (checklist part A)
+
+1. **The goal, in the world.** The session knows how much of a builder's context the plan files take, as a figure.
+2. **The constraints.** T499's line and the brief (read-only, per builder, shapes, tokens labeled an estimate, a lever only if it pays); 451 FR-013.
+3. **Where each comes from.** O: the 114 transcripts, counted 2026-11-27.
+4. **Do they describe the world here?** Yes: the transcripts are the builders' own tool results; the caveat is that a Bash call's whole output is counted where it names a plan file.
+5. **The order.** Independent of the other open tasks.
+6. **The exits.** Green: `results.md` written with the figures and a verdict on a lever. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `python3 -I dev/measurements/2026-11-27/plan-reads/plan-reads.py` prints the table and the figures above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows; no check it breaks: a measurement.
+
+**Found and left?** none
+
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
+<!-- plan-archive: archived 2026-11-27 -->
+### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))
+
+- **Approach**: `review_round_hooks.rs` `plan_cap_refusal` reads the file once a dispatch. Measured 2026-11-27.
+  - **T497-D1, one read, the count per task unchanged.** `plan_rounds`' body becomes `rounds_in(doc, task)`, which counts from the file as `block_reviews` read it: the heading regex, the stub rule of 451 T462 and the walk back to the last CLEAR, all unchanged. `plan_cap_refusal` reads the file once, and only where the dispatch names a task that is not empty; a dispatch naming none still reads nothing. It then asks `plan_cap_held(root, dir, task, doc)` for each task, lazily, in the order the dispatch names them. The first task past its cap is still the one that trips the arbiter, and no task after it is asked. `plan_rounds(dir, task)` stays as the tests' entry (`#[cfg(test)]`), so T493's 15-shape differential still runs on it unchanged.
+  - **Red first.** `a_block_review_reads_the_review_file_once_for_all_its_tasks` uses a test-only read counter (`READS`, a thread-local at `block_reviews`' entry). A plan-delta dispatch names `T01-T02-T03-T14`, where only T14, the last, is held. On the old code it failed (1 failed of 24: `left: 4, right: 1`), measured 2026-11-27 (`make rust-test ONLY=guards::review_round_hooks`). After the change: 24 passed. The same test checks three more cases: T14 is still held, with the same trigger; a missing file is read once and holds nothing; a dispatch naming no task reads none. The guard's 598 tests pass, and `tests/hooks/test-review-round-hooks.sh` gave 91 passed, 0 failed, measured 2026-11-27 (`make builder-checks`, the suite run).
+  - **Not timed on the sandbox.** T388's plan-review case names its bundle `plan-451-blocks`, with no task list in the name, so it falls back to the active task and reads the file once, before and after alike. What a dispatch naming N tasks saves is (N - 1) reads, each about 18 ms, measured 2026-11-27 (the reads counted by the test above, each priced by the heading's figure), not timed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `plan_cap_refusal` reads `plan-review.json` once a dispatch | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T497 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan review naming several tasks reads the review file once.
+2. **The constraints.** The round count, its cap (`PLAN_ROUND_CAP`), the bundle rule (451 T141), the stub rule (451 T462) and which task trips first do not change. No guard message changes.
+3. **Where each comes from.** O: 451 T493's section and its timings. R: `review_round_hooks.rs`. O: the read count above.
+4. **Do they describe the world here?** Yes. A `make plan-delta` dispatch names every task whose blocks it holds (`DELTA`), for example `-blocks-T491-T493-` for the bundle T491 and T493 landed in.
+5. **The order.** After T493. Before T494, in the same tree.
+6. **The exits.** Green: the read count is 1 for N tasks, with every existing count test unchanged. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 4 reads became 1 for a four-task dispatch (the red test, 2026-11-27). `make builder-checks CRATE="rust/guard rust/guard/shared"` is green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every count, cap and message is unchanged.
+
+**Found and left?** none
+
+**Performance work?** yes: a plan-delta review of N tasks reads the 4.7 MB file once rather than N times, about 18 ms a task saved past the first, measured 2026-11-27 (the heading's figure, the reads counted by the red test).
+
+
+<!-- plan-archive: archived 2026-11-27 -->
+### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))
+
+- **Approach**: one helper, `tool::ask_gate` (`rust/guard/shared/src/tool.rs`), which pair-hooks (`pair_hooks.rs` `gate`, through `reviews` and `review.rs` `decided`), review-round-hooks (`active_task`, `later_round`'s stale-terms call) and check-bundle-hooks (`decide_first`) now call. Measured 2026-11-27.
+  - **T494-D1, the launcher run by `bash`, not by its shebang.** `ask_gate` starts `bash <script> <args>`, as pair-hooks already did and as 451 T456 did for `l7r-hook`. A script that cannot start now answers bash's 127 where the exec answered -1. Every caller reads only exit 0 (`active_task`), exit 1 with output (`decide_first`) or the output (`stale-dirs`, the checkpoint), so 127 holds nothing, as -1 did.
+  - **T494-D2, the freshness signal: an earlier call through the same launcher, in the same hook process, exited 0.** After such a call to a plain subcommand, the later calls pass `L7R_GATE_FRESH=<the binary>`, 449 T205's seam, and the launcher skips `stale()`. Exit 0 means the launcher ran its binary, so that binary was fresh then or had just been built. Every way its build can fail exits 1 before the `exec`. The two ways it runs a stale binary anyway (`L7R_GATE_STALE_OK`, or an `L7R_GATE_FRESH` already exported) hold for the later call too, because that call runs under the same environment. So the guard may know the binary is fresh only under three conditions: the same launcher path, the same process, and a plain subcommand. A variant (`rust`, `browser`, `embed`, `mode-a`, `hamlet`) runs another binary built from other sources, so it neither proves freshness nor uses the proof. A failed call proves nothing, and an `L7R_GATE_FRESH` the process already exports is left as it is. The proof lives in a thread-local and lasts one hook process, tens of ms. A source edited inside that window is missed by the later call, as it would be by a call started that much earlier. The launcher still checks that the variable names its own binary and that the binary is executable. A wrong name here only walks as before, so no stale gate can run where it would not have run already. The binary is named as the launcher names it: `${L7R_GATE_TARGET:-<the account's home in /etc/passwd>/.cache/l7r-cargo-target/<the tree's name>}/tool/l7r-gate`, with no name for a launcher given by a relative path. `the_gate_binary_named_is_the_one_the_launcher_runs` pins that name: against the real launcher's `L7R_GATE_PRINT_FRESH=1` answer under a target, and against its own text for the default.
+  - **T494-D3, priced and declined: the guard launcher's walk, and an in-process walk.** `l7r-guard.sh`'s walk covers `rust/guard`, `rust/Cargo.toml`, `rust/Cargo.lock` and `.cargo/config.toml` against `l7r-guard.good`. It does not cover `rust/gate`, and it is not compared against the gate's binary, so it cannot stand for any part of the gate's walk. The gate's walk covers 1,859 paths over `rust/gate`, `rust/guard` and those files, measured 2026-11-27 (`t494-walk.py`'s count on T388's sandbox). An in-process walk would be the same check without the fork, but the stats are its cost: a Python `lstat` walk of the 1,859 paths took 111.6 ms median against `find`'s 51.4, 20 runs at load 22, measured 2026-11-27 (`t494-walk.py`). A kept stamp stays declined, for `l7r-guard.sh`'s 451 T439 reason. What would reopen it: a walk that costs less than the fork, measured. So pair-hooks' own first call on every Agent call still walks, 296 x 17.5 ms = 5 s a day, measured 2026-11-27 (T388's count of 2026-11-26's Agent calls times its walk).
+  - **Red first.** The helper is new, so its tests are new; there was no old code to fail. `a_gate_call_after_one_that_exited_0_skips_the_launcher_s_walk` uses a stub launcher that prints the `L7R_GATE_FRESH` it was given. A first call is given none. The call after a call that exited 0 is given the binary. A call after a failed call, a variant, another launcher and an exported variable are given none. A script that cannot start answers 127. The guard's 598 tests pass, and `make builder-checks CRATE="rust/guard rust/guard/shared"` is green, measured 2026-11-27 (`make builder-checks`). The suites passed, measured 2026-11-27 (each run by `bash tests/hooks/test-<guard>.sh`): review-round 91 passed, pair 104 passed, check-bundle 38 passed, none failed.
+  - **Before and after, on T388's sandbox.** The method is T491's `t491-time.py`, copied as `t494-time.py`. Two arms were added to it, `binafter` and `onlyafter`, so the before binary and the after binary run interleaved in the same rounds. Both binaries are this tree's own, with T497 in, copied before and after this change. The gate is T491's after copy, checked fresh against the sandbox's sources with `L7R_GATE_PRINT_FRESH=1`. Each arm ran 20 times after a warm-up, every run exiting 0, measured 2026-11-27 (`t494-pair1.tsv`, `t494-pair2.tsv`). Medians, before -> after, run 1 at load 11.1 to 19.2, run 2 at load 15.0 to 18.2:
+    - a plan review's whole PreToolUse (`sf`, every guard): 210.9 -> 181.6 ms, and 246.3 -> 214.0, measured 2026-11-27 (`t494-time.py`, 20 runs);
+    - a record check's (`rf`): 308.4 -> 295.6 ms, and 369.5 -> 306.6, measured 2026-11-27 (`t494-time.py`, 20 runs);
+    - review-round alone (`--only`, the bash start alone, with no earlier call to ride): 62.5 -> 56.2 ms, and 59.8 -> 56.3, measured 2026-11-27 (`t494-time.py`, 20 runs).
+  - **The walks counted.** A logging `find` was put first on `PATH`, because ptrace is refused in the container. One hook call, measured 2026-11-27 (`t494-find.log`): a plan review's launcher walks went 2 -> 1, a record check's 2 -> 1, and a builder's brief's stayed 1 -> 1.
+  - **The day.** About 98 x 0.030 + 65 x 0.0175 = 4 s, measured 2026-11-27 (T388's count of 2026-11-26's plan reviews and record checks, times the medians' saving above, with the walk's 17.5 ms standing for the noisier record-check pair). That is half of T388's 8 s, measured 2026-11-27 (T388's record): pair-hooks' own walk stays (D3).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the gate launcher run by bash, its walk shared within a hook process | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T494 Approach (checklist part A)
+
+1. **The goal, in the world.** A guard's gate call starts no `env` process. A second gate call in the same hook process does not walk the gate's sources again.
+2. **The constraints.** A stale gate binary is never run where the launcher would not already run it (the brief). No guard message changes. A caller's reading of a failed start does not change.
+3. **Where each comes from.** O: 451 T388's record (lever D). R: `scripts/gates/l7r-gate.sh` (the `L7R_GATE_FRESH` branch, 449 T205; the build's exits) and `scripts/hooks/l7r-guard.sh` (the 451 T439 note). O: the timings and the walk count above.
+4. **Do they describe the world here?** Yes. pair-hooks runs first of the Agent PreToolUse guards (`lib.rs` `guards()`), and its `reviews checkpoint due` exits 0 in the sandbox, measured 2026-11-27 (the launcher run by hand, `rc=0`). The guard's computed binary equals the launcher's `L7R_GATE_PRINT_FRESH=1` answer (the test above).
+5. **The order.** After T497 (same tree, same file). Before T500.
+6. **The exits.** Green: the walk count drops on a plan review and on a record check, and the unit tests and suites pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** A plan review's whole PreToolUse went from 210.9 and 246.3 ms to 181.6 and 214.0 ms (medians, 20 runs each, interleaved, 2026-11-27). Its launcher walks went from 2 to 1.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every verdict and message is unchanged. Only the second gate call's source walk is gone.
+
+**Found and left?**
+- Five more guards start the launcher by its shebang and outside the shared walk: `record_edit_hooks.rs`, `measure_hooks.rs`, `clone_sync_hooks.rs` (`own-make`), `gate_write_hooks.rs` (`ask_within`, which needs a bounded `ask_gate`) and `ledger_hooks.rs`. The visible effect is 2.5 ms of a Bash call's hook each, measured 2026-11-27 (T388's record), and the walk again after pair-hooks' call on a gate invocation. Not fixed here: they are Bash-call guards outside this brief's three measured sites, and each needs its own stubs run by bash. Filed as T500; lands before T498.
+
+**Performance work?** yes: it takes about 30 ms off every plan review's PreToolUse and one 17.5 ms walk off every record check's, measured 2026-11-27 (`t494-time.py`, 20 runs, interleaved).
+
+
+<!-- plan-archive: T497 to T493 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the "its dispatch looks dead: PLAN_EDIT_OK" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)
+
+- **Approach**: `rust/guard/shared/src/checks/planhold.rs` `refusal` loses its `escaped` parameter, the "its dispatch looks dead: PLAN_EDIT_OK=..." tail and the escaped-and-dead pass; it now skips every dead hold (`dead`: pending past `PENDING_S` or any hold past `HOLD_MAX_S`) as `purge` would have dropped it, which folds the old `never` test (a pending hold past `PENDING_S`) into the same line. Its one caller, `checks/handle.rs` `edit_mode`, no longer reads `PLAN_EDIT_OK`. `docs/guards.md`'s `record_edit_hooks.rs` row says a held plan has no escape and a dead hold refuses nothing; the module comment and the shared-text comment in `refusal` say the same. `handle/tests.rs`'s Bash call under a hold drops the token from its command (it tested a plain `ls`).
+  - **T496-D1 - A dead hold met by a direct caller refuses nothing.** The task line offers "retire them, or keep them for a caller that does not purge". `refusal` has one caller, `edit_mode`, reached only after `snapshot`'s purge (451 T489), so no caller meets a dead hold. Skipping it, not refusing it with no escape, matches what the purge does to it and fires on no correct work. Chosen by the builder on the brief.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="checks::planhold"`, the tests only changed): 11 passed, 2 failed - `a_write_to_held_text_is_refused` (a dead hold's Edit returned the refusal with the `PLAN_EDIT_OK` tail where `""` was asserted) and `a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back` (the dead hold's case refused, `left: [4]`). Green after: `checks::planhold checks::handle`, 36 of 36. `make builder-checks CRATE="rust/guard/shared rust/gate/crates/reviews rust/guard"`: shared 586 passed, guard 597 passed, lint and format clean, measured 2026-11-27. The suites `tests/hooks/test-record-edit-hooks.sh` 14 passed, `test-checks-hooks.sh` 22 passed, `test-record-edit-gate.sh` 9 passed, measured 2026-11-27.
+  - **The message check.** No suite renders the plan hold's refusal: the three suites run under `L7R_MESSAGE_CORPUS` into the tree's store rendered 21 record-edit-hooks and 4 check-bundle-hooks messages, none of them `the plan review of ...`, and `make guard-messages` read 23 wordings, each reviewed or baselined and within its budget, observed 2026-11-27, method: the suites run with the store as corpus, then `grep` of the store's `messages.jsonl`. The live refusal's words are unchanged and the removed tail was never rendered, so no wording is owed `message-check` and none was dispatched.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the plan hold's dead-hold escape retired, a dead hold skipped (`checks/planhold.rs`, `checks/handle.rs`; tests `planhold/tests.rs`, `handle/tests.rs`; `docs/guards.md`), red first 2 of 13, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
+
+### T496 Approach (checklist part A)
+
+1. **The goal, in the world.** The plan hold's refusal offers no escape no call can use: a live review's held text waits for its return, and a dead hold, which the purge drops, refuses nothing.
+2. **The constraints.** T496's line and the brief (red first; `docs/guards.md`'s row to match; a changed guard message owes its message check); feature 385 T85 (the hold), 451 T489 (the purge before the refusal); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: 451 T489's found-and-left item and its plan review's ruling; R: `planhold.rs`, `handle.rs`; O: this task's red-first run and the message store read.
+4. **Do they describe the world here?** Yes: `grep` finds `refusal`'s one caller, `edit_mode`, and `snapshot` calls `purge` first (observed 2026-11-27, method: `grep -rn "planhold::refusal" rust/guard`).
+5. **The order.** After 451 T489; before T490. Built in one tree with T498.
+6. **The exits.** Green: the two red tests passing, the crates' first-tier checks and the three guards' suites clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `PLAN_EDIT_OK` read nowhere in `rust/` (observed 2026-11-27, method: `grep -rn PLAN_EDIT_OK rust`: three doc comments left, the module comment naming its retirement and two of 451 T489's history); `make builder-checks` clean, 2026-11-27.
+10. **Before moving a constant.** n/a: `HOLD_MAX_S` and `PENDING_S` are unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows, and no hooked call answers differently: the purge already left no dead hold at one. Not a defect; a message no call shows retired.
+
+**Found and left?** none
+
+**Performance work?** no.
+
+
+<!-- plan-archive: T499 to T499 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-27 -->
+### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))
+
+- **Approach**: `rust/gate/crates/reviews/src/reviews/checkpoint.rs` `state_in` reads `events(root, &feature)` once, inside the `!off &&` branch, and hands the one list to `gm_waits(&[(f64, Value)], since, at)` and `idle(&[(f64, Value)], since, at)`, which take the events in place of a root and a feature. Each answer is unchanged: the two walks are the same loops over the same list. While `dev/step-back.json` is off, `due` skips `state_in` (451 T491) and `state_in` itself reads no log while off (the `!off &&` short-circuit), so the change costs nothing there.
+  - **Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/reviews ONLY="reviews::checkpoint"`, the test and its counter only added): `checkpoint::tests::the_state_reads_the_event_log_once` failed, 12 passed, 1 failed (`left: 2, right: 1`: two whole reads of the log for one `state_in` with the switch on). The counter is a test-only thread-local, `READS`, bumped by `events` under `#[cfg(test)]`. Green after: 13 of 13. `make builder-checks CRATE="rust/guard/shared rust/gate/crates/reviews rust/guard"`: the reviews crate 217 passed, 0 failed, lint and format clean, measured 2026-11-27.
+  - **Not timed**: the saving is one read of the log while the switch is on, about 50 ms on T388's sandbox for the clone's 50 MB log (451 T388's figure, measured 2026-11-26/27); the switch has been off since 2026-10-21, so no call today saves it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `state_in` reads the event log once for `gm_waits` and `idle` (`checkpoint.rs`; test `checkpoint/tests.rs`), red first 1 of 13, measured 2026-11-27 | n/a: gate tooling, no map | n/a: tooling | none | n/a |
+
+### T498 Approach (checklist part A)
+
+1. **The goal, in the world.** With the step-back on, a `checkpoint due` (every Agent call's pair-hooks and every `make done`) reads the feature's event log once, not twice.
+2. **The constraints.** T498's line and the brief (read once for both, each answer unchanged, red first with a read count of 2 before and 1 after); 451 T491 (the off switch read nothing, kept); feature 383's checkpoint rules (the hour less the GM waits and the idle gaps); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: 451 T388's record (`dev/measurements/2026-11-27/agent-hook/results.md`) and T491's section. R: `checkpoint.rs`. O: this task's red-first run.
+4. **Do they describe the world here?** Yes: the test drives `state_in` on a scratch repository with the switch on and an hour's worked events, the shape the clone has when the switch is on.
+5. **The order.** After 451 T491, which found it. Independent of T496, with which it is built in one tree.
+6. **The exits.** Green: the red-first test passing and the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** One whole read of the event log for a `state_in` with the switch on, against two before (`the_state_reads_the_event_log_once`, measured 2026-11-27); `make builder-checks` clean on the reviews crate, 217 passed, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every answer is the same; only the second read goes.
+
+**Found and left?** none
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013): with the step-back switched on it takes one whole read of the 50 MB event log, about 50 ms on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms, not timed again here), off every `checkpoint due`; while `dev/step-back.json` is off, as it has been since 2026-10-21, it costs and saves nothing, since `due` and `state_in` read no log then (451 T491). Not an engine-speed task: no checklist answers owed.
+
+<!-- plan-archive: T496 to T489 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
