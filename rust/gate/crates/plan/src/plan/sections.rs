@@ -9,7 +9,10 @@ use l7r_shared::plan_text::HEAD;
 pub(super) use l7r_shared::plan_text::{
     blocks, leading_task, leading_tasks, ordered_sections, TASK_ID,
 };
-use l7r_shared::sha256;
+
+/// The digests, apart so the code that computes them is one closed set the digest index is stamped by (451 T474).
+pub(super) mod digests;
+pub(super) use digests::{block_digest, digest, strip_archive};
 
 /// `{task id: its section}` ([`l7r_shared::plan_text::task_sections`]), each parse counted for the tests (451 T466: a whole-plan
 /// judgment parsed the sections again for every task it judged).
@@ -126,9 +129,6 @@ pub(super) fn re(pattern: &str) -> Regex {
 }
 
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[A-Za-z0-9]+"));
-/// The line `make plan-archive` leaves where finished sections were (FR-044): out of every digest, so it owes no review.
-pub(super) static ARCHIVE_LINE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)^<!-- plan-archive: [^\n]*? -->\n?"));
 pub(super) static PART_B: LazyLock<Regex> = LazyLock::new(|| re(r"^### T\d+[a-z]?\s+part B \("));
 static DEFINED: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^\*\*(D\d+[a-z]?) - "));
 static APPROACH: LazyLock<Regex> = LazyLock::new(|| re(r"^### T\d+[a-z]?\s+Approach\b"));
@@ -149,18 +149,6 @@ static DECISIONS_BLOCK: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?m)^#{3,4}\s+T\d+[a-z]?\s+Decisions\s*$"));
 static NEXT_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{2,4}\s"));
 static DECISION_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^\*\*D\d+[a-z]?\s+-\s"));
-
-pub(super) fn digest(data: &[u8]) -> String {
-    sha256::hex(data)
-}
-
-pub(super) fn strip_archive(text: &str) -> String {
-    ARCHIVE_LINE.replace_all(text, "").into_owned()
-}
-
-pub(super) fn block_digest(text: &str) -> String {
-    digest(strip_archive(text).as_bytes())
-}
 
 /// The Damerau-Levenshtein distance of two short words (a transposition is one edit).
 fn distance(a: &str, b: &str) -> usize {

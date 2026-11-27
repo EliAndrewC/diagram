@@ -3985,14 +3985,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T465 (<why: the finding or measurement that files it>)": {
-   "sha256": "2e6deda4839a440f7a91dd74cef63e98be349f07256baf720b07fdc5d809849b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T465 Approach (checklist part A)": {
-   "sha256": "241dfc2758426bc62a5f81a3d83c4fab0ba860e4cd861dec86d07f4ba10ba0ee",
+   "sha256": "ab45dc450f18bcca7c8094e2d1670fa67ea901c4830bd26ae16e3fb7421e19a8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,24 @@
   },
   "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)": {
    "sha256": "444697da90a42a8ad9227c11c0e38718f706d76617cfec7665ac4592a358df61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T465 (after T457 plan.md's history was still read once a process: every version fetched and parsed by the first question that walked far, 477 versions, about 5 s of 9.4 s inside History in a 35-task `tick --land-check` and 4.5 s of `plan push`'s 6.7 s, measured 2026-11-27, method: T457's traced runs over a scratch clone of diagram-backlog at 98b632638d, load 9 to 16)": {
+   "sha256": "5065a836c9b101d6538c361f49676e0be26fdc13c3da64f58118ae414f3dec24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T474 (T465's index checked a parser change by a probe plan's digests and one canary commit only: a change to `blocks`, `task_sections` or the archive rule that digests only older versions otherwise would pass both and answer from stale digests, found by T465's build half, 2026-11-27, method: reading its `load` and `header`)": {
+   "sha256": "4fe7b26c90dbb91d8c694bcafa4173c0dc9e999e4dfa0c9f8e45ea7860e20072",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T474 Approach (checklist part A)": {
+   "sha256": "d014b6b974916b82045afae6a2531841456745d44934d10a5f6f1dd8d5009f87",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38406,6 +38418,124 @@
      "summary": "Four template placeholder blocks (T441, T442, T448, T451 '<why: ...>' skeletons with empty tables) removed.",
      "class": "within",
      "why": "They held no decision; T448 and T451 now have real sections, and the T441/T442 skeletons were empty."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T465 (after T457 plan.md's history was still read once a process: every version fetched and parsed by the first question that walked far, 477 versions, about 5 s of 9.4 s inside History in a 35-task `tick --land-check` and 4.5 s of `plan push`'s 6.7 s, measured 2026-11-27, method: T457's traced runs over a scratch clone of diagram-backlog at 98b632638d, load 9 to 16)",
+    "### T465 Approach (checklist part A)",
+    "### T474 (T465's index checked a parser change by a probe plan's digests and one canary commit only: a change to `blocks`, `task_sections` or the archive rule that digests only older versions otherwise would pass both and answer from stale digests, found by T465's build half, 2026-11-27, method: reading its `load` and `header`)",
+    "### T474 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)",
+    "(removed) ### T465 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T465-index",
+     "summary": "Keep every plan.md version's (key, digest) pairs on disk in the common git dir so later processes read only new versions from git; a performance task under FR-013.",
+     "class": "within",
+     "why": "FR-013 asks performance work first; how a landing's History is made faster is the builder's to design. Answers identical across base, cold and warm (measured, dated), so no behavior the GM asked for is narrowed."
+    },
+    {
+     "id": "T465-walk",
+     "summary": "T457/D63 walk kept: newest first, chunks of 25, first answer wins; index-covered commits skipped by lookup; dirty index merged and renamed at a question's end.",
+     "class": "within",
+     "why": "Keeps the existing decision D63 and T457's answers unchanged; only where the versions come from changes."
+    },
+    {
+     "id": "T465-texts",
+     "summary": "Kept answer texts under plan-index/texts keyed by (plan file, commit, kind, key), used only where their digest matches.",
+     "class": "within",
+     "why": "An implementation detail of the speed-up; never serves a text whose digest moved."
+    },
+    {
+     "id": "T465-D1",
+     "summary": "Inverted (key, digest) -> commit-runs layout, 426 KB rather than about 12 MB.",
+     "class": "within",
+     "why": "Storage format choice; no request clause touches it."
+    },
+    {
+     "id": "T465-D2",
+     "summary": "Texts keyed by (commit, key), never by digest alone, because archive-stripped digests collide and the newest version's text is the answer.",
+     "class": "within",
+     "why": "Preserves the walk's existing answer; a correctness choice inside the task."
+    },
+    {
+     "id": "T465-D3",
+     "summary": "Never stale: versions not read whole are never written; parser change caught by the header stamp (T474) and a one-commit canary re-parse on each load.",
+     "class": "within",
+     "why": "A guard making the speed-up return the same answers; enforcement of the task's own correctness, narrows nothing asked."
+    },
+    {
+     "id": "T465-D4",
+     "summary": "A lost save race loses at most the loser's additions (a re-index later), no lock taken.",
+     "class": "within",
+     "why": "The cost is a later re-fetch, never a wrong answer; no request clause demands a lock, and it is not a defect (no wrong outcome)."
+    },
+    {
+     "id": "T465-D5",
+     "summary": "Outside a repository the index is in-memory only, never written.",
+     "class": "within",
+     "why": "Keeps the old behavior where there is no git dir; narrows nothing."
+    },
+    {
+     "id": "T465-found-and-left",
+     "summary": "Kept texts are never pruned (728 KB after one 35-task pass); deferred to T478, lands before T22.",
+     "class": "within",
+     "why": "Stated in FR-009's form (why not fixed here, filed task, order). A bounded-growth cache entry this size is no wrong outcome today; the GM's disk concern (2026-11-22) is answered by the filed, ordered task rather than dropped."
+    },
+    {
+     "id": "T474-stamp",
+     "summary": "Index header stamped with the sha256 of the digest code's closed source set (digests.rs, plan_text.rs, regex.rs, sha256.rs, Cargo.lock) plus char::UNICODE_VERSION; probe plan removed; digest code moved into sections/digests.rs with re-exports.",
+     "class": "within",
+     "why": "Closes T465-D3's stale-digest gap on the T434 precedent; a correctness guard on the perf work, narrows nothing asked."
+    },
+    {
+     "id": "T474-reach-test",
+     "summary": "A reach test holds the hashed set closed (no use or path outside it but std and fancy_regex, etc.), with a firing companion per rule and a demonstrated failure on the real set.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the stamp honest: enforcement, in scope."
+    },
+    {
+     "id": "T474-D1",
+     "summary": "Keyed by the digest code, not the binary or crate build id, so trees sharing the git dir do not drop each other's index on every rebuild.",
+     "class": "within",
+     "why": "A choice of cache key serving FR-013's speed goal; no request clause bears on it."
+    },
+    {
+     "id": "T474-D2",
+     "summary": "Accepted: an edit to any hashed file re-indexes (about 5 s), and trees whose hashed files differ drop each other's index; per-stamp files and a narrower lockfile key priced and not taken.",
+     "class": "within",
+     "why": "A cost of about 5 s while the digest code is being edited, never a wrong answer; a performance trade-off, not a defect left."
+    },
+    {
+     "id": "T474-D3",
+     "summary": "Accepted: fancy-regex's features and the toolchain are not in the stamp; a change there is caught only by the canary's one commit.",
+     "class": "within",
+     "why": "Version changes of fancy-regex are caught through Cargo.lock and Unicode table changes through UNICODE_VERSION; what is left is a hypothetical (a feature flag or compiler change that changes regex or sha256 output), not a known wrong outcome, so leaving it is no defect left and narrows no request clause."
+    },
+    {
+     "id": "T474-D4",
+     "summary": "No rule on code handed in: `of` takes a text alone, pinned by the reach test's count of its signature.",
+     "class": "within",
+     "why": "Design detail of the guard; narrows nothing."
+    },
+    {
+     "id": "T474-perf-class",
+     "summary": "The block states the task is not performance work although its tasks.md line carries [perf].",
+     "class": "within",
+     "why": "No scheduling effect: it lands in T465's landing and T465 is a [perf] task. Under FR-013's definition the [perf] tag makes it performance work, so the block's 'no' is a mislabel rather than a narrowing; the order FR-013 asks for is kept either way."
+    },
+    {
+     "id": "removed-T437-T440-T464-T465-stubs",
+     "summary": "Four template-only placeholder blocks removed (T465's replaced by the real block).",
+     "class": "within",
+     "why": "Their earlier text held only template placeholders and no decision; removing them narrows nothing."
     }
    ]
   }

@@ -379,3 +379,7 @@ landing on its own, each small; T22 last.
       research: rendering
 - [x] T476 x Withdrawn 2026-11-27: filed by mistake as a probe of the task-add refusal, no defect
       research: rendering
+- [ ] T474 [perf] plan.md's digest index on disk (451 T465, rust/gate/crates/plan/src/plan/history/index.rs) checks a parser change by one canary commit only (the first of a History's commits it covers): a change to blocks, task_sections or the archive rule that digests only older versions differently passes the canary and answers from stale digests; stamp the index with the parser's own build id (the content ids of sections.rs and the shared parser it calls) and drop it on a mismatch - measured 2026-11-27, the index 426 KB for 477 versions, a cold re-index about 5 s
+      research: rendering
+- [ ] T478 [perf] plan.md's digest index keeps every answered text under the clone's .git/plan-index/texts/ and never prunes it (451 T465, rust/gate/crates/plan/src/plan/history/index.rs keep_text): 60 files, 728 KB after one 35-task tick --land-check and plan push, measured 2026-11-27 over T457's scratch clone, growing with each distinct (commit, key) a question returns; prune the texts no index commit's answer has read in a window, or cap the directory
+      research: rendering

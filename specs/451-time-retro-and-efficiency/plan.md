@@ -7385,31 +7385,48 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 <!-- plan-archive: T459 to T443 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T459 to T459 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T465 (<why: the finding or measurement that files it>)
+### T465 (after T457 plan.md's history was still read once a process: every version fetched and parsed by the first question that walked far, 477 versions, about 5 s of 9.4 s inside History in a 35-task `tick --land-check` and 4.5 s of `plan push`'s 6.7 s, measured 2026-11-27, method: T457's traced runs over a scratch clone of diagram-backlog at 98b632638d, load 9 to 16)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the digests of every version kept on disk, in `rust/gate/crates/plan/src/plan/history/index.rs` (new) and `history.rs`.
+  - **(1) The index.** One file a plan path, `<common git dir>/plan-index/<path with / as %2F>.idx`: a header (the format and the digest code's stamp, T474 below), one `c <commit>` line a covered commit (its id its line's place), then one `b|s <digest> <runs> <key>` line a distinct (key, digest) with the ids of the commits holding it as runs (`0-24,30`). Digests only, never a text. Anything but what the encoder writes decodes as an empty index.
+  - **(2) The walk.** T457's shape is kept: newest first, chunks of 25 (D63), the first answer wins. Per commit: in this thread's store, its version; covered by the index and not holding (key, digest), skipped by a lookup; covered and holding, the kept text, else that one version fetched; neither, the file read again once a History (another process may have indexed it since), then the chunk fetched, parsed and added. A dirty index is saved at a question's end: the file read again, merged, written to a temporary file and renamed.
+  - **(3) The kept texts.** `plan-index/texts/<sha256 of (plan file, commit, kind, key)>.txt`: only the texts questions returned, used only where its digest is the question's, rewritten where it is not. 60 files, 728 KB after the 35-task run, measured 2026-11-27 (`du` over the scratch clone's `.git/plan-index`).
+  - **(4) Measured 2026-11-27**, the 35 tasks through `l7r-gate tick --land-check` and `l7r-gate plan push 2988fee630...HEAD` over the scratch clone (script `t465-run.sh` in the session's scratchpad), wall / user, with the 1-minute load: base (HEAD code) x3, tick 12.0-17.0 s / 11.4-16.1 s and push 6.7-8.0 s / 6.2-7.4 s, load 14-26, cold (no index) x2, tick 12.6-13.2 s / 11.5-11.9 s and push 6.5-7.0 s / 6.0-6.5 s, load 12-18, warm x3, tick 8.0-8.3 s / 7.5-7.8 s and push 2.6-4.3 s / 2.4-3.5 s, load 9-14, measured 2026-11-27 (the runs of the script). Inside History, base 6.1-6.7 s (tick) and 4.8-12.8 s (push), warm 0.42 s and 0.42-0.64 s, measured 2026-11-27 (traced builds of the same runs). The save cost 0.01-0.31 s a process, measured 2026-11-27 (the traced builds). Outputs: the land JSON and push stderr and exit byte-identical to base in all 8 untraced runs, and the per-question answers (129 tick, 123 push) identical across base, cold and warm, measured 2026-11-27 (the answer files diffed). The index is 426,353 bytes for 477 versions, measured 2026-11-27 (`wc -c`).
+
+**T465-D1 - Inverted (key, digest) -> commit runs, not a row a version.** Tooling, no research question: 477 versions hold about 79,500 (key, digest) entries but a few thousand distinct ones, so the file is 426 KB where a row a version and key would be about 12 MB, observed 2026-11-27, method: `wc -c` of the index and, for the rows, an estimate from a heading split of every version in Python.
+
+**T465-D2 - Texts are keyed by (commit, key), never by digest alone.** A block digest strips archive lines, so two texts share one digest, and the walk's answer is the newest version's text (`a_digest_two_versions_share_answers_with_the_newer_text`).
+
+**T465-D3 - Never stale: an entry is per commit, and what could break that is closed.** A version not read whole (a failed or truncated `cat-file`, a commit where the path is gone) is never written (`Version.whole`). A parser that digests otherwise is caught by the header's stamp (T474) and sampled by the canary: each load re-parses one covered commit (the first of the History's commits the file covers, else the last added) and drops the file on any difference.
+
+**T465-D4 - A lost race costs a re-index, never a wrong answer.** The save merges what is on disk first; two renames at once lose at most the loser's additions. Accepted by the builder as a limitation: its cost is one more fetch of those versions in a later process; a lock was priced and not taken (every reader would wait on it for a gain of seconds at most).
+
+**T465-D5 - Outside a repository the index is the History's own, never written.** The old behavior there.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a second process reads the index, not git | `history/tests.rs` `a_second_process_reads_the_versions_from_the_index_not_git` (a spawned thread, its thread-local stores fresh). Red on the old code: the history module 5 passed and 1 failed, (30, 30) fetched and parsed where (1, 1) was asked, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan ONLY=plan::history`). Green after, with a commit made since read alone, and a kept text whose digest moved not taken | n/a: tooling | none | none |
+| a changed parser, a lost commit, a malformed file | `a_changed_parser_drops_the_index_and_another_process_s_commits_are_read_from_it`, `a_version_that_cannot_be_read_is_never_kept`, and `history/index/tests.rs` (a round trip, 12 malformed files read as nothing, a merge on save, a failed rename, a key with a newline leaving its commit out). Green on the build half's tree, the crate 217 passed, measured 2026-11-27 (`make builder-checks`) | n/a: tooling | none | none |
 
 ### T465 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A process that asks where a block's or section's earlier text is reads plan.md's history from git only for the versions committed since the index last caught up, and for the answers; every answer is the one the walk gave.
+2. **The constraints.** D63: newest first, in chunks, only as far as a question needs. T457's answers unchanged. 451 FR-013: a performance task makes the landings faster. The clone and every pool tree share the git directory.
+3. **Where each comes from.** O: T457's traced runs and the runs of (4). R: `history.rs`'s D63 comment.
+4. **Do they describe the world here?** Yes. The runs were made over a copy of the clone's own plan.md history and verdict store with T464's 35-task batch, measured 2026-11-27 (T457's scratch clone at 98b632638d).
+5. **The order.** After T457 and T464. With T474, its stamp, in the same landing.
+6. **The exits.** Green: the red test green, the answers identical, the runs timed cold and warm. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Warm, the 35-task tick checks take 8.0-8.3 s against 12.0-17.0 s and `plan push` 2.6-4.3 s against 6.7-8.0 s, with identical answers, and cold no slower than base within noise, measured 2026-11-27 (the scratch clone, load 9 to 26).
+10. **Before moving a constant.** n/a. CHUNK stays 25.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A landing's first pass and plan push spend about 0.4 s inside History where each spent about 5 s, measured 2026-11-27 (the traced builds), and no plan verdict changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The kept texts under `plan-index/texts/` are never pruned: 728 KB after one 35-task pass, observed 2026-11-27, method: `du` over the scratch clone's index directory, growing with each distinct (commit, key) a question returns, in every clone's `.git`. Not fixed here: a pruning rule (what counts as read, over what window) is a design of its own beyond this task's one job. Filed as T478; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings faster). Warm, the 35-task tick checks went from 12.0-17.0 s to 8.0-8.3 s and `plan push` from 6.7-8.0 s to 2.6-4.3 s, measured 2026-11-27 (the scratch clone). Not an engine-speed task: no checklist answers owed.
 
 ### T463 (found by 451 T455, dev/measurements/2026-11-27/land-test-time/results.md sections 1 and 4: six green land test runs of 61 to 102 s, 58 to 93 s over same-time controls, not reproduced in 70 runs, measured 2026-11-27 - the next one is to be caught alive)
 
@@ -7660,4 +7677,69 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T474 (T465's index checked a parser change by a probe plan's digests and one canary commit only: a change to `blocks`, `task_sections` or the archive rule that digests only older versions otherwise would pass both and answer from stale digests, found by T465's build half, 2026-11-27, method: reading its `load` and `header`)
+
+- **Approach**: the index's header stamped with the hash of the code that computes a digest, as 451 T434 keyed the views cache by its code, in `rust/gate/crates/plan/src/plan/sections/digests.rs` (new), `sections.rs`, `history.rs` and `history/index.rs`.
+  - **(1) One closed set.** The digest code moved out of `sections.rs` (whose other functions reach the plan template) into `sections/digests.rs`: `digest`, `strip_archive`, `block_digest`, the archive line, and `of`, a plan's (key, digest, text) of every block and task section; `sections.rs` re-exports the first three, so no caller moved, and `Version::of` only interns what `of` gives. `SOURCES` compiles in that file, the shared `plan_text.rs`, `regex.rs`, `sha256.rs` and `rust/Cargo.lock` (which pins `fancy-regex` and its dependencies); the stamp is their sha256 with `char::UNICODE_VERSION`, 79,752 bytes hashed once a process, measured 2026-11-27 (`wc -c`). The header is `l7r plan-index 1 <stamp>`; the probe plan is gone.
+  - **(2) Held closed by a test.** `digests/tests.rs` `the_digests_reach_nothing_outside_their_hashed_sources` reads each hashed `.rs` file, comments out and literals emptied, for a `use` or a path through `super`, `crate`, `l7r_shared` or another crate but std and `fancy_regex`, a path from the crate root, a module file, a cfg but `cfg(test)`, a macro neither std's nor the file's, a compiled-in file outside the set, and a test module not the file's last item; `each_reach_rule_fires_on_a_file_that_breaks_it` proves each rule on a breaking snippet. Proved on the real set too: with `regex.rs` taken out of `SOURCES` the test failed, `digests.rs` reaching `the path l7r_shared::`, measured 2026-11-27 (`make rust-test ... ONLY=plan::sections::digests`, then restored).
+
+**T474-D1 - Keyed by the digest code, not the crate's or the binary's build id.** The index lives in the common git directory, shared by the clone and every pool tree, and each tree's `l7r-gate` binary differs: keyed by the binary, every rebuild and every switch between trees would drop and rewrite the others' index, a re-index of about 5 s each, measured 2026-11-27 (T465's traced cold runs), as the whole-binary key of the views cache read all 1,504 Rust files again after every rebuild, 1.9 s at load 12, measured 2026-11-27 (451 T434's step lines). Keyed by this code, only an edit of it does. Chosen by the builder on T434's precedent and the brief's words.
+
+**T474-D2 - Accepted: an edit of any hashed file re-indexes, and two trees whose hashed files differ drop each other's index.** Its cost: about 5 s a switch, measured 2026-11-27 (T465's traced cold runs), while a task edits the digest code or `Cargo.lock`, and nothing otherwise. Priced and not taken: a file a stamp (old ones never cleared), and a narrower lockfile key (the `fancy-regex` packages alone, more code for a file that rarely moves). Chosen by the builder.
+
+**T474-D3 - Accepted: `fancy-regex`'s features and the toolchain are not in the stamp.** The workspace `Cargo.toml` names `fancy-regex = "0.14"` with its defaults and the plan crate names it by `workspace = true`; a feature or compiler change that digested otherwise would be caught by the canary, kept as T465-D3's sample, and missed only where the canary commit's digests stood. Priced and not taken: hashing `rust/Cargo.toml` (every workspace edit would re-index). Chosen by the builder.
+
+**T474-D4 - No rule on code handed in.** T434's test refuses a closure or `dyn Fn` reaching the views; here the one way into the digests, `of`, takes a text alone, pinned by the reach test's count of its signature.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| an index another digest code wrote reads as nothing | `history/index/tests.rs` `an_index_written_by_other_digest_code_reads_as_nothing`: a header from `SOURCES` with one file's text changed. Red on the probe header (kept as the seam `header_of` first), `assertion left != right failed`, the history and sections modules 21 passed and 3 failed (the other two the reach test's first form), measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan ONLY="plan::history plan::sections"`); green after, 24 passed. `history/tests.rs` `an_index_stamped_by_other_digest_code_is_read_again_from_git`: 4 versions read again and the file rewritten under this stamp | n/a: tooling | none | none |
+| the stamp and the closed set | `digests/tests.rs`: the reach test and its firing companion (above), `the_stamp_moves_with_every_hashed_source_and_the_unicode_version`, `a_plan_s_digests_are_its_blocks_and_its_sections`. The crate 223 passed, lint and format clean, measured 2026-11-27 (`make builder-checks CRATE=rust/gate/crates/plan`) | n/a: tooling | none | none |
+
+### T474 Approach (checklist part A)
+
+1. **The goal, in the world.** No process answers from digests another parser computed: an index written by different digest code reads as nothing.
+2. **The constraints.** T465-D3 (never stale). T434's precedent: key a cache by the code that computes it. The clone and the pool trees share the git directory.
+3. **Where each comes from.** R: `rustc/kept/code.rs` `stamp()` and its reach test (451 T434). O: T465's cold re-index, about 5 s, measured 2026-11-27 (its traced cold runs).
+4. **Do they describe the world here?** Yes. The digests are computed by exactly the files named, held so by the reach test over the real set, measured 2026-11-27 (the test, and its firing with `regex.rs` left out).
+5. **The order.** With T465, in its landing: T465's index is never on disk without this stamp.
+6. **The exits.** Green: the red test green and the reach test over the real set clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** A header from any changed hashed file differs and its index decodes as nothing; a history over such a file reads every version again, measured 2026-11-27 (the two tests).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No visible change: a guard against a wrong plan verdict that a future parser change could give.
+
+**Found and left?** none.
+
+**Performance work?** no - a correctness guard on T465's index, though its tasks.md line says `[perf]`.
+
+
+### T478 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T478 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
