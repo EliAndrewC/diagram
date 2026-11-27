@@ -73,18 +73,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)": {
-   "sha256": "86cf246b0a27df7c373b501ac44d3789ce5cf25d16cbfe47794b8aa01d03448d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T22 Approach (checklist part A)": {
-   "sha256": "c83610922af15378b293188f7bc651abd83b244e3d2604bd51cb27e646f9d4c4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "## Project Structure": {
    "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
    "verdict": "CLEAR",
@@ -143,12 +131,6 @@
    "sha256": "66d8db47d83d849a8037eb682ecb5f511d2498f9a76ede78d71b0350f6c69f11",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T51 Approach (checklist part A)": {
-   "sha256": "00c57a8f0e88a5bb6bbe2e27834071bb9954342f149230a067d0f70922e446c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
   "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)": {
@@ -231,12 +213,6 @@
   },
   "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))": {
    "sha256": "27ae24c8f1008b5c0b799333a863cb96b8c834713490302a17a721ccfafba2b8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)": {
-   "sha256": "5979bc86ce6a4d5f0cab55938ae8ee820c23c251d47c17ac3c5fabac6aa903fc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -331,12 +307,6 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T122 Approach (checklist part A)": {
-   "sha256": "a81158f14589d3475a91e5cc6c2701242c3a93613efd2285fa5c77c0c1df8359",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T125 (<why: the finding or measurement that files it>)": {
    "sha256": "9e99055e58a08a95d761d7ed7a695606d303b20f170b3218fd532a6c1eb16abb",
    "verdict": "CLEAR",
@@ -375,12 +345,6 @@
   },
   "### T128 (<why: the finding or measurement that files it>)": {
    "sha256": "f390fde5d660315f1af2752e2b9c7b7a6d9d1a02f0d3c8986f9136a3bfcff959",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T128 Approach (checklist part A)": {
-   "sha256": "28541e331fc120652ea4e214d9f58d9d89c03f604edd55521e415d508ee35696",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -501,12 +465,6 @@
   },
   "### T140 (<why: the finding or measurement that files it>)": {
    "sha256": "044b6e58fb6e5734627a641418bf7007cc3b021dd31d6a980f27eb135d0e2625",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T140 Approach (checklist part A)": {
-   "sha256": "d828b96264ca8913b8331033ae9583658c3abf1ba29e763cf5c617cdea9519eb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1315,12 +1273,6 @@
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
   },
-  "### T181 Approach (checklist part A)": {
-   "sha256": "ea9591c6e775a0310d716522d2be4110f1a5c5d7b56b39fbd073578214095832",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-24",
-   "declared": "spec-fidelity"
-  },
   "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)": {
    "sha256": "9cf003fd40f48897825242b120884942d5998b9170b9fe9b3108c0c68c47906d",
    "verdict": "CLEAR",
@@ -1341,12 +1293,6 @@
   },
   "### T208 (<why: the finding or measurement that files it>)": {
    "sha256": "51d7cb42c72be6e005203afd8289e8bc337d435b582717b5cc9d622f1a772ed7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-24",
-   "declared": "spec-fidelity"
-  },
-  "### T208 Approach (checklist part A)": {
-   "sha256": "e43b34ff5ec08f99298fc809750224411118ea36637f07b696836a1b07752501",
    "verdict": "CLEAR",
    "reviewed": "2026-11-24",
    "declared": "spec-fidelity"
@@ -2377,32 +2323,14 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T264 Approach (checklist part A)": {
-   "sha256": "3ce975b51e7b82966b1419005e44810cdd665d60b38da25df359026d012640a9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T266 (<why: the finding or measurement that files it>)": {
    "sha256": "96ae884e63b12c1f1e1604867198529faf4b399697928a1ea917af044f0a1ce4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T266 Approach (checklist part A)": {
-   "sha256": "7c91ee93cf81e9429bc0b8430b311347a4c3db34576da3c3c4ec0c699fb94c0e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T273 (<why: the finding or measurement that files it>)": {
    "sha256": "deb528dbd2078abbbb85dbd1a6a4eecfcfdc1758c06b7518e1939cd844cf3357",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T273 Approach (checklist part A)": {
-   "sha256": "8f98485f4aa8a6206a579e0cd769ef30bff9b13a39356150706c6c39fe245e0b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2467,20 +2395,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T280 Approach (checklist part A)": {
-   "sha256": "677dda173ae0c3167ebb9a02991750acc85f7c218408c005000a31167c95ec38",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T283 (<why: the finding or measurement that files it>)": {
    "sha256": "640eee4c880b0cfc7c8f8eb3187c6a9e6ccc0d1ea3f5c7e3473235ebb3ecaea2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T283 Approach (checklist part A)": {
-   "sha256": "7cd1f3d210672d6f434f97ce9e35337ad8ccab8daae602426fb47d8200a1a297",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2527,12 +2443,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T291 Approach (checklist part A)": {
-   "sha256": "d3dfec794b029420c6e555e1040951bcb1cefd43e9a07d0f61a5832356cb2e16",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T294 Approach (checklist part A)": {
    "sha256": "2dcc511e10f3b4a398fc0e4090f1a5ebc2d4dd2e6e8469228153d87928680a94",
    "verdict": "CLEAR",
@@ -2551,26 +2461,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)": {
-   "sha256": "5ff4032a01c410a2f8ad5263e410fa54739f92946b6ff3992e85a662d500b841",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T301 Approach (checklist part A)": {
-   "sha256": "a71d266ad24368d7dbb8a10da508b539202f22b0f833e4645171765978161bc1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T302 (<why: the finding or measurement that files it>)": {
    "sha256": "caa58e561d82ca7d8192d375a3e3b1b33923c2eab5d7d4cdbdeeb35290d0b503",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T302 Approach (checklist part A)": {
-   "sha256": "52ea70f9374811ef623f56295e9b24fc8d23bf371d4e77aec2c6aff0779714d9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2683,12 +2575,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T330 Approach (checklist part A)": {
-   "sha256": "b428ade9adeaec27704a5885af0dfd5fde0ffc5aaab2eeb9ee6c644b7bc92c0e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T320 (<why: the finding or measurement that files it>)": {
    "sha256": "fa783bc1a3fab8466c4052cea876fb8bf57b93b75f19cc96acc5a8041e46f6ce",
    "verdict": "CLEAR",
@@ -2715,12 +2601,6 @@
   },
   "### T319 (<why: the finding or measurement that files it>)": {
    "sha256": "50036ca692f627c49fd0ec7d6a86be8fc17be34fbb53611972f4c9fa5b76aa7f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T319 Approach (checklist part A)": {
-   "sha256": "c60fec2f92583eabb30f922bc08fde3865935c19ff5c711ed06b79d7a54f6f2a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2791,12 +2671,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T335 Approach (checklist part A)": {
-   "sha256": "26bff23cba576d682097dfb095e8cfd9ce7203246731eb6de6a8f7617262329d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T343 (<why: the finding or measurement that files it>)": {
    "sha256": "a57fbefdaa6411993e9edf8a3848aa9c10336a540afc2772269a638526936dcf",
    "verdict": "CLEAR",
@@ -2839,12 +2713,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T350 Approach (checklist part A)": {
-   "sha256": "3a6a6e34b4c378e11355802198c7df99cbd6c3f1e2ec7e5643a146dfb1be6e78",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T342 Approach (checklist part A)": {
    "sha256": "2bef83ed7cee3acb588a2e04ca4a43286816af1873b4f5dfdfc20b628e48dc21",
    "verdict": "CLEAR",
@@ -2877,12 +2745,6 @@
   },
   "### T357 (<why: the finding or measurement that files it>)": {
    "sha256": "593aaf1ff5285f7878ce042baf3de41ea1524af66b8f2fcfde35f5aff5e42d6e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T357 Approach (checklist part A)": {
-   "sha256": "760d22eb30273eb20cb025f19cd0a9117cce6db7581f32ee30040d518f908ecf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4303,12 +4165,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T484 Approach (checklist part A)": {
-   "sha256": "2788f7954344d8ce51ef3517479e92e82d4c00e72252b3aeefe6f7566e9464a8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T486 (451 T485's keys were a pool tree's stale store of rendered guard messages, not a wording HEAD renders)": {
    "sha256": "b0d600f88c5a163d6273f824533cc4758f6059d84804ee45b559b1150acac6da",
    "verdict": "CLEAR",
@@ -4579,12 +4435,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T503 Approach (checklist part A)": {
-   "sha256": "f4b33585c0683865301d67aa27239d0a4c6c07be323ce794ed5938aa84b5b490",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))": {
    "sha256": "7b210ec1f3492048142f69ecd797bbc7b1817ef390baf26915b8c58d63573b50",
    "verdict": "CLEAR",
@@ -4639,20 +4489,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T509 Approach (checklist part A)": {
-   "sha256": "6226d84ea01021e5222385f1a3d870f2ae997da25aaffd873d0f3a37a8a01887",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T511 (<why: the finding or measurement that files it>)": {
    "sha256": "c21b6ae560cb3bf2ace360a502400aa26db710e42f93e9b9b9d47de605438d1e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T511 Approach (checklist part A)": {
-   "sha256": "11cb6f21f24dc45174a74a0d939cf42d18cbba158c7801a3ffe2cbecbfbdf903",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -43750,6 +43588,185 @@
      "summary": "Classed as a false-red fix, not performance work. Nothing found and left. Budget of one landing. Ordered after T364 and T363.",
      "class": "within",
      "why": "A gate check that refuses good work is a defect to fix as it is found. Nothing is deferred, so no narrowing arises. Ordering after the tasks whose code it changes is mechanical."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T122 Approach (checklist part A)",
+    "(removed) ### T128 Approach (checklist part A)",
+    "(removed) ### T140 Approach (checklist part A)",
+    "(removed) ### T181 Approach (checklist part A)",
+    "(removed) ### T208 Approach (checklist part A)",
+    "(removed) ### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "(removed) ### T22 Approach (checklist part A)",
+    "(removed) ### T264 Approach (checklist part A)",
+    "(removed) ### T266 Approach (checklist part A)",
+    "(removed) ### T273 Approach (checklist part A)",
+    "(removed) ### T280 Approach (checklist part A)",
+    "(removed) ### T283 Approach (checklist part A)",
+    "(removed) ### T291 Approach (checklist part A)",
+    "(removed) ### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "(removed) ### T301 Approach (checklist part A)",
+    "(removed) ### T302 Approach (checklist part A)",
+    "(removed) ### T319 Approach (checklist part A)",
+    "(removed) ### T330 Approach (checklist part A)",
+    "(removed) ### T335 Approach (checklist part A)",
+    "(removed) ### T350 Approach (checklist part A)",
+    "(removed) ### T357 Approach (checklist part A)",
+    "(removed) ### T484 Approach (checklist part A)",
+    "(removed) ### T503 Approach (checklist part A)",
+    "(removed) ### T509 Approach (checklist part A)",
+    "(removed) ### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+    "(removed) ### T51 Approach (checklist part A)",
+    "(removed) ### T511 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T22",
+     "summary": "451 T22's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T22 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost. T22 is 451's own close (451 SC-001/002/005 and make feature-report F=451); 462's T22 line keeps those 451 SCs and the F=451 report, so the close is carried, not dropped."
+    },
+    {
+     "id": "remove-T51",
+     "summary": "451 T51's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T51 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T122",
+     "summary": "451 T122's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T122 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T128",
+     "summary": "451 T128's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T128 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T140",
+     "summary": "451 T140's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T140 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T181",
+     "summary": "451 T181's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T181 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T208",
+     "summary": "451 T208's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T208 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T264",
+     "summary": "451 T264's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T264 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T266",
+     "summary": "451 T266's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T266 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T273",
+     "summary": "451 T273's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T273 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T280",
+     "summary": "451 T280's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T280 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T283",
+     "summary": "451 T283's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T283 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T291",
+     "summary": "451 T291's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T291 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T301",
+     "summary": "451 T301's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T301 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T302",
+     "summary": "451 T302's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T302 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost. T302 parts 1 and 4 go to 461 (462 FR-003); its section moves here with parts 2 and 3, unchanged."
+    },
+    {
+     "id": "remove-T330",
+     "summary": "451 T330's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T330 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T319",
+     "summary": "451 T319's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T319 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T335",
+     "summary": "451 T335's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T335 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T350",
+     "summary": "451 T350's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T350 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T357",
+     "summary": "451 T357's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T357 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T484",
+     "summary": "451 T484's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T484 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T503",
+     "summary": "451 T503's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T503 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T509",
+     "summary": "451 T509's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T509 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T511",
+     "summary": "451 T511's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T511 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
     }
    ]
   }
