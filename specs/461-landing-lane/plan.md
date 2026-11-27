@@ -1601,31 +1601,55 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** no
 
 
-### T50 (<why: the finding or measurement that files it>)
+### T50 (T49's found-and-left: the lane's tree gone from disk mid-batch was a dead end)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: the task line's first route, a re-made worktree at the registry's path. `lane_start`
+  (`rust/gate/crates/task/src/builder_tree.rs`), finding the registry's lane tree gone from disk, runs `git worktree prune` (a
+  hand `rm -rf` leaves git's record of the path, and the add would refuse it) and `git worktree add -q --detach <path> <the
+  clone's HEAD>` from the clone, logs a `remake` line, says `was gone from disk: made again there, its build cache kept` on
+  stderr, and falls through to the fetch, reset, clean and detach at `origin/main` as before. WHY THIS ROUTE, not the drop: the
+  drop's route was the loop itself - refused while the runner lives (the runner made the call) and, after `make lane-stop`, while
+  the batch stays open (resumed at the next start, which calls `lane` again); a `stop` of the open batch written from here, the
+  brief's example, would put a second writer of `l7r-lane/lane.jsonl` in the `task` crate beside the lane's own (T14 is building
+  the batch run there) and still leave drop-then-adopt, whose adoption needs a worktree at the path that only a hand `git worktree
+  add` (refused, 451 T285) would make. The re-make loses nothing: `lane` already throws away whatever the tree held (step 4's
+  `reset --hard`, `clean -fdq`, detach), a resumed batch carries onto it from `origin/main` as every batch does, and the build
+  cache lives beside the tree by its name (`builder_pool::cache`, `<cache root>/<tree name>`, read 2026-11-27), so D1's reason for
+  never making the lane's tree - a new tree starts cold - does not hold for one made again at the same path: its cache is warm
+  where it survived. T13's "refused, never made" stands for a lane tree never adopted; only the gone-from-disk case changes.
+  Where git cannot make it there (something stands at the path), the refusal names that and the `git worktree add` that says what,
+  and no longer the drop: the next batch start makes it once the path is clear. No lane-crate edit; the drop (T49) is unchanged.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_tree::tests::lane"` on the old code): 4 passed,
+  1 failed - `a_lane_tree_gone_from_disk_is_made_again_at_its_path_and_its_cache_kept` answered `is gone from disk - make
+  builder-tree-drop ...`, code 2. Green: the same run 5 of 5; `make builder-checks CRATE="rust/gate/crates/task"` clean, the crate 158 of 158. The test: a
+  batch open, the tree removed with no prune, `lane` re-makes it at `origin/main` with the cache's `debug/` kept, the registry's
+  lane line kept and a `remake` line logged; then a file at the path, refused naming what is in the way and not the drop. The old
+  gone-from-disk assertion of T13's adoption test moved into it.
 
 ### T50 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A lane whose tree vanished mid-batch carries on at its next batch start, warm where the cache
+   survived, with no hand step and no escape.
+2. **The constraints.** D1 (the lane's tree, its cache kept, step 4's rule), T13 (`lane` at a batch's start), T49 (the drop refused
+   while the runner lives or a batch is open), 451 T285 (no hand `git worktree add`), the brief: lane-crate edits narrow (none made).
+3. **Where each comes from.** R: tasks.md T50's line, T49's found-and-left item; O: `lane_start`, `drop_tree`, `make_cold` and
+   `builder_pool::cache`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the red test shows the old `lane` refused a gone tree with the drop T49 refuses.
+5. **The order.** After T13 and T49; before T22.
+6. **The exits.** Green: the lane tests and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one gone-from-disk branch for the lane's tree (`lane_start`), read; the builders' own (`take`'s note
+   naming the drop) is a free tree's, which the drop takes, and is left as it is.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The lane test green; in use, a `rm -rf` of `<clone>-land` mid-batch is followed by a `remake` line in the
+   pool's log at the next batch start and the batch's landing.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session whose lane tree vanished is no longer sent round the drop's refusals; nothing else a reader sees
+    changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 ### T51 (<why: the finding or measurement that files it>)
 

@@ -868,8 +868,22 @@ fn lane_start(p: &Pool, env: &Env) -> Reply {
         return refused(format!("builder-tree lane: no lane's tree is in the pool - make builder-tree-adopt TREE={} (land-alone's worktree, its cache warm; a new tree would start cold, plan D1)\n", lane_path(p, env).display()));
     };
     let tree = &t.tree;
+    // gone from disk (461 T50): made again at its path - what it held is reset away below in any case, and its cache lives beside it
+    // by the tree's name, so it stays warm; the drop is no route here, refused while the runner that called this lives (T49)
+    let mut said = String::new();
     if !tree.is_dir() {
-        return refused(format!("builder-tree lane: the lane's tree {} is gone from disk - make builder-tree-drop TREE={} REASON=\"<why>\", then make builder-tree-adopt TREE=<the tree the lane runs in>\n", tree.display(), tree.display()));
+        let tree_text = tree.to_string_lossy();
+        git(&p.clone, &["worktree", "prune"]);
+        if git(
+            &p.clone,
+            &["worktree", "add", "-q", "--detach", &tree_text, &p.head],
+        )
+        .0 != Some(0)
+        {
+            return refused(format!("builder-tree lane: the lane's tree {tree_text} is gone from disk and git worktree add could not make it there again - clear what stands at that path (git -C {} worktree add --detach {tree_text} says what), and the next batch start makes it\n", p.clone.display()));
+        }
+        note(p, env, "remake", tree, builder_pool::LANE);
+        said = format!("builder-tree lane: the lane's tree {tree_text} was gone from disk: made again there, its build cache kept\n");
     }
     let fetched = git(tree, &["fetch", "-q", "origin", "main"]).0 == Some(0);
     let target = text(
@@ -894,7 +908,7 @@ fn lane_start(p: &Pool, env: &Env) -> Reply {
     note(p, env, "lane", tree, &target);
     reply(
         format!("{}\n", tree.display()),
-        format!("builder-tree lane: {} is at origin/main ({}), whatever it held gone - it is the lane's, nobody's work lives there\n", tree.display(), target.get(..10).unwrap_or(&target)),
+        format!("{said}builder-tree lane: {} is at origin/main ({}), whatever it held gone - it is the lane's, nobody's work lives there\n", tree.display(), target.get(..10).unwrap_or(&target)),
         0,
     )
 }

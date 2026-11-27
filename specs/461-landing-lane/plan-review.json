@@ -474,6 +474,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T50 (T49's found-and-left: the lane's tree gone from disk mid-batch was a dead end)": {
+   "sha256": "8ac4e19eed486701f277114b86350a8bcfb914ad0f912dfe3df1ded127b5eca7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T50 Approach (checklist part A)": {
+   "sha256": "344fc9ed5acd07aed98f99f2642f47fb2ad38b9e2c270c95fb796559ca30d0ac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2968,6 +2980,52 @@
      "why": "Nothing the GM or the spec asked for is cut. The defect is not carried past the step: it is filed as its own task and set to land before T22. T49's own brief refuses the drop while a batch is open, so a fix through the drop would contradict the brief, and the route a gone tree needs is a separate decision. It would be NOT LEGITIMATE only if T50 were not ordered ahead of the work that relies on it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T50 (T49's found-and-left: the lane's tree gone from disk mid-batch was a dead end)",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T50-route",
+     "summary": "lane_start, finding the registry's lane tree gone from disk, prunes and re-makes the worktree at the registry's path from the clone's HEAD, logs a remake line, and falls through to the usual fetch/reset/clean/detach at origin/main, instead of refusing with the drop T49 now refuses.",
+     "class": "within",
+     "why": "Serves FR-003 (the lane runs in its own worktree) and the request's purpose that the lane run without coordinator turns or hand steps (sketch item 1, FR-005/SC-001): a dead end that needs a hand step is the failure being fixed. It drops no check (FR-008): the tree is reset to origin/main exactly as before, so the batch's gate and push are unchanged."
+    },
+    {
+     "id": "T50-no-stop-writer",
+     "summary": "Does not write a stop of the open batch from the task crate (the brief's example), to avoid a second writer of l7r-lane/lane.jsonl beside the lane crate's own.",
+     "class": "within",
+     "why": "A design choice between two routes to the same end. It leaves nothing the request or spec asks for undone: the batch carries on, which is more of what was asked than stopping it."
+    },
+    {
+     "id": "T50-cache-kept",
+     "summary": "The re-made tree keeps its build cache (builder_pool::cache keyed by the tree's name); D1's rule against making the lane's tree is held not to apply to one re-made at the same path.",
+     "class": "within",
+     "why": "Keeps D1's own purpose (a new tree starts cold) rather than excepting it: the re-made tree is warm where the cache survived. Nothing the GM asked is narrowed; FR-006's token and throughput goal is served, not cut."
+    },
+    {
+     "id": "T50-scope-gone-only",
+     "summary": "T13's 'refused, never made' stands for a lane tree never adopted; only the gone-from-disk case changes.",
+     "class": "within",
+     "why": "Bounds the fix to the found-and-left defect T49 named. Nothing in request.md or the spec index requires the lane to make a never-adopted tree, and the never-adopted refusal is not a dead end the block reports, so no known defect is carried forward."
+    },
+    {
+     "id": "T50-path-blocked",
+     "summary": "When git cannot make the tree because something stands at the path, the refusal names what is in the way and the git worktree add's message, no longer the drop; the next batch start makes it once the path is clear.",
+     "class": "within",
+     "why": "Replaces a refusal that sent the session to a refused command with one that names the actual obstruction. That serves FR-002's own standard that a refusal names its fix, and it narrows nothing asked."
+    },
+    {
+     "id": "T50-builders-left",
+     "summary": "The builders' own gone-from-disk note (take's, naming the drop) is left as it is, as is the drop (T49), and no lane-crate edit is made.",
+     "class": "within",
+     "why": "A free builder tree is one the drop takes. T49's refusal covers only the lane tree while the runner lives or a batch is open, so the builders' note is not the dead end and leaving it unchanged leaves no defect. Not touching the lane crate leaves nothing of the request undone."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3388,6 +3446,50 @@
      "summary": "A lane tree gone from disk mid-batch is still a dead end: the gone-from-disk refusal names the drop, which stays refused while the runner lives or a batch is open. Not fixed here: filed as T50, to land before T22.",
      "class": "within",
      "why": "Fixing it here would contradict this task's own brief (refuse the drop while a batch is open), and it needs a separate route decision. The defect is not left unfixed or carried past the next step: it is filed as T50 and ordered to land before T22, as fix-as-we-go requires. That defers a defect to a scheduled task rather than narrowing the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T50": {
+   "section_sha256": "0a4e5e54a089267cc9b72db552f48b963c220ec75626b6b2289630123f912803",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T50-route",
+     "summary": "lane_start, finding the registry's lane tree gone from disk, prunes and re-makes the worktree at the registry's path from the clone's HEAD, logs a remake line, and falls through to the usual fetch/reset/clean/detach at origin/main, instead of refusing with the drop T49 now refuses.",
+     "class": "within",
+     "why": "Serves FR-003 (the lane runs in its own worktree) and the request's purpose that the lane run without coordinator turns or hand steps (sketch item 1, FR-005/SC-001): a dead end that needs a hand step is the failure being fixed. It drops no check (FR-008): the tree is reset to origin/main exactly as before, so the batch's gate and push are unchanged."
+    },
+    {
+     "id": "T50-no-stop-writer",
+     "summary": "Does not write a stop of the open batch from the task crate (the brief's example), to avoid a second writer of l7r-lane/lane.jsonl beside the lane crate's own.",
+     "class": "within",
+     "why": "A design choice between two routes to the same end. It leaves nothing the request or spec asks for undone: the batch carries on, which is more of what was asked than stopping it."
+    },
+    {
+     "id": "T50-cache-kept",
+     "summary": "The re-made tree keeps its build cache (builder_pool::cache keyed by the tree's name); D1's rule against making the lane's tree is held not to apply to one re-made at the same path.",
+     "class": "within",
+     "why": "Keeps D1's own purpose (a new tree starts cold) rather than excepting it: the re-made tree is warm where the cache survived. Nothing the GM asked is narrowed; FR-006's token and throughput goal is served, not cut."
+    },
+    {
+     "id": "T50-scope-gone-only",
+     "summary": "T13's 'refused, never made' stands for a lane tree never adopted; only the gone-from-disk case changes.",
+     "class": "within",
+     "why": "Bounds the fix to the found-and-left defect T49 named. Nothing in request.md or the spec index requires the lane to make a never-adopted tree, and the never-adopted refusal is not a dead end the block reports, so no known defect is carried forward."
+    },
+    {
+     "id": "T50-path-blocked",
+     "summary": "When git cannot make the tree because something stands at the path, the refusal names what is in the way and the git worktree add's message, no longer the drop; the next batch start makes it once the path is clear.",
+     "class": "within",
+     "why": "Replaces a refusal that sent the session to a refused command with one that names the actual obstruction. That serves FR-002's own standard that a refusal names its fix, and it narrows nothing asked."
+    },
+    {
+     "id": "T50-builders-left",
+     "summary": "The builders' own gone-from-disk note (take's, naming the drop) is left as it is, as is the drop (T49), and no lane-crate edit is made.",
+     "class": "within",
+     "why": "A free builder tree is one the drop takes. T49's refusal covers only the lane tree while the runner lives or a batch is open, so the builders' note is not the dead end and leaving it unchanged leaves no defect. Not touching the lane crate leaves nothing of the request undone."
     }
    ],
    "verdict": "CLEAR"

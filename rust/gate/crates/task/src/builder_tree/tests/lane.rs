@@ -100,15 +100,45 @@ fn the_lane_s_tree_is_adopted_under_a_holder_no_handout_takes_and_the_cap_does_n
     assert_eq!(run(&words(&["release", "T01", "9001"]), &root, &e).code, 0);
     let next = run(&words(&["take", "T04", "9001"]), &root, &e);
     assert_eq!(next.stdout, b1.stdout);
-    // gone from disk: the drop and the adoption to run
+}
+
+/// THE LANE'S TREE GONE FROM DISK MID-BATCH (feature 461 T50): `lane` - the runner's call at a batch's start, a resumed batch's too -
+/// makes the worktree again at the registry's path, its build cache (kept beside, by the tree's name) untouched, and brings it to
+/// `origin/main` as ever; where git cannot make it there, the refusal names what is in the way, never the drop T49 refuses while
+/// the runner lives or the batch is open.
+#[test]
+fn a_lane_tree_gone_from_disk_is_made_again_at_its_path_and_its_cache_kept() {
+    let (dir, root) = world("pool-lane-gone");
+    let e = env(&dir);
+    let land = dir.join("repo-land");
+    let land_text = land.to_string_lossy().into_owned();
+    worktree(&root, &land);
+    assert_eq!(run(&words(&["adopt", &land_text]), &root, &e).code, 0);
+    std::fs::create_dir_all(e.cache.join("repo-land/debug")).unwrap();
+    // a batch open, and the tree removed by hand with git's own record of it left (no prune)
+    lane_log(&root, &[r#"{"event":"batch","batch":"b1"}"#]);
     std::fs::remove_dir_all(&land).unwrap();
-    git(&root, &["worktree", "prune"]);
-    let gone = run(&words(&["lane"]), &root, &e);
+    let again = run(&words(&["lane"]), &root, &e);
+    assert_eq!(again.code, 0, "{}", again.stderr);
+    assert_eq!(again.stdout, format!("{land_text}\n"));
+    assert!(again.stderr.contains(&format!("builder-tree lane: the lane's tree {land_text} was gone from disk: made again there, its build cache kept")), "{}", again.stderr);
+    assert!(again.stderr.contains("is at origin/main"));
+    let main = git(&root, &["rev-parse", "origin/main"]);
+    assert_eq!(git(&land, &["rev-parse", "HEAD"]), main);
+    assert!(e.cache.join("repo-land/debug").is_dir());
+    assert!(registry(&root).contains("\"lane\""));
+    let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
     assert!(
-        gone.code == 2 && gone.stderr.contains("is gone from disk"),
-        "{}",
-        gone.stderr
+        log.lines().any(|l| l.contains("\"event\":\"remake\"")),
+        "{log}"
     );
+    // a file where the tree was: git cannot make it there, and the refusal says what is in the way
+    std::fs::remove_dir_all(&land).unwrap();
+    std::fs::write(&land, "in the way\n").unwrap();
+    let blocked = run(&words(&["lane"]), &root, &e);
+    assert_eq!(blocked.code, 2);
+    assert!(blocked.stderr.contains(&format!("builder-tree lane: the lane's tree {land_text} is gone from disk and git worktree add could not make it there again")), "{}", blocked.stderr);
+    assert!(!blocked.stderr.contains("builder-tree-drop"));
 }
 
 #[test]
