@@ -7085,31 +7085,38 @@ that batch; the red was not in its change.
 <!-- plan-archive: T521 to T521 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T522 to T417 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T526 (<why: the finding or measurement that files it>)
+### T526 (451 T520's option (b), the GM's 2026-11-26 rule "we definitely don't want to clean things up if it is going to cost us time later" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/src/guards/scratch_sweep_hooks/sweep/evict.rs`'s pool-tree exemption is narrowed from every pool tree to the KEPT ones (`kept`): in each clone's own registry, a held tree, the landing lane's tree, and the first `L7R_BUILDERS` (3, the pool-idle guard's GUESS knob, read through `Config::builders` with `builder_queue::builders()`'s parse and default) trees on disk, in the registry's order. A free tree past them is an ordinary idle tree to the budget and the low-disk trigger (both reach `evict::choose`: `sweep/cargo.rs`'s budget step, observed 2026-11-27, method: grep for `choose(`), all its profiles, coverage included. A tree a live cargo uses stays out through `cargo::in_use`, unchanged.
+  - **Why by position.** `builder_tree::take` hands out the first free tree in the registry's order, so at the knob's count no handout reaches a tree past the first three, observed 2026-11-27, method: reading `take` in `rust/gate/crates/task/src/builder_tree.rs`. Kept by "the count less the held trees" instead, a tree early in the order would be chilled while a later one is held, and the next handout would take it cold. A tree gone from disk is skipped by `take` and is not counted. Counted per clone, since `builder_pool::pools` flattens every clone's registry.
+  - **The lane's tree (feature 461 D1).** Kept and not counted, by EITHER mark: its name ends `-land` (`<clone>-land`, D1's tree), or its holder is the reserved `lane` (the feature or a task named `lane`). 461 T13 writes the holder, and `make builder-tree-adopt` refuses a `-land` tree today (`builder_tree.rs`'s `adopt`), so this tree has no mark to read yet. The name covers D1's tree whatever form T13's holder takes. A tree `L7R_LANE_TREE` names elsewhere is kept only by the holder, so T13 must write it.
+  - **What it frees and costs.** b1 held 15 GiB besides its coverage and 1.9 GB of `cover-*`, idle since 10:04Z while three builders ran, so 0 min lost at 3 builders, observed 2026-11-27, method: T520's `du -sh`, `c-third-party.py` and the pool log. Taken, a fourth builder's first `builder-checks` runs cold: 165.9 s on the guard and 197.8 s on measure, against 5.9 s and 3.1 s warm, observed 2026-11-27, method: T520's `b-cold-warm.sh`. That is the price of raising the knob without a warm fourth tree. Nothing is taken before `L7R_CACHE_IDLE_HOURS` (12, unchanged) and before the cache is past its budget or the disk below its free share.
+  - **Declined.** T520's option (a), the kept trees' coverage profiles (23.2 GB, observed 2026-11-27, method: T520's `c-third-party.py`): coverage-repair builders build in them, 1.5 to 10 min cold, observed 2026-11-26/27, method: T520's census. Chosen by the T526 builder under the GM's words. The knob is `L7R_BUILDERS`.
+  - Tests (`sweep/evict/tests.rs`): red first, `a_free_pool_tree_past_the_builder_count_has_its_profiles_taken` failed on the old code (taken `[]`, expected `["p4"]`; 3 passed, 1 failed). Added: past the count, a held or busy tree is kept, and the knob moves the line (`builders = 2`). The lane's tree is kept and not counted under either mark, and a gone tree is not counted. Each clone's pool is counted apart, and a nameless entry is passed over. T285's `a_pool_tree_s_profiles_are_never_taken` is green unchanged.
+  - Records restated: the module's header and the inline T285 comment, `dev/audits/builder-pool.md` (its cost line and the budget sentence, which said "never evicts"), and `rust/guard/CLAUDE.md`'s index line for `sweep/evict.rs`. No guard message changed: the reason strings are as before.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the exemption narrowed, tests red first | n/a: tooling, no map | n/a: tooling | none | n/a |
 
 ### T526 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A free pool tree that no handout reaches at the settled builder count gives its build cache back when the disk needs it. The trees a handout takes stay warm, and the lane's tree is never taken.
+2. **The constraints.** The GM's 2026-11-26 rule (*"we definitely don't want to clean things up if it is going to cost us time later"*) and his 2026-11-27 word that time stays before disk. T285's reason for the exemption (a free tree is idle by the ranking). T520's option (a) declined. Feature 461 D1 (the `-land` tree adopted as the lane's).
+3. **Where each comes from.** G: the GM's two rulings. R: T520's section and `results.md`; 461's plan D1 and its T13 line; `builder_tree::take`. O: T520's measurements.
+4. **Do they describe the world here?** Yes. The live registry holds t269, t270, t271 and b1 in that order, observed 2026-11-27, method: reading `.git/builder-pool.json`, so b1 is the tree this rule takes once it is free and idle.
+5. **The order.** After T520 (its measurement) and T285 (the exemption). Before 461 T13, which must write the `lane` holder for a tree not named `-land`.
+6. **The exits.** Green: the evict tests, red first, and `make builder-checks CRATE="rust/guard"` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make rust-test CRATE=rust/guard ONLY="guards::scratch_sweep_hooks::sweep::evict"`, 8 tests green; `make builder-checks CRATE="rust/guard"`, 622 passed, lint and format clean, observed 2026-11-27, method: those commands. The disk freed in the real world is read by the next `make cache-clean DRY=1` once b1 has been idle past the knob.
+10. **Before moving a constant.** n/a: no constant moved. `L7R_BUILDERS` (3) gains a reader; its value is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. Not a defect: a deliberate narrowing of a rule under the GM's words.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, a `[perf]` task (451 FR-013): it keeps the builders' warm trees while freeing disk the builders' loop does not use. It is no engine-speed task, so the performance checklist does not apply.
 
 
 ### T527 (<why: the finding or measurement that files it>)

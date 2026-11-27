@@ -88,6 +88,9 @@ pub(crate) struct Config {
     /// `~/.cache` and the guard log's directory, which `make disk-audit` sizes (451 T245).
     pub cache_home: PathBuf,
     pub guard_log: PathBuf,
+    /// The trees of each pool a handout can take (`L7R_BUILDERS`, the pool-idle guard's knob, 451 T526): a free pool tree past them
+    /// is the budget's (`sweep/evict.rs`).
+    pub builders: usize,
 }
 
 impl Config {
@@ -166,6 +169,10 @@ impl Config {
             cache_home: home.join(".cache"),
             guard_log: set("GUARD_LOG_DIR")
                 .map_or_else(|| home.join(".claude/guard-log"), PathBuf::from),
+            // the same parse and default as `builder_queue::builders()`, read through this seam so a test sets it
+            builders: set("L7R_BUILDERS")
+                .and_then(|v| v.parse().ok())
+                .unwrap_or(crate::shared::builder_queue::BUILDERS),
         }
     }
 

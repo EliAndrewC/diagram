@@ -4728,6 +4728,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T526 (451 T520's option (b), the GM's 2026-11-26 rule \"we definitely don't want to clean things up if it is going to cost us time later\" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)": {
+   "sha256": "b6aeb271a936efc6e071dadb7061215a82b1601901369c12627ef627a176af6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T526 Approach (checklist part A)": {
+   "sha256": "a362e3cac8f0e7435463d9a43874e675c1b394c0560907cdbf79701238f2b4a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T529 (<why: the finding or measurement that files it>)": {
+   "sha256": "92cb894e68adaf982620c02602e70042958582f5dcdc1dc5d39456a329df80c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T529 Approach (checklist part A)": {
+   "sha256": "dc036d3803e6ea9887f1087528a45634f58691eaeb0f28e350a29dc0748c08df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43322,6 +43346,56 @@
      "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
      "class": "within",
      "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T526 (451 T520's option (b), the GM's 2026-11-26 rule \"we definitely don't want to clean things up if it is going to cost us time later\" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)",
+    "### T526 Approach (checklist part A)",
+    "### T529 (<why: the finding or measurement that files it>)",
+    "### T529 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T526-a",
+     "summary": "The pool-tree exemption from eviction is narrowed: a free tree past the first L7R_BUILDERS (3) trees of its clone's registry, neither held nor the lane's, has its ordinary build profiles taken by the budget step and the low-disk trigger once idle past L7R_CACHE_IDLE_HOURS (12).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the GM's 2026-11-26 principle ('we definitely don't want to clean things up if it is going to cost us time later') by accepting a contingent later cost the block names itself (a fourth builder's first builder-checks cold, 165.9 s guard / 197.8 s measure). Legitimate on two grounds. (1) Implied by the GM's own 2026-11-27 words that file T515: 'we might have implemented some cleanup that occurs when a builder worktree is cleaned up, but then since we are reusing builder worktrees for efficiency, then maybe that means that a lot of the cleanup that we are relying on never actually happens ... our current tooling is not preventing' - a reused pool tree that is never cleaned is the hole he names. (2) Purpose test: the principle protects caches that save time when used; builder_tree::take hands out the first free tree in registry order, so at the GM's settled count ('start it at 3 builders', 2026-11-26) a handout reaches the fourth tree only when more than three run at once, and eviction needs 12 h of non-use AND a cache past budget or a disk below its free share - so what is taken is a cache the settled loop does not use, and the time it saves at that count is zero. Residual, not a ruling ground: there is no builder cap (T284: 'synchronization rather than pre-emptively limiting builders'), so the 'no handout reaches it' premise rests on take's order plus the 12 h idle test, not on a ceiling; the cold-start price is paid once, and only if the count is raised after an eviction."
+    },
+    {
+     "id": "T526-b",
+     "summary": "The same unreached tree's coverage profile (cover-*, 1.9 GB on b1) is taken with its other profiles.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from T526-a because the GM's 2026-11-26 sentence names coverage specifically: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit'. That sentence is about a coverage cache that IS used, rarely; this tree's coverage is used only when the tree itself is handed out, which by take's order the settled count does not do, and it is taken not 'just because it's been idle' but only under budget or low-disk pressure after 12 h - the same reach as T526-a, and the same T515 words imply it. The kept trees' coverage, the case his sentence describes, stays (T526-e). Note for the record, not a ruling ground: the block's 'What it frees and costs' gives only builder-checks' cold cost; the cold coverage cost should be stated too (T520's census, 1.5 to 10 min, already cited in 'Declined')."
+    },
+    {
+     "id": "T526-c",
+     "summary": "Kept trees chosen by registry position (the first L7R_BUILDERS trees on disk, per clone, gone trees not counted, nameless entries passed over), read through Config::builders with builder_queue::builders()' parse and default; the knob's value unchanged.",
+     "class": "within",
+     "why": "Design of how 'the trees a handout reaches' is computed; it keeps more than a count-less-held rule would and keeps every tree take can hand out at the knob. Changes no constant (L7R_BUILDERS stays 3)."
+    },
+    {
+     "id": "T526-d",
+     "summary": "The landing lane's tree is kept and not counted by either mark: a name ending -land, or the reserved holder 'lane'; 461 T13 must write the holder for a lane tree not named -land.",
+     "class": "within",
+     "why": "Keeps more, not less. The block itself states the gap: a lane tree named elsewhere through L7R_LANE_TREE has no mark until 461 T13 writes the holder, and the order line puts T526 before T13. The bundle cannot confirm feature 461's D1 (spec-cited.md: NOT FOUND); the lane-tree rule rests on the block's own description of it."
+    },
+    {
+     "id": "T526-e",
+     "summary": "T520's option (a), taking the kept trees' coverage profiles (23.2 GB), is declined.",
+     "class": "within",
+     "why": "Declining it honors the GM's 2026-11-26 words on rarely used coverage that saves a ton of time when used: coverage-repair builders build in those trees, 1.5 to 10 min cold."
+    },
+    {
+     "id": "T526-f",
+     "summary": "T526 is tagged [perf] under 451 FR-013 (scheduling priority).",
+     "class": "within",
+     "why": "The GM placed disk work under performance tuning himself (2026-11-25: 'having some kind of audit of disk space ... is probably something we should add to our performance tuning and checks'); the block keeps the builders' warm trees and changes no engine speed."
     }
    ]
   }

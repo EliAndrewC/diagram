@@ -7,7 +7,7 @@ measurement: the day's parallel builders - 21 of 22 code builders at two ran in 
 command: make builder-trees (who holds each tree, each cache's size); make rust-test CRATE=rust/gate/crates/task (builder_tree::tests); bash tests/hooks/test-builder-pool-hooks.sh; make task-time (a builder's first closing-checks minutes)
 falsifier: a builder's first closing checks in a pool tree taking more than five minutes with no cold tree announced, a pool tree or cache found removed with no drop on .git/builder-pool.log, or the guard refusing a correct command (make guard-log GUARD=builder-pool)
 threshold: one cold first run in a tree the pool called warm, one unlogged removal, or two refusals of correct work in a week (any reopens it)
-cost: about 9 GB of build cache a pool tree (four at the cap, L7R_BUILDER_POOL, a GUESS), which the cache's budget never evicts (about 40 GB at the cap outside the 100 GB budget's reach); one walk of the command on a Bash call naming worktree or rm
+cost: about 9 GB of build cache a pool tree (four at the cap, L7R_BUILDER_POOL, a GUESS), which the cache's budget never evicts for the first L7R_BUILDERS (3) trees of a pool, a held tree or the lane's (about 27 GB at three outside the 100 GB budget's reach; a free tree past the count is the budget's, 451 T526); one walk of the command on a Bash call naming worktree or rm
 last-audited: 2026-11-26
 cadence-days: 30
 covers: rust/guard/src/guards/builder_pool_hooks.rs
@@ -24,4 +24,5 @@ Weighed and not taken: renaming the three existing trees to `-b1` to `-b3` (the 
 cold tree when a free one is held by uncommitted work (the cold tree is the failure, so the handout refuses and names the paths);
 exempting the landing's and the review's trees by name (a hand command could take the name - they are exempt because their
 scripts' git calls are not tool calls). The cache's budget (`sweep/evict.rs`) skips a pool tree's build directory, since a free pool
-tree is idle by its ranking and would be emptied first; a tree whose holding tasks are all ticked is freed at the next handout.
+tree is idle by its ranking and would be emptied first - since 451 T526 only the trees a handout can take (the first `L7R_BUILDERS` of
+the registry on disk), a held tree and the landing lane's tree (feature 461 D1), a free tree past the count evicted like any idle tree; a tree whose holding tasks are all ticked is freed at the next handout.

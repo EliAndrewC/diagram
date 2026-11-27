@@ -7,9 +7,9 @@
 //! The rule: past the budget (or, from the low-disk trigger, short of the free-space share), whole PROFILES of live trees' build
 //! directories go - `debug/`, `cover-gate/`, `tool/`, each a child directory, never the build directory's own files (the guard's kept
 //! `l7r-guard.good`, the run lock and record) - least recently built first, until the shortfall is met, and only a profile:
-//! - not of the mirror's build directory (the guard hook runs its kept binary), not of a builder pool tree's (451 T285: a free
-//!   pool tree is idle, and its warm cache is what the pool keeps), and not in a build directory in use (`cargo::in_use`:
-//!   a live process holds a path under it, or its run record names a live member);
+//! - not of the mirror's build directory (the guard hook runs its kept binary), not of a KEPT builder pool tree's (451 T285: a free
+//!   pool tree is idle, and its warm cache is what the pool keeps; narrowed by 451 T526, below), and not in a build directory in use
+//!   (`cargo::in_use`: a live process holds a path under it, or its run record names a live member);
 //! - idle past `L7R_CACHE_IDLE_HOURS` (12, the variants' knob): nothing in it changed since;
 //! - its tree's ranked: a tree IDLE first - none of its trees exists (a landing tree between landings, a name the suites build into), or
 //!   each one's HEAD log (`.git/logs/HEAD`: a commit, a checkout, a reset) is older than the knob and no live process has its cwd in
@@ -23,6 +23,19 @@
 //! the working set grows with each parallel tree, 13-14 GB a trial); evicting only gone trees (27 MB on the day); evicting by tree
 //! rather than profile (a tree touched at 13:28 by one tool build kept its 25 GB coverage set from 07:34). Chosen by the T245 builder
 //! under the GM's words; the knobs are the budget, the idle hours and the free-space share.
+//!
+//! THE KEPT POOL TREES (451 T526, T520's option (b); the GM 2026-11-26: "we definitely don't want to clean things up if it is going to
+//! cost us time later", and his 2026-11-27 word that time stays before disk). A pool tree is kept whole where it is held, where it is
+//! the landing lane's tree (feature 461 D1: named `<clone>-land`, or held by the reserved holder `lane`; either mark keeps it, and it is
+//! not counted), or where it is among the first `L7R_BUILDERS` (3) trees of ITS OWN clone's registry that are on disk - a handout takes
+//! the first free tree in the registry's order (`builder_tree::take`), so at the knob's count no handout reaches a tree past them. A free
+//! tree past them is an ordinary idle tree here: all its profiles, coverage included, go past the budget or at the low-disk trigger.
+//! Kept by position, not by "the count less the held": that would chill a tree early in the order while a later one is held, and the
+//! next handout would take it cold. Measured 2026-11-27 (T520, `dev/measurements/2026-11-27/t520-cache-working-set/`): b1, the fourth,
+//! held 15 GiB besides its coverage, idle since 10:04Z while three builders ran (0 min lost at 3); taken, a fourth builder's first
+//! `builder-checks` runs cold, 165.9 s for the guard and 197.8 s for measure against 5.9 s and 3.1 s warm - the cost of raising the
+//! knob. Declined (T520's option (a)): the kept trees' coverage profiles (23.2 GB), which coverage-repair builders build in, 1.5 to
+//! 10 min cold. Chosen by the T526 builder under the GM's words; the knob is `L7R_BUILDERS`.
 
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -52,15 +65,11 @@ pub(super) fn choose(
         .mirror
         .file_name()
         .map(|n| n.to_string_lossy().into_owned());
-    // A POOL TREE'S BUILD DIRECTORY IS NEVER THE BUDGET'S (451 T285, its plan review of 2026-11-26): a free pool tree is idle
+    // A KEPT POOL TREE'S BUILD DIRECTORY IS NEVER THE BUDGET'S (451 T285, its plan review of 2026-11-26): a free pool tree is idle
     // by this rule's own ranking, so past the budget its profiles went first and the next builder was handed a cold tree - the
-    // failure the pool exists to end. The pool's share is bounded apart: its cap of trees (`builder_pool::CAP`), about 9 GB
-    // each, measured 2026-11-26 (`du -sh` of the three trees' build directories); `make builder-tree-drop` gives one back.
-    let pool: Vec<String> = crate::shared::builder_pool::pools(&c.clones)
-        .iter()
-        .filter_map(|t| t.tree.file_name())
-        .map(|n| n.to_string_lossy().into_owned())
-        .collect();
+    // failure the pool exists to end. Only the trees a handout can take are kept (451 T526, the header): a free one past them is
+    // the budget's.
+    let pool = kept(c);
     let mut found = Vec::new();
     for (target, name, meta) in children(&c.cargo) {
         if !meta.is_dir()
@@ -99,6 +108,33 @@ pub(super) fn choose(
                 "the cache past its budget: an active tree's profile, idle past the knob"
             },
         ));
+    }
+    out
+}
+
+/// The names of the pool trees whose build directories the budget never takes (451 T526): in each clone's registry, a held tree, the
+/// lane's tree, and the first `c.builders` of the rest that are on disk (a handout skips a tree gone from disk), in the registry's order.
+fn kept(c: &Config) -> Vec<String> {
+    let mut clones: Vec<PathBuf> = std::fs::read_dir(&c.clones)
+        .map(|d| d.filter_map(Result::ok).map(|e| e.path()).collect())
+        .unwrap_or_default();
+    clones.sort();
+    let mut out = Vec::new();
+    for clone in clones {
+        let mut handed = 0;
+        for t in crate::shared::builder_pool::read(&clone.join(".git")) {
+            let Some(name) = t.tree.file_name().map(|n| n.to_string_lossy().into_owned()) else {
+                continue;
+            };
+            let lane = name.ends_with("-land")
+                || t.feature == "lane"
+                || t.tasks.iter().any(|k| k == "lane");
+            let within = !lane && t.tree.is_dir() && handed < c.builders;
+            handed += usize::from(within);
+            if lane || within || !t.free() {
+                out.push(name);
+            }
+        }
     }
     out
 }
