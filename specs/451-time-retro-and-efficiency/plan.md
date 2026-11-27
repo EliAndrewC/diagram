@@ -6639,31 +6639,34 @@ that batch; the red was not in its change.
 **Performance work?** no - a check refusing correct work; what it saves is one re-run of `make builder-brief` with `SIZING_OK` (seconds), not a faster loop.
 
 
-### T430 (<why: the finding or measurement that files it>)
+### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each write is judged in every gated tree by where it lands. In `gate_refusal` (`rust/guard/src/guards/gate_write_hooks.rs`) the file tools' branch drops `&& c.own`: `relative_in(&c.top, file)` already answers None for a file outside that gated tree, a file under its `.git` is still no file of it, and `unseen` already asks that tree's own `l7r-gate preflight --tree-check`. The `if !c.own { return None; }` before `shell_write` is removed: its `seen` already asks that the walk's placed path is under the gated tree's top, and a path the walk cannot place already falls out at `t.path.as_deref()?`, so in another gated tree only a positive placement holds - T406's rule for a commit, now an Edit's and a shell write's. `stands_here`'s fail-closed split (a place the walk cannot read held in the hook process's tree alone) is unchanged. No guard message changes. The doc comments of the module and of `gate_refusal` restated.
+  - **Cost.** A Bash call while another tree's gate runs now walks the command once more, in `shell_write`, for that gated tree (it was cut short before); a walk over one command, no process asked unless a path lands in that tree.
+  - **The tests.** `a_commit_sent_into_a_gated_tree_from_another_is_held`'s pinned let-through Write is now held; new `a_write_sent_into_a_gated_tree_from_another_is_held` (from a pool tree: an Edit, a NotebookEdit and 6 shell writes - a redirect, a `cp`, `cd && sed -i`, `cd && rm`, `git -C apply`, a Python literal - held; the pool tree's own Edit and 3 shell writes, a handoff Write under the gated tree's `.git`, 2 writes the walk cannot place and a write under `.git` let through; from the gated tree a write into the pool tree let through; with the tree check's `unseen`, an Edit and a `cp` from the pool tree let through); 3 cases of `tests/hooks/test-gate-write-hooks.sh` (from another tree, an Edit and a `cp` into the gated tree refused, that tree's own `cp` let through), counted in the files' text, observed 2026-11-27, method: read from the files after the last edit.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T430, an Edit, a Write and a shell write held in every gated tree they land in | `a_write_sent_into_a_gated_tree_from_another_is_held` and the flipped Write of `a_commit_sent_into_a_gated_tree_from_another_is_held`, red on the old code (item 9) | n/a: tooling | none: tooling | `GATE_WRITE_OK` with a reason |
 
 ### T430 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** While a tree's gate runs, no Edit, Write or shell write the gate would see lands in it from any session, wherever that session stands, where the file names it or the walk places it there; a shell write the walk cannot place is held in the hook process's own tree alone (T406's rule, or a write to `$VAR` would be refused wherever any gate ran); a write in another, ungated tree passes.
+2. **The constraints.** Feature 385 plan D13 (no write the gate would see while it runs), feature 375 FR-004 (a gate vouches for none of a tree that moved), T307's rule (another tree's write is not this gate's), T406's (a command the walk cannot place fails closed only in the hook process's own tree); no guard message changes (the brief).
+3. **Where each comes from.** O: T406's Found and left (`plan.md`, `### T409, T406 (bundle)`), read 2026-11-27; the brief's report of two writes into the clone during its gate (observed 2026-11-27, method: the coordinating session's report in T430's brief).
+4. **Do they describe the world here?** Yes: on the old code a Write of `l7r/x/a.py` in the gated tree from a pool tree passed, and an Edit there did too, each shown by its test failing (item 9).
+5. **The order.** After T406 (its code in this tree, its box still open in `tasks.md`); before T307's tick, as T406's Found and left orders it.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard"` and `tests/hooks/test-gate-write-hooks.sh` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY="guards::gate_write_hooks"`, its result line): on the old guard 12 passed, 2 failed (the two tests above); `tests/hooks/test-gate-write-hooks.sh` on the old guard 33 passed, 2 failed (the two refusals). After, measured 2026-11-27 (`make builder-checks CRATE="rust/guard"`): `rust/guard` 585 passed, 0 failed, lint and format clean; `tests/hooks/test-gate-write-hooks.sh` 35 passed, 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome, not a difference: a gate voided by an Edit or a shell write sent into its tree from a session standing in another.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task by its effect on the landings (451 FR-013): a write let into a running gate's tree voids the gate and owes the whole `make done` again (about ten minutes: the brief's figure, 2026-11-27, method: the coordinating session's reading of its own gates); the guard's own added cost is one more walk of a Bash command for each gated tree other than its own (above).
 
 <!-- plan-archive: T408 to T297 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T408 to T408 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->

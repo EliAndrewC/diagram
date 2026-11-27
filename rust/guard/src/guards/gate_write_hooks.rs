@@ -3,7 +3,8 @@
 //! this way, the second an hour after the round arbiter named the slip (the GM, 2026-10-17: "a guard, not a reminder"). A change the gate
 //! does not see passes, asked of the gate's own `l7r-gate preflight --tree-check` (feature 405 T41). `GATE_WRITE_OK` with a reason is the
 //! escape. ANOTHER TREE'S COMMIT IS NOT THIS GATE'S (451 T307): a `git commit`, a `git add` or a record-writing make is held only
-//! where it runs in the gated tree (`stands_here`). (Feature 426 T10's refusal while `make cache-audit` ran left with that target, deleted by 449 T218: nothing runs it, so the
+//! where it runs in the gated tree (`stands_here`). EVERY GATED TREE IS JUDGED, wherever the session stands (451 T406, T430): a
+//! write is held by the tree its target lands in. (Feature 426 T10's refusal while `make cache-audit` ran left with that target, deleted by 449 T218: nothing runs it, so the
 //! branch watched for a process that cannot exist - removed by 449 T223.)
 //!
 //! Plan T024's decisions: (a) the guard and `own-make.sh`'s question in-process, by pid; (b) `preflight.py` is a phase-2 piece, asked by
@@ -271,11 +272,14 @@ fn after_edit(event: &Event, file: &str) -> Option<String> {
     }
 }
 
-/// What a running gate refuses: a change it would see. In a gated tree the hook's process does not stand in, only a commit, an
-/// add or a record-writing make the walk places there (451 T406); an edit or a shell write there is judged in its own tree alone.
+/// What a running gate refuses: a change it would see, judged in every gated tree by where it lands - a commit, an add or a
+/// record-writing make the walk places there (451 T406), an Edit or a Write of a file in it, a shell write the walk places in it
+/// (451 T430). WHY: an Edit or a shell write was judged in the hook process's tree alone, so a builder standing in its pool tree
+/// writing the clone while the clone's gate ran was not held (found by 451 T406, by reading). Only the tree the hook's process
+/// stands in fails closed (`stands_here`).
 fn gate_refusal(event: &Event, c: &Gate) -> Option<String> {
     let tool = event.tool();
-    if FILE_TOOLS.contains(&tool) && c.own {
+    if FILE_TOOLS.contains(&tool) {
         let file = file_of(event);
         // a file under the tree's `.git` is no file of the tree: the gate's snapshot never holds one (451 T307)
         let rel = relative_in(&c.top, file)
@@ -315,9 +319,6 @@ fn gate_refusal(event: &Event, c: &Gate) -> Option<String> {
         .filter(|_| stands_here(event, cmd, c, &|head, _| head == "make"))
     {
         return Some(format!("make {found} (it writes a tracked record)"));
-    }
-    if !c.own {
-        return None;
     }
     shell_write(event, cmd, c)
 }

@@ -3481,14 +3481,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T430 (<why: the finding or measurement that files it>)": {
-   "sha256": "f7521876dab1b32f8671593aa20e99fb66f95e9eb505115ca7446cebbe0bd8dc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T430 Approach (checklist part A)": {
-   "sha256": "c850150db8813a7ef2d07162a454953bf70971d2c1916a21827248c4ad3f74e1",
+   "sha256": "b1314c4621311bc6ef33472bffbdcb09c181901da9b72bb20e8d12da1547d592",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,12 @@
   },
   "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)": {
    "sha256": "aa8a03df9438db3a1a41cf3db2fda5fae18dd816a77542a766f332818ad13759",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))": {
+   "sha256": "61823d6bd9c311a4f580c5d268956042d8c78135c0551d78575ba3b46877af10",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38893,6 +38893,130 @@
      "why": "Unfilled templates replaced by the filled sections; nothing of what was asked is removed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))",
+    "### T430 Approach (checklist part A)",
+    "(removed) ### T430 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T430-file-tools",
+     "summary": "gate_refusal's file-tool branch drops `&& c.own`: an Edit, Write or NotebookEdit is held in every gated tree it lands in, wherever the session stands; a file under that tree's .git is still no file of it",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a running gate voided by a write sent in from another tree), which is what D13 and 375 FR-004 exist to prevent; with the GM's parallel builders and pool trees (2026-11-26/27 go-ahead) a write from another tree is the case that occurs. Fixing a known defect found by this feature's own task is owed (fix as we go); .git exemption matches D13 (writes only under .git are not what the gate sees)."
+    },
+    {
+     "id": "T430-shell-write-placement",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed: in another gated tree a shell write is held only on a positive placement under that tree's top; a write the walk cannot place stays fail-closed in the hook process's own tree alone (T406's rule)",
+     "class": "within",
+     "why": "Strictly widens the guard's reach from the old own-tree-only scope that D13 states ('while a make done of this tree runs'); nothing asked or specified that an unplaceable write be refused in every tree, and doing so would refuse correct work (any `$VAR` write anywhere whenever any gate runs), against the GM's throughput rulings. The unplaceable case keeps the scope D13 already had, so it narrows nothing that was asked."
+    },
+    {
+     "id": "T430-messages-docs",
+     "summary": "No guard message changes; the module's and gate_refusal's doc comments restated",
+     "class": "within",
+     "why": "Keeps the existing refusal text and escape (GATE_WRITE_OK, D13); the doc restatement records the changed behavior."
+    },
+    {
+     "id": "T430-cost",
+     "summary": "One more command walk per Bash call per other gated tree, no process unless a path lands there",
+     "class": "within",
+     "why": "Implementation cost of the fix, stated and bounded; not a scope decision."
+    },
+    {
+     "id": "T430-tests",
+     "summary": "Flip the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 shell-suite cases; red on the old code first",
+     "class": "within",
+     "why": "Tests that only enforce the fix (red-first per FR-012's practice and constitution); enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T430-order",
+     "summary": "After T406, before T307's tick, as T406's Found and left orders it",
+     "class": "within",
+     "why": "Ordering of a known defect's fix before the dependent tick, consistent with fixing known defects before moving on."
+    },
+    {
+     "id": "T430-perf-tag",
+     "summary": "Tagged performance work (FR-013) by its effect on landings: a voided gate owes the whole make done again (about ten minutes, labeled)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate's rerun does that. A scheduling classification, it narrows nothing."
+    },
+    {
+     "id": "T430-found-left",
+     "summary": "Found and left: none",
+     "class": "within",
+     "why": "No defect deferred."
+    },
+    {
+     "id": "T430-removed-placeholder",
+     "summary": "The template heading `### T430 (<why: ...>)` removed, replaced by the filled heading block",
+     "class": "within",
+     "why": "The removed block was an unfilled task-add template; its content now lives in the filled T430 block. Nothing of substance is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))",
+    "### T430 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T430-1",
+     "summary": "File tools (Edit, Write, NotebookEdit) judged in every gated tree by where the file lands: gate_refusal drops `&& c.own`, relying on relative_in(&c.top, file) to answer None outside that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (feature 385 D13's guard let a write void a running gate when the writing session stood in another tree; FR-004's end-hash then refuses green and the whole make done is owed again). The request's parallel-builder work (the GM 2026-11-25/26/27: several builders at once, 'synchronization rather than pre-emptively limiting builders') is what makes cross-tree writes happen; holding a write that would void the gate is D13's purpose applied to the case it missed, not new scope. Fix-as-we-go: a known defect fixed in its step."
+    },
+    {
+     "id": "T430-2",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed, so a shell write the walk places under another gated tree's top is held there (T406's positive-placement rule, extended from a commit to an Edit and a shell write).",
+     "class": "within",
+     "why": "Same defect, same purpose as T430-1, for shell writes; uses the existing `seen` placement test, so it refuses only writes positively placed in the running gate's tree. No refusal beyond the thing D13 exists to stop."
+    },
+    {
+     "id": "T430-3",
+     "summary": "A shell write the walk cannot place is held in the hook process's own tree alone (stands_here's fail-closed split unchanged); in another gated tree it passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own goal carves this case out of 'no write lands in a running gate's tree from any session'. Applying the rule literally - holding every unplaceable write (a `$VAR` target, say) in every tree while any gate anywhere runs - would refuse good work in every builder's tree whenever any one gate ran, which defeats the request's stated purpose (the GM 2026-11-26: synchronization rather than limiting builders; 2026-11-26 on coverage: 'Our goal is to maximize task throughput'), and a check that refuses good work is itself a defect under the project's rule. The residual is not a silent wrong outcome: FR-004's end-of-gate hash still refuses green on any tracked file that moved. The case is one class (writes whose landing place is unknown), so one argument covers it. It is also T406's existing rule, kept, not a new carve-out."
+    },
+    {
+     "id": "T430-4",
+     "summary": "A Write under the gated tree's `.git` (a handoff file) is let through; a tree whose `l7r-gate preflight --tree-check` answers unseen lets writes through.",
+     "class": "within",
+     "why": "Both are what the gate already does not see: D13 refuses only what moves 'what the gate's end checks' (HEAD and `git diff --name-only HEAD`), and names `.git/`-only writes as not refused. Unchanged behavior, consistent with the request."
+    },
+    {
+     "id": "T430-5",
+     "summary": "A write from the gated tree into an ungated pool tree passes (T307's rule kept); no guard message changes; escape GATE_WRITE_OK kept.",
+     "class": "within",
+     "why": "Keeps existing, requested behavior (D13's escape; another tree's write is not this gate's). Nothing narrowed."
+    },
+    {
+     "id": "T430-6",
+     "summary": "Cost accepted: one more walk of a Bash command per other gated tree while it runs.",
+     "class": "within",
+     "why": "A cost note, not a scope decision; no process is spawned unless a path lands in that tree."
+    },
+    {
+     "id": "T430-7",
+     "summary": "Tests: the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held flipped to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 cases in tests/hooks/test-gate-write-hooks.sh; red first on the old code.",
+     "class": "within",
+     "why": "Enforcement of the fix: each test fails only when the held-write behavior is absent, and the let-through cases pin that good work is not refused. Not unrequested scope (GM 2026-09-20). Figures carry dates and methods."
+    },
+    {
+     "id": "T430-8",
+     "summary": "Ordered after T406 and before T307's tick; tagged [perf] under FR-013 because a voided gate owes the whole make done again (about ten minutes, labeled as the brief's figure).",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -58873,6 +58997,63 @@
      "summary": "Suite case 6e pins that a fresh call asks find once and it succeeds (red on the old code, green after); safety pins (nested edit with directory time unmoved, file added, file removed, find failing) held on both versions.",
      "class": "within",
      "why": "Verification that the requested change happens and that D7's no-stale-guard behavior is kept; enforcement of what was asked, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T430": {
+   "section_sha256": "ecbd1775a8f9d217ff26b3760f9d6ab1e19b59a2fe9b4891778e798f2223e545",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T430-1",
+     "summary": "File tools (Edit, Write, NotebookEdit) judged in every gated tree by where the file lands: gate_refusal drops `&& c.own`, relying on relative_in(&c.top, file) to answer None outside that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (feature 385 D13's guard let a write void a running gate when the writing session stood in another tree; FR-004's end-hash then refuses green and the whole make done is owed again). The request's parallel-builder work (the GM 2026-11-25/26/27: several builders at once, 'synchronization rather than pre-emptively limiting builders') is what makes cross-tree writes happen; holding a write that would void the gate is D13's purpose applied to the case it missed, not new scope. Fix-as-we-go: a known defect fixed in its step."
+    },
+    {
+     "id": "T430-2",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed, so a shell write the walk places under another gated tree's top is held there (T406's positive-placement rule, extended from a commit to an Edit and a shell write).",
+     "class": "within",
+     "why": "Same defect, same purpose as T430-1, for shell writes; uses the existing `seen` placement test, so it refuses only writes positively placed in the running gate's tree. No refusal beyond the thing D13 exists to stop."
+    },
+    {
+     "id": "T430-3",
+     "summary": "A shell write the walk cannot place is held in the hook process's own tree alone (stands_here's fail-closed split unchanged); in another gated tree it passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own goal carves this case out of 'no write lands in a running gate's tree from any session'. Applying the rule literally - holding every unplaceable write (a `$VAR` target, say) in every tree while any gate anywhere runs - would refuse good work in every builder's tree whenever any one gate ran, which defeats the request's stated purpose (the GM 2026-11-26: synchronization rather than limiting builders; 2026-11-26 on coverage: 'Our goal is to maximize task throughput'), and a check that refuses good work is itself a defect under the project's rule. The residual is not a silent wrong outcome: FR-004's end-of-gate hash still refuses green on any tracked file that moved. The case is one class (writes whose landing place is unknown), so one argument covers it. It is also T406's existing rule, kept, not a new carve-out."
+    },
+    {
+     "id": "T430-4",
+     "summary": "A Write under the gated tree's `.git` (a handoff file) is let through; a tree whose `l7r-gate preflight --tree-check` answers unseen lets writes through.",
+     "class": "within",
+     "why": "Both are what the gate already does not see: D13 refuses only what moves 'what the gate's end checks' (HEAD and `git diff --name-only HEAD`), and names `.git/`-only writes as not refused. Unchanged behavior, consistent with the request."
+    },
+    {
+     "id": "T430-5",
+     "summary": "A write from the gated tree into an ungated pool tree passes (T307's rule kept); no guard message changes; escape GATE_WRITE_OK kept.",
+     "class": "within",
+     "why": "Keeps existing, requested behavior (D13's escape; another tree's write is not this gate's). Nothing narrowed."
+    },
+    {
+     "id": "T430-6",
+     "summary": "Cost accepted: one more walk of a Bash command per other gated tree while it runs.",
+     "class": "within",
+     "why": "A cost note, not a scope decision; no process is spawned unless a path lands in that tree."
+    },
+    {
+     "id": "T430-7",
+     "summary": "Tests: the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held flipped to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 cases in tests/hooks/test-gate-write-hooks.sh; red first on the old code.",
+     "class": "within",
+     "why": "Enforcement of the fix: each test fails only when the held-write behavior is absent, and the let-through cases pin that good work is not refused. Not unrequested scope (GM 2026-09-20). Figures carry dates and methods."
+    },
+    {
+     "id": "T430-8",
+     "summary": "Ordered after T406 and before T307's tick; tagged [perf] under FR-013 because a voided gate owes the whole make done again (about ten minutes, labeled as the brief's figure).",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
     }
    ],
    "verdict": "CLEAR"

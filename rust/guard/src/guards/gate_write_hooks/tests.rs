@@ -241,11 +241,79 @@ fn a_commit_sent_into_a_gated_tree_from_another_is_held() {
     ] {
         assert_eq!(from_pool(&cmd), Vec::new(), "{cmd}");
     }
-    // an Edit in the gated tree from the pool tree is judged in its own tree alone (filed as T430)
+    // a Write into the gated tree from the pool tree is held as a commit is (451 T430)
     let write = json!({"file_path": w.file("l7r/x/a.py"), "content": "x"});
-    assert_eq!(w.run_from(&pool, "Write", &write), Vec::new());
+    let held = refused(
+        &w.run_from(&pool, "Write", &write),
+        "an Write of l7r/x/a.py",
+    );
+    assert!(held);
     // from the gated tree, a commit sent into the pool tree passes, as T307 built
     assert_eq!(w.bash(&format!("git -C {there} commit -qm x")), Vec::new());
+}
+
+/// 451 T430: an Edit, a Write or a shell write was judged only in the tree the hook's process stood in, so one sent INTO a gated
+/// tree from a session standing in another - a builder cd'ed into its pool tree writing the clone while the clone's gate ran - was
+/// not held. Each is judged by the tree its target lands in: the file's for an Edit or a Write, the walk's place for a shell write.
+#[test]
+fn a_write_sent_into_a_gated_tree_from_another_is_held() {
+    let w = world("write-into-gated");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    std::fs::write(w.top.join("l7r/x/a.py"), "a\n").unwrap();
+    let pool = w.top.parent().unwrap().join("pool-t430");
+    std::fs::create_dir_all(&pool).unwrap();
+    let (top, there) = (w.top.display().to_string(), pool.display().to_string());
+    assert!(ask(Path::new("/"), "git", &["init", "-q", &there], "").ok());
+    std::fs::write(pool.join("b.py"), "a\n").unwrap();
+    let from_pool = |tool: &str, input: &Value| w.run_from(&pool, tool, input);
+    let sh = |cmd: &str| json!({"command": cmd});
+    let edit = json!({"file_path": w.file("l7r/x/a.py"), "old_string": "a", "new_string": "b"});
+    assert!(refused(&from_pool("Edit", &edit), "an Edit of l7r/x/a.py"));
+    let nb = json!({"notebook_path": w.file("n.ipynb")});
+    let held = refused(
+        &from_pool("NotebookEdit", &nb),
+        "an NotebookEdit of n.ipynb",
+    );
+    assert!(held);
+    let a = "l7r/x/a.py";
+    for (cmd, rel) in [
+        (format!("echo x > {top}/{a}"), a),
+        (format!("cp /tmp/x {top}/l7r/x/new.py"), "l7r/x/new.py"),
+        (format!("cd {top} && sed -i s/a/b/ {a}"), a),
+        (format!("cd {top}/l7r && rm x/a.py"), a),
+        (format!("git -C {top} apply /tmp/p.patch"), "."),
+        (
+            format!("python3 -c \"open('{top}/{a}','w').write('x')\""),
+            a,
+        ),
+    ] {
+        let got = from_pool("Bash", &sh(&cmd));
+        let held = refused(&got, &format!("a shell write of {rel}"));
+        assert!(held, "{cmd}: {got:?}");
+    }
+    // the pool tree's own writes, a handoff under the gated tree's `.git`, and a place the walk cannot read pass
+    let own = json!({"file_path": pool.join("b.py"), "old_string": "a", "new_string": "b"});
+    assert_eq!(from_pool("Edit", &own), Vec::new());
+    let notes = format!("{top}/.git/l7r-handoffs/T430-a.md");
+    let handoff = json!({"file_path": notes, "content": "x"});
+    assert_eq!(from_pool("Write", &handoff), Vec::new());
+    for cmd in [
+        "echo x > b.py".to_owned(),
+        format!("cd {there} && cp /tmp/x b.py"),
+        format!("cp {top}/l7r/x/a.py b.py"),
+        "echo x > \"$T430_SOMEWHERE/l7r/x/a.py\"".to_owned(),
+        "cd \"$T430_SOMEWHERE\" && cp /tmp/x l7r/x/a.py".to_owned(),
+        format!("echo x > {top}/.git/t430-scratch"),
+    ] {
+        assert_eq!(from_pool("Bash", &sh(&cmd)), Vec::new(), "{cmd}");
+    }
+    // from the gated tree, a write into the pool tree passes, as T307 built
+    assert_eq!(w.bash(&format!("echo x > {there}/b.py")), Vec::new());
+    // and what the gated tree's own check does not see passes from the pool tree too
+    std::fs::write(w.top.join("unseen"), "").unwrap();
+    assert_eq!(from_pool("Edit", &edit), Vec::new());
+    let cp = sh(&format!("cp /tmp/x {top}/{a}"));
+    assert_eq!(from_pool("Bash", &cp), Vec::new());
 }
 
 #[test]

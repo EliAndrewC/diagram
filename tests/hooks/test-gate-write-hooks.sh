@@ -63,6 +63,10 @@ check "a Write under the tree's .git (a handoff): let through (451 T307)" 0 "$(r
 # 451 T406: the same commit sent INTO the gated tree from a session standing in another is held; that tree's own commit is not
 check "git -C the gated tree commit, from another tree: refused (451 T406)" 2 "$(run "$OTHER" "$(printf '{"tool_name":"Bash","tool_input":{"command":"git -C %s commit -qm x"}}' "$R")")"
 check "make -C the gated tree tick, from another tree: refused (451 T406, T409)" 2 "$(run "$OTHER" "$(printf '{"tool_name":"Bash","tool_input":{"command":"make -C %s tick F=1 T=T1 NOTE=x"}}' "$R")")"
+# 451 T430: an Edit or a shell write sent INTO the gated tree from another is held; that tree's own is not
+check "an Edit of the gated tree, from another tree: refused (451 T430)" 2 "$(run "$OTHER" "$EDIT")"
+check "a cp into the gated tree, from another tree: refused (451 T430)" 2 "$(run "$OTHER" "$(printf '{"tool_name":"Bash","tool_input":{"command":"cp /tmp/x %s/a.txt"}}' "$R")")"
+check "a cp in another tree, from it: let through (451 T430)" 0 "$(run "$OTHER" '{"tool_name":"Bash","tool_input":{"command":"cp /tmp/x a.txt"}}')"
 pkill -f "sleep $NAP" 2>/dev/null
 
 echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
