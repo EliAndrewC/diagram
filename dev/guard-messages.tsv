@@ -398,6 +398,7 @@ d9f116a975186ba7	BASELINE	244	engine-freeze-hooks	refuse	unreviewed - stood befo
 da7d5fa4f8518fbe	BASELINE	1263	readme-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: writing a README (> <path>). A README is not loaded into
 da8cd5248acd45fc	BASELINE	624	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
 dafb0239f4ca40cd	BASELINE	169	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: args is a JSON string - pass the object itself: args:
+db116a131ed264b2	PASS	71	clone-sync-hooks	notice	a20831df02fee8ad3		lane: batch N-N landed - N TN (N change(s), N run(s), N.N
 db48ee4c398dc2a1	PASS	893	context-cap-hooks	refuse	ab7bffa0599f317c4		BLOCKED: this builder's context is N tokens, past the cap of N:
 dbbb6a0e05562710	BASELINE	410	house-style-hooks	notice	unreviewed - house-style's both-spellings notice, a family of 2 keys: 20 shown a session, 8,300 characters, under 2 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		House style, in this command payload: `—`. Not corrected for you: this
 dc313787eeee5b77	PASS	815	context-cap-hooks	refuse	ae10733670bca1dd3		BLOCKED: this builder's context is N tokens, past the cap of N:
