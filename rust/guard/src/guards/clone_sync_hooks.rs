@@ -357,7 +357,6 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
     if !clone.join(".git").is_dir() {
         return Vec::new();
     }
-    let canon = cx.session.canonical();
     let claim = || {
         if !sid.is_empty() {
             let _ = std::fs::create_dir_all(cx.mapdir());
@@ -368,7 +367,9 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
         claim();
         return Vec::new();
     }
-    if let Some(refused) = misrouted(cx, &clone, canon.as_deref(), sid) {
+    // the session's name only here, where `misrouted` judges by it (451 T384): a dirty clone's edit, let through above, read the
+    // whole transcript for it where no `/rename` stood (643 ms a call on 294 MB, measured 2026-11-27)
+    if let Some(refused) = misrouted(cx, &clone, cx.session.canonical().as_deref(), sid) {
         return vec![refused];
     }
     claim();

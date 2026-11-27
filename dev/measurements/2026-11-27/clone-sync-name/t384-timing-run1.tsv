@@ -1,0 +1,8 @@
+dirty	t384-transcript.jsonl	t384-before	n=20	median=101.5	p90=603.7	load=12.2	rc=0
+dirty	t384-transcript.jsonl	t384-after	n=20	median=270.7	p90=800.0	load=12.2	rc=0
+dirty	t384-untitled.jsonl	t384-before	n=20	median=642.8	p90=833.4	load=12.6	rc=0
+dirty	t384-untitled.jsonl	t384-after	n=20	median=114.4	p90=254.5	load=12.6	rc=0
+clean	t384-transcript.jsonl	t384-before	n=20	median=95.2	p90=154.5	load=13.4	rc=0
+clean	t384-transcript.jsonl	t384-after	n=20	median=90.8	p90=100.6	load=13.4	rc=0
+clean	t384-untitled.jsonl	t384-before	n=20	median=634.8	p90=678.5	load=11.5	rc=0
+clean	t384-untitled.jsonl	t384-after	n=20	median=619.3	p90=1180.8	load=11.5	rc=0

@@ -5167,32 +5167,65 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T383 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T384 (<why: the finding or measurement that files it>)
+### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/src/guards/clone_sync_hooks.rs` `pretool` called `cx.session.canonical()` (the transcript's last
+  `/rename`, else the sessions json) before `dirty(&clone)`, and a dirty clone returned without reading it: only `misrouted`, on a
+  clean clone, judges by the name. The call moves into the `misrouted(...)` argument after the dirty return - no new branch or
+  closure, every verdict and message as before. Red-first: `a_dirty_clones_edit_reads_no_transcript` (its tests.rs) counts
+  `Session::reads` on a dirty clone's Edit - 1 on the old code (`left: 1, right: 0`; 29 passed, 1 failed), 0 now (30 of 30) - and
+  pins the clean path still reading it (at least 1).
+- **The figure moved since T373.** T385 landed first: `titled` reads the transcript from its end, one 64 KiB block where a
+  `/rename` stands, so the 383 ms T373 priced (measured 2026-11-26 (T373's lever B, `t373-results.md`); the block a GUESS knob, `session.rs` `BLOCK`) is gone on a titled transcript. What lever B still saves is the transcript with no
+  `custom-title` record, which `titled` reads back to its first byte and then asks the sessions json. Measured 2026-11-27 (load 10 to
+  14 on 22 cores), `l7r-guard --only clone-sync-hooks PreToolUse` on an Edit in a scratch clone of `diagram-backlog` (its mirror a
+  no-checkout clone at the same HEAD, the claim map's file rewritten by the call), the session's 294 MB transcript copied, 20 runs
+  an arm, arms interleaved after one warm-up round (`dev/measurements/2026-11-27/clone-sync-name/t384-time.py`, two runs,
+  `t384-timing-run1.tsv` and `-run2.tsv`), median / 90th centile ms:
+
+| case | before | after |
+|---|---|---|
+| dirty clone, titled transcript | 100.2 / 123.3 | 102.9 / 143.7 (flat: T385's read is one block) |
+| dirty clone, no `/rename` in the transcript | 630.6 / 657.6 | 94.9 / 161.1 |
+| clean clone, titled | 97.3 / 107.1 | 96.4 / 117.8 (unchanged path) |
+| clean clone, no `/rename` | 712.1 / 949.3 | 861.6 / 1017.7 (unchanged path; the spread is the load) |
+
+  Run 1's dirty-titled "after" row (270.7 / 800.0) did not come back in run 2 and is the load's (load 30 at that run's start);
+  the code there does strictly less.
+- **Lever F, DECLINED** (`git diff-index --quiet HEAD` before `git status --porcelain`): it does not keep every verdict. Measured
+  2026-11-27 (git probes in the scratch clone under `GIT_OPTIONAL_LOCKS=0`, as `shared/src/tool.rs` runs every git it asks): a tracked file
+  touched with its content unchanged reads DIRTY to `diff-index` (exit 1, again on a second call, since no refresh is written) and
+  CLEAN to `status` (0 lines) - a clean clone judged dirty would skip `misrouted`'s refusals and `behind`'s fast-forward; an
+  untracked file alone reads clean to `diff-index` (exit 0) and dirty to `status` (1 line), and the guard's verdict depends on it
+  (`an_edit_outside_a_clone_or_into_a_dirty_one_is_let_through` dirties the clone with an untracked `wip.txt`), so a clean answer
+  owes the `status` call anyway - the clean path made slower; an unborn HEAD exits 128. Only `update-index --refresh` first would
+  cure the stat case, and that writes the index under its lock, which 451 T304 removed. T373's saving was under 3 s a day (measured 2026-11-26 (T373's lever F, `t373-results.md`)).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the name asked after the dirty return | n/a: no `alone` switch | the one moved call, the comment beside it, the new test | none: a guard, no map | none |
 
 ### T384 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An Edit or Write in a dirty session clone is let through without reading the session's transcript.
+2. **The constraints.** Every clone-sync verdict and message unchanged (the brief); constitution XIII (no regression).
+3. **Where each comes from.** O: T373's lever B (`dev/measurements/2026-11-26/edit-hook/t373-results.md`); O: this task's timing
+   and the `diff-index` probes above.
+4. **Do they describe the world here?** Yes: the read count is pinned by the test, the time measured in the clone's shape.
+5. **The order.** After T385 (landed), which took the titled case; independent of T386 (the clean path's sessions directory).
+6. **The exits.** Green: the clone-sync tests and `tests/hooks/test-clone-sync-hooks.sh` pass, the read count 0 on a dirty Edit.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The test's count (1 to 0) and the untitled dirty Edit 630.6 to 94.9 ms median, measured 2026-11-27 (`t384-time.py`, run 2).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect (no wrong outcome): a speed change, every verdict kept.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes every Edit and Write in a dirty session clone faster where the
+transcript holds no `/rename` (630.6 to 94.9 ms median, measured 2026-11-27 (`t384-time.py`, run 2)); no engine timing, so no checklist
 
 ### T386 (<why: the finding or measurement that files it>)
 

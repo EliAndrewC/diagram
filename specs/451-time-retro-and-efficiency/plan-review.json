@@ -3115,14 +3115,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T384 (<why: the finding or measurement that files it>)": {
-   "sha256": "0c8bc1fdd2979ef1a488f006a65ee5cb71ee58c63e9c06cfa3a336e772129e05",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T384 Approach (checklist part A)": {
-   "sha256": "3fe6fc5d32860eb0f383d94d076781a05a513d8b7aa4d801f72ad13dc4107c20",
+   "sha256": "2bbd7da1fe1e92d9702108baf80c01e927d956adce8d17e98481302d5883c07d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4046,7 +4040,7 @@
    "declared": "spec-fidelity"
   },
   "### T463 Approach (checklist part A)": {
-   "sha256": "7456e04037d9e1dfdc4ac61981cdf834e5a29a883f15921bf812a299cab07f9f",
+   "sha256": "212cfbb7e5d45092d7367995bef902a25699bbfca95a9b1b9f521d03ad565a39",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,18 @@
   },
   "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))": {
    "sha256": "61823d6bd9c311a4f580c5d268956042d8c78135c0551d78575ba3b46877af10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)": {
+   "sha256": "0a0bd6fefebc2998b894b726aebb6b4faf5e0d58a78820b4918b311482e7f01f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T463 (<why: the finding or measurement that files it>)": {
+   "sha256": "f6908a8df6cb5f468f1ba944129f431d74b3aeaf0e272083d045de67dd052be2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -39017,6 +39023,101 @@
      "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)",
+    "### T384 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) argument, after the dirty-clone return; no new branch, every verdict and message unchanged",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements'): the name is read only on the path that judges by it, so the dirty-clone Edit stops reading the transcript; the clean path is untouched and the block keeps every verdict (constitution XIII)."
+    },
+    {
+     "id": "T384-test",
+     "summary": "red-first test a_dirty_clones_edit_reads_no_transcript counts Session::reads (1 before, 0 after) and pins the clean path still reading",
+     "class": "within",
+     "why": "Enforcement of the change the task makes and of the unchanged clean path; it only fails when the requested speed-up is absent or the clean verdict path stops reading the name. Not unrequested scope."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "T373's lever F (git diff-index --quiet HEAD before git status --porcelain) declined, and its cure (update-index --refresh first) not taken",
+     "class": "within",
+     "why": "Lever F is the session's own proposal, not the GM's words; the block measures that it gives wrong verdicts (a stat-touched clean clone judged dirty skips misrouted's refusals and behind's fast-forward; an untracked file still owes the status call, slowing the clean path) - a defect it would introduce - and the cure would reintroduce an index write under its lock that 451 T304 removed. Declining a lever that changes verdicts narrows nothing the GM asked; prioritizing performance does not ask for a speed-up that breaks a guard."
+    },
+    {
+     "id": "T384-order",
+     "summary": "after T385 (landed, which took the titled case); independent of T386 (the clean path's sessions directory)",
+     "class": "within",
+     "why": "Sequencing only; the remaining clean/untitled cost is named to T386 rather than left unowned, so no known defect is carried and nothing is narrowed."
+    },
+    {
+     "id": "T384-not-a-defect",
+     "summary": "classed as a speed change, not a defect fix; found-and-left none",
+     "class": "within",
+     "why": "No wrong outcome is involved: every verdict is kept, so constitution XIV's defect rules do not reach it; the slower clean-untitled row is the unchanged path under load, as the block states, not a regression the code could cause (it does strictly less on the dirty path and the same on the clean one)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)",
+    "### T384 Approach (checklist part A)",
+    "### T463 (<why: the finding or measurement that files it>)",
+    "### T463 Approach (checklist part A)",
+    "(removed) ### T384 (<why: the finding or measurement that files it>)",
+    "(removed) ### T395 (<why: the finding or measurement that files it>)",
+    "(removed) ### T395 Approach (checklist part A)",
+    "(removed) ### T416 (<why: the finding or measurement that files it>)",
+    "(removed) ### T416 Approach (checklist part A)",
+    "(removed) ### T421 (<why: the finding or measurement that files it>)",
+    "(removed) ### T421 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) call after the dirty-clone return, so a dirty clone's Edit/Write reads no transcript; every verdict and message unchanged, pinned red-first by a_dirty_clones_edit_reads_no_transcript (reads 1 -> 0, clean path still >= 1).",
+     "class": "within",
+     "why": "A [perf] task under FR-013 and the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?': it makes the builders' loop faster (untitled dirty Edit 630.6 -> 94.9 ms median, dated and with method) and changes no outcome, so constitution XIII is kept. The clean untitled row moving 712 -> 862 ms is on the unchanged path and is a timing signal, not a stop."
+    },
+    {
+     "id": "T384-figure-restated",
+     "summary": "The saving is restated against T385's landing: the titled transcript is already one 64 KiB block, so what lever B still saves is the transcript with no custom-title record; T373's 383 ms is not claimed.",
+     "class": "within",
+     "why": "Restating a measured figure to what the current code does is the project's standing rule (a figure measured, never remembered); it narrows no request clause."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "Lever F (git diff-index --quiet HEAD before git status --porcelain) is declined: measured 2026-11-27 it judges a stat-touched clean clone dirty (skipping misrouted's refusals and behind's fast-forward) and an untracked-only clone clean (so status is still owed, the clean path slower); the only cure, update-index --refresh, writes the index under the lock T304 removed; T373 priced it under 3 s a day.",
+     "class": "within",
+     "why": "The GM asked for performance improvements to be prioritized, not for this lever; nothing in request.md or the cited FRs names it. An optimization that would change the guard's verdicts (a clean clone let past its refusals) is a wrong outcome under constitution XIV, so declining it preserves correct behavior rather than narrowing what was asked. The reason is measured, not argued."
+    },
+    {
+     "id": "T384-checklist",
+     "summary": "Part A filled: goal, constraints (every verdict unchanged; XIII), sources O: T373 results and this task's probes, order after T385 and independent of T386, exits green/red, done = read count 1 -> 0 and 630.6 -> 94.9 ms; 'Not a defect' (speed only); Found and left: none; Performance work: yes, [perf], no engine checklist.",
+     "class": "within",
+     "why": "Each answer follows from the approach above; leaving the clean untitled path to T386 is ordering of separately filed perf work, not a defect left."
+    },
+    {
+     "id": "T463-template",
+     "summary": "T463's section and checklist added as the unfilled template.",
+     "class": "within",
+     "why": "Placeholder text only; it decides nothing."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "Unfilled template sections removed: T384's old placeholder header (replaced by the filled T384 section above) and T395, T416 and T421 (both parts), which were ticked in cb852f0a27.",
+     "class": "within",
+     "why": "Each removed block was template text with no decision in it (earlier.md); removing it drops nothing the GM asked for. FR-044 says a removed section owes no review."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -59054,6 +59155,44 @@
      "summary": "Ordered after T406 and before T307's tick; tagged [perf] under FR-013 because a voided gate owes the whole make done again (about ten minutes, labeled as the brief's figure).",
      "class": "within",
      "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T384": {
+   "section_sha256": "fb8e398d2bb13428378ff47c11a70c42dba230965af0a128b2dcc4512368a178",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) argument, after the dirty-clone return; no new branch, every verdict and message unchanged",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements'): the name is read only on the path that judges by it, so the dirty-clone Edit stops reading the transcript; the clean path is untouched and the block keeps every verdict (constitution XIII)."
+    },
+    {
+     "id": "T384-test",
+     "summary": "red-first test a_dirty_clones_edit_reads_no_transcript counts Session::reads (1 before, 0 after) and pins the clean path still reading",
+     "class": "within",
+     "why": "Enforcement of the change the task makes and of the unchanged clean path; it only fails when the requested speed-up is absent or the clean verdict path stops reading the name. Not unrequested scope."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "T373's lever F (git diff-index --quiet HEAD before git status --porcelain) declined, and its cure (update-index --refresh first) not taken",
+     "class": "within",
+     "why": "Lever F is the session's own proposal, not the GM's words; the block measures that it gives wrong verdicts (a stat-touched clean clone judged dirty skips misrouted's refusals and behind's fast-forward; an untracked file still owes the status call, slowing the clean path) - a defect it would introduce - and the cure would reintroduce an index write under its lock that 451 T304 removed. Declining a lever that changes verdicts narrows nothing the GM asked; prioritizing performance does not ask for a speed-up that breaks a guard."
+    },
+    {
+     "id": "T384-order",
+     "summary": "after T385 (landed, which took the titled case); independent of T386 (the clean path's sessions directory)",
+     "class": "within",
+     "why": "Sequencing only; the remaining clean/untitled cost is named to T386 rather than left unowned, so no known defect is carried and nothing is narrowed."
+    },
+    {
+     "id": "T384-not-a-defect",
+     "summary": "classed as a speed change, not a defect fix; found-and-left none",
+     "class": "within",
+     "why": "No wrong outcome is involved: every verdict is kept, so constitution XIV's defect rules do not reach it; the slower clean-untitled row is the unchanged path under load, as the block states, not a regression the code could cause (it does strictly less on the dirty path and the same on the clean one)."
     }
    ],
    "verdict": "CLEAR"

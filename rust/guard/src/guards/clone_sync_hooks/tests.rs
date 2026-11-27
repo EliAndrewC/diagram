@@ -426,6 +426,36 @@ fn a_parked_background_job_shares_its_parkers_clone() {
     }
 }
 
+/// The transcript reads one Edit of `a.txt` in the clone makes (`Session::reads`).
+fn edit_reads(w: &World, transcript: &str) -> u32 {
+    let input = json!({"session_id": "s", "transcript_path": transcript, "tool_name": "Edit", "tool_input": {"file_path": w.clone.join("a.txt").to_string_lossy()}});
+    let session = w.session(&input);
+    let event = Event {
+        name: "PreToolUse".to_owned(),
+        input,
+    };
+    let got = judge(&Ctx {
+        event: &event,
+        session: &session,
+        main: w.main.clone(),
+        tree: w.tree.clone(),
+        solo_forced: Some("0".to_owned()),
+    });
+    assert!(got.is_empty(), "{got:?}");
+    session.reads.get()
+}
+
+/// 451 T384: a dirty clone's Edit is let through without the session's name, so it reads no transcript (the name was asked first:
+/// one read, the whole transcript where it holds no `/rename`); a clean clone's still asks it, to judge where the edit is routed.
+#[test]
+fn a_dirty_clones_edit_reads_no_transcript() {
+    let w = World::new("lazy-name");
+    let me = w.titled("mine");
+    assert!(edit_reads(&w, &me) >= 1);
+    std::fs::write(w.clone.join("wip.txt"), "x").unwrap();
+    assert_eq!(edit_reads(&w, &me), 0);
+}
+
 #[test]
 fn a_clean_clone_on_main_is_claimed_and_one_behind_a_stray_is_refused() {
     let w = World::new("stray");
