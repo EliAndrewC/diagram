@@ -341,3 +341,34 @@ fn the_named_brief_for_performance_work_meets_no_performance_first_refusal() {
     );
     drop(dir);
 }
+
+/// 451 T408: a tree handed out by hand - `make builder-tree`, or `make builder-brief T=<a task picked by hand>` through it -
+/// names on stderr each task in flight its queue entry overlaps, a notice and never a refusal; nothing where it overlaps none or
+/// the task has no entry.
+#[test]
+fn a_handout_by_hand_names_the_tasks_in_flight_its_entry_overlaps() {
+    let (dir, root, mut e, held) = queued("queue-take-overlap");
+    e.cap = 4;
+    // another feature's file of that name in another form is passed, as `make builder-done`'s step 1 passes it
+    put(&root, "specs/9002-y/queue.txt", "not a queue line\n");
+    let took = builder_tree::run(&words(&["take", "T02", "9001"]), &root, &e);
+    assert_eq!(took.code, 0, "{}", took.stderr);
+    let notice = format!("builder-tree: NOTICE - 9001 T02's queue entry (line 3 of specs/9001-x/queue.txt) overlaps 9001 T01 in flight at rust/guard ({}): the second of the two to land meets the first's edits; make builder-next names an entry that overlaps nothing in flight\n", held.display());
+    assert!(took.stderr.contains(&notice), "{}", took.stderr);
+    assert_eq!(took.stderr.matches("NOTICE").count(), 1);
+    // its own entry, in flight in the tree just taken, is not named against itself; asked again, the notice again
+    let again = builder_tree::run(&words(&["take", "T02", "9001"]), &root, &e);
+    assert!(again.stderr.contains(&notice), "{}", again.stderr);
+    // no overlap, a landed entry, no entry, a feature with no queue: nothing
+    for (task, feature) in [
+        ("T03", "9001"),
+        ("T08", "9001"),
+        ("T09", "9001"),
+        ("T01", "77"),
+    ] {
+        let quiet = builder_tree::run(&words(&["take", task, feature]), &root, &e);
+        assert!(!quiet.stderr.contains("NOTICE"), "{task}: {}", quiet.stderr);
+        builder_tree::run(&words(&["release", task, feature]), &root, &e);
+    }
+    drop(dir);
+}

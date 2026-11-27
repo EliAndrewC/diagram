@@ -6290,31 +6290,32 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T408 (<why: the finding or measurement that files it>)
+### T408 (left by 451 T313's build half, its first DEVIATION and its Found and left: a handout made by hand names no overlap, which is T297's literal first half, "at dispatch, name the overlap - make builder-tree compares the task's expected files")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: at the take, after a tree is handed out (warm, cold or already held - `builder_tree::run`'s `take` arm, code 0, beside the sampler's line), `builder_queue::overlapping` (gate, `rust/gate/crates/task/src/builder_queue.rs`) reads every readable queue of the clone through `l7r_shared::builder_queue::board` - the board `make queue` and `make builder-done`'s step 1 read, an unreadable file passed as they pass it - finds the task's own open entry (the first of its feature's lines naming it that is neither landed nor built) and prints, for each entry of any queue in flight but its own, a `builder-tree: NOTICE - ...` line where `l7r_shared::builder_queue::overlap` names a shared path. One reader and one overlap rule, no copy: nothing here compares paths. Never a refusal: the take's reply and code are what they were. `make builder-brief` takes its tree through `builder_tree::run` and passes the take's stderr on, so a hand-picked brief says it too.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a hand handout names each task in flight its entry overlaps; its own entry, no overlap, a landed entry, no entry and a feature with no queue print nothing; an unreadable queue is passed | `a_handout_by_hand_names_the_tasks_in_flight_its_entry_overlaps` of `rust/gate/crates/task`, red on the old take (item 9) | n/a: tooling | none | n/a |
 
 ### T408 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session that hands a tree to a task it picked by hand is told, at that moment, which task in flight its queue entry overlaps, so it can pick another before two builders edit one file - not after, at the carry's conflict.
+2. **The constraints.** The overlap rule and the states are `l7r_shared::builder_queue`'s, read and never copied (T313's module doc, T297); a notice and never a refusal (the task line); the take's own output and code unchanged, so `make builder-brief`'s marker and the pool guard read the same tree.
+3. **Where each comes from.** G: the GM's words of 2026-11-26 on T313 ("something that we want our tooling to actually enforce"), carried by T297's and T408's lines. O: T313's plan section, its first DEVIATION and its Found and left (this file).
+4. **Do they describe the world here?** Read 2026-11-27: `builder_brief::run` calls `builder_tree::run(["take", ...])` and prepends `took.stderr` to its notes (`rust/gate/crates/task/src/builder_brief.rs`), so the one call site in `run` covers both commands; `builder_queue::dispatch` reads every queue with `queue::board` and passes an unreadable one, the shape followed here.
+5. **The order.** After 451 T313 (the queue, landed in the clone this tree was handed out at). Before T22, as T313's Found and left orders it.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/task"` in the builder's tree; the full gate with its coverage at the batch's landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task`, the new test over the old take): 133 passed, 1 failed - `a_handout_by_hand_names_the_tasks_in_flight_its_entry_overlaps`, at its notice assertion. Green after, measured 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/task"`): 134 passed, lint and format clean. Every branch of `overlapping` is met by the one test: the overlapping entry named (T02 against T01 at `rust/guard`), the task's own in-flight entry passed, an entry in no conflict (T03), a landed entry (T08), a task with no entry (T09), a feature with no queue (77) and a queue file that does not parse (9002).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map, sheet or research claim changes. What a session sees differently: `make builder-tree T=<n>` and `make builder-brief T=<n>` print a NOTICE line naming the task in flight, the shared path and its tree where the task's queue entry overlaps one, and nothing more where it does not.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a notice that prevents a merge conflict.
 
 
 ### T412 (<why: the finding or measurement that files it>)

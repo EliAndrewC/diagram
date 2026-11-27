@@ -3655,14 +3655,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T408 (<why: the finding or measurement that files it>)": {
-   "sha256": "a7da2f3f28893127e62b81830cc6d28975e2fa34a9cbe6a3b749fc943a208565",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T408 Approach (checklist part A)": {
-   "sha256": "448bb295e53e8ea8796c697a39e8b4534a92f6aeb1739d95d76aa8633f16171d",
+   "sha256": "7ee40371e797ac593134a8178719f3b4ba3c1f137f3ff45d2991f8a86f1335b5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3945,6 +3939,12 @@
   },
   "### T447 Approach (checklist part A)": {
    "sha256": "9bdebbd423625e1ace72c14c4caedf7a082f9a6d18ff280e71d99d41a30fca71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T408 (left by 451 T313's build half, its first DEVIATION and its Found and left: a handout made by hand names no overlap, which is T297's literal first half, \"at dispatch, name the overlap - make builder-tree compares the task's expected files\")": {
+   "sha256": "0617665934b607eef72dd0d87abad5fa1d5d34d2af2b64251c95bc6a2a010716",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35370,6 +35370,65 @@
      "class": "within",
      "summary": "T447's heading and checklist blocks are the unfilled template.",
      "why": "They make no decision. T447's plan is owed when it is decided."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T408 (left by 451 T313's build half, its first DEVIATION and its Found and left: a handout made by hand names no overlap, which is T297's literal first half, \"at dispatch, name the overlap - make builder-tree compares the task's expected files\")",
+    "### T408 Approach (checklist part A)",
+    "(removed) ### T408 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T408-where",
+     "summary": "The overlap is named at the take in builder_tree::run, after any handout (warm, cold or already held), code 0, beside the sampler's line; make builder-brief inherits it by passing the take's stderr on.",
+     "class": "within",
+     "why": "T297's first half as the task heading quotes it: 'at dispatch, name the overlap - make builder-tree compares the task's expected files'. A take is the dispatch point for a hand-picked task, and builder-brief taking its tree through the same call reaches the other hand route with no second copy."
+    },
+    {
+     "id": "T408-one-rule",
+     "summary": "Reads every queue through l7r_shared::builder_queue::board and decides overlap with l7r_shared::builder_queue::overlap; nothing in the new code compares paths.",
+     "class": "within",
+     "why": "Reusing the queue's one reader and one overlap rule is how the existing check is applied to this route. It adds and removes nothing the request or T297 asked for."
+    },
+    {
+     "id": "T408-notice",
+     "summary": "A NOTICE line per overlapping in-flight entry; never a refusal; the take's reply and exit code unchanged.",
+     "class": "within",
+     "why": "The task the block implements asks to NAME the overlap at dispatch (T297's literal words), and that is what this does. No GM words in request.md ask for a hand handout with an overlap to be refused: the GM's T313 words ('something that we want our tooling to actually enforce') are about keeping the pool full, and his T285 words are about worktree creation. So notice-only fulfils the task as written. It does not narrow it."
+    },
+    {
+     "id": "T408-own-entry",
+     "summary": "The task's own entry is the first of its feature's lines naming it that is neither landed nor built; its own entry, landed entries, no entry and a feature with no queue print nothing.",
+     "class": "within",
+     "why": "Comparing an entry with itself, or with work already landed, is not an overlap between two builders. Excluding them is what naming the overlap with tasks in flight means."
+    },
+    {
+     "id": "T408-unreadable",
+     "summary": "A queue file that does not parse is passed over, as make queue and builder-done's step 1 pass it.",
+     "class": "within",
+     "why": "Follows the existing readers' behavior (builder_queue::dispatch). The task is a notice that never refuses, so the take does not fail on a bad queue file, and the test pins this case (9002)."
+    },
+    {
+     "id": "T408-test",
+     "summary": "One red-first test, a_handout_by_hand_names_the_tasks_in_flight_its_entry_overlaps, covers every branch; red measured 133/1 and green 134 on 2026-11-27 by the named commands.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (FR-012's red-first rule; GM 2026-09-20: a test that makes the asked-for thing happen serves the request). The figures carry dated one-shot labels with their methods."
+    },
+    {
+     "id": "T408-order-exits",
+     "summary": "Ordered after T313 and before T22; green is builder-checks on the crate in the builder's tree, with full gate and coverage at the batch landing; a one-landing budget.",
+     "class": "within",
+     "why": "Matches the GM's two-tier ruling (T308: 'a builder runs no coverage'; full rigor deferred to the session clone's gate) and the order T313's Found and left sets."
+    },
+    {
+     "id": "T408-template-removed",
+     "summary": "The template heading '### T408 (<why ...>)' and its placeholder approach are removed, replaced by the filled block under its real heading.",
+     "class": "within",
+     "why": "The removed block held only template placeholders and no decision. Its content is now in the filled block, so removing it drops nothing that was asked for."
     }
    ]
   }

@@ -741,8 +741,12 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env) -> Reply {
     }
     match (arg(0), arg(1)) {
         ("take", t) if !t.is_empty() => {
-            let mut r = take(&p, &task_list(t), &feature_key(arg(2)), env);
+            let (tasks, feature) = (task_list(t), feature_key(arg(2)));
+            let mut r = take(&p, &tasks, &feature, env);
             if r.code == 0 {
+                // the tasks in flight its queue entry overlaps, said and never refused (451 T408)
+                r.stderr
+                    .push_str(&crate::builder_queue::overlapping(&p, &tasks, &feature));
                 r.stderr.push_str(&sampler(&p, env));
             }
             r

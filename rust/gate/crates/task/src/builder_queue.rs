@@ -225,6 +225,42 @@ pub(crate) fn dispatch(p: &Pool, feature: &str) -> String {
     }
 }
 
+/// THE OVERLAP AT A HANDOUT (451 T408, the first half of T297's line: "at dispatch, name the overlap"): a tree handed to `tasks` of
+/// `feature` - by `make builder-tree`, or `make builder-brief T=<a task picked by hand>` through it - says on stderr each task in
+/// flight, in any queue of the clone, whose entry the task's own open entry overlaps ([`queue::overlap`], the one rule `make
+/// builder-next` passes an entry over by). A notice, never a refusal: the second of the two to land meets the first's edits at its
+/// carry. Nothing where the feature has no readable queue, the task no open entry, or the entry overlaps none.
+pub(crate) fn overlapping(p: &Pool, tasks: &[String], feature: &str) -> String {
+    let trees = builder_pool::read(&p.common);
+    let all: Vec<(Board, String)> = queue::queues(&p.clone)
+        .iter()
+        .filter_map(|dir| {
+            let b = queue::board(&p.clone, &p.common, dir, &trees).ok()?;
+            Some((b, under(p, dir)))
+        })
+        .collect();
+    let mine = |e: &queue::Entry| e.tasks.iter().any(|t| tasks.contains(t));
+    let Some((own, at)) = all.iter().find(|(b, _)| b.key == feature) else {
+        return String::new();
+    };
+    let open =
+        |(e, s): &(&queue::Entry, &State)| mine(e) && !matches!(s, State::Landed | State::Built(_));
+    let Some((e, _)) = own.entries.iter().zip(&own.states).find(open) else {
+        return String::new();
+    };
+    let mut out = String::new();
+    for (b, _) in &all {
+        for (o, s) in b.entries.iter().zip(&b.states) {
+            let State::InFlight(tree) = s else { continue };
+            let Some(path) = queue::overlap(e, o).filter(|_| b.key != feature || !mine(o)) else {
+                continue;
+            };
+            let _ = writeln!(out, "builder-tree: NOTICE - {feature} {}'s queue entry (line {} of {at}) overlaps {} {} in flight at {path} ({}): the second of the two to land meets the first's edits; make builder-next names an entry that overlaps nothing in flight", e.name(), e.line, b.key, o.name(), tree.display());
+        }
+    }
+    out
+}
+
 /// `make queue-add`: one entry appended to the feature's queue.
 fn add(p: &Pool, args: &[String], note: &str) -> Reply {
     let arg = |i: usize| args.get(i).map_or("", String::as_str);
