@@ -568,3 +568,15 @@ fn a_task_verdict_survives_a_typo_only_once_its_reviewed_section_is_committed() 
     git(&root, &["commit", "-qm", "the reviewed section"]);
     assert!(current(&typo) && !current(&digit));
 }
+
+/// RED FIRST (451 T472): a red gate's ruling now owes ONE section for the batch, `### T05, T06 part B (<UTC>)`; quiet, it leaves its
+/// first task's section reviewed as a one-task part B does, or every red would cost that task a re-review.
+#[test]
+fn a_quiet_bundle_part_b_leaves_its_first_task_s_section_reviewed() {
+    let sec = "## T05 - x\n\n### T05 Approach (checklist part A)\n\n1. **G.** y\n\n### T05 Decisions\n\n**D10 - a rule.** z\n\n";
+    let plan = format!("# Plan\n\n{sec}");
+    let review = task_review(sec, "T05");
+    let block = "### T05, T06 part B (2026-10-19T01:30Z)\n\n4. **Moving?** No.\n5. **Tuning or changing?** Neither.\n\n";
+    let text = plan.replace("### T05 Decisions", &format!("{block}### T05 Decisions"));
+    assert!(task_current(&review, &text, "T05", None));
+}

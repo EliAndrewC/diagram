@@ -234,20 +234,48 @@ pub(super) fn owe(
     part: &str,
     now: Option<&str>,
 ) -> String {
+    owe_all(root, feature, &[task.to_owned()], trigger, part, now)
+}
+
+/// Record that each of `tasks` owes `part` after `trigger`; the message naming the ONE block that answers for them all - a bundle
+/// heading, `### T1, T2 part B (<UTC>)`, which [`task_blocks`] reads as each task's (451 T472) - or "" where `tasks` is empty.
+fn owe_all(
+    root: &Path,
+    feature: &str,
+    tasks: &[String],
+    trigger: &str,
+    part: &str,
+    now: Option<&str>,
+) -> String {
+    let Some(first) = tasks.first() else {
+        return String::new();
+    };
     let when = now.map_or_else(rfc3339_now, str::to_owned);
     let mut rows = owed_entries(root);
-    let same = |r: &Value| r["feature"] == feature && r["task"] == task && r["trigger"] == trigger;
-    if !rows.iter().any(same) {
-        rows.push(json!({"feature": feature, "task": task, "trigger": trigger, "part": part, "utc": when}));
+    let before = rows.len();
+    for task in tasks {
+        let same =
+            |r: &Value| r["feature"] == feature && r["task"] == *task && r["trigger"] == trigger;
+        if !rows.iter().any(same) {
+            rows.push(json!({"feature": feature, "task": task, "trigger": trigger, "part": part, "utc": when}));
+        }
+    }
+    if rows.len() > before {
         let _ = std::fs::write(git_dir(root).join(OWED), super::pretty(&Value::Array(rows)));
     }
     let minute = when.chars().take(16).collect::<String>();
+    let named = tasks.join(", ");
     let head = if part == "B" {
-        format!("### {task} part B ({minute}Z)")
+        format!("### {named} part B ({minute}Z)")
     } else {
-        format!("### {task} Approach (re-answered {minute}Z)")
+        format!("### {named} Approach (re-answered {minute}Z)")
     };
-    format!("approach owed: {trigger} - {task} owes the checklist's {}, answered before the next attempt: add `{head}` to specs/{feature}/plan.md directly after {task}'s other sections (never at the plan's end: {PLACE}), every item of part {part} numbered; `make tick` refuses {task} until it is there", part_title(part))
+    let title = part_title(part);
+    let place = format!("to specs/{feature}/plan.md directly after {first}'s other sections (never at the plan's end: {PLACE}), every item of part {part} numbered");
+    if tasks.len() == 1 {
+        return format!("approach owed: {trigger} - {first} owes the checklist's {title}, answered before the next attempt: add `{head}` {place}; `make tick` refuses {first} until it is there");
+    }
+    format!("approach owed: {trigger} - {named} owe the checklist's {title}, answered before the next attempt: add ONE section `{head}` {place} - it answers for all {}, since a red gate's record names its failing steps, never their files, so no task's share can be told (451 T472), and a task built inside another's section is left out of it (451 T307 part 2); `make tick` refuses each until it is there", tasks.len())
 }
 
 static TASK_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"^### (T\d+)"));
@@ -304,6 +332,9 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
             joined(&missing)
         ));
     }
+    // a bundle's part B stands with its first task's sections, which that task's tick may archive before the others' (451 T472)
+    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let both = format!("{text}\n{done}");
     for row in owed_entries(root) {
         if row["feature"] != *name || row["task"] != task {
             continue;
@@ -315,7 +346,7 @@ pub(super) fn refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<String
         let utc = row["utc"].as_str().unwrap_or("None");
         let (owed, asked) = split_items(&lines, part);
         let (exists, missing) = best(
-            &text,
+            &both,
             task,
             part,
             (&owed, &asked),
@@ -376,13 +407,8 @@ fn in_flight(root: &Path, dir: &Path, active: &str) -> Vec<String> {
     out
 }
 
-/// Charge the trigger to every in-flight task of the active feature; the messages, or None when no task is active.
-pub(super) fn owe_in_flight(
-    root: &Path,
-    trigger: &str,
-    part: &str,
-    now: Option<&str>,
-) -> Option<String> {
+/// The active feature's directory, its name and the in-flight tasks, or None when no task is active.
+fn flight(root: &Path) -> Option<(PathBuf, String, Vec<String>)> {
     let (dir, task) = active_task(root);
     let dir = dir
         .filter(|d| !task.is_empty() && d.join("plan.md").is_file() && checklist(root).is_some())?;
@@ -391,8 +417,20 @@ pub(super) fn owe_in_flight(
         .unwrap_or_default()
         .to_string_lossy()
         .into_owned();
+    let tasks = in_flight(root, &dir, &task);
+    Some((dir, name, tasks))
+}
+
+/// Charge the trigger to every in-flight task of the active feature; the messages, or None when no task is active.
+pub(super) fn owe_in_flight(
+    root: &Path,
+    trigger: &str,
+    part: &str,
+    now: Option<&str>,
+) -> Option<String> {
+    let (_, name, tasks) = flight(root)?;
     Some(
-        in_flight(root, &dir, &task)
+        tasks
             .iter()
             .map(|t| owe(root, &name, t, trigger, part, now))
             .collect::<Vec<_>>()
@@ -400,12 +438,23 @@ pub(super) fn owe_in_flight(
     )
 }
 
-/// The round arbiter ruled: an `hour:` or `red-gate@` ruling owes part B.
+/// The round arbiter ruled: an `hour:` or `red-gate@` ruling owes part B. A red gate's owes ONE section for the batch (451 T472):
+/// the run log keeps a red's failing steps alone (`result: failed: static`, no test or file), so its failures cannot be tied to a
+/// task's files, and tonight's 23, 20 and 20 sections each said the same nine answers but its id. A task a `Built here:` line names
+/// is left out, judged by its host (451 T307 part 2: a heading naming it fills its stub, as T395's, T416's and T421's did).
 pub(super) fn ruled(root: &Path, trigger: &str, now: Option<&str>) -> Option<String> {
     if !RULED_PREFIXES.iter().any(|p| trigger.starts_with(p)) {
         return None;
     }
-    owe_in_flight(root, trigger, "B", now)
+    if !trigger.starts_with("red-gate@") {
+        return owe_in_flight(root, trigger, "B", now);
+    }
+    let (dir, name, tasks) = flight(root)?;
+    let own: Vec<String> = tasks
+        .into_iter()
+        .filter(|t| super::inside::built_inside(&dir, t).is_none())
+        .collect();
+    Some(owe_all(root, &name, &own, trigger, "B", now))
 }
 
 #[cfg(test)]

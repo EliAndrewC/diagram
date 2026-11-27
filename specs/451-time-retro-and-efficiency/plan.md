@@ -7276,58 +7276,73 @@ that batch; the red was not in its change.
 <!-- plan-archive: T468 to T444 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T468 to T468 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T472 (<why: the finding or measurement that files it>)
+### T472 (left by the round arbiter's continue rulings on red-gate@2026-11-27T06:33:54Z and 09:06:32Z: each owed a part B of every started task, 20 rows a trigger in `approach-owed.json`, measured 2026-11-27 (its rows grouped by trigger: 06:33:54Z 20, 09:06:32Z 20, 09:39:16Z 20, 09:39:13Z 20), each section the same nine answers but its id)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a red gate's ruling owes ONE part B section for the batch (`rust/gate/crates/plan/src/plan/approach.rs`: `ruled`, the new `owe_all` and `flight`; `refusal`; `sections.rs`'s `PART_B`).
+  - **What the record supports**, observed 2026-11-27, method: the three red `make done` records of the night read whole (`dev/run-log/2026-11/20261127T063354537938-474335.json`, `...T090632595790-2807679.json`, `...T093907997665-3327132.json`): each names its failing steps only (`result: failed: static hooks-test`, `failed: static`), with no `failed_names` and no file; the owed row (`tree`'s `second_red_gate`) holds `detail`, `kind`, `t` and an empty `unit`; the rulings name files in their prose alone (`why`/`what`, 451 arbiter.jsonl rows 69 and 72). So the failures cannot be tied to a task's done commit or files from what is recorded, and the brief's second route is taken.
+  - **T472-D1, built: a `red-gate@` ruling owes ONE section, `### T1, T2 part B (<UTC>)`, placed directly after the first task's other sections.** Every in-flight task still gets its owed row, so each tick still asks for part B; the one heading answers each, because `task_blocks` reads a task named anywhere in a bundle heading as its own, and `apart` reads a bundle's part B as its first task's. An `hour:` ruling and the cohort's newly failing seed (`owe_in_flight`) still owe one section a task: their message is unchanged. Label: CONVENTION (tooling; no research claim). Reason: the brief ("if the failures cannot be tied to files from what is recorded, owe ONE section for the batch"); narrowing by files was not possible on the record above.
+  - **T472-D2, built: a task a `Built here:` line names is left out of the bundle and owes nothing** (`inside::built_inside`). Label: CONVENTION. Reason: 451 T307 part 2: a heading naming such a task fills its stub (`template::without_stub` reads `### T1, T395 part B` as T395's), which refused T395, T416 and T421 tonight; its host's section answers for it.
+  - **T472-D3, built: an owed part B is read from `plan-done.md` too** (`refusal`), so a bundle archived with its first task's sections at that task's tick still answers for the others. Label: CONVENTION.
+  - **T472-D4, built: a quiet bundle part B leaves its first task's section reviewed** (`PART_B` takes `### T5, T6 part B (`), as a one-task part B whose item 4 is "No" and item 5 "Neither" does (385 T75, D94). Found building D1: the bundle heading did not match `PART_B`, so every red would have cost the first task a re-review. Label: CONVENTION.
+  - **Red first**: `a_red_gate_ruling_owes_one_section_for_the_batch` (`approach/tests.rs`: three tasks in flight, one built inside T01; the one heading named, T03 left out, the section answering T01 and T02 in plan.md and from plan-done.md, an hour's ruling still one a task): on the old code 15 passed, 1 failed of `plan::approach::tests` (`make rust-test CRATE=rust/gate/crates/plan ONLY="plan::approach::tests"`, 2026-11-27); after, 16 ran, clean. `a_quiet_bundle_part_b_leaves_its_first_task_s_section_reviewed` (`status/tests.rs`): on the old code 23 passed, 1 failed of `plan::status::tests`; after, clean. The crate whole: 230 passed, lint and format clean (`make builder-checks`).
+  - **Before and after**: the night's three red-gate rulings owed 20 sections each (60 plan edits, above); under D1 each owes one, 3 in all, measured 2026-11-27 (the test's fixture of three tasks: one section named; the 20-task case is the same code path, INFERRED, not run on the night's state).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a red gate's ruling owes one bundle part B, a built-inside task left out, read from plan-done.md too, quiet bundles unreviewed (T472-D1 to D4) | `plan::approach::tests::a_red_gate_ruling_owes_one_section_for_the_batch`, `plan::status::tests::a_quiet_bundle_part_b_leaves_its_first_task_s_section_reviewed` | n/a: tooling | none: no engine code | n/a |
 
 ### T472 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** After a red gate's ruling, the session writes one part B section for the batch, not one a started task, and no task built inside another's section is handed one.
+2. **The constraints.** The task's line and the brief (narrow by files where the record supports it, else one bundle section); 451 T307 part 2 (the built-inside rule); 451 T419 (a part B beside its task's other sections); 385 D8, D9 and D94 (the part B gate and the quiet part B); the GM's 405 ruling that the work that resisted may be any task in flight, so every task still owes it.
+3. **Where each comes from.** O: the night's run-log records and `approach-owed.json` read, 2026-11-27; G: the GM 2026-10-21 (405, `in_flight`'s doc comment); O: the red-first runs.
+4. **Do they describe the world here?** Yes: the fixtures are the night's forms (a red-gate trigger, a `Built here:` line in a host's section, a bundle heading archived to plan-done.md), each red on the old code.
+5. **The order.** After T419 (the placement rule), T307 part 2 (the built-inside rule) and T442 (owed rows in the common git directory). No task waits on it.
+6. **The exits.** Green: the red-first tests passing and `make builder-checks` on the plan crate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The file-narrowing route was looked for first and the record does not carry it (Approach, "What the record supports").
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27: `plan::approach::tests` 15 passed, 1 failed on the old code, 16 clean after; `plan::status::tests` 23 passed, 1 failed, then clean; the crate 230 passed (`make builder-checks`).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: one `approach owed:` line naming one bundle heading after a red gate's ruling, where it saw one a task; no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none: the host's re-review (T313 lost its CLEAR tonight) is answered here, by T472-D4.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a `[perf]` task (451 FR-013): it takes 19 of every 20 plan edits a red gate's ruling owed off the builders' loop. It is not engine speed, so the performance checklist does not apply.
 
 
-### T477 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T477 (left by the round arbiter's ruling on red-gate@2026-11-27T09:39:16Z, an id no guard owed: its bundle's MANIFEST said "(not in arbiter-owed.json)", the ruling discharged nothing and the next landing was refused for red-gate@2026-11-27T09:39:13Z, 451 arbiter.jsonl rows 73 and 74)
+
+- **Approach**: `make arbiter-bundle TRIGGER=` refuses a `red-gate@` trigger that is not owed (`rust/gate/crates/arbiter/src/arbiter/bundle.rs`, the new `unowed_red_gate`, asked in `cli_in`'s one-trigger path).
+  - **How a red-gate trigger is owed**, observed 2026-11-27, method: `tree`'s `state.rs` read: `second_red_gate` writes the key `red-gate@<its own clock>` into `arbiter-owed.json` (the clone's common git directory) when a `done` gate fails after a failed one, and `arbiter`'s gate hold (`blocking`, `kind == "red-gate"`) reads it there; a ruling pops it (`home::pop_everywhere`). The run log's `utc` (09:39:07Z) and the gate's Phase line (09:39:16Z) are other clocks, so the id can be read only from that file or from the landing's refusal, which names it. `make arbiter-bundle BATCH=1` lists round triggers alone, so the refusal lists the owed red-gate keys itself.
+  - **T477-D1, built: a `red-gate@` trigger with no key in `arbiter-owed.json` (any feature's) is refused**, code 2, naming each owed red-gate trigger as its `make arbiter-bundle TRIGGER=<id>` command, or saying none is owed; one already ruled (in its feature's `arbiter.jsonl`) is named as ruled. Label: CONVENTION (tooling; no research claim). Reason: the task's line; the ruling on the mis-keyed id cost a 3-minute first pass and a second arbiter dispatch (2026-11-27). Other kinds are untouched: a `round:` trigger is checked by `misnumbered`, and `ask:`, `reversal:` and `hour:` are bundled as before.
+  - **Red first**: `a_red_gate_trigger_no_guard_owes_is_refused_naming_the_owed_ones` (`bundle/tests.rs`: none owed, the night's two ids with an `ask:` owed beside them, the owed id bundled, the ruled id refused as ruled): on the old code 6 passed, 1 failed of `arbiter::bundle::tests` (`make rust-test CRATE=rust/gate/crates/arbiter ONLY="arbiter::bundle::tests"`, 2026-11-27); after, 7 ran, clean. `reversals_red_gates_and_reviews` bundled an unowed `red-gate@2026-10-19T00:59:47Z`; its fixture now owes it. The crate whole: 47 passed, lint and format clean (`make builder-checks`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| an unowed red-gate trigger refused, naming the owed ones (T477-D1) | `arbiter::bundle::tests::a_red_gate_trigger_no_guard_owes_is_refused_naming_the_owed_ones` | n/a: tooling | none: no engine code | n/a |
 
 ### T477 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A round arbiter is never dispatched on a red-gate id no guard owes: the bundle refuses it and names the one to bundle.
+2. **The constraints.** The task's line; 375 FR-010 and FR-011 (the red-gate tripwire and its bundle); one ruling per trigger (the ruled refusal of `ruling_at`).
+3. **Where each comes from.** O: 451 arbiter.jsonl rows 73 and 74 and the night's run-log record read, 2026-11-27; O: `tree/src/state.rs` read (the key's writer).
+4. **Do they describe the world here?** Yes: the fixture is the night's two ids, red on the old code.
+5. **The order.** After T442 (owed state in the common git directory). Before T482, the same refusal at `make arbiter-ruled`.
+6. **The exits.** Green: the red-first test passing and `make builder-checks` on the arbiter crate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27: `arbiter::bundle::tests` 6 passed, 1 failed on the old code, 7 clean after; the crate 47 passed (`make builder-checks`).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: `make arbiter-bundle TRIGGER=red-gate@<a wrong id>` refuses, naming the owed id, where it built a bundle that said "(not in arbiter-owed.json)"; no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make arbiter-ruled` records a ruling on a red-gate trigger no guard owes (`arbiter.rs`, `ruling_at`), as it did for red-gate@2026-11-27T09:39:16Z (451 arbiter.jsonl row 73), so a bundle built by hand still reaches a ruling that discharges nothing. Not fixed here: the brief names the bundle alone, and the arbiter's tests rule an unowed `red-gate@2` in a batch, which would change with it. Filed as T482; lands before T475.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 
 
 ### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)
@@ -7555,6 +7570,33 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T479 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T482 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T482 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

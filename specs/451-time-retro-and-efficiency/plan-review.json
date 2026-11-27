@@ -4176,6 +4176,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T472 (left by the round arbiter's continue rulings on red-gate@2026-11-27T06:33:54Z and 09:06:32Z: each owed a part B of every started task, 20 rows a trigger in `approach-owed.json`, measured 2026-11-27 (its rows grouped by trigger: 06:33:54Z 20, 09:06:32Z 20, 09:39:16Z 20, 09:39:13Z 20), each section the same nine answers but its id)": {
+   "sha256": "94506b9211dd05e6980aadb9c60e2beff888b7f203d797907b2ebd3c519d07bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T472 Approach (checklist part A)": {
+   "sha256": "bc1e95499e2d4484ec2089fbb034ae394e53c2ed257f6881408af8a30933369c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T477 (left by the round arbiter's ruling on red-gate@2026-11-27T09:39:16Z, an id no guard owed: its bundle's MANIFEST said \"(not in arbiter-owed.json)\", the ruling discharged nothing and the next landing was refused for red-gate@2026-11-27T09:39:13Z, 451 arbiter.jsonl rows 73 and 74)": {
+   "sha256": "7a9aea5e92a7d19482a7e6917a5004e8c8ccd07d52b52c85195efe1d102d351f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T477 Approach (checklist part A)": {
+   "sha256": "87892c49d72cf6190510efc87c243a1f644da2c4a2505a9bc4e117d3ae758721",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -39207,6 +39231,79 @@
      "summary": "The template heading `### T456 (<why: the finding or measurement that files it>)` is removed, replaced by the filled-in T456 heading carrying its finding; the Approach template likewise filled in.",
      "class": "within",
      "why": "A placeholder giving way to the task's own text; no decision of substance is withdrawn."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T472 (left by the round arbiter's continue rulings on red-gate@2026-11-27T06:33:54Z and 09:06:32Z: each owed a part B of every started task, 20 rows a trigger in `approach-owed.json`, measured 2026-11-27 (its rows grouped by trigger: 06:33:54Z 20, 09:06:32Z 20, 09:39:16Z 20, 09:39:13Z 20), each section the same nine answers but its id)",
+    "### T472 Approach (checklist part A)",
+    "### T477 (left by the round arbiter's ruling on red-gate@2026-11-27T09:39:16Z, an id no guard owed: its bundle's MANIFEST said \"(not in arbiter-owed.json)\", the ruling discharged nothing and the next landing was refused for red-gate@2026-11-27T09:39:13Z, 451 arbiter.jsonl rows 73 and 74)",
+    "### T477 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T472-route",
+     "summary": "the brief's second route taken: failures not narrowed by files because the night's red done records name failing steps only and the owed row carries no unit",
+     "class": "within",
+     "why": "The plan reports the brief as 'narrow by files where the record supports it, else ONE section'; the observation (three run-log records read whole, 2026-11-27) shows the record does not support narrowing, so the brief's own fallback is taken. Nothing asked is dropped."
+    },
+    {
+     "id": "T472-D1",
+     "summary": "a red-gate@ ruling owes ONE bundle section '### T1, T2 part B (<UTC>)' after the first task's sections; every in-flight task keeps its owed row and each tick still asks for part B",
+     "class": "within",
+     "why": "Discriminator: no started task loses a fresh answer. Every owed row is kept and each task's tick still demands a part B; one heading answers each (task_blocks / apart). The 405 rule as the plan reports it (every task in flight owes it) is kept. Removes 19 of 20 identical plan edits, which serves FR-013 and the GM's 2026-11-22 bundling ('small defects can be bundled together') and 2026-11-23 cascade words (changes 'not fixing any real flaws')."
+    },
+    {
+     "id": "T472-D1-scope",
+     "summary": "hour: rulings and the cohort's newly failing seed still owe one part B a task, message unchanged",
+     "class": "within",
+     "why": "Leaves 385 D9's other triggers exactly as they were; no requirement is narrowed by leaving them."
+    },
+    {
+     "id": "T472-D2",
+     "summary": "a task a 'Built here:' line names is left out of the bundle and owes nothing; its host's section answers for it",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the 405 rule as the plan reports it (every task in flight owes part B): one class of task owes nothing. LEGITIMATE on two grounds. (a) Applied literally the rule refuses correct work: a bundle heading naming a built-inside task fills its stub (template::without_stub), which the plan records refused T395, T416 and T421 on 2026-11-27 - a check refusing good work is a defect (XIV). (b) It does not gut the rule's purpose: the built-inside task's work is its host's work (451 T307 part 2 as the plan reports it), and the host owes and answers the same part B, so the work that resisted still gets a fresh approach. Limit of this ruling: it rests on the host being in the same batch and owing (the fixture has T01 in flight hosting T03); the bundle shows no case of a Built-here task whose host is not in flight, and the ruling does not reach one."
+    },
+    {
+     "id": "T472-D3",
+     "summary": "an owed part B is read from plan-done.md too, so a bundle archived with its first task still answers for the others",
+     "class": "within",
+     "why": "Changes where the answer is found, not what is owed; without it D1's one section would be lost to the archive and the others refused for an answer that exists."
+    },
+    {
+     "id": "T472-D4",
+     "summary": "a quiet bundle part B leaves its first task's section reviewed: PART_B matches '### T5, T6 part B ('",
+     "class": "within",
+     "why": "Read as a heading-pattern change: 385 D94's quiet test (item 4 'No', item 5 'Neither', every named D<n> defined) is applied unchanged to the bundle form ('as a one-task part B ... does'). The block names only items 4 and 5; on the reading that D94's whole test still governs, this extends an accepted rule to the new heading and decides nothing new."
+    },
+    {
+     "id": "T472-perf",
+     "summary": "T472 tagged [perf] (FR-013); the performance checklist stated not to apply as it is not engine speed",
+     "class": "within",
+     "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work, so the tag follows the spec. The checklist's scope is not in the bundle; the statement narrows nothing the GM asked and is not ruled on."
+    },
+    {
+     "id": "T477-D1",
+     "summary": "make arbiter-bundle TRIGGER= refuses a red-gate@ trigger with no key in arbiter-owed.json (code 2), naming the owed red-gate triggers or saying none is owed, and names an already ruled one as ruled; other trigger kinds untouched",
+     "class": "within",
+     "why": "Enforces 375 FR-011's 'one ruling per unit per trigger' and FR-010's red-gate tripwire on the id a guard actually owes; a refusal whose only reach is a red-gate id nothing owes. Serves the GM's 'real enforcement and not just instructions' (2026-11-19) and his 2026-11-26 'we should not rely on you remembering' (T285). Reach is limited to red-gate@ at the bundle; no other kind or command is touched."
+    },
+    {
+     "id": "T477-fixture",
+     "summary": "the existing test reversals_red_gates_and_reviews, which bundled an unowed red-gate@2026-10-19T00:59:47Z, now has its fixture owe it",
+     "class": "within",
+     "why": "The test's purpose (red gates are bundled) is kept; only the precondition that a guard owes the trigger is added, matching how a red-gate trigger is owed (state.rs read, 2026-11-27)."
+    },
+    {
+     "id": "T477-left",
+     "summary": "make arbiter-ruled still records a ruling on an unowed red-gate trigger; filed T482, lands before T475",
+     "class": "within",
+     "why": "The plan reports the brief as naming the bundle alone, so leaving the ruled-side refusal to its own task narrows nothing T477 was asked. FR-009's three parts are present: why not here (the brief's scope), the filed id (T482) and its order (lands before T475, and part A item 5 places T482 after T477). The defect is carried forward with an order, not dropped."
     }
    ]
   }

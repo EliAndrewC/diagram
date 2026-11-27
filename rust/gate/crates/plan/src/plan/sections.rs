@@ -129,7 +129,9 @@ pub(super) fn re(pattern: &str) -> Regex {
 }
 
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[A-Za-z0-9]+"));
-pub(super) static PART_B: LazyLock<Regex> = LazyLock::new(|| re(r"^### T\d+[a-z]?\s+part B \("));
+/// A part B's heading, one task's or a bundle's (`### T5, T6 part B (`, the one section a red gate's ruling owes the batch, 451 T472).
+pub(super) static PART_B: LazyLock<Regex> =
+    LazyLock::new(|| re(r"^### T\d+[a-z]?(?:,\s*T\d+[a-z]?)*\s+part B \("));
 static DEFINED: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^\*\*(D\d+[a-z]?) - "));
 static APPROACH: LazyLock<Regex> = LazyLock::new(|| re(r"^### T\d+[a-z]?\s+Approach\b"));
 static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(\d+)\.\s+\*\*[^*]*\*\*[ \t]*"));

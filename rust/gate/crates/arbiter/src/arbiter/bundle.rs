@@ -559,6 +559,32 @@ fn misnumbered(root: &Rooted, triggers: &[String]) -> Vec<String> {
     out
 }
 
+/// Why a `red-gate@` trigger no guard owes is refused, or None (451 T477). WHY: the tripwire (`tree`'s `second_red_gate`) keys it
+/// at its own clock, which neither the run log's `utc` nor the gate's Phase line shares - on 2026-11-27 the session derived
+/// `red-gate@2026-11-27T09:39:16Z` from a Phase line where `red-gate@2026-11-27T09:39:13Z` was owed, the arbiter ruled on the
+/// mis-keyed id, the ruling discharged nothing and the next landing was refused for the real one. Owed means a key of
+/// `arbiter-owed.json`, under any feature; a ruled trigger is popped from it, so its second bundle is named as ruled.
+fn unowed_red_gate(root: &Rooted, trigger: &str) -> Option<String> {
+    let owed = core::owed(root);
+    if !trigger.starts_with("red-gate@") || owed.contains_key(trigger) {
+        return None;
+    }
+    if core::rulings_in(root, trigger, root.reader()).contains_key(trigger) {
+        return Some(format!("{trigger} is already ruled (its feature's arbiter.jsonl) - one ruling per trigger, and nothing is owed under it"));
+    }
+    let red: Vec<String> = owed
+        .iter()
+        .filter(|(_, v)| v.get("kind").and_then(Value::as_str) == Some("red-gate"))
+        .map(|(t, _)| format!("make arbiter-bundle TRIGGER={t}"))
+        .collect();
+    let owed_now = if red.is_empty() {
+        "no red-gate trigger is owed now - nothing to rule on".to_owned()
+    } else {
+        format!("the owed: {}", red.join("; "))
+    };
+    Some(format!("{trigger} is owed by no guard (arbiter-owed.json holds no such key: the tripwire keys a red gate at its own clock, never the run log's or a Phase line's, so take the id from the landing's refusal), and a ruling on it would discharge nothing - {owed_now}"))
+}
+
 /// ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11), each trigger's own bundle beneath it.
 fn batch(
     root: &Rooted,
@@ -737,6 +763,8 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
             py_path(out_arg)
         };
         batch(&root, &out, &missing_ok, &extra)
+    } else if let Some(why) = unowed_red_gate(&root, &trigger) {
+        Err(Stop::Value(why))
     } else {
         let wrong = misnumbered(&root, std::slice::from_ref(&trigger));
         if wrong.is_empty() {

@@ -8,7 +8,7 @@ use serde_json::json;
 
 use super::super::tests::{git, repo};
 use super::{
-    apart, best, future_refusal, future_stamps, in_flight, owe, owed_entries, parse_utc,
+    apart, best, future_refusal, future_stamps, in_flight, owe, owe_all, owed_entries, parse_utc,
     part_items, refusal, ruled, split_items, unanswered,
 };
 
@@ -391,4 +391,78 @@ fn a_linked_worktree_owes_into_the_clones_git_dir() {
     );
     assert_eq!(owed_entries(&root).len(), 1);
     assert_eq!(owed_entries(&wt).len(), 1);
+}
+
+/// RED FIRST (451 T472): a red gate's ruling owes ONE part B section for the batch, never one a task - the run log records a red
+/// gate's failing steps (`failed: static`), never their files, so no task's share of it can be told; 23 and 20 sections after
+/// red-gate@2026-11-27T06:33:54Z and 09:06:32Z, each the same nine answers. A task built inside another's section is left out
+/// (451 T307 part 2: a heading naming it fills its stub), and the section still answers once its first task is archived.
+#[test]
+fn a_red_gate_ruling_owes_one_section_for_the_batch() {
+    let (root, dir) = feature();
+    let plan = PLAN
+        .replace(
+            "**D1 - the lane.**",
+            "Built here: T03 - the third's lane.\n\n**D1 - the lane.**",
+        )
+        .replace("a well.\n3.", "a well.\n2. **The constraints.** none.\n3.");
+    std::fs::write(dir.join("plan.md"), &plan).unwrap();
+    git(&root, &["add", "-A"]);
+    git(
+        &root,
+        &[
+            "commit",
+            "-qm",
+            "999-x: T00 ticked (make land)",
+            "--date=2026-10-17T10:00:00Z",
+        ],
+    );
+    let rows: String = ["T02", "T03"]
+        .iter()
+        .map(|t| {
+            format!(
+                "{}\n",
+                json!({"feature": "999-x", "task": t, "utc": "2099-01-01T00:00:00Z"})
+            )
+        })
+        .collect();
+    std::fs::write(root.join(".git/task-starts.jsonl"), rows).unwrap();
+    std::fs::write(
+        root.join(".git/active-task"),
+        json!({"feature": "999-x", "task": "T01"}).to_string(),
+    )
+    .unwrap();
+    assert_eq!(in_flight(&root, &dir, "T01"), ["T01", "T02", "T03"]);
+    let msg = ruled(
+        &root,
+        "red-gate@2026-10-17T21:39:13Z",
+        Some("2026-10-17T21:40:00Z"),
+    )
+    .unwrap();
+    assert!(msg.contains("add ONE section `### T01, T02 part B (2026-10-17T21:40Z)`"));
+    assert!(msg.contains("directly after T01's other sections") && !msg.contains("T03"));
+    let owing: Vec<String> = owed_entries(&root)
+        .iter()
+        .map(|r| r["task"].as_str().unwrap().to_owned())
+        .collect();
+    assert_eq!(owing, ["T01", "T02"]);
+    assert!(why(&dir, &root, "T02").contains("red-gate@2026-10-17T21:39:13Z"));
+    let bundle = "### T01, T02 part B (2026-10-17T21:45Z)\n\n1. the static step\n2. the same\n\n";
+    let placed = plan.replace(
+        "## T02 - the second",
+        &format!("{bundle}## T02 - the second"),
+    );
+    std::fs::write(dir.join("plan.md"), &placed).unwrap();
+    assert_eq!(why(&dir, &root, "T01"), "");
+    assert_eq!(why(&dir, &root, "T02"), "");
+    assert_eq!(apart(&placed, &["T01".to_owned(), "T02".to_owned()]), None);
+    // T01 archived with its sections at its tick: T02's owed row is answered from plan-done.md
+    std::fs::write(dir.join("plan.md"), &plan).unwrap();
+    std::fs::write(dir.join("plan-done.md"), format!("# Done\n\n{bundle}")).unwrap();
+    assert_eq!(why(&dir, &root, "T02"), "");
+    assert_eq!(owe_all(&root, "999-x", &[], "red-gate@x", "B", None), "");
+    // an hour's ruling still charges each task its own section
+    assert!(ruled(&root, "hour:999-x@3", Some("2026-10-17T21:41:00Z"))
+        .unwrap()
+        .contains("T02 owes"));
 }

@@ -183,7 +183,8 @@ fn reversals_red_gates_and_reviews() {
         &root,
         &json!({
             "ask:probe": {"kind": "ask", "detail": "Does ROUND_CAP hold at 12 ft? The plan review rounds, and two knots here.", "unit": ""},
-            "reversal:research/questions/0094-trade.html@1": {"kind": "reversal", "detail": "A -> B -> A"}
+            "reversal:research/questions/0094-trade.html@1": {"kind": "reversal", "detail": "A -> B -> A"},
+            "red-gate@2026-10-19T00:59:47Z": {"kind": "red-gate", "detail": "a second red make done in a row", "unit": ""}
         }),
     );
     let o = root.join("out").to_string_lossy().into_owned();
@@ -428,4 +429,50 @@ fn a_trigger_naming_a_feature_or_task_it_cannot_resolve_is_refused_naming_the_fo
         "{}",
         r.stderr
     );
+}
+
+/// A red-gate trigger no guard owes is refused, naming the owed ones (451 T477: the session derived
+/// red-gate@2026-11-27T09:39:16Z from a Phase line where the tripwire owed red-gate@2026-11-27T09:39:13Z; the ruling on the
+/// mis-keyed id discharged nothing and the next landing was refused for the real one).
+#[test]
+fn a_red_gate_trigger_no_guard_owes_is_refused_naming_the_owed_ones() {
+    no_owed();
+    let root = scratch("arbiter-bundle-unowed-red");
+    feature(&root);
+    let o = root.join("out").to_string_lossy().into_owned();
+    let none = bundle_cli(&root, &["red-gate@2026-11-27T09:39:16Z", "--out", &o]);
+    assert_eq!(none.code, 2);
+    assert!(none.stderr.contains("no red-gate trigger is owed now"));
+    owed(
+        &root,
+        &json!({
+            "red-gate@2026-11-27T09:39:13Z": {"kind": "red-gate", "detail": "a second red make done in a row", "unit": ""},
+            "ask:probe": {"kind": "ask", "detail": "a question", "unit": ""}
+        }),
+    );
+    let wrong = bundle_cli(&root, &["red-gate@2026-11-27T09:39:16Z", "--out", &o]);
+    assert_eq!(wrong.code, 2);
+    assert!(wrong
+        .stderr
+        .contains("red-gate@2026-11-27T09:39:16Z is owed by no guard"));
+    assert!(wrong
+        .stderr
+        .contains("make arbiter-bundle TRIGGER=red-gate@2026-11-27T09:39:13Z"));
+    assert!(!wrong.stderr.contains("ask:probe"));
+    assert!(!root.join("out").exists());
+    let right = bundle_cli(&root, &["red-gate@2026-11-27T09:39:13Z", "--out", &o]);
+    assert_eq!(right.code, 0);
+    // ruled, the trigger is popped from the owed record: a second bundle of it says it is ruled
+    owed(&root, &json!({}));
+    put(
+        &root,
+        "specs/500-f/arbiter.jsonl",
+        &format!(
+            "{}\n",
+            json!({"trigger": "red-gate@2026-11-27T09:39:13Z", "ruling": "continue"})
+        ),
+    );
+    let again = bundle_cli(&root, &["red-gate@2026-11-27T09:39:13Z", "--out", &o]);
+    assert_eq!(again.code, 2);
+    assert!(again.stderr.contains("is already ruled"));
 }
