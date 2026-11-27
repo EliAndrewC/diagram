@@ -167,3 +167,18 @@ T321 (a reproduction helper), T354 (brief sizing) and T401 (the tree-idle re-mea
 Over a like window after the feature lands, against the night of 2026-11-27: landed tasks per hour of builder work at least the
 night's, read beside task size (FR-007); the cross-blocking row no higher; total tokens per landed task no higher (FR-006); every
 check that holds today still holding.
+
+## Review history
+
+- 2026-11-27, round 1 (spec-fidelity, MODE 2 against request.md): CHANGES REQUIRED, 8 items - coverage struck from the hand-in
+  (it reinstated the closing-step coverage reversed on 2026-11-26); total tokens per landed task weighed with throughput (FR-006)
+  and every per-task figure read beside task size (FR-007); US1 measured by the cross-blocking row; the reuse decision (FR-009);
+  the figures sourced; one repair order, a fresh builder; the takeover list by part; the approved sketch recorded in request.md.
+- 2026-11-27, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 6 items - the cross-blocking baseline dated to its run
+  (32.3 minutes over 130 tasks), the tree-busy figures' real source, T302 parts 1 and 4 and T307 part 2 taken, T308's two
+  contradicting clauses replaced, bisection restored to current practice, US4's bound for one bad change.
+- 2026-11-27, round 3 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - T307 part 2's parenthetical said only its own
+  text. The same commit added FR-010 from the GM's seventh process-reviewer message.
+- 2026-11-27, round 4 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - FR-010's like window reworded so the night's
+  baseline can meet it (concurrency close, time-weighted, never compared bare).
+- 2026-11-27, round 5 (spec-fidelity-verify, MODE 3): FAITHFUL.
