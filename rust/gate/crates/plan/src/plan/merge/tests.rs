@@ -283,3 +283,9 @@ fn the_driver_given_the_plan_merges_by_it() {
     let v: Value = serde_json::from_str(&std::fs::read_to_string(&o).unwrap()).unwrap();
     assert_eq!(v["blocks"][KEY]["verdict"], "CLEAR");
 }
+
+/// A map the record keeps no digest for decides nothing by the plan (451 T495's `Held::at`).
+#[test]
+fn a_map_with_no_digest_is_held_by_no_plan() {
+    assert!(super::Held::of("").at("passes", "x").is_none());
+}

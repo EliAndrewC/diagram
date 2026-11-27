@@ -838,8 +838,6 @@ fn a_count_below_the_cascade_minimum_runs_no_work_tree_diff() {
     super::cascade_check(&dispatched(10), &root, 20.0);
     assert_eq!(crate::checks::rounds::counted() - before, 1);
     let owed = std::fs::read_to_string(root.join(".git/arbiter-owed.json")).unwrap();
-    assert!(
-        owed.contains("cascade@1") && owed.contains("10 check dispatches over 0 changed lines"),
-        "{owed}"
-    );
+    assert!(owed.contains("cascade@1"));
+    assert!(owed.contains("10 check dispatches over 0 changed lines"));
 }
