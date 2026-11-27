@@ -4704,6 +4704,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")": {
+   "sha256": "efd573a6fd67aca3d258eeb68c78a30ca7309b8d79a5c2a03457cfbb7e2c3463",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T530 Approach (checklist part A)": {
+   "sha256": "379ad7b271bfa004f43542d85cb0ad564c83e6f306bc3554edd1e08acf0c3f16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T514 (<why: the finding or measurement that files it>)": {
+   "sha256": "16f2db62572626d95ae313362d167bf84e65bc5bffffa9026b321116e82b4a64",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T514 Approach (checklist part A)": {
+   "sha256": "f87f7ec61a65c867486a2a3af999184eb6699864cf4b5299666aca77e04ee470",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43057,6 +43081,249 @@
      "why": "Those rules are inside the feature already. FR-013 counts measurement of where time goes as performance work, citing the GM's words of 2026-11-20."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-D1",
+     "summary": "Fix the proved cause: gate_refusal no longer returns on the tree check's --quiet answer; a commit the check calls unseen falls through to the make check and the command's own writes (shell_write), so a command that appends to a file the gate sees and then commits it is refused while a gate runs.",
+     "class": "within",
+     "why": "A defect (a wrong outcome): a commit moved the clone's HEAD under its gate and voided T522's landing gate. Fixing it is owed under fix-as-we-go, and the fix reaches the incident's shape without dropping any case the guard held before."
+    },
+    {
+     "id": "T530-D2",
+     "summary": "shell_write leaves git's commit and add to the commit check, so a bare git commit is not read as a shell write of '.'.",
+     "class": "within",
+     "why": "A consequence D1 needs. Without it, D1's fall-through would refuse good work (every commit read as a write of the tree root). Each part stays judged: commits by the commit check, writes by shell_write."
+    },
+    {
+     "id": "T530-D3",
+     "summary": "GIT_WRITE matches the command with heredoc bodies stripped (shared::shape::strip_heredocs), so a 'git commit' that is only a heredoc's text is not held.",
+     "class": "within",
+     "why": "A second defect of the same guard: a check refusing correct work (text held as a commit, failing closed). The block records it as a wrong outcome it observed, not as a difference in style, and the other matchers (make::POS, the walk) already strip heredocs. It narrows nothing: a real commit is still matched outside the body."
+    },
+    {
+     "id": "T530-D4",
+     "summary": "The task line's stated cause (the pattern splitting only at ; & |) is set aside as refuted by reading, and the fix aims at the measured cause instead of adding newline splitting.",
+     "class": "within",
+     "why": "The goal is the same as the task line's: the incident's shape is refused. Only the diagnosis changes, and it is backed by a measurement (--quiet exit 0 against --would-write exit 1 on a fresh snapshot) and a red-first shell-suite case that runs the real tree check. A refuted premise is not a narrowed request."
+    },
+    {
+     "id": "T530-D5",
+     "summary": "Found and left: none. The guard's other matchers (GIT_WRITE, make::invoked, tree::walk_judged, OWN_DEF) were read for the same newline gap, with that reading's date and method recorded, and none had it; the early return was the only one before shell_write.",
+     "class": "within",
+     "why": "The class check is labeled as an observation with its method (FR-009's form), and no defect is deferred."
+    },
+    {
+     "id": "T530-D6",
+     "summary": "Order: the task stands alone. Running landings in a tree of their own is left to the feature the task line names, and this guard stays the clone's only protection until then.",
+     "class": "within",
+     "why": "That structural change is filed elsewhere by the task line itself and is not part of T530's ask. This task fixes the guard's defect in full rather than carrying it forward, so nothing known is left unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T514 (<why: the finding or measurement that files it>)",
+    "### T514 Approach (checklist part A)",
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the cause recorded is gate_refusal returning on the --quiet tree check before shell_write judged the command's own append",
+     "class": "within",
+     "why": "A diagnosis of the observed defect (a commit moved HEAD under T522's landing gate, voiding it), backed by a dated two-exit measurement; it settles what the fix must reach and narrows nothing asked."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen falls through to the make check and the command's own writes instead of returning None",
+     "class": "within",
+     "why": "Removes the early return that let the incident's shape through; it makes the guard's existing rule (451 T307, T406/T430) hold, enforcement of what was already asked."
+    },
+    {
+     "id": "T530-shell-write-leaves-git",
+     "summary": "shell_write leaves git commit and add to the commit check, so a bare git commit is not read as a shell write of '.'",
+     "class": "within",
+     "why": "Prevents the fall-through from refusing good work (a check refusing correct work is a defect, constitution XIV); the commit stays judged by the commit check, so nothing the guard held before is released."
+    },
+    {
+     "id": "T530-heredoc-strip",
+     "summary": "GIT_WRITE matches the command with heredoc bodies stripped, so a git commit only inside a heredoc body is text and not held",
+     "class": "within",
+     "why": "Fixes a false refusal (the old pattern held heredoc text the walk placed no commit in, failing closed while a gate ran); the goal line states the carve-out's bound as a commit that is ONLY a heredoc's text, consistent with T307's 'a commit held only where it runs'. Not an exception to anything the GM asked: it corrects a guard refusing good work."
+    },
+    {
+     "id": "T530-sibling-matchers",
+     "summary": "The guard's other matchers (GIT_WRITE, make::invoked, tree::walk_judged, OWN_DEF) read for the same newline gap, none found; Found and left: none",
+     "class": "within",
+     "why": "The class check FR-009/D15 asks for, with its observation date and method; no defect is deferred."
+    },
+    {
+     "id": "T530-order",
+     "summary": "Alone, no task waits on it; one landing; not performance work",
+     "class": "within",
+     "why": "Scheduling of a defect fix; nothing asked is narrowed."
+    },
+    {
+     "id": "T514-stub",
+     "summary": "T514's two blocks are the unfilled task-add template (heading and every field placeholders)",
+     "class": "within",
+     "why": "The blocks decide nothing; there is no decision to rule on. When filled they are changed blocks and owe their own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the cause taken is gate_refusal returning on the --quiet tree check before shell_write judges the command's own append.",
+     "class": "within",
+     "why": "Fixing a found defect (a guard passing a commit that the gate then saw move the tree) is what fix-as-we-go asks; correcting the task line's diagnosis to the measured one is the measured-not-assumed rule, not a change of scope."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen falls through to the make check and the command's own writes instead of returning None.",
+     "class": "within",
+     "why": "The fix of the defect itself; unchanged from the block's CLEAR text."
+    },
+    {
+     "id": "T530-shell-write-leaves-git",
+     "summary": "shell_write leaves git commit and add to the commit check, so a bare git commit is not read as a shell write of '.'.",
+     "class": "within",
+     "why": "Needed so the fall-through does not refuse good work (a bare git commit held as a write of '.'); unchanged from the CLEAR text."
+    },
+    {
+     "id": "T530-placed",
+     "summary": "The commit check is entered where the pattern matches OR the walk places a git commit or add, so quoted forms (\"git\" commit, 'git' add -A) that miss the pattern's \\bgit\\s are still checked rather than escaping once shell_write stops judging git.",
+     "class": "within",
+     "why": "Closes the hole the previous decision would otherwise open; it widens what the guard checks to the commits it is for and refuses nothing beyond them. Enforcement of the guard's own job, not new scope."
+    },
+    {
+     "id": "T530-strip-heredocs",
+     "summary": "GIT_WRITE is matched against the command with heredoc bodies stripped, so a git commit only inside a body is text and no longer held while a gate runs and the tree has moved.",
+     "class": "within",
+     "why": "Removes a check refusing good work (a body that merely mentions git commit); unchanged from the CLEAR text."
+    },
+    {
+     "id": "T530-shell-heredoc",
+     "summary": "Except where a shell reads the heredoc (SHELL_HEREDOC: bash <<'EOF', sh -s <<EOF): that body is commands and is matched whole, as at HEAD; the four shapes held at HEAD are pinned held in a_commit_only_inside_a_heredoc_body_is_not_held.",
+     "class": "within",
+     "why": "Not a narrowing of anything asked: it narrows the plan's own stripping, keeping the guard strict (as at HEAD) where the body really is shell commands. Without it the stripping would let a real commit fed to bash pass, a check passing bad work. Pinning HEAD's held shapes in a test is enforcement of the guard's job."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The fix targets the cause proved by measurement (gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append), not the task line's stated cause (GIT_WRITE splitting only at ;&|), which the block refutes by reading.",
+     "class": "within",
+     "why": "Closes the incident the task was filed for (a commit moved the clone's HEAD under T522's landing gate). Choosing the measured cause over the guessed one is the project's standing rule, not a change of what was asked."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns early; it falls through to the make check and the command's own writes.",
+     "class": "within",
+     "why": "This is the defect fix itself: a check that passed bad work (a commit after its own write while a gate ran). It serves the request's 'real enforcement' (2026-11-19) and the gate's rigor at landing (GM 2026-11-26, T316 section)."
+    },
+    {
+     "id": "T530-placed",
+     "summary": "shell_write leaves git commit/add to the commit check, and the commit check is entered where GIT_WRITE matches OR the walk places a git commit or add (quoted forms such as \"git\" commit, 'git' add -A).",
+     "class": "within",
+     "why": "Keeps the coverage HEAD had: those quoted forms were held at HEAD as a shell write of '.', and are now held by the commit check instead. They are pinned held in a test. Nothing is let through that HEAD held."
+    },
+    {
+     "id": "T530-heredoc-text",
+     "summary": "GIT_WRITE matches the command with heredoc bodies stripped, so a git commit that is only a heredoc's text (data written to a file, a commit message body) is no longer held while a gate runs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the guard's reach: HEAD failed closed on any git commit text. For a body that is data, the narrowing is legitimate. Holding text that never runs is a check refusing good work, which is a defect by constitution XIV's definition. The block's goal names it ('a git commit that is only a heredoc's text is not'), and no commit can move HEAD from such a body. This ruling covers only bodies nothing executes."
+    },
+    {
+     "id": "T530-heredoc-executed",
+     "summary": "Where a heredoc's body is run as commands, the line is drawn at SHELL_HEREDOC, named by two examples (bash <<'EOF', sh -s <<EOF), and only those are pinned held. Every other heredoc body is stripped before the commit pattern.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix names a class ('where a shell reads a heredoc, whose body is commands') with no line saying how every form of it was found. FR-009's second clause requires that observation, and the 'Found and left?' line covers only the newline gap. The block does not show other routes to an executed body held: a body piped to a shell (cat <<'EOF' | bash), a body fed through command substitution (bash -c \"$(cat <<'EOF' ...)\", eval \"$(cat <<EOF)\"), a shell behind a wrapper (env/sudo/ssh/podman exec ... sh <<EOF, /bin/bash, zsh, dash), or an interpreter heredoc that runs git (python3 <<EOF). Each was matched whole at HEAD, so each was held. Any form missed now lets a commit move HEAD under a running gate, which is exactly the incident T530 exists to close. It also contradicts the block's own goal ('refused, however its lines and heredocs are laid out'). Cure: add an observation line, with its method, saying how the forms by which a heredoc body is executed were found. Each form must then be shown held (pinned), or filed as left with its id and order. Alternatively, strip only bodies whose reader is known to be inert, and keep the fail-closed default for the rest."
+    },
+    {
+     "id": "T530-left",
+     "summary": "'Found and left? none' (the newline-gap search across GIT_WRITE, make::invoked, tree::walk_judged and OWN_DEF, observed 2026-11-27 by reading); performance work 'no'; landings in a tree of their own left to the feature the task line names.",
+     "class": "within",
+     "why": "The newline-gap search carries its method and space. Landings in their own tree is separate work the task line assigns elsewhere, and this task does not narrow it. The executed-heredoc class is the open item, and is ruled above."
+    }
+   ],
+   "tasks": [
+    "T530"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the fix targets the proved cause, gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append.",
+     "class": "within",
+     "why": "Fixing the actual cause of the incident the task names (a commit moved HEAD under a running gate) is the task. Restating a refuted cause is not a narrowing."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns None: it falls through to the make check and to the command's own writes (shell_write), which the gate sees.",
+     "class": "within",
+     "why": "This is the fix for the defect. It makes the guard refuse what the task says it missed, and refuses nothing the task did not ask to have refused."
+    },
+    {
+     "id": "T530-commit-check-entry",
+     "summary": "shell_write cedes git commit/add to the commit check, which is entered where the pattern matches OR where the walk places a git commit or add, so quoted spellings ('\"git\" commit', \"'git' add -A\") are held as a commit rather than as a shell write of '.'.",
+     "class": "within",
+     "why": "These forms were held before and are held after. Only the refusal's wording changes, which is a difference and not a defect (constitution XIII, 2026-11-18). It is needed so that a bare git commit is not misread as a shell write once the early return is gone."
+    },
+    {
+     "id": "T530-heredoc-bodies-read",
+     "summary": "The GIT_WRITE pattern keeps reading the whole text, heredoc bodies included, so a commit a body could run (a shell reading it, a pipe, a substitution, a wrapper, an interpreter, a later script) stays held. Eight such shapes are pinned by a test.",
+     "class": "within",
+     "why": "This serves goal item 1 ('however its lines and heredocs are laid out'): the guard fails closed on every form that can run a body. The pinned shapes are correct refusals, so the test enforces what was asked."
+    },
+    {
+     "id": "T530-T531-deferral",
+     "summary": "A git commit that appears only in a heredoc's TEXT, never run, is still refused while a gate runs and the tree has moved. This false refusal is the same as at HEAD. It is left, filed as T531, 'lands before none'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A false refusal is a defect by the GM's definition (a check that refuses good work), so leaving it needs a ruling. 'Needs its own method' is a cost argument and does not carry the ruling. The premise 'round 2 ruled the strip NOT LEGITIMATE' is not in this bundle (earlier.md says the block is new; rulings.md is empty), so it is not relied on. What carries it: (1) purpose. T530's purpose is that a commit cannot move a clone under its gate, and the residual errs only toward refusing, so it does not gut that purpose. A naive strip of the bodies would reopen exactly the fail-open hole the task closes, which is plain from the forms the block lists that run a body. (2) The defect is pre-existing and not made worse, and it lies outside the missed commit the task line names. (3) The block gives FR-009's three parts: why it is not fixed here, a filed id (T531), and an order. Nothing in request.md requires this particular tooling defect to land before any named task. The general fix-as-we-go rule is met because T531 is filed as an open task of this same feature's tasking, not dropped."
+    },
+    {
+     "id": "T530-census-order-budget",
+     "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
+     "class": "within",
+     "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -63607,6 +63874,51 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This leaves part of the over-budget cache in place, which narrows line 501's 'leaving things around'. The ground is that the GM's own words already imply it. Line 413: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit ... we definitely don't want to clean things up if it is going to cost us time later.' Taking an idle pool profile without first pricing what its rebuild costs is exactly what that forbids. The 100 GB figure is the session's build (line 229), not the GM's. The residual is filed and ordered (FR-009 form). This ruling covers only the pricing-first deferral: T518 must still decide on the measured cost, and no ruling here exempts the residual permanently."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T530": {
+   "section_sha256": "fb226c0731326eaf179e0c615e4d631ff6f367143c9dd5072ade5926b95416aa",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the fix targets the proved cause, gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append.",
+     "class": "within",
+     "why": "Fixing the actual cause of the incident the task names (a commit moved HEAD under a running gate) is the task. Restating a refuted cause is not a narrowing."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns None: it falls through to the make check and to the command's own writes (shell_write), which the gate sees.",
+     "class": "within",
+     "why": "This is the fix for the defect. It makes the guard refuse what the task says it missed, and refuses nothing the task did not ask to have refused."
+    },
+    {
+     "id": "T530-commit-check-entry",
+     "summary": "shell_write cedes git commit/add to the commit check, which is entered where the pattern matches OR where the walk places a git commit or add, so quoted spellings ('\"git\" commit', \"'git' add -A\") are held as a commit rather than as a shell write of '.'.",
+     "class": "within",
+     "why": "These forms were held before and are held after. Only the refusal's wording changes, which is a difference and not a defect (constitution XIII, 2026-11-18). It is needed so that a bare git commit is not misread as a shell write once the early return is gone."
+    },
+    {
+     "id": "T530-heredoc-bodies-read",
+     "summary": "The GIT_WRITE pattern keeps reading the whole text, heredoc bodies included, so a commit a body could run (a shell reading it, a pipe, a substitution, a wrapper, an interpreter, a later script) stays held. Eight such shapes are pinned by a test.",
+     "class": "within",
+     "why": "This serves goal item 1 ('however its lines and heredocs are laid out'): the guard fails closed on every form that can run a body. The pinned shapes are correct refusals, so the test enforces what was asked."
+    },
+    {
+     "id": "T530-T531-deferral",
+     "summary": "A git commit that appears only in a heredoc's TEXT, never run, is still refused while a gate runs and the tree has moved. This false refusal is the same as at HEAD. It is left, filed as T531, 'lands before none'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A false refusal is a defect by the GM's definition (a check that refuses good work), so leaving it needs a ruling. 'Needs its own method' is a cost argument and does not carry the ruling. The premise 'round 2 ruled the strip NOT LEGITIMATE' is not in this bundle (earlier.md says the block is new; rulings.md is empty), so it is not relied on. What carries it: (1) purpose. T530's purpose is that a commit cannot move a clone under its gate, and the residual errs only toward refusing, so it does not gut that purpose. A naive strip of the bodies would reopen exactly the fail-open hole the task closes, which is plain from the forms the block lists that run a body. (2) The defect is pre-existing and not made worse, and it lies outside the missed commit the task line names. (3) The block gives FR-009's three parts: why it is not fixed here, a filed id (T531), and an order. Nothing in request.md requires this particular tooling defect to land before any named task. The general fix-as-we-go rule is met because T531 is filed as an open task of this same feature's tasking, not dropped."
+    },
+    {
+     "id": "T530-census-order-budget",
+     "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
+     "class": "within",
+     "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
     }
    ],
    "verdict": "CLEAR"

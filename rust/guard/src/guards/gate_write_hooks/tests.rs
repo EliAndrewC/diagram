@@ -424,6 +424,58 @@ fn a_write_after_many_triggers_is_seen_in_linear_time() {
     assert_eq!(found, (Some(true), Some("tick".to_owned())));
 }
 
+/// 451 T530: on 2026-11-27 about 17:40Z a commit reached the clone while its gate ran, sent as a heredoc append, then on its NEXT
+/// LINE `git add ... && git commit -q -F - <<'EOF'`, its message, `EOF`, `echo rc=$?` - the body holding `;`, `&`, `|` and
+/// apostrophes. At the hook the tree had not moved (the append not yet run), so the tree check called the commit unseen - and the
+/// guard returned there, never judging the command's own append, which the gate sees. The stand-in answers as the real check did:
+/// the tree as it stands unmoved, a write of the file seen.
+#[test]
+fn a_commit_after_its_own_write_in_one_command_is_held() {
+    let w = world("heredoc-line");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    let goal = "specs/449-rust-codebase/port-talk-gm-goal.md";
+    let body = "The GM's words; a pipe | and an & here,\nanother line's 'quote and it's done; x && y || z\n";
+    let commit = |write: &str| {
+        format!(
+            "cat {write} <<'EOF'\n{body}EOF\ngit add {goal} && git commit -q -F - <<'EOF'\n451: the GM's goal; a & b | c\nEOF\necho rc=$?"
+        )
+    };
+    let incident = commit(&format!(">> {goal}"));
+    // the tree moved (the stand-in's default): the commit on its own line after a heredoc is held as a commit
+    assert!(refused(&w.bash(&incident), "a git commit or add"));
+    crate::guards::write_executable(
+        &w.top.join("scripts/gates/l7r-gate.sh"),
+        "#!/bin/sh\ncase \"$*\" in *--would-write*) exit 1 ;; esac\n",
+    );
+    assert!(refused(
+        &w.bash(&incident),
+        &format!("a shell write of {goal}")
+    ));
+    // the same commit after a write outside the tree commits nothing the gate sees
+    assert!(w.bash(&commit("> /tmp/t530-out.md")).is_empty());
+}
+
+/// 451 T530: a `git commit` in a heredoc's body, or with git spelled in quotes, is held as at HEAD (the tree moved, the stand-in's
+/// default): a body may be run - by a shell reading it, a pipe, a substitution or a script it writes - so the guard fails closed;
+/// and `shell_write`, which leaves git's `commit` and `add` to the commit check, does not let a quoted git through.
+#[test]
+fn a_commit_in_a_heredoc_body_or_spelled_in_quotes_is_held() {
+    let w = world("heredoc-body");
+    w.make(60, "/usr/bin/make", "done", &w.top);
+    for cmd in [
+        "bash <<'EOF'\ngit add -A && git commit -qm x\nEOF",
+        "sh -s <<EOF\ngit commit -qm x\nEOF",
+        "cat <<'EOF' | sh\ngit commit -qm x\nEOF",
+        "bash -c \"$(cat <<'EOF'\ngit commit -qm x\nEOF\n)\"",
+        "cat > /tmp/t530-run.sh <<'EOF'\ngit commit -qm x\nEOF\nbash /tmp/t530-run.sh",
+        "python3 - <<'PY'\nimport subprocess; subprocess.run('git commit -qm x', shell=True)\nPY",
+        "\"git\" commit -qm x",
+        "'git' add -A",
+    ] {
+        assert!(refused(&w.bash(cmd), "a git commit or add"), "{cmd}");
+    }
+}
+
 /// 451 T33: a SHELL write into the tree is refused while its gate runs, as an Edit and a commit are - on 2026-11-20 a builder's
 /// `git apply` and `cp` of guard files under T34's `make land` put unfinished code under its gate - asked of the same tree check;
 /// a write outside the tree, into `.git` or a path git ignores, and every read, pass.

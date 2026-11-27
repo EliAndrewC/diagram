@@ -94,6 +94,11 @@ check "an Edit of a code token: refused" 2 "$(run "$S" "$CODE")"
 check "a Write of a claims-round record: let through" 0 "$(run "$S" "$(printf '{"tool_name":"Write","tool_input":{"file_path":"%s/dev/claims-index.json","content":"{\\"k\\": 1}\\n"}}' "$S")")"
 printf '{"k": 1}\n' > "$S/dev/claims-index.json"
 check "a commit of only those: let through" 0 "$(run "$S" "$COMMIT")"
+# 451 T530: an append by heredoc, then on its next line a commit of it - the tree unmoved at the hook, so the real tree check called
+# the commit unseen and the guard returned there (2026-11-27 about 17:40Z, a commit reached the clone while its gate ran)
+HEREDOC_COMMIT='{"tool_name":"Bash","tool_input":{"command":"cat >> rust/x/m.rs <<'"'"'EOF'"'"'\n// a; b & c | it'"'"'s\nEOF\ngit add rust/x/m.rs && git commit -q -F - <<'"'"'EOF'"'"'\nmsg; x\nEOF\necho rc=$?"}}'
+check "a heredoc append, then its commit on the next line: refused (451 T530)" 2 "$(run "$S" "$HEREDOC_COMMIT")"
+check "...naming the append" yes "$(grep -q 'a shell write of rust/x/m.rs' "$R/err" && echo yes || echo no)"
 git -C "$S" -c user.email=t@t -c user.name=t commit -qam claims
 check "...and the gate's tree check reads the run as unmoved" 0 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
 sed -i 's/x + 1/x + 2/' "$S/rust/x/m.rs"

@@ -7192,14 +7192,44 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T530 (<why: the finding or measurement that files it>)
+### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed "the tree moved while the gate ran")
+
+- **Approach**: `research: rendering` - tooling, no map drawn. The task line's cause (the `GIT_WRITE` pattern splitting only at `;`, `&`, `|`) was REFUTED by reading: `[^;&|]*?` matches a newline, so the commit on its own line was matched, and the walk (`shared::tree::split`, a newline a separator since its port) and the make detector (`shared::make::POS`, `\n` a command position, heredocs stripped) read newlines as the shell does. The cause as proved: `gate_refusal` asked the tree check `--quiet` (the tree as it stands) and RETURNED on its answer. At the hook the command has not run, so its own `cat >> <file> <<'EOF'` had not moved the tree; the check called the commit unseen and the guard returned `None` before `shell_write` judged the append, which the gate sees. Measured 2026-11-27 in the pool tree with a fresh snapshot (`l7r-gate.sh preflight --tree-snap`, then `--tree-check`): `--quiet` exit 0, `--would-write specs/449-rust-codebase/port-talk-gm-goal.md` exit 1. The fix, in `rust/guard/src/guards/gate_write_hooks.rs`: a commit the check calls unseen falls through to the make check and the command's own writes; `shell_write` leaves git's `commit` and `add` to the commit check (else a bare `git commit` read as a shell write of `.`), so the commit check is entered where the pattern matches OR the walk places a git commit or add (`placed`: `"git" commit` and `'git' add -A` miss the pattern's `\bgit\s`, and were held at HEAD as a shell write of `.`). The pattern still reads the whole text, heredoc bodies too, as at HEAD: round 2 of this section's review ruled a strip of every body but a shell's NOT LEGITIMATE, the forms that run a body unbounded (a shell reading it, a pipe, a substitution, a wrapper, an interpreter, a script a later segment runs), so a commit only in a body stays held, failing closed. `a_commit_in_a_heredoc_body_or_spelled_in_quotes_is_held` pins eight such shapes held as a commit (measured 2026-11-27: on HEAD's guard the six heredoc shapes were held as a commit and `"git" commit -qm x` was held as a shell write of `.`, its wording the one difference).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T530 Approach (checklist part A)
+
+1. **The goal, in the world.** While a tree's `make done` runs, a command that writes a file the gate sees and then commits it is refused, however its lines and heredocs are laid out.
+2. **The constraints.** The guard's own rules: 451 T307 (a commit held only where it runs in the gated tree), T406/T430 (every gated tree judged), 405 T41 (a change the gate does not see passes).
+3. **Where each comes from.** O: the incident (the task line, 2026-11-27 about 17:40Z); O: the tree check's two exits measured above; O: the red-first runs below.
+4. **Do they describe the world here?** Yes: the shell suite's section 3 runs the REAL tree check, and on the old guard it let the incident's shape through (exit 0, measured 2026-11-27).
+5. **The order.** Alone; no task waits on it. Until the landings run in a tree of their own (the task line names that feature), this guard is the clone's only protection.
+6. **The exits.** Green: `a_commit_after_its_own_write_in_one_command_is_held`, `a_commit_in_a_heredoc_body_or_spelled_in_quotes_is_held` and the suite's T530 case pass with the guard's 618 tests and 37 suite cases (measured 2026-11-27, `make builder-checks CRATE=rust/guard` and `tests/hooks/test-gate-write-hooks.sh`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the other matchers read for the newline gap (below) had none.
+8. **The budget.** One landing.
+9. **Done, measured.** Red-first, 2026-11-27: the crate's module, 16 passed and 2 failed on the old code, 18 passed after; the shell suite, 35 passed and 2 failed on the old guard, 37 passed after; the crate's coverage names no line.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, a wrong outcome: a commit moved the clone's HEAD under its gate, voiding the gate (T522's landing ran it again).
+
+**Found and left?**
+
+- A `git commit` only in a heredoc's TEXT is still held as a commit while a gate runs and the tree has moved (a false refusal, failing closed, as at HEAD). Not fixed here: round 2 of this section's review ruled the strip unbounded, and a bounded one needs its own method for the forms that run a body. Filed as T531; lands before none (no task waits on it).
+
+The brief's check of the guard's other matchers for the same newline gap, observed 2026-11-27, method: read each matcher the guard calls - `GIT_WRITE` (spans newlines), `shared::make::invoked` (`POS` holds `\n`, heredocs stripped), the walk `shared::tree::walk_judged` (`split` cuts at `\n`), `OWN_DEF` (Python text, no shell separators): none had it. The early return was this guard's only return before `shell_write`: fixed here.
+
+**Performance work?** no.
+
+### T531 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T530 Approach (checklist part A)
+### T531 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-27T17:55:41Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T530",
+  "commit": "bd3a76164c",
+  "why": "no open task waits on T531, a false refusal that fails closed"
+}

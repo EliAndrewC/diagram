@@ -300,12 +300,20 @@ fn gate_refusal(event: &Event, c: &Gate) -> Option<String> {
         return None;
     }
     let cmd = input_field(event, "command");
-    if GIT_WRITE.is_match(cmd).unwrap_or(false)
-        && stands_here(event, cmd, c, &|head, sub| {
-            head == "git" && matches!(sub, "commit" | "add")
-        })
+    // GUARD_EDIT_OK: 451 T530 - a commit after its own write in one command was let through while the gate ran.
+    // A commit the tree check calls unseen falls through to the command's own writes. WHY: the check reads the tree as it stands at
+    // the hook, before the command runs, so `cat >> <file> <<'EOF' ... EOF` then `git add <file> && git commit` on the next line
+    // read as a commit of nothing, and the guard returned there without judging the append - which reached the clone's HEAD while
+    // its gate ran (2026-11-27 about 17:40Z). The pattern reads the whole text, heredoc bodies too: a body may be run (`bash
+    // <<'EOF'`, `cat <<'EOF' | sh`, `cat > f.sh <<'EOF'; bash f.sh`), so a commit only in one is held, failing closed (451 T530's
+    // round 2 ruled a strip unbounded; the text-only case is T531's). A commit the walk places is one however git is spelled
+    // (`"git" commit`), which `shell_write` leaves to this check.
+    let commit = |head: &str, sub: &str| head == "git" && matches!(sub, "commit" | "add");
+    if (GIT_WRITE.is_match(cmd).unwrap_or(false) || placed(event, cmd, c, &commit))
+        && stands_here(event, cmd, c, &commit)
+        && !unseen(c, &["--quiet"])
     {
-        return (!unseen(c, &["--quiet"])).then(|| "a git commit or add of a change the gate sees (it moves HEAD, or what the gate compares against it)".to_owned());
+        return Some("a git commit or add of a change the gate sees (it moves HEAD, or what the gate compares against it)".to_owned());
     }
     if let Some(found) = crate::shared::make::invoked(cmd)
         .into_iter()
@@ -344,6 +352,18 @@ fn head_of(head: &str) -> (&str, &str) {
         }
     }
     (head, sub)
+}
+
+/// Whether the walk places a command of this kind anywhere in the command (451 T530).
+fn placed(event: &Event, cmd: &str, c: &Gate, kind: &dyn Fn(&str, &str) -> bool) -> bool {
+    let (here, home) = standing(event, c);
+    crate::shared::tree::walk_judged(cmd, Some(&here), "", &home)
+        .targets
+        .iter()
+        .any(|t| {
+            let (head, sub) = head_of(&t.head);
+            kind(head, sub)
+        })
 }
 
 /// Where the command's shell stands as it starts (the event's `cwd`, else the tree the hook's process stands in) and the home.
@@ -417,9 +437,11 @@ fn shell_write(event: &Event, cmd: &str, c: &Gate) -> Option<String> {
     let walk = crate::shared::tree::walk_judged(cmd, Some(&here), "", &home);
     walk.targets.iter().find_map(|t| {
         let (head, sub) = head_of(&t.head);
+        // git's `commit` and `add` are judged above, by the tree check's own word, before the command's other writes (451 T530)
         if t.how == "read"
             || matches!(head, "make" | "mkdir" | "rmdir" | "touch")
             || matches!(sub, "push" | "tag" | "branch")
+            || (head == "git" && matches!(sub, "commit" | "add"))
         {
             return None;
         }
