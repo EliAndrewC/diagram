@@ -1,0 +1,99 @@
+2026-11-24T00:00 land           cover-build  T195      25.5s guard,shared
+2026-11-24T00:02 land           cover-build  T195       0.1s guard
+2026-11-24T00:40 land           build        T207       5.0s pool
+2026-11-24T00:40 land           build        T207       8.3s mode_a
+2026-11-24T00:40 land           lint         T207       4.0s embed
+2026-11-24T00:40 land           lint         T207       6.6s gate
+2026-11-24T00:40 land           lint         T207       6.9s arbiter
+2026-11-24T00:40 land           lint         T207       9.9s archive
+2026-11-24T00:40 land           lint         T207      27.5s browser
+2026-11-24T00:41 land           lint         T207       0.3s ci
+2026-11-24T00:41 land           lint         T207       0.5s author
+2026-11-24T00:41 land           lint         T207       0.6s semantic
+2026-11-24T00:41 land           lint         T207       0.6s diffrun
+2026-11-24T00:41 land           lint         T207       0.7s land
+2026-11-24T00:41 land           lint         T207       0.7s task
+2026-11-24T00:41 land           lint         T207       0.7s tree
+2026-11-24T00:41 land           lint         T207       0.8s downloads
+2026-11-24T00:41 land           lint         T207       0.8s checks
+2026-11-24T00:41 land           lint         T207       0.9s cohort
+2026-11-24T00:41 land           lint         T207       0.9s uncited
+2026-11-24T00:41 land           lint         T207       0.9s rustc
+2026-11-24T00:41 land           lint         T207       1.0s pages
+2026-11-24T00:41 land           lint         T207       1.2s pool
+2026-11-24T00:41 land           lint         T207       1.2s registry
+2026-11-24T00:41 land           lint         T207       1.4s claims
+2026-11-24T00:41 land           lint         T207       1.4s plan
+2026-11-24T00:41 land           lint         T207       1.9s core
+2026-11-24T00:41 land           lint         T207       2.2s reviews
+2026-11-24T00:41 land           lint         T207       2.4s record
+2026-11-24T00:41 land           lint         T207       2.5s trials
+2026-11-24T00:41 land           lint         T207       2.7s measure
+2026-11-24T00:41 land           lint         T207       2.9s bundle
+2026-11-24T00:41 land           lint         T207       3.6s owed
+2026-11-24T00:41 land           lint         T207       4.1s research
+2026-11-24T00:41 land           lint         T207       5.8s guard
+2026-11-24T00:41 land           lint         T207       8.8s shared
+2026-11-24T00:41 land           lint         T207      16.4s mode_a
+2026-11-24T00:42 land           cover-build  T207       8.5s browser
+2026-11-24T00:42 land           cover-build  T207      11.1s embed
+2026-11-24T00:42 land           cover-build  T207      90.2s gate,arbiter,archive,author,bundle,checks,ci,claims,cohort,core,diffrun,downloads,land,measure,owed,pages,plan,pool,record,registry,research,reviews,rustc,semantic,task,tree,trials,uncited
+2026-11-24T00:44 land           cover-build  T207      22.1s guard,shared
+2026-11-24T00:44 land           cover-build  T207      35.0s mode_a
+2026-11-24T01:03 land           build        T201      11.0s pool
+2026-11-24T01:03 land           build        T201      19.8s mode_a
+2026-11-24T01:03 land           cover-build  T201      15.7s mode_a
+2026-11-24T01:03 land           cover-build  T201      28.3s checks,registry,task
+2026-11-24T04:20 land           build        T192      11.3s mode_a
+2026-11-24T04:20 land           cover-build  T192      16.6s checks,task
+2026-11-24T06:00 land           build        T399       0.1s pool
+2026-11-24T06:00 land           build        T399      17.9s mode_a
+2026-11-24T06:00 land           cover-build  T399       0.1s checks,task
+2026-11-24T14:51 land           build        None       8.3s phases
+2026-11-24T14:51 land           cover-build  None       6.6s phases
+2026-11-24T14:51 land           cover-build  None      18.1s checks,task
+2026-11-24T14:51 land           lint         None      11.9s phases
+2026-11-24T17:09 land           cover-build  None      14.0s checks,task
+2026-11-24T17:10 land           build        None       1.9s pool
+2026-11-24T17:10 land           build        None       6.9s phases
+2026-11-24T17:10 land           build        None      18.9s mode_a
+2026-11-24T18:26 land           lint         None       6.8s arbiter
+2026-11-24T18:26 land           lint         None      15.2s gate
+2026-11-24T18:27 land           build        None       0.3s mode_a
+2026-11-24T18:27 land           cover-build  None      17.5s mode_a
+2026-11-24T18:27 land           cover-build  None      25.9s gate,arbiter,checks,ci,land,registry,task
+2026-11-24T18:27 land           lint         None       0.4s ci
+2026-11-24T18:27 land           lint         None       1.0s land
+2026-11-24T18:27 land           lint         None       1.0s task
+2026-11-24T18:27 land           lint         None       1.3s checks
+2026-11-25T12:30 done           build        T238      39.2s mode_a
+2026-11-25T12:30 done           lint         T238      39.4s gate
+2026-11-25T12:31 done           build        T240      12.5s phases
+2026-11-25T12:31 done           lint         T240      10.8s phases
+2026-11-25T12:31 done           lint         T240      13.5s checks
+2026-11-25T12:32 done           cover-build  T240      39.4s gate,checks,ci,cohort,land,registry,task
+2026-11-25T12:32 done           cover-build  T240      60.2s guard,shared
+2026-11-25T12:33 done           cover-build  T240      33.7s mode_a
+2026-11-25T12:34 done           cover-build  T240      10.8s phases
+2026-11-26T04:19 rust-test      build        None      52.8s guard
+2026-11-26T04:20 rust-test      build        None       0.1s guard
+2026-11-26T04:20 rust-test      build        None       0.1s guard
+2026-11-26T04:20 rust-test      build        None       0.1s guard
+2026-11-26T19:04 land           lint         T256     175.0s guard
+2026-11-26T19:07 land           lint         T256     216.5s mode_a
+2026-11-26T19:08 land           build        T256     158.1s mode_a
+2026-11-26T19:10 land           cover-build  T256      63.5s checks,task
+2026-11-26T19:11 land           cover-build  T256      55.6s guard,shared
+2026-11-26T19:12 land           cover-build  T256      78.9s mode_a
+2026-11-27T03:57 land           lint         T256      97.8s gate
+2026-11-27T03:59 land           cover-build  T256     118.6s gate,arbiter,checks,ci,claims,cohort,core,land,measure,task
+2026-11-27T03:59 land           lint         T256       5.0s land
+
+make step seconds
+done           build              52
+done           cover-build       144
+done           lint               64
+land           build             268
+land           cover-build       652
+land           lint              655
+rust-test      build              53

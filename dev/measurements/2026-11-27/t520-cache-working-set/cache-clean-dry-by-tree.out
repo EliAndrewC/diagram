@@ -1,0 +1,11 @@
+diagram-backlog          cover-gate        27.7 GB
+diagram-backlog          debug             21.9 GB
+diagram-backlog-land     cover-gate        21.7 GB
+diagram-backlog-land     debug              4.6 GB
+diagram                  tool               3.3 GB
+diagram-backlog-land     tool               2.2 GB
+diagram-backlog          cover-guard        2.2 GB
+diagram-backlog          cover-mode_a       2.1 GB
+diagram-backlog          cover-embed        0.4 GB
+diagram-backlog          cover-browser      0.4 GB
+{'diagram-backlog': 54.9, 'diagram': 3.3, 'diagram-backlog-land': 28.5}

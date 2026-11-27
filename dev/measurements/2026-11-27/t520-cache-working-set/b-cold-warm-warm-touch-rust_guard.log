@@ -1,0 +1,4 @@
+rust-checks: test on rust/guard: test result: ok. 616 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.14s
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format clean on 1 crate(s)

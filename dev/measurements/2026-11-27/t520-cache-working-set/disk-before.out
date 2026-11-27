@@ -1,0 +1,34 @@
+230G	/home/agent/.cache/l7r-cargo-target
+1.7G	/home/agent/.cache
+3.4G	/home/agent
+26G	/tmp
+23G	/diagram
+196K	/diagram/.clones/RESEARCH-CLAIMS.md
+0	/diagram/.clones/RESEARCH-CLAIMS.md.lock
+32K	/diagram/.clones/RESEARCH-PEER-CHECKS.log
+2.8G	/diagram/.clones/diagram-backlog
+302M	/diagram/.clones/diagram-backlog-b1
+315M	/diagram/.clones/diagram-backlog-land
+776M	/diagram/.clones/diagram-backlog-pages
+301M	/diagram/.clones/diagram-backlog-review
+308M	/diagram/.clones/diagram-backlog-t269
+308M	/diagram/.clones/diagram-backlog-t270
+303M	/diagram/.clones/diagram-backlog-t271
+1.1G	/diagram/.clones/diagram-research
+292M	/diagram/.git
+20K	/home/agent/.config
+24K	/home/agent/.npm
+228K	/home/agent/.claude.json
+333M	/home/agent/.cargo
+760M	/home/agent/.rustup
+2.1G	/home/agent/.local
+16G	/home/agent/.claude
+232G	/home/agent/.cache
+200M	/tmp/l7r-dl
+283M	/tmp/rh
+338M	/tmp/probe309
+566M	/tmp/l7r-pass
+1.1G	/tmp/l7r-check
+21G	/tmp/claude-1000
+Filesystem     1G-blocks  Used Available Use% Mounted on
+overlay              461   358        80  82% /

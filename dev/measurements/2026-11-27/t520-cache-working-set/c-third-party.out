@@ -1,0 +1,114 @@
+GB per tree, profile and kind (allocated blocks)
+diagram-backlog        other=4.54 third=5.99 workspace=100.85
+    cover-browser  third       0.21
+    cover-browser  workspace   1.15
+    cover-embed    third       0.88
+    cover-embed    workspace   1.29
+    cover-gate     third       0.42
+    cover-gate     workspace  48.41
+    cover-guard    third       0.42
+    cover-guard    workspace   4.09
+    cover-mode_a   third       0.98
+    cover-mode_a   workspace   4.35
+    cover-phases   workspace   0.26
+    debug          third       1.88
+    debug          workspace  36.77
+    release        third       0.23
+    release        workspace   0.20
+    tool           other       4.47
+    tool           third       0.97
+    tool           workspace   4.34
+diagram-backlog-t269   other=0.09 third=2.33 workspace=21.60
+    cover-browser  third       0.07
+    cover-browser  workspace   0.14
+    cover-embed    third       0.30
+    cover-embed    workspace   0.15
+    cover-gate     third       0.10
+    cover-gate     workspace   5.42
+    cover-guard    third       0.07
+    cover-guard    workspace   0.69
+    cover-mode_a   third       0.32
+    cover-mode_a   workspace   0.46
+    cover-phases   workspace   0.07
+    debug          third       0.84
+    debug          workspace  11.76
+    tool           other       0.09
+    tool           third       0.64
+    tool           workspace   2.91
+diagram-backlog-t270   other=0.10 third=2.72 workspace=21.52
+    cover-browser  third       0.07
+    cover-browser  workspace   0.14
+    cover-embed    third       0.30
+    cover-embed    workspace   0.15
+    cover-gate     third       0.07
+    cover-gate     workspace   5.14
+    cover-guard    third       0.07
+    cover-guard    workspace   0.70
+    cover-mode_a   third       0.32
+    cover-mode_a   workspace   0.54
+    cover-phases   workspace   0.07
+    debug          third       1.26
+    debug          workspace  11.87
+    tool           other       0.09
+    tool           third       0.64
+    tool           workspace   2.91
+diagram-backlog-t271   other=0.09 third=2.30 workspace=19.74
+    cover-browser  third       0.07
+    cover-browser  workspace   0.14
+    cover-embed    third       0.30
+    cover-embed    workspace   0.15
+    cover-gate     third       0.07
+    cover-gate     workspace   3.78
+    cover-guard    third       0.07
+    cover-guard    workspace   0.51
+    cover-mode_a   third       0.32
+    cover-mode_a   workspace   0.46
+    cover-phases   workspace   0.07
+    debug          third       0.84
+    debug          workspace  11.73
+    tool           other       0.08
+    tool           third       0.64
+    tool           workspace   2.90
+diagram-backlog-b1     other=0.08 third=1.35 workspace=15.24
+    cover-gate     third       0.07
+    cover-gate     workspace   1.25
+    cover-guard    third       0.07
+    cover-guard    workspace   0.50
+    debug          third       0.82
+    debug          workspace  10.70
+    tool           other       0.08
+    tool           third       0.39
+    tool           workspace   2.78
+diagram-backlog-land   other=0.11 third=2.73 workspace=38.78
+    cover-gate     third       0.23
+    cover-gate     workspace  27.61
+    debug          third       1.66
+    debug          workspace   7.71
+    tool           other       0.08
+    tool           third       0.85
+    tool           workspace   3.46
+diagram                other=0.11 third=0.61 workspace=6.29
+    release        third       0.16
+    release        workspace   0.12
+    tool           other       0.08
+    tool           third       0.45
+    tool           workspace   6.16
+
+third-party total 18.03 GB; units by number of trees holding them: {1: 7261, 2: 3991, 4: 2721, 5: 1898, 6: 2976}
+third-party bytes in units held by 2+ trees 14.30 GB; one copy each would free 10.56 GB
+of which .rlib/.rmeta/.so/.a artifacts: 2323 units, 12.80 GB
+  DIFFERS: ('debug', 'deps/fax-2c95221406022939.d') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('cover-mode_a', 'deps/pico_args-7d41ffaee60a9b93.d') ['diagram-backlog', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('debug', 'deps/roxmltree-7a6a15b5ff5c304c.d') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('debug', 'deps/serde_core-c70f9fc144983950.d') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('tool', 'build/esaxx-rs-f058b60c650b94e2/root-output') ['diagram-backlog', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('tool', 'deps/float_cmp-40e9699443f0a7b1.d') ['diagram', 'diagram-backlog']
+  DIFFERS: ('debug', 'build/serde_core-46ed637d0bde8985/build_script_build-46ed637d0bde8985.d') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('tool', 'deps/rand-b4e238bee33ad1dd.d') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('debug', 'deps/libtokenizers-ccda07730f266e9c.rlib') ['diagram-backlog-b1', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('cover-embed', 'deps/libtokenizers-15024881ec9df85c.rlib') ['diagram-backlog', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('debug', 'deps/libtokenizers-15024881ec9df85c.rlib') ['diagram-backlog-b1', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('debug', 'deps/libgeo-2a8d4d62527bd943.rmeta') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-land', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+  DIFFERS: ('cover-guard', 'deps/libserde_json-36d1da640d2f870f.rmeta') ['diagram-backlog', 'diagram-backlog-b1', 'diagram-backlog-t269', 'diagram-backlog-t270', 'diagram-backlog-t271']
+sample of 120 multi-tree third-party files (1.81 GB read): identical bytes in every tree 107, differing 13
+by bytes: identical 1.62 GB, differing 0.19 GB (differing = same size, a few bytes apart: rustc output not reproducible across trees)

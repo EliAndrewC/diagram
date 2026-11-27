@@ -1,0 +1,14 @@
+# make cache-clean DRY=1, 2026-11-27 about 16:50Z: 9324 'would remove' lines; the first 10 and the last 3 kept here, the per-tree sums in cache-clean-dry-by-tree.out
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/.fingerprint/aho-corasick-26dde93e93675b19 (0.0 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/libaho_corasick-26dde93e93675b19.rlib (2.9 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/aho_corasick-26dde93e93675b19.d (0.0 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/libaho_corasick-26dde93e93675b19.rmeta (1.9 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/.fingerprint/bit-set-d38342d960c64460 (0.0 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/.fingerprint/bit-vec-4b68be6d51f0100a (0.0 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/bit_set-d38342d960c64460.d (0.0 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/libbit_set-d38342d960c64460.rlib (0.1 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/libbit_set-d38342d960c64460.rmeta (0.1 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+would remove /home/agent/.cache/l7r-cargo-target/diagram-backlog/release/deps/libbit_vec-4b68be6d51f0100a.rlib (0.2 MB, a crate's stale build in a live profile, unread in the knob's hours before the profile's last use)
+scratch-sweep: 9324 entries, 87072.2 MB - would remove
+cache-clean: a build runs (3812476 cargo), so only the stale builds in live profiles were taken: run it again once that build ends
+make: *** [Makefile:449: cache-clean] Error 1

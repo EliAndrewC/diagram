@@ -1,0 +1,6 @@
+rust-checks: test unchanged on rust/guard - its last green result stands
+rust-checks: test clean on 1 crate(s)
+rust-checks: lint unchanged on rust/guard - its last green result stands
+rust-checks: lint clean on 1 crate(s)
+rust-checks: format unchanged on rust/guard - its last green result stands
+rust-checks: format clean on 1 crate(s)

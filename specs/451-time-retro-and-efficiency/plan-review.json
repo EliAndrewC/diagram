@@ -4668,6 +4668,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T520 (the GM 2026-11-27 on what T515's prune leaves: \"that is more than what I would have expected\"; the cache's working set one full build per tree, six trees over, observed 2026-11-27, method: `make cache-clean DRY=1` and `du` per tree)": {
+   "sha256": "99cef290567005eb62657a59d5c94d88ee5576af788359c4bb6874c4fed2c1a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T520 Approach (checklist part A)": {
+   "sha256": "344d9dde0dc6044a47f9c0c50ea6c141bddde17d1c61b0bbd3e43d840dc8918c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -42786,6 +42798,80 @@
      "summary": "Item 12 classes the change as the GM's change to what the report shows, not a defect fix; T512's figures and sources unchanged, only their printing.",
      "class": "within",
      "why": "Matches the request: the GM changed what the report should show; nothing the GM asked for is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T509 (<why: the finding or measurement that files it>)",
+    "### T509 Approach (checklist part A)",
+    "### T511 (<why: the finding or measurement that files it>)",
+    "### T511 Approach (checklist part A)",
+    "### T520 (the GM 2026-11-27 on what T515's prune leaves: \"that is more than what I would have expected\"; the cache's working set one full build per tree, six trees over, observed 2026-11-27, method: `make cache-clean DRY=1` and `du` per tree)",
+    "### T520 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T509/T511 stubs",
+     "summary": "T509's and T511's blocks are the unfilled section template (placeholders only)",
+     "class": "within",
+     "why": "A placeholder decides nothing; there is no decision to rule on until the sections are written."
+    },
+    {
+     "id": "T520 measurement-only",
+     "summary": "T520 is a measurement: no source changed, nothing built in the sweep, nothing deleted from the real cache; it prices four levers in GB freed against rebuild minutes, with the disk before and after",
+     "class": "within",
+     "why": "Answers the GM's 2026-11-27 words on what T515 leaves ('that is more than what I would have expected') under his 2026-11-26 principle ('we definitely don't want to clean things up if it is going to cost us time later'): pricing each lever's disk against its minutes, for him to choose, is what that principle requires before any cleanup that could cost time."
+    },
+    {
+     "id": "T520 (a)",
+     "summary": "Pool trees' idle cover-* profiles (23.2 GB) priced with their cold-rebuild cost and left as a candidate for the GM, not built",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words address exactly this case ('If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle'); leaving the eviction to him with its price follows that rule."
+    },
+    {
+     "id": "T520 (b)",
+     "summary": "Holding b1 cold (about 15 GiB) priced as a knob for the GM, not built",
+     "class": "within",
+     "why": "Priced in rebuild seconds at 3 and 4 builders; a lever that can cost time is put to the GM rather than built, per his time-over-disk principle."
+    },
+    {
+     "id": "T520 (c)",
+     "summary": "A shared third-party build cache (at most 10.6 GB freed) declined: sccache measured 0 hits twice, a shared target directory serializes builds on cargo's lock",
+     "class": "within",
+     "why": "The GM asked for no shared cache; the option is priced and reported, and declining it on measured grounds that it would cost build time is his own 2026-11-26 rule, not a narrowing of anything requested."
+    },
+    {
+     "id": "T520 (d) / T525",
+     "summary": "The landing tree's 39 GiB (about 10 after the prune) goes when land-alone retires and its -land worktree is removed; filed as T525, lands before T302",
+     "class": "within",
+     "why": "A cache that is live only while land-alone exists is taken by the existing dead-tree rule once the worktree goes; filing that step against T302's retirement, in D15's form, keeps it in the feature and ordered."
+    },
+    {
+     "id": "T520 folds T518",
+     "summary": "T518 (pool trees' idle cover-* priced with eviction cost, decision the GM's) is folded into T520 as option (a)",
+     "class": "within",
+     "why": "Same work and same outcome as T518's line; folding it changes no scope."
+    },
+    {
+     "id": "T520 found-and-left T523",
+     "summary": "The model trial's arms sharing one target directory (skewing m14's timings) and the sweep leaving 4.1 MB of 2026-10-30 root files are deferred to T523, lands before T517",
+     "class": "within",
+     "why": "A wrong outcome (a skewed measurement; a cleanup hole of the kind the GM's 2026-11-27 T515 words name) filed in D15's form to an ordered task inside the same feature, before the next disk task; a measurement task carrying no source change is a stated reason. Not a defect carried past the step."
+    },
+    {
+     "id": "T520 perf classification",
+     "summary": "T520 tagged [perf] as a measurement under FR-013; not an engine-speed task, so the performance checklist does not apply",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes as performance work for ordering; T520 measures the builders' rebuild minutes against each lever. Scheduling classification, not a narrowing."
+    },
+    {
+     "id": "T520 constants unchanged",
+     "summary": "L7R_CACHE_BUDGET_GB (100) and L7R_BUILDERS (3) unchanged; the levers that would move them are the GM's",
+     "class": "within",
+     "why": "Moves nothing the GM has not approved."
     }
    ]
   }

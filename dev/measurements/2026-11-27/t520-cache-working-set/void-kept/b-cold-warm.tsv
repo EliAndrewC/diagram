@@ -1,0 +1,8 @@
+label	crate	seconds	exit	load_at_start	target_gb_after
+warm	rust/guard	5.1	0	7.92	-
+cold	rust/guard	93.7	0	9.21	1.02
+cold-again	rust/guard	0.9	0	23.47	-
+warm	rust/gate/crates/measure	1.0	0	23.47	-
+cold	rust/gate/crates/measure	97.8	0	21.83	1.02
+cold-again	rust/gate/crates/measure	1.2	0	24.65	-
+done
