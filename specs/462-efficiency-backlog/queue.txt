@@ -1,0 +1,10 @@
+# The builders' queue of this feature: one entry a line, in the order to hand out. make queue lists it with each entry's state
+# computed (landed, built, in flight, waiting, READY); make builder-next names the next; make queue-add appends, and a plain edit
+# does as well. A line STAYS until its task is landed; a task that needs another builder gets another line. The format and the
+# rules: rust/guard/shared/src/builder_queue.rs.
+# <task[,task]> <kind> [jobs=<1-3>] [measures=<n>] [load=1] crates=<dir,dir|-> files=<path,prefix|-> [waits=<T<n>,GM,alone>] [note=<the rest of the line>]
+T533 fix crates=- files=-
+T301 fix crates=- files=-
+T374 fix crates=- files=-
+T278 fix crates=- files=-
+T371 fix crates=- files=-

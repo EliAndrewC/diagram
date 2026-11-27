@@ -21,3 +21,9 @@
 > Finish the "now" set in 451. I'm counting as "now": T526, which is in flight; 461's own tasks; the ready short-run fixes T513, T514, T517, T519, T523, T527 to T529, T531 and T532. T308 is listed in the queue as in flight, but 461 has taken it over (T16 closes it), so it isn't 451's now. Everything else in 451's queue, including T321, T307, T300 and T302's remaining parts, goes to the new feature. ... Move the rest. Tasks that belong to 461 go there, and the remaining deferred work goes into a new placeholder feature. The process-reviewer feature doesn't exist yet, so nothing moves to it now. When it's filed, the tasks that are really its own can move there. ... Close 451 with its feature report, once the "now" set lands. Measure the large-file readers, before and after. ... I'd measure that first in the new feature, so the switch gives a clean before-and-after.
 
 (T526 and T517 of that list have landed. The spec sends T307 to 461, not here: 461's accepted spec takes it over.)
+
+2026-11-27, on the order of 462's work:
+
+<!-- SOURCE: GM NOTES -->
+> Okay, that's fine, though I would still like the disk cleanup tasks to be a higher priority than most of the rest of that new feature, since while it's not a current blocker or problem for anyone, it has been in the past so I want to make sure we get to that sooner than some of the other tasks in that feature, which are more long term in nature.
+<!-- END SOURCE -->
