@@ -59,6 +59,51 @@ fn diff_run(args: &[String]) -> Reply {
     )
 }
 
+/// `l7r-gate plan <verb>`, with `make plan-delta` and `make decide` (`plan delta <F>`, `plan decide <F> <T>`) running the push's
+/// spec lint over the feature's every changed file first (451 T527). WHY: both linted plan.md alone where the push's `spec-lint
+/// --delta` reads the feature's every file, so 461's three research.md figures passed `make plan-delta` and were refused at the
+/// landing (observed 2026-11-27, method: that landing's refusal). Both run and are reported together (451 T25); a red lint turns
+/// the verb's success into a refusal, its dispatch prompt withheld. `plan` and `check` are handed in (`plan::cli`, `checks::cli`), so a test asks them of fakes.
+fn linted_plan(
+    words: &[String],
+    root: &Path,
+    plan: &dyn Fn(&[String], &Path, &plan::Claims) -> Reply,
+    check: &dyn Fn(&[String], &Path) -> Reply,
+) -> Reply {
+    let plan = |w: &[String]| plan(w, root, &claims::cli);
+    let shown = match words.first().map(String::as_str) {
+        Some("delta") => "plan-delta",
+        Some("decide") => "decide",
+        _ => return plan(words),
+    };
+    let Some(dir) = words.get(1).and_then(|f| plan::resolve_feature(f, root)) else {
+        return plan(words);
+    };
+    let lint = check(
+        &[
+            "spec-lint".to_owned(),
+            "--delta".to_owned(),
+            root.display().to_string(),
+            dir.display().to_string(),
+        ],
+        root,
+    );
+    let done = plan(words);
+    if lint.code == 0 {
+        return done;
+    }
+    let stdout = if done.code == 0 {
+        String::new()
+    } else {
+        done.stdout
+    };
+    Reply {
+        stdout,
+        stderr: format!("{}{}{}{shown}: refused - the spec lint above, which the push runs over this feature's every changed file (451 T527): fix each finding in the form it names and run make {shown} again\n", done.stderr, lint.stdout, lint.stderr),
+        code: 1,
+    }
+}
+
 /// The tree the wrapper started this binary from (`L7R_GATE_TREE`), else the repository here.
 fn gate_tree() -> PathBuf {
     std::env::var_os("L7R_GATE_TREE").map_or_else(top, PathBuf::from)
@@ -112,7 +157,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("github-token") => ci::config::github_token(&top()),
         Some("check") => checks::cli(&args[1..], &top()),
-        Some("plan") => plan::cli(&args[1..], &top(), &claims::cli),
+        Some("plan") => linted_plan(&args[1..], &top(), &plan::cli, &checks::cli),
         Some("rust") => rustc::cli(&args[1..]),
         Some("push-gate") => push::gate_cli(&args[1..], &top()),
         Some("push-checks") => push::checks_cli(
@@ -210,6 +255,7 @@ pub fn cli(args: &[String]) -> Reply {
 #[cfg(test)]
 mod tests {
     use super::cli;
+    use std::path::Path;
 
     /// The bytes' door (feature 449 T143): `log guard` reached with its arguments as bytes, anything else as text, a byte that is not
     /// UTF-8 refused outside `log guard`.
@@ -227,6 +273,69 @@ mod tests {
         bad.push(OsString::from_vec(vec![0xff]));
         let r = super::cli_os(&bad);
         assert_eq!((r.code, r.stderr.contains("not UTF-8")), (101, true));
+    }
+
+    fn said(stdout: &str, stderr: &str, code: i32) -> super::Reply {
+        super::Reply {
+            stdout: stdout.to_owned(),
+            stderr: stderr.to_owned(),
+            code,
+        }
+    }
+
+    /// 451 T527: `make plan-delta` and `make decide` run the push's spec lint over the feature's every changed file, both reported
+    /// together; a red lint withholds the verb's dispatch prompt; another verb, or a feature that names no directory, asks no lint.
+    #[test]
+    fn plan_delta_and_decide_run_the_spec_lint_over_the_feature() {
+        let root = l7r_shared::tempdir::TempDir::new("gate-linted-plan");
+        std::fs::create_dir_all(root.join("specs/200-a-feature")).unwrap();
+        let words = |w: &[&str]| w.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
+        let asked = std::cell::RefCell::new(Vec::new());
+        let red = |a: &[String], _: &Path| {
+            asked.borrow_mut().push(a.join(" "));
+            said(
+                "specs/200-a-feature/research.md:3: the figure '40 s' carries no\n",
+                "",
+                1,
+            )
+        };
+        let green = |_: &[String], _: &Path| said("", "", 0);
+        let prompt = |_: &[String], _: &Path, _: &crate::plan::Claims| said("PROMPT\n", "", 0);
+        let refused = |_: &[String], _: &Path, _: &crate::plan::Claims| {
+            said("", "decide: refused - PLANWHY\n", 2)
+        };
+        let r = super::linted_plan(&words(&["delta", "200"]), &root, &prompt, &red);
+        assert_eq!((r.code, r.stdout.as_str()), (1, ""));
+        assert!(r.stderr.contains("'40 s'") && r.stderr.ends_with("run make plan-delta again\n"));
+        assert!(
+            asked.borrow()[0].starts_with("spec-lint --delta ")
+                && asked.borrow()[0].ends_with("specs/200-a-feature")
+        );
+        let r = super::linted_plan(&words(&["decide", "200", "T01"]), &root, &refused, &red);
+        assert_eq!(r.code, 1);
+        assert!(
+            r.stderr.starts_with("decide: refused - PLANWHY\n")
+                && r.stderr.contains("'40 s'")
+                && r.stderr.contains("make decide again")
+        );
+        let r = super::linted_plan(&words(&["decide", "200", "T01"]), &root, &refused, &green);
+        assert_eq!(
+            (r.code, r.stderr.as_str()),
+            (2, "decide: refused - PLANWHY\n")
+        );
+        let r = super::linted_plan(&words(&["delta", "200"]), &root, &prompt, &green);
+        assert_eq!((r.code, r.stdout.as_str()), (0, "PROMPT\n"));
+        asked.borrow_mut().clear();
+        assert_eq!(
+            super::linted_plan(&words(&["section", "200", "T01"]), &root, &prompt, &red).code,
+            0
+        );
+        assert_eq!(
+            super::linted_plan(&words(&["delta", "999"]), &root, &prompt, &red).code,
+            0
+        );
+        assert!(asked.borrow().is_empty());
+        assert_eq!(cli(&words(&["plan"])).code, 2);
     }
 
     #[test]

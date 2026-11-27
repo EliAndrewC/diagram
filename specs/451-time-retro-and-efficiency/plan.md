@@ -6918,29 +6918,53 @@ that batch; the red was not in its change.
 <!-- plan-archive: T512 to T512 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T515 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T517 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T519 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T519 (spec-lint's figure refusal named a label it does not accept: 461's spec took four pushes, 2026-11-27)
+
+- **Approach**: built in pool tree `diagram-backlog-t269`, bundled with T527 (one brief, one tree). Only the refusal's words change.
+  - **The refusal** (`rust/gate/crates/checks/src/checks/spec_figures.rs`, `check_paragraphs`): it said "label it as a one-shot
+    observation (date and method)". The check passes a paragraph only where core's `ONE_SHOT`, the words `observed YYYY-MM-DD` in
+    any case, and the word `method` stand in the same paragraph. It now prints that form and a filled example: "`observed
+    <YYYY-MM-DD>, method: <how it was measured>` in the same paragraph, e.g. `(observed 2026-11-27, method: a stopwatch)`". The
+    example is lower case, since `reviews/prereq.rs` keeps a case-sensitive copy of the pattern (Found and left). The review-history
+    suffix ` or as a round's own run` still follows it. The prefix "carries no `m:<key>`" is kept: `is_check5` and the tests key on it.
+  - **The test** (`spec_figures/tests.rs`, `the_refusal_prints_the_one_shot_label_it_accepts`) pins the form, not the string. It
+    lifts the example out of the refusal, pastes it into the refused paragraph, and asserts that the paragraph then passes.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/checks ONLY="checks::spec_figures::tests"`
+    on the old message): 13 passed, 1 failed, the new test. After: the crate's 204 tests pass, and `make builder-checks
+    CRATE="rust/gate/crates/checks rust/gate"` is green (observed 2026-11-27, method: that command).
+  - **Rendered elsewhere?** No hook suite or fixture renders this message. Outside `rust/`, the words "date and method" appear only
+    in `docs/guards.md`'s description of the check, which stays true (observed 2026-11-27, method: grep over `tests/`, `docs/`,
+    `scripts/`, `.claude/`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the figure refusal prints its accepted label | n/a - no map | n/a | none | n/a |
 
 ### T519 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A writer refused for an unlabeled figure reads, in the refusal, the exact label that passes, and
+   passes on the next push.
+2. **The constraints.** The project's rule that a known refusal prints the concrete fix, pinned by a test. Feature 239's FR-010:
+   a one-shot observation stays legal and labeled. Check 5's pattern is unchanged.
+3. **Where each comes from.** G: the user's rule "tips live in error output". R: T519's task line; `core/src/checks.rs`'s
+   `ONE_SHOT`. O: the red-first run above.
+4. **Do they describe the world here?** Yes. The test runs the real check over a scratch feature the figure check reaches, the
+   label lifted from the real refusal.
+5. **The order.** Alone; T527's refusals print this message too, so it lands with T527.
+6. **The exits.** Green: the checks crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The new test passes, and failed on the old message (observed 2026-11-27, method: the runs above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A writer whose figure was refused reads a label that passes. The old words, "date and method", sent 461's
+    spec back four times.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `rust/gate/crates/reviews/src/reviews/prereq.rs` keeps its own `ONE_SHOT`, which is case-sensitive, where core's is `(?i)`. A
+  figure labeled "Observed ..." passes spec-lint and the push but is listed unresolved in a review dispatch's prerequisite check.
+  Not fixed here: the fix is in a third crate, outside this brief's two jobs. Filed as T534; lands before T503.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
@@ -7059,29 +7083,78 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T522 to T417 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T526 to T520 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T527 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T527 (the landing's mechanical refusals reached where the work is written: four landings refused on 2026-11-27 for what no earlier check said)
+
+- **Approach**: built in pool tree `diagram-backlog-t269`, bundled with T519. Two of the push table's rows now also run where a
+  writer is working. Each reuses the push's own check, so it refuses what the push refuses and prints the push's fix.
+  - **`make plan-delta` and `make decide` run the push's spec lint over the feature** (`rust/gate/src/lib.rs`, `linted_plan`).
+    Both verbs linted plan.md alone. The push's `spec-lint --delta` reads every file of a touched feature, so 461's research.md
+    figures passed `make plan-delta` and were refused at the landing. The binary's `plan` arm now runs `check spec-lint --delta
+    <root> <the feature's directory>` beside `plan delta` or `plan decide`, and reports both together (451 T25). Where the lint is
+    red, the verb's refusal is followed by the lint's findings and the line "`<verb>`: refused - the spec lint above ... run make
+    `<verb>` again", with exit 1. Where the verb itself succeeded, its dispatch prompt is withheld, so no review is dispatched over
+    a plan the push will refuse. Other verbs ask no lint, nor does a feature that names no directory. The door sits in the binary,
+    which names both crates; `plan` cannot name `checks`, since `checks` dev-depends on `claims`, which builds on `plan`. `plan::cli`
+    and `checks::cli` are handed in as fn items, as `claims::cli` already is, so the test asks fakes.
+  - **`spec-lint --delta ROOT DIR...`** (`checks/spec_lint.rs`, `cli`): the delta is narrowed to the named features. The base is the
+    push's own (`delta_base::named`, else the merge base with origin/main), and so is the `introduced` filter, so a finding the base
+    already held is not the writer's. Without a directory, `--delta ROOT` is unchanged and judges every touched feature.
+  - **`make builder-checks` runs the push's audit-register row** (the Makefile): `check audit-register --delta <top>`, the row's own
+    command, after test, lint and format, inside the same `rc` loop, so every failure is reported together. Its refusal already
+    prints the entry skeleton with each `covers:` line and the escape, so its text is unchanged. T515's two knobs would have been
+    refused in the builder's tree.
+  - **The base, measured.** In this tree before any edit, 16 commits ahead of origin/main, `check spec-lint --delta .` and `check
+    audit-register --delta .` were both clean (`the delta's 0 mechanism(s)`), and so was `check spec-lint specs/451-...` (observed
+    2026-11-27, method: the three commands, run before the first edit). The staged batches each passed the push's table at their own
+    landing's first pass (T307 part 2), so the push's merge base adds no noise in a pool tree, and no hand-in base is set here.
+  - **Outside 461's FR-002.** 461 T06 asks the whole push table at hand-in (`make builder-done`, once T08 wires it in). These run
+    earlier: at a plan's review and in the first tier, before any hand-in. No file of `land/`, `push.rs` or the hand-in is touched.
+  - **Tests and red first** (observed 2026-11-27, method: `make rust-test ... ONLY=` on each, then the crates whole):
+    - `spec_lint/tests.rs`, `a_delta_narrowed_to_one_feature_judges_its_every_changed_file`. Two features each gain an unlabeled
+      research.md figure. The plain delta names both, and the narrowed delta names only the named feature's research.md. On the old
+      `cli` it gave 19 passed, 1 failed: the named directory was ignored and the other feature's finding was reported.
+    - `rust/gate/src/lib.rs`, `plan_delta_and_decide_run_the_spec_lint_over_the_feature`. It checks that a red lint withholds
+      `delta`'s prompt and names `make plan-delta again`, that `decide`'s own refusal is kept ahead of the lint's findings, that a
+      green lint leaves either verb's reply unchanged, and that `section` and an unknown feature ask no lint. With the two verbs'
+      arms broken back to the old pass-through, it gave 0 passed, 1 failed.
+    - `make builder-checks`'s new row: no Rust test reads a recipe. A probe file in the tree, `rust/gate/t527-probe.rs` holding
+      `pub(crate) const T527_PROBE_CAP: u64`, made `make builder-checks CRATE=rust/gate` exit red with "this delta adds a numeric
+      constant `T527_PROBE_CAP` that no entry under dev/audits/ names" and the skeleton. With the probe removed it was green again
+      (observed 2026-11-27, method: that run).
+  - After: `make builder-checks CRATE="rust/gate/crates/checks rust/gate"` is green, with the checks crate's 204 tests and the
+    gate's 9 (observed 2026-11-27, method: that command). `docs/make-targets.html` was regenerated (`make docs`) for the three
+    help lines.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the push's spec lint and audit row run where the work is written | n/a - no map | n/a | none | n/a |
 
 ### T527 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A refusal the landing would make on a writer's own text or knobs is met where it is written: at
+   `make plan-delta` or `make decide` for a feature's files, and at `make builder-checks` for a knob. It prints the form the push
+   accepts, so the landing is not the first to say it.
+2. **The constraints.** 451 T25 (every finding in one report). The first tier carries no coverage and no hook suites (451 T308).
+   461 FR-002 builds the hand-in's first pass, and this stays outside it. The user's rule that a known refusal prints the concrete fix.
+3. **Where each comes from.** G: the GM's question on T527's line ("if you keep running into the same problem, then is that
+   something where a process fix is reasonable?"), added to request.md from 449's `port-talk-gm-goal.md`. R: the push table's
+   `spec-lint` and `audit-register` rows (`cohort/src/push.rs`). O: the measurements above.
+4. **Do they describe the world here?** Yes. The narrowed delta's test runs on a git scratch tree with origin/main set, the probe
+   ran the real recipe, and the base was measured in this pool tree.
+5. **The order.** With T519, whose message is what the plan-delta refusal prints for an unlabeled figure. It goes before 461 T08,
+   which needs nothing from it.
+6. **The exits.** Green: the crates' tests, `make builder-checks`, and the probe. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The two new tests pass, and each failed on the old code. The probe refused in the builder's tree (observed
+   2026-11-27, method: the runs above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A writer meets the push's spec lint and audit refusals at the review and the first tier, not at the landing.
+    On 2026-11-27 those refusals sent four landings back.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
@@ -7229,6 +7302,32 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T535 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T534 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T534 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

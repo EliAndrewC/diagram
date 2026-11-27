@@ -523,3 +523,9 @@ The GM, 2026-11-27, on the cache's remaining options (T520, T526):
 The GM, 2026-11-27, approving the close of 451 (the "now" tasks finished, the rest moved to a new placeholder feature, the large records split):
 
 > In the meantime, it seems like you have a good amount of work to do with both the tasks that you are closing out and moving everything new feature, afterwards, and then doing the split that we discussed which is all on top of the orchestrator feature that you are working in parallel to that, so I'm going to try to keep an eye on what you're doing for the next few hours, but I will probably be preparing for a dinner and then doing work in the kitchen and such, so let me know if you need anything. But I will probably leave you to it for a while, if you agree that this is a good time to do that. And that you don't need anything else from me beforehand.
+
+## 2026-11-27: a refusal met again and again owes a process fix (451 T527)
+
+The GM, 2026-11-27, his ninth process-reviewer message (recorded whole in `specs/449-rust-codebase/port-talk-gm-goal.md`), the words T527's line quotes:
+
+> I haven't looked into what you're actually talking about when you mention the upfront bookkeeping problem again. But if you keep running into the same problem, then is that something where a process fix is reasonable?

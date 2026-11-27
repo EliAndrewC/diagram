@@ -4764,6 +4764,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T519 (spec-lint's figure refusal named a label it does not accept: 461's spec took four pushes, 2026-11-27)": {
+   "sha256": "c9819e3eec2a5e5e100508fefda8693091472452bccf86b9563fa14332c03037",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T519 Approach (checklist part A)": {
+   "sha256": "7468173f2ece485f9a133a7b8599168b960d693e33d1b8f48b05a80893438d45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T527 (the landing's mechanical refusals reached where the work is written: four landings refused on 2026-11-27 for what no earlier check said)": {
+   "sha256": "7e1ecefb99cb3b894d430a92fe2d0abd7681029dd64148951a6db320e046a2ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T527 Approach (checklist part A)": {
+   "sha256": "1fce4643041dbe76146bbe68b2763ff2026d9a0125791730db883805d9433271",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43461,6 +43485,91 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T519 (spec-lint's figure refusal named a label it does not accept: 461's spec took four pushes, 2026-11-27)",
+    "### T519 Approach (checklist part A)",
+    "### T527 (the landing's mechanical refusals reached where the work is written: four landings refused on 2026-11-27 for what no earlier check said)",
+    "### T527 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T519-D1",
+     "summary": "spec-lint check 5's refusal prints the label form it accepts ('observed <YYYY-MM-DD>, method: <how>' in one paragraph) and a filled lower-case example, replacing 'date and method'; the review-history suffix and the 'carries no m:<key>' prefix are kept",
+     "class": "within",
+     "why": "A wording change to an existing refusal so a writer passes on the next push; serves the GM's T527 words (a problem met again and again owes a process fix: 461's spec took four pushes) and the 2026-11-19 ask for process improvements. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T519-D2",
+     "summary": "Check 5's acceptance pattern (core ONE_SHOT) is unchanged; only the message changes",
+     "class": "within",
+     "why": "Keeps 239 FR-010 (a one-shot observation stays legal and labeled) exactly as it is; neither widens nor narrows what passes."
+    },
+    {
+     "id": "T519-D3",
+     "summary": "The new test pins the form by round trip: the example is lifted from the refusal, pasted into the refused paragraph, and the paragraph must then pass; red first on the old message",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (the refusal names a label that passes); deleting the behavior leaves the test nothing to check."
+    },
+    {
+     "id": "T519-D4",
+     "summary": "Found and left: reviews/prereq.rs keeps a case-sensitive copy of ONE_SHOT, so 'Observed ...' passes spec-lint but is listed unresolved by a dispatch's prerequisite check; not fixed here, filed as T534, lands before T503; the example is lower case so the printed fix passes both",
+     "class": "narrowing",
+     "why": "Ruled as MODE 1, presumed not legitimate. The stated reason alone (a third crate, outside the brief's two jobs) is the 'more of the codebase' argument and would not carry it. What carries it: (1) T519's purpose is intact - the refusal's printed example is lower case, so a writer who follows the printed fix passes spec-lint, the push AND the prereq check, and the plan already chooses its example to avoid the defect; (2) the defect predates T519 and is not introduced by it; (3) it is not left but filed as T534 and ordered before T503, the form the accepted spec's FR-009 gives a deferral, consistent with the GM's approved item 4 ('briefs that default to fixing in the task' - a default) and his T141 bundling words. A defect carried silently, or one T519's own fix did not route around, would be NOT LEGITIMATE.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T519-D5",
+     "summary": "Built and landed bundled with T527 in one pool tree, one landing",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling of small tasks (T141)."
+    },
+    {
+     "id": "T527-D1",
+     "summary": "make plan-delta and make decide also run the push's own 'check spec-lint --delta <root> <feature dir>' and report both together; a red lint follows the verb's output with the lint's findings and a refusal naming 'make <verb> again', exit 1, and withholds the dispatch prompt; other verbs and a feature naming no directory ask no lint",
+     "class": "within",
+     "why": "The GM's 2026-11-27 words (T527): a refusal met again and again owes a process fix. It reuses the push's check and its 'introduced' filter, so it refuses only what the push would refuse anyway, earlier; it adds no new rule. Withholding the prompt stops a review being dispatched over text the push will refuse - the same refusal, moved earlier."
+    },
+    {
+     "id": "T527-D2",
+     "summary": "spec-lint --delta ROOT DIR... narrows the delta to the named features, on the push's own base (delta_base::named, else merge base with origin/main) and its 'introduced' filter; --delta ROOT alone unchanged",
+     "class": "within",
+     "why": "Mechanism for D1; keeps the push's behavior unchanged and judges the writer only on findings the base did not already hold."
+    },
+    {
+     "id": "T527-D3",
+     "summary": "make builder-checks also runs the push's audit-register row ('check audit-register --delta <top>') in the same rc loop, reporting every failure together (451 T25); its refusal text unchanged",
+     "class": "within",
+     "why": "Serves the T527 words (T515's knobs were refused at the landing). Checked against the GM's two-tier words (T308: rigor deferred to the session clone; 'our goal is to maximize task throughput'): this is one mechanical row of the push table (its own command, not a new check), not coverage or hook suites, and its purpose - fewer refused landings - is the throughput the GM named, so the purpose of the two-tier rule is served, not gutted."
+    },
+    {
+     "id": "T527-D4",
+     "summary": "Kept outside 461 FR-002: no file of land/, push.rs or the hand-in touched; these run before hand-in (plan review and first tier)",
+     "class": "within",
+     "why": "Avoids overlap with 461 T06/T08's builder-done first pass; narrows nothing either feature asked for."
+    },
+    {
+     "id": "T527-D5",
+     "summary": "No hand-in base set; the push's merge base is used, on the measured clean base in the pool tree (both delta checks and the full spec-lint clean before the first edit)",
+     "class": "within",
+     "why": "A design choice the spec leaves open, with its premise measured and labeled."
+    },
+    {
+     "id": "T527-D6",
+     "summary": "The builder-checks row is shown by a red/green probe run (a probe constant refused, then green once removed) rather than a standing test, since no Rust test reads a recipe; the two Rust changes carry red-first tests",
+     "class": "within",
+     "why": "451 FR-012's standing red-first test duty covers FR-006 to FR-009, FR-011 and FR-013, not this task; the row itself is real enforcement (the 2026-11-19 approval) and its firing is observed and labeled. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T527-D7",
+     "summary": "Lands with T519 and before 461 T08, which needs nothing from it",
+     "class": "within",
+     "why": "Ordering only; 451 FR-013's performance-first rule is not engaged (neither is filed as [perf])."
     }
    ]
   }

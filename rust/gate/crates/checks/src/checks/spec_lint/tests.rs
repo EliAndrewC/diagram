@@ -423,6 +423,42 @@ fn at_a_hand_in_a_spec_is_judged_on_what_the_work_introduces() {
     assert!(done.stdout.contains("FR-004") && !done.stdout.contains("FR-003"));
 }
 
+/// 451 T527: `--delta ROOT DIR` judges the one feature `make plan-delta` and `make decide` name, on what its every changed file
+/// introduced (a research.md figure too), and leaves another touched feature's findings to that feature.
+#[test]
+fn a_delta_narrowed_to_one_feature_judges_its_every_changed_file() {
+    let root = scratch("spec-lint-one");
+    for n in ["200-ours", "201-other"] {
+        put(
+            &root,
+            &format!("specs/{n}/tasks.md"),
+            "- [ ] T01 do the thing (FR-001)\n",
+        );
+        put(&root, &format!("specs/{n}/spec.md"), "# x\n\n## Functional requirements\n\n**FR-001** A thing.\n\n## Success criteria\n\n**SC-001** (FR-001) It holds.\n\n**Approved**: the GM, 2026-10-10, \"please file it then\"\n");
+    }
+    git(&root, &["init", "-q", "-b", "main"]);
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "landed"]);
+    git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    put(
+        &root,
+        "specs/200-ours/research.md",
+        "# R\n\nThe gate ran 40 s.\n",
+    );
+    put(
+        &root,
+        "specs/201-other/research.md",
+        "# R\n\nThe build ran 90 s.\n",
+    );
+    let top = root.display().to_string();
+    let ours = root.join("specs/200-ours").display().to_string();
+    assert!(cli(&owned(&["--delta", &top])).stdout.contains("201-other"));
+    let done = cli(&owned(&["--delta", &top, &ours]));
+    assert_eq!(done.code, 1);
+    assert!(done.stdout.contains("200-ours/research.md"));
+    assert!(!done.stdout.contains("201-other"));
+}
+
 #[test]
 fn the_command_line_names_directories_a_self_test_and_the_one_figure() {
     assert!(cli(&owned(&["--selftest"])).stdout.contains("selftest ok"));

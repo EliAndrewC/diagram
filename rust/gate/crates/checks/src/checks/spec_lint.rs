@@ -636,7 +636,7 @@ fn selftest() -> Outcome {
     )
 }
 
-/// `l7r-gate check spec-lint --delta ROOT | DIR... | --selftest | --figure-pattern`.
+/// `l7r-gate check spec-lint --delta ROOT [DIR...] | DIR... | --selftest | --figure-pattern`.
 pub(super) fn cli(args: &[String]) -> Outcome {
     let has = |flag: &str| args.iter().any(|a| a == flag);
     if has("--selftest") {
@@ -648,7 +648,10 @@ pub(super) fn cli(args: &[String]) -> Outcome {
     let named: Vec<&String> = args.iter().filter(|a| !a.starts_with("--")).collect();
     let root = Path::new(named.first().map_or(".", |a| a.as_str()));
     let delta = has("--delta");
-    let dirs = if delta {
+    // `--delta ROOT DIR...` narrows the delta to the features named: `make plan-delta` and `make decide` judge their own (451 T527)
+    let dirs = if delta && named.len() > 1 {
+        named[1..].iter().map(PathBuf::from).collect()
+    } else if delta {
         touched_spec_dirs(root)
     } else {
         named.iter().map(PathBuf::from).collect()

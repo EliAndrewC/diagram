@@ -115,6 +115,21 @@ fn a_labeled_one_shot_passes_and_its_label_may_open_a_sentence() {
     );
 }
 
+/// The refusal prints the label's form, and the form it prints passes (451 T519: "date and method" was refused four pushes running,
+/// since only the literal `observed YYYY-MM-DD` with the word `method` in the same paragraph passes).
+#[test]
+fn the_refusal_prints_the_one_shot_label_it_accepts() {
+    let para = "## Summary\n\nThe container ran at 5 s per call.\n";
+    let said = check(para).join("\n");
+    assert!(said.contains("`observed <YYYY-MM-DD>, method: <how it was measured>`"));
+    let example = said
+        .split("e.g. `")
+        .nth(1)
+        .and_then(|r| r.split('`').next());
+    let labeled = para.replace(" call.", &format!(" call {}.", example.unwrap_or("none")));
+    assert_eq!(check(&labeled), Vec::<String>::new(), "{labeled}");
+}
+
 #[test]
 fn it_reaches_an_old_feature_a_draft_with_no_tasks_and_passes_the_number_claim() {
     let old = measured(

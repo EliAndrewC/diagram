@@ -148,7 +148,7 @@ fn check_paragraphs(spec_dir: &Path, recorded: &Value) -> Vec<String> {
                 } else {
                     ""
                 };
-                bad.push(format!("{path}:{line}: the figure {} carries no `m:<key>` - record it with the harness that measured it, or label it as a one-shot observation (date and method){round}", py_repr(&Value::from(first.as_str().trim()))));
+                bad.push(format!("{path}:{line}: the figure {} carries no `m:<key>` - record it with the harness that measured it, or label it as a one-shot observation, `observed <YYYY-MM-DD>, method: <how it was measured>` in the same paragraph, e.g. `(observed 2026-11-27, method: a stopwatch)`{round}", py_repr(&Value::from(first.as_str().trim()))));
             }
             continue;
         }

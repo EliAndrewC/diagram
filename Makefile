@@ -580,7 +580,7 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan $(if $(ARBITER),arbiter-accept "$(F)" "$(ARBITER)",$(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)")
 
-plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043); a found-and-left deferral without its form refused, escape DEFER_FORM_OK="<reason>" (451 T17)   F=<feature>
+plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043); a found-and-left deferral without its form refused, escape DEFER_FORM_OK="<reason>" (451 T17); the push's spec lint over the feature's every changed file beside it (451 T527)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make plan-delta: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan delta "$(F)"
 
@@ -771,7 +771,7 @@ task-withdraw:  ## [project] close a filed task found to be a duplicate or no de
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-withdraw: F=<feature>, T=<task id(s)> and WHY="<reason>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-withdraw "$(F)" "$(T)"
 
-decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17); T=a,b,c decides a bundle's one section in one dispatch (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
+decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17); T=a,b,c decides a bundle's one section in one dispatch (451 T141); the push's spec lint over the feature's every changed file beside it (451 T527)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
@@ -1293,10 +1293,11 @@ crate-checks:    ## [static] a task's crate-scoped checks while iterating - test
 # build, no hook-suite fan-out. Measured 2026-11-26: of a three-builder run's compile minutes coverage builds were 57.9 and coverage
 # runs 19.8 against lint 33.2 and test builds 6.2, and every memory and compiler peak fell where three trees were in a coverage build
 # at once. The second tier is the landing's gate (make land), once over the batch carried into the clone.
-builder-checks:  ## [static] the FIRST TIER, a builder's checks in its own tree - test, lint and format --check over every crate CRATE= names, all reported, red if any is; no coverage and no hook suites: those run once at the landing's gate over the batch (451 T308)   CRATE="<dir> ..."
+builder-checks:  ## [static] the FIRST TIER, a builder's checks in its own tree - test, lint and format --check over every crate CRATE= names, and the push's audit-register row over the tree's delta (451 T527), all reported, red if any is; no coverage and no hook suites: those run once at the landing's gate over the batch (451 T308)   CRATE="<dir> ..."
 	@if [ -z "$(CRATE)" ]; then printf 'make builder-checks: CRATE="<crate dir> ..." is required - e.g. make builder-checks CRATE="rust/guard rust/guard/shared"\n' >&2; exit 2; fi
-	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; rc=0; \
-	for step in test lint "format --check"; do "$$g" rust $$step $(foreach c,$(CRATE),--crate "$(c)") || rc=1; done; exit $$rc
+	@top="$$(git rev-parse --show-toplevel)"; g="$$top/scripts/gates/l7r-gate.sh"; rc=0; \
+	for step in test lint "format --check"; do "$$g" rust $$step $(foreach c,$(CRATE),--crate "$(c)") || rc=1; done; \
+	"$$g" check audit-register --delta "$$top" || rc=1; exit $$rc
 
 # FR-008's timer (feature 449 T169): T99's method - each test alone, best of three, a fresh TMPDIR, timed around the process - which
 # T160, T164, T167 and T168 each ran by hand. It reports and never refuses: time is never a gate (the GM's performance rule).
