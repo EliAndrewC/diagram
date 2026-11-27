@@ -40,7 +40,7 @@ to 451 is warned off whole reads.
   box (461 T27, T14; part 2 already closed by 461 T06), T308 (461 T16), T405 (461 T28), T415 (461 T26), and T525 (closed by 461 T30,
   not moved). The session's proposal told the GM T307 would move here; 461's accepted spec takes it over, so it goes there.
 - **FR-004 The split and its measurement are 451's closing tasks:** 451 T536 measures which tools, hooks and agents read 451's large
-  records whole, while they are whole (the proposal's item 4); 451 T537 splits them mechanically with a note warning future sessions
+  records whole, while they are whole (the proposal's item 4, which put it "first in the new feature": it runs in 451 instead because the before reading needs the records whole, before T537 splits them); 451 T537 splits them mechanically with a note warning future sessions
   off whole reads (the GM's "doing the split that we discussed"), after T536.
 - **FR-005** A task that belongs to the process-reviewer feature moves there once that feature is filed (it is not yet).
 
