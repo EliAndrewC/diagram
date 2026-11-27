@@ -2671,12 +2671,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T313 (<why: the finding or measurement that files it>)": {
-   "sha256": "cde907b68cc84e12f20fa56ccbb5b9e5a79db68d4e9deca8695e699346ac3aec",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T313 Approach (checklist part A)": {
    "sha256": "7dcb92fd2b0d2fa732cc6c79e960cc1894801a127eeb43e6ab3a40bc1ce8eb66",
    "verdict": "CLEAR",
@@ -3037,20 +3031,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T365 (<why: the finding or measurement that files it>)": {
-   "sha256": "65e0eb7a1b92f8d1c5fd504918244ecd749906dd305d38190020b7609684c603",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T365 Approach (checklist part A)": {
-   "sha256": "a0c690f3433fc124e32d4e2cfe84956f60dee66f45b16bc3049c44d468a592da",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "7c2607a1205046304c2441005b85b832ce83edf22569682760cf43cb16632c8e",
+   "sha256": "4b8387748033b153d970bc52af69e0cc005b8a020780f1d9ada5a47e01808e3b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3073,20 +3055,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T373 (<why: the finding or measurement that files it>)": {
-   "sha256": "7f903c2f9ec645e115ef11a3f2f420eb97af3e4cec2dd42a9d8edf718815d403",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T373 Approach (checklist part A)": {
-   "sha256": "3e458e26494cb2e5698e39ebf33c301c858dc7466f8be72e72cb3e8cde206800",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "461bfb1270faa8e5c5651891ebdcfa79d3600494a7e02b306597947a78afa44a",
+   "sha256": "7e6f9bc68453afa5dc3b97a143d6e259d0d31ba498f46731c7841809346d35c3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3511,26 +3481,14 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T413 (<why: the finding or measurement that files it>)": {
-   "sha256": "4a464b253d79d6e6fe1ceeda0d5d742e5c216b35708f2c293568957a8b62e87a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T413 Approach (checklist part A)": {
    "sha256": "0014f2dba876f2b541a64f4b39fe8e7616730629f42b2ac4ebfe558e66f93272",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T420 (<why: the finding or measurement that files it>)": {
-   "sha256": "837605826108660b62726cd2b714382a07ee8f079645cac5eeb6b182080db9bc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T420 Approach (checklist part A)": {
-   "sha256": "65b4df711b33570f37854fe7771cfab0053c473c504d989abb674e4cc8a67983",
+   "sha256": "ec989968e600cb225cb905b4a0517a67a059ddf873bf9cd232b7fa7dafd675fb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3747,6 +3705,132 @@
   },
   "### T434 Approach (checklist part A)": {
    "sha256": "20b9bdedc98f126b577538ae4a50bf235879632d36c91094d9432bfb960e4ecb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 (the guard crate's test binary ran 5.3 to 6.0 s under the default `TMPDIR` against 2.0 s under a fresh one, found by T340, measured 2026-11-26 (the task line's three runs of each by hand in `diagram-backlog-t270`, load 10 to 13))": {
+   "sha256": "855e1889b3341daa14e7e82811e398b5bc5da3bd71180f371291ecb89637e0dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 (a PreToolUse hook on an Edit took 342 ms where one on a Bash call took 32, found by T365, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs a call))": {
+   "sha256": "cd97f29fe51b421b3c072560b9efe4d5d792cc4d12d993aec3b6f4ba24bd9641",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))": {
+   "sha256": "b627e9b15d2598ee199683b76df7c90b3cc82f9c63caba86e054d537d6489b22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T431 (<why: the finding or measurement that files it>)": {
+   "sha256": "da79c49075c5bf3e569041d2c820e9b27c49a45c5d3643821eecb61db1bf81e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T431 Approach (checklist part A)": {
+   "sha256": "7ac94dc4839e42568fb6c0f0583f02c8fa36da9b0e42ec46a8e2643b2cf02de7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T408 (<why: the finding or measurement that files it>)": {
+   "sha256": "a7da2f3f28893127e62b81830cc6d28975e2fa34a9cbe6a3b749fc943a208565",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T408 Approach (checklist part A)": {
+   "sha256": "448bb295e53e8ea8796c697a39e8b4534a92f6aeb1739d95d76aa8633f16171d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T412 (<why: the finding or measurement that files it>)": {
+   "sha256": "a79b9adb603baf1b3f1dab7198ab8851543b3d7c4f9e22f9e3303ae4343f52a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T412 Approach (checklist part A)": {
+   "sha256": "631bb611f844cada07624b424c9f483c3052e1923247a47f1f710722b8677e53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T415 (<why: the finding or measurement that files it>)": {
+   "sha256": "35d6c232b2f35108c5bda479807687a082ffec927a8c940e82b54c0dd1c1741d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T415 Approach (checklist part A)": {
+   "sha256": "c924ff264b12486863114fcaac2e304b40e9a2035a64b31ca55d2db97f7ba5e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T416 (<why: the finding or measurement that files it>)": {
+   "sha256": "a10d834dc963478d2c673fecca26ce43904b25a0c96046c7a5be387b5aff8a49",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T416 Approach (checklist part A)": {
+   "sha256": "5a4766b68ceb3c08f8b76172d69988c70807b2ad6214d73883adf8256c000200",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T418 (<why: the finding or measurement that files it>)": {
+   "sha256": "8b5dc650efbe284d42126ba6cad5053fa7fcaa8f90a8898fa3af8ebc58e35bfe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T418 Approach (checklist part A)": {
+   "sha256": "b5f0db9878a1a52071c3881936d097dad020a40a3cbd6007499a69cc580250cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T421 (<why: the finding or measurement that files it>)": {
+   "sha256": "37851250515e0c86fbc5ab685a20de4e5d73b44d5e1ef52d9cccc6ceb0d5dffd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T421 Approach (checklist part A)": {
+   "sha256": "2d7f30cca0c1bfb32ff2f9763ff4c5d322eda275249a5a6541f2b255c041fd0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T432 (<why: the finding or measurement that files it>)": {
+   "sha256": "9e8b7a7a0e59a473ab6e99e36f195e07eaf34499f8ba07beff8200b1cb4b67d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T432 Approach (checklist part A)": {
+   "sha256": "452009424e802deff355f8553abf16979bdcac74a2295beccec8036d61321134",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T439 (<why: the finding or measurement that files it>)": {
+   "sha256": "a0c1814383dd14e5ae77e50d42d1b3e0570e03e52fab578bfd3cdcb32a136e47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T439 Approach (checklist part A)": {
+   "sha256": "28c51bbdd797605e42619a0ebc075f446c74bb4d4b4d4602b1ecc001d125e8c8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34303,6 +34387,171 @@
      "summary": "Both tasks classed as [perf] work (FR-013) with before and after figures; no engine speed is involved, so no engine-speed checklist",
      "class": "within",
      "why": "Both make the checks faster, which is FR-013's own example of performance work. The note is a factual one about which checklist applies, and it decides nothing the request asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T365 (the guard crate's test binary ran 5.3 to 6.0 s under the default `TMPDIR` against 2.0 s under a fresh one, found by T340, measured 2026-11-26 (the task line's three runs of each by hand in `diagram-backlog-t270`, load 10 to 13))",
+    "### T365 Approach (checklist part A)",
+    "### T373 (a PreToolUse hook on an Edit took 342 ms where one on a Bash call took 32, found by T365, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs a call))",
+    "### T373 Approach (checklist part A)",
+    "### T408 (<why: the finding or measurement that files it>)",
+    "### T408 Approach (checklist part A)",
+    "### T412 (<why: the finding or measurement that files it>)",
+    "### T412 Approach (checklist part A)",
+    "### T415 (<why: the finding or measurement that files it>)",
+    "### T415 Approach (checklist part A)",
+    "### T416 (<why: the finding or measurement that files it>)",
+    "### T416 Approach (checklist part A)",
+    "### T418 (<why: the finding or measurement that files it>)",
+    "### T418 Approach (checklist part A)",
+    "### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))",
+    "### T420 Approach (checklist part A)",
+    "### T421 (<why: the finding or measurement that files it>)",
+    "### T421 Approach (checklist part A)",
+    "### T431 (<why: the finding or measurement that files it>)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (<why: the finding or measurement that files it>)",
+    "### T432 Approach (checklist part A)",
+    "### T439 (<why: the finding or measurement that files it>)",
+    "### T439 Approach (checklist part A)",
+    "(removed) ### T313 (<why: the finding or measurement that files it>)",
+    "(removed) ### T365 (<why: the finding or measurement that files it>)",
+    "(removed) ### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T373 (<why: the finding or measurement that files it>)",
+    "(removed) ### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T413 (<why: the finding or measurement that files it>)",
+    "(removed) ### T420 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T365-measure-only",
+     "summary": "T365 is a measurement: no source changed, nothing removed from /tmp by hand; the cause (sweep_dead's whole-directory listing at every TempDir::new) named and its arithmetic closed",
+     "class": "within",
+     "why": "The task line asked which of sweep_dead and the fixtures' scans makes the binary slow and who else pays; the section answers exactly that. The GM (2026-11-20) counts a measurement task as performance work."
+    },
+    {
+     "id": "T365-levers",
+     "summary": "Levers A (T370) and C (T372) built; B (T371) and E1 (T377) filed as alternatives, build one; E2 (T378) and F (T379) dominated, to be withdrawn when B/E1 or B and C land",
+     "class": "within",
+     "why": "Each lever priced is filed or given a stated withdrawal condition with its number; nothing that saves time is dropped unrecorded."
+    },
+    {
+     "id": "T365-lever-D",
+     "summary": "Lever D (the scratch sweep's /tmp rule widened: at most 90 s a day, 0 s beside B and C, up to 4.9 GB) filed as T374, 'a decision for the GM about disk'",
+     "class": "within",
+     "why": "The lever is filed as an open task, not dropped or narrowed; whether T374 needs the GM or is already decided by his words (2026-11-22 'clean up after ourselves', 2026-11-25 the container's leftovers, 2026-11-26 'time saved is more important than disk usage') is T374's question, and T365 settles nothing against them."
+    },
+    {
+     "id": "T365-defer-T373",
+     "summary": "The Edit hook's 342 ms deferred to T373, lands before T302",
+     "class": "within",
+     "why": "Not a temp-directory cost, so outside the task line; FR-009/D15 form, to an open task of this feature, which the GM's 2026-11-26 'fix all of this ... before resuming our port' keeps ahead of the port."
+    },
+    {
+     "id": "T365-defer-T375",
+     "summary": "Four rust/guard tests red under a scratchpad TMPDIR deferred to T375, lands before T379",
+     "class": "within",
+     "why": "A defect (a red crate run) left by a measurement builder that changes no source, in FR-009/D15 form. The order is causal: T379 (a TMPDIR per pool tree) is itself 'blocked by T375'. Should T379 be withdrawn, the order binds nothing, but T375 stays an open task of 451, so the defect is still fixed before the port resumes."
+    },
+    {
+     "id": "T365-defer-T376",
+     "summary": "An unknown runner of the land crate's test binary under /tmp, leaving 29 leftovers, deferred to T376, lands before T371",
+     "class": "within",
+     "why": "FR-009/D15 form; the reason (who runs it is not in the logs) is a measurement of its own. T371 is one of two alternatives (with T377) and may not be built, so this order may come to bind nothing; T376 still stays an open task of 451 ahead of the port, so the defect is not dropped."
+    },
+    {
+     "id": "T365-T373-checklist-removed",
+     "summary": "The PERF=1 engine-speed performance checklist blocks of T365 and T373 removed; the 'Performance work?' answer says yes, a measurement task",
+     "class": "within",
+     "why": "The template asks the docs/performance-checklist.md answers only of an engine-speed task, and calls them prompts, never a gate; these are tooling measurements. The FR-013 performance classification is kept."
+    },
+    {
+     "id": "T373-measure-only",
+     "summary": "T373 is a measurement in a sandbox with a leak check: two guards named (event-log-hooks' reversal parse, clone-sync's transcript read), their sum within 2% of the binary's, the Bash plan-hold cost found beside them",
+     "class": "within",
+     "why": "Answers the task line (which guard spends the Edit hook's time, by --only) and no more; no source changed."
+    },
+    {
+     "id": "T373-levers",
+     "summary": "A, C built (T383, T385); A2 kept in T383, passed to T392 to price; B, D, E filed (T384, T386, T387); G filed as a measurement (T388)",
+     "class": "within",
+     "why": "Pricing and filing levers is the measurement's own exit; every lever with a saving to price has a task."
+    },
+    {
+     "id": "T373-lever-F-declined",
+     "summary": "Lever F (git diff-index --quiet HEAD before git status --porcelain: 52.1 against 110.9 ms a call, at most 2 s a day) DECLINED below a 3 s a day cut-off, noted in T384",
+     "class": "within",
+     "why": "A speed-up worth at most 2 s a day, not a wrong outcome, so declining it leaves no defect (constitution XIV v2.36.0); the decline is written down with its number. The block shows no reopening condition and no audit-register entry for it, unlike T420's declines; that is a recording gap, not a narrowing."
+    },
+    {
+     "id": "T373-found-and-left",
+     "summary": "The 15 to 17 ms a hook call outside the guard binary filed as a measurement, T439, before T302; the plan-hold Bash slowness is lever E, T387, before T302",
+     "class": "within",
+     "why": "FR-009/D15 form, each to an open task of this feature; T439 is a measurement of the hop that spends the time, which the GM counts as performance work (2026-11-20)."
+    },
+    {
+     "id": "T420-premise",
+     "summary": "The task's premise was a measurement's own waits: 221.9 s of T367's were T355's scripted holds; real waits 7.1 s wide and 87.4 s on the small lane; L7R_BUILD_SLOTS and L7R_BUILD_SLOTS_SMALL left as they are",
+     "class": "within",
+     "why": "Answers each question of the task line (which builds, what held the slots, whether a third slot or a dependency lane fits T347's budget); a measured premise that did not hold is a finding, not a narrowing."
+    },
+    {
+     "id": "T420-decline-third-slot",
+     "summary": "A third wide slot DECLINED: at most 7.1 s / 47 s a day saved, 7.4 GiB on paper over the 7 GiB margin",
+     "class": "within",
+     "why": "Nothing to save and over the budget the task asked it to be judged against; no defect left."
+    },
+    {
+     "id": "T420-decline-coverage-one-slot",
+     "summary": "The batch gate's coverage build taking one slot DECLINED as moot: it takes one already",
+     "class": "within",
+     "why": "Already the case (cover.rs); nothing to do."
+    },
+    {
+     "id": "T420-decline-dep-lane",
+     "summary": "A lane for one crate and its changed dependencies DECLINED: at most 1.5 s / 10 s a day, 7.6 GiB on paper over the margin",
+     "class": "within",
+     "why": "Priced against T347's budget as the task line asked; over the margin and near nothing saved; no defect left."
+    },
+    {
+     "id": "T420-decline-prewarm-yield",
+     "summary": "The pre-warm yielding its slot before a builder's build DECLINED: about 1.3 s / 9 s a day; it already yields between crates (T336)",
+     "class": "within",
+     "why": "Near nothing to save and largely already the case; no defect left."
+    },
+    {
+     "id": "T420-decline-lane-two-wide",
+     "summary": "A lane two wide DECLINED: about 87 s / 578 s a day but 8.2 GiB on paper, over the margin, where the filed overflow lever (T425) saves as much inside the budget",
+     "class": "within",
+     "why": "Not a loss of time saved: the same saving is filed as T425 inside the budget."
+    },
+    {
+     "id": "T420-file-T425",
+     "summary": "A build told alone takes a free wide slot when the lane is held: FILED as T425, 85.7 of 87.4 s / about 570 s a day, inside the paper budget",
+     "class": "within",
+     "why": "The lever that saves the measured waits is filed."
+    },
+    {
+     "id": "T420-reopen",
+     "summary": "What would reopen the declined levers: real wide waits passing about 5 minutes a day, read with waits.py over a new window (a GUESS knob)",
+     "class": "within",
+     "why": "The falsifier the GM asked a decision to carry (2026-11-25, the audit register)."
+    },
+    {
+     "id": "T420-found-and-left",
+     "summary": "A slot-wait on a scratch slot directory is logged like a real one, so make task-time books scripted holds as waiting: filed as T426, before T380",
+     "class": "within",
+     "why": "A defect (a reader books wrong minutes) deferred in FR-009/D15's form to an open task of this feature, by a measurement builder that changes no source."
+    },
+    {
+     "id": "stubs-and-removals",
+     "summary": "T408, T412, T415, T416, T418, T421, T431, T432, T439: unfilled template stubs of open tasks; T313 and T413 stubs removed; T365, T373 and T420 stubs replaced by the sections above",
+     "class": "within",
+     "why": "A template stub decides nothing; removing an unfilled stub removes no decision."
     }
    ]
   }

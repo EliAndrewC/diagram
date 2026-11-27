@@ -4762,43 +4762,52 @@ Built here: T421 - an open performance task the queue has no line for
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T365 (<why: the finding or measurement that files it>)
+### T365 (the guard crate's test binary ran 5.3 to 6.0 s under the default `TMPDIR` against 2.0 s under a fresh one, found by T340, measured 2026-11-26 (the task line's three runs of each by hand in `diagram-backlog-t270`, load 10 to 13))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement; no source changed. What was asked (the task line): which of `TempDir::new`'s sweep of dead processes' directories (`rust/guard/shared/src/tempdir.rs`, `sweep_dead`) and the fixtures' own scans makes the binary slow under `/tmp`, and whether the hook suites of `tests/hooks` and the live hooks pay it at every call. The record is `dev/measurements/2026-11-26/tmp-clutter/t365-results.md`, its scripts and raw outputs beside it; every figure below is the record's, measured 2026-11-26 in the pool tree `diagram-backlog-t270` from 22:54 to 23:25Z at load 3 to 23 with other builders running (the record's head).
+  - **The method.** `strace` and `perf` are refused in the container, so the listings were counted in process by an `LD_PRELOAD` shim (`t365-shim.c`: each `opendir` of the temp directory, its `readdir64` calls and the time to its `closedir`); wall times by `/usr/bin/time`, five runs of each arm alternating; one `TempDir::new` timed alone in a loop of 300 calls in a release build (`t365-loop-main.rs`); the live hooks by 20 alternating runs a call after a warm-up (`t365-time.py`); the day's counts from the clone's event log (`t365-events.py`), all measured 2026-11-26 (the record's section 1 and 2).
+  - **The cause is `sweep_dead`, at every `TempDir::new`.** It lists the WHOLE temp directory on each call, with no stamp and no once-a-process rule, and the guard test binary makes 509 such calls a run under either temp directory, measured 2026-11-26 (the shim, `t365-shim-testbin-*.txt`). On one thread the binary took 24.85 s under `/tmp` against 15.04 s under a new empty `TMPDIR`, a difference of 9.81 s, and the shim's 509 listings took 9.97 s, measured 2026-11-26 (`t365-bin-times.txt`, `/usr/bin/time`, and the shim). At 22 threads the medians were 5.34 s against 2.08 s over five runs each, the listings 82.2 thread-seconds at 161 ms a listing where one alone costs 19.6 ms, measured 2026-11-26 (`t365-bin-times.txt` and the shim); which lock the listings contend on is not measured (no tracing tool runs here). The fixtures' own scans are ruled out: `rust/guard` holds no `read_dir` of the temp directory but `sweep_dead`'s, measured 2026-11-26 (`grep -rn "read_dir(" rust/guard`, and the shim's count the same 509 under both directories).
+  - **The cost of a listing.** In a directory that never grew, 0.06 ms + 0.41 ms for each 1,000 entries, linear to 80,000, measured 2026-11-26 (`t365-loop-new.txt`, the loop of 300). `/tmp` costs 13.4 to 16.0 ms for its 5,443 entries because its directory file is 21.9 MB from the 329,000 entries it once held, and a synthetic copy of that history costs 2.4 to 2.7 ms emptied, so an emptied `/tmp` would still list at about 2.5 ms, measured 2026-11-26 (`t365-loop-bloat.txt`, the same loop).
+  - **Who else pays.** The live hooks list the temp directory 0 times, and a Bash PreToolUse took 31.6 ms median under `/tmp` against 30.5 under an empty `TMPDIR`, inside the spread, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs, load 2.8 to 2.9). The test runner's leak pin lists `/tmp` once a crate run (21.6 ms through `make rust-test`), the hook suites' runner globs it once a suite (16.5 ms), and `file-scale --selftest` lists it twice (76.4 ms median against 36.6), measured 2026-11-26 (`t365-shim-rust-test.txt`, `t365-glob.txt`, `t365-gate-times.txt`).
+  - **The day's cost is an ESTIMATE**: about 114 s of process time measured, at most 122 s with the bound, 1.9 to 2.0 minutes a day, not anyone's waiting, from one clone's event log of 28,147 lines, measured 2026-11-26 (`t365-events.py`, `t365-events-totals.txt`, the lines stamped 00:00Z to 22:56Z). A test binary run by hand with `TMPDIR` unset pays the three times and is not counted: 29 leftovers show the land crate's binary run so between 12:46 and 14:07, measured 2026-11-26 (`t365-census-l7r.txt`, the census of `/tmp`'s top level).
+  - **What is in `/tmp`**: 5,442 entries and 11.7 GB, 5,000 of them older than three days, measured 2026-11-26 (`find /tmp -maxdepth 1` at 22:56Z and `du -sk` of each entry, `t365-census.py`).
+  - **The levers, each the record's section 4 with its filed task.**
+
+    | lever | what it saves, by the record | its task | label |
+    |---|---|---|---|
+    | A. `sweep_dead` once a process, all tags in one listing | 508 of the guard binary's 509 listings, 5.3 s to about 2.1 s a run by hand, about 4 s a day | T370, built and landed | measured 2026-11-26 (t365-results.md section 4, priced from sections 1 and 2) |
+    | B. the helper's directories under one subdirectory of the temp directory | 14 to 16 ms to about 0.1 ms a `TempDir::new`, 40 s + 7 s a day | T371, open: the alternative to T377, build one of the two | measured 2026-11-26 (t365-results.md section 4, priced from sections 1 and 2) |
+    | C. the hook suites' leftover glob once a run | 16.5 ms a suite, 67 s a day, the largest | T372, built and landed | measured 2026-11-26 (t365-results.md section 4, priced from `t365-glob.txt`) |
+    | D. the scratch sweep's `/tmp` rule widened | at most 90 s a day, 0 s beside B and C, and up to 4.9 GB of disk | T374, a decision for the GM about disk | measured 2026-11-26 (t365-results.md section 4, priced from the census) |
+    | E1. the sweep at most once an interval, by a stamp | the same 40 s + 7 s a day as B with no path moved | T377 | measured 2026-11-26 (t365-results.md section 4, priced from sections 1 and 2) |
+    | E2. the sweep detached | dominated: nothing beyond E1, a process a call | T378, to be withdrawn when T371 or T377 lands | measured 2026-11-26 (t365-results.md section 4) |
+    | F. a `TMPDIR` for each pool tree | dominated by B and C together, and blocked by T375 | T379, to be withdrawn when T371 and T372 land | measured 2026-11-26 (t365-results.md section 4) |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its scripts and results in `dev/measurements/2026-11-26/tmp-clutter/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T365 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows why the guard crate's tests run slow under `/tmp`, who else pays the same cost, and which levers on it are worth building, before any is built.
+2. **The constraints.** No source changed and nothing removed from `/tmp` by hand (the brief); a figure is the record's, with its date and method; every lever priced is filed (the brief, 451 T289).
+3. **Where each comes from.** O: the task line's measurement of 2026-11-26 (T340's finding) and the record `dev/measurements/2026-11-26/tmp-clutter/t365-results.md`. G: the GM's words of 2026-11-20 in request.md, which count a measurement as performance work.
+4. **Do they describe the world here?** Yes: the task line's gap came back as 5.34 s against 2.08 s medians, measured 2026-11-26 (`t365-bin-times.txt`, five runs each by `/usr/bin/time`), and its shim count accounts for it, measured 2026-11-26 (the shim, 9.97 s of listings against a 9.81 s difference on one thread).
+5. **The order.** After T340, which found it; before T370 to T379, which it filed, and T373, T375 and T376, found beside it.
+6. **The exits.** Green: the cause found and closed by arithmetic, the other payers counted, every lever priced and filed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One probe set aside: the first three timings were taken under a `TMPDIR` inside a session's scratchpad, where four guard tests fail, and were discarded (filed as T375, below).
+8. **The budget.** One landing, of the record and this section.
+9. **Done, measured.** The cause named and its arithmetic closed (9.97 s of listings for a 9.81 s difference), the live hooks, the leak pin, the hook suites and the gate's self-tests counted, and the seven levers of its section 4 priced and filed, measured 2026-11-26 (t365-results.md sections 1, 2 and 4).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: a measurement builder changes no source. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A PreToolUse hook on an Edit took 342.2 ms median where one on a Bash call took 31.6, the same under either temp directory, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs); visible effect: every edit's wait. Not fixed here: it is not the temp directory, so which guard spends it is a measurement of its own. Filed as T373; lands before T302.
+- Four `rust/guard` tests fail when `TMPDIR` is a directory under a session's scratchpad and pass under `/tmp`, measured 2026-11-26 (the guard test binary run under each, t365-results.md's closing section); visible effect: a red crate run wherever a tree's `TMPDIR` is so placed. Not fixed here: whether the tests pin their root or the guards misread a real clone under such a path is a decision past a measurement. Filed as T375; lands before T379.
+- Something runs the land crate's whole test binary with `/tmp` as its temp directory, outside the leak pin, and it dies mid-run, leaving 29 `l7r-gate-ci-stop-handler-p<pid>-<seq>` directories written 12:46 to 14:07, measured 2026-11-26 (`t365-census-l7r.txt`, the census), with the visible effect of leftovers at `/tmp`'s top level and 14 to 16 ms a `TempDir` for each such run, measured 2026-11-26 (the loop of 300, t365-results.md section 1). Not fixed here: who runs it is not found from the logs. Filed as T376; lands before T371.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 ### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))
 
@@ -4886,42 +4895,50 @@ Built here: T421 - an open performance task the queue has no line for
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
-### T373 (<why: the finding or measurement that files it>)
+### T373 (a PreToolUse hook on an Edit took 342 ms where one on a Bash call took 32, found by T365, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs a call))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement; no source changed. What was asked (the task line): which guard spends the Edit hook's time, by `l7r-guard --only <guard>` on the same event, before any change. The record is `dev/measurements/2026-11-26/edit-hook/t373-results.md`, its scripts and tables beside it; every figure below is the record's, measured 2026-11-26 from 18:26 to 19:25 local at load 4.4 to 53 on 22 cores with other builders running, each figure the median / 90th centile ms of one hook call over 20 counted runs after a warm-up, the arms interleaved (`t373-time.py`), a row above load 20 marked LOADED (the record's head).
+  - **The method.** A throwaway world under the scratchpad: a clone of the mirror, a clone of the real clone with its event logs, `checks-open.json` and caches copied in, a worktree of it standing in for a pool tree, the mirror's claim map copied and re-aimed, and the mirror's kept guard binary copied and reached through `L7R_GUARD_TARGET`, every call under `env -i` with only the named variables, measured 2026-11-26 (the record's "How it was measured"). Where a call writes was found under an `LD_PRELOAD` shim (`t373-shim.c`, `t373-probes.txt`), and a leak check found no line of a `t373-*` session in the real logs, claim map or guard log, measured 2026-11-26 (`t373-leak-check.txt`). Fidelity first: in the sandbox worktree the Edit hook came back at 372.3 / 413.1 ms LOADED, minimum 344.6, against T365's 342.2 / 362.0, measured 2026-11-26 (`t373-worktree.tsv`). The guards taken alone, less their extra process starts, sum to within 2% of the binary's own, measured 2026-11-26 (`t373-top3.txt`, 809 against 802 ms).
+  - **Two guards, not one.** `event-log-hooks` spends 333.0 / 359.7 ms on every Edit (not a Write): its reversal tripwire reads the feature's whole event log, 41.0 MB and 156,753 lines, and JSON-parses every line, measured 2026-11-26 (`t373-guards.tsv`, the session in its dirty clone, load 5.4 to 16.9). About 265 to 290 ms of it is the parse of lines that cannot match, since the read alone is 46.6 ms and read and screened 67.6 ms, measured 2026-11-26 (`t373-levers.txt`, `t373-levers.rs`, load 18, LOADED). `clone-sync-hooks` spends another 480.1 / 508.0 ms on an Edit or Write in the session's clone itself, not in a pool worktree, because it reads the session's whole 274 MB transcript for the session's name before `dirty()` and then runs `git status --porcelain`, while a dirty clone never uses the name, measured 2026-11-26 (`t373-guards.tsv`, `t373-sizes2.tsv`). A clean clone adds 147 ms (627.3 against 480.1), the claim map's 2,871 files opened and the sessions directory listed 131 times over, measured 2026-11-26 (`t373-top3.txt`, the shim's opens). So the session's Edit in its clone cost 823.6 / 1146.0 ms and a builder's in a pool worktree 372 to 402 ms, growing 8.1 ms a MB of event log and 1.4 ms a MB of transcript, measured 2026-11-26 (`t373-guards.tsv`, `t373-worktree.tsv`, `t373-sizes2.tsv`).
+  - **Found beside it**: while a plan review holds text, `record-edit-hooks` loads, snapshots and SAVES the 3.0 MB `checks-open.json` on every Bash call, 150.4 / 251.1 ms against 34.7 / 44.6 with no hold, measured 2026-11-26 (`t373-tools2.tsv`, `t373-nohold.tsv`), and 1,176 of the day's 4,202 Bash calls fell inside a `spec-fidelity` run, an UPPER BOUND on the hold's share, measured 2026-11-26 (`t373-holds.py`, `t373-holds.txt`).
+  - **The day's cost is an ESTIMATE**: Edit and Write hooks 117 s, about 2.0 minutes, over 306 Edit and Write calls in a copy of the clone's event log taken at 18:26 local, the day not over, measured 2026-11-26 (`t373-events.py`, `t373-events.txt`). T365's 470 calls are its own day file's count, its own probe edits among them, and why the two differ was not determined, measured 2026-11-26 (`t365-events-counts.txt`). All hooks of the five tools timed came to about 604 s, 10 minutes of the day, measured 2026-11-26 (the record's "the other tools" table).
+  - **The levers, each the record's section 3 with its filed task.**
+
+    | lever | what it saves, by the record | its task | label |
+    |---|---|---|---|
+    | A. `reversal` screens each line for an Edit of the path before parsing it | 265 to 290 ms of 333 a call, about 60 s a day | T383, built and landed (T392 filed after it for the read that remains) | measured 2026-11-26 (t373-results.md section 3, `t373-levers.txt`) |
+    | A2. the Edit lines kept in a side file beside the log | about 330 ms a call, 70 s a day, two files to keep in step | in T383, the option not taken first, now T392's to price | measured 2026-11-26 (t373-results.md section 3) |
+    | B. clone-sync asks for the session's name only on the clean path | 383 ms of 480 on a dirty clone's Edit or Write, at most 18 s a day | T384 | measured 2026-11-26 (t373-results.md section 3, `t373-sizes2.tsv`) |
+    | C. `titled` reads the transcript from its end | 383 ms on every caller of the session's name, 0.0 ms and one 64 KiB block against 755 ms forward | T385, built and landed | measured 2026-11-26 (t373-results.md section 3, `t373-levers.txt`, LOADED) |
+    | D. clone-sync's clean path reads the sessions directory once | about 130 of the 147 ms a clean clone adds, at most 6 s a day | T386 | measured 2026-11-26 (t373-results.md section 3) |
+    | E. the plan hold saves `checks-open.json` only where its snapshot changed, and prunes it | 100 to 115 ms of a Bash call's 150 under a hold, 135 s + 21 s a day, an upper bound | T387 | measured 2026-11-26 (t373-results.md section 3, `t373-holds.txt`) |
+    | F. `git diff-index --quiet HEAD` before `git status --porcelain` | 52.1 ms against 110.9 a call, at most 2 s a day | DECLINED: under 3 s a day, noted in T384 | measured 2026-11-26 (t373-results.md section 3, `t373-git.txt`, LOADED) |
+    | G. the Agent hooks (pair-hooks 88 ms, check-bundle-hooks 35, checks-hooks 98) | not priced: the cause was not read, about 60 s a day | T388, a measurement | measured 2026-11-26 (t373-results.md section 3, `t373-tools2.tsv`) |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its scripts and tables in `dev/measurements/2026-11-26/edit-hook/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T373 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows which guards make an Edit's hook slow, by how much and why, and which levers on them are worth building, before any is built.
+2. **The constraints.** No source changed; nothing written to the real event logs, claim map, guard log or plan-hold state (the sandbox and its leak check); `--only` run only for guards whose events and matcher take the tool; every lever priced is filed (the brief, 451 T289).
+3. **Where each comes from.** O: T365's figure (`t365-hook-times.txt`) and the record `dev/measurements/2026-11-26/edit-hook/t373-results.md`. G: the GM's words of 2026-11-20 in request.md, which count a measurement as performance work.
+4. **Do they describe the world here?** Yes: T365's case came back in the sandbox at 372.3 ms LOADED with a minimum of 344.6 against T365's 342.2, measured 2026-11-26 (`t373-worktree.tsv`, 20 interleaved runs).
+5. **The order.** After T365, which found it; before T383 to T388, which it filed.
+6. **The exits.** Green: the time split by guard and closed against the binary's own, each guard's cost read to its line of code, every lever priced and filed or declined. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Two first attempts were set aside, both kept in the record: without `.specify/feature.json` the event line went to a small `_unassigned.jsonl`, and with the sandbox clone misnamed the guard refused the edit as misrouted (`t373-try1-misnamed-clone.tsv`).
+8. **The budget.** One landing, of the record and this section.
+9. **Done, measured.** Two guards named and their sum within 2% of the binary's own, the Bash hold found beside them, eight levers priced - six filed, one kept inside T383 and one declined - measured 2026-11-26 (t373-results.md sections 1 and 3, `t373-top3.txt`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: a measurement builder changes no source. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Every hook call spends 15 to 17 ms outside the guard binary, in `sh`, `env bash` and the launcher's staleness walk of `rust/guard/**` (`scripts/hooks/l7r-guard.sh`, `newer`), 34.7 against 17.5 ms for Bash and 23.8 against 8.7 for an Edit's PostToolUse, measured 2026-11-26 (`t373-tools2.tsv`, `t373-guards.tsv`), with the visible effect of about 166 s of the day's hook time over 10,400 calls, measured 2026-11-26 (`t373-events.txt`, the day's counts times 16 ms). Not fixed here: the record observed it and priced no lever, so which hop spends it is a measurement of its own. Filed as T439; lands before T302.
+- The Bash call's slowness under a plan hold, above, is lever E. Not fixed here: a change to the hold's state, which must still restore held text. Filed as T387; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 ### T374 (<why: the finding or measurement that files it>)
@@ -5856,31 +5873,50 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** yes (a `[perf]` task: a landing refused after its gate costs the gate's minutes, dev/measurements/2026-11-27/tree-idle/results.md); not an engine-speed task, so the performance checklist's questions do not apply.
 
-### T420 (<why: the finding or measurement that files it>)
+### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement; no source changed. What was asked (the task line): which builds those waits lay in, how long each compiled, what held both wide slots meanwhile (a batch gate's coverage build, a pre-warm), and whether a third wide slot or a lane for one crate's rebuild of a changed dependency fits T347's memory budget. The record is `dev/measurements/2026-11-27/slot-waits/results.md`, its script `waits.py` and output `waits.txt` beside it; every figure below is the record's, measured 2026-11-27 read-only from every feature's event log in the clone and the pool's log over 00:20Z (T347 landed) to 03:56:52Z (this tree's handout for T420), 3.61 h (the record's head).
+  - **The finding: the task's premise was a measurement's own waits.** Of T367's waits, 221.9 s were not contention but four scripted holds of 55.5, 49.9, 56.4 and 60.0 s by T355's `lint-wait.sh`, which held both wide slots of a SCRATCH slot directory with `flock <file> sleep 60`, its rows `before1`, `before2`, `negative` and `knob-off` carrying the same waits, measured 2026-11-27 (`waits.py`, against `lint-memory/lint-wait-rows.txt`). The event log has no field that tells such a line from a real one, so `make task-time` books them as waiting too (T426, below).
+  - **The real waits**: 3 real wide waits of 7.1 s in all, none of 5 s or more, and 13 real waits for the SMALL LANE of 87.4 s, 6 of them 78.3 s at 5 s or more, measured 2026-11-27 (`waits.py`, `waits.txt`, each `slot-wait` line split by its `slot-small` line and slot directory). None of the three wide waits was after a dependency's edit by a builder's own `Edit`: a lint told no pass, a carry or landing that moved files, and a crate's first build after a handout, measured 2026-11-27 (`waits.py`, the `slot-tell` line before each and the tree's `Edit`/`Write` events since the crate's last build).
+  - **Who held the wide slots** during the real wide waits: 15.1 slot-seconds, every one accounted for, pool-tree lint passes and test builds told wide and a pre-warm, and no batch gate's coverage build, measured 2026-11-27 (`waits.py`, its holder model). Over the whole window the seconds with 0 / 1 / 2 wide holders were 8,983 / 3,523 / 455, never three, measured 2026-11-27 (`waits.py`). The lane's waits were each held by one build told alone in another tree, `guard/shared` the most at 43.7 s, measured 2026-11-27 (`waits.py`, `waits.txt`).
+  - **The dependency rebuild**, in this tree one build at a time at load 9.0 to 9.2 with the slot on, after a body edit of `rust/gate/crates/core/src/difflib.rs` put back after: `make rust-test CRATE=rust/gate` 8.17 s, 28 crates compiled, 749 MiB anonymous memory, and `CRATE=rust/gate/crates/task` 3.70 s, 12 crates compiled, 392 MiB, both told wide, measured 2026-11-27 (`dep-run.sh` with `mem-sample.py` and T347's `windows.py`, the logs `rust_gate*-core-edit.log`); a body edit only, two cases as the brief capped.
+  - **The memory**: the sampler's anonymous memory over the window was median 0.79, 95th centile 1.91 and peak 4.20 GiB, never over the 7 GiB margin, no OOM kill, measured 2026-11-27 (`make sampler-report SINCE=2026-11-27T00:20:00Z`, 1,359 samples to 04:06Z).
+  - **The levers, each the record's section 4.** A day's figure is the window's times 6.65, on the GUESS that the window's builder load holds all day (the record's section 4); T347's budget of 5.4 of a 7 GiB margin is its GUESS knobs.
+
+    | lever | waiting saved, window / day | memory | verdict | label |
+    |---|---|---|---|---|
+    | a third wide slot | at most 7.1 s / 47 s, every real wide wait | 1.4 + 3 x 2.0 = 7.4 GiB on paper, over the margin | DECLINED: nothing to save | measured 2026-11-27 (`waits.py`), the day a GUESS |
+    | the batch gate's coverage build taking one slot, not two | 0 s | - | DECLINED, moot: it takes one already (`cover.rs`, one `around` a group) | measured 2026-11-27 (`waits.py`, the 29 coverage builds) |
+    | a lane for one crate and its changed dependencies | at most 1.5 s / 10 s | case A's 0.75 GiB beside the first lane, 7.6 GiB on paper, over the margin | DECLINED | measured 2026-11-27 (`waits.py`, `dep-run.sh`), the day a GUESS |
+    | the pre-warm yielding its slot before a builder's build | at most 2.6 slot-s, about 1.3 s / 9 s | none | DECLINED: it already yields between crates (T336) | measured 2026-11-27 (`waits.py`), the day a GUESS |
+    | a build told alone takes a FREE wide slot when the lane is held | 85.7 of 87.4 s / about 570 s | a build of the class, 1.42 GiB at most, in a wide slot's 2.0 room: inside the paper budget | FILED: T425 | measured 2026-11-27 (`waits.py`), the day a GUESS |
+    | a lane two wide | about 87 s / 578 s | 1.4 + 4.0 + 2 x 1.42 = 8.2 GiB on paper, over the margin | DECLINED: the overflow lever saves as much inside the budget | measured 2026-11-27 (`waits.py`), the day a GUESS |
+
+    What would reopen the levers declined: real wide waits - `slot-wait` lines without a `slot-small` of the same start, and not on a scratch slot directory once T426 marks those - passing about 5 minutes a day, read with `waits.py` over a new window (the record's section 4, a GUESS knob).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its script and results in `dev/measurements/2026-11-27/slot-waits/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T420 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows what the build slots' waits after the small lane really were, what held the slots, and whether any change of the slots' count or lanes is worth building inside the memory budget.
+2. **The constraints.** Read-only from the logs, but for the two dependency rebuilds, one at a time with no load generator (the brief); T347's memory budget; every lever priced is filed or declined with its number.
+3. **Where each comes from.** O: T367's record (`dev/measurements/2026-11-27/prewarm-keys/results.md`), T355's `lint-memory/lint-wait-rows.txt`, T347's budget and sampler, and the record `dev/measurements/2026-11-27/slot-waits/results.md`. G: the GM's words of 2026-11-20 in request.md, which count a measurement as performance work.
+4. **Do they describe the world here?** No: the premise did not hold, since 221.9 s of T367's waits were T355's scripted holds and no real wide wait reached 5 s, measured 2026-11-27 (`waits.py` over the event logs).
+5. **The order.** After T347, T355 and T367, whose records it reads; before T425 and T426, which it filed.
+6. **The exits.** Green: every `slot-wait` line of the window sorted real or synthetic, wide or lane, every wide slot-second's holder named, two dependency rebuilds measured and each lever priced against the budget. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One holder model set aside: with T355's scripted runs counted as holders it saw three holders at once for 155 s, without them never, measured 2026-11-27 (`waits.py`, both models), and they held no real slot.
+8. **The budget.** One landing, of the record and this section.
+9. **Done, measured.** 20 `slot-wait` lines sorted - 4 synthetic, 3 real wide, 13 real lane - six levers priced, one filed and five declined, measured 2026-11-27 (`waits.py`, `waits.txt`; the record's section 4).
+10. **Before moving a constant.** n/a: `L7R_BUILD_SLOTS` and `L7R_BUILD_SLOTS_SMALL` are left as they are.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: a measurement builder changes no source. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A `slot-wait` taken on a scratch slot directory is written to the event log like a real one, so `make task-time` booked 221.9 s of T355's scripted holds as waiting on a build slot and T367's record and this task's line read them as builds waiting after a dependency's edit, measured 2026-11-27 (`waits.py`, against `lint-memory/lint-wait-rows.txt`). Not fixed here: a change to the slot's event line and its readers. Filed as T426; lands before T380.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 ### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: "assertion failed: builds(&world).is_empty() && spare(&world.slots)", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)
@@ -6520,6 +6556,32 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T434 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T439 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T439 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
