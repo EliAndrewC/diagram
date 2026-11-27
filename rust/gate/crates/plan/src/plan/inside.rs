@@ -13,7 +13,7 @@ use fancy_regex::Regex;
 
 use super::history::History;
 use super::sections::{re, task_sections};
-use super::status::{section_clear, task_current, RECORD};
+use super::status::{section_clear, section_current, RECORD};
 use super::template::without_stub;
 
 /// The line, at a line's start or as a list item: `Built here: T<n> - <what>`, `<what>` not empty.
@@ -86,7 +86,7 @@ pub fn built_inside(dir: &Path, task: &str) -> Option<Host> {
             if host == task {
                 continue;
             }
-            let clear = task_current(&review, &text, &host, history)
+            let clear = section_current(&review, &text, &host, &section, history)
                 || section_clear(&review, &section, history);
             return Some(Host {
                 task: host,

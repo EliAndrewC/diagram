@@ -56,10 +56,20 @@ pub(super) fn task_current(
     task: &str,
     history: Option<&History>,
 ) -> bool {
-    let sections = task_sections(plan);
-    let Some(section) = sections.get(task) else {
-        return false;
-    };
+    task_sections(plan)
+        .get(task)
+        .is_some_and(|section| section_current(review, plan, task, section, history))
+}
+
+/// [`task_current`] of `task`'s `section`, as [`task_sections`] cut it from `plan`: a caller judging many sections parses them once
+/// (451 T466).
+pub(super) fn section_current(
+    review: &Value,
+    plan: &str,
+    task: &str,
+    section: &str,
+    history: Option<&History>,
+) -> bool {
     let empty = json!({});
     let entry = review
         .get("tasks")
@@ -146,7 +156,18 @@ pub(super) fn block_status(
     history: Option<&History>,
     done: &str,
 ) -> (Vec<String>, Vec<String>) {
-    let sections = task_sections(plan);
+    block_status_of(review, plan, &task_sections(plan), ruled, history, done)
+}
+
+/// [`block_status`] over `plan`'s `sections`, parsed once by its caller (451 T466).
+pub(super) fn block_status_of(
+    review: &Value,
+    plan: &str,
+    sections: &BTreeMap<String, String>,
+    ruled: &BTreeSet<String>,
+    history: Option<&History>,
+    done: &str,
+) -> (Vec<String>, Vec<String>) {
     let out_of: Vec<(usize, usize)> = sections
         .iter()
         .filter(|(t, _)| ruled.contains(*t))
@@ -296,15 +317,19 @@ fn removed_blocks(
     owed
 }
 
-/// Every task whose section carries its own current verdict.
+/// Every task whose section carries its own current verdict, each judged on its section of `sections`, `plan`'s parsed once. WHY
+/// (451 T466): each task's judgment parsed every section again to find its own, about 1.8 s a whole-plan judgment over a 1 MB plan.md
+/// of some 300 sections, measured 2026-11-27 (an Instant trace of `l7r-gate tick --land-check` over a scratch clone of diagram-backlog).
 pub(super) fn ruled_tasks(
     review: &Value,
     plan: &str,
+    sections: &BTreeMap<String, String>,
     history: Option<&History>,
 ) -> BTreeSet<String> {
-    task_sections(plan)
-        .into_keys()
-        .filter(|t| task_current(review, plan, t, history))
+    sections
+        .iter()
+        .filter(|(t, s)| section_current(review, plan, t, s, history))
+        .map(|(t, _)| t.clone())
         .collect()
 }
 
@@ -403,13 +428,13 @@ pub(super) struct Layout {
 }
 
 impl Layout {
-    fn of(review: &Value, plan: &str) -> Self {
-        let spans = task_sections(plan)
-            .into_iter()
+    fn of(review: &Value, plan: &str, sections: &BTreeMap<String, String>) -> Self {
+        let spans = sections
+            .iter()
             .filter_map(|(t, s)| {
                 let first = heading_text(s.lines().next().unwrap_or_default());
                 let own = leading_tasks(&first).contains(&t.as_str());
-                span_of(plan, &s).map(|at| (t, own, at))
+                span_of(plan, s).map(|at| (t.clone(), own, at))
             })
             .collect();
         let offsets = blocks(plan).into_iter().map(|(k, _, at)| (k, at)).collect();
@@ -520,10 +545,12 @@ pub(super) enum Base {
     Judged {
         review: Value,
         text: String,
+        /// the plan's task sections, parsed once for the judgment and its scoped asks (451 T466)
+        sections: BTreeMap<String, String>,
         owed: Vec<String>,
         blocked: Vec<String>,
         /// made on the first scoped ask, kept for the rest
-        layout: std::cell::OnceCell<Layout>,
+        layout: Box<std::cell::OnceCell<Layout>>,
     },
 }
 
@@ -565,35 +592,45 @@ fn base(
             .collect();
         review["blocks"] = Value::Object(whole);
     }
-    let ruled = ruled_tasks(&review, &text, history);
-    let (owed, blocked) = block_status(&review, &text, &ruled, history, done);
+    let sections = task_sections(&text);
+    let ruled = ruled_tasks(&review, &text, &sections, history);
+    let (owed, blocked) = block_status_of(&review, &text, &sections, &ruled, history, done);
     Base::Judged {
         review,
         text,
+        sections,
         owed,
         blocked,
-        layout: std::cell::OnceCell::new(),
+        layout: Box::default(),
     }
 }
 
 /// A judgment's answer from its [`Base`], the blocks read only as far as `scope` reaches.
 fn finish(base: &Base, history: Option<&History>, scope: Option<&Scope>) -> Option<Held> {
-    let (review, text, layout, mut owed_keys, mut blocked) = match base {
+    let (review, text, sections, layout, mut owed_keys, mut blocked) = match base {
         Base::Missing(held) => return Some(held.clone()),
         Base::Judged {
             review,
             text,
+            sections,
             owed,
             blocked,
             layout,
-        } => (review, text.as_str(), layout, owed.clone(), blocked.clone()),
+        } => (
+            review,
+            text.as_str(),
+            sections,
+            layout,
+            owed.clone(),
+            blocked.clone(),
+        ),
     };
     // an unwritten section is owed by no judgment but its own task's (451 T462): judged per scope, so after the shared base (451 T464)
     let kept = scope.map_or_else(BTreeSet::new, |s| s.tasks.clone());
     owed_keys = written_only(owed_keys, text, &kept);
     blocked = written_only(blocked, text, &kept);
     if let Some(scope) = scope {
-        let layout = layout.get_or_init(|| Layout::of(review, text));
+        let layout = layout.get_or_init(|| Layout::of(review, text, sections));
         owed_keys = in_scope(owed_keys, review, layout, scope, history);
         blocked = in_scope(blocked, review, layout, scope, history);
     }

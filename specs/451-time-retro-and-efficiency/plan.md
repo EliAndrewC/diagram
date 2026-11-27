@@ -8067,31 +8067,35 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T466 (<why: the finding or measurement that files it>)
+### T466 (after T464 a whole-plan judgment still parsed plan.md's task sections once for every task it judged: about 1.8 s a judgment over a 1 MB plan.md of some 300 sections, measured 2026-11-27, method: T464's before-run trace of `ruled_tasks` from its third call on)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one change in `rust/gate/crates/plan/src/plan/status.rs`, its callers in `plan.rs` and `inside.rs` brought along.
+  - **(1) The cause.** `ruled_tasks` asked `task_current` of each section, and `task_current` parsed the whole plan's sections (`task_sections(plan)`) to find its own; `block_status` parsed them again, and `Layout::of` once more on a scoped ask. A plan of five task sections parsed them 7 times for one whole-plan judgment, 1 + 5 + 1, measured 2026-11-27 (the red test's own count).
+  - **(2) The sections parsed once a judgment.** `base` parses them once and hands them to `ruled_tasks` (which now takes them), `block_status_of` (`block_status` with the sections handed in; `block_status` stays, parsing them itself, for its one-off callers) and the `Base`, from which `Layout::of` reads them. `section_current` is `task_current` given the section, which `task_current` (one task, its callers in `task.rs`) now calls; `built_inside` calls it with the section its own loop already parsed. `plan_delta` (`make plan-delta`) parses once too. Each section handed in is the one `task_sections(plan).get(task)` gave, so every answer is the one before. The `Base`'s layout cell is boxed, as clippy's `large_enum_variant` asks once the sections ride in it.
+  - **(3) Before and after**, over T457's scratch clone of diagram-backlog at 98b632638d (read-only source, its status unchanged by the runs), T464's 35 tasks through `l7r-gate tick --land-check` and `l7r-gate plan push 2988fee630...HEAD`, and `l7r-gate plan owed` of 451 (a whole, unscoped judgment that lists one stale block): every output byte-identical before and after (`cmp`, the land check's 3,824 bytes of JSON, the push's and owed's lines, stderr but the timing line), measured 2026-11-27 (`scratchpad/t466-run.sh`). Timed with the old code at load 10.6 to 13.2 and the new at load 10.9 to 14.8: the tick checks 12.4 s to 11.2 s, `plan push` 6.9 s to 6.5 s, `plan owed` 6.3 s and 6.4 s to 5.3 s and 5.4 s, measured 2026-11-27 (`/usr/bin/time`, one run each but owed's two). At load 20 to 37 the push was 7.2 s before and 5.8 s and 5.9 s after, measured 2026-11-27 (the same runs). About 1 s off each whole-plan judgment, from about 6.4 s, and the first pass's tick checks, judged once since T464, within the machine's noise, measured 2026-11-27 (the same runs).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the sections parsed once a judgment | `plan/tests/parse.rs` `a_whole_plan_judgment_parses_its_task_sections_once`: five task sections, one with a CLEAR verdict at an older digest, judged whole (`judge`) and for one tick (`judge_in`, a scope), each counting `task_sections` parses (`sections::parses`, a test-only counter in the plan crate's wrapper of the shared parse). Red on the old code, 7 parses against 1, the plan crate's tests 210 passed and 1 failed, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan`). Green after, 1 and 1, 211 passed and 0 failed, measured 2026-11-27 (`make builder-checks`). Both answers None, before and after | n/a: tooling | none | none |
 
 ### T466 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Each whole-plan judgment - `plan push`, `make decide`, the push table's plan row, a tick's archive, `make plan-delta` - parses plan.md's task sections once, and every answer is unchanged.
+2. **The constraints.** 451 FR-013: a performance task makes the landings faster. Each answer stays the one a judgment gave before.
+3. **Where each comes from.** O: T464's traced run and the runs of (3). R: `status.rs`'s `ruled_tasks`, `task_current`, `block_status` and `Layout`.
+4. **Do they describe the world here?** Yes. The runs were made over a copy of the clone's own plan.md, its history and its review record, with the 35-task batch T457 and T464 measured, measured 2026-11-27 (T457's scratch clone).
+5. **The order.** After T464, which made the first pass judge once. Beside T465, the history's one indexing pass.
+6. **The exits.** Green: the red test green, the outputs byte-identical, and the runs timed before and after. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A whole-plan judgment parses the task sections once, from once a task and twice more; `plan owed` takes 5.3 s where it took 6.4 s, with byte-identical output, measured 2026-11-27 (T457's scratch clone, load 10.6 to 14.8).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A push, a decide and each tick's archive take about a second less over 451's plan, measured 2026-11-27 (the timed runs), and no plan verdict changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the gate faster). A whole-plan judgment went from about 6.4 s to 5.3 s (`plan owed`) and `plan push` from 6.9 s to 6.5 s, measured 2026-11-27 (the scratch clone, load 10.6 to 14.8). Not an engine-speed task: no checklist answers owed.
 
 ### T467 (<why: the finding or measurement that files it>)
 

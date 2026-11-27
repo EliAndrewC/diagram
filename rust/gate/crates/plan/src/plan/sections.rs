@@ -7,9 +7,28 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_shared::plan_text::HEAD;
 pub(super) use l7r_shared::plan_text::{
-    blocks, leading_task, leading_tasks, ordered_sections, task_sections, TASK_ID,
+    blocks, leading_task, leading_tasks, ordered_sections, TASK_ID,
 };
 use l7r_shared::sha256;
+
+/// `{task id: its section}` ([`l7r_shared::plan_text::task_sections`]), each parse counted for the tests (451 T466: a whole-plan
+/// judgment parsed the sections again for every task it judged).
+pub(super) fn task_sections(plan: &str) -> BTreeMap<String, String> {
+    #[cfg(test)]
+    PARSES.with(|n| n.set(n.get() + 1));
+    l7r_shared::plan_text::task_sections(plan)
+}
+
+/// How many times this thread has parsed a plan's task sections ([`task_sections`]), for the tests (451 T466).
+#[cfg(test)]
+pub(super) fn parses() -> usize {
+    PARSES.with(std::cell::Cell::get)
+}
+
+#[cfg(test)]
+thread_local! {
+    static PARSES: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
 
 /// Words a "typo" may never touch (feature 375 FR-005(b), plan D6): a number, a quantity, a negation or a quantifier changes a
 /// decision however few letters it moves - "two" -> "ten", "all" -> "any", "must" -> "may".

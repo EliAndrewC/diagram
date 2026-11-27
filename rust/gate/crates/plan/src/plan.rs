@@ -35,7 +35,7 @@ use history::History;
 use record::Stop;
 use sections::{blocks, digest, task_sections, wording_only};
 pub use status::Shared;
-use status::{block_status, owed, ruled_tasks, RECORD};
+use status::{block_status_of, owed, ruled_tasks, RECORD};
 use task::resolve;
 pub use task::touched_features;
 
@@ -371,9 +371,11 @@ fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>)
         return fail(format!("plan-delta: {ahead}\n"), 1);
     }
     let history = History::new(&plan, "HEAD");
-    let ruled = ruled_tasks(&review, &text, Some(&history));
+    let sections = task_sections(&text);
+    let ruled = ruled_tasks(&review, &text, &sections, Some(&history));
     let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap_or_default();
-    let (mut keys, blocked) = block_status(&review, &text, &ruled, Some(&history), &done);
+    let (mut keys, blocked) =
+        block_status_of(&review, &text, &sections, &ruled, Some(&history), &done);
     for key in blocked {
         if !keys.contains(&key) {
             keys.push(key);

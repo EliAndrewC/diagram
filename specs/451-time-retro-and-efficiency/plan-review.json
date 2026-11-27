@@ -3547,12 +3547,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T437 (<why: the finding or measurement that files it>)": {
-   "sha256": "07332f6949557efd5cc7984eb027771a696a7d4e37c238df8c37def0c9f3dd7c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T437 Approach (checklist part A)": {
    "sha256": "cb2108e1052b659ae3d8cea2360b44f7499a14996b61e23235bef3784c31098d",
    "verdict": "CLEAR",
@@ -3717,12 +3711,6 @@
   },
   "### T438 Approach (checklist part A)": {
    "sha256": "9bd9eb693296ebc3ffba22c8fda2c27c00c70340713f56f9c1bb940ebf0ef4d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T440 (<why: the finding or measurement that files it>)": {
-   "sha256": "7ebf37c925be43d2b3475f9ff516ab95d2e6fdd728aca36e38ee5c769b43ba24",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4033,12 +4021,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T464 (<why: the finding or measurement that files it>)": {
-   "sha256": "c2c9ababdbb08867184321b77b75586992fc8594ec41817631ae7540ceb68700",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T464 Approach (checklist part A)": {
    "sha256": "de5ba7bc390acbcb2db0f8941155d7b9945e7b2992fbb93b54fab637e14a7d7d",
    "verdict": "CLEAR",
@@ -4161,6 +4143,18 @@
   },
   "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)": {
    "sha256": "c0c02dc751e2e655c5243d44083cf5e904e5ff7460662451c78a99e4bc8cc6ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T466 (after T464 a whole-plan judgment still parsed plan.md's task sections once for every task it judged: about 1.8 s a judgment over a 1 MB plan.md of some 300 sections, measured 2026-11-27, method: T464's before-run trace of `ruled_tasks` from its third call on)": {
+   "sha256": "152db067acdc670c648ecb33deaa9f3b67e52f3c9a82e41cda4584e02c6e73e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T466 Approach (checklist part A)": {
+   "sha256": "051736bafd3201530e45f2cd0d26638b9a36eab324e25c4e88ba6fadc4bf15f6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37815,6 +37809,55 @@
      "summary": "The template stub heading '### T438 (<why: ...>)' is removed, replaced by the filled T438 section above.",
      "class": "within",
      "why": "Its earlier text is only the task-add template's placeholders, with no decision in it. Removing it decides nothing, because the filled section carries the task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T466 (after T464 a whole-plan judgment still parsed plan.md's task sections once for every task it judged: about 1.8 s a judgment over a 1 MB plan.md of some 300 sections, measured 2026-11-27, method: T464's before-run trace of `ruled_tasks` from its third call on)",
+    "### T466 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T466-1",
+     "summary": "Parse plan.md's task sections once per whole-plan judgment (base hands them to ruled_tasks, block_status_of and the Base/Layout; section_current extracted from task_current; built_inside and plan_delta reuse their parse); every answer unchanged",
+     "class": "within",
+     "why": "A [perf] task under FR-013 and the GM's 2026-11-20 words ('can we in general priotitize performance improvements going forward?'): it makes the gate's and landings' plan judgments faster and changes no verdict. It narrows nothing asked."
+    },
+    {
+     "id": "T466-2",
+     "summary": "block_status kept (parsing itself) for its one-off callers beside the new block_status_of; the Base's layout cell boxed for clippy's large_enum_variant",
+     "class": "within",
+     "why": "Implementation detail of the same refactor; no behavior or scope the request or spec settles is changed."
+    },
+    {
+     "id": "T466-3",
+     "summary": "Red-first test a_whole_plan_judgment_parses_its_task_sections_once with a test-only parse counter (7 parses red, 1 green)",
+     "class": "within",
+     "why": "A test whose only effect is to pin the performance fix it serves (FR-013); enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T466-4",
+     "summary": "Before/after runs over T457's scratch clone (tick --land-check, plan push, plan owed) compared byte-for-byte and timed; green exit includes byte-identical outputs",
+     "class": "within",
+     "why": "The byte comparison is the author's evidence that a pure refactor left every plan verdict the same - the check still doing its job - not a bitwise standard imposed on a port; it held as measured, so nothing is narrowed or blocked by it."
+    },
+    {
+     "id": "T466-5",
+     "summary": "Ordered after T464, beside T465; budget one landing; found-and-left none; not an engine-speed task",
+     "class": "within",
+     "why": "Ordering and budget inside FR-013's performance-first rule; nothing deferred, so no FR-009 defect deferral arises."
+    },
+    {
+     "id": "remove-T437-T440-T464-stubs",
+     "summary": "Three unfilled template sections (placeholder '<why...>' heading, placeholder Approach, empty table) removed",
+     "class": "within",
+     "why": "The removed text was the bare section template with no decision, figure or scope in it; removing it decides nothing and narrows nothing the GM asked."
     }
    ]
   }
