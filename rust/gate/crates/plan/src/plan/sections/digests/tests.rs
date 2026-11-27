@@ -143,7 +143,7 @@ fn reach(path: &str, text: &str, sources: &[&str]) -> Vec<String> {
     let include = build(r#"\binclude(?:_str|_bytes)?!\s*\(\s*"([^"\n]+)""#).unwrap();
     for name in include
         .captures_iter(text)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1))
     {
         let mut at: Vec<&str> = dir[..dir.len() - 1].to_vec();
@@ -177,7 +177,7 @@ fn reach(path: &str, text: &str, sources: &[&str]) -> Vec<String> {
     let words = build(r"\b([A-Za-z_][A-Za-z0-9_]*)\b").unwrap();
     let all: Vec<(usize, String)> = words
         .captures_iter(&code)
-        .flatten()
+        .map_while(Result::ok)
         .filter_map(|c| c.get(1).map(|m| (m.start(), m.as_str().to_owned())))
         .collect();
     let mut known: Vec<String> = Vec::new();
@@ -275,6 +275,8 @@ fn each_reach_rule_fires_on_a_file_that_breaks_it() {
     let names = ["a/d.rs", "rust/guard/shared/src/sha256.rs"];
     let clean = "use std::sync::LazyLock;\nuse fancy_regex::Regex;\nuse l7r_shared::sha256;\nmacro_rules! m { () => {} }\nconst S: &str = include_str!(\"d.rs\");\nfn f(x: &str) -> String { m!(); let c = '\"'; let r = r#\"crate::x\"#; let b = br\"super::y\"; /* super::z */ format!(\"{x}{c}{r}{b:?}\") + &sha256::hex(b\"\") + &String::new() + &str::repeat(\"\", 1) + &Self::g() + &std::env::args().count().to_string() }\nfn g(a: u8) -> bool { a != 1 && '\\'' != ' ' }\n#[cfg(test)]\nmod tests {\n    use super::f;\n}\n";
     assert_eq!(reach("a/d.rs", clean, &names), Vec::<String>::new());
+    // a cfg(test) item that is no test module is no finding of the last-item rule
+    assert!(reach("a/d.rs", "#[cfg(test)]\nfn t() {}\n", &names).is_empty());
     let shared_ok = "fn f() { crate::sha256::hex(b\"\") }";
     assert!(reach("rust/guard/shared/src/x.rs", shared_ok, &names).is_empty());
     for (bad, says) in [
@@ -293,7 +295,7 @@ fn each_reach_rule_fires_on_a_file_that_breaks_it() {
             "the path l7r_shared::",
         ),
         (
-            "fn f() { ::fancy_regex::Regex::new(\"\") }",
+            "fn f() { ::fancy_regex::escape(\"\") }",
             "a path from the crate root ::",
         ),
         ("mod other;", "mod, a file outside the set"),

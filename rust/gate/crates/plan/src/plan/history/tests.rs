@@ -359,3 +359,19 @@ fn an_index_stamped_by_other_digest_code_is_read_again_from_git() {
         .starts_with(&format!("l7r plan-index 1 {stamp}\n")));
     assert_eq!(missing(plan), (None, (1, 1)));
 }
+
+/// A section's kept text is judged by the section digest, a block's by the block digest (`kept_text`).
+#[test]
+fn a_kept_section_text_is_found_by_its_section_digest() {
+    let root = repo();
+    let file = root.join("plan.idx");
+    let body = "### T1 a task\n\nits text\n";
+    let at = super::index::text_file(&file, "c0", false, "T1");
+    std::fs::create_dir_all(at.parent().unwrap()).unwrap();
+    std::fs::write(&at, body).unwrap();
+    assert_eq!(
+        super::kept_text(&file, "c0", false, "T1", &digest(body.as_bytes())).as_deref(),
+        Some(body)
+    );
+    assert_eq!(super::kept_text(&file, "c0", false, "T1", "other"), None);
+}

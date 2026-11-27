@@ -289,7 +289,7 @@ impl History {
     /// The version at `commit` read from git alone (an index's hit: the text it returns), kept for the thread.
     fn one(&self, rel: &str, commit: &str) -> Rc<Version> {
         let got = fetch(self.dir(), &[commit], rel).pop().flatten();
-        remember(rel, commit, got.unwrap_or_else(|| Version::of("")))
+        remember(rel, commit, got.unwrap_or(Version::of("")))
     }
 
     /// The text the first version, newest first, holding `key` (a block's key when `block`, else a task) at the digest `sha` had.

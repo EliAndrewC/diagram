@@ -667,10 +667,7 @@ fn through_the_guard_a_bare_closing_run_is_refused_with_its_own_t_form() {
     }
     // its own escape (451 FR-012): with a reason it stands aside, with none it is the escape's refusal
     let short = at("make closing-checks CLOSING_BARE_OK");
-    assert!(
-        matches!(short.as_slice(), [Answer::Refuse(t)] if t.contains("CLOSING_BARE_OK")),
-        "{short:?}"
-    );
+    assert!(matches!(short.as_slice(), [Answer::Refuse(t)] if t.contains("CLOSING_BARE_OK")));
     assert!(
         refused("make closing-checks")
             && at("make closing-checks")
