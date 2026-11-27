@@ -7030,31 +7030,36 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T439 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T447 (<why: the finding or measurement that files it>)
+### T447 (Superseded by T397: `make land` carries its tasks' done commits before its first pass, so the refusal this task would add can never fire)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: no code. The task would have `make land`'s first pass (`cheap.rs`) refuse a landing task whose done commit (`refs/l7r/done/<feature>-<task>`) the landing tree's HEAD does not hold. Since 451 T397 part (c), no landing reaches that pass with such a commit uncarried. Read 2026-11-27 at 30193ea012:
+  - **The one route into the first pass.** `Land::cheap_refusals` has one caller, `Land::land` (`rust/gate/crates/land/src/land.rs`, the `cheap` phase). `Land::land`'s one production caller is the phase wrapper (`land/phase.rs`), which every `make land` and `make land-batch` runs. In `Land::land` the order is: `unfinished::refusals`, then `self.carry_done(d, tasks)` (a non-zero code returned at once), then `alone_owed`, then the first pass.
+  - **What the carry leaves.** `Land::carry_done` (`rust/gate/crates/land/src/land/carry_done.rs`) asks `l7r_gate_task::builder_done::to_carry` for exactly the set T447 would refuse: the landed tasks' done refs whose commit HEAD lacks, by `uncarried`'s author time and subject. It carries each through `carry::cli`, the same call `make carry COMMIT=` makes. A carry that does not end verified returns 2 ("refused before anything ran - nothing landed, nothing ticked"), and the first pass never runs. So the first pass sees either no such commit or no landing.
+  - **The land-alone route.** `alone_owed` stands after the carry, so a dirty clone's landing worktree (`land/alone.rs`) is checked out at the carried HEAD. Its inner `make land` comes back through `Land::land`, where `to_carry` finds nothing.
+  - **Pinned**: `land/carry_done/tests.rs` holds `a_landing_carries_its_tasks_done_commit_before_its_first_pass`, `a_carry_that_stops_lands_nothing_and_names_its_hand_command` and `a_dirty_clone_carries_before_it_lands_alone`. Measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/land ONLY="land::carry_done"`): 4 ran, 0 failed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| closed, Superseded by T397 | n/a: no code; T397's `carry_done` tests pin it | n/a: tooling | none | none |
 
 ### T447 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No landing ticks a task whose done commit HEAD lacks. T397 holds that by carrying the commit first.
+2. **The constraints.** T397 part (c)'s order in `Land::land`; T294's named-file refusal stays as it is.
+3. **Where each comes from.** R: `rust/gate/crates/land/src/land.rs`, `land/carry_done.rs`, `land/alone.rs`, `land/phase.rs`, `rust/gate/crates/task/src/builder_done.rs` (`to_carry`), read 2026-11-27; R: T397's section in `plan-done.md` ("T447 becomes moot").
+4. **Do they describe the world here?** Yes: the carry's tests run the landing's real first pass on fixture clones.
+5. **The order.** After T397 (landed); closes with no landing of its own code.
+6. **The exits.** Green: this section's ruling CLEAR, and the box ticked `Superseded by T397`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** None: no code.
+9. **Done, measured.** Measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/land ONLY="land::carry_done"`): 4 ran, 0 failed. `cheap_refusals` has one call site, at land.rs's `cheap` phase, after `carry_done`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: the refusal would never fire, so it is no defect's fix.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 <!-- plan-archive: T450 to T397 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T450 to T450 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -7397,14 +7402,46 @@ that batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T485 (<why: the finding or measurement that files it>)
+### T485 (451 T481's `make guard-messages` named two escalation-hooks refusals, keys a01405381091d548 and eee895a7b090e5af, as rendered at HEAD with no verdict)
+
+- **Approach**: no guard change and no verdict recorded: neither key is a wording HEAD renders. Measured 2026-11-27.
+  - **T485-D1, the keys are the wording before 451 T282, from a store older than it.** The suite at this tree's HEAD (30193ea012) renders its section 10's offer and question cases at 494 and 479 characters, measured 2026-11-27 (`L7R_MESSAGE_CORPUS=<dir> bash tests/hooks/test-escalation-hooks.sh` into a private corpus: 67 passed, 0 failed; the texts' lengths read from its `messages.jsonl`). Under T282's mask they key to `e8301989f2d8f60f` and `7dd4088ec3ff42c4`, both PASS in `dev/guard-messages.tsv`, measured 2026-11-27 (`l7r-guard messages check` over that corpus). The task's keys come out of the same texts with their last line cut ("If the line offers him nothing, go on and say nothing of this to him." and its QUESTION twin), at 424 and 408 characters, hashed under T282's mask: exactly `eee895a7b090e5af` and `a01405381091d548`, measured 2026-11-27 (the mask and the key recomputed by hand from `rust/guard/src/suite_tools/messages.rs`'s `Masks::wording` and `key`). That last line is what 148fa78bdf (T299 and T282) added, with the mask. The same cut texts keyed WITHOUT the mask are the record's BASELINE rows `4da09dff87312ac3` and `a908329f0c8990d8`, measured 2026-11-27 (the same hand recomputation). So T481's reading combined an older guard's renderings with a newer guard's key. Of the clone's stores, the review tree's (`diagram-backlog-review`, its file written 2026-11-24 21:43) and the t271 tree's (2026-11-26 11:14) hold those renderings, both before 148fa78bdf (2026-11-26 15:26 -0500), and the clone's own store and the land tree's hold only HEAD's wording, observed 2026-11-27, method: each worktree's `hooks-test/messages/escalation-hooks.sh.jsonl` read for the cut forms, with its mtime. A store file is rewritten only when its suite runs (`tests/hooks/hookrun.sh`), so it is a store older than the commit, not a stale guard binary.
+  - **T485-D2, no message-check dispatch.** The brief asked for one on `make guard-messages BUNDLE=1`'s bundle. With the corpus above in this tree's store, the bundle holds no escalation unit (every escalation wording HEAD renders has a verdict). A verdict on the keys would record a wording no guard renders, and cutting the guard would answer a FAIL nobody reached. This differs from the brief's literal step, and the plan review rules on it.
+  - **Why the batch gates did not catch them**: there was nothing for them to catch. The gate's `make hooks-test` re-renders every suite into the clone's store first, and the clone's store holds the 494 and 479 renderings, both PASS. Only a pool tree's store, which no first-tier builder re-renders, kept the old ones. The same thing showed in this tree: its store held 451 T483's nine gate-write renderings (its done commit 1902ea23c2, not carried here) over a HEAD with the old wording, and `make guard-messages` here named all nine as owed. All nine are in that commit's `dev/guard-messages.tsv`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the keys traced to a store older than 148fa78bdf | n/a: no code changed | n/a: tooling | none | none |
+
+### T485 Approach (checklist part A)
+
+1. **The goal, in the world.** Every refusal wording the escalation suite renders at HEAD has a message-check verdict, and the task's keys are explained.
+2. **The constraints.** 451 T170 (every rendered wording a verdict or BASELINE), T282's mask (`suite_tools/messages.rs`), T338's hand route for a builder's rendering; constitution XIV: a defect is a wrong outcome, so a wording HEAD does not render owes no verdict.
+3. **Where each comes from.** O: the suite run and the keys recomputed, 2026-11-27; R: `rust/guard/src/suite_tools/messages.rs`, `tests/hooks/test-escalation-hooks.sh`, 148fa78bdf's diff of `rust/guard/src/guards/escalation_hooks.rs`; O: the mtimes of each worktree's `hooks-test/messages/escalation-hooks.sh.jsonl`.
+4. **Do they describe the world here?** Yes: the keys reproduce exactly from the pre-T282 text, and HEAD's text keys to PASS rows.
+5. **The order.** After T282 (landed) and T481 (which found it); independent of T483.
+6. **The exits.** Green: `l7r-guard messages check` over HEAD's rendering against the record, clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** Measured 2026-11-27 (`scripts/hooks/l7r-guard.sh messages check <the suite's private corpus> dev/guard-messages.tsv`): `5 wordings, each reviewed or baselined and within its budget`, exit 0. This tree's store now holds that rendering, written over the suite's old file.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: the task's keys are no wording a guard renders, so not a defect of the guard. The defect is the stale store's report, below.
+
+**Found and left?**
+- A pool tree's store of rendered messages outlives its handout, so `make guard-messages` there names wordings HEAD does not render as owed (this task's keys in the review and t271 trees, T483's gate-write renderings in this one). Its visible effect: a builder files or reviews a wording no guard says, as T481 filed this task. Observed 2026-11-27, method: each worktree's `escalation-hooks.sh.jsonl` read for the 408 and 424 character forms, and this tree's `make guard-messages` read against HEAD's gate-write source. Not fixed here: the brief's job is the two verdicts, and the fix is a change to the store or the handout. Filed as T486; lands before T338.
+
+**Performance work?** no
+
+
+### T486 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T485 Approach (checklist part A)
+### T486 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

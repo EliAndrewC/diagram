@@ -3727,14 +3727,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T447 (<why: the finding or measurement that files it>)": {
-   "sha256": "470659946d4c37a128e96c6832a61c058723496468b2ac988f3d71cb677c3cc2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T447 Approach (checklist part A)": {
-   "sha256": "9bdebbd423625e1ace72c14c4caedf7a082f9a6d18ff280e71d99d41a30fca71",
+   "sha256": "20e685faf5fb84fa0b03c666873b1b1ae61d670fcd9e80d4a935ac3c4252d8d9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4281,6 +4275,24 @@
   },
   "### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)": {
    "sha256": "d34de02685489000010173dd07a2fd873cb34f7320cc4126742fff60261c5fa6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T447 (Superseded by T397: `make land` carries its tasks' done commits before its first pass, so the refusal this task would add can never fire)": {
+   "sha256": "7d67e37b1a4bf5c6be47f6c02ae2add8c262f41ed16b7755e85d22004890d2ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T485 (451 T481's `make guard-messages` named two escalation-hooks refusals, keys a01405381091d548 and eee895a7b090e5af, as rendered at HEAD with no verdict)": {
+   "sha256": "e84368f319e2281aaa845cd0b98387348429663f57d9e861e5367b99048cf2a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T485 Approach (checklist part A)": {
+   "sha256": "7b88ba1400022db5e54e90c4df4a82ea44eb9ec3adfccf98425cf06b8dfb2250",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40340,6 +40352,57 @@
      "summary": "A red-first test pins the short refusal (at most 260 characters, names the bar and the form, carries no history), and the old test's assertion of 'GATE_OK: ok' is moved to the header.",
      "class": "within",
      "why": "A test whose only job is to make the requested brevity happen and keep happening is enforcement of the request, not added scope (GM 2026-09-20)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T447 (Superseded by T397: `make land` carries its tasks' done commits before its first pass, so the refusal this task would add can never fire)",
+    "### T447 Approach (checklist part A)",
+    "### T485 (451 T481's `make guard-messages` named two escalation-hooks refusals, keys a01405381091d548 and eee895a7b090e5af, as rendered at HEAD with no verdict)",
+    "### T485 Approach (checklist part A)",
+    "(removed) ### T447 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T447-close",
+     "summary": "T447 closed Superseded by T397 with no code: the first-pass refusal of a landing task whose done commit HEAD lacks is not added, because Land::land runs carry_done (to_carry over exactly that set, a failed carry returning 2 before the first pass) before cheap_refusals, on both the direct and the land-alone route; pinned by T397's carry_done tests (4 ran, 0 failed, measured 2026-11-27).",
+     "class": "within",
+     "why": "The task's purpose - no landing ticks a task whose done commit HEAD lacks - is held by T397's carry-before-first-pass, and the plan traces the single route into the first pass to show the refusal could never fire. A refusal that cannot fire enforces nothing the request asked for; closing it leaves the request's outcome intact. The close is what the brief asked for."
+    },
+    {
+     "id": "T485-D1",
+     "summary": "The two keys are traced to the pre-T282 renderings (the offer/question texts without the line 148fa78bdf added) hashed under T282's mask, read from pool-tree stores older than that commit; HEAD's renderings key to e8301989f2d8f60f and 7dd4088ec3ff42c4, both PASS.",
+     "class": "within",
+     "why": "A measured finding (keys recomputed exactly, store mtimes read, dated with method), not a decision that narrows anything: it answers the task's 'the keys are explained' goal and shows HEAD's escalation wordings already hold verdicts as 451 T170 requires."
+    },
+    {
+     "id": "T485-D2",
+     "summary": "No message-check dispatch and no verdict recorded for the two keys, departing from the brief's literal step (render, one message-check dispatch on the bundle, record verdicts, cut a FAIL).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against the purpose, not the brief's step words (the brief is the coordinating session's, not the GM's; the GM's request names no T485). The purpose of the verdict record is that every refusal wording a guard actually renders has been reviewed (T170). Measured at HEAD, the suite renders 494/479-character texts that already carry PASS rows, and the bundle holds no escalation unit; the keys are no wording any guard renders. Recording verdicts on them would put rows in the record for text no one is shown, and 'cutting a FAIL' would edit a guard over a message nobody reaches - following the step literally would defeat its own purpose rather than serve it. The exit kept is the real one: l7r-guard messages check over HEAD's rendering clean (5 wordings, exit 0). This is not a session completing the GM's thought: the premise the step rested on (the keys are rendered at HEAD) was measured false, and the outcome the step exists for is measured true."
+    },
+    {
+     "id": "T485-found-and-left",
+     "summary": "The stale pool-tree message store that made make guard-messages name non-rendered wordings as owed is not fixed here; filed as T486, landing before T338.",
+     "class": "within",
+     "why": "A real defect (a tool answering wrongly: it names wordings owed that no guard renders) found outside the task's job, deferred in the form the checklist sets ('Not fixed here: <why>. Filed as T<n>; lands before T<m>.'), with its visible effect and dated method. It narrows nothing T485 was asked to do."
+    },
+    {
+     "id": "removed-T447-template",
+     "summary": "The unfilled T447 template heading block removed, replaced by the filled T447 section.",
+     "class": "within",
+     "why": "The removed text was placeholders only; it carried no decision. Its replacement is judged above."
+    },
+    {
+     "id": "removed-T475-template",
+     "summary": "The unfilled T475 template block (placeholders only) removed from the plan.",
+     "class": "within",
+     "why": "The earlier text holds no approach, no decision and no figure - only the template's angle-bracket prompts - so removing it drops no decision about what the GM asked. Whether T475 still needs a filled section before its own work is a tooling matter (task-add/plan-lint), not a fidelity one."
     }
    ]
   }
