@@ -3536,7 +3536,7 @@
    "declared": "spec-fidelity"
   },
   "### T433 Approach (checklist part A)": {
-   "sha256": "a20e48502943010c1fed88c6b387c0282d73ad575bcc749a91f4c7da357e4820",
+   "sha256": "9539920a7d1bc2db614a9b7b4ca4fb953c19d7821d993ea7ea3a827e919b58bc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3548,7 +3548,7 @@
    "declared": "spec-fidelity"
   },
   "### T436 Approach (checklist part A)": {
-   "sha256": "e89ce4deb20115251b0929c9ed6c379e1c5f3a97b5fedccf8cff84642c965467",
+   "sha256": "184583767a655d4abdf2626c980c70664e584c6e7358a5de41ec8a85336a7eff",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4059,6 +4059,18 @@
   },
   "### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))": {
    "sha256": "9d94d7031d470151a55f577f7c6d15e2e5394bc7f8e99b01f68d56c9e2928a48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T436 (found by T427, 2026-11-27: `cd /t > /diagram/x.rs` truncated a file no walk reader saw)": {
+   "sha256": "5d007e7e73fe3a473ab7a1d5bded0268bbc52157dc36f01b721d5d269bedf45b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)": {
+   "sha256": "9180cce69c95fe1c112fa86099cd1a2b3c79384963c2c1721f6f31c0935f186d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36612,6 +36624,104 @@
      "why": "Not a defect (a wrong outcome), so within and no ruling owed: disk left behind; the GM's principle of 2026-11-26 puts time saved above disk usage, and it carries why, its filed id and its order (lands before T302), so it is fixed before the next step."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T436 (found by T427, 2026-11-27: `cd /t > /diagram/x.rs` truncated a file no walk reader saw)",
+    "### T436 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T436-D1",
+     "summary": "At a cd, pushd or popd, each redirect of the segment is a write resolved by path_write against the directory and $PWD before cd_to/popd moves them, classed from the hint where the shell was last known, marked redirect.",
+     "class": "within",
+     "why": "Closes a guard gap (a cd's redirect was no target to main-tree, house style or gm-tree), so the enforcement the GM asked to be real (2026-11-19 approval: 'real enforcement and not just instructions') sees the write. The mechanism follows bash's measured order (bash 5.3.9 probe, 2026-11-27: a builtin's redirects and $PWD are expanded before it moves) and the red-first test covers relative, $PWD, absolute, pushd, popd, &> and >&, and the elsewhere class, so it does what it says on the case it names."
+    },
+    {
+     "id": "place",
+     "summary": "The loop that turns a segment's writes into targets is factored into place, shared by the cd branch and every other segment.",
+     "class": "within",
+     "why": "An implementation shape of D1 (keeps walk_text within clippy's limit); it decides nothing the request or spec left open about behavior."
+    },
+    {
+     "id": "band-unmoved",
+     "summary": "The band's whole-command refusal of a cd/pushd carrying a redirect is kept and runs before its redirect check, so its verdicts and messages are unmoved but for one shape newly refused whole: cd /v &> /tmp/l, as cd /v > /tmp/l already was.",
+     "class": "within",
+     "why": "The newly refused shape is the same stopgap already applied to the > form, reached only because T433-D4 keeps &> in the cd's segment; it is consistent behavior, not a new rule, and use is measured at 0 such invocations in 73,482 Bash calls (2026-11-27). Its over-reach is the defect filed as T460 below, not left unowned."
+    },
+    {
+     "id": "found-and-left T460",
+     "summary": "The band's whole-command refusal refuses a landing under /tmp its redirect check would pass, now that the walk places it; not fixed here, filed as T460, lands before T420.",
+     "class": "within",
+     "why": "A check refusing good work is a defect, and this one is deferred in the form the accepted spec's FR-009 sets (why it is not fixed in this task, its filed id, its order 'lands before T420'), fixed inside this feature before the work that follows (T420), and on a shape with 0 measured uses; it is not carried past the next step, so it does not narrow what was asked."
+    },
+    {
+     "id": "order",
+     "summary": "After T433 (its &> case reads T433-D4), before T420 as T427 filed it, before T460; one landing.",
+     "class": "within",
+     "why": "Scheduling inside the feature's tooling tasks; nothing in the request or spec orders these otherwise, and none is performance work displaced."
+    },
+    {
+     "id": "constraints",
+     "summary": "No guard message changes (the brief); 100% line coverage of new Rust; red-first unit test.",
+     "class": "within",
+     "why": "The red-first test enforces the fix (enforcement of what was asked, not scope); the coverage figure is a property of the code, not a builder coverage run against the GM's 2026-11-26 two-tier ruling; the unchanged-message constraint keeps the task to its fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)",
+    "### T433 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T433-D1",
+     "summary": "REDIRECT reads >& (with or without a space) as a write of the word after it",
+     "class": "within",
+     "why": "Fixes a guard gap (a write no walk reader saw), a check passing bad work and so a defect under fix-as-we-go; serves the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'. Bash behavior measured, red-first test recorded. Narrows nothing asked."
+    },
+    {
+     "id": "T433-D2",
+     "summary": "An fd is a whole word: DUP_FD takes '>& 2', '>&-' closes what follows, '>&2.log' kept as a file, read in code not a lookahead",
+     "class": "within",
+     "why": "Keeps D1 from reading fds as files and fixes the earlier miscut of >&2.log, each case matched to bash as measured 2026-11-27. Implementation of the fix, no narrowing."
+    },
+    {
+     "id": "T433-D3",
+     "summary": "/dev/null by every spelling (>&, &>, &>>) is no write",
+     "class": "within",
+     "why": "Prevents D1 from creating a false write target that would make readers refuse good work; matches bash and the existing '> /dev/null' treatment."
+    },
+    {
+     "id": "T433-D4",
+     "summary": "&> stays in its command's segment in split.rs; make-only's statement pairing reads it the same way",
+     "class": "within",
+     "why": "Places the write where bash does (after a cd, T436's case); the make-only change only keeps an existing test's verdict under the new split, so no guard verdict the GM asked for moves."
+    },
+    {
+     "id": "T433-D5",
+     "summary": ">&$NAME read as a file write (the walk cannot tell a variable fd from a name); 2>&g2 likewise read as a write",
+     "class": "within",
+     "why": "The safe side for a guard (a possible write is seen, not missed); measured 0 invocations of >&$NAME over the week's 73,482 Bash calls, so no wrong outcome is observed and nothing asked is left unenforced."
+    },
+    {
+     "id": "T433-file-scale",
+     "summary": "The redirect reading moves to tree/redirect.rs to bring tree.rs under the file-scale limit",
+     "class": "within",
+     "why": "Code organisation to satisfy an existing check; changes no behavior asked for."
+    },
+    {
+     "id": "T433-found-and-left",
+     "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
+     "class": "within",
+     "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -55697,6 +55807,100 @@
      "summary": "Found and left: a hook killed between the temporary write and the rename leaves a .tmp file nothing removes; filed as T459, lands before T302.",
      "class": "within",
      "why": "Not a defect (a wrong outcome), so within and no ruling owed: disk left behind; the GM's principle of 2026-11-26 puts time saved above disk usage, and it carries why, its filed id and its order (lands before T302), so it is fixed before the next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T436": {
+   "section_sha256": "0829ef463c0c0acdafb22f349ee39b60d66edd8c3cbab3fa7833ce73e0ee6ee9",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T436-D1",
+     "summary": "At a cd, pushd or popd, each redirect of the segment is a write resolved by path_write against the directory and $PWD before cd_to/popd moves them, classed from the hint where the shell was last known, marked redirect.",
+     "class": "within",
+     "why": "Closes a guard gap (a cd's redirect was no target to main-tree, house style or gm-tree), so the enforcement the GM asked to be real (2026-11-19 approval: 'real enforcement and not just instructions') sees the write. The mechanism follows bash's measured order (bash 5.3.9 probe, 2026-11-27: a builtin's redirects and $PWD are expanded before it moves) and the red-first test covers relative, $PWD, absolute, pushd, popd, &> and >&, and the elsewhere class, so it does what it says on the case it names."
+    },
+    {
+     "id": "place",
+     "summary": "The loop that turns a segment's writes into targets is factored into place, shared by the cd branch and every other segment.",
+     "class": "within",
+     "why": "An implementation shape of D1 (keeps walk_text within clippy's limit); it decides nothing the request or spec left open about behavior."
+    },
+    {
+     "id": "band-unmoved",
+     "summary": "The band's whole-command refusal of a cd/pushd carrying a redirect is kept and runs before its redirect check, so its verdicts and messages are unmoved but for one shape newly refused whole: cd /v &> /tmp/l, as cd /v > /tmp/l already was.",
+     "class": "within",
+     "why": "The newly refused shape is the same stopgap already applied to the > form, reached only because T433-D4 keeps &> in the cd's segment; it is consistent behavior, not a new rule, and use is measured at 0 such invocations in 73,482 Bash calls (2026-11-27). Its over-reach is the defect filed as T460 below, not left unowned."
+    },
+    {
+     "id": "found-and-left T460",
+     "summary": "The band's whole-command refusal refuses a landing under /tmp its redirect check would pass, now that the walk places it; not fixed here, filed as T460, lands before T420.",
+     "class": "within",
+     "why": "A check refusing good work is a defect, and this one is deferred in the form the accepted spec's FR-009 sets (why it is not fixed in this task, its filed id, its order 'lands before T420'), fixed inside this feature before the work that follows (T420), and on a shape with 0 measured uses; it is not carried past the next step, so it does not narrow what was asked."
+    },
+    {
+     "id": "order",
+     "summary": "After T433 (its &> case reads T433-D4), before T420 as T427 filed it, before T460; one landing.",
+     "class": "within",
+     "why": "Scheduling inside the feature's tooling tasks; nothing in the request or spec orders these otherwise, and none is performance work displaced."
+    },
+    {
+     "id": "constraints",
+     "summary": "No guard message changes (the brief); 100% line coverage of new Rust; red-first unit test.",
+     "class": "within",
+     "why": "The red-first test enforces the fix (enforcement of what was asked, not scope); the coverage figure is a property of the code, not a builder coverage run against the GM's 2026-11-26 two-tier ruling; the unchanged-message constraint keeps the task to its fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T433": {
+   "section_sha256": "fd663f28e7ebc02abf282ed0aabfd65c3820264e1279928c0658f381b7349156",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T433-D1",
+     "summary": "REDIRECT reads >& (with or without a space) as a write of the word after it",
+     "class": "within",
+     "why": "Fixes a guard gap (a write no walk reader saw), a check passing bad work and so a defect under fix-as-we-go; serves the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'. Bash behavior measured, red-first test recorded. Narrows nothing asked."
+    },
+    {
+     "id": "T433-D2",
+     "summary": "An fd is a whole word: DUP_FD takes '>& 2', '>&-' closes what follows, '>&2.log' kept as a file, read in code not a lookahead",
+     "class": "within",
+     "why": "Keeps D1 from reading fds as files and fixes the earlier miscut of >&2.log, each case matched to bash as measured 2026-11-27. Implementation of the fix, no narrowing."
+    },
+    {
+     "id": "T433-D3",
+     "summary": "/dev/null by every spelling (>&, &>, &>>) is no write",
+     "class": "within",
+     "why": "Prevents D1 from creating a false write target that would make readers refuse good work; matches bash and the existing '> /dev/null' treatment."
+    },
+    {
+     "id": "T433-D4",
+     "summary": "&> stays in its command's segment in split.rs; make-only's statement pairing reads it the same way",
+     "class": "within",
+     "why": "Places the write where bash does (after a cd, T436's case); the make-only change only keeps an existing test's verdict under the new split, so no guard verdict the GM asked for moves."
+    },
+    {
+     "id": "T433-D5",
+     "summary": ">&$NAME read as a file write (the walk cannot tell a variable fd from a name); 2>&g2 likewise read as a write",
+     "class": "within",
+     "why": "The safe side for a guard (a possible write is seen, not missed); measured 0 invocations of >&$NAME over the week's 73,482 Bash calls, so no wrong outcome is observed and nothing asked is left unenforced."
+    },
+    {
+     "id": "T433-file-scale",
+     "summary": "The redirect reading moves to tree/redirect.rs to bring tree.rs under the file-scale limit",
+     "class": "within",
+     "why": "Code organisation to satisfy an existing check; changes no behavior asked for."
+    },
+    {
+     "id": "T433-found-and-left",
+     "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
+     "class": "within",
+     "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
     }
    ],
    "verdict": "CLEAR"

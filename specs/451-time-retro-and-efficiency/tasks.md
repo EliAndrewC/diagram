@@ -477,3 +477,7 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T459 A hook killed between the reversal index's temporary write and its rename leaves a .<feature>.idx.<pid>.<n>.tmp file in <events dir>/reversal/ that nothing removes (rust/guard/shared/src/guards/event_log_hooks/reversal/index.rs, store; 0 seen in T443's runs): a sweep of ones older than an hour at a rebuild, or the scratch sweep's
       research: rendering
+- [ ] T460 the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs (found by T433/T436, 2026-11-27): rust/guard/src/guards/context_cap_hooks/band.rs refuses any '>&' left after sanitize and any cd/pushd carrying a redirect, with comments saying the walk reads neither; since T433 and T436 the walk places both, so 'cd /t > /tmp/l' and 'x >& /tmp/l' are refused though they land under /tmp - drop the two rules and their stale comments, the redirect check judging them by place, the band's tests and context-cap suite case 12 moved to match (0 real uses of either shape in 73,482 Bash calls of 2026-11-20 to 27)
+      research: rendering
+- [x] T461 x Withdrawn 2026-11-27: filed by mistake: a probe call of make task-add with a placeholder title, the real filing is T460
+      research: rendering

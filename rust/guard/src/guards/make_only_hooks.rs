@@ -329,12 +329,12 @@ fn scratch_hits_placed(c: &str, targets: &[Target]) -> bool {
 }
 
 /// The stretch of `c` holding byte `at`, between two separators - `;`, a newline, `|`, `(`, `)`, a backquote, an `&` that is no
-/// redirect's target (`2>&1`; an `&>` is a separator, as the walk reads it) - as byte offsets.
+/// redirect's (`2>&1`, and an `&>`'s, its command's as the walk reads it since 451 T433) - as byte offsets.
 fn statement(c: &str, at: usize) -> (usize, usize) {
     let b = c.as_bytes();
     let sep = |i: usize| match b[i] {
         b';' | b'\n' | b'|' | b'(' | b')' | b'`' => true,
-        b'&' => !(i > 0 && matches!(b[i - 1], b'>' | b'<')),
+        b'&' => !(i > 0 && matches!(b[i - 1], b'>' | b'<')) && b.get(i + 1) != Some(&b'>'),
         _ => false,
     };
     let from = (0..at).rev().find(|&i| sep(i)).map_or(0, |i| i + 1);

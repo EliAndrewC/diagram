@@ -140,8 +140,12 @@ pub(super) fn segments(text: &str, subs: &mut Vec<String>) -> Vec<Piece> {
             let end = closing(&chars, i + 1).min(chars.len() - 1);
             buf.extend(&chars[i..=end]);
             i = end + 1;
-        } else if (ch == '|' || ch == '&') && buf.ends_with('>') {
-            buf.push(ch); // `>|` and `>&` belong to the redirection, not a separator (feature 429)
+        } else if ((ch == '|' || ch == '&') && buf.ends_with('>'))
+            || (ch == '&' && next == Some('>'))
+        {
+            // `>|` and `>&` belong to the redirection, not a separator (feature 429), and `&>` too (451 T433: `cd /v &> n` was a `cd`
+            // and a segment `> n` read after it moved)
+            buf.push(ch);
             i += 1;
         } else if matches!(ch, ';' | '|' | '&' | '\n') {
             // a pipe at a line's end still feeds the next line's segment

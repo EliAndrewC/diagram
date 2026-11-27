@@ -6960,58 +6960,81 @@ batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
    anywhere else a new finding for its own task.
 
-### T433 (<why: the finding or measurement that files it>)
+### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the walk reads a `>&` as a redirect wherever what follows is no fd, `&>` kept in its command's segment.
+  - **The gap.** `REDIRECT`'s capture excluded `&`, and `sanitize` took out only `DUP_FD`'s `\d*>&[0-9-]`, so `>& FILE` and `>&FILE` left a `>&` no pattern read: the write was no target of the walk, for main-tree, house style, gm-tree and the band alike. `DUP_FD` also cut `>&2` out of `>&2.log`, a file. And `&>` was read only because `split` cut the segment at its `&` as a job's end, leaving a bare `> f` segment after the command: placed right standing still, but after a `cd` the segment `> n` of `cd /v &> n` was read where the shell had moved to (T436's case), and make-only's statement pairing had to treat `&>` as a separator to match.
+  - **Bash, measured 2026-11-27** (bash 5.3.9, a scratch directory, `t433-sh` in the builders' scratchpad): `>& f3`, `>&f4`, `1>&g1` and `&> f6` each wrote their file; `>&2.log` wrote `2.log`; `echo z >& 2` wrote no file (stderr); `echo a >&-x` closed stdout, `x` an argument; `2>&g2` is an ambiguous redirect (bash's error, no write; the walk reads it as a write of `g2`, the safe side).
+  - **T433-D1, `REDIRECT` reads `>&`** (`shared/src/tree/redirect.rs`): `\d?(?:>{1,2}|>&)\|?\s*(...)`, so a `>&` left in the text is a write of the word after it.
+  - **T433-D2, an fd is a whole word** (`redirect.rs` `no_file_out`, called by `sanitize`): `DUP_FD` is `\d*>&\s*(?:-|\d+-?)` - a space before the fd now read (`>& 2`, which D1 would otherwise read as a file `2`) - and a match ending in a digit that a word character goes on after is kept as a file's name (`>&2.log`). Read in code, not by a lookahead, so the pattern stays in the regex crate's automaton (451 T129). `>&-` closes whatever follows (`>&-x`), as measured.
+  - **T433-D3, `/dev/null` by every spelling** (`DEV_NULL`, `(?:\d+|&)?>>?&?\s*/dev/null`): `>& /dev/null`, `>&/dev/null`, `&>/dev/null` and `&>> /dev/null` are no write, as `> /dev/null` was not; without it D1 made `>& /dev/null` a new target for every reader.
+  - **T433-D4, `&>` is its command's redirect** (`shared/src/tree/split.rs`): an `&` a `>` follows is no separator, as `>&` and `>|` were not (feature 429); `make_only_hooks.rs` `statement` reads it the same way, so a guard file's name written in scratch by `echo x &>/tmp/q/Makefile` still pairs with its segment (its test `a_guard_files_name_written_in_scratch_is_no_guard_write` went red on D4 alone and green with this).
+  - **D5, `>&$NAME`**: read as a file, the walk unable to tell a variable's fd from a name (451 T79's one rule then places it); unused.
+  - **Use**, measured 2026-11-27 (the 73,482 Bash calls of 2026-11-20 to 27 in the session transcripts under `/home/agent/.claude/projects/-diagram*/`, read-only, quoted strings blanked, `t433-count.py` in the builders' scratchpad): `>& FILE` or `>&FILE` 0 invocations (10 matches, every one inside prose or a quoted pattern); `>&$NAME` 0; `&>` 1 invocation, `&> /dev/null`.
+  - **File scale.** `tree.rs` reached 1,054 lines with the change, measured 2026-11-27 (`make task-add`'s `make quick`, check-file-scale); the redirect reading - `REDIRECT`, `redirects`, `DUP_FD`, `DEV_NULL` and `no_file_out` - moved to `tree/redirect.rs`, `tree.rs` at 994, measured 2026-11-27 (`wc -l`).
+  - **Red first, measured 2026-11-27 in this tree.** `shared/src/tree/tests/commands.rs` `a_redirect_spelled_with_an_ampersand_writes_its_file_unless_an_fd_follows` on the old code: the shared crate 2 failed of 551 (this and T436's test), its first assertion `left: []` for `tail -n 0 x >& rust/a.rs`; with the fix 551 green, the guard crate 573 green.
+  - **The band.** Its whole-command refusal of any `>&` left after `sanitize` (451 T427) still runs first, so no band verdict or message moved (its tests and the context-cap suite's 102 cases green, measured 2026-11-27 in this tree's runs); the rule is now a stopgap the walk does not need, filed as T460.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `>&` read as a redirect, fds and `/dev/null` out | `a_redirect_spelled_with_an_ampersand_writes_its_file_unless_an_fd_follows`, red on the old code | n/a: tooling | none | n/a |
+| `&>` kept in its command's segment | the same test's `&>` heads; make-only's scratch test, red on the split alone | n/a: tooling | none | n/a |
 
 ### T433 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A write spelled `>& FILE`, `>&FILE` or `&> FILE` is a write every reader of the shared walk sees, where bash puts it; an fd or `/dev/null` is none.
+2. **The constraints.** T433's line; T427's section (the redirect rule and the `redirect` mark); T306's `spelled` and the walk's readers; the root `CLAUDE.md`'s guard rule (match invocations, not mentions); no guard message changes (the brief); 100% line coverage of new Rust.
+3. **Where each comes from.** O: T427's reading of `REDIRECT` and `DUP_FD`; bash's behavior measured 2026-11-27; the use counted over the week's transcripts.
+4. **Do they describe the world here?** The unit test red on the old code, the bash probe, the count above.
+5. **The order.** Before T436 (its `cd /v &> n` case needs D4), before T420 as T427 filed it.
+6. **The exits.** Green: the shared and guard crates' tests and the main-tree, house-style, gm-tree, context-cap and make-only suites green, measured 2026-11-27 in this tree's runs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/guard"` clean (551 and 573 tests) and the five suites green (main-tree 104, gm-tree 24, context-cap 102, make-only 144, house style), measured 2026-11-27 in this tree.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A command writing a source file through `>&` was seen by no guard reading the walk: main-tree did not move it to the clone, house style did not correct it, gm-tree did not refuse it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The band's whole-command refusal of any `>&` (and of a `cd` carrying a redirect, T436's) refuses writes under `/tmp` that its redirect check would pass, now that the walk places both (observed 2026-11-27, method: reading `band.rs`'s `bash`, the one place either stopgap stands). Not fixed here: it changes the band's verdicts, past this brief's two jobs and its "no guard message should change". Filed as T460; lands before T420.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a guard's gap.
 
 
-### T436 (<why: the finding or measurement that files it>)
+### T436 (found by T427, 2026-11-27: `cd /t > /diagram/x.rs` truncated a file no walk reader saw)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a `cd`'s, `pushd`'s or `popd`'s redirects are placed as any segment's, where the shell stood before it moved.
+  - **The gap.** `walk_text` moved the shell at a `cd` or `pushd` and went on to the next segment before `writes_in`, and at a `popd` the same, so their redirects were no target (main-tree, house style, gm-tree; the band refuses such a `cd` whole since T427).
+  - **Bash, measured 2026-11-27** (bash 5.3.9, scratch directories `a` and `b`): standing in `a`, `cd b > out1` and `cd b > $PWD/out2` each made `a/out1` and `a/out2`, nothing in `b` - a builtin's redirects are opened before it runs, and `$PWD` expanded there too.
+  - **T436-D1, placed before the move** (`shared/src/tree.rs` `walk_text`): at a `cd`, `pushd` or `popd`, each of `redirects(&seg)` is a write resolved by `path_write` against the directory and the `$PWD` before `cd_to` or `popd` moves them, classed from the hint where the shell was last known before the move, marked `redirect`. The loop that turns a segment's writes into targets became `place`, which the `cd` branch and every other segment share (`walk_text` within clippy's 100 lines, observed 2026-11-27, method: `make builder-checks`'s clippy clean).
+  - **Use**, measured 2026-11-27 (the same 73,482 Bash calls, the same script): a `cd` or `pushd` with a redirect to a file 0 invocations; 28 with `2>/dev/null`, which `sanitize` takes out and is no write.
+  - **Red first, measured 2026-11-27 in this tree.** `shared/src/tree/tests/commands.rs` `a_cds_redirect_lands_where_the_shell_stood_before_it_moved` on the old code: 2 failed of 551 with T433's, its first assertion `left: []` for `cd /u > out1`; with the fix green (relative, `$PWD`, absolute, `pushd`, `popd`, `&>` and `>&` after a `cd`, and the class `elsewhere` of `cd /diagram/x > /tmp/l` standing in `/t` with the shell ending in `/diagram/x`).
+  - **The band.** Its whole-command refusal of a `cd` or `pushd` carrying a redirect runs before its redirect check, so its verdicts and messages are unmoved; one shape is newly refused whole: `cd /v &> /tmp/l`, which was a `cd` and a `> /tmp/l` segment the band passed (T433-D4 keeps `&>` in the `cd`'s segment), as `cd /v > /tmp/l` already was. T460 drops both stopgaps.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a `cd`'s redirects placed before it moves | `a_cds_redirect_lands_where_the_shell_stood_before_it_moved`, red on the old code | n/a: tooling | none | n/a |
 
 ### T436 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A `cd`, `pushd` or `popd` carrying a redirect writes a file every walk reader sees, in the directory bash opens it in.
+2. **The constraints.** T436's line; T427's section; bash's order of a builtin's redirects, measured; no guard message changes (the brief); 100% line coverage of new Rust.
+3. **Where each comes from.** O: T427's band probe and its reading of `walk_text`'s `cd` branch; the bash probe and the count above.
+4. **Do they describe the world here?** The unit test red on the old code and the bash probe.
+5. **The order.** After T433 (its `&>` case reads T433-D4), before T420 as T427 filed it, before T460.
+6. **The exits.** Green: as T433's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** As T433's, the same runs.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** `cd /t > /diagram/x.rs` standing in a clone truncated a mirror file main-tree did not move to the clone and gm-tree did not refuse in gm-assistant's tree.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The band's whole-command refusal of a `cd` or `pushd` carrying a redirect refuses one landing under `/tmp` that its redirect check would pass, now that the walk places it (observed 2026-11-27, method: reading `band.rs`'s `bash`). Not fixed here: it changes the band's verdicts, past this brief's two jobs and its "no guard message should change". Filed as T460; lands before T420.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a guard's gap.
+
 
 ### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))
 
@@ -7790,4 +7813,31 @@ batch; the red was not in its change.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T460 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T460 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 

@@ -19,6 +19,7 @@ pub mod program;
 mod py_c;
 mod python;
 mod quoted;
+mod redirect;
 mod split;
 mod verdict;
 
@@ -27,6 +28,7 @@ use python::{
     HEREDOC_WORD, PYTHON,
 };
 use quoted::{blanked, quotes_to_paths, strip_quote_chars, unheld};
+use redirect::{no_file_out, redirects};
 use split::{segments, Piece};
 pub use verdict::{context_line, explain, judge, Verdict};
 #[cfg(test)]
@@ -129,36 +131,7 @@ static DIR_BASE: Lazy = Lazy::new(
     |t| t.contains("dirname") || t.contains("basename"),
     || re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#),
 );
-/// A redirect's target, the capture: `(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)` with its lookbehind read by `redirects`, so the
-/// pattern runs in the regex crate's automaton, not fancy-regex's backtracking machine (451 T83: 0.50 G instructions fewer over
-/// T79's ux corpus, the walk's 59.81 G to 59.31 G, the scan itself 0.12 G in 41,052 calls, measured 2026-11-21 under callgrind).
-static REDIRECT: Lazy = Lazy::new(
-    |t| t.contains('>'),
-    || re(r"\d?>{1,2}\|?\s*([^\s;&|()<>]+)"),
-);
-
-/// Each redirect target of a segment, as `(?<![<>])` and `REDIRECT` read them together: the leftmost match from where the last
-/// ended whose start no `<` or `>` precedes, a match a `<` or `>` precedes tried again a character on.
-fn redirects(seg: &str) -> Vec<&str> {
-    let mut found = Vec::new();
-    let Some(r) = REDIRECT.on(seg) else {
-        return found;
-    };
-    let mut at = 0;
-    while let Some(c) = r.captures_from_pos(seg, at).ok().flatten() {
-        let whole = c.get(0).map_or(seg.len()..seg.len(), |m| m.range());
-        if seg[..whole.start].ends_with(['<', '>']) {
-            at = whole.start + seg[whole.start..].chars().next().map_or(1, char::len_utf8);
-            continue;
-        }
-        found.push(c.get(1).map_or("", |g| g.as_str()));
-        at = whole.end;
-    }
-    found
-}
 static FUNCTION_DEF: Lazy = Lazy::new(|t| t.contains('('), || re(r"^\s*[\w-]+\s*\(\s*\)"));
-static DUP_FD: Lazy = Lazy::new(|t| t.contains(">&"), || re(r"\d*>&[0-9-]"));
-static DEV_NULL: Lazy = Lazy::new(|t| t.contains("/dev/null"), || re(r"\d*>\s*/dev/null"));
 static ASSIGNMENT_WORD: Lazy = Lazy::new(|t| t.contains('='), || re(r"^[A-Za-z_]\w*="));
 /// A chmod mode: octal, or symbolic clauses (`u+x`, `go-w,a+r`, `-x`); no gate, a chmod's words alone reach it.
 static CHMOD_MODE: Lazy = Lazy::new(
@@ -227,8 +200,7 @@ fn sanitize(carried: &str, programs: Vec<Program>) -> (String, Vec<Program>) {
     let (text, programs) = quotes_to_paths(carried, programs);
     // after the heredoc bodies and the quoted strings are out of the text, so a `\` at the end of a body's line is the body's
     let text = joined(&text);
-    let text = DUP_FD.replace_all(&text, " ");
-    (DEV_NULL.replace_all(&text, " ").into_owned(), programs)
+    (no_file_out(&text), programs)
 }
 
 /// The text with each `\`-continued line joined to the next, as bash reads it (451 T79): each match of `CONTINUED` whose start no
@@ -867,6 +839,15 @@ fn walk_text(
         let showing = shown.next().unwrap_or(&seg).clone();
         let toks = words(&seg);
         bind::read_where_it_stands(&seg, &mut env, home);
+        if matches!(toks.first(), Some(&"cd" | &"pushd" | &"popd")) {
+            // 451 T436: bash opens a `cd`'s redirects before it moves, where the shell stood and with its `$PWD` (measured
+            // 2026-11-27 under bash 5.3: `cd b > out1` and `cd b > $PWD/out2` standing in `a` each made `a/...`, nothing in `b`)
+            let opened = redirects(&seg)
+                .into_iter()
+                .map(|t| path_write(t, &env, home, eff.as_deref()))
+                .collect();
+            place(&mut targets, opened, (0, None), &showing, hint, main);
+        }
         if matches!(toks.first(), Some(&"cd" | &"pushd")) {
             let class;
             (eff, class) = cd_to(&toks, &mut env, home, eff.take(), main);
@@ -909,20 +890,14 @@ fn walk_text(
             Stdin::None | Stdin::Program(..) => {}
         }
         let first_redirect = writes.len() - redirects(&seg).len(); // `writes_in` puts them last (451 T427)
-        for (k, (path, how, known)) in writes.into_iter().enumerate() {
-            let class = settled(path.as_deref(), &known, hint, main);
-            let blank = blanked(&showing);
-            let shown = HEREDOC_WORD.replace_all(bind::from_command(&blank), "<<BODY");
-            targets.push(Target {
-                path,
-                class,
-                how,
-                segment: shown.chars().take(120).collect(),
-                program: if k == 0 { program.take() } else { None },
-                head: command_head(&shown),
-                redirect: k >= first_redirect,
-            });
-        }
+        place(
+            &mut targets,
+            writes,
+            (first_redirect, program),
+            &showing,
+            hint,
+            main,
+        );
     }
     for t in targets.iter_mut().filter(|t| unread && t.how == "read") {
         t.how = "shell";
@@ -932,6 +907,31 @@ fn walk_text(
         final_dir: eff,
         cd_into_main,
         standing: classify(start, main),
+    }
+}
+
+/// One segment's writes as the walk's targets, each classed from the hint where the shell was last known: the writes from
+/// `first_redirect` on its redirects, the first its `-c` program's (`walk_text`; a `cd`'s redirects too, 451 T436).
+fn place(
+    targets: &mut Vec<Target>,
+    writes: Vec<Write>,
+    (first_redirect, mut program): (usize, Option<String>),
+    showing: &str,
+    hint: &'static str,
+    main: &str,
+) {
+    let blank = blanked(showing);
+    let shown = HEREDOC_WORD.replace_all(bind::from_command(&blank), "<<BODY");
+    for (k, (path, how, known)) in writes.into_iter().enumerate() {
+        targets.push(Target {
+            class: settled(path.as_deref(), &known, hint, main),
+            path,
+            how,
+            segment: shown.chars().take(120).collect(),
+            program: if k == 0 { program.take() } else { None },
+            head: command_head(&shown),
+            redirect: k >= first_redirect,
+        });
     }
 }
 

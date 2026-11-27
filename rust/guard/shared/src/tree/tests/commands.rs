@@ -59,3 +59,89 @@ fn a_redirect_is_marked_apart_from_its_programs_own_write() {
         ]
     );
 }
+
+/// Where each redirect of `cmd` lands, standing in `/t`.
+fn redirected(cmd: &str) -> Vec<Option<String>> {
+    crate::tree::walk(cmd, Some("/t"), "", "/h")
+        .targets
+        .into_iter()
+        .filter(|t| t.redirect)
+        .map(|t| t.path)
+        .collect()
+}
+
+fn at(paths: &[&str]) -> Vec<Option<String>> {
+    paths.iter().map(|p| Some((*p).to_owned())).collect()
+}
+
+#[test]
+fn a_redirect_spelled_with_an_ampersand_writes_its_file_unless_an_fd_follows() {
+    // 451 T433: `>& FILE` and `>&FILE` send both streams to FILE, as `&>` does; `>&2.log` is a file, its word no fd (measured
+    // 2026-11-27 under bash: `echo w >&2.log` made `2.log`, `echo z >& 2` made nothing)
+    assert_eq!(
+        redirected("tail -n 0 x >& rust/a.rs"),
+        at(&["/t/rust/a.rs"])
+    );
+    assert_eq!(redirected("tail -n 0 x >&rust/a.rs"), at(&["/t/rust/a.rs"]));
+    assert_eq!(redirected("echo w >&2.log"), at(&["/t/2.log"]));
+    assert_eq!(redirected("echo w 1>&/d/x.rs"), at(&["/d/x.rs"]));
+    // `&>` and `&>>` in their command's segment, not cut off by the `&` as a job's end
+    let walked = crate::tree::walk("echo v &> f6; echo u &>> f7", Some("/t"), "", "/h");
+    let heads: Vec<(Option<String>, String)> = walked
+        .targets
+        .into_iter()
+        .map(|t| (t.path, t.head))
+        .collect();
+    assert_eq!(
+        heads,
+        [
+            (Some("/t/f6".to_owned()), "echo v &> f6".to_owned()),
+            (Some("/t/f7".to_owned()), "echo u &>> f7".to_owned())
+        ]
+    );
+    // an fd, a closed or moved fd (`>&-x` closes it, `x` an argument: measured the same way), and /dev/null are no file written
+    for cmd in [
+        "echo z >&2",
+        "echo z >& 2",
+        "echo z 1>&2",
+        "echo z >&-",
+        "echo z >&-x",
+        "echo z 3>&1-",
+        "echo z >&2;",
+        "echo z >&2|cat",
+        "echo z >&/dev/null",
+        "echo z >& /dev/null",
+        "echo z &>/dev/null",
+        "echo z &>> /dev/null",
+        "make x 2>&1 | tail",
+    ] {
+        assert!(redirected(cmd).is_empty(), "{cmd}");
+    }
+}
+
+#[test]
+fn a_cds_redirect_lands_where_the_shell_stood_before_it_moved() {
+    // 451 T436: bash opens a builtin's redirects before it runs, `$PWD` expanded there too (measured 2026-11-27: `cd b > out1`
+    // and `cd b > $PWD/out2` standing in `a` each made `a/...`, nothing in `b`)
+    assert_eq!(redirected("cd /u > out1"), at(&["/t/out1"]));
+    assert_eq!(
+        redirected("cd /u > $PWD/out2 && echo x > y"),
+        at(&["/t/out2", "/u/y"])
+    );
+    assert_eq!(redirected("cd /u > /diagram/x.rs"), at(&["/diagram/x.rs"]));
+    assert_eq!(
+        redirected("cd /v &> n; pushd /u >> l; popd > m"),
+        at(&["/t/n", "/v/l", "/u/m"])
+    );
+    assert_eq!(redirected("cd /u >& /diagram/x.rs"), at(&["/diagram/x.rs"]));
+    let walked = crate::tree::walk("cd /diagram/x > /tmp/l", Some("/t"), "/diagram", "/h");
+    let placed: Vec<(&str, bool)> = walked
+        .targets
+        .iter()
+        .map(|t| (t.class, t.redirect))
+        .collect();
+    assert_eq!(
+        (placed, walked.final_dir.as_deref()),
+        (vec![("elsewhere", true)], Some("/diagram/x"))
+    );
+}
