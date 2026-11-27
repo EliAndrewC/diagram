@@ -3541,12 +3541,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T425 (<why: the finding or measurement that files it>)": {
-   "sha256": "b8bb962b50a62c8b1505c6baba002d9e32af767837ae382132a876a8e2b2aac9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T425 Approach (checklist part A)": {
    "sha256": "669453acb2a6289200ca1d1ca9ec645e4ee0fd6294e74ebf6150c608d0770b56",
    "verdict": "CLEAR",
@@ -34705,6 +34699,14 @@
      "why": "The earlier text of each was an empty template that decided nothing, so removing it removes no decision."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T425 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
   }
  ],
  "tasks": {
