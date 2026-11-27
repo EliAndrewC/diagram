@@ -474,10 +474,7 @@ fn a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ej
     std::fs::write(w.common.join("refuse"), refusal.replace("@ROW@", row)).unwrap();
     let l = lane_of(&w);
     let err = step(&l).unwrap_err();
-    assert!(
-        err.contains("first pass refused at attempt 1, a row naming no change"),
-        "{err}"
-    );
+    assert!(err.contains("first pass refused at attempt 1, a row naming no change"));
     assert!(err.contains(row), "{err}");
     assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
     assert_eq!(w.lane()[3][crate::wake::STOPPED], true);
@@ -541,10 +538,7 @@ fn a_first_pass_row_naming_two_changes_ejects_both_and_the_rest_lands() {
     );
     std::fs::write(w.common.join("refuse"), mixed).unwrap();
     let err = step(&lane_of(&w)).unwrap_err();
-    assert!(
-        err.contains("(first-pass the clone's lock is held (pid 42))"),
-        "{err}"
-    );
+    assert!(err.contains("(first-pass the clone's lock is held (pid 42))"));
     assert!(repairs::read(&w.common).is_empty());
 }
 
