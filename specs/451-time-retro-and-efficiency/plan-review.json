@@ -4596,6 +4596,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T510 (the GM 2026-11-27, request.md: the window table put the second tier at 568.3 of 680.0 working blocking minutes, 83.6%, every row's percentage of that one total, while the pool trees were busy 93%, 98% and 83% of 2026-11-27T02:00Z to 14:29Z, measured 2026-11-27 (`make task-time` and `tree-idle.py`, as T510's line records))": {
+   "sha256": "a815ad1c66cb4d22169d5946c821aed148988187e438b56bd04ade7a46bc6d13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T510 Approach (checklist part A)": {
+   "sha256": "83e7bb94d7626355d0694a1f71b904678bdad523d2ef8dd49908b51c3a1a4045",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -42133,6 +42145,95 @@
      "summary": "Checklist part A: goal, constraints, sources, exits (green: differential 0 and CPU down; red: recorded and ruled via arbiter-ask), one landing, done measured (PreToolUse 7.29/6.98 to 3.32/3.46 ms, PostToolUse 5.72/5.90 to 3.42/3.43), CHUNK a GUESS knob, not a defect.",
      "class": "within",
      "why": "Restates the task's brief and measured outcome; no clause of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T510 (the GM 2026-11-27, request.md: the window table put the second tier at 568.3 of 680.0 working blocking minutes, 83.6%, every row's percentage of that one total, while the pool trees were busy 93%, 98% and 83% of 2026-11-27T02:00Z to 14:29Z, measured 2026-11-27 (`make task-time` and `tree-idle.py`, as T510's line records))",
+    "### T510 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T510-D1",
+     "summary": "Two sides, each its own denominator: the landings' side is every batch-keyed cell plus every `carry into the clone` cell; the tasks' side everything else but the GM's wait; two tables each ending in its own 100% row; the landings' side shows its categories.",
+     "class": "within",
+     "why": "The GM 2026-11-27: 'the landing should just be in its own separate category where its percentages should not really factor into the time that our tasks spend blocking ... the denominators should just be totally separate'. A carry into the clone is part of landing (T298: a task's own table ends at its carry), so putting it with the landings is the request's own reading. Showing the landings' categories serves 'its own separate category'."
+    },
+    {
+     "id": "T510-D2",
+     "summary": "Every other percentage follows its side: carry rows and the second tier's table of the landings' working time, the rest of the tasks'; the GM's rows and the all row stay of the whole; The biggest blocking and The whole window become the tasks' side's.",
+     "class": "within",
+     "why": "This is the request applied to every percentage. Keeping the GM's rows of the whole is amendment (i) of 2026-11-25 left as it was. Aside, not a ruling: D2 calls The whole window 'every non-batch key', while D1 puts carry-category cells on the landings' side by category. The wording should agree with D1, so that a carry booked to a task's key does not stay in the tasks' whole (0.8 min on the real window)."
+    },
+    {
+     "id": "T510-D3",
+     "summary": "Carries go on the landings' side through a render-side predicate (`landing_side`). The booking that gives a hand carry to its task (T298, T346) is left as it is.",
+     "class": "within",
+     "why": "This is an implementation choice that changes no outcome the GM asked about. Every carry still lands on the landings' side, and leaving the booking alone keeps T298's 'a task's own table ends at its carry'."
+    },
+    {
+     "id": "T510-D4-row",
+     "summary": "One cross-blocking row on the tasks' side, inside its blocking total, counting a task's wait on a landing: idle pool trees while a landing ran, and handouts refused while a done commit was not carried. Each second is counted once.",
+     "class": "within",
+     "why": "This is the request's 'except to the degree that things in one category actually are blocking things in the other category', for the direction the GM's message is about ('the implementation of our tasks in the builders was not blocked on this to the degree indicated'). The reverse direction needs no row. D1 puts every batch-keyed cell on the landings' side, so a landing's own waits are already in its denominator. The new row exists only because an idle tree is booked nowhere, and nothing in the bundle names a landing's wait on a task that falls on neither side."
+    },
+    {
+     "id": "T510-D4-source1-limits",
+     "summary": "The idle-tree source counts only from a release to a LATER handout of that tree, only while fewer than L7R_BUILDERS (default 3) trees are held, and never counts a tree that is not handed out again. It is stated as an upper bound.",
+     "class": "within",
+     "why": "Each limit measures 'actually blocking': idle time with no later demand, or beyond the pool's cap, is not a task waiting. Overcounting where the queue state is unknown is stated on the line, not hidden."
+    },
+    {
+     "id": "T510-D4-unrecorded-queue",
+     "summary": "Whether the queue held a READY entry while a tree stood free is not in the records. A later handout is taken to mean that work waited, and the line says it is an upper bound.",
+     "class": "within",
+     "why": "This inference overcounts, which errs toward showing blocking rather than hiding it, and it is said on the report's line. That matches amendment (l): 'it doesn't have to be 100% exact'."
+    },
+    {
+     "id": "T510-D4-refusal-reason",
+     "summary": "A refusal's reason is not read, because it lives only in tool results. A refusal is counted when its task has a done row and no carry since.",
+     "class": "within",
+     "why": "This is an inference from records the report does read, so the source is kept, not dropped. Amendment (l) accepts approximate attribution."
+    },
+    {
+     "id": "T510-D4-build-slot",
+     "summary": "A builder's wait on a build slot that a gate held is not counted again in the cross row, because it is already booked on the tasks' side as `waiting on a build slot`.",
+     "class": "within",
+     "why": "That time already sits in the tasks' denominator, which is what the GM's exception asks for. Counting it again in the cross row would double it. It is named on the report's line."
+    },
+    {
+     "id": "T510-D4-resume-held",
+     "summary": "A builder's resume held by a gate is not counted, because no record ties a message's delivery to a landing. The report's line says so.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the one real task-on-landing wait the row leaves out, an undercount of the GM's 'to the degree that things ... actually are blocking'. 'No record' alone would only make it awkward to count. It is legitimate on the GM's own words in amendment (l) of 2026-11-25: 'it doesn't have to be 100% exact ... what we're looking for here is just a broad understanding of where our time goes'. D4 also commits to naming the omission on the report's line, so the reader is not misled the way the GM objected to. Approximation here does not defeat the request's purpose: the 83.6% misreading the GM complained of is fixed whether or not this source is counted."
+    },
+    {
+     "id": "T510-D5",
+     "summary": "Done is measured on the real window 2026-11-27T02:00Z to 14:29Z: the tasks' side 137.1 blocking minutes with a cross row of 26.3, the landings' side 569.1, the GM 41.8, reconciled to the old report within 0.1 minute.",
+     "class": "within",
+     "why": "This measures the outcome the GM asked for, on the window he read. The figures carry D5's dated command label. D3's 0.8, 12.5 and 13.3 rest on 'over the real window', which D5 of the same block dates and commands, and that is accepted here as their route back to the run. 26.3/137.1 = 19.2% and 749 min x 0.26 is about 194 tree-minutes, both checked by hand."
+    },
+    {
+     "id": "T510-A-constraints",
+     "summary": "Part A items 2, 3 and 10: the second tier's booking (T298, T346, T403) is unchanged, the GM's row is as before, the transcript is not read, and L7R_BUILDERS is read at its default and not moved.",
+     "class": "within",
+     "why": "The request asks to change the denominators, not the booking. Keeping T298's booking and amendment (i)'s GM row is what earlier amendments asked. Reading the pool's own knob without moving it changes nothing the GM ruled on."
+    },
+    {
+     "id": "T510-found-and-left-T511",
+     "summary": "The misattribution of a hand carry to the next task's table since T394's dispatch-first order (and COMMIT= carries found as no carry) is left, filed as T511, and lands before T319.",
+     "class": "within",
+     "why": "This is outside this request: it concerns which task a carry is booked to, not the sides' denominators. Its deferral meets FR-009 (why, the filed id, 'lands before T319'), and part A item 5 orders T510 before T511. The claim that the sides are unaffected holds for both forms, because D1 decides the side by the cell's category, not by which task `tiers::carries` names."
+    },
+    {
+     "id": "T510-performance",
+     "summary": "Counted as performance work.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task'. T510 corrects a measurement tool."
     }
    ]
   }

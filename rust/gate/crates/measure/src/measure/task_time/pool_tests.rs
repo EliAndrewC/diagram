@@ -163,8 +163,9 @@ fn a_pool_tree_s_build_is_its_holder_s_whatever_task_its_line_names() {
     assert!(one.contains("| tests | 1.0 | "), "{one}");
     assert!(!two.contains("| compile |"), "{two}");
     assert!(two.contains("| tests | 1.5 | "), "{two}");
-    // only the attribution moves: the window's compile is the same 40 s
-    let window = "| compile | 0.7 | 9.5% | 0.7 | 9.5% |";
+    // only the attribution moves: the window's compile is the same 40 s, its share of the tasks' side alone (451 T510: the carries
+    // and the landing out of the denominator)
+    let window = "| compile | 0.7 | 10.8% | 0.7 | 10.8% |";
     assert!(out.contains(window), "{out}");
     assert!(out.contains("0 phases tied to no run"), "{out}");
 }

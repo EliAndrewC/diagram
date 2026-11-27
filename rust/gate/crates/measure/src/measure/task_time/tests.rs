@@ -315,7 +315,12 @@ fn waiting_on_the_gm_is_out_of_every_other_percentage() {
     )];
     let whole = cell(60.0, 200.0);
     let mut out = String::new();
-    tables(&mut out, &cats, &targets, (whole, cell(60.0, 160.0)));
+    let d = super::Sides {
+        whole,
+        tasks: cell(60.0, 160.0),
+        landings: cell(0.0, 0.0),
+    };
+    tables(&mut out, &cats, &targets, &d, false);
     for want in [
         // his row: of the whole, the task's 100 and the window's 200
         "| the GM | 0.0 | 0.0% | 0.0% | 20.0 | 20.0% | 10.0% |",
@@ -340,7 +345,7 @@ fn waited_on_work_blocking_no_task_is_named_apart() {
         (&l, &Ledger::default()),
         (&[], &[]),
         ((0.0, 3600.0), 0.0, &BTreeMap::new()),
-        &columns::Runs::default(),
+        (&columns::Runs::default(), &super::cross::Cross::default()),
     );
     let want = "blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): 12.0 min \
                 - research and page sessions 10.0 - plan review: agents 2.0.\n";

@@ -14,7 +14,9 @@
 //! it - by the `Blocks:` clue the work's dispatch, brief or command gave, else by the defaults (`book`'s doc), each task with blocking
 //! work in flight its own piece - so they sum over tasks and pass the clock where tasks ran side by side, in one session or across clones; a wait on work that blocked no task is named apart, never blocking. Waiting on the GM
 //! (his turn, or away) is reported with its share of the whole, and left out of every other percentage's denominator (amendment (i),
-//! the GM 2026-11-25): those are of the WORKING time, the whole less the GM's, and sum to 100 over it. The line "Working at once" shows
+//! the GM 2026-11-25): those are of the WORKING time, the whole less the GM's, and sum to 100 over it - over its own SIDE since
+//! 451 T510: the tasks' side (every cell but a batch's or a carry's, with the minutes a task waited on a landing, `cross`) and the
+//! landings' side (every batch's cell and every carry's) are each their own denominator, no percentage of one of the other's total. The line "Working at once" shows
 //! how many actors worked together.
 
 use std::collections::{BTreeMap, HashMap};
@@ -32,13 +34,14 @@ use crate::Reply;
 
 pub mod asked;
 pub mod book;
+pub mod cross;
 pub mod held;
 pub mod program;
 pub mod progress;
 pub mod tiers;
 mod top;
 
-use book::{is_tier, Batch, Cell, Key, Ledger, Page};
+use book::{is_tier, Batch, Cell, Key, Ledger, Page, CARRY};
 
 /// Every event log of every clone (and the mirror's), each once: (feature, path), the feature its file's stem.
 #[must_use]
@@ -353,18 +356,77 @@ fn working(cats: &[(String, Cell)]) -> Cell {
     }
 }
 
-/// One task's (or a group's) two tables: the GM's rows as percentages of the whole (itself, the window `all.0`), every other row of
-/// the working time (itself and the window `all.1`, each less the GM's).
+/// The window's three wholes (451 T510): the whole, the GM's rows' denominator as before; the tasks' side's working time, the
+/// minutes a task waited on a landing in its blocking; the landings' side's working time.
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct Sides {
+    /// Everything booked, the GM's wait in it.
+    pub whole: Cell,
+    /// The tasks' side, less the GM's wait, with the cross-blocking in its blocking.
+    pub tasks: Cell,
+    /// The landings' side: every batch's time and every carry.
+    pub landings: Cell,
+}
+
+/// Whether a cell is the landings' side's (451 T510): a batch's, or a carry into the clone; never the GM's wait.
+fn landing_side(key: &Key, cat: &str) -> bool {
+    !is_gm(cat) && (is_tier(key) || cat == CARRY)
+}
+
+/// The window's three wholes from its ledger and the cross-blocking seconds.
+fn sides(l: &Ledger, cross: f64) -> Sides {
+    let mut d = Sides::default();
+    for ((key, cat, _), c) in &l.cells {
+        d.whole.min += c.min;
+        d.whole.block += c.block;
+        let side = if landing_side(key, cat) {
+            &mut d.landings
+        } else if is_gm(cat) {
+            continue;
+        } else {
+            &mut d.tasks
+        };
+        side.min += c.min;
+        side.block += c.block;
+    }
+    d.tasks.block += cross;
+    d
+}
+
+/// One task's (or a group's) two tables: the GM's rows as percentages of the whole (itself, the window's `d.whole`), every other row
+/// of the working time (itself, and its side of the window, 451 T510: the landings' for a carry's row or a `tier` table, else the
+/// tasks').
 fn tables(
     out: &mut String,
     cats: &[(String, Cell)],
     targets: &[(String, String, usize, Cell)],
-    (all, work): (Cell, Cell),
+    d: &Sides,
+    tier: bool,
 ) {
+    let side = |cat: &str| {
+        if tier || cat == CARRY {
+            d.landings
+        } else {
+            d.tasks
+        }
+    };
     let (me, me_w) = (total(cats), working(cats));
+    let mine: Cell = cats
+        .iter()
+        .filter(|(c, _)| !is_gm(c) && (tier || c != CARRY))
+        .fold(Cell::default(), |a, (_, x)| Cell {
+            min: a.min + x.min,
+            block: a.block + x.block,
+            fg: 0.0,
+        });
+    let (all, work) = (d.whole, side(""));
     out.push_str("| category | minutes | % of task | % of window | blocking | % of task | % of window |\n|---|---|---|---|---|---|---|\n");
     for (cat, c) in cats {
-        let (t, w) = if is_gm(cat) { (me, all) } else { (me_w, work) };
+        let (t, w) = if is_gm(cat) {
+            (me, all)
+        } else {
+            (me_w, side(cat))
+        };
         let _ = writeln!(
             out,
             "| {cat} | {} | {} | {} | {} | {} | {} |",
@@ -388,9 +450,9 @@ fn tables(
         out,
         "| working (all but waiting on the GM) | {} | | {} | {} | | {} |\n",
         m(me_w.min),
-        pct(me_w.min, work.min),
+        pct(mine.min, work.min),
         m(me_w.block),
-        pct(me_w.block, work.block)
+        pct(mine.block, work.block)
     );
     out.push_str("| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window |\n|---|---|---|---|---|---|---|---|---|\n");
     for (t, cat, n, c) in targets {
@@ -399,10 +461,10 @@ fn tables(
             "| {t} | {cat} | {n} | {} | {} | {} | {} | {} | {} |",
             m(c.min),
             pct(c.min, me_w.min),
-            pct(c.min, work.min),
+            pct(c.min, side(cat).min),
             m(c.block),
             pct(c.block, me_w.block),
-            pct(c.block, work.block)
+            pct(c.block, side(cat).block)
         );
     }
     out.push('\n');
@@ -432,7 +494,7 @@ fn beside(out: &mut String, l: &Ledger) {
     );
 }
 
-/// The report (the module's doc): the window, its one table of every category, a line a landed task and the second tier's section
+/// The report (the module's doc): the window, its table in two sides (451 T510), a line a landed task and the second tier's section
 /// (451 T298, `top`), the biggest blocking categories and whether each could run in parallel, each landed task's tables, the rest of
 /// the window's, and the footnote naming what could not be booked.
 #[must_use]
@@ -440,10 +502,11 @@ pub fn render(
     (l, whole): (&Ledger, &Ledger),
     (landed, batches): (&[(f64, Key)], &[Batch]),
     (window, from, starts): ((f64, f64), f64, &BTreeMap<Key, f64>),
-    runs: &columns::Runs,
+    (runs, cross): (&columns::Runs, &cross::Cross),
 ) -> String {
-    let (all_c, all_t) = sums(l, &|_| true);
+    let all_c = sums(l, &|_| true).0;
     let (all, work) = (total(&all_c), working(&all_c));
+    let d = sides(l, cross.both);
     let keys: Vec<&Key> = landed.iter().map(|(_, k)| k).collect();
     let landed_block = total(&sums(l, &|x| keys.contains(&x)).0).block;
     let mut out = format!(
@@ -452,7 +515,9 @@ pub fn render(
          the landed tasks' {})\n\n\
          Waiting on the GM: {} min blocking, {} of the window's blocking. It is left out of every other percentage: the GM's rows are \
          percentages of the whole (the task's, the window's), every other row's - minutes and blocking, of the task and of the window - \
-         of the working time, the whole less the GM's ({} min, {} min blocking in the window).\n\n",
+         of its own side's working time, the GM's less (451 T510: the two sides' denominators are apart): the tasks' side {} min, {} min \
+         blocking ({} of it a task waiting on a landing), the landings' side (every batch landing and every carry) {} min, {} min \
+         blocking.\n\n",
         iso_of(window.0),
         iso_of(window.1),
         landed.len(),
@@ -461,19 +526,24 @@ pub fn render(
         m(landed_block),
         m(all.block - work.block),
         pct(all.block - work.block, all.block),
-        m(work.min),
-        m(work.block)
+        m(d.tasks.min),
+        m(d.tasks.block),
+        m(cross.both),
+        m(d.landings.min),
+        m(d.landings.block)
     );
     beside(&mut out, l);
-    top::window_table(&mut out, l);
+    top::window_table(&mut out, l, &d, cross);
     top::task_lines(&mut out, whole, landed, batches);
-    top::second_tier(&mut out, l, batches, window, (all, work));
-    out.push_str("## The biggest blocking, and whether it could run in parallel\n\n");
-    let mut by_block = all_c.clone();
+    top::second_tier(&mut out, l, batches, window, &d);
+    out.push_str(
+        "## The biggest blocking on the tasks' side, and whether it could run in parallel\n\n",
+    );
+    let mut by_block = sums(l, &|x| !is_tier(x)).0;
     by_block.sort_by(|a, b| b.1.block.total_cmp(&a.1.block));
     for (cat, c) in by_block
         .iter()
-        .filter(|(cat, c)| c.block > 0.0 && !is_gm(cat))
+        .filter(|(cat, c)| c.block > 0.0 && !is_gm(cat) && cat != CARRY)
         .take(5)
     {
         let how = if c.fg > 0.0 {
@@ -486,12 +556,13 @@ pub fn render(
         };
         let _ = writeln!(
             out,
-            "- {cat}: {} min blocking ({} of the window's working time) - {how}",
+            "- {cat}: {} min blocking ({} of the tasks' side's working blocking) - {how}",
             m(c.block),
-            pct(c.block, work.block)
+            pct(c.block, d.tasks.block)
         );
     }
-    out.push_str("\n(the parallel reading is a proxy, measured: the share of a category's blocking that was a foreground run in its actor)\n\n");
+    out.push_str("\n(the parallel reading is a proxy, measured: the share of a category's blocking that was a foreground run in its actor; \
+                   the landings' side is in the second tier's section)\n\n");
     for (t, k) in landed {
         let _ = writeln!(
             out,
@@ -506,7 +577,7 @@ pub fn render(
         let (w, inside) = (total(&c), total(&sums(l, &|x| x == k).0));
         let _ = writeln!(
             out,
-            "Its whole time, from {}: {} min, {} min blocking; inside the window {} min ({} of it), {} min blocking ({}); its % of window is its whole time against the window's totals, so it can pass 100%.\n",
+            "Its whole time, from {}: {} min, {} min blocking; inside the window {} min ({} of it), {} min blocking ({}); its % of window is its whole time against its side's totals, so it can pass 100%.\n",
             iso_of(from),
             m(w.min),
             m(w.block),
@@ -515,15 +586,16 @@ pub fn render(
             m(inside.block),
             pct(inside.block, w.block)
         );
-        tables(&mut out, &c, &tg, (all, work));
+        tables(&mut out, &c, &tg, &d, false);
     }
     out.push_str(
         "## The rest of the window: tasks not landed in it, and time under no task (`-`); the second tier's is in its own section\n\n",
     );
     let (c, tg) = sums(l, &|x| !keys.contains(&x) && !is_tier(x));
-    tables(&mut out, &c, &tg, (all, work));
-    out.push_str("## The whole window\n\n");
-    tables(&mut out, &all_c, &all_t, (all, work));
+    tables(&mut out, &c, &tg, &d, false);
+    out.push_str("## The whole window, the tasks' side (a carry's rows of the landings' side, its % of window of that side's)\n\n");
+    let (c, tg) = sums(l, &|x| !is_tier(x));
+    tables(&mut out, &c, &tg, &d, false);
     footnote(&mut out, landed, (from, starts), runs, window.0);
     out
 }
@@ -627,7 +699,8 @@ pub fn run(
     spent::clip(&mut flight.agents, got.window);
     spent::clip(&mut inside, window);
     let pages = pages(&got.aside)?;
-    let carried = tiers::carries(&runs, &subs.commands, &tiers::takes(&bases(root, clones)));
+    let takes = tiers::takes(&bases(root, clones));
+    let carried = tiers::carries(&runs, &subs.commands, &takes);
     let batches = tiers::batches((&got.stream, &got.aside), &runs, &subs.commands, &carried)?;
     let carry_of: HashMap<String, String> = carried
         .iter()
@@ -645,11 +718,24 @@ pub fn run(
     };
     let whole = book::book(&world(&flight.agents, got.window))?;
     let l = book::book(&world(&inside, window))?;
+    // a task's wait on a landing, from the pool's log and the event log (451 T510, `cross`)
+    let dones = cross::dones(&bases(root, clones));
+    let records = cross::Records {
+        runs: &runs,
+        stream: &got.stream,
+        commands: &subs.commands,
+        dones: &dones,
+        takes: &takes,
+        carried: &carried,
+    };
+    let refused = cross::refusals(&records, window.1);
+    let cap = cross::cap_of(std::env::var("L7R_BUILDERS").ok().as_deref());
+    let waited = cross::measure(&held::of(root, clones), &batches, &refused, window, cap);
     let text = render(
         (&l, &whole),
         (&landed(&got.aside, window, only)?, &batches),
         (window, got.window.0, &starts(root, clones)),
-        &runs,
+        (&runs, &waited),
     );
     Ok((text, window.1))
 }
@@ -721,6 +807,8 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
     }
 }
 
+#[cfg(test)]
+mod cross_tests;
 #[cfg(test)]
 mod pool_tests;
 #[cfg(test)]

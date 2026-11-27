@@ -926,7 +926,7 @@ pub mod tier;
 pub use cats::*;
 mod window;
 use tier::Blocks;
-pub use tier::{is_tier, Attempt, Batch, SECOND_TIER};
+pub use tier::{is_tier, Attempt, Batch};
 use window::{at_once, builder_minutes, span_minutes};
 
 #[cfg(test)]

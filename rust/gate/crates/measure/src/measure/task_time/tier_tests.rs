@@ -306,9 +306,10 @@ fn the_report_opens_with_the_window_s_table_and_a_line_a_landed_task() {
     has(
         &out,
         &[
-            "## The window, every category\n\n| category | minutes | % of working | blocking | % of working |",
-            "| the second tier (a batch's gate, repairs and push) | 3.0 | ",
-            "| working (all but waiting on the GM) | ",
+            "## The window: the tasks' side\n\n| category | minutes | % of the tasks' | blocking | % of the tasks' |",
+            "## The window: the landings' side (the second tier)\n\n",
+            "| landing | ",
+            "| the tasks' side, working (all but waiting on the GM) | ",
             "## The landed tasks, one line each\n\n| task | landed | builders | builder minutes | minutes | blocking | its own table ends at |",
             // the builder's 79 s from its start and stop lines; the task's own time ends at its carry
             "| 451-x T1 | 10:04 | 1 | 1.3 | ",
@@ -318,7 +319,7 @@ fn the_report_opens_with_the_window_s_table_and_a_line_a_landed_task() {
     );
     let place = |what: &str| out.find(what).unwrap();
     assert!(
-        place("## The window, every category") < place("## The landed tasks, one line each")
+        place("## The window: the tasks' side") < place("## The landed tasks, one line each")
             && place("## The landed tasks, one line each") < place("## The second tier")
             && place("## The second tier") < place("## 451-x T1 (landed")
     );

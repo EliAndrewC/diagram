@@ -13,7 +13,8 @@
 //!
 //! ITS BLOCKING stands on its own line, expected near zero since no new task waits on the gate - a rise is the signal that something
 //! has begun to wait on it (a carry behind a running gate, a repair, a build slot): the task line's words, relaying the GM's ruling
-//! of 2026-11-26. So a gate in flight blocks
+//! of 2026-11-26 - and it is the LANDINGS' side's, its own denominator, never a percentage of the tasks' (451 T510: a task's wait
+//! on a landing is the tasks' side's cross-blocking row, `task_time/cross.rs`). So a gate in flight blocks
 //! nothing while any task's own work in flight blocks that task (the session is waiting on builders, the gate beside them), and is
 //! never booked beside the session's own turn; it blocks - the batch, no task - where the session waits on it ALONE, where it ran in
 //! the foreground, and through a repair (the session's own turns from the carry on, and what they wait on). Where the batch's own
@@ -33,8 +34,6 @@ use super::{is_wait, ran, Cand, Ix, Key, SESSION_CHECKS};
 
 /// The prefix of a batch's task name: a key so named is a batch's, no task's.
 pub const TIER: &str = "second tier: ";
-/// The one category the window's table folds every batch's time to.
-pub const SECOND_TIER: &str = "the second tier (a batch's gate, repairs and push)";
 
 /// One `make land` run over a batch.
 #[derive(Debug, Clone, PartialEq, Default)]

@@ -1,4 +1,5 @@
-//! What the report opens with (feature 451 T298): ONE window-wide table of every category, one line a landed task, and the second
+//! What the report opens with (feature 451 T298): the window's table - in two parts since 451 T510, the tasks' side and the
+//! landings', each its own denominator - one line a landed task, and the second
 //! tier's section, one line a batch - before the per-task sections. On 2026-11-26 a day's report was 38 per-task tables, 2,294
 //! lines, and the day's totals were summed from them by hand.
 
@@ -6,15 +7,15 @@ use std::collections::HashMap;
 use std::fmt::Write as _;
 
 use super::super::events::hhmm;
-use super::book::{is_tier, Batch, Cell, Key, Ledger, SECOND_TIER};
-use super::{is_gm, m, pct, sums, tables, total, working};
+use super::book::{is_tier, Batch, Cell, Key, Ledger};
+use super::cross::{self, Cross};
+use super::{is_gm, landing_side, m, pct, sums, tables, total, Sides};
 
-/// The window's categories, every batch's time folded to the one second-tier category.
-fn folded(l: &Ledger) -> Vec<(String, Cell)> {
+/// The window's categories over the cells `pick` takes, largest first.
+fn folded(l: &Ledger, pick: &dyn Fn(&Key, &str) -> bool) -> Vec<(String, Cell)> {
     let mut cats: HashMap<&str, Cell> = HashMap::new();
-    for ((key, cat, _), c) in &l.cells {
-        let name = if is_tier(key) { SECOND_TIER } else { cat };
-        let e = cats.entry(name).or_default();
+    for ((_, cat, _), c) in l.cells.iter().filter(|((k, cat, _), _)| pick(k, cat)) {
+        let e = cats.entry(cat).or_default();
         e.min += c.min;
         e.block += c.block;
     }
@@ -31,16 +32,13 @@ fn folded(l: &Ledger) -> Vec<(String, Cell)> {
     rows
 }
 
-/// The window's one table: every category's minutes and blocking minutes, each with its share of the window's working time (the
-/// GM's rows their share of the whole, and outside every other row's denominator).
-pub(super) fn window_table(out: &mut String, l: &Ledger) {
-    let rows = folded(l);
-    let (all, work) = (total(&rows), working(&rows));
-    out.push_str(
-        "## The window, every category\n\n| category | minutes | % of working | blocking | % of working |\n|---|---|---|---|---|\n",
+/// One side's table: its rows, each a percentage of the side's own working time `of`.
+fn side_table(out: &mut String, heading: &str, (rows, of): (&[(String, Cell)], Cell), name: &str) {
+    let _ = write!(
+        out,
+        "## The window: {heading}\n\n| category | minutes | % of {name} | blocking | % of {name} |\n|---|---|---|---|---|\n"
     );
-    for (cat, c) in &rows {
-        let of = if is_gm(cat) { all } else { work };
+    for (cat, c) in rows {
         let _ = writeln!(
             out,
             "| {cat} | {} | {} | {} | {} |",
@@ -50,14 +48,58 @@ pub(super) fn window_table(out: &mut String, l: &Ledger) {
             pct(c.block, of.block)
         );
     }
+}
+
+/// The window's table in two parts (451 T510, the GM 2026-11-27: "the denominators should just be totally separate except to the
+/// degree that things in one category actually are blocking things in the other category"): the tasks' side - what is booked to a
+/// task or to the session's own, and the minutes a task waited on a landing (`cross`) - and the landings' side - every batch's time
+/// and every carry - each a percentage of its own working time; the GM's rows apart, of the whole, as before.
+pub(super) fn window_table(out: &mut String, l: &Ledger, d: &Sides, cross: &Cross) {
+    let tasks = folded(l, &|k, c| !landing_side(k, c) && !is_gm(c));
+    side_table(out, "the tasks' side", (&tasks, d.tasks), "the tasks'");
     let _ = writeln!(
         out,
-        "| all | {} | | {} | |\n| working (all but waiting on the GM) | {} | 100.0% | {} | 100.0% |\n\n\
-         (a GM row's % is of the whole; `{SECOND_TIER}` is every batch landing's time, booked to no task: its section is below)\n",
-        m(all.min),
-        m(all.block),
-        m(work.min),
-        m(work.block)
+        "| a task waited on a landing (cross-blocking) | - | | {} | {} |\n\
+         | the tasks' side, working (all but waiting on the GM) | {} | 100.0% | {} | 100.0% |\n\n{}",
+        m(cross.both),
+        pct(cross.both, d.tasks.block),
+        m(d.tasks.min),
+        m(d.tasks.block),
+        cross::said(cross)
+    );
+    let landings = folded(l, &landing_side);
+    side_table(
+        out,
+        "the landings' side (the second tier)",
+        (&landings, d.landings),
+        "the landings'",
+    );
+    let _ = writeln!(
+        out,
+        "| the landings' side, working | {} | 100.0% | {} | 100.0% |\n\n\
+         (every batch landing's time, booked to no task - its section is below - and every carry into the clone; its blocking is the \
+         session's clock, never a task's but where the line above counts one)\n",
+        m(d.landings.min),
+        m(d.landings.block)
+    );
+    out.push_str(
+        "Waiting on the GM, apart from both sides:\n\n| category | minutes | % of the whole | blocking | % of the whole |\n|---|---|---|---|---|\n",
+    );
+    for (cat, c) in &folded(l, &|_, c| is_gm(c)) {
+        let _ = writeln!(
+            out,
+            "| {cat} | {} | {} | {} | {} |",
+            m(c.min),
+            pct(c.min, d.whole.min),
+            m(c.block),
+            pct(c.block, d.whole.block)
+        );
+    }
+    let _ = writeln!(
+        out,
+        "| the whole (both sides and the GM) | {} | | {} | |\n",
+        m(d.whole.min),
+        m(d.whole.block)
     );
 }
 
@@ -148,7 +190,7 @@ pub(super) fn second_tier(
     l: &Ledger,
     batches: &[Batch],
     (lo, hi): (f64, f64),
-    (all, work): (Cell, Cell),
+    d: &Sides,
 ) {
     out.push_str(
         "## The second tier: each batch landing, booked to no task\n\n\
@@ -178,16 +220,17 @@ pub(super) fn second_tier(
     let tier = total(&cats);
     let _ = writeln!(
         out,
-        "\nThe second tier's blocking: {} min, {} of the window's working blocking. Expected near zero - no new task waits on the gate: \
+        "\nThe second tier's blocking: {} min, {} of the landings' side's working blocking (the rest of that side is the carries, \
+         booked to the tasks they carried, whose own tables end there). Expected near zero - no new task waits on the gate: \
          a gate waited on beside a task's own work blocks nothing, and this counts a repair (the session's turns from a task's carry \
          to the landing, and what they waited on), a gate the session waited on alone, and a gate run in the foreground - only the \
-         session's own work: its time stopped waiting on the GM is the GM's row (451 T403). A rise says something has begun to wait on \
-         the gate.\n",
+         session's own work: its time stopped waiting on the GM is the GM's row (451 T403). A rise is not by itself a task's wait: \
+         what a task waited on a landing is the tasks' side's cross-blocking row.\n",
         m(tier.block),
-        pct(tier.block, work.block)
+        pct(tier.block, d.landings.block)
     );
     if !cats.is_empty() {
         out.push_str("Its time by what it was, every batch together:\n\n");
-        tables(out, &cats, &targets, (all, work));
+        tables(out, &cats, &targets, d, true);
     }
 }
