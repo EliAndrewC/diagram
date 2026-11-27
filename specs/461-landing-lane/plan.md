@@ -651,31 +651,73 @@ engine speed, so the performance checklist does not apply.
 
 
 
-### T02 (<why: the finding or measurement that files it>)
+### T02 (D12's other figures, the night's concurrency and the likeness test, completing phase 0's baseline)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: A sibling script, `dev/measurements/2026-11-27/461-t01-night-tokens/night-figures.py`, sits beside T01's
+  `night-tokens.py`. Tokens stay in T01's script, and this one gives the rest of D12's table. Its record is T02's section of
+  that directory's `results.md`.
+  - **Sources.** It reads, under the common git directory, the pool log (replayed from its start), the event log's `make land`
+    rows and the sampler's samples.
+  - **Kept extracts.** `extract` keeps no-content extracts of all three under `kept/`, so the figures re-derive after the
+    sampler's file rotates.
+  - **The likeness test.** `like` is D12's test, which phase 5 reruns. Its three GUESS knobs are at the script's head:
+    `LIKE_MIN_H` 8, `LIKE_TREES_BAND` 0.5 and `LIKE_LOAD_BAND` 0.75,1.25.
+  - **The silent point.** D12 does not say whether "eight hours or more of builder work" is a wall span or tree-hours. The
+    script takes the wall span, the plain reading, and prints tree-hours beside it.
+  - **The headline figures.** Over 04:30Z to 14:29Z, 120 tasks landed on 31.80 tree-hours held, 3.77 a tree-hour. Of 39
+    landing attempts, 11 landed, 17 were refused before a gate, 8 gates were red and 3 were refused after a green gate. Trees
+    held came to 3.19 time-weighted, and the median load was 14.1 on 22 cores (observed 2026-11-27, method: `night-figures.py
+    figures` over the kept extracts, `output-figures-0430-1429.txt`).
+  - **The whole window.** Over 02:00Z to 14:29Z the same figures are 130 tasks on 41.75 tree-hours, 49 attempts with 19
+    refused before a gate, 3.34 trees held and a load of 12.6 (observed 2026-11-27, method: `output-figures-0200-1429.txt`).
+  - **Checks.** Trees held agree with the sampler's `held` field, 3.18 and 3.34. The load medians are `make sampler-report`'s.
+    Over 02:00Z to 15:00Z the refusals reproduce the update note's 50 / 18 / 19 / 10 / 3 exactly (observed 2026-11-27, method:
+    the outputs' cross-check lines, `make sampler-report SINCE= UNTIL=` and a `figures` run ending 15:00Z).
+  - **Four trees.** The pool held four trees, not D12's three, with b1 held 58% of the headline window (observed 2026-11-27,
+    method: the same output). The likeness test reads trees held, so it is unaffected.
+  - **R3's baseline.** `baseline-task-time.txt` is kept unchanged as the before figure. Its cross-blocking row moved after its
+    window closed (Found and left).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: a measurement, no engine or tooling code | - | - | - | - |
 
 ### T02 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every figure of D12's table has a before figure in the form phase 5 will take, with the night's
+   concurrency read. A likeness test exists that the after-measurement (T31) runs as written.
+2. **The constraints.** FR-006, FR-007 and FR-010; D12's table and its likeness rule; the plan's knob table; and R3's kept
+   baseline.
+3. **Where each comes from.** R: plan D12, research R3 and the update note in `specs/449-rust-codebase/`. O: T01's record and
+   this task's runs. G: the three likeness knobs, from the plan's knob table.
+4. **Do they describe the world here?** Yes, each checked by a second source.
+   - Trees held: the sampler's own `held` count.
+   - Load: `make sampler-report`.
+   - Refusals: the update note's count, reproduced exactly over its own span.
+   - Kept against live: the same output, by `diff`.
+5. **The order.** After T01, the same directory. Before any phase 1 edit, and before T31's after-measurement.
+6. **The exits.** Green: both windows' outputs written from the kept extracts, the likeness test shown LIKE and NOT LIKE.
+   Red: what failed is recorded and the task set down. A claim that it cannot be done is ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Both `figures` runs re-derive from `kept/` to the same output as a live run, apart from the source
+   line (observed 2026-11-27, method: `diff`). `output-like.txt` shows the night LIKE itself, a 06:00Z start LIKE, and three windows NOT LIKE, each with the band it
+   missed (observed 2026-11-27, method: `diff` and the runs there).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing fixed here. A measurement changes no behavior.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make task-time`'s cross-blocking row for a closed window grows after the window ends. The 02:00Z window gave 32.3 min at
+  7af15e21ab, run about 14:40Z, and 53.7 min at eb205722a4, run about 17:55Z (observed 2026-11-27, method: both runs'
+  headers). The row counts a tree free until its next
+  handout, and t271's and t270's next handouts came after the first run (observed 2026-11-27, method: both runs' headers, the
+  pool log's take and release rows). Visible effect: phase 5's before and after cross-blocking differ by when each was run.
+  This record gives both windows at one commit. Not fixed here: a measurement task changes no tooling. Filed as T33; lands
+  before T31.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, as a `[perf]` measurement (451 FR-013). It measures where time goes in the landings and the pool, but
+it changes no engine speed, so the performance checklist does not apply.
 
 
 ### T03 (<why: the finding or measurement that files it>)
@@ -1534,6 +1576,32 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T33 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T33 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -192,6 +192,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T02 (D12's other figures, the night's concurrency and the likeness test, completing phase 0's baseline)": {
+   "sha256": "f1224bb435464d237febb11b41ef1142e7922f156fd100f14a79e23d84662bb8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "579b59c73cddf59977c956e505a36ebed0af7b266edf5911581ffffb826bcd79",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1201,6 +1213,134 @@
      "why": "A known defect outside the land crate, filed and scheduled within the feature before the first task that depends on it. Moving it earlier tightens the schedule rather than carrying the defect forward."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T02 (D12's other figures, the night's concurrency and the likeness test, completing phase 0's baseline)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-script",
+     "summary": "A sibling script night-figures.py beside T01's night-tokens.py; tokens stay in T01's script, this one gives the rest of D12's table, recorded in T02's section of results.md",
+     "class": "within",
+     "why": "Implementation placement of the FR-006/FR-007/FR-010 before-measurement; narrows nothing asked."
+    },
+    {
+     "id": "T02-kept-extracts",
+     "summary": "Keep no-content extracts of the pool log, the event log's make-land rows and the sampler's samples under kept/, so figures re-derive after the sampler's file rotates",
+     "class": "within",
+     "why": "Makes the before figure reproducible for phase 5's comparison (SC-005); adds no behavior."
+    },
+    {
+     "id": "T02-like-knobs",
+     "summary": "The likeness test 'like' (D12's, rerun by phase 5) with GUESS knobs LIKE_MIN_H 8, LIKE_TREES_BAND 0.5, LIKE_LOAD_BAND 0.75,1.25",
+     "class": "within",
+     "why": "FR-010 fixes eight hours and asks concurrency (trees held, load) 'close to' the compared window; the knobs quantify 'close' and are labeled GUESS from the plan's knob table. This is the mechanism by which the GM's seventh message (no bare comparison of one builder against four) is enforced, so it serves the request."
+    },
+    {
+     "id": "T02-silent-point",
+     "summary": "FR-010's 'eight hours or more of builder work' read as a wall span, tree-hours printed beside it",
+     "class": "within",
+     "why": "Resolves a silence in FR-010 (the eight hours is the spec's, not the GM's words). Combined with the trees band (night 3.19 +/- 0.5, so at least ~2.7 trees), an eight-hour wall span implies at least ~21 tree-hours, so the reading is no looser than the tree-hours one, and both are printed; it cannot let an unlike window pass."
+    },
+    {
+     "id": "T02-windows",
+     "summary": "Headline window 04:30Z-14:29Z with the whole window 02:00Z-14:29Z stated beside it, each with tasks, tree-hours, attempts, refusals, trees held and load",
+     "class": "within",
+     "why": "Both windows are reported with their concurrency, as FR-010 requires of every figure; SC-005's 'the night of 2026-11-27' is covered by the whole window, and nothing is withheld."
+    },
+    {
+     "id": "T02-four-trees",
+     "summary": "The pool held four trees, not D12's three; the likeness test reads time-weighted trees held so is unaffected",
+     "class": "within",
+     "why": "A measured correction of a premise; the test's input is the time-weighted figure FR-010 names, so the requirement still does what it says. (FR-010's parenthetical 'three pool trees' is now a stale statement of fact - restate it; not a plan narrowing.)"
+    },
+    {
+     "id": "T02-r3-baseline-and-T33",
+     "summary": "Keep R3's baseline-task-time.txt unchanged as the before figure; the task-time cross-blocking row growing after a closed window is found and left, filed as T33 to land before T31; this record gives both windows at one commit",
+     "class": "within",
+     "why": "Not a defect left: the wrong outcome (a closed window's cross-blocking row moving with run time) is filed and ordered to land before T31, the only step it would corrupt, and a measurement task changing no tooling is ordinary scoping. Nothing of FR-006/FR-007/FR-010 or SC-005 is narrowed. T31 must compare the cross-blocking row with before and after read by the same (fixed) tool, which T33's landing first makes possible."
+    },
+    {
+     "id": "T02-perf-class",
+     "summary": "T02 counted as [perf] measurement work under 451 FR-013; the performance checklist does not apply",
+     "class": "within",
+     "why": "451 FR-013 explicitly counts work that measures where the time goes as performance work for ordering; it speeds nothing, so a speed checklist has nothing to check."
+    },
+    {
+     "id": "T02-exits-budget",
+     "summary": "Green exit: both windows' outputs re-derived from kept/ and the likeness test shown LIKE and NOT LIKE; red: record and set down, impossibility through make arbiter-ask; budget one landing; ordered after T01 and before any phase 1 edit and T31",
+     "class": "within",
+     "why": "Process and ordering inside the feature's phase 0 baseline; narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T02 (D12's other figures, the night's concurrency and the likeness test, completing phase 0's baseline)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T02-script",
+     "summary": "A sibling script night-figures.py gives D12's non-token figures; tokens stay in T01's night-tokens.py; record is T02's section of results.md",
+     "class": "within",
+     "why": "Implementation layout of the before-measurement FR-006/FR-007/FR-010 and SC-005 require; FR-006's tokens are still measured (by T01). Narrows nothing asked."
+    },
+    {
+     "id": "T02-sources-kept",
+     "summary": "Reads the pool log, the event log's make land rows and the sampler's samples; keeps no-content extracts under kept/ so figures re-derive after rotation",
+     "class": "within",
+     "why": "Sources are the ones FR-010 names (trees held from the pool's log, machine load); keeping extracts makes the before figure reproducible for SC-005's comparison. Adds no behavior."
+    },
+    {
+     "id": "T02-like-knobs",
+     "summary": "The like test (rerun in phase 5) with GUESS knobs LIKE_MIN_H 8, LIKE_TREES_BAND 0.5, LIKE_LOAD_BAND 0.75..1.25",
+     "class": "within",
+     "why": "FR-010 says 'eight hours or more' (LIKE_MIN_H 8 matches) and 'close to' without a number; the bands quantify 'close'. The GM's own case (one builder against four) is NOT LIKE under the 0.5 trees band read either as absolute or as ratio, so the test serves the seventh message's purpose. Marked GUESS, not presented as measured."
+    },
+    {
+     "id": "T02-silent-point",
+     "summary": "'Eight hours or more of builder work' read as wall span, tree-hours printed beside",
+     "class": "within",
+     "why": "An interpretation of a phrase the spec leaves open, stated openly with the other reading printed. Near the night's concurrency (about 3.2 trees) 8 h of wall span is about 25 tree-hours, so the wall reading is the stricter one, and an idle-heavy window that would pass on wall span is caught by the trees-held band. Neither reading guts FR-010's purpose. Note: the block uses tree-hours as SC-005's 'hour of builder work' denominator (3.77 a tree-hour) - a different quantity from the window-length test, which is consistent as long as both are stated, as they are. That D12 is silent here was not verifiable from the bundle (D12 is not in it)."
+    },
+    {
+     "id": "T02-windows",
+     "summary": "Headline window 04:30Z-14:29Z, with the whole 02:00Z-14:29Z window's figures given beside it",
+     "class": "within",
+     "why": "Both windows are recorded, nothing dropped; the headline sets the higher throughput bar for SC-005 (3.77 against 3.11 per tree-hour), and the refusal counts are reproduced over the update note's own span (SC-002's 19 of 50). Every figure carries its concurrency (trees held, load) as FR-010 requires."
+    },
+    {
+     "id": "T02-four-trees",
+     "summary": "Pool held four trees, not D12's/FR-010's three; treated as not affecting the likeness test",
+     "class": "within",
+     "why": "FR-010's test is trees held time-weighted, not the tree count, so the finding does not change the test; recorded with its method. Aside: FR-010's parenthetical (three pool trees, 93/98/83% busy) now disagrees with a measurement and should be restated in the spec."
+    },
+    {
+     "id": "T02-r3-baseline",
+     "summary": "R3's baseline-task-time.txt kept unchanged as the before figure; its cross-blocking row noted as having moved after its window closed",
+     "class": "within",
+     "why": "Keeps a recorded research figure as it was and records the movement beside it rather than overwriting; narrows nothing. Not blocking, but owed by T33/T31: the row moves with run time, not commit, so 'both windows at one commit' does not by itself fix which before value (32.3, 53.7, or the fixed tool's) SC-005's 'cross-blocking row no higher' is held to; the before must be re-derived by the same tool the after uses."
+    },
+    {
+     "id": "T02-cross-blocking-found-and-left",
+     "summary": "make task-time's cross-blocking row for a closed window grows after the window ends; not fixed in T02, filed as T33, landing before T31",
+     "class": "within",
+     "why": "This is a defect by the constitution's definition (a tool answering a closed window differently by when it is run, with a stated visible effect on phase 5's comparison), not a mere difference. It is within only because the block states T33 lands before T31, the after-measurement that is the row's only consumer named; on that ordering no comparison SC-005 makes uses the defective row, and T02 is a measurement task that changes no tooling. If T33 were not to land before T31 this would be a defect carried past its consumer."
+    },
+    {
+     "id": "T02-perf",
+     "summary": "Tagged [perf] as a measurement task (451 FR-013); performance checklist not applied since no engine speed changes",
+     "class": "within",
+     "why": "451 FR-013 explicitly counts work that measures where time goes as performance work for ordering; not applying a speed checklist to a task that changes no speed narrows nothing asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1274,6 +1414,68 @@
      "summary": "Tagged [perf] as a measurement (451 FR-013); the performance checklist does not apply",
      "class": "within",
      "why": "FR-013 counts work that measures where the cost goes as performance work for ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T02": {
+   "section_sha256": "1174278984e19af7fcfdbf8ed465dc9c7131321bdacc021b03a5048e9193b6ca",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T02-script",
+     "summary": "A sibling script night-figures.py gives D12's non-token figures; tokens stay in T01's night-tokens.py; record is T02's section of results.md",
+     "class": "within",
+     "why": "Implementation layout of the before-measurement FR-006/FR-007/FR-010 and SC-005 require; FR-006's tokens are still measured (by T01). Narrows nothing asked."
+    },
+    {
+     "id": "T02-sources-kept",
+     "summary": "Reads the pool log, the event log's make land rows and the sampler's samples; keeps no-content extracts under kept/ so figures re-derive after rotation",
+     "class": "within",
+     "why": "Sources are the ones FR-010 names (trees held from the pool's log, machine load); keeping extracts makes the before figure reproducible for SC-005's comparison. Adds no behavior."
+    },
+    {
+     "id": "T02-like-knobs",
+     "summary": "The like test (rerun in phase 5) with GUESS knobs LIKE_MIN_H 8, LIKE_TREES_BAND 0.5, LIKE_LOAD_BAND 0.75..1.25",
+     "class": "within",
+     "why": "FR-010 says 'eight hours or more' (LIKE_MIN_H 8 matches) and 'close to' without a number; the bands quantify 'close'. The GM's own case (one builder against four) is NOT LIKE under the 0.5 trees band read either as absolute or as ratio, so the test serves the seventh message's purpose. Marked GUESS, not presented as measured."
+    },
+    {
+     "id": "T02-silent-point",
+     "summary": "'Eight hours or more of builder work' read as wall span, tree-hours printed beside",
+     "class": "within",
+     "why": "An interpretation of a phrase the spec leaves open, stated openly with the other reading printed. Near the night's concurrency (about 3.2 trees) 8 h of wall span is about 25 tree-hours, so the wall reading is the stricter one, and an idle-heavy window that would pass on wall span is caught by the trees-held band. Neither reading guts FR-010's purpose. Note: the block uses tree-hours as SC-005's 'hour of builder work' denominator (3.77 a tree-hour) - a different quantity from the window-length test, which is consistent as long as both are stated, as they are. That D12 is silent here was not verifiable from the bundle (D12 is not in it)."
+    },
+    {
+     "id": "T02-windows",
+     "summary": "Headline window 04:30Z-14:29Z, with the whole 02:00Z-14:29Z window's figures given beside it",
+     "class": "within",
+     "why": "Both windows are recorded, nothing dropped; the headline sets the higher throughput bar for SC-005 (3.77 against 3.11 per tree-hour), and the refusal counts are reproduced over the update note's own span (SC-002's 19 of 50). Every figure carries its concurrency (trees held, load) as FR-010 requires."
+    },
+    {
+     "id": "T02-four-trees",
+     "summary": "Pool held four trees, not D12's/FR-010's three; treated as not affecting the likeness test",
+     "class": "within",
+     "why": "FR-010's test is trees held time-weighted, not the tree count, so the finding does not change the test; recorded with its method. Aside: FR-010's parenthetical (three pool trees, 93/98/83% busy) now disagrees with a measurement and should be restated in the spec."
+    },
+    {
+     "id": "T02-r3-baseline",
+     "summary": "R3's baseline-task-time.txt kept unchanged as the before figure; its cross-blocking row noted as having moved after its window closed",
+     "class": "within",
+     "why": "Keeps a recorded research figure as it was and records the movement beside it rather than overwriting; narrows nothing. Not blocking, but owed by T33/T31: the row moves with run time, not commit, so 'both windows at one commit' does not by itself fix which before value (32.3, 53.7, or the fixed tool's) SC-005's 'cross-blocking row no higher' is held to; the before must be re-derived by the same tool the after uses."
+    },
+    {
+     "id": "T02-cross-blocking-found-and-left",
+     "summary": "make task-time's cross-blocking row for a closed window grows after the window ends; not fixed in T02, filed as T33, landing before T31",
+     "class": "within",
+     "why": "This is a defect by the constitution's definition (a tool answering a closed window differently by when it is run, with a stated visible effect on phase 5's comparison), not a mere difference. It is within only because the block states T33 lands before T31, the after-measurement that is the row's only consumer named; on that ordering no comparison SC-005 makes uses the defective row, and T02 is a measurement task that changes no tooling. If T33 were not to land before T31 this would be a defect carried past its consumer."
+    },
+    {
+     "id": "T02-perf",
+     "summary": "Tagged [perf] as a measurement task (451 FR-013); performance checklist not applied since no engine speed changes",
+     "class": "within",
+     "why": "451 FR-013 explicitly counts work that measures where time goes as performance work for ordering; not applying a speed checklist to a task that changes no speed narrows nothing asked."
     }
    ],
    "verdict": "CLEAR"

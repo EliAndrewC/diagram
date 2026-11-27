@@ -60,7 +60,8 @@ table's totals divided).
 The concurrency to read beside this figure (FR-010):
 
 - **Trees.** Three trees were held, busy 93%, 98% and 83% of 02:00Z to 14:29Z (R3, `tree-idle.py`).
-- **Machine load.** The night's median load is T02's to read from `make sampler-report`. It is not in this record.
+- **Machine load.** The night's median load is 14.1 on 22 cores over this window, with 3.19 trees held. Both are in T02's
+  section below.
 
 ## The same over the spec's whole window, 02:00Z to 14:29Z
 
@@ -162,3 +163,120 @@ replaces, so phase 5 should read it as part of the coordinator's 474.03M cache r
 - **Models.** Builders used Opus 5.5 for nearly all calls, Sonnet 5.5 for 24 and Fable 5.2 for 241. The coordinator used Opus
   5.5 for 934 calls and Fable 5.2 for 45. In the 04:30Z window every call was Opus or Sonnet (observed 2026-11-27, method: the
   outputs' model-mix lines). Tokens are not normalized across models.
+
+# 461 T02: the rest of D12's figures, the night's concurrency and the likeness test (FR-006, FR-007, FR-010)
+
+Measured 2026-11-27 by the 461 T02 builder, in diagram-backlog-t271 at eb205722a4. Nothing in the engine or the tooling changed.
+The script is `night-figures.py`, a sibling of `night-tokens.py`: tokens stay there, everything else of D12's table is here.
+
+## What was run
+
+From the clone's root, with `D=dev/measurements/2026-11-27/461-t01-night-tokens`:
+
+    python3 -I $D/night-figures.py extract 2026-11-27T02:00:00Z 2026-11-27T14:29:00Z $D/kept
+    python3 -I $D/night-figures.py figures 2026-11-27T04:30:00Z 2026-11-27T14:29:00Z $D/task-time-0430-1429-at-eb2057.txt --kept $D/kept --json $D/ref-0430-1429.json > $D/output-figures-0430-1429.txt
+    python3 -I $D/night-figures.py figures 2026-11-27T02:00:00Z 2026-11-27T14:29:00Z $D/task-time-0200-1429-at-eb2057.txt --kept $D/kept --json $D/ref-0200-1429.json > $D/output-figures-0200-1429.txt
+
+- **The sources.** Three files under the common git directory: `builder-pool.log`, replayed from its first line;
+  `l7r-events/*.jsonl`, the `make land` rows; and `l7r-events/samples/mem-samples*.jsonl`, the sampler's samples.
+- **The kept extracts.** `kept/` holds no content: the pool log up to 14:29Z, the window's `make land` rows, and each sample's
+  time, `load1`, cores and count of trees held. With `--kept`, the figures re-derive once the sampler's file has rotated (it
+  starts a new file past 4 MiB or 12 hours). Both runs above read the extracts, and each run's output matches a live run's,
+  apart from its source line (observed 2026-11-27, method: `diff` of the two runs).
+- **The task-time cuts.** `task-time-0430-1429-at-eb2057.txt` and `task-time-0200-1429-at-eb2057.txt` are the header and the
+  two window tables of `make task-time` over each window, both run at one time and one commit. The time matters more than the
+  commit, for the reason under "Cross-blocking" below.
+
+## The figures, 04:30Z to 14:29Z (the headline window), with 02:00Z beside it
+
+| figure | 04:30Z to 14:29Z | 02:00Z to 14:29Z | source |
+|---|---|---|---|
+| tasks landed | 120 | 130 | the task-time header |
+| tree-hours held (builder hours) | 31.80 | 41.75 | the pool log's held spans |
+| landed per tree-hour held | 3.77 | 3.11 | the two above |
+| cross-blocking (a task waited on a landing) | 53.7 min of 129.3 tasks' side blocking | 53.7 min of 164.5 | the task-time header, at eb205722a4 |
+| landings' side blocking | 522.4 of 599.8 min | 569.1 of 772.5 min | the task-time header |
+| landing attempts | 39 | 49 | the event log's `land` `end` rows |
+| landed | 11 | 17 | the same rows, `landed` |
+| refused before a gate | 17 | 19 | the attempts with no `gate` row in their span |
+| gate red | 8 | 10 | the attempts whose `gate` row is non-zero |
+| gate green, refused at the tick or push | 3 | 3 | the rest |
+| trees held, time-weighted (FR-010) | 3.19 | 3.34 | the pool log |
+| median load (FR-010) | 14.1 on 22 cores (0.64x) | 12.6 (0.57x) | the sampler's `load1` |
+
+All of these are observed 2026-11-27, method: `output-figures-0430-1429.txt` and `output-figures-0200-1429.txt`.
+
+- **The trees.** The pool held four trees, not three. Over the headline window t269 was held 95% of the time, t271 84%, t270
+  82% and b1 58%. R3's 93/98/83% are `tree-idle.py`'s busy shares, where a builder ran, over the three trees. Tree-hours
+  held are a different figure (observed 2026-11-27, method: the same outputs).
+- **Trees held, checked.** The sampler's own `held` field gives a mean of 3.18 over the headline window and 3.34 over the whole
+  window, against the replay's 3.19 and 3.34 (observed 2026-11-27, method: the outputs' cross-check line).
+- **The load, checked.** The median `load1` is what `make sampler-report` prints for each window, 14.1 and 12.6 (observed
+  2026-11-27, method: `make sampler-report SINCE= UNTIL=` over each window). The sampler had one gap over 120 s, 09:38:58Z to
+  09:44:04Z, where it ended at its 12 hours and was restarted (observed 2026-11-27, method: `sampler.log`).
+- **The refusals, checked.** Over the update note's own span, 02:00Z to 15:00Z on the live event log, the script gives 50
+  attempts, 18 landed, 19 refused before a gate, 10 gates red and 3 refused after a green gate. That is the note's count
+  exactly (observed 2026-11-27, method: a `figures` run with the end set to 15:00Z). So the before figure is re-derivable from
+  the event log, not only the note's partly inferred count. The note's causes (plan review owed 6, audit entry 5, tripwire 4,
+  ledger row 3, unclear 2) are not in the event log and stay the note's.
+- **Which window an attempt counts in.** An attempt counts in the window where its `end` row falls.
+
+## Cross-blocking moves after its window closes
+
+The 02:00Z window's cross-blocking was 32.3 min in R3's `baseline-task-time.txt`, run at 7af15e21ab about 14:40Z. At
+eb205722a4, run about 17:55Z, the same window gives 53.7 min, and its tasks' side blocking rises from 143.2 to 164.5 by the
+same 21.4 min (observed 2026-11-27, method: both runs' headers).
+
+- **The cause.** The row counts a pool tree free from a release to its NEXT handout. A tree freed inside the window and handed
+  out only after the run is not counted at all. t271 was freed at 13:19:38Z and next taken at 17:31:55Z, and t270 was freed at
+  13:47:10Z and next taken at 15:40:16Z. Neither handout had happened at 14:40Z (observed 2026-11-27, method: the pool log's
+  take and release rows).
+- **The size of it.** A per-tree sum of those spans during landings, while fewer than three trees were held, gives 25.2 min
+  from spans whose next handout came after 14:40Z, against the 21.4 min rise. The rough sum overcounts, because it does not
+  merge the trees second by second as the row does, so the two are consistent (observed 2026-11-27, method: a one-off replay of
+  `kept/pool.jsonl.gz` against `kept/land.jsonl.gz`).
+- **What this means for the record.** `baseline-task-time.txt` is kept as R3 took it, the before figure the task line names. Its
+  32.3 min is not comparable to a later run. The cause is the pool log's growth after the window, not the commit, so a rerun
+  at one commit does not fix it. Filed as T33 (an open free span clipped at the window's end, one rule for both windows),
+  which lands before T31.
+- **The night's 53.7 min can still move.** b1 was released at 10:20:43Z and has had no handout since (observed 2026-11-27,
+  method: the pool log's last b1 rows, read about 18:00Z). Its free span is still open, so the row does not count it yet. Its
+  next handout can add whatever of 10:20Z to 14:29Z it spent free during a landing while fewer than three trees were held.
+- **No new cross-blocking in the first two and a half hours.** The headline window's 53.7 min equals the whole window's 53.7
+  min, so all of it fell after 04:30Z (observed 2026-11-27, method: the two cuts' headers).
+
+## The likeness test (D12; phase 5 reruns it)
+
+    python3 -I $D/night-figures.py like $D/ref-0430-1429.json <W0> [<W1>] [--kept DIR] [--samples FILE ...]
+
+- **The rule.** A window is LIKE the night when three things hold. Its wall span is at least `LIKE_MIN_H` hours (8). Its
+  time-weighted trees held is within `LIKE_TREES_BAND` (0.5) of the night's 3.19. Its median load is within `LIKE_LOAD_BAND`
+  (0.75 to 1.25) times the night's 14.1, that is 10.6 to 17.6.
+- **The knobs.** All three are GUESS knobs (plan D12 and its knob table). They sit at the head of the script and are
+  overridden from the environment.
+- **The plan's silent point.** D12 says "eight hours or more of builder work". The plan does not say whether that is a wall
+  span or tree-hours. The script takes the wall span and prints tree-hours beside it.
+- **Given W0 only.** The script scans window ends from W0 + 8 h in 10-minute steps to the last sample, and prints the first LIKE
+  window. Exit 0 means a window is LIKE, 1 that none is.
+- **Shown both ways.** These are in `output-like.txt` (observed 2026-11-27, method: the five runs there):
+  - The night against itself is LIKE.
+  - 06:00Z to 14:29Z is LIKE: trees held 3.05, load 13.2.
+  - 04:30Z to 11:30Z is NOT LIKE: its span is 7 h.
+  - 2026-11-26T21:40Z to 2026-11-27T05:40Z is NOT LIKE: its load is 9.4.
+  - From 09:45Z to the last sample (17:54Z) is NOT LIKE: trees held 2.06 and load 8.1.
+  - The last two runs read the live sources, so they re-run only while the sampler's file holds those samples.
+- **The reference.** `ref-0430-1429.json` is the night's reference: its trees held, load, and the task-time and landing figures.
+  `ref-0200-1429.json` is the same over the whole window.
+
+## For phase 5
+
+- **The coordinator's repairs.** The night's repairs were the coordinator's own turns (T01, "Where the night's repairs sit"). A
+  zero in the repair builders' row is not a zero repair cost.
+- **Refusals before a gate.** The after figure is read from the same event-log rows, or from the lane log once D8 writes one.
+  The two must be reconciled over one batch before they are compared.
+- **Cross-blocking.** Read both windows after T33 lands, by the same tool. Before T33, a window's row is final only once every
+  tree freed in it has been handed out again, and the after window undercounts if `make task-time` runs before that.
+- **Finding the like window.** `like` with W0 alone holds W0 fixed and grows the end, so a quiet stretch just after W0 dilutes
+  every later end. T31 steps W0 too: from phase 3's landing, by the same 10-minute steps, until a start gives a LIKE window.
+- **Three trees or four.** D12's table, R3 and FR-010 say three trees. The pool held four, b1 included, and the likeness test
+  reads trees held, not the count of trees.

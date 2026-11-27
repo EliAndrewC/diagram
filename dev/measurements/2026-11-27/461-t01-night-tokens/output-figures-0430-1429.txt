@@ -1,0 +1,28 @@
+# 461 T02: D12 figures, 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z (9.98 h wall)
+source: the kept extracts in dev/measurements/2026-11-27/461-t01-night-tokens/kept; task-time: dev/measurements/2026-11-27/461-t01-night-tokens/task-time-0430-1429-at-eb2057.txt
+
+## Throughput (task-time header; the pool log replayed from its first line)
+tasks landed: 120
+tree-hours held (builder hours): 31.80 - diagram-backlog-b1 5.81 h (58%), diagram-backlog-t269 9.45 h (95%), diagram-backlog-t270 8.16 h (82%), diagram-backlog-t271 8.39 h (84%)
+landed per tree-hour held: 3.77
+
+## Blocking (task-time header)
+cross-blocking (a task waited on a landing): 53.7 min of the tasks' side's 129.3 blocking (2151.7 min working)
+landings' side: 522.4 blocking of 599.8 min
+
+## Landing attempts (the event log's `make land` rows)
+attempts: 39
+landed: 11
+landed, gate ran: 11
+landed, no gate (nothing owed one): 0
+refused before a gate: 17
+gate red: 8
+gate green, refused after it (tick or push): 3
+
+## Concurrency (FR-010)
+trees held, time-weighted (pool log): 3.19
+sampler: 3561 samples, 2026-11-27T04:30:07Z to 2026-11-27T14:28:56Z, 1 gap(s) over 120 s
+median load: 14.1 on 22 cores (0.64x)
+cross-check, the sampler's held: mean 3.18, median 3
+
+reference written: dev/measurements/2026-11-27/461-t01-night-tokens/ref-0430-1429.json

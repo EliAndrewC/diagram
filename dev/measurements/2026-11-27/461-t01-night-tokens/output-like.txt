@@ -1,0 +1,21 @@
+$ like ref-0430-1429.json 2026-11-27T04:30:00Z 2026-11-27T14:29:00Z --kept dev/measurements/2026-11-27/461-t01-night-tokens/kept
+knobs (GUESS, plan D12): LIKE_MIN_H=8 (wall hours), LIKE_TREES_BAND=0.5, LIKE_LOAD_BAND=0.75,1.25; reference 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z
+LIKE: 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z - span 9.98 h, tree-hours held 31.80, trees held 3.19 (reference 3.19), median load 14.1 (reference 14.1)
+exit 0
+$ like ref-0430-1429.json 2026-11-27T06:00:00Z 2026-11-27T14:29:00Z --kept dev/measurements/2026-11-27/461-t01-night-tokens/kept
+knobs (GUESS, plan D12): LIKE_MIN_H=8 (wall hours), LIKE_TREES_BAND=0.5, LIKE_LOAD_BAND=0.75,1.25; reference 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z
+LIKE: 2026-11-27T06:00:00Z to 2026-11-27T14:29:00Z - span 8.48 h, tree-hours held 25.92, trees held 3.05 (reference 3.19), median load 13.2 (reference 14.1)
+exit 0
+$ like ref-0430-1429.json 2026-11-27T04:30:00Z 2026-11-27T11:30:00Z --kept dev/measurements/2026-11-27/461-t01-night-tokens/kept
+knobs (GUESS, plan D12): LIKE_MIN_H=8 (wall hours), LIKE_TREES_BAND=0.5, LIKE_LOAD_BAND=0.75,1.25; reference 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z
+NOT LIKE: 2026-11-27T04:30:00Z to 2026-11-27T11:30:00Z - span 7.00 h, tree-hours held 25.53, trees held 3.65 (reference 3.19), median load 16.9 (reference 14.1) - missed: span 7.00 h < 8 h
+exit 1
+$ like ref-0430-1429.json 2026-11-26T21:40:00Z 2026-11-27T05:40:00Z
+knobs (GUESS, plan D12): LIKE_MIN_H=8 (wall hours), LIKE_TREES_BAND=0.5, LIKE_LOAD_BAND=0.75,1.25; reference 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z
+NOT LIKE: 2026-11-26T21:40:00Z to 2026-11-27T05:40:00Z - span 8.00 h, tree-hours held 28.71, trees held 3.59 (reference 3.19), median load 9.4 (reference 14.1) - missed: median load 9.4 outside 10.6 to 17.6
+exit 1
+$ like ref-0430-1429.json 2026-11-27T09:45:00Z
+knobs (GUESS, plan D12): LIKE_MIN_H=8 (wall hours), LIKE_TREES_BAND=0.5, LIKE_LOAD_BAND=0.75,1.25; reference 2026-11-27T04:30:00Z to 2026-11-27T14:29:00Z
+NOT LIKE: no window from 2026-11-27T09:45:00Z to the last sample 2026-11-27T17:54:18Z passes (1 ends tried)
+NOT LIKE: 2026-11-27T09:45:00Z to 2026-11-27T17:54:18Z - span 8.15 h, tree-hours held 16.78, trees held 2.06 (reference 3.19), median load 8.1 (reference 14.1) - missed: trees held 2.06 not within 0.5 of 3.19; median load 8.1 outside 10.6 to 17.6
+exit 1

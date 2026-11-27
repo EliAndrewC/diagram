@@ -1,0 +1,22 @@
+{
+ "w0": "2026-11-27T04:30:00Z",
+ "w1": "2026-11-27T14:29:00Z",
+ "trees_held": 3.186,
+ "tree_hours": 31.8,
+ "load_median": 14.1,
+ "cores": 22,
+ "tasks_landed": 120,
+ "tasks_side_min": 2151.7,
+ "tasks_side_blocking": 129.3,
+ "cross_blocking": 53.7,
+ "landings_side_min": 599.8,
+ "landings_side_blocking": 522.4,
+ "landings": {
+  "attempts": 39,
+  "refused before a gate": 17,
+  "gate red": 8,
+  "landed": 11,
+  "landed, gate ran": 11,
+  "gate green, refused after it (tick or push)": 3
+ }
+}
