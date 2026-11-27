@@ -427,11 +427,12 @@ fn inside_box(
 fn inside_written(ask: &Ask, host: &l7r_gate_plan::plan::Host) -> Raise<String> {
     let (dir, task) = (ask.dir, ask.task);
     let path = dir.join("plan.md");
-    let plan = if path.is_file() {
-        read_strict(&path)?
-    } else {
-        String::new()
-    };
+    // (a plan.md gone is an empty plan, said in one line: no branch of its own for coverage to miss)
+    let plan = path
+        .is_file()
+        .then(|| read_strict(&path))
+        .transpose()?
+        .unwrap_or_default();
     let name = dir.file_name().unwrap_or_default().to_string_lossy();
     let mut said = format!("tick: {task} closed built inside {}'s section", host.task);
     if let Ok(Some(left)) = l7r_gate_plan::plan::template::without_stub(&plan, task) {

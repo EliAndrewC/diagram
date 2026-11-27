@@ -461,10 +461,7 @@ fn a_task_built_inside_another_s_section_closes_with_it() {
     assert!(!now.contains("### T05") && now.contains("Built here: T05"));
     let done = std::fs::read_to_string(d.join("tasks-done.md")).unwrap_or_default()
         + &std::fs::read_to_string(d.join("tasks.md")).unwrap();
-    assert!(
-        done.contains("- [x] T05 absorbed built inside T01\n"),
-        "{done}"
-    );
+    assert!(done.contains("- [x] T05 absorbed built inside T01\n"));
     // ...its host already ticked: alone, nothing; its host not CLEAR, or its own section filled: refused, each said
     put(&root, "specs/9001-x/plan.md", &plan);
     put(
@@ -481,8 +478,7 @@ fn a_task_built_inside_another_s_section_closes_with_it() {
         both.contains("but its own plan section has been filled in (9001-x/plan.md)")
             && both.contains(
                 "; and T01's section carries no current CLEAR verdict - make decide F=9001 T=T01"
-            ),
-        "{both}"
+            )
     );
     let refused = tick(&ask(&root, &d, "T05", "n"), false, true);
     assert_eq!(refused.code, 2);
@@ -493,4 +489,53 @@ fn a_task_built_inside_another_s_section_closes_with_it() {
         &plan.replace("Built here: T05 - the half it absorbed\n\n", ""),
     );
     assert!(!first(&["T05"])[0].refusal.contains("built inside"));
+}
+
+/// A task built inside a host already archived to plan-done.md, with no plan.md left and no stub of its own: closed, nothing
+/// removed; and a plan.md that cannot be read as text raises the tick (451 T307 part 2, the batch gate's coverage).
+#[test]
+fn a_task_built_inside_an_archived_host_closes_and_an_unreadable_plan_raises() {
+    let dir = repo("built-inside-archived");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    let host = "## T01 the task\n\n### T01 Approach (checklist part A)\n\n1. **one** answered\n\nBuilt here: T05 - the half it absorbed\n\n";
+    put(&root, "specs/9001-x/plan-done.md", host);
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [x] T01 host\n- [ ] T05 absorbed\n- [ ] T06 left open\n",
+    );
+    let sec = l7r_shared::plan_text::task_sections(host)
+        .remove("T01")
+        .unwrap();
+    let digest = l7r_shared::sha256::hex(sec.as_bytes());
+    let review = format!(
+        "{{\"tasks\": {{\"T01\": {{\"verdict\": \"CLEAR\", \"section_sha256\": \"{digest}\"}}}}}}"
+    );
+    put(&root, "specs/9001-x/plan-review.json", &review);
+    let ticked = tick(&ask(&root, &d, "T05", "landed in batch"), false, true);
+    assert_eq!(ticked.code, 0, "{}", ticked.stderr);
+    assert!(ticked
+        .stdout
+        .contains("tick: T05 closed built inside T01's section; recorded in"));
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [x] T01 host\n- [ ] T05 absorbed\n- [ ] T06 left open\n",
+    );
+    // a plan.md with the task's stub that cannot be written: the tick raises with the write's error
+    let stub = l7r_gate_plan::plan::template::stubs("T05")[1].clone();
+    put(&root, "specs/9001-x/plan.md", &stub);
+    let mut ro = std::fs::metadata(d.join("plan.md")).unwrap().permissions();
+    ro.set_readonly(true);
+    std::fs::set_permissions(d.join("plan.md"), ro).unwrap();
+    let raised = tick(&ask(&root, &d, "T05", "landed in batch"), false, true);
+    let mut rw = std::fs::metadata(d.join("plan.md")).unwrap().permissions();
+    #[expect(
+        clippy::permissions_set_readonly_false,
+        reason = "the fixture's file is made writable again so its directory can be removed"
+    )]
+    rw.set_readonly(false);
+    std::fs::set_permissions(d.join("plan.md"), rw).unwrap();
+    assert_ne!(raised.code, 0);
 }

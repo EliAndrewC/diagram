@@ -140,8 +140,7 @@ fn make_decide_holds_a_built_here_line_to_an_open_task_with_an_unfilled_stub() {
     );
     assert!(
         report.contains("cannot close as built inside this section")
-            && report.contains("T14 is no filed task"),
-        "{report}"
+            && report.contains("T14 is no filed task")
     );
     // T15 built inside another task: ticked, and not this one's
     assert_eq!(
