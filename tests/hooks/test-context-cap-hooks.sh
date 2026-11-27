@@ -214,16 +214,18 @@ done
 run builder Write "$(jq -nc --arg f "$C/.git/l7r-handoffs/T05-other.md" '{file_path: $f, content: "x"}')"
 [ "$RC" -eq 2 ] && ok "a handoff-directory file the brief does not name stays refused" || no "an unnamed file passed" "(rc=$RC)"
 
-echo "12. a redirect in the band (451 T427) lands only under /tmp or in the handoff; a source file's is refused"
+echo "12. a redirect in the band (451 T427) lands only under /tmp or in the handoff; a source file's is refused; a \`>& FILE\` and a \`cd\`'s redirect judged by place (451 T460)"
 brief "$BRIEFED" 300001
 # the fixture lives under /tmp, so a refused target is an absolute path outside it
-for cmd in 'tail -n 0 x > /diagram/.clones/t427-x/rust/guard/src/a.rs' "grep '' a >> /diagram/.clones/t427-x/b.rs"; do
+for cmd in 'tail -n 0 x > /diagram/.clones/t427-x/rust/guard/src/a.rs' "grep '' a >> /diagram/.clones/t427-x/b.rs" \
+    'tail -n 0 x >& /diagram/.clones/t427-x/rust/a.rs' 'cd /tmp > /diagram/.clones/t427-x/c.rs && make decide F=451 T=T05'; do
   run builder Bash "$(bash_in "$cmd")"
   [ "$RC" -eq 2 ] && seen OUT -q 'Refused: a redirect writing /diagram/.clones/t427-x/' && seen OUT -q 'only under /tmp or in the handoff' \
     && ok "$cmd refused, naming where it writes" || no "$cmd" "(rc=$RC: $OUT)"
 done
 for cmd in 'make decide F=451 T=T05 > /tmp/t427-decide.log 2>&1' 'make claims-triage >/dev/null 2>&1' 'make plan-delta F=451 2>&1 | tail -5' \
-    'grep -c x a > /tmp/claude-1000/-diagram/s/scratchpad/t427-hits.txt'; do
+    'grep -c x a > /tmp/claude-1000/-diagram/s/scratchpad/t427-hits.txt' 'tail -n 0 x >& /tmp/t460-x.log' \
+    'cd /tmp > /tmp/t460-cd.log && make decide F=451 T=T05' 'pushd /tmp >> /tmp/t460-pushd.log'; do
   run builder Bash "$(bash_in "$cmd")"
   [ "$RC" -eq 0 ] && ok "$cmd passes" || no "$cmd refused" "(rc=$RC: $OUT)"
 done

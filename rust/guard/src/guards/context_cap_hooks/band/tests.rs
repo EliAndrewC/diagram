@@ -35,6 +35,12 @@ fn a_redirect_lands_only_under_tmp_or_in_the_handoff() {
         "make decide > \"/tmp/t1 decide.log\" 2>&1",
         "D=/tmp/x; grep x a > \"$D/h.txt\"",
         "make task-add F=451 TITLE=\"x -> y.rs, found by T1\"",
+        // 451 T460: a `>& FILE` and a `cd`'s or `pushd`'s redirect are judged by where the walk places them (451 T433, T436)
+        "tail -n 0 x >& /tmp/t460-x.log",
+        "grep x a >&/tmp/t460-y.log",
+        "cd /t > /tmp/t460-cd.log && make decide",
+        "pushd /t >> /tmp/t460-pushd.log",
+        "cd /tmp && cd /t > t460-before.log",
     ] {
         assert!(allowed(&bash(cmd)), "{cmd}");
     }
@@ -57,6 +63,11 @@ fn a_redirect_lands_only_under_tmp_or_in_the_handoff() {
             "grep x a > $(head -1 p)/b.rs",
             "a place the guard cannot resolve",
         ),
+        ("tail -n 0 x >& /t/rust/a.rs", "/t/rust/a.rs"),
+        ("grep x a >&b.rs", "/t/b.rs"),
+        // a `cd`'s redirect opens where the shell stood before it moved
+        ("cd /tmp > rust/a.rs && make decide", "/t/rust/a.rs"),
+        ("pushd /t >> /c/a.rs", "/c/a.rs"),
     ] {
         let (got, want) = (bash(cmd), no(&format!("a redirect writing {place} {why}")));
         assert_eq!(got, want, "{cmd}");
@@ -117,18 +128,7 @@ fn every_other_kind_is_refused_naming_it() {
         ("git commit -m x", "`git commit -m x`"),
         ("git -C /t", "`git -C /t`"),
         ("git diff --output=/t/x.rs", "`git diff --output=/t/x.rs`"),
-        // 451 T427: a `cd`'s redirect, which the walk does not read, refuses the `cd`
-        (
-            "cd /t > /t/rust/a.rs && make decide",
-            "`cd /t > /t/rust/a.rs`",
-        ),
-        ("pushd /t >> /t/a.rs", "`pushd /t >> /t/a.rs`"),
-        // 451 T433: a `>& FILE` the walk does not see, refused whole
-        (
-            "tail -n 0 x >& /t/rust/a.rs",
-            "`tail -n 0 x >& /t/rust/a.rs`",
-        ),
-        ("grep x a >&/t/b.rs", "`grep x a >&/t/b.rs`"),
+        ("popd", "`popd`"),
         ("", "an empty command"),
     ] {
         assert_eq!(bash(cmd), no(what), "{cmd}");

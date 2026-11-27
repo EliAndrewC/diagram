@@ -7564,31 +7564,37 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T450 (<why: the finding or measurement that files it>)
+### T450 (451 T397 part (c): `make land` carries its tasks' done commits, but three places still sent the session to carry by hand first)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each place that named `make carry` as the step after `make builder-done` now names `make land`, which carries the done commits itself (the land crate's `carry_done.rs`, 451 T397), with `make carry` kept for a carry by hand or one a landing stopped on.
+  - **T450-D1, `make builder-done`'s last printed step** (`rust/gate/crates/task/src/builder_done.rs`, its step 6 in the module doc and the printed NEXT block): step 2 is `make land F=<feature> T="<tasks>" NOTE="<what was verified>" - it carries this commit first (by hand, or where a carry stopped: make carry FROM=<tree> COMMIT=<sha>)`, and the NEXT line says "the landing after it"; the closing-half exception still says that half is dispatched after the commit is carried.
+  - **T450-D2, `scripts/container/builder-brief.md`**: the TWO TIERS bullet says the batch gate is `make land`, which carries each task's done commit first, `make carry` kept for a hand carry or a stopped one; the AT A BUILDER'S END bullet, which named "the carry it printed", names the landing it prints the same way.
+  - **T450-D3, the Makefile's `land` help line** (a guard file, `make guard-edit` first): it opens with "each task's done commit carried first", `make docs` regenerating `docs/make-targets.html`.
+  - **Red first, measured 2026-11-27 in this tree.** The three `builder_done` tests that pin the printed step 2 moved to the new wording (`a_tree_is_committed_kept_and_released_in_one_call_and_its_commit_outlives_the_next_handout`, `the_next_dispatch_is_the_queue_s_next_entry`, `the_next_dispatch_prefers_performance_work_of_any_queue`): on the old code 3 failed of 12, with the change 12 green, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task ONLY=builder_done`, before and after).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| builder-done's last printed step names `make land` | the `builder_done` tests above, red on the old code | n/a: tooling | none | n/a |
+| the brief file and the land help line | prose; `make docs` regenerated | n/a: tooling | none | n/a |
 
 ### T450 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session at a builder's end reads, in every place that tells it the next step, that `make land` carries the commit, so it runs no hand carry before the landing.
+2. **The constraints.** T450's line; T397 part (c)'s section (the landing carries first, a stopped carry names `make carry COMMIT=`); T394's dispatch-first order and T398's closing-half exception, kept; a guard file edited through `make guard-edit`.
+3. **Where each comes from.** O: T397's builder left these three places (T450's line); the printed step read in `builder_done.rs`.
+4. **Do they describe the world here?** `carry_done.rs` carries every done commit of the landed tasks HEAD lacks before the first pass, read 2026-11-27 in this tree.
+5. **The order.** After T397 (landed); no task waits on it.
+6. **The exits.** Green: the task crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard rust/gate/crates/task"` clean, measured 2026-11-27 in this tree.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session ran a hand `make carry` before every landing that `make land` would have carried itself, one round trip a task.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - wording of the builders' loop.
 
 ### T448 (<why: the finding or measurement that files it>)
 
@@ -7836,31 +7842,36 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T460 (<why: the finding or measurement that files it>)
+### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the band's `bash` (`rust/guard/src/guards/context_cap_hooks/band.rs`) drops its refusal of any `>&` left after `sanitize` (451 T433's stopgap) and of a `cd` or `pushd` carrying a redirect (451 T427's), with their comments; both shapes are judged by `redirect`, the place the shared walk gives them (`rust/guard/shared/src/tree/redirect.rs` reads `>& FILE` and `>&FILE`, T433; `tree.rs` places a `cd`'s, `pushd`'s or `popd`'s redirects in the directory it stood in before it moved, T436).
+  - **T460-D1, the two rules out.** A `>& /tmp/x`, `cd /t > /tmp/l` or `pushd /t >> /tmp/l` passes as any redirect under `/tmp` does; a `>& rust/a.rs` or `cd /tmp > rust/a.rs` is refused as `a redirect writing <place> (in the band a redirect lands only under /tmp or in the handoff)`, the message every other refused redirect already had - no new message.
+  - **T460-D2, `pushd` into `PLAIN`.** It was let through only by the `cd`/`pushd` arm the rule stood in; it joins `cd` in `PLAIN` so a `pushd` with no redirect passes as before. `popd` was never let through and is not now (a test pins it).
+  - **Use**, measured 2026-11-27 by T433 and T436 (the 73,482 Bash calls of 2026-11-20 to 27): 0 real uses of either shape, so no past band verdict moves.
+  - **Red first, measured 2026-11-27 in this tree.** `band/tests.rs` `a_redirect_lands_only_under_tmp_or_in_the_handoff` gained five allowed commands (`>&`, `>&FILE`, `cd`'s and `pushd`'s redirects under `/tmp`, a `cd`'s after a `cd /tmp`) and four refused by place (`>& /t/rust/a.rs`, `>&b.rs`, `cd /tmp > rust/a.rs` placed at `/t/rust/a.rs`, `pushd /t >> /c/a.rs`); `every_other_kind_is_refused_naming_it` lost the four whole-command cases. On the old code that test failed (1 of 3 band tests, at its first new case, `tail -n 0 x >& /tmp/t460-x.log`, refused whole); with the change the context-cap module's 29 tests green, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=guards::context_cap_hooks`, before and after). The context-cap suite's case 12 gained `>&` and `cd` refused naming their place and `>&`, `cd` and `pushd` under `/tmp` passing: 107 passed, 0 failed, measured 2026-11-27 (`tests/hooks/test-context-cap-hooks.sh`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the `>&` and `cd`/`pushd` stopgaps out | `a_redirect_lands_only_under_tmp_or_in_the_handoff`, red on the old code; context-cap case 12 | n/a: tooling | none | n/a |
 
 ### T460 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder in the wrap-up band can send a stop point's output to `/tmp` by any redirect bash takes, and still cannot write a source file by any of them.
+2. **The constraints.** T460's line; T417's band and T427's redirect rule; T433's and T436's walk; no other message changes (the brief); a guard file edited through `make guard-edit`; 100% line coverage of the guard's lines.
+3. **Where each comes from.** O: T433's and T436's sections (each filed this as its found-and-left item); the walk's tests of both shapes.
+4. **Do they describe the world here?** The band's tests and the suite's redirect case above went red on the old code where the stopgap refused, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=guards::context_cap_hooks`).
+5. **The order.** After T433 and T436 (landed); before T420, as they filed it.
+6. **The exits.** Green: the guard crate's tests and the context-cap suite green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard rust/gate/crates/task"` clean and the context-cap suite 107 green, measured 2026-11-27 in this tree.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder past the cap running `make decide >& /tmp/log` or `cd /t > /tmp/log && make decide` was refused a step its stop point owns.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a guard's stopgap removed.
 
 
 ### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)

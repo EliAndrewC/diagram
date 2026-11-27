@@ -68,7 +68,8 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   tier only - `make builder-checks CRATE="<the crates it changed>"` (tests, lint, format) and a changed guard's own hook suite
   - while ITERATING, `make rust-test CRATE=<dir> ONLY="<module::path> ..."` runs only the changed modules' tests, kept as no
   crate's green, and `make builder-checks` still runs each crate whole at the builder's end (451 T435) - and NOT `make closing-checks`, `make static`, `make hooks-test` or a coverage run; the full gate runs once in the clone
-  over the batch (`make land T="<tasks>"`), after `make carry` and `scripts/sync-with-main.sh backup` for each. The block's
+  over the batch (`make land T="<tasks>"`, which carries each task's done commit first, 451 T397; `make carry` is kept for a
+  carry by hand or one a landing stopped on), after `scripts/sync-with-main.sh backup` for each. The block's
   CHECKS line says so, for every kind. A BUILDER RUNS NO COVERAGE (the GM's ruling of 2026-11-26, the same record's "REVERSED
   the same night": the goal is tasks through, not gates passed, and a red batch gate holds no builder back): on the session's own
   reading, briefs from 21:40 UTC that day added `make crate-checks` after the first tier, 7 to 111 s on every builder's critical
@@ -82,8 +83,9 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - AT A BUILDER'S END, your steps in this order (451 T394): `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>"
   [GUARD="<guard-edit reason>"]` - it commits the builder's tree (found in the pool's registry), keeps the commit under
   `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next two commands; THEN THE NEXT DISPATCH (`make builder-brief`
-  for the queue's next task no tree holds), and only then the carry it printed, `make carry FROM=<the tree> COMMIT=<the commit>`,
-  the checks and the landing, while the next builder works. Never a hand `git add`/`git commit` in a pool tree, and never the
+  for the queue's next task no tree holds), and only then the landing it printed, `make land F= T=`, which
+  carries the commit itself (`make carry FROM=<the tree> COMMIT=<the commit>` by hand, or after a carry stopped), while the next
+  builder works. Never a hand `git add`/`git commit` in a pool tree, and never the
   carry before the dispatch: measured 2026-11-27, the three warm trees stood idle 23% of an eight-hour window with the queue never
   short, because the tree waited on the carry, its conflicts, the gate and the landing
   (`dev/measurements/2026-11-27/tree-idle/results.md`). `make builder-trees` lists every done commit not yet carried, each with

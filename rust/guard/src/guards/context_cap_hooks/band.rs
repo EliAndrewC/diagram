@@ -9,12 +9,12 @@
 //!
 //! WHAT IS LET THROUGH (each recorded, rule `wrap-up`, so the turns a builder spends here are counted): a Read or Grep; a Bash
 //! command every one of whose simple commands (`shared::tree::commands`, so a quoted `make decide` or a heredoc's line is none) is
-//! `cd` or `export` (every brief's own `cd <tree> && export ...` prefix), `make` of the stop point's targets only ([`MAKE`]), `git
+//! `cd`, `pushd` or `export` (every brief's own `cd <tree> && export ...` prefix), `make` of the stop point's targets only ([`MAKE`]), `git
 //! status` or `git diff` (`git -C <path>` read past, `--output` refused: it writes), or `head`, `tail` or `grep` (a read, as the
 //! Read and Grep tools are, and the pipe that keeps a long output out of the context), its every redirect landing under `/tmp` (the
 //! session's scratchpad is `/tmp/claude-<uid>/...`) or in the handoff the cap's exit allows (451 T427: `tail -n 0 x > rust/a.rs`
 //! wrote a source file the band refuses as a Write; where it lands is the shared walk's, `shared::tree::walk`, a redirect it
-//! cannot place refused); the one plan review - an Agent call of
+//! cannot place refused; a `>& FILE` and a `cd`'s redirect are placed as any other, 451 T460); the one plan review - an Agent call of
 //! `spec-fidelity` whose prompt opens `MODE 4: PLAN REVIEW`, as `make decide` and `make plan-delta` print it (a later round is
 //! another such dispatch: `review_round_hooks` passes a MODE 4 plan review untouched). The handoff's own Write is the cap's
 //! exit, judged before the band. Everything else - an Edit or Write of any other file, any other dispatch, any other make target or
@@ -46,8 +46,8 @@ pub(super) const MAKE: [&str; 8] = [
     "builder-checks",
 ];
 
-/// The programs a band command may run but `make` and `git`: the brief's own prefix and the reads.
-const PLAIN: [&str; 5] = ["cd", "export", "head", "tail", "grep"];
+/// The programs a band command may run but `make` and `git`: the brief's own prefix (`pushd` as `cd`) and the reads.
+const PLAIN: [&str; 6] = ["cd", "pushd", "export", "head", "tail", "grep"];
 
 /// The plan review's agent and its prompt's opening.
 const REVIEW: (&str, &str) = ("spec-fidelity", "MODE 4: PLAN REVIEW");
@@ -103,18 +103,13 @@ fn bash(cmd: &str, at: &At) -> Band {
         let words: Vec<&str> = head.split_whitespace().collect();
         let at = command_at(&words);
         let program = words.get(at).map_or("", |w| name_of(w));
-        // a `>& FILE` the walk does not read as a write (451 T433), refused here whole; `2>&1` and `>&2` are out of its text
-        let ok = !c.contains(">&")
-            && match program {
-                // `make`, its targets judged below; none, a command of `VAR=value` words alone
-                "make" | "" => true,
-                "git" => git_reads(&words[at + 1..]),
-                // the walk moves the shell at a `cd` and reads no redirect of it, so a `cd` carrying one is refused whole (451 T427:
-                // `cd /t > /t/a.rs` truncated a file the band let through); its stand-ins hold no quoted `>`, and `2>&1` and
-                // `>/dev/null` are out of its text
-                "cd" | "pushd" => !c.contains('>'),
-                p => PLAIN.contains(&p),
-            };
+        // a `>& FILE` and a `cd`'s redirect are judged by place below, the walk reading both (451 T433, T436; T460)
+        let ok = match program {
+            // `make`, its targets judged below; none, a command of `VAR=value` words alone
+            "make" | "" => true,
+            "git" => git_reads(&words[at + 1..]),
+            p => PLAIN.contains(&p),
+        };
         if !ok {
             return Band::Refused(format!("`{}`", shown(&head)));
         }

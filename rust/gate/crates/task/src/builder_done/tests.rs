@@ -104,7 +104,11 @@ fn a_tree_is_committed_kept_and_released_in_one_call_and_its_commit_outlives_the
         .find("  1. no next dispatch named: specs/9001-x/queue.txt: ")
         .unwrap();
     assert!(brief < said.stdout.find(&carry).unwrap());
-    assert!(said.stdout.ends_with(&format!("  2. {carry}\n")));
+    // 451 T450: the landing carries the commit; make carry is named for a carry by hand or a stopped one
+    let land = format!("  2. make land F=9001 T=\"T01\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {carry})\n");
+    assert!(said.stdout.ends_with(&land), "{}", said.stdout);
+    let order = "the next dispatch FIRST, the landing after it";
+    assert!(said.stdout.contains(order));
     // the reader: the commit done and not yet carried, with its carry
     let listed = list(&root, &e);
     assert!(listed.contains("builder-trees: commits done and not yet carried into"));
@@ -465,7 +469,7 @@ fn the_next_dispatch_is_the_queue_s_next_entry() {
     let said = done(&b1, &e, "T01", "9001 T01: one", "");
     assert_eq!(said.code, 0);
     let sha = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
-    let want = format!("  1. make builder-brief T=T03 F=9001 KIND=fix JOBS=2 CRATE=\"rust/x\" ENTRY=1   (9001 T03, line 3 of specs/9001-x/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make carry FROM={} COMMIT={sha}\n", b1.display());
+    let want = format!("  1. make builder-brief T=T03 F=9001 KIND=fix JOBS=2 CRATE=\"rust/x\" ENTRY=1   (9001 T03, line 3 of specs/9001-x/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make land F=9001 T=\"T01\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: make carry FROM={} COMMIT={sha})\n", b1.display());
     assert!(said.stdout.ends_with(&want), "{}", said.stdout);
     // T03 handed out and T02 done: nothing is left to hand out, and T01, built, is not offered again
     builder_tree::run(&words(&["take", "T03", "9001"]), &root, &e);
@@ -502,7 +506,7 @@ fn the_next_dispatch_prefers_performance_work_of_any_queue() {
     put(&b1, "scripts/a.py", "x = 2\n");
     let said = done(&b1, &e, "T01", "9001 T01: one", "");
     assert_eq!(said.code, 0, "{}", said.stderr);
-    let want = "  1. FIRST, open performance work (FR-013) no queue line names - write each one's line (CRATE= and FILES= as its task line names them, WAITS= where it waits, which quiets it):\n     make queue-add F=9002 T=T06 KIND=fix   (9002 T06, KIND by make builder-brief's mechanism test)\n     make builder-brief T=T05 F=9002 KIND=fix ENTRY=1   (9002 T05, line 1 of specs/9002-y/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make carry";
+    let want = "  1. FIRST, open performance work (FR-013) no queue line names - write each one's line (CRATE= and FILES= as its task line names them, WAITS= where it waits, which quiets it):\n     make queue-add F=9002 T=T06 KIND=fix   (9002 T06, KIND by make builder-brief's mechanism test)\n     make builder-brief T=T05 F=9002 KIND=fix ENTRY=1   (9002 T05, line 1 of specs/9002-y/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make land F=9001 T=\"T01\"";
     assert!(said.stdout.contains(want), "{}", said.stdout);
     // the other queue's performance entry lined and waiting, T06's too: the done task's own feature's pick
     put(

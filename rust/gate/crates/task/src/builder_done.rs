@@ -21,8 +21,9 @@
 //!    detaches the tree at the clone's HEAD, and an unreferenced commit is git's to prune), and appends a `done` line to the pool's
 //!    log (the tree, the holder, the commit, the time);
 //! 5. releases the tree, as `make builder-tree-release` does ([`builder_tree::release`]);
-//! 6. prints, last, the two commands the session runs next, IN THIS ORDER: the next dispatch, then the carry. It never carries,
-//!    lands or pushes.
+//! 6. prints, last, the two commands the session runs next, IN THIS ORDER: the next dispatch, then `make land` of these tasks, which
+//!    carries their done commits itself (451 T397 part (c), the land crate's `carry_done.rs`), `make carry` named beside it for a
+//!    carry by hand or one a landing stopped on (451 T450). It never carries, lands or pushes.
 //!
 //! THE GUARD-FILE RULE IS ASKED HERE, IN PROCESS: the guards are hooks on a tool call, and a `git commit` this command runs is none,
 //! so nothing else would hold the commit to its `GUARD_EDIT_OK:` line. [`guard_file`] is a COPY of the guard's list
@@ -393,11 +394,13 @@ fn commit(p: &Pool, tree: &Path, a: &Ask, dones: &[Done], env: &Env) -> Reply {
     let freed = builder_tree::release(p, a.tasks, a.feature, env);
     let next = crate::builder_queue::dispatch(p, a.feature);
     let out = format!(
-        "builder-done: {at} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the carry after it (the tree is free now; the carry and the landing can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the carry - its tree starts at the clone's HEAD):\n  1. {next}  2. {}\n",
+        "builder-done: {at} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the commit is carried by `make carry`, before any landing - its tree starts at the clone's HEAD):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
         sha.get(..10).unwrap_or(&sha),
         a.subject,
         kept.join(", "),
         freed.stdout,
+        a.feature,
+        a.tasks.join(" "),
         carry_command(p, &sha)
     );
     reply(out, freed.stderr, freed.code)

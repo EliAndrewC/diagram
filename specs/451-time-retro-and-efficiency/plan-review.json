@@ -3932,7 +3932,7 @@
    "declared": "spec-fidelity"
   },
   "### T450 Approach (checklist part A)": {
-   "sha256": "66b27e8d4b8534c22ee5d55c4ecb263400865f42a867df58b5265b053552e02e",
+   "sha256": "a76b127b10a0e162d738c9930fea838ca56c4580e2e8e2b0d53bd7742064031e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4113,6 +4113,24 @@
   },
   "### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)": {
    "sha256": "2021018fb936359cfa432c874ddcf98c9bf43024b3932638733f22100fa6ad83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)": {
+   "sha256": "5feadb8b6ea0a20a1363f37b5a601bcc4692db5b4340ad3e548eddc48fc03279",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T460 Approach (checklist part A)": {
+   "sha256": "64be77c0df8790fa17c95c8394473084fea5a7257a99cbc174282a8b6eafe322",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T450 (451 T397 part (c): `make land` carries its tasks' done commits, but three places still sent the session to carry by hand first)": {
+   "sha256": "aa0b9f0e2b49771fd1ff1722bb5dd89816e5c7856fffa5fc2e855b8fcddb4407",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37022,6 +37040,68 @@
      "why": "Process bounds of the task; they do not narrow what is asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)",
+    "### T460 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T460-D1",
+     "summary": "The wrap-up band drops its two whole-command stopgap refusals (any >& left after sanitize, T433; a cd or pushd carrying a redirect, T427), leaving both shapes to the existing place-based redirect rule: under /tmp or the handoff passes, anywhere else is refused with the message every refused redirect already has.",
+     "class": "within",
+     "why": "It serves FR-006 as the GM amended it on 2026-11-27 (T417: a builder at the cap may finish its stop point - 'if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?'). The stopgaps refused correct work (make decide >& /tmp/log, a step the stop point owns), which is a defect per XIV; removing them narrows nothing the GM asked for, since a write to a source file by either shape is still refused by place (red-first cases >& /t/rust/a.rs, >&b.rs, cd /tmp > rust/a.rs, pushd /t >> /c/a.rs). Enforcement stays real enforcement (the 2026-11-19 approval). No new message, no new escape."
+    },
+    {
+     "id": "T460-D2",
+     "summary": "pushd moves into PLAIN beside cd so a pushd with no redirect still passes after the cd/pushd arm goes; popd stays refused, pinned by a test.",
+     "class": "within",
+     "why": "A consequence of D1 that keeps the band's prior verdicts unchanged: pushd without a redirect passed before and passes now; popd was refused before and is refused now. It widens and narrows nothing relative to FR-006 or T417."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T450 (451 T397 part (c): `make land` carries its tasks' done commits, but three places still sent the session to carry by hand first)",
+    "### T450 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T450-D1",
+     "summary": "make builder-done's printed step 2 and NEXT line name make land, which carries the done commit itself; make carry kept for a hand carry or one a landing stopped on; T398's closing-half exception kept as it is",
+     "class": "within",
+     "why": "Corrects a printed next step that sent the session to do by hand what make land already does (T397 part (c)); it serves the GM's 2026-11-27 asks under T394 (make land carrying by commit) and T285/T313 (the tooling, not the session's memory, carries the right step). Keeping make carry for the stopped case removes nothing that was asked for, and keeping the closing-half exception leaves an earlier ruled behavior alone."
+    },
+    {
+     "id": "T450-D2",
+     "summary": "builder-brief.md's TWO TIERS and AT A BUILDER'S END bullets say make land carries each done commit first, make carry kept for a hand or stopped carry",
+     "class": "within",
+     "why": "The same correction in the builders' brief, so the two places agree; no requested behavior is reduced."
+    },
+    {
+     "id": "T450-D3",
+     "summary": "the Makefile's land help line opens with 'each task's done commit carried first', edited through make guard-edit, make docs regenerating docs/make-targets.html",
+     "class": "within",
+     "why": "The same correction in the help text. Going through the guard-edit route and regenerating the docs follows the project's procedure and changes nothing about scope."
+    },
+    {
+     "id": "T450-tests",
+     "summary": "the three builder_done tests that pin printed step 2 are moved to the new wording, red on the old code (3 of 12 failed) and green with the change (12 of 12)",
+     "class": "within",
+     "why": "A test whose only effect is to make the corrected next step stay corrected. It enforces what was asked and is not extra scope."
+    },
+    {
+     "id": "T450-scope-and-class",
+     "summary": "the fix covers the three places T450's line names (Found and left: none); classed 'Performance work: no'",
+     "class": "within",
+     "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -56320,6 +56400,64 @@
      "summary": "Green: record written and T463 filed; red: failure recorded and the task set down, an impossibility claim ruled through make arbiter-ask; budget one landing",
      "class": "within",
      "why": "Process bounds of the task; they do not narrow what is asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T460": {
+   "section_sha256": "fb6b2b53d37505c8f104c06afe534a6ec4435154ce2a5ce11daa1b1bc22f491c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T460-D1",
+     "summary": "The wrap-up band drops its two whole-command stopgap refusals (any >& left after sanitize, T433; a cd or pushd carrying a redirect, T427), leaving both shapes to the existing place-based redirect rule: under /tmp or the handoff passes, anywhere else is refused with the message every refused redirect already has.",
+     "class": "within",
+     "why": "It serves FR-006 as the GM amended it on 2026-11-27 (T417: a builder at the cap may finish its stop point - 'if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?'). The stopgaps refused correct work (make decide >& /tmp/log, a step the stop point owns), which is a defect per XIV; removing them narrows nothing the GM asked for, since a write to a source file by either shape is still refused by place (red-first cases >& /t/rust/a.rs, >&b.rs, cd /tmp > rust/a.rs, pushd /t >> /c/a.rs). Enforcement stays real enforcement (the 2026-11-19 approval). No new message, no new escape."
+    },
+    {
+     "id": "T460-D2",
+     "summary": "pushd moves into PLAIN beside cd so a pushd with no redirect still passes after the cd/pushd arm goes; popd stays refused, pinned by a test.",
+     "class": "within",
+     "why": "A consequence of D1 that keeps the band's prior verdicts unchanged: pushd without a redirect passed before and passes now; popd was refused before and is refused now. It widens and narrows nothing relative to FR-006 or T417."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T450": {
+   "section_sha256": "c1e31df03dbeb80618fc3c6117484ed66095f6b22eb2fcb01c6bc9cb869f91d2",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T450-D1",
+     "summary": "make builder-done's printed step 2 and NEXT line name make land, which carries the done commit itself; make carry kept for a hand carry or one a landing stopped on; T398's closing-half exception kept as it is",
+     "class": "within",
+     "why": "Corrects a printed next step that sent the session to do by hand what make land already does (T397 part (c)); it serves the GM's 2026-11-27 asks under T394 (make land carrying by commit) and T285/T313 (the tooling, not the session's memory, carries the right step). Keeping make carry for the stopped case removes nothing that was asked for, and keeping the closing-half exception leaves an earlier ruled behavior alone."
+    },
+    {
+     "id": "T450-D2",
+     "summary": "builder-brief.md's TWO TIERS and AT A BUILDER'S END bullets say make land carries each done commit first, make carry kept for a hand or stopped carry",
+     "class": "within",
+     "why": "The same correction in the builders' brief, so the two places agree; no requested behavior is reduced."
+    },
+    {
+     "id": "T450-D3",
+     "summary": "the Makefile's land help line opens with 'each task's done commit carried first', edited through make guard-edit, make docs regenerating docs/make-targets.html",
+     "class": "within",
+     "why": "The same correction in the help text. Going through the guard-edit route and regenerating the docs follows the project's procedure and changes nothing about scope."
+    },
+    {
+     "id": "T450-tests",
+     "summary": "the three builder_done tests that pin printed step 2 are moved to the new wording, red on the old code (3 of 12 failed) and green with the change (12 of 12)",
+     "class": "within",
+     "why": "A test whose only effect is to make the corrected next step stay corrected. It enforces what was asked and is not extra scope."
+    },
+    {
+     "id": "T450-scope-and-class",
+     "summary": "the fix covers the three places T450's line names (Found and left: none); classed 'Performance work: no'",
+     "class": "within",
+     "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"
