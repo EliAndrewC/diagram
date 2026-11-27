@@ -31,6 +31,7 @@ echo build >> "$CALLS"
 pwd > "$CALLS.dir"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
 [ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
+[ "$BUILD" = slowok ] && sleep "${SLOW_SECS:-1}"
 [ "$2 $3" = "--profile tool" ] || { echo "fake cargo: built $2 $3, not --profile tool (T95)" >&2; exit 101; }
 mkdir -p "$CARGO_TARGET_DIR/tool"
 check=0; [ "$BUILD" = unchecked ] && check=1
@@ -148,6 +149,31 @@ check "fresh: the sources' roots in the recorder's log" "$(grep "$(printf '\tc-t
 out=$(L7R_GUARD_FRESH="$W/elsewhere/l7r-guard.good" run ok v9)
 check "another name: walked and built as before" "$out" "v9 PreToolUse"
 check "another name: one more build" "$(calls)" 9
+
+# 6e. A NEVER-BUILT GUARD BEFORE A MAKE STEP (451 T286): a fresh tree's first `make closing-checks` died at its disk floor, the wrapper's
+# 45 s build limit passed by a cold build at load 56 (2026-11-26; two dead starts). With L7R_GUARD_COLD_SECS (the floor's, never a hook
+# entry's) and no good binary, the call waits for another call's build and builds within that bound; with a good binary, or without the
+# seam, nothing changes
+CT="$W/cold"; cold() { L7R_GUARD_TARGET="$CT" BUILD=$1 VERSION=vc "$T/scripts/hooks/l7r-guard.sh" --scratch-sweep floor < /dev/null; }
+touch_sources; : > "$CALLS"
+L7R_GUARD_BUILD_SECS=0.3 cold slowok > /dev/null 2>&1; check "cold, no seam: the floor's call dies as before" "$?" 1
+out=$(L7R_GUARD_BUILD_SECS=0.3 L7R_GUARD_COLD_SECS=30 cold slowok 2>/dev/null); check "cold, the seam: built and run past the hook limit" "$out:$?" "vc --scratch-sweep floor:0"
+rm -rf "$CT"; mkdir -p "$CT"
+( exec 7> "$CT/guard.lock"; flock 7; sleep 1 ) & held=$!; sleep 0.2
+out=$(L7R_GUARD_COLD_SECS=30 cold ok 2>/dev/null); check "cold, another call's build running: waited for, then built" "$out:$?" "vc --scratch-sweep floor:0"
+wait "$held"
+rm -rf "$CT"; mkdir -p "$CT"; t0=${EPOCHREALTIME/,/.}
+SLOW_SECS=5 L7R_GUARD_COLD_SECS=0.5 cold slowok > /dev/null 2>&1; rc=$?
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 4) ? "bounded" : "waited" }')
+check "cold, the bound passed: exit 1, within the bound" "$rc:$gone" "1:bounded"
+[ ! -e "$CT/guard.failed" ] && ok || bad "cold, the bound passed: not stamped failed"
+cold ok > /dev/null 2>&1; touch_sources
+exec 8> "$CT/guard.lock"; flock 8; t0=${EPOCHREALTIME/,/.}
+out=$(L7R_GUARD_COLD_SECS=30 cold ok 2>/dev/null)
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (b - a < n) ? "fast" : "waited" }')
+check "a good binary, stale, another build running: no wait, the good one runs" "$out:$gone" "vc --scratch-sweep floor:fast"
+exec 8>&-
+grep -Eq '^DISK_FLOOR = .*L7R_GUARD_COLD_SECS=' "$ROOT/Makefile" && ok || bad "the Makefile's DISK_FLOOR passes L7R_GUARD_COLD_SECS to the floor's call"
 
 # 8. THE SETTINGS' HOOK COMMANDS ARE SHORT (feature 451 T169, the GM 2026-11-23 "on hook output length"): the harness prints an
 # entry's command with every block or notice it emits, and the ~245-character commands were 1.66M characters of one session's

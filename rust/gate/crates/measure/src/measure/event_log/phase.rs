@@ -7,11 +7,14 @@
 //! (`make task-time`, 451 T243).
 //!
 //! ```text
-//! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...
+//! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] [--task <T>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...
 //! ```
 //!
 //! `t0` and `t1` are UTC seconds since the epoch (`date +%s.%N`, bash's `$EPOCHREALTIME`); `--make` defaults to the outermost make above
-//! this process (`shared::make::outermost_goal`), as the landing's lines read theirs.
+//! this process (`shared::make::outermost_goal`), as the landing's lines read theirs. `--task` files the lines under that task, where
+//! the writer's own chain would read the tree's marks (451 T286: `closing-checks.sh`'s launch line carries its caller's `T=`, as the
+//! call's `PreToolUse` line does: of 464 `make closing-checks` calls in 451's log, the Phase lines their session wrote before its next
+//! such call named only other tasks after 198, measured 2026-11-27 - in a pool tree the chain read the tree's previous task).
 
 use std::path::Path;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
@@ -24,7 +27,7 @@ use super::super::reply;
 use crate::Reply;
 
 /// The usage.
-pub const USAGE: &str = "usage: l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...\n";
+pub const USAGE: &str = "usage: l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] [--task <T>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...\n";
 
 /// A span read: its step, start, end, exit code, name and kept log.
 type Span = (String, SystemTime, SystemTime, i32, String, String);
@@ -47,8 +50,8 @@ fn span(word: &str) -> Option<Span> {
 
 /// The command: each span a line, exit 0; a span it cannot read, or no `--root` or `--src`, the usage and exit 2, nothing written.
 pub fn cli(args: &[String], env: &Reader) -> Reply {
-    let (mut root, mut src, mut make, mut feature, mut spans) =
-        (None, None, None, None, Vec::new());
+    let (mut root, mut src, mut make, mut feature, mut task, mut spans) =
+        (None, None, None, None, None, Vec::new());
     let mut it = args.iter();
     while let Some(a) = it.next() {
         let slot = match a.as_str() {
@@ -56,6 +59,7 @@ pub fn cli(args: &[String], env: &Reader) -> Reply {
             "--src" => &mut src,
             "--make" => &mut make,
             "--feature" => &mut feature,
+            "--task" => &mut task,
             word => {
                 let Some(s) = span(word) else {
                     return reply(
@@ -79,7 +83,11 @@ pub fn cli(args: &[String], env: &Reader) -> Reply {
     let root = Path::new(&root);
     for (step, t0, t1, code, name, log) in spans {
         let mut row = phase_row(&src, &step, (t0, t1), code, &make, root);
-        for (key, value) in [("name", name), ("log", log)] {
+        for (key, value) in [
+            ("name", name),
+            ("log", log),
+            ("task", task.clone().unwrap_or_default()),
+        ] {
             if !value.is_empty() {
                 row.insert(key.into(), Value::from(value));
             }

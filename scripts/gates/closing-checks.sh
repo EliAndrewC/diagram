@@ -95,6 +95,19 @@ stop() {
 }
 trap stop INT TERM
 
+# THE LAUNCH OF MAKE STATIC ON THE EVENT LOG (451 T286): the static-runs guard counts a `make closing-checks` as a run of `make static`
+# only by this line - the call's own end line comes back at its launch, backgrounded, so a start that died before here (a cold guard
+# build past the disk floor's limit, two dead starts at load 56 on 2026-11-26) was counted, and the next start needed STATIC_OK. Its
+# task is T='s first, as the call's PreToolUse line reads it (`event_log_hooks` TASK) and marks it its own (`own_t`), its feature
+# this run's; an instant, code 0. A run with no such T= writes none: the line's task would be the tree's guess, not the call's, and
+# the count reads that call by its own line instead.
+first=${task%%[, ]*}
+if [[ $first =~ ^T[0-9]+[a-z]?$ ]]; then
+  at=${EPOCHREALTIME/,/.}
+  [ -n "$caller" ] && launch_f=$(cat "$dir/feature") || launch_f=${CLOSING_FEATURE:-}
+  "${CLOSING_GATE:-$(dirname "${BASH_SOURCE[0]}")/l7r-gate.sh}" measure event-log phase --root "$(git rev-parse --show-toplevel)" --src closing-checks \
+    --task "$first" ${launch_f:+--feature "$launch_f"} "static-started:$at:$at:0" > /dev/null 2>&1 || true
+fi
 t0=$(date +%s)
 for c in "${checks[@]}"; do
   ( s=$(date +%s); if [ "$c" = static ] && [ -n "$caller" ]; then export L7R_RUST_CALLER=$caller; fi

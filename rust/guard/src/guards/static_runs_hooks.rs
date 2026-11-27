@@ -12,6 +12,12 @@
 //!   340 in 449's (observed 2026-11-20, method: the logs' `make: static` `PreToolUse` lines with no line of their `id` after). The call
 //!   being judged is never one: in the whole chain `event_log_hooks` has written its `PreToolUse` line before this guard reads, and its
 //!   `id` is set aside;
+//! - a `make closing-checks` whose call names its own `T=` (its line's `own_t`) is a run where its script reached `make static`: the
+//!   [`REACHED`] `Phase` line it writes as it launches the three checks, filed under that `T=`'s task (451 T286). Its call is
+//!   backgrounded, so its end line comes back at the launch (405 of 492 such calls in 451's log have one, all `PostToolUse` with a `bg`
+//!   id, none a failure, measured 2026-11-27) whether the run then died at the disk floor or not: a fresh tree's two dead starts of
+//!   2026-11-26 were counted, and its third start needed `STATIC_OK`. A call with no `T=`, and every line from before `own_t`, is
+//!   counted by its call as above, under its own task: its script writes no launch line, whose task would be the tree's guess;
 //! - SINCE the task's last landing that succeeded - a landing's `end` line (feature 451 T06) whose `landed` is true and whose `tasks`
 //!   names it, whatever its exit code (3 with its ticks standing is a landing; a refused landing is not) - else since its FIRST
 //!   `task-starts.jsonl` entry for the feature (a later `make task-start` resets nothing: 48 of the clone's 498 started tasks have more
@@ -52,6 +58,10 @@ pub const GUARD: Guard = Guard {
 pub const STATIC_RUNS_A_TASK: usize = 2;
 
 const TOKEN: &str = "STATIC_OK";
+
+/// The `src` and `step` of the `Phase` line `scripts/gates/closing-checks.sh` writes as it launches `make static` (451 T286): a
+/// `make closing-checks` is a run of `make static` only where that line follows its start.
+pub(crate) const REACHED: (&str, &str) = ("closing-checks", "static-started");
 
 /// What the guard says of a `make static` call it does not simply pass.
 #[derive(Debug, PartialEq, Eq)]
@@ -305,22 +315,39 @@ fn runs(lines: &[Value], starts: &str, feature: &str, task: &str, own: &str) -> 
         .filter(|l| ["PostToolUse", "PostToolUseFailure"].contains(&text(l, "ev")))
         .map(|l| text(l, "id"))
         .collect();
+    let after = |l: &Value| {
+        let t = stamp(text(l, "t"));
+        since
+            .as_ref()
+            .is_none_or(|(s, from)| t > *s || (*from && t == *s))
+    };
+    // a `make closing-checks` naming its own `T=` (`own_t`) is counted by the line its script writes under that task as it launches
+    // `make static` (451 T286), never by its call: the call is backgrounded and its end line comes back at once, so a start that died
+    // before static (at the disk floor) ran. One with no `T=` writes no such line and is counted by its call, under its own task.
+    let reached = |l: &Value| {
+        text(l, "ev") == "Phase"
+            && (text(l, "src"), text(l, "step")) == REACHED
+            && text(l, "task") == task
+    };
+    let own_t = |l: &Value| l.get("own_t") == Some(&Value::Bool(true));
+    let counts = |m: &str| m == "static" || m == "closing-checks";
+    let names_run = |l: &Value| {
+        let named = |m: &str| counts(m) && !(m == "closing-checks" && own_t(l));
+        named(text(l, "make"))
+            || l.get("makes")
+                .and_then(Value::as_array)
+                .is_some_and(|ms| ms.iter().any(|m| m.as_str().is_some_and(named)))
+    };
     lines
         .iter()
         .filter(|l| {
             let id = text(l, "id");
-            let t = stamp(text(l, "t"));
-            text(l, "ev") == "PreToolUse"
+            let call = text(l, "ev") == "PreToolUse"
                 && text(l, "task") == task
-                && (is_run(text(l, "make"))
-                    || l.get("makes")
-                        .and_then(Value::as_array)
-                        .is_some_and(|ms| ms.iter().any(|m| m.as_str().is_some_and(is_run))))
+                && names_run(l)
                 && id != own
-                && ran.contains(id)
-                && since
-                    .as_ref()
-                    .is_none_or(|(s, from)| t > *s || (*from && t == *s))
+                && ran.contains(id);
+            (call || reached(l)) && after(l)
         })
         .count()
 }

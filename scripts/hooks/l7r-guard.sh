@@ -48,12 +48,25 @@ stale() { newer "$GOOD" && newer "$FAILED"; }
 # through unguarded with no record. The build stops itself at L7R_GUARD_BUILD_SECS, inside the entry's timeout, and is NOT stamped
 # failed: cargo keeps what it finished, and the next call carries it on. A call that finds another building does not wait for the
 # lock either (waiting is the same silent kill): it runs what is there.
+#
+# A NEVER-BUILT GUARD BEFORE A MAKE STEP (451 T286): hooks run the mirror's copy of this script, so a tree's own binary is first built
+# by its own `make` - the disk floor of `make closing-checks`, `make done` and `make land` (`DISK_FLOOR`) - and with none ever built that
+# call's only answer is exit 1: a fresh tree's first closing checks died there twice at load 56 (2026-11-26), the cold build past 45 s.
+# L7R_GUARD_COLD_SECS, which only such a caller sets (no hook entry: its harness timeout is the bound above), gives a call with NO good
+# binary that bound in seconds for the whole of it - waiting for another call's build, then building - so it builds instead of dying.
+# With a good binary, stale or not, the seam changes nothing: the last good one runs at once as before.
 build() {
-  local cargo=${L7R_GUARD_CARGO:-} secs=${L7R_GUARD_BUILD_SECS:-45}
+  local cargo=${L7R_GUARD_CARGO:-} secs=${L7R_GUARD_BUILD_SECS:-45} lock=-n began=${EPOCHREALTIME/,/.}
   [ -n "$cargo" ] || { [ -x "$HOME/.cargo/bin/cargo" ] && cargo="$HOME/.cargo/bin/cargo" || cargo=cargo; }
+  if [ -n "${L7R_GUARD_COLD_SECS:-}" ] && [ ! -x "$GOOD" ]; then
+    secs=$L7R_GUARD_COLD_SECS lock="-w $L7R_GUARD_COLD_SECS"
+    echo "l7r-guard: no guard binary has been built in $TREE yet; building it first (up to $secs s; its log $LOG)" >&2
+  fi
   (
-    flock -n 9 || exit 0
+    flock $lock 9 || exit 0
     stale || exit 0  # another call built it since this one looked
+    # what the wait left of a cold call's bound (451 T286); a hook's call never waited, so its limit stands whole
+    [ "$lock" = -n ] || secs=$(awk -v s="$secs" -v a="$began" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { l = s - (b - a); print (l > 0.1) ? l : 0.1 }')
     exec 2> "$LOG"  # opened under the lock: a second call never truncates the log of the build it skipped
     # THE LINKER (T96): a hook runs from the session's directory, which may be outside this tree; the build runs from the tree's root,
     # where cargo finds `.cargo/config.toml` (rust-lld), and a toolchain that moved is a failed build that says the fix in the log

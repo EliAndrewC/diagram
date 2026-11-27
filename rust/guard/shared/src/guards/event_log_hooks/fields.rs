@@ -60,6 +60,13 @@ pub(super) fn tool_fields(
         }
         let target = all.first().cloned().unwrap_or_default();
         out.extend(blocks_env(&command).map(|b| ("blocks".to_owned(), Value::from(b))));
+        // A CLOSING RUN'S OWN `T=` (451 T286): the static-run count reads such a run by the line its script writes under that task as it
+        // launches `make static`, and a closing run with none by this call's own line, filed under its own task
+        if all.iter().any(|t| t == "closing-checks")
+            && first_group(&TASK, &crate::shape::strip_heredocs(&command)).is_some()
+        {
+            out.insert("own_t".into(), Value::Bool(true));
+        }
         if all.len() > 1 {
             out.insert("makes".into(), Value::from(all));
         }

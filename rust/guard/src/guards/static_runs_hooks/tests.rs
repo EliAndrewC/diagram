@@ -482,19 +482,102 @@ fn through_the_chain_the_calls_own_line_is_no_run_and_the_named_checks_pass() {
     }
 }
 
-/// A run of `make closing-checks` (feature 451 T55) by `task` at `t` that ran: it runs `make static`, so it is a run of it.
-fn closing(id: &str, t: &str, task: &str) -> [Value; 2] {
+/// A start of `make closing-checks T=<task>` (feature 451 T55) at `t`: its `PreToolUse` line, which marks its own `T=` (`own_t`, 451
+/// T286), and the backgrounded call's `PostToolUse`, which comes back at once whatever the run does after.
+fn started(id: &str, t: &str, task: &str) -> [Value; 2] {
     [
-        json!({"t": t, "ev": "PreToolUse", "tool": "Bash", "id": id, "make": "closing-checks", "task": task}),
+        json!({"t": t, "ev": "PreToolUse", "tool": "Bash", "id": id, "make": "closing-checks", "task": task, "own_t": true}),
         json!({"t": t, "ev": "PostToolUse", "tool": "Bash", "id": id, "make": "closing-checks", "task": task, "bg": "b1"}),
     ]
+}
+
+/// The line `closing-checks.sh` writes as it launches `make static` (451 T286), built by the one Phase writer, filed under `task`.
+fn reached(t: &str, task: &str) -> Value {
+    let at = std::time::UNIX_EPOCH;
+    let mut row = event_log_hooks::phase_row(
+        super::REACHED.0,
+        super::REACHED.1,
+        (at, at),
+        0,
+        "closing-checks",
+        Path::new("/c"),
+    );
+    row.insert("t".into(), json!(t));
+    row.insert("task".into(), json!(task));
+    Value::Object(row)
+}
+
+/// A run of `make closing-checks` by `task` at `t` that reached `make static`: its start and the line its launch wrote.
+fn closing(id: &str, t: &str, task: &str) -> [Value; 3] {
+    let [pre, post] = started(id, t, task);
+    [pre, post, reached(t, task)]
+}
+
+#[test]
+fn a_closing_checks_start_that_never_reached_static_is_no_run() {
+    // two starts that died at the disk floor (451 T286: a cold guard build past the wrapper's 45 s, 2026-11-26), then one that ran
+    let dead = [
+        started("a", "2026-11-20T10:01:00.000Z", "T06"),
+        started("b", "2026-11-20T10:02:00.000Z", "T06"),
+    ]
+    .concat();
+    let d = clone("dead-starts", &[("T06", "2026-11-20T10:00:00Z")], &dead);
+    assert_eq!(said(&d, "make closing-checks T=T06"), None);
+    // the line of another task's launch, or another phase's line, reaches nothing of T06's
+    let mut lines = dead.clone();
+    lines.push(reached("2026-11-20T10:03:00.000Z", "T07"));
+    let mut other = reached("2026-11-20T10:03:00.000Z", "T06");
+    other["step"] = json!("quick");
+    lines.push(other);
+    lines.extend(closing("c", "2026-11-20T10:04:00.000Z", "T06"));
+    write_log(&d, &lines);
+    assert_eq!(said(&d, "make closing-checks T=T06"), None);
+    // a second run that reached static: refused, two runs
+    lines.extend(closing("e", "2026-11-20T10:05:00.000Z", "T06"));
+    write_log(&d, &lines);
+    assert_eq!(said(&d, "make closing-checks T=T06"), Some(refused()));
+    // a launch before the task's last landing is no run since it
+    lines.push(end("2026-11-20T10:06:00.000Z", &["T06"], true, 0));
+    write_log(&d, &lines);
+    assert_eq!(said(&d, "make closing-checks T=T06"), None);
+}
+
+#[test]
+fn a_closing_run_with_no_t_of_its_own_is_counted_by_its_call_under_its_task() {
+    // no `own_t`: a run with no `T=` (its script writes no launch line) and every line from before it, counted as before
+    let bare = |id: &str, t: &str, task: &str| {
+        let [mut pre, post] = started(id, t, task);
+        pre.as_object_mut().unwrap().remove("own_t");
+        [pre, post]
+    };
+    let lines = [
+        bare("a", "2026-11-20T10:01:00.000Z", "T06"),
+        bare("b", "2026-11-20T10:02:00.000Z", "T07"),
+    ]
+    .concat();
+    let d = clone("bare", &[("T06", "2026-11-20T10:00:00Z")], &lines);
+    assert_eq!(said(&d, "make static"), None);
+    let mut more = lines.clone();
+    more.extend(bare("c", "2026-11-20T10:03:00.000Z", "T06"));
+    write_log(&d, &more);
+    assert_eq!(said(&d, "make static"), Some(refused()));
+    // a call running another target first, its own `T=` marked: counted by its launch line alone, none here
+    let mut several = started("e", "2026-11-20T10:04:00.000Z", "T06");
+    several[0]["makes"] = json!(["rust-test", "closing-checks"]);
+    several[0]["make"] = json!("rust-test");
+    let d2 = clone(
+        "several",
+        &[("T06", "2026-11-20T10:00:00Z")],
+        &[lines[..2].to_vec(), several.to_vec()].concat(),
+    );
+    assert_eq!(said(&d2, "make static"), None);
 }
 
 #[test]
 fn a_closing_checks_run_is_a_static_run_and_a_call_of_it_is_counted() {
     let lines = [
-        closing("a", "2026-11-20T10:01:00.000Z", "T06"),
-        ran("b", "2026-11-20T10:02:00.000Z", "T06"),
+        closing("a", "2026-11-20T10:01:00.000Z", "T06").to_vec(),
+        ran("b", "2026-11-20T10:02:00.000Z", "T06").to_vec(),
     ]
     .concat();
     let d = clone("closing", &[("T06", "2026-11-20T10:00:00Z")], &lines);

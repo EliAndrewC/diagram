@@ -144,3 +144,34 @@ fn a_span_it_cannot_read_writes_nothing() {
     let got = lines(&d);
     assert_eq!(got.len(), 1);
 }
+
+/// 451 T286: `--task` names the task the lines are filed under - `closing-checks.sh`'s launch line carries its caller's `T=`, as the
+/// call's own `PreToolUse` line does, so the static-run count reads the two under one task.
+#[test]
+fn a_named_task_is_the_lines_task() {
+    let d = crate::checks::scratch("measure-phase-door-task");
+    std::fs::create_dir_all(d.join(".git")).unwrap();
+    let root = d.display().to_string();
+    let env = Rooted::with(".", &[]);
+    let words = [
+        "--root",
+        &root,
+        "--src",
+        "closing-checks",
+        "--make",
+        "closing-checks",
+        "--task",
+        "T7",
+        "static-started:1:1:0",
+    ];
+    let r = super::cli(&args(&words), env.reader());
+    assert_eq!((r.code, r.stderr.as_str()), (0, ""));
+    let got: Vec<(String, String)> = lines(&d)
+        .iter()
+        .map(|l| (l["step"].to_string(), l["task"].to_string()))
+        .collect();
+    assert_eq!(
+        got,
+        [("\"static-started\"".to_owned(), "\"T7\"".to_owned())]
+    );
+}

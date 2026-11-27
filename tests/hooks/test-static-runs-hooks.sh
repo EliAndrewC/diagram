@@ -109,7 +109,12 @@ run "make static"
 echo "7. make closing-checks is one run of make static (feature 451 T55)"
 starts T06@2026-11-20T10:00:00Z; fresh
 ran a 2026-11-20T10:01:00.000Z
-printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06","bg":"b1"}\n' >> "$LOG"
+printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06","own_t":true}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06","bg":"b1"}\n' >> "$LOG"
+# a start with its own T= (`own_t`) that died before make static (451 T286: at the disk floor) wrote no launch line: no run
+run "make static"
+[ "$RC" -eq 0 ] && ok "a closing-checks start that never reached make static: no run" || no "a dead closing-checks start was counted" "(rc=$RC)"
+# the line closing-checks.sh writes as it launches make static, as `l7r-gate measure event-log phase` writes it
+printf '{"ev":"Phase","src":"closing-checks","step":"static-started","t0":"2026-11-20T10:02:01.000Z","t1":"2026-11-20T10:02:01.000Z","t":"2026-11-20T10:02:01.000Z","code":0,"make":"closing-checks","clone":"/c","task":"T06"}\n' >> "$LOG"
 run "make static"
 [ "$RC" -eq 2 ] && ok "a static run and a closing-checks run, then a third: refused" || no "a closing-checks run was not counted" "(rc=$RC)"
 run "make closing-checks"

@@ -2878,31 +2878,45 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T284 to T284 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T286 (<why: the finding or measurement that files it>)
+### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two fixes, the floor's and the counter's.
+  - **Where a cold-guard closing-checks still arises.** Hooks run the MIRROR's `scripts/hooks/l7r-guard.sh` (`scripts/hooks/l7r-hook`, "the mirror's copy first"), whose target is `~/.cache/l7r-cargo-target/diagram`; a tree's OWN guard binary, `~/.cache/l7r-cargo-target/<tree's name>/l7r-guard.good`, is first built by the tree's own `make` - `DISK_FLOOR`, the first line of `make closing-checks`, `make done` and `make land`, which runs `<tree>/scripts/hooks/l7r-guard.sh --scratch-sweep floor`. With none ever built and the build cut at its limit (`L7R_GUARD_BUILD_SECS`, 45 s, a GUESS knob; exit code 124 from `timeout`) or the build lock held by another call (`flock -n`), the wrapper's last arm prints its "went through unguarded" note and exits 1, and the make dies. Since 451 T285/T316, `make builder-tree` builds a NEW pool tree's guard at the handout (limit 1800 s, a GUESS knob, `L7R_BUILDER_GUARD_SECS`), and since the two tiers builders run no closing checks; it still arises in a session clone made fresh (`git clone /diagram .clones/<name>`: no handout builds it, the hooks build only the mirror's), a clone given `make state-restore` (it restores `.git/record-checks` and `.git/l7r-events`, no build directory), a scratch clone or a detached worktree a measurement makes, and a pool tree whose handout said "its guard binary did NOT build" (its build lost the lock to another call - filed as T448, below).
+  - **The floor builds or waits, bounded** (`scripts/hooks/l7r-guard.sh` `build`, the Makefile's `DISK_FLOOR`). A new seam, `L7R_GUARD_COLD_SECS`, which `DISK_FLOOR` alone sets (600 s, a GUESS knob: ten times the slowest cold build the guard suite records, 60.0 s on 2026-11-11 in `tests/hooks/test-l7r-guard.sh` case 7's comment): where the call finds NO good binary, the wrapper waits for the build lock (`flock -w`) and builds within what is left of that bound, so the floor's call answers instead of dying; it says so on stderr first, with its bound and its log. With a good binary, stale or not, nothing changes - the last good one runs at once - and no hook entry sets the seam, so a hook's call keeps the 45 s limit (the GUESS knob `L7R_GUARD_BUILD_SECS`) and the no-wait lock its harness timeout needs (the suite's settings check still reads the first `L7R_GUARD_BUILD_SECS:-45`). Past the bound the call ends as before, exit 1, not stamped failed.
+  - **The counter counts a run that reached `make static`** (`rust/guard/src/guards/static_runs_hooks.rs` `runs`; `scripts/gates/closing-checks.sh`; `rust/gate/crates/measure/src/measure/event_log/phase.rs`; `rust/guard/shared/src/guards/event_log_hooks/fields.rs`). What the counter read: a `PreToolUse` line naming `closing-checks` whose `id` an end line carries. A closing run is backgrounded (the order guard refuses it in the foreground), so its end line comes back at its launch: 405 of the 492 calls in 451's log that name `closing-checks` among their targets have one, every one a `PostToolUse` with a `bg` id, none a `PostToolUseFailure`, the one read in full 20 ms after its start (measured 2026-11-27, method: each `PreToolUse` line naming `closing-checks` in `.git/l7r-events/451-time-retro-and-efficiency.jsonl` paired with the end lines of its `id`) - so a start that died at the floor was a run. What a run writes once it reaches static: nothing on the event log that names its call (the crates' `Phase` lines carry no tool-use id, and are filed by the tree's marks: of the 464 calls whose FIRST target is `closing-checks` (the 492 less 28 that run another target first), the Phase lines their session wrote before its next such call named only other tasks after 198, measured 2026-11-27 the same way - a pool tree's previous holder). So a run is told apart by its call's own `T=`:
+    - **A call naming its own `T=`** - the closing step's form - is marked on its `PreToolUse` line (`own_t: true`, written by `event_log_hooks`' `fields.rs` where the command runs `closing-checks` and its `T=` outside a heredoc matches `TASK`, the same reading that files the line under that task, `own_step`). Its script writes ONE `Phase` line as it launches the three checks: `src: closing-checks`, `step: static-started`, an instant, code 0, through the one Phase writer (`l7r-gate measure event-log phase`, given a new `--task`, that `T=`'s first task, and `--feature`, the run's resolved feature). The counter counts such a run by that line, under that task, since its last landing or first start, and never by its call; a start refused before the checks (no feature, 451 T303) or dead at the floor writes none and is no run.
+    - **A call with no `T=` of its own** (a bare `make closing-checks`, or a `T=` the `TASK` pattern does not read) writes no launch line - its task would be the tree's guess, which the 198 above show is often another task's, and so would add to another task's count - and is counted by its own call as before, under the task its own line is filed under and no other's. Such a start that dies at the floor is still counted - a defect left, under "Found and left?" below.
+    - **Rollout.** (a) Old log lines: a line written before `own_t` carries none, so every closing run already in the logs is counted as before. (b) Old scripts: hooks run the mirror's guard, which writes `own_t`, while the launch line comes from the tree's own `closing-checks.sh`; in a tree whose script predates this task (a session clone not yet synced, a pool tree on an older base), a call with its own `T=` is marked and writes no launch line, so it is counted none - a narrowing of 451 D11's "every run counts", lenient only (it never refuses a correct start), and bounded: a session clone takes main at its next prompt (`scripts/sync-with-main.sh sync-in`, the prompt hook) and a pool tree is brought to the clone's HEAD at its next handout (`make builder-tree`), so it lasts until each tree's next prompt or handout after the landing. Accepted by this builder for the plan review to rule; priced against marking `own_t` only where the tree's script writes the line (the guard reading the tree's script at every call) and counting a marked call with no launch line by its call (which re-counts the very dead starts this task removes).
+  - **Fixed in passing, the plan review's round 1 (BLOCKED)**: the first version counted every closing run by its launch line, a bare call's filed under the writer's chain's task; the reviewer ruled that a narrowing of 451 D11 ("every session and agent's run counts") and a risk to another task's count. Restated as above, with a test for the bare call (`a_closing_run_with_no_t_of_its_own_is_counted_by_its_call_under_its_task`, which the first version's rule fails - it counted a bare call none - read from that rule, not run; on HEAD it passes, as the rule it keeps is HEAD's) and a red-first one for the mark (`a_closing_run_with_its_own_t_says_so`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the floor's call with no guard built builds within its bound, waits for another's build, gives up at the bound unstamped; a good binary never waits; the Makefile passes the seam | `tests/hooks/test-l7r-guard.sh` case 6e, red on HEAD (4 of 65) | n/a: tooling | none | n/a |
+| a closing run's launch line, its tree, first task, feature and instant, written before static starts; none from a refused run | `tests/hooks/test-closing-checks.sh` section 7, red on HEAD (3 of 78) | n/a: tooling | none | n/a |
+| `--task` files the Phase line under the task named | `a_named_task_is_the_lines_task`, red on HEAD (1 of 279) | n/a: tooling | none | n/a |
+| a closing start with its own `T=` that never reached static is no run; another task's launch line or another step's is none of this task's; a landing resets it | `a_closing_checks_start_that_never_reached_static_is_no_run`, red on HEAD (1 of 569); `tests/hooks/test-static-runs-hooks.sh` section 7 | n/a: tooling | none | n/a |
+| a call naming its own `T=` is marked `own_t`, a bare one or a heredoc's `T=` not; a bare call counted by its call under its own task, another task's not | `a_closing_run_with_its_own_t_says_so`, red on HEAD (1 of 544); `a_closing_run_with_no_t_of_its_own_is_counted_by_its_call_under_its_task`; `tests/hooks/test-closing-checks.sh` section 7's bare run, no launch line | n/a: tooling | none | n/a |
 
 ### T286 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A tree's first `make closing-checks` (or `make done`, `make land`) starts its checks whatever its guard binary's state, and a start that never reached `make static` costs the task none of its two static runs.
+2. **The constraints.** T286's line in tasks.md. The brief: no guard message changes; hooks keep their bounded, no-wait build (449 T004's "BOUNDED, AND NEVER WAITED ON"; each hook entry's timeout above the 45 s limit, a GUESS knob, `test-l7r-guard.sh` section 8); the count stays the event log's (451 T14, D11).
+3. **Where each comes from.** O: T286's line (451 T270's builder, 2026-11-26: two dead starts at load 56); the end-line and Phase-line measurements of 2026-11-27 in the Approach. R: `scripts/hooks/l7r-hook` (hooks run the mirror's wrapper), `rust/gate/crates/task/src/builder_tree.rs` (a new pool tree's guard built at its handout).
+4. **Do they describe the world here?** Yes, measured 2026-11-27 (the wrapper read, and its suite's fake cargo run before the fix): both failure paths, the build's timeout and the lock taken with `flock -n`, end at the wrapper's last arm for `--scratch-sweep`, and case 6e's floor call with no seam exits 1; the counter's input was read in 451's live log, the Approach's figures and their method.
+5. **The order.** Independent of the queue; T448 (builder-tree's handout build) after it.
+6. **The exits.** Green: item 9's reds green, with the crates' first tier (`make builder-checks CRATE="rust/guard rust/guard/shared rust/gate/crates/measure"`) and the suites they live in. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27, each on the old code with the new tests: `tests/hooks/test-l7r-guard.sh` 61 passed, 4 failed (the seam's build, the wait, the bound, the Makefile pin); `tests/hooks/test-closing-checks.sh` 75 passed, 3 failed (no launch line); `make rust-test CRATE=rust/gate/crates/measure` 278 passed, 1 failed (`--task` read as a span, exit 2); `make rust-test CRATE=rust/guard` 568 passed, 1 failed (two dead starts counted, `Refused { runs: 2 }`); after the plan review's round 1, `make rust-test CRATE=rust/guard/shared` 543 passed, 1 failed (no `own_t` on the line). After: 65 of 65, 78 of 78, 279 of 279, 570 of 570 and 544 of 544; `tests/hooks/test-static-runs-hooks.sh` 43 of 43 (its section 7 fixture a call with its own `T=`, given the launch line, and a dead start no run), `tests/hooks/test-event-log-hooks.sh` 25 of 25 and `tests/hooks/test-disk-floor.sh` 16 of 16; `make builder-checks CRATE="rust/guard rust/guard/shared rust/gate/crates/measure"` clean (test, lint, format).
+10. **Before moving a constant.** n/a: a new knob, `L7R_GUARD_COLD_SECS` = 600 at `DISK_FLOOR`, a GUESS labeled beside it; the hook limit unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check it breaks: the static-runs guard refused a correct third start (`STATIC_OK` owed) after two starts that ran nothing, and `make closing-checks` failed in a tree for want of a binary its own step could build. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make builder-tree`'s handout build of a new tree's guard (`builder_tree.rs` `build_guard`) still takes the wrapper's lock with `flock -n`, so beside another call's build of that tree's guard it says "its guard binary did NOT build", and its note still says the first closing checks may stop on the hook wrapper's limit - since this task the floor builds a never-built guard within its bound, so the note is stale. Not fixed here: it is the task crate's, another crate beside this task's and its scripts, and the floor now covers what it misses. Filed as T448; lands before T296.
+- A bare `make closing-checks` (no `T=` of its own) that dies before `make static` - at the disk floor, now rarer with the floor's bounded build - is still counted as a static run, so after two such deaths a correct third start needs `STATIC_OK`: the defect this task fixes, left for the bare form. Not fixed here: its launch line cannot be tied to its call without a field neither line has (the Phase line's task is the tree's guess, another task's after 198 of 464 calls, measured 2026-11-27 as in the Approach), and how many bare calls there are is unmeasured (the event log keeps no command); the closing step's own form carries `T=`. Filed as T451; lands before T296.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task of the builders' loop: a dead start is the builder's waiting (two dead starts and four calls, observed 2026-11-26, method: T286's line), and an uncounted dead start saves the `STATIC_OK` round it caused; not an engine-speed task, so `docs/performance-checklist.md` has nothing to answer.
 
 
 ### T287 (<why: the finding or measurement that files it>)
@@ -7524,6 +7538,59 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T450 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T448 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T448 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T451 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T451 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

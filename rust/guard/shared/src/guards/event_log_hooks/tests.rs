@@ -477,6 +477,32 @@ fn a_commands_task_is_its_t() {
     }
 }
 
+/// 451 T286: a `make closing-checks` call that names its own `T=` says so (`own_t`), so the static-run count reads its run by the
+/// line its script writes under that task, and a call with none by its own line.
+#[test]
+fn a_closing_run_with_its_own_t_says_so() {
+    for (command, want) in [
+        ("make closing-checks T=T05", Some(true)),
+        (
+            "make rust-test CRATE=rust/x && make closing-checks T=T05 F=451",
+            Some(true),
+        ),
+        ("make closing-checks", None),
+        ("make closing-checks T=286", None),
+        (
+            "cat <<'EOF' > f\nmake closing-checks T=T05\nEOF\nmake closing-checks",
+            None,
+        ),
+        ("make static T=T05", None),
+    ] {
+        let row = line(
+            &json!({"tool_name": "Bash", "tool_input": {"command": command}}),
+            "T",
+        );
+        assert_eq!(row.get("own_t").and_then(Value::as_bool), want, "{command}");
+    }
+}
+
 fn session_files(d: &Path, aid: &str, meta: &str) -> String {
     let transcript = d.join("projects/s1.jsonl");
     std::fs::create_dir_all(d.join("projects/s1/subagents")).unwrap();

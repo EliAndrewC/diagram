@@ -365,6 +365,22 @@ rm -f "$T/c6/static.blocked"; c6 env -u CLOSING_TASK
   && ok "no T=: the whole clone judged as before, the T= form named" || no "no T= (exit $RC)" "$OUT"
 rm -rf "$T/c6"
 
+echo "7. the launch of make static is written to the event log under the caller's task and feature (451 T286)"
+# the static-runs guard counts a closing run by this line: a start that died before make static (a cold guard build past the disk floor's
+# limit, 2026-11-26) writes none and is no run
+mkdir -p "$T/c6"; : > "$T/records"; c6 env CLOSING_TASK=T86,T87
+launch=$(grep -E -- ' --src closing-checks ' "$T/records")
+[[ $launch =~ ^measure\ event-log\ phase\ --root\ $C\ --src\ closing-checks\ --task\ T86\ --feature\ 451-x\ static-started:([0-9.]+):([0-9.]+):0$ ]] \
+  && [ "${BASH_REMATCH[1]}" = "${BASH_REMATCH[2]}" ] && ok "a run's launch line: its tree, its first task, its feature, one instant" || no "the launch line" "$(cat "$T/records")"
+at=${BASH_REMATCH[1]:-0}; began=$(awk '$2 == "static" && $1 == "start" { print $3 }' "$T/c6/events")
+awk -v a="$at" -v b="${began:-0}" 'BEGIN { exit !(a > 0 && b > 0 && a <= b / 1e9) }' && ok "written before make static started" || no "the launch line after static started" "$at $began"
+: > "$T/records"; c6 env CLOSING_TASK=T99
+[ "$RC" -eq 2 ] && ! grep -q -- '--src closing-checks' "$T/records" && ok "a refused run, before any check: no launch line" || no "a refused run's launch line (exit $RC)" "$(cat "$T/records")"
+: > "$T/records"; c6 env -u CLOSING_TASK CLOSING_FEATURE=451-x
+[ "$RC" -eq 0 ] && ! grep -q -- "--src closing-checks" "$T/records" \
+  && ok "no T=: no launch line (its task would be the tree's guess; the count reads the call's own line)" || no "no T='s launch line (exit $RC)" "$(cat "$T/records")"
+rm -rf "$T/c6"
+
 echo
 echo "closing-checks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

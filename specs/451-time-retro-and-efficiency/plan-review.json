@@ -2485,17 +2485,11 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T286 (<why: the finding or measurement that files it>)": {
-   "sha256": "30b511c7e7516f224d03d5b9fcf31cbe307ec86109a75d21a4b9870df71415c5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T286 Approach (checklist part A)": {
-   "sha256": "3b756d45dc9623b1a4b82dd4c1b922e3fe41aa13aff9a3f287c352f1dc9fe19b",
+   "sha256": "ed4560983331a19a6dab05155a10976fbf8a20a83bdab9697af0139177e4214f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T287 (<why: the finding or measurement that files it>)": {
    "sha256": "1b982b029164cfb7d1ff29bffa40f00a0339600d50ba8b706f8c4d29ab248e67",
@@ -3970,6 +3964,36 @@
   "### T450 Approach (checklist part A)": {
    "sha256": "66b27e8d4b8534c22ee5d55c4ecb263400865f42a867df58b5265b053552e02e",
    "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)": {
+   "sha256": "6fcd4dda08746e78695a7cd75ebfd95d8435f1d1200f99690097b11da04ccd24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  },
+  "### T448 (<why: the finding or measurement that files it>)": {
+   "sha256": "41c854ebfdae13e00d95f0b9e73a51dd62cb43edd3945dfddd723f9ebbc15ad7",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T448 Approach (checklist part A)": {
+   "sha256": "de64d17060e50beef577412a3038d0460633d26028e6e35f9d7c7f8aaa0657a3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T451 (<why: the finding or measurement that files it>)": {
+   "sha256": "4102cd33ae2f24703ac18ab6d952bafa36c136d667f505f56dffe1b20ca961e8",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T451 Approach (checklist part A)": {
+   "sha256": "12e0615563812f88c6507b9cd746fdc939d86416da2474e863530e09b9224e29",
+   "verdict": "BLOCKED",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   }
@@ -35530,6 +35554,264 @@
      "why": "The removal replaces a placeholder with its content. Nothing it held is lost."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "summary": "DISK_FLOOR alone sets L7R_GUARD_COLD_SECS (600 s, a GUESS knob): with no good guard binary the floor's call waits for the build lock and builds within that bound instead of dying; a good binary runs at once; hook entries keep the 45 s, no-wait build",
+     "class": "within",
+     "why": "Fixes a wrong outcome (make closing-checks / done / land dying in a tree for want of a binary its own step can build). The hooks' bounded, never-waited build (449 T004) is untouched because no hook sets the seam; the floor is not a hook."
+    },
+    {
+     "id": "T286-floor-past-bound",
+     "summary": "Past the 600 s bound the call ends as before, exit 1, not stamped failed",
+     "class": "within",
+     "why": "Keeps the existing failure arm for the case the fix cannot cover; narrows nothing that was asked."
+    },
+    {
+     "id": "T286-counter-launch-line",
+     "summary": "A closing run is counted by a new Phase line (src closing-checks, step static-started) written as the three checks launch, rather than by its PreToolUse line paired with an end line; a start dead at the floor or refused before the checks writes none",
+     "class": "within",
+     "why": "FR-007 refuses a third make static; D11 counts runs that RAN and already excludes a call that ran nothing. The measured premise (every closing call's end line returns at its backgrounded launch, 405 of 492 paired) shows the old pairing counted dead starts as runs, which made the guard refuse correct work. The count stays on the event log (D11, T14)."
+    },
+    {
+     "id": "T286-phase-writer-task-feature",
+     "summary": "l7r-gate measure event-log phase gains --task (the caller's T= first task) and --feature, so the launch line is filed under the call's task, not the tree's marks",
+     "class": "within",
+     "why": "Mechanism for the decision above; the measured misfiling of Phase lines (filed by the tree's marks) is why it is needed."
+    },
+    {
+     "id": "T286-rollout-old-closing-runs",
+     "summary": "Rollout: closing runs already in the logs wrote no launch line and stop counting - at most one landing's worth of lenience per task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule (count the closing runs that reached static) cannot be applied to lines already written: by the block's own measurement the old Phase lines carry no tool-use id and are filed by the tree's marks, so nothing in the old log ties a run that reached static to its call. Some deviation at the cutover is therefore forced. Counting old starts by the old pairing would keep refusing correct starts, which is the defect this task fixes. The leniency is bounded to each task's next landing, so it does not gut FR-007's purpose going forward."
+    },
+    {
+     "id": "T286-closing-run-without-T",
+     "summary": "A closing run with no T= writes its launch line under the writer's chain's task, which may not be the call's; that run may go uncounted (justified as lenient, since the closing step's form carries T=)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a permanent carve-out, not a transient one. Before this change such a run was counted under its own call's task (its PreToolUse line is filed by event_log_hooks TASK / own_step, as the block itself says), so the task is knowable and the rule is not physically impossible. D11: 'Every session and agent's run counts'. The GM's approval (request.md, 2026-11-19): 'let's make sure all of the enforcement is real enforcement and not just instructions'. Resting the count on 'the closing step's form carries T=' makes the count depend on instructions. The mechanism also does worse than 'may go uncounted': the counter counts a launch line under the task it is filed under. A line filed under the chain's task (the block measured Phase lines naming only other tasks after 198 of 464 calls) adds to ANOTHER task's count, which can refuse that task's correct third start, the very defect T286 fixes. No figure says how many closing calls lack T=. What it should say instead: a closing run with no T= is counted under the call's own task and under no other task's - however it is achieved (for example a fallback to the call's PreToolUse/end pairing, or refusing closing-checks without T=) - with a red-first test for the no-T= case."
+    },
+    {
+     "id": "T286-defer-builder-tree-build",
+     "summary": "builder_tree.rs build_guard still takes the lock with flock -n beside another build, and its handout note ('first closing checks may stop on the hook wrapper's limit') is stale; deferred to T448, lands before T296",
+     "class": "within",
+     "why": "What is left is a stale sentence and a handout build that loses a lock race; since this task the floor builds a never-built guard within its bound, so no closing run fails on it. The deferral has D15's form (a reason, filed task T448, order before T296), and FR-009 provides for it."
+    },
+    {
+     "id": "T286-order-perf",
+     "summary": "T286 is independent of the queue, T448 after it; tagged performance work of the builders' loop",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order narrows nothing."
+    },
+    {
+     "id": "T448-template-and-removed-T286-template",
+     "summary": "T448's two blocks are the unfilled template; the removed T286 block was the unfilled template replaced by T286's filled heading",
+     "class": "within",
+     "why": "They make no decision. The removal only replaces a placeholder heading with the task's real one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, GUESS), set only by the Makefile's DISK_FLOOR: where no good guard binary exists the wrapper waits for the build lock (flock -w) and builds within the bound, so make closing-checks/done/land answers instead of dying; with a good binary nothing changes; hooks keep the 45 s limit and the no-wait lock; past the bound exit 1 unstamped as before.",
+     "why": "Fixes a defect (the closing step dying for want of a binary its own step can build). It keeps the hooks' bounded, never-waited-on build (449 T004) untouched, since only DISK_FLOOR sets the seam. It touches no requirement of FR-007/D11 and changes no guard message. The new constant is labeled GUESS."
+    },
+    {
+     "id": "T286-counter-own-T-by-launch-line",
+     "class": "within",
+     "summary": "A closing-checks call naming its own T= is marked own_t on its PreToolUse line. closing-checks.sh writes one Phase line (src closing-checks, step static-started) as it launches the checks, filed by --task under that T='s first task. The static-runs counter counts such a run by that line since the last landing or first start, never by its call, so a start refused before the checks or dead at the floor is no run.",
+     "why": "D11 counts `make static` runs that RAN, and T14 already took a call that ran nothing out of the count. The 2026-11-27 measurement shows a backgrounded closing call gets its end line at launch (405 of 492, all PostToolUse with a bg id), so the old pairing test could not tell a dead start from a run. Counting by a line written only once static starts carries out D11's own test (ran). The line is filed under the same T= reading that files the call's PreToolUse line (own_step), so no other task's count moves and D11's 'every session and agent's run counts' holds. The reset point (last landing, else first start) is D11's. It removes a check refusing correct work (Principle XIV); it does not narrow FR-007."
+    },
+    {
+     "id": "T286-counter-bare-call-unchanged",
+     "class": "narrowing",
+     "summary": "A closing-checks call with no T= of its own (or one the TASK pattern does not read) writes no launch line and is still counted by its own call, under the task its own line is filed under, as on HEAD. Such a bare start that dies at the floor is still counted, which narrows the task's goal (item 1: 'a start that never reached make static costs the task none of its two static runs') to the T= form.",
+     "why": "D11 requires counting a run under its own task and every run counting. Without a T=, a launch line could only be filed under the tree's guess, which the plan measured as another task's after 198 of 464 calls. That is the risk to another task's count, and the D11 narrowing, that the previous round BLOCKED. Leaving the bare form on D11's existing mechanism is the only form that keeps D11 whole: it can over-count a dead bare start but never moves another task's count or under-counts a real run. That errs toward FR-007's purpose (making `make static` stop being the edit loop) and has the recorded STATIC_OK escape. The defect left is also small: this task's floor fix removes the observed cause of dead starts (the cold-guard death) for every call form, bare calls included, so a bare dead start now needs the 600 s bound to run out. It is the accepted spec's own mechanism, not a departure from what the GM asked. One limitation: the plan says how many bare calls there are is not measured, so this ruling rests on the residual's rarity following from the floor fix, not on a count.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T286-rollout",
+     "class": "within",
+     "summary": "Lines written before own_t existed carry none, so every closing run already in the logs is counted as before: no lenience and no count changed at the switch.",
+     "why": "This replaces round 1's 'stop counting old runs, one landing of lenience' with no change to any existing count, which keeps D11's count exactly as it was at the switch."
+    },
+    {
+     "id": "T286-phase-writer-task-flag",
+     "class": "within",
+     "summary": "The one Phase writer (l7r-gate measure event-log phase) gains --task and --feature, and the PreToolUse line gains an own_t field written by event_log_hooks' fields.rs.",
+     "why": "These are tooling seams that serve the counter fix. The count stays the event log's (D11, T14), and the change keeps one writer rather than adding a second log."
+    },
+    {
+     "id": "T286-found-and-left-T448",
+     "class": "within",
+     "summary": "builder-tree's handout build (builder_tree.rs build_guard) still takes the lock with flock -n and its note about the hook limit is now stale. Deferred: 'Not fixed here: it is the task crate's ... Filed as T448; lands before T296.'",
+     "why": "This is the deferral form the accepted spec sanctions (FR-009, D15): a reason, a filed task id and an order. The defect's visible effect (a first closing check dying in such a tree) is covered in the meantime by this task's floor fix, so what remains is a stale note and a lost handout build that the floor now does. It is ordered to land before T296, not carried open-ended."
+    },
+    {
+     "id": "T286-perf-tag",
+     "class": "within",
+     "summary": "Tagged [perf] as builders'-loop work (dead starts and the STATIC_OK round they cause).",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, GUESS), set only by the Makefile's DISK_FLOOR: where no good guard binary exists the wrapper waits for the build lock (flock -w) and builds within the bound, so make closing-checks/done/land answers instead of dying; with a good binary nothing changes; hooks keep the 45 s limit and the no-wait lock; past the bound exit 1 unstamped as before.",
+     "why": "Fixes a defect (the closing step dying for want of a binary its own step can build). It keeps the hooks' bounded, never-waited-on build (449 T004) untouched, since only DISK_FLOOR sets the seam. It touches no requirement of FR-007/D11 and changes no guard message. The new constant is labeled GUESS."
+    },
+    {
+     "id": "T286-counter-own-T-by-launch-line",
+     "class": "within",
+     "summary": "A closing-checks call naming its own T= is marked own_t on its PreToolUse line. closing-checks.sh writes one Phase line (src closing-checks, step static-started) as it launches the checks, filed by --task under that T='s first task. The static-runs counter counts such a run by that line since the last landing or first start, never by its call, so a start refused before the checks or dead at the floor is no run.",
+     "why": "D11 counts `make static` runs that RAN, and T14 already took a call that ran nothing out of the count. The 2026-11-27 measurement shows a backgrounded closing call gets its end line at launch (405 of 492, all PostToolUse with a bg id), so the old pairing test could not tell a dead start from a run. Counting by a line written only once static starts carries out D11's own test (ran). The line is filed under the same T= reading that files the call's PreToolUse line (own_step), so no other task's count moves and D11's 'every session and agent's run counts' holds. The reset point (last landing, else first start) is D11's. It removes a check refusing correct work (Principle XIV); it does not narrow FR-007."
+    },
+    {
+     "id": "T286-counter-bare-call-unchanged",
+     "class": "narrowing",
+     "summary": "A closing-checks call with no T= of its own (or one the TASK pattern does not read) writes no launch line and is still counted by its own call, under the task its own line is filed under, as on HEAD. Such a bare start that dies at the floor is still counted, which narrows the task's goal (item 1: 'a start that never reached make static costs the task none of its two static runs') to the T= form.",
+     "why": "NOT LEGITIMATE as written. Leaving the bare form on D11's existing mechanism keeps round 1's concern answered (no other task's count moves), but the plan itself states the result: a bare start that never reached static is still counted, so the static-runs guard can still refuse a correct third start (STATIC_OK owed). That is a check refusing good work, a DEFECT under constitution XIV, and the task's own goal (item 1) states it is to be gone. The plan neither fixes it nor lists it under Found and left with a filed task and order (FR-009, D15). Impossibility is not shown: the plan shows only that a launch line filed under the tree's guess is unreliable (198 of 464). It does not show that a bare run cannot be tied to the task its own PreToolUse line is filed under. Rarity does not save it either. The plan says the number of bare calls is not measured. And the floor fix removes only one of the two dead-start paths the block names; the other, a start refused before the checks (no feature, 451 T303), still counts a bare call. Fix: either fix the bare form so a bare start that never reached static is not counted, without filing any run under another task; or measure that bare closing-checks calls do not occur, which makes it no defect; or list it under Found and left in D15's form (Not fixed here: <why>. Filed as T<n>; lands before T<m>.).",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T286-rollout",
+     "class": "narrowing",
+     "summary": "Rollout: lines written before own_t carry none, so the closing runs already in the logs count as before. The block claims 'no lenience, no change to a count at the switch'. But the block also says hooks run the MIRROR's guard (event_log_hooks' own_t mark and static_runs_hooks' count both run there), while the launch line is written by the TREE's own closing-checks.sh and l7r-gate.",
+     "why": "NOT LEGITIMATE as written. Take a tree whose checked-out closing-checks.sh predates this change: a session clone not yet pulled, or a pool tree on an older base. Under a mirror that already marks own_t, a call naming its own T= is marked own_t, is counted 'never by its call', and writes no launch line, so it is not counted at all. That is an uncounted run, a narrowing of D11's 'every session and agent's run counts' (the same class round 1 BLOCKED). It also contradicts the block's own 'no lenience' claim, and the Rollout sentence covers only old LINES, not old SCRIPTS. Fix: close the gap (for example, mark own_t only where the tree's script writes the launch line, or count an own_t call by its call when no launch line exists for it), or state the lenience and its bound and rule it as a narrowing.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T286-phase-writer-task-flag",
+     "class": "within",
+     "summary": "The one Phase writer (l7r-gate measure event-log phase) gains --task and --feature, and the PreToolUse line gains an own_t field written by event_log_hooks' fields.rs.",
+     "why": "These are tooling seams that serve the counter fix. The count stays the event log's (D11, T14), and the change keeps one writer rather than adding a second log."
+    },
+    {
+     "id": "T286-found-and-left-T448",
+     "class": "within",
+     "summary": "builder-tree's handout build (builder_tree.rs build_guard) still takes the lock with flock -n and its note about the hook limit is now stale. Deferred: 'Not fixed here: it is the task crate's ... Filed as T448; lands before T296.'",
+     "why": "This is the deferral form the accepted spec sanctions (FR-009, D15): a reason, a filed task id and an order. The defect's visible effect (a first closing check dying in such a tree) is covered in the meantime by this task's floor fix, so what remains is a stale note and a lost handout build that the floor now does. It is ordered to land before T296, not carried open-ended."
+    },
+    {
+     "id": "T286-perf-tag",
+     "class": "within",
+     "summary": "Tagged [perf] as builders'-loop work (dead starts and the STATIC_OK round they cause).",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (<why: the finding or measurement that files it>)",
+    "### T451 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-seam",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, a GUESS knob) set only by DISK_FLOOR: with no good guard binary the floor's call waits for the build lock and builds within the bound instead of dying; a good binary never waits; hook entries keep the 45 s no-wait build.",
+     "why": "Fixes the dead start T286 files; hooks' bounded no-wait build (449 T004) unchanged; nothing the request or spec asked is narrowed."
+    },
+    {
+     "id": "T286-count-by-launch-line",
+     "class": "within",
+     "summary": "A closing call naming its own T= is marked own_t on its PreToolUse line; its script writes one static-started Phase line at launch; the counter counts such a run by that line, so a start refused or dead at the floor is no run.",
+     "why": "D11 counts make static runs that RAN, excluding a call that ran nothing; a start dead before static ran nothing, so counting by the launch line serves D11 and FR-007's purpose (item 2 of the approved improvements: stop make static as the edit loop)."
+    },
+    {
+     "id": "T286-bare-call-as-head",
+     "class": "within",
+     "summary": "A call with no T= of its own writes no launch line and is counted by its own call under its own task, as on HEAD.",
+     "why": "Keeps D11's 'every run counts' and avoids charging another task's count; the plan review's round 1 finding is answered."
+    },
+    {
+     "id": "T286-rollout-a-old-lines",
+     "class": "within",
+     "summary": "Event-log lines written before own_t carry none, so every closing run already logged is counted as before.",
+     "why": "No count changes at the switch; nothing narrowed."
+    },
+    {
+     "id": "T286-rollout-b-old-scripts",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "In a tree whose closing-checks.sh predates T286 (a session clone not yet synced, a pool tree on an older base), the mirror's guard marks an own-T= call own_t but the tree's script writes no launch line, so that run is counted none until the tree's next prompt or handout; accepted by the builder as a lenient narrowing of D11.",
+     "why": "Presumed not legitimate and none of the three tests is met. Not impossible: the block itself names a strict-side rollout (mark own_t, or count by launch line, only where the tree's script writes that line) and rejects it for cost alone ('the guard reading the tree's script at every call'), which is the excluded reason. Not implied by the GM's words: the approval asks that 'all of the enforcement is real enforcement and not just instructions', and D11 says every run counts. The literal rule does not defeat the purpose; the lenience does reach it: in the window FR-007's guard passes a third make static without STATIC_OK, a check passing bad work. Judged per population: a session clone's window ends at its next prompt (sync-in), but a pool tree on an older base keeps its old script for its whole in-flight task; neither bound carries a date or method, and the bundle cannot verify them, so 'bounded' carries no weight. Restate: a call whose tree's closing-checks.sh carries no launch-line writer is counted by its call as on HEAD (e.g. own_t written only where the tree's script writes the static-started line), with a test that an own-T= run in an old-script tree is still counted; no tree undercounts."
+    },
+    {
+     "id": "T286-defer-T448",
+     "class": "within",
+     "summary": "builder-tree's handout guard build (flock -n, stale note) left to T448, in the task crate, ordered before T296.",
+     "why": "A D15-form deferral to an open task of the same feature; the defect stays owed and the floor now covers the miss meanwhile."
+    },
+    {
+     "id": "T286-defer-T451-bare-dead-start",
+     "class": "within",
+     "summary": "A bare make closing-checks (no T=) that dies before make static is still counted as a run; deferred to T451, lands before T296, with its reason (the launch line cannot be tied to a bare call without a new field; the bare count is unmeasured).",
+     "why": "A D15-form deferral within feature 451, so the defect is still owed under 'fix all of this as part of our tasking ... before resuming our port' rather than carved out. T296's identity is not in the bundle; this ruling assumes nothing about it beyond its being an open task of the feature that D15's form requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T286-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted T286's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T286"
+   ]
   }
  ],
  "tasks": {
@@ -54463,6 +54745,19 @@
      "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
      "class": "within",
      "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T286": {
+   "section_sha256": "7a7261da5b9e06710baf2ef57f26018264b56a3bb3e688ccd253d6e22d2afa05",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T286-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted T286's section as it stands"
     }
    ],
    "verdict": "CLEAR"

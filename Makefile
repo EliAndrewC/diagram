@@ -452,7 +452,10 @@ audits:         ## [project] the audit register (dev/audits/): every entry, the 
 disk-audit:     ## [project] every place this container writes - the build cache by tree, /tmp/claude-<uid> by session, /tmp/l7r-*, the rest of /tmp, this project's transcripts, the guard log, the clones, the mirror, ~/.cache, and within the clones their tasks' .git/t<N>, handoff folders, review snapshots and .gencache - each with its size, owner, age and budget, the total against the disk, the host's podman storage named as the host's, and what the low-disk eviction would free now; removes nothing (451 T245, T246)
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep audit </dev/null
 done land closing-checks: export DISK_OK := $(DISK_OK)
-DISK_FLOOR = $(if $(DISK_OK),$(LOGESCAPE) DISK_OK "$$DISK_OK",@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep floor </dev/null)
+# THE FLOOR BUILDS A NEVER-BUILT GUARD (451 T286): its call is often a tree's first of its own guard binary (hooks run the mirror's), and
+# past the hook limit (45 s, passed by a cold build at load 56 on 2026-11-26) it died with none built; L7R_GUARD_COLD_SECS (600, a GUESS
+# knob: ten times the slowest cold build the guard suite has measured, 60.0 s on 2026-11-11) bounds the wait and the build instead.
+DISK_FLOOR = $(if $(DISK_OK),$(LOGESCAPE) DISK_OK "$$DISK_OK",@L7R_GUARD_COLD_SECS="$${L7R_GUARD_COLD_SECS:-600}" "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep floor </dev/null)
 SCRATCH_TREES = "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep trees </dev/null
 
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
