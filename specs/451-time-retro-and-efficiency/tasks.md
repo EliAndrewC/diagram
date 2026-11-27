@@ -404,3 +404,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [x] T429 x Withdrawn 2026-11-27: filed by mistake, a probe of task-add with no content
       research: rendering
+- [ ] T431 make builder-brief's mechanism test reads a bare 'make -' in a task line as a new make target (451 T369's line: 'make -' with no target, refused as a new mechanism and passed only by SIZING_OK, 2026-11-27): rust/gate/crates/task/src/builder_brief.rs mechanism - a hyphenated make target needs at least one letter after the hyphen; red-first with T369's line as the fixture
+      research: rendering
