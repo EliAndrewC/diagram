@@ -526,7 +526,7 @@ impl<'a> Ix<'a> {
             out.push(Seg {
                 t0: x,
                 t1: y,
-                key,
+                key: gm_own(key, &what),
                 who: who.to_owned(),
                 what,
             });
@@ -795,6 +795,17 @@ impl<'a> Ix<'a> {
             What::Wait(c, fb) if depth < 8 => self.descend(l, c, piece, blocked, fb, depth),
             What::Wait(_, fb) => block(l, blocked, (fb, ""), piece.1 - piece.0, false),
         }
+    }
+}
+
+/// A segment's key: the session stopped waiting on the GM is the GM's row, never a batch's - inside a batch's span it is the session's
+/// own, under no task (451 T403: 27.6 of the second tier's 146.9 blocking minutes over 2026-11-26T17:00Z to 2026-11-27T01:00Z).
+fn gm_own(key: Key, what: &What) -> Key {
+    let gm = matches!(what, What::Own(c) if super::is_gm(c));
+    if gm && is_tier(&key) {
+        (key.0, "-".to_owned())
+    } else {
+        key
     }
 }
 

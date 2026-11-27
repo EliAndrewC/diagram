@@ -180,8 +180,9 @@ pub(super) fn second_tier(
         out,
         "\nThe second tier's blocking: {} min, {} of the window's working blocking. Expected near zero - no new task waits on the gate: \
          a gate waited on beside a task's own work blocks nothing, and this counts a repair (the session's turns from a task's carry \
-         to the landing, and what they waited on), a gate the session waited on alone, and a gate run in the foreground. A rise says \
-         something has begun to wait on the gate.\n",
+         to the landing, and what they waited on), a gate the session waited on alone, and a gate run in the foreground - only the \
+         session's own work: its time stopped waiting on the GM is the GM's row (451 T403). A rise says something has begun to wait on \
+         the gate.\n",
         m(tier.block),
         pct(tier.block, work.block)
     );

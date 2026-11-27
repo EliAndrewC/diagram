@@ -18,7 +18,9 @@
 //! never booked beside the session's own turn; it blocks - the batch, no task - where the session waits on it ALONE, where it ran in
 //! the foreground, and through a repair (the session's own turns from the carry on, and what they wait on). Where the batch's own
 //! landing run is in flight, the wait is booked to it - its gate, its push - whatever else in flight ends later (`each_task`): another
-//! task's leftover background loop is not what the session waited on. A carry held behind a
+//! task's leftover background loop is not what the session waited on. The session stopped waiting on the GM inside a batch's span
+//! is the GM's row, booked to the session's own (`-`), never the batch's (451 T403: 27.6 of the 146.9 blocking minutes the second
+//! tier booked over 2026-11-26T17:00Z to 2026-11-27T01:00Z). A carry held behind a
 //! running gate and a build slot the gate holds are not told apart here: 451 T319.
 //!
 //! AFTER ITS LANDING a task is done: a main session's line that still carries it only because the mark was never moved (`fallback`)

@@ -3415,14 +3415,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T403 (<why: the finding or measurement that files it>)": {
-   "sha256": "83e3e0057682b4483bb83022331464ce090feda530f38d996ea94b3edfd797af",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T403 Approach (checklist part A)": {
-   "sha256": "dc2e176f0183c1ebcf3d129f2e287f4ed624341299fa97e8c4de4b54f4de34a9",
+   "sha256": "11bd8036719cd46c88c98c1cf821229c683b1f8aac21ef94216c7db066f14eb3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3687,6 +3681,12 @@
   },
   "### T417, T352 Approach (checklist part A)": {
    "sha256": "8b15adef78f5b95fb8815bea0141eb9a7a27cadeb2dbfb904094b5162655e32a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T403 (`make task-time` booked 27.6 of the second tier's blocking minutes over 2026-11-26T17:00Z to 2026-11-27T01:00Z to the session stopped waiting on the GM - its turns ended on a question to the GM between a task's carry and its landing - where every other window's waiting-on-the-GM minutes are the GM's row; the GM read the tier's figure as \"a HUGE problem, either with our measurements or with our process\", 2026-11-27, request.md; the measurement `dev/measurements/2026-11-27/tree-idle/results.md`)": {
+   "sha256": "db82d0e2e9f7a56a94f44615d315c1f7ae9adf12c501a1b58386e140cec33b3d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -33258,6 +33258,76 @@
      "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
      "class": "within",
      "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T403 (`make task-time` booked 27.6 of the second tier's blocking minutes over 2026-11-26T17:00Z to 2026-11-27T01:00Z to the session stopped waiting on the GM - its turns ended on a question to the GM between a task's carry and its landing - where every other window's waiting-on-the-GM minutes are the GM's row; the GM read the tier's figure as \"a HUGE problem, either with our measurements or with our process\", 2026-11-27, request.md; the measurement `dev/measurements/2026-11-27/tree-idle/results.md`)",
+    "### T403 Approach (checklist part A)",
+    "### T413 (<why: the finding or measurement that files it>)",
+    "### T413 Approach (checklist part A)",
+    "### T417 (<why: the finding or measurement that files it>)",
+    "### T417 Approach (checklist part A)",
+    "### T419 (<why: the finding or measurement that files it>)",
+    "### T419 Approach (checklist part A)",
+    "### T420 (<why: the finding or measurement that files it>)",
+    "### T420 Approach (checklist part A)",
+    "### T424 (<why: the finding or measurement that files it>)",
+    "### T424 Approach (checklist part A)",
+    "(removed) ### T314 (<why: the finding or measurement that files it>)",
+    "(removed) ### T403 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T403-D1",
+     "summary": "segments keys a segment that is the GM's (after_stop's `the GM` / `the GM away`) to the session's own key (<feature>, -) where tiered gave a batch's key, so the session's wait on the GM inside a batch's span is the GM's row, not the second tier's",
+     "class": "within",
+     "why": "The GM 2026-11-25 (i): time waiting for him is recorded and reported but kept out of the other percentages' denominators; the GM 2026-11-27 asked whether 2+ hours of second-tier blocking was 'a problem either with our measurements or with our process' and to get to the bottom of it. Booking his own 27.6 minutes as second-tier work (and as working blocking: 457.7 vs the header's 430.0) is a measurement defect - a tool answering wrongly - and this fixes it. The minutes stay visible in the GM's row (43.6 to 71.2), nothing is hidden."
+    },
+    {
+     "id": "T403-D2",
+     "summary": "The window's totals (all minutes 2670.9, blocking 501.2) do not change; only the row the GM's minutes sit in moves, and the window's working blocking now equals the header's 430.0",
+     "class": "within",
+     "why": "A rebooking between rows, consistent with (i) and with T298's second tier as a category of its own; no requested figure is dropped."
+    },
+    {
+     "id": "T403-D3",
+     "summary": "The second tier's note states that its blocking is only the session's own work on a batch",
+     "class": "within",
+     "why": "Describes the category the GM asked for on 2026-11-26 (batched second-tier checks as their own category, expected rarely blocking) as the fix now books it."
+    },
+    {
+     "id": "T403-D4",
+     "summary": "Scope: this task fixes the measurement half of the GM's 2026-11-27 question; 119.3 second-tier blocking minutes remain and are not claimed explained here; T426's slot waits lie after the window; order after T298 and T394, independent of T426",
+     "class": "within",
+     "why": "The block does not claim the GM's 'get to the bottom' is finished by this change - it reports the remaining 119.3 openly - and request.md's T394 section carries the process half (make builder-done, carry by commit, the re-measurement). Narrowing the GM's question to the 27.6 minutes would be a finding; this block does not do that, it handles one identified cause and leaves the rest visible."
+    },
+    {
+     "id": "T403-D5",
+     "summary": "Performance work: yes, a measurement task",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20: measurement work counts as performance work for scheduling."
+    },
+    {
+     "id": "T417/T419/T413/T420/T424",
+     "summary": "Unfilled template blocks (placeholders only); T419, T420 and T424 carry the template's newer Performance-work placeholder that names a measurement task as counting",
+     "class": "within",
+     "why": "No decision is made; the placeholder wording restates FR-013 and the GM's 2026-11-20 words."
+    },
+    {
+     "id": "removed-T403-placeholder",
+     "summary": "T403's empty template heading removed, replaced by its filled heading",
+     "class": "within",
+     "why": "Its earlier text held only placeholders; the filled block supersedes it."
+    },
+    {
+     "id": "removed-T314-placeholder",
+     "summary": "T314's empty template heading removed",
+     "class": "within",
+     "why": "Its earlier text held only placeholders and decided nothing, so removing it removes no decision of the plan."
     }
    ]
   }

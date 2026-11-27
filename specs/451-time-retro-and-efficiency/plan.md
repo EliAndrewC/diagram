@@ -5672,32 +5672,43 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T403 (<why: the finding or measurement that files it>)
+### T403 (`make task-time` booked 27.6 of the second tier's blocking minutes over 2026-11-26T17:00Z to 2026-11-27T01:00Z to the session stopped waiting on the GM - its turns ended on a question to the GM between a task's carry and its landing - where every other window's waiting-on-the-GM minutes are the GM's row; the GM read the tier's figure as "a HUGE problem, either with our measurements or with our process", 2026-11-27, request.md; the measurement `dev/measurements/2026-11-27/tree-idle/results.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the booking already tells the session stopped waiting on the GM: `book.rs`'s `after_stop` names a main session's gap from its `Stop` to the GM's prompt `the GM` (or `the GM away`), and `is_gm` reads that category. But `segments` keyed that segment by `tiered`, which inside a batch's span (a task's carry to its landing) returns the batch's key, and the window's table folds every cell of a batch's key into the one second-tier category - so the GM's minutes there were the second tier's, and counted as working time too. Now `segments` keys a segment that is the GM's, where `tiered` gave a batch's key, to the session's own (`<feature>, -`): the GM's row gains it, the window's totals do not change. The second tier's note says its blocking is only the session's own work. Measured 2026-11-27, method: `make task-time`'s binary, kept before the change as a copy and built after it, run read-only on `/diagram/.clones/diagram-backlog`'s real logs (`--root`, `--since 2026-11-26T17:00:00Z --until 2026-11-27T01:00:00Z`, never `SINCE=last`):
+
+| figure | before | after |
+|---|---|---|
+| the second tier's blocking (the window's table, and its section's line) | 146.9 | 119.3 |
+| its section's `the GM` row's blocking | 27.6 | none |
+| the window's `the GM` row's blocking | 43.6 | 71.2 |
+| the header's waiting on the GM | 71.2 | 71.2 |
+| the window's all (minutes, blocking) | 2670.9, 501.2 | 2670.9, 501.2 |
+| the window's working blocking (all but the GM) | 457.7 | 430.0, now the header's own figure |
+
+(The tier's 146.9 is today's figure for the window the measurement read 123.3 in: the logs gained lines since, and the GM's 27.6 is the same, measured 2026-11-27 (the reports above).) 451 T426's `slot-wait` on a scratch slot directory - 221.8 s, four waits of T355's builder in diagram-backlog-t270 from 2026-11-27T01:49Z - lies after the window, so none of it is in the second tier's rows, measured 2026-11-27 (every `slot-wait` Phase line of the clone's event logs summed by start); the tier's `waiting on a build slot` row is 6.1 minutes and 0.0 blocking, measured 2026-11-27 (the after report).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the GM's wait inside a batch's span booked to the GM's row | `tier_tests::the_session_waiting_on_the_gm_inside_a_batch_is_the_gm_s_row`, red on the old code (277 passed, 1 failed), green on the new (278 passed) | n/a: tooling | none | none |
 
 ### T403 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The second tier's blocking counts only the session's own work on a batch; the session's time stopped waiting on the GM is the GM's row in every window, inside a batch's span too.
+2. **The constraints.** 451 T298's second tier (`book/tier.rs`'s doc); the GM's rows out of every other percentage's denominator (the GM 2026-11-25); the window's totals unchanged.
+3. **Where each comes from.** G: the GM's words of 2026-11-27 in request.md; O: `dev/measurements/2026-11-27/tree-idle/results.md` and this section's re-measurement.
+4. **Do they describe the world here?** Yes: the before report's second-tier section held a `the GM` row of 27.6 blocking minutes, and its window table's working blocking (457.7) disagreed with its header's (430.0) by the same 27.6, measured 2026-11-27 (make task-time's old binary on the clone's logs, the window pinned).
+5. **The order.** After T298 and T394; independent of T426.
+6. **The exits.** Green: the measure crate's tests and the re-measurement above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The fixture test red on the old code and green on the new (counts above); the real window's tier 146.9 to 119.3, the GM's row 43.6 to 71.2, all 501.2 unchanged (2026-11-27, method above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The report's second-tier figure, read by the GM as a process problem, held 27.6 minutes of his own wait, and the window's working blocking counted them as work, measured 2026-11-27 (make task-time's old binary on the clone's logs, the window pinned).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 ### T410 (five plan reviews of 2026-11-26/27 blocked a round on a section answering no to performance work of a measurement - T315, T274, T301 and two the session headed off by brief - against FR-013's measurement clause; built with T308's part 2 as its T308-D10)
 

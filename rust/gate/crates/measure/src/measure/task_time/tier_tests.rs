@@ -552,3 +552,31 @@ fn a_carry_is_the_task_s_that_held_the_tree_when_it_began() {
         )]
     );
 }
+
+/// The session stopped waiting on the GM inside a batch's span is the GM's row, never the batch's blocking (451 T403): over
+/// 2026-11-26T17:00Z to 2026-11-27T01:00Z the second tier booked 27.6 of its 146.9 blocking minutes so, its turns ended on a question
+/// to the GM between a task's carry and its landing. Here the session stops after its `make quick` and the GM answers 8 s later.
+#[test]
+fn the_session_waiting_on_the_gm_inside_a_batch_is_the_gm_s_row() {
+    let more = [
+        line("02:31", "Stop", &json!({})),
+        line("02:39", "UserPromptSubmit", &json!({})),
+    ];
+    let (d, root) = world_with("task-time-tier-gm", &more);
+    let out = report(&d, &root, &at("00:00")).stdout;
+    let window = &out[..out.find("## The landed tasks").unwrap()];
+    let tier =
+        &out[out.find("## The second tier").unwrap()..out.find("## The biggest blocking").unwrap()];
+    has(
+        window,
+        &[
+            "| the GM | 0.0 | 0.0% | 0.1 | ",
+            "Waiting on the GM: 0.1 min blocking",
+        ],
+    );
+    assert!(!tier.contains("| the GM |"), "{tier}");
+    has(
+        tier,
+        &["only the session's own work: its time stopped waiting on the GM is the GM's row"],
+    );
+}
