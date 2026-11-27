@@ -77,7 +77,8 @@ pub(crate) enum Said {
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     // a suite names its clone; a session's is the one it resolves to
     let root = crate::shared::env::opt("POOL_IDLE_ROOT").map(std::path::PathBuf::from);
-    let clone = root.as_deref().or_else(|| session.clone_dir());
+    // (said eagerly: the suites always name their clone, so a closure here is a line no test reaches)
+    let clone = root.as_deref().or(session.clone_dir());
     let said = judge(&event.input, clone, builder_queue::builders());
     let log = |kind: &str, detail: &str, rule: &str| {
         fire("pool-idle", kind, detail, rule, &event.input, session);

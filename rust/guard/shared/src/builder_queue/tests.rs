@@ -443,10 +443,7 @@ fn no_pool_no_free_tree_no_ready_entry_and_an_unread_queue_are_not_idle() {
     put(&clone.join("specs/269-pages/queue.txt"), "/c/w.md then:x\n");
     put(&clone.join("specs/280-pages/queue.txt"), "/c/v.md then:y\n");
     let why = format!("{:?}", idle(&clone, 3));
-    assert!(
-        why.starts_with("Unread(\"specs/269-pages/queue.txt line 1: "),
-        "{why}"
-    );
+    assert!(why.starts_with("Unread(\"specs/269-pages/queue.txt line 1: "));
 }
 
 /// FR-013 (the GM 2026-11-20) under SC-006: among the READY entries that overlap nothing in flight, an open performance task's
@@ -618,10 +615,7 @@ fn an_open_performance_task_with_no_queue_line_is_named_with_the_command_that_wr
     );
     assert!(names("").is_empty());
     let said = format!("{:?}", idle(&clone, 3));
-    assert!(
-        said.contains("tasks: \"451 T7\"") && said.contains("unlisted: []"),
-        "{said}"
-    );
+    assert!(said.contains("tasks: \"451 T7\"") && said.contains("unlisted: []"));
     // a queue file that is no builders' queue names none of its feature's tasks; with none listed and nothing READY: quiet
     put(&clone.join("specs/451-x/queue.txt"), "/c/w.md then:x\n");
     assert!(names("").is_empty());
