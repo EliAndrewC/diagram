@@ -229,3 +229,13 @@ fn a_line_that_is_not_utf8_costs_only_itself() {
     let (olds, parsed) = replaced(std::fs::File::open(&log).unwrap(), &p, CHUNK);
     assert_eq!((olds, parsed), (vec![json!("A")], 1));
 }
+
+#[test]
+fn a_line_holding_the_search_text_twice_is_handed_over_once() {
+    let key = memchr::memmem::Finder::new(b"Edit").into_owned();
+    let mut seen = Vec::new();
+    super::lines(&key, b"Edit Edit\nnone\nEdit\n", true, &mut |l, _| {
+        seen.push(l.to_vec());
+    });
+    assert_eq!(seen, [b"Edit Edit".to_vec(), b"Edit".to_vec()]);
+}

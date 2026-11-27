@@ -963,8 +963,5 @@ fn two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own(
     );
     let name = task_one.file_name().unwrap().to_string_lossy().into_owned();
     let hex = name.strip_prefix("plan-999-x-T02-").unwrap();
-    assert!(
-        hex.len() == 8 && hex.chars().all(|c| c.is_ascii_hexdigit()),
-        "{name}"
-    );
+    assert!(hex.len() == 8 && hex.chars().all(|c| c.is_ascii_hexdigit()));
 }

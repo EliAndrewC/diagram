@@ -308,9 +308,7 @@ fn the_command_reads_the_clone_and_writes_the_run_s_files() {
                 "judged as T5's: 1 of the clone's 1 uncommitted files (1 its own edits name"
             )
         ),
-        (0, true),
-        "{}",
-        got.stdout
+        (0, true)
     );
     assert_eq!(
         std::fs::read_to_string(out.join("caller-files")).unwrap(),

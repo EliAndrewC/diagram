@@ -81,10 +81,7 @@ fn a_scratch_slot_wait_is_booked_to_no_category_and_counted() {
     let said = "waits on a scratch slot directory (451 T426): 2 (1.5 min), booked to no category";
     assert!(text.contains(said), "{text}");
     // every second of the runs in the minutes: the real wait in its column, the scratch holds in the bucket
-    assert!(
-        text.contains("| T9 | 2 | 7.0 | 5.8 | 0.8 | 0.4 |"),
-        "{text}"
-    );
+    assert!(text.contains("| T9 | 2 | 7.0 | 5.8 | 0.8 | 0.4 |"));
 }
 
 #[test]

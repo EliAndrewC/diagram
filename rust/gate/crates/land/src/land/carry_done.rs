@@ -42,14 +42,9 @@ impl Land {
                 self.pass_through(&said);
                 let short: String = sha.chars().take(10).collect();
                 if said.code != 0 {
-                    let before = if carried.is_empty() {
-                        String::new()
-                    } else {
-                        format!(
-                            "; carried before it, in HEAD and verified: {}",
-                            carried.join(", ")
-                        )
-                    };
+                    let before = Some(carried.join(", "))
+                        .filter(|c| !c.is_empty())
+                        .map_or_else(String::new, |c| format!("; carried before it, in HEAD and verified: {c}"));
                     self.warn(&format!(
                         "land: refused before anything ran - nothing landed, nothing ticked: the done commit {short} ({}) did not carry (the carry's lines above){before}. Finish it by hand - what the carry names above, then `make carry COMMIT={sha}`, which verifies it and ends its wait - then make land again",
                         refs.join(", ")

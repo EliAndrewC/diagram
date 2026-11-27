@@ -410,3 +410,11 @@ fn the_build_parses_only_a_line_holding_both_the_tool_and_the_event_as_text() {
     let (_d, log) = world("screen", &text);
     assert_eq!(ask(&log, &p), parse_all(&text, &p));
 }
+
+#[test]
+fn a_parsed_line_that_is_no_pre_tool_use_edit_makes_no_row() {
+    let mut rows = Vec::new();
+    let line = br#"{"ev":"PostToolUse","tool":"Edit","path":"/c/a.md","note":"PreToolUse"}"#;
+    assert!(super::indexed(line, &mut rows));
+    assert!(rows.is_empty());
+}

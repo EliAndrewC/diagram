@@ -269,7 +269,7 @@ fn each_reach_rule_fires_on_a_file_that_breaks_it() {
         ("use l7r_shared::regex;", "use l7r_shared::regex"),
         ("use fancy_regex::Regex;", "use fancy_regex::Regex"),
         (
-            "fn f() { fancy_regex::Regex::new(\"\") }",
+            "fn f() { fancy_regex::escape(\"\") }",
             "the path fancy_regex::",
         ),
         ("mod other;", "mod, a file outside the set"),
@@ -296,7 +296,7 @@ fn each_reach_rule_fires_on_a_file_that_breaks_it() {
             "the path l7r_shared::",
         ),
         (
-            "fn f() { ::fancy_regex::Regex::new(\"\") }",
+            "fn f() { ::fancy_regex::escape(\"\") }",
             "a path from the crate root ::",
         ),
         (

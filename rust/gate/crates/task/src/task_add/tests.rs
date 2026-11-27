@@ -711,3 +711,10 @@ fn two_worktrees_filing_at_once_take_two_ids_each_in_its_own_tree() {
     assert_eq!(own_lines(&root, "T11", "the second tree's"), (0, 0));
     assert_eq!(own_lines(&other, "T10", "the first tree's"), (0, 0));
 }
+
+/// The production entry, which reads the process's environment: a call with no feature is refused before anything is written.
+#[test]
+fn the_entry_refuses_a_call_with_no_feature() {
+    let d = std::env::temp_dir();
+    assert_ne!(super::cli(&[], &d, "").code, 0);
+}

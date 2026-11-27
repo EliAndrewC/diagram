@@ -58,28 +58,17 @@ fn trees_of_different_content_keep_each_others_traces() {
     stamp(&root, &gitdir, "g", "kb", 2, &log, &root);
     assert_eq!(fresh_now(), [at("g", "kb")]);
     std::fs::write(root.join("a.sh"), "one\n").unwrap();
-    assert_eq!(
-        fresh_now(),
-        [at("g", "ka")],
-        "the first tree's trace was kept beside the second's"
-    );
+    assert_eq!(fresh_now(), [at("g", "ka")]);
     std::fs::write(root.join("a.sh"), "a third\n").unwrap();
     std::thread::sleep(std::time::Duration::from_millis(20));
     stamp(&root, &gitdir, "g", "kc", 2, &log, &root);
     assert!(!trace_file(&gitdir, "g", "ka").exists() && trace_file(&gitdir, "g", "kb").exists());
     std::fs::write(root.join("a.sh"), "one\n").unwrap();
-    assert!(
-        fresh_now().is_empty(),
-        "past the bound, the oldest key reruns"
-    );
+    assert!(fresh_now().is_empty());
     std::fs::write(gitdir.join("hooks-test/traces/g@kd.json"), "not json").unwrap();
     std::fs::write(gitdir.join("hooks-test/traces/g@notes.txt"), "").unwrap();
     std::fs::write(root.join("a.sh"), "the other tree's\n").unwrap();
-    assert_eq!(
-        fresh_now(),
-        [at("g", "kb")],
-        "an unreadable trace is never fresh, a stray file no trace"
-    );
+    assert_eq!(fresh_now(), [at("g", "kb")]);
 }
 
 #[test]

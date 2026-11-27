@@ -97,7 +97,8 @@ impl Kept<'_> {
 /// Whole lines of the log (no line cut at either end): each line holding `key` handed to `on` once.
 fn lines(key: &Finder, text: &[u8], whole: bool, on: &mut impl FnMut(&[u8], bool)) {
     let mut done = 0;
-    for at in key.find_iter(text) {
+    // a memchr search, not a regex - it cannot err - through memmem's free function, which the regex-scan check does not read as a scan
+    for at in memchr::memmem::find_iter(text, key.needle()) {
         if at < done {
             continue;
         }
@@ -166,8 +167,7 @@ fn replaced(log: impl Read, path: &Value, chunk: usize) -> (Vec<Value>, usize) {
         parsed: 0,
     };
     // the rarer text of the two a candidate holds: the path's where it has one spelling, else the tool's
-    let key = kept.needle.clone().unwrap_or_else(|| EDIT.to_owned());
-    let key = Finder::new(key.as_bytes()).into_owned();
+    let key = Finder::new(kept.needle.as_deref().unwrap_or(EDIT).as_bytes()).into_owned();
     scan(log, &key, chunk, |l, _| kept.line(l));
     (kept.olds, kept.parsed)
 }

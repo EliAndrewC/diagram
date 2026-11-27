@@ -148,7 +148,7 @@ fn another_tree_s_mark_is_refused_and_a_phase_hold_is_lifted() {
 /// and once.
 fn holders(common: &std::path::Path, task: &str) -> (Vec<String>, Vec<String>) {
     let resolved = |t: &str| {
-        std::fs::canonicalize(t).map_or_else(|_| t.to_owned(), |p| p.to_string_lossy().into_owned())
+        std::fs::canonicalize(t).map_or(t.to_owned(), |p| p.to_string_lossy().into_owned())
     };
     let mut marked: Vec<String> = marks::all(common)
         .iter()
