@@ -1,0 +1,76 @@
+## hook PreToolUse Bash	exit 0	wall median 12 ms (n=5, min 9, max 12)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  write outside scratch: /tmp/claude-batching/t536-copy-session.state3 x1
+  output head: 
+## hook PostToolUse Bash	exit 0	wall median 4 ms (n=5, min 4, max 4)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  write outside scratch: /tmp/claude-batching/t536-copy-session.state3 x1
+  output head: 
+## hook PreToolUse Edit plan.md	exit 0	wall median 6 ms (n=5, min 6, max 7)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  specs/451/plan.md	280,580 bytes	1 read calls	1 process(es)
+  output head: 
+## hook PostToolUse Edit plan.md	exit 0	wall median 3 ms (n=5, min 3, max 4)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  output head: 
+## hook PreToolUse Agent plan review	exit 0	wall median 70 ms (n=5, min 68, max 75)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  specs/451/plan-review.json	5,026,023 bytes	1 read calls	1 process(es)
+  write outside scratch: /home/agent/.claude/guard-log/<stamp>.json.tmp x2
+  output head: 
+## hook SubagentStart	exit 0	wall median 10 ms (n=5, min 9, max 12)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  output head: 
+## hook SessionStart	exit 0	wall median 6 ms (n=5, min 5, max 6)
+  (none of 451's records read)
+  output head: 
+## hook UserPromptSubmit	exit 0	wall median 25 ms (n=5, min 23, max 29)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  write outside scratch: /home/agent/.claude/guard-log/<stamp>.json.tmp x1
+  write outside scratch: /home/agent/.claude/scratch-sweep/lock x1
+  write outside scratch: /home/agent/.claude/scratch-sweep/seen/t536-copy-session x1
+  write outside scratch: /home/agent/.claude/scratch-sweep/stamp x1
+  output head: clone-sync: this session's name does not resolve (no /rename record in its transcript and no entry for it under /home/agent/.claude/sessions), so it has NO valid clone name. Read-only work is fine. If you are going to modify this repo, ask 
+## hook Stop	exit 0	wall median 28 ms (n=5, min 24, max 33)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	1 process(es)
+  output head: 
+## make plan-section T=T536	exit 0	wall median 9 ms (n=5, min 9, max 12)
+  specs/451/plan.md	280,580 bytes	1 read calls	1 process(es)
+  output head: ==> T536 (plan.md) | ### T536 (<why: the finding or measurement that files it>)
+## make decide F=451 T=T536	exit 2	wall median 209 ms (n=5, min 203, max 223)
+  specs/451/plan.md	841,740 bytes	3 read calls	1 process(es)
+  specs/451/request.md	118,094 bytes	2 read calls	1 process(es)
+  specs/451/research.md	35,520 bytes	2 read calls	1 process(es)
+  specs/451/spec.md	113,238 bytes	6 read calls	1 process(es)
+  specs/451/tasks-done.md	3,004,035 bytes	5 read calls	1 process(es)
+  specs/451/tasks.md	217,524 bytes	6 read calls	1 process(es)
+  output head: decide: refused - 1 finding - every one of the section's, reported together: fix them all, then run it once more | (1) T536's Approach block leaves part A item(s) 12 unanswered (feature 385 D8)
+## make plan-delta F=451	exit 0	wall median 2619 ms (n=5, min 2522, max 3242)
+  specs/451/plan-done.md	40,017,934 bytes	11 read calls	1 process(es)
+  specs/451/plan-review.json	10,052,046 bytes	2 read calls	1 process(es)
+  specs/451/plan.md	1,402,900 bytes	5 read calls	1 process(es)
+  specs/451/request.md	177,141 bytes	3 read calls	1 process(es)
+  specs/451/research.md	35,520 bytes	2 read calls	1 process(es)
+  specs/451/spec.md	132,111 bytes	7 read calls	1 process(es)
+  specs/451/tasks-done.md	3,004,035 bytes	5 read calls	1 process(es)
+  specs/451/tasks.md	217,524 bytes	6 read calls	1 process(es)
+  write outside scratch: /home/agent/.claude/guard-log/<stamp>.json.tmp x870
+  write outside scratch: /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-T532-<hash>/<bundle file> x8
+  output head: MODE 4: PLAN REVIEW of 19 changed block(s) of feature 451-time-retro-and-efficiency's plan (feature 375 FR-043), on their bundle: read /tmp/l7r-check/plan-451-time-retro-and-efficiency-blocks-T532-9e0001c0/MANIFEST.md and the files beside i
+## make queue F=451	exit 0	wall median 27 ms (n=5, min 23, max 68)
+  specs/451/plan.md	280,580 bytes	1 read calls	1 process(es)
+  specs/451/queue.txt	11,082 bytes	1 read calls	1 process(es)
+  specs/451/spec.md	18,873 bytes	1 read calls	1 process(es)
+  specs/451/tasks-done.md	600,807 bytes	1 read calls	1 process(es)
+  specs/451/tasks.md	108,762 bytes	3 read calls	1 process(es)
+  output head: queue: specs/451-time-retro-and-efficiency/queue.txt - 61 entries: 61 landed, 0 built, 0 in flight, 0 waiting, 0 READY |   line  14  T321           build-half    landed
+## make builder-next F=451	exit 0	wall median 31 ms (n=5, min 29, max 33)
+  specs/451/plan.md	280,580 bytes	1 read calls	1 process(es)
+  specs/451/queue.txt	11,082 bytes	1 read calls	1 process(es)
+  specs/451/spec.md	18,873 bytes	1 read calls	1 process(es)
+  specs/451/tasks-done.md	600,807 bytes	1 read calls	1 process(es)
+  specs/451/tasks.md	108,762 bytes	3 read calls	1 process(es)
+  output head: builder-next: no entry of specs/451-time-retro-and-efficiency/queue.txt to hand out - the queue is empty: each entry is landed, built or in flight | builder-next: 0 of 3 builders in flight (L7R_BUILDERS), 0 pool tree(s) free
+## speckit-todo --holding (the push)	exit 0	wall median 12 ms (n=5, min 11, max 19)
+  (none of 451's records read)
+  output head: 

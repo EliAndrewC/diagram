@@ -1,0 +1,285 @@
+tasks-done.md	rust/guard/shared/src/tree.rs:202	-	let text = joined(&text);
+tasks-done.md	rust/guard/shared/src/tree.rs:208	-	fn joined(text: &str) -> String {
+tasks-done.md	rust/guard/shared/src/tree.rs:390	-	let text = joined(&if cmd.contains("<<") {
+tasks-done.md	rust/guard/shared/src/builder_queue.rs:549	read-near	let tasks = read("tasks.md") + "\n" + &read("tasks-done.md");
+event log	rust/guard/shared/src/builder_queue.rs:569	read-near	let log = std::fs::read_to_string(common.join(LOG)).unwrap_or_default();
+event log	rust/guard/shared/src/attempts.rs:84	-	let path = base(root).join(LOG);
+event log	rust/guard/shared/src/attempts.rs:316	read-near	for x in read(root, LOG)? {
+event log	rust/guard/shared/src/attempts.rs:447	read-near	for x in read(root, LOG)? {
+event log	rust/guard/shared/src/attempts.rs:587	read-near	let lines = read(root, LOG)?;
+event log	rust/guard/shared/src/speckit.rs:194	read-near	fn text_if_file(path: &Path) -> Result<String, String> {
+event log	rust/guard/shared/src/speckit.rs:356	read-near	let text = text_if_file(&spec)?;
+event log	rust/guard/shared/src/speckit.rs:440	read-near	let text = text_if_file(&d.join("spec.md"))?;
+event log	rust/guard/shared/src/speckit.rs:500	read-near	let text = text_if_file(&d.join("gm-review.jsonl"))?;
+event log	rust/guard/shared/src/speckit.rs:632	-	.map_or_else(|| common.join("l7r-events"), PathBuf::from);
+plan-review.json	rust/guard/shared/src/speckit/touch.rs:14	-	pub const SECTIONED: [&str; 3] = ["plan.md", "tasks.md", "plan-review.json"];
+event log	rust/guard/shared/src/speckit/touch.rs:146	-	for (task, at, path) in edit_lines(events, feature) {
+event log	rust/guard/shared/src/speckit/touch.rs:173	read-near	pub fn edit_lines(events: &Path, feature: &str) -> Vec<(String, (f64, String), String)> {
+tasks-done.md	rust/guard/shared/src/speckit/tasks.rs:35	-	pub const DONE: &str = "tasks-done.md";
+tasks-done.md	rust/guard/shared/src/speckit/tasks.rs:37	-	pub const POINTER: &str = "Ticked tasks are archived in `tasks-done.md` (feature 449 T142): `make tick` moves each ticked task there with its lines; t
+event log	rust/guard/shared/src/speckit/tasks.rs:43	read-near	fn text_if_file(path: &Path) -> Result<String, String> {
+event log	rust/guard/shared/src/speckit/tasks.rs:56	read-near	text_if_file(&d.join(DONE))
+tasks-done.md	rust/guard/shared/src/speckit/tasks.rs:62	-	pub fn joined(open: &str, done: &str) -> String {
+tasks-done.md	rust/guard/shared/src/speckit/tasks.rs:79	read-near	Ok(joined(&text_if_file(&d.join(OPEN))?, &done_text(d)?))
+event log	rust/guard/shared/src/speckit/tasks.rs:79	read-near	Ok(joined(&text_if_file(&d.join(OPEN))?, &done_text(d)?))
+event log	rust/guard/shared/src/checks/passes.rs:158	read-near	let log = git_dir.join(PASS_LOG);
+tasks-done.md	rust/guard/shared/src/guards/feature_approval_hooks.rs:241	read-near	let tasks = crate::speckit::tasks::joined(&show("tasks.md"), &show("tasks-done.md"));
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:630	-	pub fn log_path(root: &Path, feature: &str) -> PathBuf {
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:631	-	log_path_in(root, feature, &crate::env::opt)
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:636	-	pub fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:639	-	.map_or_else(|| common_git_dir(root).join("l7r-events"), PathBuf::from);
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:709	-	let log = log_path_in(&root, &to.feature, env);
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:731	-	let path = log_path_in(&root, &to.feature, env);
+event log	rust/guard/shared/src/guards/event_log_hooks.rs:965	-	write_line(&log_path_in(root, &to.feature, env), row)
+event log	rust/guard/shared/src/guards/set_down_hooks.rs:348	-	fn landings(root: &Path, feature: &str) -> Result<HashMap<String, i64>, String> {
+event log	rust/guard/shared/src/guards/set_down_hooks.rs:349	-	let log = super::event_log_hooks::log_path(root, feature);
+event log	rust/guard/shared/src/guards/set_down_hooks.rs:429	-	lands.insert(feature.to_owned(), landings(root, feature)?);
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:117	-	fn joined(base: &str, tail: &str) -> String {
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:132	-	Some(joined(repo, tail.strip_suffix('\'')?))
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:141	-	.map(|p| joined(repo, p))
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:150	-	.map(|p| joined(repo, p)),
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:172	-	.map(|l| joined(repo, l.get(3..).unwrap_or(""))),
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:193	-	here = joined(&here, &toks[1]);
+tasks-done.md	rust/guard/shared/src/guards/conflict_marker_hooks.rs:203	-	repo = joined(&here, &rest[1]);
+event log	rust/guard/shared/src/guards/event_log_hooks/filed.rs:466	-	let events = log_path_in(root, "", env);
+event log	rust/guard/shared/src/guards/set_down_hooks/stalls.rs:124	-	let landed = landings(root, &feature).unwrap_or_default();
+event log	rust/guard/src/guards/finished_run_hooks.rs:351	-	let logs = crate::guards::event_log_hooks::log_path(clone, "_");
+plan-review.json	rust/guard/src/guards/review_round_hooks.rs:505	-	block_reviews(&feature_dir.join("plan-review.json")).as_ref(),
+plan-review.json	rust/guard/src/guards/review_round_hooks.rs:576	-	let doc = block_reviews(&dir.join("plan-review.json"));
+tasks-done.md	rust/guard/src/guards/phase_source_hooks.rs:258	-	parked::write_hits(path, &joined("new_string"), &joined("old_string"))
+event log	rust/guard/src/guards/static_runs_hooks/order.rs:145	-	let landed = landings(lines);
+event log	rust/guard/src/guards/static_runs_hooks/order.rs:229	-	fn landings(lines: &[Value]) -> HashMap<&str, usize> {
+event log	rust/gate/crates/research/src/source_pages.rs:62	read-near	for x in attempts::read(root, attempts::LOG).map_err(fault)? {
+event log	rust/gate/crates/cohort/src/cohort.rs:364	read-near	let mut names: Vec<_> = std::fs::read_dir(root.join(LOG))
+event log	rust/gate/crates/cohort/src/cohort.rs:458	read-near	let mut names: Vec<_> = std::fs::read_dir(repo.root.join(RUST_LOG))
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:143	-	fn joined(v: &Value) -> String {
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:174	-	let _ = write!(out, " - seeds {}", joined(&f["seeds"]));
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:187	-	let changes = joined(&s["changes"]);
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:199	-	joined(&f["seeds"]),
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:200	-	joined(&f["changes"])
+tasks-done.md	rust/gate/crates/cohort/src/cohort/seeds.rs:213	-	let _ = write!(out, " (and the pinned rows for {})", joined(&s[only]));
+event log	rust/gate/crates/cohort/src/speckit_todo/report.rs:179	read-near	let newest = std::fs::read_dir(clone.join(".git/l7r-events"))
+plan-review.json	rust/gate/crates/cohort/src/speckit_todo/work_budget_view.rs:16	-	const RECORD: &str = "dev/work-budget.md";
+plan-review.json	rust/gate/crates/cohort/src/speckit_todo/work_budget_view.rs:159	-	let path = root.join(RECORD);
+event log	rust/gate/crates/reviews/src/reviews/checkpoint.rs:96	-	let Some(path) = gitdir(root).map(|g| g.join("l7r-events").join(format!("{feature}.jsonl")))
+tasks-done.md	rust/gate/crates/reviews/src/reviews/gm_review.rs:344	-	fn joined(parts: &[Value]) -> R<String> {
+tasks-done.md	rust/gate/crates/reviews/src/reviews/gm_review.rs:377	-	joined(&[
+event log	rust/gate/crates/reviews/src/reviews/glyph.rs:68	read-near	.join("l7r-events")
+event log	rust/gate/crates/reviews/src/reviews/ledger_passes.rs:104	-	resolve(&self.at(if out.is_empty() { ".git" } else { &out })).join(LOG)
+plan-review.json	rust/gate/crates/reviews/src/reviews/ledger_passes/rows.rs:242	read-near	let path = repo.join("specs").join(feature).join("plan-review.json");
+plan-review.json	rust/gate/crates/reviews/src/reviews/owed/deferred.rs:33	-	pub const RECORD: &str = "dev/deferred-reviews.jsonl";
+plan-review.json	rust/gate/crates/reviews/src/reviews/owed/deferred.rs:41	read-near	std::fs::read_to_string(root.join(RECORD))
+plan-review.json	rust/gate/crates/reviews/src/reviews/owed/deferred.rs:207	-	let path = root.join(RECORD);
+plan-review.json	rust/gate/crates/reviews/src/reviews/owed/deferred.rs:219	-	write().map_err(|e| format!("{RECORD}: {e}"))
+tasks-done.md	rust/gate/crates/reviews/src/reviews/owed/declared.rs:601	-	if ["tasks.md", "tasks-done.md"]
+plan-review.json	rust/gate/crates/record/src/record/stale_terms.rs:26	-	"plan-review.json",
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:25	-	const RECORD: &str = "research";
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:76	-	let qdir = root.join(RECORD).join(QUESTIONS);
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:124	-	let qdir = root.join(RECORD).join(QUESTIONS);
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:128	-	format!("{RECORD}/{QUESTIONS}/{}{suffix}.html", m.old),
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:129	-	format!("{RECORD}/{QUESTIONS}/{}{suffix}.html", m.new),
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:157	-	let record = root.join(RECORD);
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:195	-	changed.push(format!("{RECORD}/{QUESTIONS}/{file}"));
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:200	-	changed.push(format!("{RECORD}/confusables.json"));
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:210	-	changed.push(format!("{RECORD}/moved-303.json"));
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:248	-	r"\b{RECORD}/{QUESTIONS}/{}(?=(?:\.drawing)?(?:\.notes|\.originals)?\.html)",
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:251	-	let aimed = format!("{RECORD}/{QUESTIONS}/{new}");
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:315	-	let q = root.join(RECORD).join(QUESTIONS);
+plan-review.json	rust/gate/crates/record/src/record/fragment_move.rs:382	-	let q = root.join(RECORD).join(QUESTIONS);
+plan-review.json	rust/gate/crates/record/src/record/apply_edits.rs:29	-	const RECORD: &str = "research/";
+plan-review.json	rust/gate/crates/record/src/record/apply_edits.rs:33	-	const ROOTS: [&str; 4] = [RECORD, MODALS, SHEET_MODALS, MODAL_FILES];
+plan-review.json	rust/gate/crates/record/src/record/apply_edits.rs:260	-	"REFUSED - {path} is not under {RECORD}, {MODAL_FILES}, {MODALS} or {SHEET_MODALS}"
+tasks-done.md	rust/gate/crates/record/src/record/apply_edits/round.rs:162	-	fn joined(&self) -> String {
+tasks-done.md	rust/gate/crates/record/src/record/apply_edits/round.rs:177	-	self.joined()
+tasks-done.md	rust/gate/crates/record/src/record/apply_edits/round.rs:242	-	out.push(format!("  {slug}: settled with its answer - the {} round's blocks alone moved it (it runs before them)", self.joined()));
+tasks-done.md	rust/gate/crates/record/src/record/apply_edits/round.rs:390	-	rnd.joined(),
+tasks-done.md	rust/gate/crates/archive/src/ops/find.rs:28	-	fn joined(base: &Path, rel: &str) -> String {
+tasks-done.md	rust/gate/crates/archive/src/ops/find.rs:77	-	|p| joined(&store.dir, &py_str(p)),
+tasks-done.md	rust/gate/crates/archive/src/ops/find.rs:90	-	let _ = writeln!(out, "  the GM's copy: {}", joined(&store.dir, &gm));
+tasks-done.md	rust/gate/crates/archive/src/ops/find.rs:163	-	joined(&store.dir, &py_str(a))
+tasks-done.md	rust/gate/crates/archive/src/ops/find.rs:201	-	.map(|r| Ok((joined(&store.dir, &field(r, "path")?), field(r, "url")?)))
+plan-done.md	rust/gate/crates/arbiter/src/arbiter.rs:764	-	return "arbiter-ruled: 0 plan block(s) recorded CLEAR - the task the question names has no section in plan.md (archived to plan-done.md, or not this f
+plan-review.json	rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs:40	-	let review = object(&d.join("plan-review.json"));
+plan-review.json	rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs:52	-	"## The plan review's rounds\n\n- (none recorded in plan-review.json)\n".to_owned(),
+event log	rust/gate/crates/arbiter/src/arbiter/bundle/sections.rs:300	-	log_path_in(
+event log	rust/gate/crates/land/src/land/ready.rs:175	-	.map_or_else(|| common.join("l7r-events"), PathBuf::from);
+tasks-done.md	rust/gate/crates/land/src/land/writers.rs:168	-	&format!("{rel}/tasks-done.md"),
+plan-done.md	rust/gate/crates/land/src/land/writers.rs:169	-	&format!("{rel}/plan-done.md"),
+plan-review.json	rust/gate/crates/land/src/land/carry.rs:263	-	const RECORD: &str = "plan-review.json";
+plan-review.json	rust/gate/crates/land/src/land/carry.rs:275	read-near	let plan = format!("{}plan.md", path.strip_suffix(RECORD)?);
+plan-review.json	rust/gate/crates/land/src/land/carry.rs:291	-	let named = ["tasks.md", "plan.md", "request.md", "plan-review.json"]
+plan-review.json	rust/gate/crates/land/src/land/carry.rs:368	-	.map(|p| (!spec_file(p, RECORD)).then(|| resolved(root, &scratch, p, None)))
+event log	rust/gate/crates/measure/src/preflight.rs:162	-	old.is_none() && path.starts_with(COHORT_LOG) && crate::checks::has_ext(path, "json")
+event log	rust/gate/crates/measure/src/measure/tool_yield.rs:364	-	let mut logs = ending(&d.join("l7r-events"), ".jsonl");
+plan-review.json	rust/gate/crates/measure/src/measure/turn_time.rs:274	-	format!("usage: l7r-gate measure turn-time [--record RECORD] [--key KEY] transcript\nl7r-gate measure turn-time: error: {why}\n"),
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report.rs:89	-	fn joined(t: &Tally<String>) -> String {
+event log	rust/gate/crates/measure/src/measure/feature_report.rs:171	read-near	let spec_text = super::events::text_if_file(&d.join("spec.md"))?;
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report.rs:334	-	format!("- gates: {}", none(joined(&g))),
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report.rs:335	-	format!("- spec rounds: {}", none(joined(&spec_rounds(&spec_text)))),
+event log	rust/gate/crates/measure/src/measure/feature_report.rs:445	read-near	let plan_text = super::events::text_if_file(&d.join("plan.md"))?;
+event log	rust/gate/crates/measure/src/measure/task_time.rs:56	-	let dir = common_git_dir(&base).join("l7r-events");
+event log	rust/gate/crates/measure/src/measure/events.rs:339	read-near	pub fn text_if_file(path: &Path) -> Result<String, Raised> {
+event log	rust/gate/crates/measure/src/measure/events.rs:388	-	.join("l7r-events")
+event log	rust/gate/crates/measure/src/measure/events.rs:433	-	let dir = common_git_dir(base).join("l7r-events");
+plan-review.json	rust/gate/crates/measure/src/measure/where_time.rs:82	-	const RECORD: [&str; 9] = [
+plan-review.json	rust/gate/crates/measure/src/measure/where_time.rs:126	-	if (cat.starts_with("waiting: ") && RECORD.iter().any(|r| cat.contains(r)))
+event log	rust/gate/crates/measure/src/measure/where_time.rs:593	read-near	let text = l7r_shared::speckit::marks::live_starts(&super::events::text_if_file(&path)?);
+tasks-done.md	rust/gate/crates/measure/src/measure/where_time.rs:778	-	let done = format!("specs/{name}/tasks-done.md");
+event log	rust/gate/crates/measure/src/measure/sampler.rs:46	-	pub const DIR: &str = "l7r-events/samples";
+event log	rust/gate/crates/measure/src/measure/sampler.rs:270	-	&dir.join(LOG),
+event log	rust/gate/crates/measure/src/measure/sampler.rs:296	-	&dir.join(LOG),
+event log	rust/gate/crates/measure/src/measure/sampler.rs:387	-	&env.common.join(DIR).join(LOG),
+event log	rust/gate/crates/measure/src/measure/sampler.rs:406	read-near	let log = read(&env.common.join(DIR).join(LOG));
+event log	rust/gate/crates/measure/src/measure/stepback_bundle.rs:406	-	Some(g) if g.join("l7r-events").is_dir() => {
+event log	rust/gate/crates/measure/src/measure/stepback_bundle.rs:408	-	l7r_gate_core::measure::tool_inventory::ending(&g.join("l7r-events"), ".jsonl");
+event log	rust/gate/crates/measure/src/measure/stepback_bundle.rs:499	-	Some(g) => lines(&g.join("l7r-events").join(format!("{feature}.jsonl")))?,
+plan-review.json	rust/gate/crates/measure/src/measure/feature_report/sources.rs:223	-	let file = format!("specs/{name}/plan-review.json");
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report/sources.rs:241	read-near	let text = l7r_shared::speckit::tasks::joined(
+event log	rust/gate/crates/measure/src/measure/feature_report/sources.rs:242	read-near	&super::super::events::text_if_file(&d.join("tasks.md"))?,
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report/sources.rs:243	read-near	&super::super::events::text_if_file(&d.join("tasks-done.md"))?,
+event log	rust/gate/crates/measure/src/measure/feature_report/sources.rs:243	read-near	&super::super::events::text_if_file(&d.join("tasks-done.md"))?,
+event log	rust/gate/crates/measure/src/measure/feature_report/sources.rs:268	read-near	let text = l7r_shared::speckit::marks::live_starts(&super::super::events::text_if_file(&path)?);
+tasks-done.md	rust/gate/crates/measure/src/measure/feature_report/sources.rs:308	-	&format!("specs/{name}/tasks-done.md"),
+event log	rust/gate/crates/measure/src/measure/event_log/refile.rs:94	-	l7r_shared::guards::event_log_hooks::log_path_in(&root, "x", env)
+event log	rust/gate/crates/measure/src/measure/task_time/asked.rs:22	-	common_git_dir(root).join("l7r-events/task-time-asked.log")
+event log	rust/gate/crates/measure/src/measure/task_time/progress.rs:344	-	fn landings(
+event log	rust/gate/crates/measure/src/measure/task_time/progress.rs:619	-	landings(&read, &scene, &takes, &mut view)?;
+plan-review.json	rust/gate/crates/measure/src/measure/task_time/book/cats.rs:33	-	pub const RECORD: &str = "record and pop-up checks: agents";
+plan-review.json	rust/gate/crates/measure/src/measure/task_time/book/cats.rs:67	-	"modal-triage" | "source-filter" | "size-exception" => RECORD,
+plan-review.json	rust/gate/crates/measure/src/measure/task_time/book/cats.rs:75	-	"record check" => RECORD,
+event log	rust/gate/crates/measure/src/measure/audit/runs.rs:31	-	Some(common_git_dir(base)?.join("l7r-events")).filter(|d| d.is_dir())
+tasks-done.md	rust/gate/crates/trials/src/record/agent_census.rs:175	-	fn joined(counts: &Counts) -> String {
+tasks-done.md	rust/gate/crates/trials/src/record/agent_census.rs:209	-	joined(&r.models)
+tasks-done.md	rust/gate/crates/trials/src/record/agent_census.rs:216	-	let ran = joined(&ad.inherited);
+event log	rust/gate/crates/trials/src/measure/budget_change.rs:93	-	let path = root.join(LOG);
+plan-review.json	rust/gate/crates/registry/src/open_questions.rs:522	-	"GUESSES MARKED OUTSIDE THE RECORD".to_owned(),
+plan-review.json	rust/gate/crates/checks/src/checks/research_pointers.rs:14	-	const RECORD: &str = "research";
+plan-review.json	rust/gate/crates/checks/src/checks/research_pointers.rs:424	-	|| path.ends_with("/plan-review.json")
+plan-review.json	rust/gate/crates/checks/src/checks/research_pointers.rs:470	-	let record = root.join(RECORD);
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:13	-	const RECORD: &str = "research";
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:70	-	let mut names = git_text(root, &["diff", "--name-only", against, "--", RECORD]);
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:73	-	&["ls-files", "--others", "--exclude-standard", "--", RECORD],
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:87	read-near	let mut found: Vec<PathBuf> = std::fs::read_dir(root.join(RECORD).join("questions"))
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:98	-	"{RECORD}/questions/{}",
+plan-review.json	rust/gate/crates/checks/src/checks/question_size.rs:148	-	let dir = root.join(RECORD).join("questions");
+tasks-done.md	rust/gate/crates/checks/src/checks/spec_lint.rs:425	-	let done = spec_dir.join("tasks-done.md");
+tasks-done.md	rust/gate/crates/checks/src/checks/guard_deps/feature_sets.rs:47	-	fn joined(dir: &str, path: &str) -> String {
+tasks-done.md	rust/gate/crates/checks/src/checks/guard_deps/feature_sets.rs:103	-	out.deps.push((joined(dir, path), features, dev));
+plan-review.json	rust/gate/crates/checks/src/checks/question_size/limits.rs:13	-	pub(super) const RECORD: &str = "research/size-limits.json";
+plan-review.json	rust/gate/crates/checks/src/checks/question_size/limits.rs:21	read-near	let Ok(text) = std::fs::read_to_string(root.join(RECORD)) else {
+plan-review.json	rust/gate/crates/checks/src/checks/question_size/limits.rs:25	-	.map_err(|e| vec![format!("question-size: {RECORD} does not parse: {e}")])?;
+plan-review.json	rust/gate/crates/checks/src/checks/question_size/limits.rs:38	-	bad.push(format!("question-size: {RECORD}: {page}'s limit carries no size-exception verdict - a page's own limit needs `verdict: \"INDIVISIBLE - <why>
+plan-review.json	rust/gate/crates/checks/src/checks/question_size/limits.rs:46	-	bad.push(format!("question-size: {RECORD}: {page}'s limit {limit} is not above the {cap} cap - drop the entry"));
+plan-review.json	rust/gate/crates/owed/src/record/translation.rs:18	-	const RECORD: &str = "research";
+plan-review.json	rust/gate/crates/owed/src/record/translation.rs:51	-	n.starts_with(&format!("{RECORD}/"))
+plan-review.json	rust/gate/crates/owed/src/record/translation.rs:112	-	walk_notes(&root.join(RECORD), RECORD, &mut found);
+plan-review.json	rust/gate/crates/owed/src/record/leaves.rs:16	-	const RECORD: &str = "research";
+plan-review.json	rust/gate/crates/owed/src/record/leaves.rs:72	-	let mark = format!("{RECORD}/");
+plan-review.json	rust/gate/crates/owed/src/record/leaves.rs:137	read-near	let here = root.join(RECORD).join(QUESTIONS);
+plan-review.json	rust/gate/crates/owed/src/record/leaves.rs:165	-	let rel = format!("{RECORD}/{QUESTIONS}/{file}");
+plan-review.json	rust/gate/crates/owed/src/record/owed/answers.rs:657	-	let paths = build::mixed(judge, build::RECORD, &mut |c, p, b| own.holds(c, p, b));
+plan-review.json	rust/gate/crates/rustc/src/rustc/runlock.rs:21	-	pub(super) const RECORD: &str = "rust-checks-run.json";
+plan-review.json	rust/gate/crates/rustc/src/rustc/runlock.rs:202	read-near	let text = std::fs::read_to_string(dir.join(RECORD)).unwrap_or_default();
+plan-review.json	rust/gate/crates/rustc/src/rustc/runlock.rs:221	-	let _ = std::fs::write(dir.join(RECORD), json!({ "members": members }).to_string());
+event log	rust/gate/crates/rustc/src/rustc/alive.rs:59	-	let log = log_path_in(&world.root, "", world.root.reader());
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:13	-	const RECORD: &str = "dev/coverage-exempt.json";
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:32	-	let path = root.join(RECORD);
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:36	read-near	let record = parsed(&stated(std::fs::read_to_string(&path), RECORD)?, RECORD)?;
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:43	-	return Err(format!("{RECORD}: {} names no stages; an entry says which stages' old code it is (ask:449-T72-coverage-exempt)", path_of(bad)));
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:109	-	RECORD,
+plan-review.json	rust/gate/crates/tree/src/exempt.rs:112	-	stated(std::fs::write(root.join(RECORD), text), RECORD)?;
+tasks-done.md	rust/gate/crates/task/src/task_add.rs:98	-	l7r_shared::speckit::tasks::DONE,
+plan-done.md	rust/gate/crates/task/src/task_add.rs:100	-	"plan-done.md",
+plan-done.md	rust/gate/crates/task/src/builder_brief.rs:153	read-near	format!("Read your plan sections with `make plan-section T={task}`, never by grep, sed or a Read over plan.md or plan-done.md.\n")
+event log	rust/gate/crates/task/src/builder_tree.rs:183	-	.open(common.join(LOG))
+tasks-done.md	rust/gate/crates/task/src/builder_tree.rs:303	read-near	.flat_map(|d| [d.join("tasks.md"), d.join("tasks-done.md")])
+event log	rust/gate/crates/task/src/builder_tree.rs:356	-	let log = tree_git_dir(tree).join(PREWARM_LOG);
+plan-review.json	rust/gate/crates/task/src/task_withdraw.rs:100	-	return Some(format!("{task}'s plan section carries a review verdict ({name}/plan-review.json): a reviewed task is no withdrawal but a landing - make l
+plan-review.json	rust/gate/crates/task/src/task_withdraw.rs:184	read-near	review: std::fs::read_to_string(d.join("plan-review.json"))
+plan-done.md	rust/gate/crates/task/src/tick.rs:379	-	"tick: archived the plan sections of {} to plan-done.md",
+tasks-done.md	rust/gate/crates/task/src/tick.rs:396	-	"tick: archived the ticked task(s) {} to tasks-done.md",
+tasks-done.md	rust/gate/crates/task/src/tick.rs:487	-	"tick --archive: {} ticked task(s) moved to {}/tasks-done.md: {}\n",
+plan-review.json	rust/gate/crates/claims/src/claims/impl_check.rs:38	-	const RECORD: &str = "implementation-check.md";
+plan-review.json	rust/gate/crates/claims/src/claims/impl_check.rs:168	-	let text = read_replace(&d.join(RECORD)).unwrap_or_default();
+plan-review.json	rust/gate/crates/claims/src/claims/impl_check.rs:306	-	missing.push(format!("{q}: its line in {RECORD} must say what was searched - `; searched: <the units and the grep that found none>`"));
+plan-review.json	rust/gate/crates/claims/src/claims/impl_check.rs:310	-	"  {q}: no claim cites it, and {RECORD} has no line for it"
+plan-review.json	rust/gate/crates/claims/src/claims/impl_check.rs:312	-	missing.push(format!("{q}: cite it in the `Research:` claim of the code that decides it (then its impl-drift check), or, only if NO code decides it, a
+tasks-done.md	rust/gate/crates/claims/src/claims/report.rs:449	-	.find(|&j| known(l7r_shared::py_text::strip(&joined(i, j))))
+tasks-done.md	rust/gate/crates/claims/src/claims/report.rs:451	-	let key = joined(i, j);
+tasks-done.md	rust/gate/crates/claims/src/claims/grammar.rs:287	-	joined(&mut out);
+tasks-done.md	rust/gate/crates/claims/src/claims/grammar.rs:290	-	joined(&mut out);
+tasks-done.md	rust/gate/crates/claims/src/claims/grammar.rs:295	-	joined(&mut out);
+plan-review.json	rust/gate/crates/claims/src/claims/carry.rs:17	read-near	pub const RECORD: &str = "claims-carried.jsonl";
+plan-review.json	rust/gate/crates/claims/src/claims/carry.rs:95	-	read_or_empty(&d.join(RECORD))?
+tasks-done.md	rust/gate/crates/claims/src/claims/carry.rs:173	-	let all = l7r_shared::speckit::tasks::joined(text, done);
+plan-review.json	rust/gate/crates/claims/src/claims/carry.rs:304	-	.open(d.join(RECORD))
+plan-review.json	rust/gate/crates/claims/src/claims/carry.rs:308	-	Ok(format!("claims-carry: {} finding(s) filed into {name} {task}; commit tasks.md and {RECORD} with the landing", keys.len()))
+tasks-done.md	rust/gate/crates/claims/src/claims/ports/rebuilt.rs:114	-	let block = task_block(root, by).ok_or_else(|| format!("{PORTS}: the rebuilt entry `{file}` is rebuilt by {by}, which is no task of its feature's task
+plan-review.json	rust/gate/crates/core/src/build.rs:150	-	pub const RECORD: &[&str] = &[
+plan-review.json	rust/gate/crates/core/src/build.rs:526	-	CLAIMS, CLAIMS_BESIDE, CLAIMS_ROOTS, DELETED, RECORD, RECORD_BESIDE, RECORD_ROOTS,
+plan-review.json	rust/gate/crates/core/src/build.rs:545	-	mixed(Some(&b), RECORD, &mut landing_blobs),
+plan-review.json	rust/gate/crates/core/src/build.rs:548	-	assert!(mixed(None, RECORD, &mut landing_blobs).is_empty());
+plan-review.json	rust/gate/crates/core/src/build.rs:549	-	assert!(mixed(Some(&json!({"commit": "c"})), RECORD, &mut landing_blobs).is_empty());
+plan-review.json	rust/gate/crates/core/src/build.rs:596	-	assert_eq!((path, runs_in(path, RECORD)), (path, record));
+plan-review.json	rust/gate/crates/core/src/build.rs:602	-	mixed(Some(&build), RECORD, &mut other),
+plan-review.json	rust/gate/crates/core/src/build.rs:642	-	mixed(Some(&build), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+plan-review.json	rust/gate/crates/core/src/build.rs:675	-	mixed(Some(&since), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+plan-review.json	rust/gate/crates/core/src/build.rs:684	-	mixed(Some(&build), RECORD, &mut |c, p, b| own.holds(c, p, b)),
+plan-review.json	rust/gate/crates/core/src/build.rs:716	-	closure::gaps(&root, RECORD, RECORD_ROOTS, RECORD_BESIDE),
+plan-review.json	rust/gate/crates/plan/src/plan.rs:39	-	use status::{owed, RECORD};
+plan-review.json	rust/gate/crates/plan/src/plan.rs:418	read-near	let path = dir.join(RECORD);
+plan-review.json	rust/gate/crates/plan/src/plan.rs:427	-	"slim: {}/{RECORD} {} KB -> {} KB, its verdicts kept\n",
+plan-review.json	rust/gate/crates/plan/src/plan.rs:450	-	"plan-verdict: {} recorded in {name}/{RECORD} ({} decision(s))\n",
+plan-done.md	rust/gate/crates/plan/src/plan.rs:654	-	said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {t
+tasks-done.md	rust/gate/crates/plan/src/plan.rs:654	-	said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {t
+plan-review.json	rust/gate/crates/plan/src/plan/bundle.rs:20	-	use super::status::{reviewed_blocks, text_of, RECORD, REMOVED};
+plan-done.md	rust/gate/crates/plan/src/plan/bundle.rs:52	-	"plan-done.md",
+plan-done.md	rust/gate/crates/plan/src/plan/bundle.rs:303	read-near	read(&dir.join("plan.md")) + &read(&dir.join("plan-done.md"))
+plan-done.md	rust/gate/crates/plan/src/plan/bundle.rs:352	-	&format!("specs/{name} holds no {rid} in its spec.md, plan.md or plan-done.md"),
+plan-review.json	rust/gate/crates/plan/src/plan/bundle.rs:826	read-near	serde_json::from_str(&read(&spec_dir.join(RECORD))).unwrap_or(json!({}))
+plan-done.md	rust/gate/crates/plan/src/plan/lint.rs:461	read-near	let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+tasks-done.md	rust/gate/crates/plan/src/plan/lint.rs:561	-	Kind::DeferralClosed => "a found-and-left deferral names a task that is not open - a ticked box or an entry of tasks-done.md defers to nothing: file i
+plan-done.md	rust/gate/crates/plan/src/plan/show.rs:14	-	const FILES: [&str; 2] = ["plan.md", "plan-done.md"];
+plan-done.md	rust/gate/crates/plan/src/plan/show.rs:120	-	"{task}: no section of its own in plan.md or plan-done.md"
+plan-review.json	rust/gate/crates/plan/src/plan/task.rs:13	read-near	use super::status::{judge_held, owed, owed_for, scope_of, section_clear, task_current, RECORD};
+plan-review.json	rust/gate/crates/plan/src/plan/task.rs:21	read-near	serde_json::from_str(&read(&dir.join(RECORD))).unwrap_or(serde_json::json!({}))
+plan-done.md	rust/gate/crates/plan/src/plan/task.rs:249	-	"<!-- plan-archive: {} to {} moved to plan-done.md, {day} (feature 375 FR-044) -->",
+plan-done.md	rust/gate/crates/plan/src/plan/task.rs:257	-	let done = dir.join("plan-done.md");
+tasks-done.md	rust/gate/crates/plan/src/plan/task.rs:352	read-near	show(root, reference, &format!("{feature}/tasks-done.md")).unwrap_or_default();
+tasks-done.md	rust/gate/crates/plan/src/plan/task.rs:353	read-near	let tasks = l7r_shared::speckit::tasks::joined(
+plan-review.json	rust/gate/crates/plan/src/plan/task.rs:360	read-near	let review = show(root, reference, &format!("{feature}/{RECORD}"))
+plan-done.md	rust/gate/crates/plan/src/plan/task.rs:363	read-near	let done = show(root, reference, &format!("{feature}/plan-done.md")).unwrap_or_default();
+plan-review.json	rust/gate/crates/plan/src/plan/merge.rs:159	-	format!("plan merge-record: {side} of plan-review.json is not JSON, so it is left to a hand merge: keep both sides' entries under `blocks` and `tasks`
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:18	-	pub(super) const RECORD: &str = "plan-review.json";
+plan-done.md	rust/gate/crates/plan/src/plan/status.rs:97	read-near	.and_then(|h| std::fs::read_to_string(h.path().with_file_name("plan-done.md")).ok())
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:403	read-near	let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
+plan-done.md	rust/gate/crates/plan/src/plan/status.rs:404	read-near	let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+tasks-done.md	rust/gate/crates/plan/src/plan/status.rs:414	read-near	let tasks = l7r_shared::speckit::tasks::joined(
+tasks-done.md	rust/gate/crates/plan/src/plan/status.rs:416	read-near	&std::fs::read_to_string(spec_dir.join(l7r_shared::speckit::tasks::DONE))
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:522	read-near	let review: Value = serde_json::from_str(&read(RECORD)).unwrap_or_else(|_| json!({}));
+plan-done.md	rust/gate/crates/plan/src/plan/status.rs:531	read-near	&read("plan-done.md"),
+tasks-done.md	rust/gate/crates/plan/src/plan/status.rs:540	read-near	let tasks = l7r_shared::speckit::tasks::joined(
+tasks-done.md	rust/gate/crates/plan/src/plan/status.rs:542	read-near	&read(l7r_shared::speckit::tasks::DONE),
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:619	-	format!("no {RECORD} - {HOW}"),
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:626	-	format!("{RECORD} is not JSON - {HOW}"),
+plan-review.json	rust/gate/crates/plan/src/plan/status.rs:725	read-near	let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
+plan-done.md	rust/gate/crates/plan/src/plan/status.rs:726	read-near	let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+tasks-done.md	rust/gate/crates/plan/src/plan/approach.rs:220	-	fn joined(items: &[u32]) -> String {
+tasks-done.md	rust/gate/crates/plan/src/plan/approach.rs:327	-	return Some(format!("{task} has no `### {task} Approach` block in {name}/plan.md - answer every item of the checklist's part A ({}) before it is ticke
+tasks-done.md	rust/gate/crates/plan/src/plan/approach.rs:332	-	joined(&missing)
+plan-done.md	rust/gate/crates/plan/src/plan/approach.rs:336	read-near	let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+tasks-done.md	rust/gate/crates/plan/src/plan/approach.rs:357	-	format!("item(s) {} unanswered", joined(&missing))
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:18	-	block_status, reviewed_blocks, text_of, unwritten, written_only, RECORD, REMOVED,
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:136	-	let path = spec_dir.join(RECORD);
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:220	-	let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:263	-	let path = spec_dir.join(RECORD);
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:455	-	let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
+plan-done.md	rust/gate/crates/plan/src/plan/record.rs:589	read-near	let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+plan-review.json	rust/gate/crates/plan/src/plan/record.rs:753	-	let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
+plan-review.json	rust/gate/crates/plan/src/plan/inside.rs:16	-	use super::status::{section_clear, section_current, RECORD};
+plan-review.json	rust/gate/crates/plan/src/plan/inside.rs:75	read-near	serde_json::from_str(&read(RECORD)).unwrap_or(serde_json::Value::Null);
+plan-done.md	rust/gate/crates/plan/src/plan/inside.rs:80	read-near	(read("plan-done.md"), None, true),
+tasks-done.md	rust/gate/crates/plan/src/plan/inside.rs:112	read-near	let (plan, tasks) = (read("plan.md"), read("tasks.md") + &read("tasks-done.md"));
+tasks-done.md	rust/gate/crates/plan/src/plan/inside.rs:124	-	None => format!("{task} is no filed task of tasks.md or tasks-done.md"),
+tasks-done.md	rust/gate/crates/plan/src/plan/lint/deferral.rs:75	read-near	for (name, live) in [("tasks.md", true), ("tasks-done.md", false)] {
+tasks-done.md	rust/gate/crates/plan/src/plan/lint/deferral.rs:197	-	faults.push(format!("{id} is filed in no tasks.md or tasks-done.md"));

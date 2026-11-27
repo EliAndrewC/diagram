@@ -1,0 +1,10 @@
+plan-review.json	bytes	median 1.1 ms	min 0.8 ms	n=9	found 5026023
+plan-done.md	bytes	median 0.5 ms	min 0.5 ms	n=9	found 3637994
+tasks-done.md	bytes	median 0.1 ms	min 0.1 ms	n=9	found 600807
+events/451-time-retro-and-efficiency.jsonl	bytes	median 43.9 ms	min 40.2 ms	n=9	found 54329227
+plan-review.json	json	median 15.9 ms	min 15.2 ms	n=7	found 4
+plan-done.md	lines	median 2.1 ms	min 1.9 ms	n=7	found 22086
+tasks-done.md	lines	median 0.2 ms	min 0.2 ms	n=7	found 1479
+events/451-time-retro-and-efficiency.jsonl	lines	median 57.4 ms	min 56.7 ms	n=7	found 204679
+events/451-time-retro-and-efficiency.jsonl	edit_lines	median 162.7 ms	min 154.9 ms	n=5	found 16687
+events/451-time-retro-and-efficiency.jsonl	landings	median 68.8 ms	min 66.6 ms	n=5	found 277

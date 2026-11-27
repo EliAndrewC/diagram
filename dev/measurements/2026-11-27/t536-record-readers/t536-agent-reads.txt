@@ -1,0 +1,20 @@
+every transcript with a tool result on 2026-11-27 from 00:00Z (UTC), by kind; this task's own builder left out
+
+| kind | transcripts | tool-result bytes | naming any 451 record | calls | naming one of the four large | calls | largest such call |
+|---|---|---|---|---|---|---|---|
+| builder | 153 | 26,771,561 | 5,662,434 | 1,331 | 730,661 | 254 | 28,207 ['plan-done.md']: cd /diagram/.clones/diagram-backlog-t270 && sed -n 14753,14800p specs/451-time-retro-and-efficiency/plan-done.md | cut -c1-2500 | tail -n +1 |
+| general-purpose | 10 | 1,927,268 | 174,651 | 47 | 55,884 | 18 | 11,539 ['tasks-done.md']: cd /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad; grep -nP '[\x{2013}\x{2014}]' interrogations-draft.md | head;  |
+| session | 1 | 1,010,574 | 165,788 | 229 | 22,312 | 32 | 3,522 ['event log']: cat > /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/tier3.py <<'EOF'
+import json,re,sys,datetime as D,bisect
+fro |
+| spec-fidelity-verify | 7 | 232,180 | 33,537 | 7 | 15,159 | 3 | 9,791 ['plan-done.md', 'plan-review.json', 'tasks-done.md']: C=/diagram/.clones/diagram-backlog; git -C $C diff HEAD~1 --stat -- specs/462-efficiency-backlog/ specs/451-time-retro-and-efficiency/tasks. |
+| round-arbiter | 11 | 489,237 | 25,704 | 7 | 0 | 0 | 0  |
+| spec-fidelity | 219 | 10,375,683 | 19,547 | 7 | 0 | 0 | 0  |
+| message-check | 23 | 153,500 | 0 | 0 | 0 | 0 | 0  |
+| escalation-check | 5 | 50,974 | 0 | 0 | 0 | 0 | 0  |
+
+the four large records, by kind (bytes):
+  builder: event log 168,680, plan-done.md 453,441, plan-review.json 88,083, tasks-done.md 20,457
+  general-purpose: event log 30,768, plan-review.json 856, tasks-done.md 24,260
+  session: event log 14,249, plan-done.md 4,320, plan-review.json 3,376, tasks-done.md 650
+  spec-fidelity-verify: plan-done.md 9,791, plan-review.json 9,791, tasks-done.md 15,159

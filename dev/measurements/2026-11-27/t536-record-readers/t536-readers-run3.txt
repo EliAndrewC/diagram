@@ -1,0 +1,18 @@
+## make decide F=451 T=T536	exit 0	wall median 1436 ms (n=3, min 1079, max 2535)
+  specs/451/plan-done.md	7,275,988 bytes	2 read calls	1 process(es)
+  specs/451/plan-review.json	5,026,023 bytes	1 read calls	1 process(es)
+  specs/451/plan.md	1,703,844 bytes	6 read calls	1 process(es)
+  specs/451/request.md	177,141 bytes	3 read calls	1 process(es)
+  specs/451/research.md	35,520 bytes	2 read calls	1 process(es)
+  specs/451/spec.md	132,111 bytes	7 read calls	1 process(es)
+  specs/451/tasks-done.md	3,004,035 bytes	5 read calls	1 process(es)
+  specs/451/tasks.md	217,524 bytes	6 read calls	1 process(es)
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/MANIFEST.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/blocks.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/earlier.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/request-index.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/request.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/rulings.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/spec-cited.md
+  WRITE OUTSIDE SCRATCH: /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/spec-index.md
+  output head: MODE 4: PLAN REVIEW of one task's section - feature 451-time-retro-and-efficiency, task T536 (a decision preflight, feature 375 FR-003a), on its bundle: read /tmp/l7r-check/plan-451-time-retro-and-efficiency-T536-14345f96/MANIFEST.md and th

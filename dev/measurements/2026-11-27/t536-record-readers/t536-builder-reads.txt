@@ -1,0 +1,20 @@
+builders: 146 (first timestamp 2026-11-27 from 00:00Z, BUILDER-BRIEF first prompt, this task's own left out)
+tool-result bytes, all builders: 29,738,619; naming any 451 record: 6,191,894 in 1,385 calls (20.8%), 42,410 a builder, about 10,603 tokens a builder (ESTIMATE)
+
+| record (path under the feature dir, or the event log) | calls | bytes returned | bytes a call |
+|---|---|---|---|
+| plan.md | 829 | 3,122,102 | 3,766 |
+| tasks.md | 344 | 2,451,011 | 7,125 |
+| plan-done.md | 63 | 508,363 | 8,069 |
+| request.md | 44 | 166,579 | 3,786 |
+| event log | 71 | 154,735 | 2,179 |
+| queue.txt | 27 | 83,371 | 3,088 |
+| plan-review.json | 105 | 81,352 | 775 |
+| queue.md | 12 | 68,808 | 5,734 |
+| spec.md | 8 | 66,403 | 8,300 |
+| plan | 8 | 46,071 | 5,759 |
+| tasks | 13 | 26,099 | 2,008 |
+| tasks-done.md | 8 | 19,426 | 2,428 |
+| arbiter.jsonl | 2 | 5,350 | 2,675 |
+
+per builder, bytes naming any 451 record: median 42,210, max 141,492

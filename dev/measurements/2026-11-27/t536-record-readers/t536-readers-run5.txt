@@ -1,0 +1,11 @@
+## make where-time F=451	exit 0	wall median 283941 ms (n=1, min 283941, max 283941)
+  events/451-time-retro-and-efficiency.jsonl	163,024,455 bytes	3 read calls	1 process(es)
+  output head: | task | total | model | tests | compile | waiting on a build slot | hook suites | map generation | gate | land | review | docs | spec-kit step | tools | background run | plan review | claims check | record/modal checks | glyph check | arbi
+rc=0 (where-time)
+## make feature-report F=451	exit 0	wall median 292187 ms (n=1, min 292187, max 292187)
+  events/451-time-retro-and-efficiency.jsonl	271,707,425 bytes	5 read calls	1 process(es)
+  specs/451/spec.md	18,873 bytes	1 read calls	1 process(es)
+  specs/451/tasks-done.md	600,807 bytes	1 read calls	1 process(es)
+  specs/451/tasks.md	36,254 bytes	1 read calls	1 process(es)
+  output head: # Feature report - 451-time-retro-and-efficiency | 
+rc=0 (feature-report)

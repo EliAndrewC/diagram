@@ -1,0 +1,30 @@
+(second batch of t536-readers-run.py, RUNS=2, ONLY= each case in turn; this file was rewritten by hand from the run's own output
+after a mid-run edit of it truncated two lines - the figures are the run's, unchanged. The task-add case's writes outside the
+scratchpad were its own house-style check's temporary repositories, /tmp/l7r-gate-check-house-style-p<pid>-0/ (4 of them, about 40
+files each) and 4 /tmp/tmp.* files, collapsed here.)
+
+## make task-add F=451	exit 0	wall median 2822 ms (n=2, min 2778, max 2866)
+  events/451-time-retro-and-efficiency.jsonl	0 bytes	0 read calls	3 process(es)
+  specs/451/plan-done.md	3,637,994 bytes	1 read calls	1 process(es)
+  specs/451/plan.md	1,689,777 bytes	6 read calls	10 process(es)
+  specs/451/research.md	71,040 bytes	4 read calls	2 process(es)
+  specs/451/spec.md	226,476 bytes	12 read calls	2 process(es)
+  specs/451/tasks-done.md	3,004,035 bytes	5 read calls	3 process(es)
+  specs/451/tasks.md	363,086 bytes	10 read calls	12 process(es)
+  write outside scratch: /tmp/l7r-gate-check-house-style-p<pid>-0/ (its own check's temporary repositories) and /tmp/tmp.* x4
+  output head: task-add: T540 filed in specs/451-time-retro-and-efficiency/tasks.md (the COPY's), its section in the copy's plan.md
+## make plan-verdict F=451 BLOCKS=1 (a stub reply)	exit 1	wall median 6 ms (n=2, min 5, max 6)
+  (none of 451's records read: the stub reply was refused before the record was opened)
+  output head: plan-verdict: refused - blocks must name each block reviewed: {"<heading line>": "<sha256>"}
+## make tick T=T533 (the copy's open task)	exit 2	wall median 5 ms (n=2)
+  (none of 451's records read: refused, the feature directory was not passed)
+  output head: tick: .../t536-copy/repo/specs/tasks.md does not exist
+## make claims-triage	exit 0	wall median 666 ms (n=2, min 629, max 703)
+  (none of 451's records read)
+  output head: claims-triage: no claim is owed a triage
+## make task-time SINCE=24h	exit 0	wall median 260066 ms (n=2, min 257106, max 263026)
+  events/451-time-retro-and-efficiency.jsonl	54,341,485 bytes	1 read calls	1 process(es)
+  output head: # The task time breakdown, 2026-11-26T20:27:13Z to 2026-11-27T20:27:13Z UTC (185 tasks landed)
+  (/proc/<pid>/io during a timing run: rchar 5,013,894,448 bytes 87 s in, RSS 916 MB - the 451 log is 54 MB of it; the rest is
+  files outside the shim's prefixes, not attributed here. The copy's log is 12,258 bytes past the snapshot: the hook cases appended
+  their own lines to it.)

@@ -1,0 +1,24 @@
+== 451-time-retro-and-efficiency.jsonl: 46,880 lines on 2026-11-27, 2026-11-27T00:00:06.540Z to 2026-11-27T20:03:07.771Z (cutoff 2026-11-27T20:03:07Z)
+  hook calls (the hook events' rows; SessionStart is not logged): 26,341; by row kind: {'Phase': 20439, 'PreToolUse': 12489, 'PostToolUse': 12252, 'SubagentStart': 500, 'SubagentStop': 499, 'UserPromptSubmit': 294, 'Stop': 234, 'BgEnd': 84, 'PostToolUseFailure': 73, 'TaskWithdrawn': 12, 'TaskBuiltInside': 4}
+  Agent dispatches: {'spec-fidelity': 156, 'general-purpose': 139, 'message-check': 17, 'round-arbiter': 9, 'escalation-check': 4, 'spec-fidelity-verify': 1}
+  make targets: decide 388, plan-delta 122, plan-verdict 198, plan-section 40, queue 4, builder-next 3, builder-done 114, builder-brief 95, land 34, carry 64, task-add 131, task-start 12, task-time 26, claims-triage 119, quick 26, arbiter-bundle 11, task-withdraw 14
+  Edit/Write of a 451 file: {'plan.md': 214, 'tasks.md': 2, 'request.md': 1}
+  landings: {'landed': 31, 'not landed': 45}
+== 461-landing-lane.jsonl: 6,407 lines on 2026-11-27, 2026-11-27T15:35:54.015Z to 2026-11-27T20:03:06.736Z (cutoff 2026-11-27T20:03:07Z)
+  hook calls (the hook events' rows; SessionStart is not logged): 3,681; by row kind: {'Phase': 2713, 'PreToolUse': 1672, 'PostToolUse': 1645, 'UserPromptSubmit': 103, 'Stop': 90, 'SubagentStart': 81, 'SubagentStop': 79, 'BgEnd': 12, 'PostToolUseFailure': 11, 'TaskBuiltInside': 1}
+  Agent dispatches: {'spec-fidelity': 38, 'general-purpose': 21, 'spec-fidelity-verify': 5, 'message-check': 2, 'round-arbiter': 2, 'escalation-check': 1}
+  make targets: decide 32, plan-delta 20, plan-verdict 19, plan-section 25, builder-done 17, builder-brief 11, land 5, carry 4, task-add 15, task-time 6, claims-triage 12, quick 3, arbiter-bundle 6
+  Edit/Write of a 451 file: {'tasks.md': 1}
+  landings: {'not landed': 6, 'landed': 3}
+== 462-efficiency-backlog.jsonl: 263 lines on 2026-11-27, 2026-11-27T19:18:09.667Z to 2026-11-27T20:01:16.856Z (cutoff 2026-11-27T20:03:07Z)
+  hook calls (the hook events' rows; SessionStart is not logged): 184; by row kind: {'Phase': 77, 'PreToolUse': 67, 'PostToolUse': 65, 'Stop': 19, 'UserPromptSubmit': 19, 'SubagentStop': 7, 'SubagentStart': 6, 'BgEnd': 2, 'PostToolUseFailure': 1}
+  Agent dispatches: {'spec-fidelity': 3, 'spec-fidelity-verify': 2, 'message-check': 1}
+  make targets: 
+  Edit/Write of a 451 file: {}
+  landings: {}
+== _unassigned.jsonl: 648 lines on 2026-11-27, 2026-11-27T00:00:00.769Z to 2026-11-27T09:36:42.767Z (cutoff 2026-11-27T20:03:07Z)
+  hook calls (the hook events' rows; SessionStart is not logged): 0; by row kind: {'Phase': 648}
+  Agent dispatches: {}
+  make targets: 
+  Edit/Write of a 451 file: {}
+  landings: {}

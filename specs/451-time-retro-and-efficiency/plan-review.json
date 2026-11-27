@@ -4694,7 +4694,25 @@
    "declared": "spec-fidelity"
   },
   "### T532 Approach (checklist part A)": {
-   "sha256": "56d26a4fcc5bf8e254edacdbcb32fdfa862706da30a8633302141a513288fc50",
+   "sha256": "80bab0e50ff8c1c0f06a08256ef9db5533def43ba8de99593e45b50b628e88ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 (<why: the finding or measurement that files it>)": {
+   "sha256": "9990353d2ef9f1ab21138559026f64fd5fc927b9d350daf96807af24d220b5e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)": {
+   "sha256": "55b4cd4c7a43117030f8e2d11a44c6951aa7b725932746dd2c65e0b46075fb2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T536 Approach (checklist part A)": {
+   "sha256": "fcc1587f14a1cb39387d70b87121344485f908a582411259eaf3addd4ebc79e5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -44110,6 +44128,139 @@
      "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
      "class": "within",
      "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (<why: the finding or measurement that files it>)",
+    "### T532 Approach (checklist part A)",
+    "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)",
+    "### T536 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T532-blocks",
+     "summary": "T532's section and its checklist are the unfilled template: every field is a placeholder.",
+     "class": "within",
+     "why": "The two blocks decide nothing; there is no decision in them to narrow what was asked. They carry no plan for T532 either, so a later block that fills them is owed its own review."
+    },
+    {
+     "id": "T536-1 read-only on copies",
+     "summary": "T536 is a read-only measurement on copies of the records, written up with its scripts; no source changes, no tooling built.",
+     "class": "within",
+     "why": "462 FR-004: T536 'measures which tools, hooks and agents read 451's large records whole, while they are whole'. Measuring on copies taken while whole is exactly that; the split itself is T537's."
+    },
+    {
+     "id": "T536-2 the large records",
+     "summary": "The large records are plan-review.json, plan-done.md, tasks-done.md and the event log, snapshotted with sizes and sha256.",
+     "class": "within",
+     "why": "Nothing in the request or the cited requirements names another set; these are the records the split (T537) is for."
+    },
+    {
+     "id": "T536-3 code census plus read counter",
+     "summary": "Readers found by a script over non-test Rust lines naming a record or its constant/helper, and bytes a call observed by an LD_PRELOAD read counter on the built binaries run against a clone of the copies.",
+     "class": "within",
+     "why": "FR-004 asks which tools and hooks read the records whole. The read counter observes the file reads of every command run under it in whatever language, so the Rust census is an instrument choice for finding candidates, not a narrowing of which tools count."
+    },
+    {
+     "id": "T536-4 land/tick/carry/plan-verdict by code",
+     "summary": "Commands that push, archive or need a reviewer's reply are judged by their code and the in-process bench, not run.",
+     "class": "within",
+     "why": "FR-004 asks whether each reads a record whole; reading the code answers that, and the bench gives the cost of a whole read. Not running a command that pushes or archives from a measurement copy narrows nothing the GM asked."
+    },
+    {
+     "id": "T536-5 frequency from the day's logs",
+     "summary": "How often each reader ran is counted from 2026-11-27's lines of the 451, 461, 462 and _unassigned event logs.",
+     "class": "within",
+     "why": "A before figure for a split the same day; FR-004 sets no window, and the day the records were whole is the window it needs."
+    },
+    {
+     "id": "T536-6 builder transcripts as the agents' reads",
+     "summary": "Agents' own reads of 451's records are counted over the 146 builder transcripts of the day only; besides those, the only agent measured is one spec-fidelity plan-review dispatch, and that reading is of the tool it runs, not of the agent's own Read calls.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 asks which agents read the records whole, and SC-002 then holds that no reader named in the before figure reads a record whole after the split. Counting builders only leaves every other agent type's own reads unmeasured: the reviewers, the verify twins, the arbiter, escalation-check, the process reviewer and the coordinating session. Those agents are then never 'named there', so SC-002 passes for them without anyone having looked. Counting them is not impossible: the same script (t536-builder-reads.py) runs over those transcripts. The GM's own words in the bundle do not imply the exclusion, since request.md line 525 says only 'doing the split that we discussed' and the cited messages are not in the bundle. Keeping the exclusion therefore defeats the before figure's purpose for those agents. Fix: run the same script over the day's other agent transcripts, with a dated method line, and record what it finds, or record that they read none of the four records."
+    },
+    {
+     "id": "T536-7 found and left as costs",
+     "summary": "plan-delta's repeated reads (2.6 s a call) and task-time's 260 s a call are classed as costs, not defects, and filed in 462 as T543 and T544.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; a slow but correct command is a cost. 462 FR-001 sends a task filed from now on to 462. D15 passes a 'not a defect' item without an order."
+    },
+    {
+     "id": "T536-8 performance work",
+     "summary": "T536 is counted as performance work, a measurement of where time and context go.",
+     "class": "within",
+     "why": "FR-013: measurement of where the time goes counts as performance work for ordering (the GM, 2026-11-20)."
+    },
+    {
+     "id": "T536-9 after figure by the same scripts",
+     "summary": "T537's after figure is read with the same scripts, which match paths by directory so a split record's parts are counted.",
+     "class": "within",
+     "why": "SC-002 needs the before and after figures to be comparable; using the same instrument does that and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (<why: the finding or measurement that files it>)",
+    "### T532 Approach (checklist part A)",
+    "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)",
+    "### T536 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T532-template",
+     "summary": "T532's two blocks are the unfilled template: every field a placeholder, no approach, no step row.",
+     "class": "within",
+     "why": "A placeholder decides nothing, so it narrows nothing the request or 462 FR-001 (which keeps T532 in the closing set) asks. This CLEAR rules only that no decision in these blocks narrows the request. It is not a ruling that T532's work was planned or matches its line."
+    },
+    {
+     "id": "T536-read-only",
+     "summary": "T536 is a read-only measurement on copies of the records taken at 20:03:07Z, written up in dev/measurements/2026-11-27/t536-record-readers/results.md, with no source changes.",
+     "class": "within",
+     "why": "462 FR-004 asks T536 to MEASURE which tools, hooks and agents read the large records whole while they are whole, before T537 splits them. Measuring on copies of the records while they are whole is exactly that. Changing no source is the brief and leaves the split to T537."
+    },
+    {
+     "id": "T536-records",
+     "summary": "The 'large records' are four: plan-review.json, plan-done.md, tasks-done.md and the event log, each sized and hashed in the snapshot.",
+     "class": "within",
+     "why": "FR-004 says '451's large records' without listing them. The four named are the large ones by the measured sizes (0.6 MB to 54 MB), and the plan says which they are rather than leaving it open."
+    },
+    {
+     "id": "T536-tools-hooks",
+     "summary": "Tools and hooks are found two ways. The census is of non-test Rust lines naming a record or its constant or helper (285 lines, search space stated). Bytes per call are counted by an LD_PRELOAD read counter on the built binaries. land, tick, carry and plan-verdict are given by reading the code, because they push, archive or need a reviewer, and their cost comes from the bench.",
+     "class": "within",
+     "why": "This answers FR-004's 'which tools and hooks' for every reader the census names. The read counter follows the commands' child processes, so a reader in any language behind a measured command is counted. Taking four commands from code because they cannot safely be run on a copy is a choice of method, stated in item 4. It drops none of them from the answer."
+    },
+    {
+     "id": "T536-agents",
+     "summary": "Agents' reads come from the day's transcripts. Builders are counted separately (146 transcripts). Every other agent type and the session are counted with ALL=1. The result: which types read a large record, how many bytes, and that none read one whole (the largest read is 28,207 bytes).",
+     "class": "within",
+     "why": "This carries FR-004's 'agents', which the version last judged covered only for builders. The window is one day, the day the figure is taken, and it is stated. Token figures are marked ESTIMATE."
+    },
+    {
+     "id": "T536-first-review-readers",
+     "summary": "Adds claims-triage, plan-section, where-time and feature-report, measured with the read counter: none, once for a finished task's section, three times and five times whole.",
+     "class": "within",
+     "why": "These extend the census of tools to the readers the earlier round asked about. That is more of FR-004's own measurement, not new scope."
+    },
+    {
+     "id": "T536-found-and-left",
+     "summary": "Two costs are left as 'not a defect' and filed in 462 as performance levers: plan-delta reads plan-done.md 11 times a call (2.6 s), and task-time takes 260 s a call. They are T543 and T544.",
+     "class": "within",
+     "why": "A slow call that gives a correct answer is a cost, not a wrong outcome (constitution XIV as the GM stated it on 2026-11-19), so the D15 deferral form does not apply. Filing new work in 462 rather than 451 is what 462 FR-001 orders. Nothing the request asks of T536 is left undone."
+    },
+    {
+     "id": "T536-order",
+     "summary": "T536 runs before T537 while the records are whole. The after figure is read later with the same scripts, which match paths by directory so a split record's parts are counted.",
+     "class": "within",
+     "why": "This is 462 FR-004's order and SC-002's 'before figure recorded before T537 lands', with the means to read the after figure the same way."
     }
    ]
   }

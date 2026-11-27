@@ -2427,31 +2427,44 @@ that batch; the red was not in its change.
 <!-- plan-archive: T514 to T474 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T531 to T530 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T532 to T532 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T536 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)
+
+- **Approach**: a read-only measurement on copies, written up in `dev/measurements/2026-11-27/t536-record-readers/results.md` with its scripts and outputs; no source changes.
+  - **The snapshot** (observed 2026-11-27, method: copies at 20:03:07Z with sizes and sha256, `t536-snapshot.txt`): plan-review.json 5,026,023 bytes, plan-done.md 3,637,994, tasks-done.md 600,807, the event log 54,329,227.
+  - **The readers by code** (observed 2026-11-27, method: `t536-readers.py` over every non-test Rust line naming a record or the constant or helper that stands for it, 285 lines, the hot ones read by hand): the review-round guard, `source_block_hooks`, the plan crate's readers, `builder_queue::facts`, `touch::edit_lines`, `set_down_hooks::landings`, the tick, the carry, `make task-time`; `house_style_hooks` opens no file.
+  - **Bytes a call** (observed 2026-11-27, method: the tree's built binaries run against a clone carrying the copies, under an LD_PRELOAD read counter, `t536-readcount.c`, since ptrace is refused in this container): no hook reads a large record on every call, they append to the event log and read 0 bytes of it, a spec-fidelity plan-review dispatch reads plan-review.json whole once (70 ms), `make plan-delta` reads plan-done.md eleven times (40,017,934 bytes) and plan-review.json twice (10,052,046), 2,619 ms, `make decide` and `make task-add` read tasks-done.md five times (3,004,035), `make queue` and `make builder-next` read it once, `make task-time` reads the event log once, 260,066 ms a call.
+  - **A whole read in process** (observed 2026-11-27, method: a release Rust bench on the copies, warm cache, median of 5 to 9, `t536-bench.txt`): plan-review.json parsed whole 15.9 ms, plan-done.md read and split into lines 2.1 ms, the event log read 43.9 ms, `edit_lines`' work 162.7 ms, `landings`' work 68.8 ms.
+  - **How often** (observed 2026-11-27, method: `t536-counts.py` over the day's lines of the 451, 461, 462 and `_unassigned` logs to 20:03:07Z): 30,206 hook rows; 197 spec-fidelity dispatches; `make decide` 420, `plan-verdict` 217, `task-add` 146, `plan-delta` 142, `claims-triage` 131, `plan-section` 65, `land` 39 (34 landed), `task-time` 32.
+  - **The builders' own reads** (observed 2026-11-27, method: `t536-builder-reads.py` over the 146 builder transcripts of the day, paths matched by directory prefix): 6,191,894 bytes in 1,385 calls named a 451 record, about 10,600 tokens a builder (an ESTIMATE at 4 bytes a token); the four large records 763,876 bytes in 247 calls, about 1,300 tokens a builder (ESTIMATE).
+  - **Every other agent's and session's own reads** (observed 2026-11-27, method: the same script with `ALL=1` over every transcript with a tool result on the day, each subagent grouped by its agentType, a top-level transcript as `session`, `t536-agent-reads.txt`): bytes naming one of the four large records were general-purpose 55,884 in 18 calls, the session 22,312 in 32, spec-fidelity-verify 15,159 in 3, and round-arbiter, spec-fidelity (219 transcripts), message-check and escalation-check 0, and no call of any agent returned a large record whole, the largest being 28,207 bytes of plan-done.md (a builder's `sed` range).
+  - **The readers the first review asked after** (observed 2026-11-27, method: the read counter on the copy, `t536-readers-run2.txt`, `-run4.txt`, `-run5.txt`): `make claims-triage` reads none of the four, 666 ms, `make plan-section` reads plan-done.md whole once for a done task's section (T499, 33 ms) and none for an open one, `make where-time F=451` reads the event log whole three times (163,024,455 bytes, 283,941 ms) and `make feature-report F=451` five times (271,707,425 bytes, 292,187 ms), neither run on the day.
+  - **The after figure** (T537) is read with the same scripts; they match paths by the feature and events directories, so a split record's parts are counted.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the readers, their bytes a call and the day's counts, on copies, observed 2026-11-27 (`results.md`) | n/a: measurement, no map drawn | n/a | none | n/a |
 
 ### T536 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The before figure for the split stands recorded: each reader of 451's large records, whether it reads them whole, its bytes a call and how often it ran on 2026-11-27.
+2. **The constraints.** 462 FR-004 and SC-002 (the before figure recorded before T537 lands); T536's line; the brief (read-only, on copies, no tooling built).
+3. **Where each comes from.** G: the GM's seventeenth and eighteenth messages and 462's spec; O: the copies, the read counter, the bench and the logs, all 2026-11-27.
+4. **Do they describe the world here?** Yes for the rows observed; the land, tick, carry and plan-verdict rows are by code, since those commands push, archive or need a reviewer's reply and could not be run on a copy, and their cost is the bench's.
+5. **The order.** Before T537, which splits the records, while they are whole.
+6. **The exits.** Green: `results.md` written with every figure and the scripts. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `results.md` holds the table; `python3 -I t536-counts.py ...` and `t536-builder-reads.py` reprint the counts.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows; no check it breaks: a measurement.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make plan-delta` reads plan-done.md eleven times and plan-review.json twice a call, 2.6 s a call and 142 calls on the day (observed 2026-11-27, method: the read counter on a copy). Not a defect (a cost, not a wrong outcome, constitution XIV): a performance lever, filed in 462 as T543 (462 FR-001), to be measured again after T537.
+- `make task-time` took 260 s a call on the copy and read about 5.0 GB in its first 87 s, all but 54 MB of it outside 451's records (observed 2026-11-27, method: wall time and `/proc/<pid>/io`). Not a defect (a cost, not a wrong outcome, constitution XIV): a performance lever, filed in 462 as T544.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement of where time and context go, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
 
 
 ### T537 (<why: the finding or measurement that files it>)
