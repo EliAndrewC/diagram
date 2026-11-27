@@ -72,3 +72,13 @@ fn the_refusal_names_the_tools_and_nothing_else_is_read() {
     let mention = event("Bash", &json!({"command": "echo RESEARCH-CLAIMS"}));
     assert!(decide(&mention, &Session::from_input(&mention.input)).is_empty());
 }
+
+/// 451 T453: a git command is no touch of the sheet however git is spelled, as the bare `git` is not.
+#[test]
+fn git_is_read_however_it_is_spelled() {
+    for s in ["", "\\", "/usr/bin/", "command ", "env -i "] {
+        assert_eq!(bash(&format!("{s}git mv {F} x.md")), None, "{s}");
+        assert_eq!(bash(&format!("ls; {s}git rm {F}")), None, "{s}");
+    }
+    assert_eq!(bash(&format!("legit mv {F} x.md")).as_deref(), Some("Bash"));
+}

@@ -23,6 +23,7 @@ use std::path::Path;
 use serde_json::Value;
 
 use crate::guards::finished_run_hooks::runs::realpath;
+use crate::shared::spelled;
 use crate::shared::state::field;
 
 mod filter;
@@ -110,7 +111,9 @@ fn end_word(seg: &mut Seg, word: &mut String, started: &mut bool) {
     }
 }
 
-/// A segment's command and arguments: leading `VAR=value` words and wrappers dropped, redirections and their targets left out.
+/// A segment's command and arguments: leading `VAR=value` words and wrappers with their options dropped, the command word by its
+/// name however it is spelled (451 T453: `/usr/bin/grep`, `\cat` and `nice -n 5 cat` were no reader), redirections and their targets
+/// left out. `xargs` stays the command word: what it runs is its reader (`xargs_reader`).
 fn command(words: &[String]) -> Vec<&str> {
     let assignment = |w: &str| {
         w.split_once('=').is_some_and(|(k, _)| {
@@ -118,22 +121,27 @@ fn command(words: &[String]) -> Vec<&str> {
         })
     };
     let mut start = 0;
-    while start < words.len() {
-        match words[start].as_str() {
-            "sudo" | "env" | "time" | "nice" | "nohup" | "command" | "exec" | "builtin" => {
-                start += 1;
-            }
-            w if assignment(w) => start += 1,
-            _ => break,
+    while let Some(w) = words.get(start) {
+        let name = spelled::name_of(w);
+        let next = words.get(start + 1).map(String::as_str);
+        if name != "xargs" && spelled::WRAPPERS.contains(&name) && !spelled::lookup(name, next) {
+            start +=
+                1 + spelled::options(name, &words[start + 1..]) + usize::from(name == "timeout");
+        } else if assignment(w) {
+            start += 1;
+        } else {
+            break;
         }
     }
     let (mut out, mut skip) = (Vec::new(), false);
-    for w in &words[start..] {
+    for w in words.get(start..).unwrap_or_default() {
         let bare = w.trim_start_matches(|c: char| c.is_ascii_digit() || c == '&');
         if skip {
             skip = false;
         } else if bare.starts_with('>') || bare.starts_with('<') {
             skip = bare.trim_start_matches(['>', '<']).is_empty();
+        } else if out.is_empty() {
+            out.push(spelled::name_of(w));
         } else {
             out.push(w.as_str());
         }
@@ -186,12 +194,17 @@ const READERS: &[&str] = &[
 type Fed = (String, Vec<String>);
 
 fn reader_at(words: &[&str], at: usize, end: &[&str]) -> Option<Fed> {
-    let cmd = words.get(at).filter(|c| READERS.contains(c))?;
+    // the reader behind its own wrappers (451 T453: `xargs command cat` was no reader)
+    let at = at + spelled::command_at(words.get(at..).unwrap_or_default());
+    let cmd = words
+        .get(at)
+        .map(|c| spelled::name_of(c))
+        .filter(|c| READERS.contains(c))?;
     let args = words[at + 1..]
         .iter()
         .take_while(|w| !end.contains(w))
         .filter(|w| **w != "{}");
-    Some(((*cmd).to_owned(), args.map(|a| (*a).to_owned()).collect()))
+    Some((cmd.to_owned(), args.map(|a| (*a).to_owned()).collect()))
 }
 
 /// The reader a `find -exec` runs, with its arguments but `{}`.

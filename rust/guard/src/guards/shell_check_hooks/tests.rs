@@ -226,3 +226,31 @@ fn plain_words_need_no_parse_and_a_reserved_word_or_a_quote_still_gets_one() {
     };
     assert!(!super::judge(&unfinished, &session, "/".into()).is_empty());
 }
+
+/// 451 T453: a commit is read however git is spelled and behind any wrapper, and past git's own options with their values (`-C <dir>`,
+/// the project's form for every git call); a program whose name only ends in git is not git.
+#[test]
+fn a_commit_is_read_however_git_is_spelled() {
+    for s in [
+        "git",
+        "\\git",
+        "\"git\"",
+        "nice -n 5 git",
+        "command git",
+        "env -i git",
+        "nohup git",
+        "git -C /x",
+        "git -c a.b=c --git-dir /x/.git",
+    ] {
+        let cmd = format!("{s} commit -m \"one\" -m \"two\"");
+        assert!(commit_dash_m_problem(&cmd).is_some(), "{cmd}");
+    }
+    assert_eq!(
+        commit_dash_m_problem("/tmp/mygit commit -m \"one\" -m \"two\""),
+        None
+    );
+    assert_eq!(
+        commit_dash_m_problem("git -C /x log -m \"one\" -m \"two\""),
+        None
+    );
+}

@@ -182,21 +182,31 @@ fn is_git_commit(seg: &[Word]) -> bool {
         .map(|w| w.value.as_str())
         .filter(|v| !v.split(' ').next().unwrap_or("").contains('=') || !hit(&ASSIGNED, v))
         .collect();
-    let head: Vec<&str> = words
-        .into_iter()
-        .filter(|w| !["sudo", "time", "env"].contains(w))
-        .collect();
-    let Some(first) = head.first() else {
-        return false;
-    };
-    if Path::new(first).file_name().is_none_or(|n| n != "git") {
+    // git by its name behind any wrapper, and its subcommand past git's own options with their values (451 T453: `nice git commit`
+    // and `git -C <dir> commit`, the project's form for every git call, were no commit, their `-m` messages never judged)
+    let head = &words[crate::shared::spelled::command_at(&words)..];
+    if !head
+        .first()
+        .is_some_and(|w| crate::shared::spelled::names(w, "git"))
+    {
         return false;
     }
-    head[1..]
-        .iter()
-        .find(|w| !w.starts_with('-'))
-        .is_some_and(|w| *w == "commit")
+    let mut at = 1;
+    while let Some(w) = head.get(at).filter(|w| w.starts_with('-')) {
+        at += if GIT_VALUED.contains(w) { 2 } else { 1 };
+    }
+    head.get(at) == Some(&"commit")
 }
+
+/// git's own options that take the next word as their value (git 2.43's manual).
+const GIT_VALUED: [&str; 6] = [
+    "-C",
+    "-c",
+    "--git-dir",
+    "--work-tree",
+    "--namespace",
+    "--config-env",
+];
 
 fn dash_m_words(seg: &[Word]) -> Vec<Word> {
     let (mut out, mut take_next) = (Vec::new(), false);

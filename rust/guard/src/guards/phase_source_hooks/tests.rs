@@ -785,3 +785,27 @@ fn the_gm_s_words_resume_a_stage_and_are_recorded() {
     );
     assert!(refused(&track, "`track`"));
 }
+
+/// 451 T453: a reader is read by its name however it is spelled - by its path, past a `\` or a wrapper - as its bare name is.
+#[test]
+fn a_reader_is_read_however_it_is_spelled() {
+    let at = world("spelled", &json!([]));
+    for s in ["\\", "/usr/bin/", "command ", "env -i ", "nice -n 5 "] {
+        for cmd in [
+            format!("{s}cat {OLD}"),
+            format!("{s}grep -rn x l7r"),
+            format!("{s}git show HEAD:{OLD}"),
+            format!("find l7r -type f | xargs {s}cat"),
+        ] {
+            assert!(refused(&bash(&cmd, &at), "old code"), "{cmd}");
+        }
+        let left_out = format!("{s}grep -rn x l7r --exclude-dir=old");
+        assert!(bash(&left_out, &at).is_empty(), "{left_out}");
+    }
+    assert!(refused(
+        &bash(&format!("ls; \"cat\" {OLD}"), &at),
+        "old code"
+    ));
+    assert!(bash("command -v grep", &at).is_empty());
+    assert!(bash(&format!("ls rust/cat {OLD}"), &at).is_empty());
+}

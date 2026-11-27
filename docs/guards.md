@@ -128,11 +128,12 @@ T306). `rust/guard/shared/src/spelled.rs` names a command's program by its word'
 git add --` ran five times in the week to 2026-11-27 and was a write no reader saw); a guard that asks "is this git" asks it there.
 What no guard reads, each accepted as a limit with its count over the 71,565 Bash calls of 2026-11-20 to 11-27 (the session
 transcripts; the event logs keep no command text): a name the shell builds (`$GIT`, `g\it`, `$(which git)`), 0 uses - reading it
-means running the shell; a program a shell runs from its `-c` string (`sh -c 'git ...'`), 1 use, a probe under `/tmp`, for the
-walk's guards (make-only and no-poll read the string); a quoted `"git"` as the command word at the history guard, 0 uses; and the
-exempting or read-only readers still on the bare name (claims-file, `shared/parked.rs`'s `git mv`, phase-source's readers,
-house-style's `$(git grep ...)`, shell-check's `is_git_commit`), 0 uses each, where a missed spelling is refused or changes no
-tree write. The last three are filed as 451 T453.
+means running the shell; and a program a shell runs from its `-c` string (`sh -c 'git ...'`), 1 use, a probe under `/tmp`, for the
+walk's guards (make-only, no-poll and readme read the string themselves). The walk would have to unquote the string it blanks, read
+`-c` among bundled options, walk it where the shell stands and give its writes a segment no guard finds in the command (451 T453's
+section). Since 451 T453 the rest read `spelled` too: a quoted `"git"` at the history guard, and claims-file's git exemption,
+`shared/parked.rs`'s `git mv`, phase-source's readers, house-style's held `$(git grep ...)` and shell-check's `is_git_commit` -
+which also read `git -C <dir> commit` as no commit, 456 real calls in the week, their `-m` messages never judged.
 
 **A MESSAGE COSTS ITS READER EVERY CHARACTER, SO EACH IS HELD TO A BUDGET AND REVIEWED** (feature 451 T170; the GM 2026-11-23,
 451's request.md "on hook output length": *"could we accomplish the same thing with no loss of fidelity and fewer tokens? ...

@@ -7701,31 +7701,46 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T453 (<why: the finding or measurement that files it>)
+### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each reader T306 left on the bare name judged - moved onto `shared::spelled` where that was a few lines and made it read git (or a reader) as the guards it sits beside do, red-first; the shell's `-c` walk kept a limit. Which way each erred before (observed 2026-11-27, method: the red tests below on the old code):
+  - **T453-D1, the history guard reads a quoted git** (`repo_safety_hooks.rs` `sanitized`): a quoted string with no space that names git (`spelled::names`) is kept, unquoted, where every other quoted string is blanked. Erred PASSING: `"git" push --force` and `'git' rebase main` were blanked to `QUOTED push` and refused nothing. `echo "git" push --force`, `FOO="git" push -f` and a `-m "git push --force"` message stay unrefused (pinned).
+  - **T453-D2, claims-file's git exemption by `spelled::program_of`** (`claims_file_hooks.rs` `piece_touches`, the `GIT` pattern removed). Erred REFUSING: `\git mv <sheet> x.md`, `command git rm <sheet>` were refused as a touch of the sheet that the bare `git mv` is not.
+  - **T453-D3, the parked stages' `git mv` by its spelling** (`shared/src/parked.rs` `GIT_MV`, now `WRAPPER_WORDS` and `before("git")`). Erred PASSING: `\git mv rust/parked/src/track.rs rust/phases/src/` (and by its path, `command`, `env -i`, `nice -n 5`) was walked as git's but its destination was not read, so a parked stage moved into the phases was no hit.
+  - **T453-D4, phase-source's readers by their names** (`phase_source_hooks/search.rs` `command` - the wrappers by `spelled`'s list and options, `xargs` kept as the command word for `xargs_reader`, `command -v` a lookup - and its command word by `name_of`; `reader_at` past the reader's wrappers and by its name; `phase_source_hooks.rs` `VERB`, past a `\`, and by quotes or a path at a command position only). Erred PASSING: `\cat <held>`, `/usr/bin/grep -rn x l7r`, `nice -n 5 cat <held>`, `/usr/bin/git show HEAD:<held>`, `find l7r -type f | xargs command cat` read the held code unrefused. `ls rust/cat <held>` stays a mention (pinned: a path is a program only at a command position).
+  - **T453-D5, house-style's held git search by its spelling** (`shared/src/guards/house_style_hooks.rs`: `GIT` from `before("git")` in `LEAD` and the `$(git grep ...)` held shape, with `WRAPPER_WORDS` inside a `$(...)`). Erred CORRECTING: `echo "$(\git grep -l colour)" >> a.md` and `\git grep -n colour a.md` had their search patterns americanized, which changes what the search finds.
+  - **T453-D6, shell-check's commit by `spelled`, past git's valued options** (`shell_check_hooks.rs` `is_git_commit`: `command_at`, `names`, and `GIT_VALUED`, git 2.43's `-C`, `-c`, `--git-dir`, `--work-tree`, `--namespace`, `--config-env`). Erred PASSING, and this one is used: `git -C <dir> commit -m ...`, the project's own form, read `<dir>` as the subcommand, so its `-m` messages and co-author were never judged - 456 real calls of the 105,078 Bash calls in the session transcripts modified since 2026-11-20 (observed 2026-11-27, method: `t453-count.py`, every `tool_use` of `~/.claude/projects/-diagram*/**/*.jsonl` deduplicated by id, the pattern `git -C <x> commit ... -m`), most of them multi-line `-m` messages with a co-author trailer that the rule now rewrites into a `-F -` heredoc. `nice`, `command`, `nohup`, `env -i` and a quoted `"git"` were missed too (0 measured).
+  - **Kept a limit: a shell's `-c` string at the walk** (1 use in T306's 71,565, a `/tmp` probe). Reading it is shell inside shell: the walk blanks every quoted string to a path placeholder (`tree::sanitize`), so walking the string means unquoting it once (a double-quoted string already expanded by the outer shell, a single-quoted one expanded only by the inner, where `bind` cannot see its values), recognizing `-c` among bundled options (`-lc`, `-ec`) and options before it, walking the result from where the shell stands with no `cd` of it carried out, and giving every target a segment no guard can find in the command's text (readme's own `-c` reader and the `first_redirect` count read it there) - and `eval`, `su -c`, `ssh` are the same shape, unread. Not a few lines; readme's and make-only's and no-poll's own `-c` readers stand.
+  - No refusal text changed, so no message-check is owed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a quoted git at the history guard | red first 2026-11-27; pinned by `a_quoted_git_is_read_as_git` | n/a: tooling | none | n/a |
+| claims-file's git exemption by its spelling | red first 2026-11-27; pinned by `claims_file_hooks::tests::git_is_read_however_it_is_spelled` | n/a: tooling | none | n/a |
+| a parked stage's `git mv` by its spelling | red first 2026-11-27; pinned by `a_git_move_is_read_however_git_is_spelled` | n/a: tooling | none | n/a |
+| phase-source's readers by their names | red first 2026-11-27; pinned by `a_reader_is_read_however_it_is_spelled` | n/a: tooling | none | n/a |
+| house-style's held git search by its spelling | red first 2026-11-27; pinned by `a_git_search_is_held_however_git_is_spelled` | n/a: tooling | none | n/a |
+| shell-check's commit past wrappers and `git -C` | red first 2026-11-27; pinned by `a_commit_is_read_however_git_is_spelled` | n/a: tooling | none | n/a |
 
 ### T453 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every guard that asks "is this git" or "is this a reader" asks `shared::spelled`, so a reader exempting a command or judging a read agrees with the tree guards beside it; what is still unread is said with its count.
+2. **The constraints.** T453's line; T306's section and its limits paragraph in `docs/guards.md`; a guard matches invocations, not mentions; no guard message changes (the brief); 100% line coverage of new Rust.
+3. **Where each comes from.** O: T306's measurement (71,565 Bash calls) and this section's recount of `git -C <x> commit -m`. No GM words bear on the design.
+4. **Do they describe the world here?** Measured 2026-11-27 by the red run: all six readers missed as filed; `is_git_commit` also missed `git -C`, which T306's census did not count (456 real calls).
+5. **The order.** After T306; before T302, as T306 filed it.
+6. **The exits.** Green: the result lines below and the changed guards' suites. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=<crate>`'s result line with the new tests on the old code: `rust/guard/shared` 566 passed, 2 failed (house-style's, parked's); `rust/guard` 575 passed, 4 failed (claims-file's, phase-source's, repo-safety's, shell-check's). GREEN, observed 2026-11-27, method: `make builder-checks CRATE="rust/guard rust/guard/shared"` and the suites of claims-file, house-style, phase-source, repo-safety and shell-check and `tests/hooks/guard-cases.sh`: 579 and 568 passed, lint and format clean; claims-file 24 passed, phase-source 48 passed, house-style, repo-safety, shell-check and the case tables (579) each green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcomes they end: `"git" push --force` passed the history guard; `\git mv` of a parked stage into the phases passed the parked hold; `\cat <held>` and `/usr/bin/grep` read a rebuilt stage's old code unrefused; `\git mv <sheet>` was refused; `$(\git grep -l colour)` had its pattern changed; `git -C <dir> commit -m` with a newline or a stranger's co-author passed shell-check. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A shell's `-c` string is not walked by the walk (1 use, a `/tmp` probe; its cost above). Not a defect seen: no wrong outcome in the week's calls, kept a limit in `docs/guards.md` with its count, not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - guards' gaps
 
 ### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)
 

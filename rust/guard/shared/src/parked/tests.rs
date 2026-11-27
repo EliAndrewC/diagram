@@ -164,6 +164,24 @@ fn a_shell_move_into_the_phases_is_a_hit_and_a_mention_is_not() {
     assert!(unknown.is_empty());
 }
 
+/// 451 T453: a `git mv` is read to its destination however git is spelled; a program whose name only ends in git is not git.
+#[test]
+fn a_git_move_is_read_however_git_is_spelled() {
+    let (_d, c) = world("spelled");
+    let top = c.to_string_lossy().into_owned();
+    for s in ["\\", "/usr/bin/", "command ", "env -i ", "A=1 nice -n 5 "] {
+        let cmd = format!("{s}git mv rust/parked/src/track.rs rust/phases/src/");
+        let got = shell_hits(&cmd, &top, "/home/nobody");
+        assert_eq!(got, [hit(&c, "track", false)], "{cmd}");
+    }
+    let other = shell_hits(
+        "/tmp/mygit mv rust/parked/src/track.rs rust/phases/src/",
+        &top,
+        "/home/nobody",
+    );
+    assert!(other.is_empty());
+}
+
 #[test]
 fn the_words_and_the_refusal() {
     let quoted = words("GM_RESUMED=\"go on with homesteads now\" make task-start F=444 T=T30");

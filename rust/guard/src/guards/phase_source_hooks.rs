@@ -38,9 +38,16 @@ pub const GUARD: Guard = Guard {
 const DEFAULT_GLOB: &str =
     "/diagram/.git/phase-sources.json /diagram/.clones/*/.git/phase-sources.json";
 
+// a read verb by its name however spelled - past a `\`, and by its quotes or its path at a command position, where such a word is a
+// program and not an argument (451 T453: `\cat <held>` and `/usr/bin/git show` passed; `ls rust/cat <held>` stays a mention)
+const VERBS: &str = r"cat|sed|head|tail|less|more|grep|rg|ugrep|awk|nl|bat|python3?";
 static VERB: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r"(?:^|[\s;&|(`$])(?:cat|sed|head|tail|less|more|grep|rg|ugrep|awk|nl|bat|python3?|git\s+(?:show|diff|log|blame))\b")
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    crate::shared::regex::build(&format!(
+        r#"(?:(?:^|[\s;&|(`$])\\?|(?:^|[;&|(`]|\$\()\s*(?:{}|\w+=\S*\s+)*{})(?:{VERBS}|git["']?\s+(?:show|diff|log|blame))\b"#,
+        crate::shared::spelled::WRAPPER_WORDS,
+        crate::shared::spelled::before(&format!("(?:{VERBS}|git)"))
+    ))
+    .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// Whether a pattern with at most one `*` path component matches a file (`compgen -G`, for the shapes this guard is given).

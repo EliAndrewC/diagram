@@ -33,9 +33,9 @@ static VERB: LazyLock<Regex> = LazyLock::new(|| {
         r"(?:^|[\s;&|(])(?:cat|head|tail|less|more|sed|awk|grep|egrep|rg|tee|cp|mv|rm|wc|vi|vim|nano|python3?|perl|truncate|touch)\b|>|<|make\s+(?:lines|append)\b",
     )
 });
-static GIT: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*git\b"));
 
-/// Whether this one piece of a command really touches the sheet: a search's pattern is not the file it searches.
+/// Whether this one piece of a command really touches the sheet: a search's pattern is not the file it searches, and a git command
+/// is git's however git is spelled (451 T453: `\git mv` and `command git rm` were read as a touch the bare `git` is not).
 fn piece_touches(piece: &str) -> bool {
     let words: Vec<&str> = piece.split_whitespace().collect();
     let mut text = piece.to_owned();
@@ -49,7 +49,7 @@ fn piece_touches(piece: &str) -> bool {
     }
     let rest = PATH.replace_all(&text, " ");
     PATH.is_match(&text).unwrap_or(false)
-        && !GIT.is_match(&text).unwrap_or(false)
+        && crate::shared::spelled::program_of(piece) != "git"
         && VERB.is_match(&rest).unwrap_or(false)
 }
 

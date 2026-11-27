@@ -31,8 +31,15 @@ fn re(pattern: &str) -> Regex {
 static PHASE: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?m)^(?:- \[[ x]\] T\d+[a-z]? +|[ \t]*)(?:\[[^\]\n]*\] +)*phase:[ \t]*(\w+)")
 });
-static GIT_MV: LazyLock<Regex> =
-    LazyLock::new(|| re(r"^\s*(?:\w+=\S*\s+)*git\s+(?:-[Cc]\s+\S+\s+|--?\S+\s+)*mv\s"));
+// git by its name however spelled, behind any wrapper (451 T453: `\git mv` and `command git mv` were walked as git's, but their
+// destination was not read, and a parked stage moved into the phases passed)
+static GIT_MV: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        r#"^\s*(?:\w+=\S*\s+|{})*{}git["']?\s+(?:-[Cc]\s+\S+\s+|--?\S+\s+)*mv\s"#,
+        crate::spelled::WRAPPER_WORDS,
+        crate::spelled::before("git")
+    ))
+});
 static WORDS: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?<![\w-])GM_RESUMED=(?:"([^"]*)"|'([^']*)'|(\S+))"#));
 

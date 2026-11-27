@@ -59,14 +59,23 @@ pub static WORDS: LazyLock<Regex> = LazyLock::new(|| {
         .collect();
     re(&format!(r"(?i)\b({})\b|[{DASHES}]", list.join("|")))
 });
+/// git by its name however spelled, with a closing quote (451 T453: `\git grep` and `$(/usr/bin/git grep ...)` were no search, and
+/// their patterns were corrected).
+static GIT: LazyLock<String> =
+    LazyLock::new(|| format!(r#"{}git\b["']?"#, crate::spelled::before("git")));
 static LEAD: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"^(?:\s+|!|\(|\{|\$\(|`|(?:then|do|else|elif|if|while|until|time|sudo|command|env|nohup|git)\b|[A-Za-z_][A-Za-z0-9_]*=\S*|xargs(?:\s+-\S+)*\b)+",
-    )
+    re(&format!(
+        r"^(?:\s+|!|\(|\{{|\$\(|`|(?:then|do|else|elif|if|while|until|time|sudo|command|env|nohup)\b|{}|[A-Za-z_][A-Za-z0-9_]*=\S*|xargs(?:\s+-\S+)*\b)+",
+        *GIT
+    ))
 });
 static HELD_SHAPES: LazyLock<Vec<Regex>> = LazyLock::new(|| {
     vec![
-        re(&format!(r"\$\(\s*(?:git\s+)?(?:{SEARCHERS})\b[^)]*\)")),
+        re(&format!(
+            r"\$\(\s*(?:{}|{}\s+)*(?:{SEARCHERS})\b[^)]*\)",
+            crate::spelled::WRAPPER_WORDS,
+            *GIT
+        )),
         re(r"[\w\\.?*+-]+(?:\\?\|[\w\\.?*+-]+)+"),
         re(&format!(
             r"\[[^\]\n]*[{DASHES}][^\]\n]*\]|\$'[^'\n]*[{DASHES}][^'\n]*'"

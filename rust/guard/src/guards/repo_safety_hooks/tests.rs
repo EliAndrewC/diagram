@@ -171,3 +171,23 @@ fn git_is_read_however_it_is_spelled() {
         assert_eq!(v(cmd), None, "{cmd}");
     }
 }
+
+/// 451 T453: a quoted git is git (`"git" push -f` was blanked as a payload and passed); a quoted word that is no command stays one.
+#[test]
+fn a_quoted_git_is_read_as_git() {
+    for (cmd, rule) in [
+        ("\"git\" push --force origin main", "force-push"),
+        ("'git' rebase main", "history-rewrite"),
+        ("ls && \"/usr/bin/git\" commit --amend", "history-rewrite"),
+    ] {
+        assert_eq!(v(cmd), Some(rule), "{cmd}");
+    }
+    for cmd in [
+        "echo \"git\" push --force",
+        "FOO=\"git\" push -f",
+        "git commit -m \"git push --force\"",
+        "git log --grep \"rebase\"",
+    ] {
+        assert_eq!(v(cmd), None, "{cmd}");
+    }
+}

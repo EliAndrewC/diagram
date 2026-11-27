@@ -429,3 +429,18 @@ fn a_pattern_argument_is_held_where_the_shape_held_it() {
         assert_eq!(got, want, "{text:?}");
     }
 }
+
+/// 451 T453: a git search is held as a mention however git is spelled, as the bare `git grep` is.
+#[test]
+fn a_git_search_is_held_however_git_is_spelled() {
+    for s in ["git", "\\git", "/usr/bin/git", "\"git\"", "command git"] {
+        for named in [
+            format!("echo \"$({s} grep -l {WORD})\" >> a.md"),
+            format!("{s} grep -n {WORD} a.md"),
+        ] {
+            assert!(run(&named).1.is_empty(), "{named}");
+        }
+    }
+    let other = format!("echo \"$(/tmp/mygit grep -l {WORD})\" >> a.md");
+    assert_eq!(run(&other).1.len(), 1);
+}

@@ -3925,14 +3925,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T453 (<why: the finding or measurement that files it>)": {
-   "sha256": "eb71a208aa0116c0dc8e7546706aca7c43afddea20ceb00f757043218685bd79",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T453 Approach (checklist part A)": {
-   "sha256": "e537aa33df82971a4b0f8aeceaff497710175b6bf3362746783a5586bfa42613",
+   "sha256": "e595d7bb09561ea5620c44b324ff6c520db1567ada3e516a88bd79c8de0829a6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,12 @@
   },
   "### T466 Approach (checklist part A)": {
    "sha256": "051736bafd3201530e45f2cd0d26638b9a36eab324e25c4e88ba6fadc4bf15f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)": {
+   "sha256": "39a78dcbe7f03c9237f65342ac078851f9df43f1f3ae79d68e0772353b96921b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37858,6 +37858,80 @@
      "summary": "Three unfilled template sections (placeholder '<why...>' heading, placeholder Approach, empty table) removed",
      "class": "within",
      "why": "The removed text was the bare section template with no decision, figure or scope in it; removing it decides nothing and narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)",
+    "### T453 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T453 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T453-D1",
+     "summary": "history guard keeps a quoted no-space string naming git (spelled::names) unquoted, so \"git\" push --force is refused; echo \"git\" push, FOO=\"git\" push, a -m message naming git stay unrefused (pinned)",
+     "class": "within",
+     "why": "ends a check passing bad work (red first on the old code); the pinned non-refusals hold the standing rule that a guard matches invocations, not mentions (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D2",
+     "summary": "claims-file's git exemption by spelled::program_of, the GIT pattern removed",
+     "class": "within",
+     "why": "ends a check refusing good work (\\git mv and command git rm of a sheet refused where git mv is not) (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D3",
+     "summary": "parked stages' git mv read by its spelling (WRAPPER_WORDS, before(\"git\"))",
+     "class": "within",
+     "why": "ends the parked hold passing a \\git mv / command / env -i / nice of a parked stage into the phases (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D4",
+     "summary": "phase-source's readers read by their names past wrappers, a \\ and a path at command position; xargs kept as command word; command -v a lookup; a path is a program only at a command position (ls rust/cat <held> stays a mention, pinned)",
+     "class": "within",
+     "why": "ends held code read unrefused by \\cat, /usr/bin/grep, nice cat, /usr/bin/git show, xargs command cat; command -v and the path-in-argument case are mentions/lookups, not reads, per invocations-not-mentions (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D5",
+     "summary": "house-style's held git search by its spelling, WRAPPER_WORDS inside $(...)",
+     "class": "within",
+     "why": "ends the guard rewriting a \\git grep search pattern, a tool answering wrongly (the search finds something else) (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D6",
+     "summary": "shell-check's is_git_commit by spelled, past git 2.43's valued options (-C, -c, --git-dir, --work-tree, --namespace, --config-env), so git -C <dir> commit -m is judged and its multi-line -m rewritten to -F - (456 of 105,078 calls, observed 2026-11-27 with its method)",
+     "class": "within",
+     "why": "the existing rule applied to the form it missed: a stranger's co-author or a newline message passed unjudged, a check passing bad work; it adds no new rule, only reach for the rule already in force over git commit, so it is enforcement of an existing check, not new behavior; no refusal text changes (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-kept-c-limit",
+     "summary": "a shell's -c string (and eval, su -c, ssh) is not walked; kept a limit in docs/guards.md with its count, not filed",
+     "class": "within",
+     "why": "not a defect under constitution XIV's definition (a WRONG OUTCOME): the block gives 1 use in T306's 71,565 calls, a /tmp probe, and no bad work passed or good work refused - the count is T306's as cited, not re-measured over this block's 105,078-call window, which does not change the reading. The seam with D1-D5, also near-zero-use forms the block calls wrong outcomes: those were fixed at a few lines' cost as discretion, and fixing a cheap unused form is not an admission that every unused form is a defect; the ground here is the measured outcome, not the cost. A recorded limit with its count leaves no known defect, so it is within and needs no ruling. Should a -c call ever pass bad work, it becomes a defect and is fixed in its step."
+    },
+    {
+     "id": "T453-message-check",
+     "summary": "no refusal text changed, so no message-check owed",
+     "class": "within",
+     "why": "follows from the brief's no-message-change constraint; the 2026-11-23 hook-output-length words are not touched"
+    },
+    {
+     "id": "T453-order",
+     "summary": "after T306, before T302, one landing; red-first and green exits as measured",
+     "class": "within",
+     "why": "the order T306 filed; nothing in the request or spec orders otherwise"
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "four removed blocks (T437, T440, T453, T464) were unfilled templates",
+     "class": "within",
+     "why": "a template stub holds no decision; removing it narrows nothing (T453's is replaced by the filled sections above)"
     }
    ]
   }

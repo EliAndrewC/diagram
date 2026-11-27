@@ -13,7 +13,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::shape::strip_heredocs;
-use crate::shared::spelled::{before, WRAPPER_WORDS};
+use crate::shared::spelled::{before, names, WRAPPER_WORDS};
 use crate::shared::state::field;
 
 /// The guard.
@@ -68,13 +68,19 @@ static MOUNT: LazyLock<[Regex; 2]> = LazyLock::new(|| {
     ]
 });
 
-/// The command with its payload blanked: heredoc bodies, then quoted strings.
+/// The command with its payload blanked: heredoc bodies, then quoted strings - but a quoted git, which is the command word wherever
+/// the bare one would be (451 T453: `"git" push -f` was blanked and passed).
 fn sanitized(cmd: &str) -> String {
     let body = strip_heredocs(cmd);
     let (mut out, mut from) = (String::new(), 0);
     for m in QUOTED.find_iter(&body).map_while(Result::ok) {
         out.push_str(&body[from..m.start()]);
-        out.push_str(" QUOTED ");
+        let git = !m.as_str().contains(char::is_whitespace) && names(m.as_str(), "git");
+        out.push_str(if git {
+            m.as_str().trim_matches(['"', '\''])
+        } else {
+            " QUOTED "
+        });
         from = m.end();
     }
     out + &body[from..]
