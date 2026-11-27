@@ -17,14 +17,16 @@ before they cost a gate.
 **Landed after those:** T478 T473 T353 T360 T482 T475 T479 T481 T310 T483 T480 T386 T485 T447 (fabc9c464e, about 13:30Z) -
 99 tasks on main overnight in all, in six batches.
 
-**Landed after those:** T387 T388 T487 T486 (fccfc1fc72), then T491 T493 T489 T488 T495 T492 (32f1d09283) - 109 tasks on main
-in eight batches.
+**Landed after those:** T387 T388 T487 T486, T491 T493 T489 T488 T495 T492, T499 T497 T494 T496 T498, T500 T501 T502, T490
+T504, T470 T363, T505 T506 (main at b651b4cc1e, 2026-11-27 afternoon) - 123 tasks on main in thirteen batches. Before each batch
+gate since 09:39Z the changed crates' coverage has been run first, catching every would-be coverage red before a gate; no batch
+gate has been red since.
 
-**Still building:** T497 with T494 (review-round's one parse a dispatch; the guards' gate calls' launcher walk). Open and unbuilt
-in 451 besides: T470, T490, T496, T498, T499 (how much of the plan builders read into context), T363, and the GM-held T302, T405,
-T307 part 3, T321, T415, T308, T401, T354. T487 found that the two refused ticks of T475 earlier were an archive that left
-T475's Approach behind, not the removed verdict the session first blamed; T495 closed the merge tie that let a carry overwrite
-its verdict.
+**Still building:** T507 (where a hot hook's remaining 5 to 8 ms over a state with no dispatches goes). Open and unbuilt in 451
+besides: T503 (T501's saving over a day of builders, once a day has passed) and the GM-held T302, T405, T307 part 3, T321, T415,
+T308, T401, T354. T487 found that the two refused ticks of T475 were an archive that left T475's Approach behind, not the removed
+verdict the session first blamed; T495 closed the merge tie that let a carry overwrite its verdict. The GM's fifth message on the
+process reviewer (token cost as important as throughput) is in `port-talk-gm-goal.md`.
 
 **Two more of my mistakes, besides those listed below:** a red-gate trigger id derived by hand, 3 s off the guard's (an arbiter
 ruling under it discharged nothing; T477 now refuses such an id), and three coverage repairs reshaped without running coverage,
