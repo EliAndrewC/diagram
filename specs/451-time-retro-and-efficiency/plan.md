@@ -7841,3 +7841,89 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)
+
+- **Approach**: the cause measured first, then one change in `rust/gate/crates/plan/src/plan/history.rs`.
+  - **(1) The cause, measured 2026-11-27** (a scratch clone of diagram-backlog at 98b632638d with its `plan-seen` store, the 06:43Z batch's 35 tasks through `l7r-gate tick --land-check` - the first pass's own `tick::checks` - and `l7r-gate plan push 2988fee630...HEAD`, plan-gate.sh's call, each with a trace of every History made, its caller, each question and its answer; load average 9 to 20). The tick checks made 70 Histories, two a task: `inside.rs:76` (`built_inside`) and `status.rs:338` (`held_for`, through `tick_gate`). They asked 2,418 questions, and the record keeps no block or section text (675 blocks, 283 task verdicts, none with `text`), so each question walked the versions, 9 of the 69 distinct ones to the end (477 versions) and the rest 7 to 332 back, measured 2026-11-27 (the traced runs). Each version a question walked was parsed again (`blocks()` or `task_sections()` over up to 1 MB), 588,486 parses, and every History fetched its versions anew, 18,100 fetched in 760 `cat-file` chunks, measured 2026-11-27 (the traced runs). The run took 1,252 s and 232 MB at most, measured 2026-11-27 (the traced runs), `plan push` took 35.6 s (69 questions, 16,773 parses), measured 2026-11-27 (the traced runs), and one task alone 63 s, measured 2026-11-27 (the traced runs). So the cost was the re-parse per question, not git: it grows with the questions (the tasks of the batch) times the versions walked (the commits of plan.md).
+  - **(2) Each version fetched and parsed once a process.** A version (a commit's plan.md) never changes. The first History to reach it fetches it and indexes it once: each block's key to (its block digest, its text), each task to (its section's digest, the section), every string interned. The index lives in a thread-local store keyed by (commit, path in the repository) and is shared by every History and question after; the raw text is dropped once indexed. A question keeps the newest-first walk and its chunks of 25 (D63), each step a hash lookup where it was a parse, so each answer is the one the walk gave: keys are unique within a version (`blocks` numbers a repeated heading `#2`), and a version that cannot be read is indexed as the empty text, as the walk read it. A History's list of versions is kept by (its path, the commit its reference names when asked): `git log` over the path took 0.3 s at 19,603 commits (measured 2026-11-27, `time git log` in the scratch clone) and the first pass made 70 of them, and a commit made between two Histories, as the landing makes, gives the second its own list.
+  - **(3) After, the same runs** (measured 2026-11-27, the scratch clone, load 9 to 16): the 35-task tick checks 92 s and 80 MB at most (from 1,252 s and 232 MB), 477 versions fetched once; `plan push` 6.7 s and 79 MB (from 35.6 s and 194 MB), measured 2026-11-27 (the traced runs); every one of the 69 distinct answers and both commands' outputs the same as before (the traces diffed). Of the 92 s, 9.4 s is in History (the one indexing pass about 5 s of it), measured 2026-11-27 (the traced runs), and the other 83 s, about 2.4 s a task, is the tick checks' own judgment of the plan, outside History (found and left, below), measured 2026-11-27 (the traced runs).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| each version read and parsed once a process | `history/tests.rs` `every_version_is_read_and_parsed_once_however_many_questions_ask`: four questions over one History and two over another, all missing, over 30 versions, measured 2026-11-27 (the traced runs, the test's own figures). Red on the old code, (60 fetched, 180 parsed) against (30, 30): the crate's tests 205 passed and 1 failed (measured 2026-11-27, `make rust-test CRATE=rust/gate/crates/plan`). Green after, 206 passed and 0 failed. The same test pins the first block of a key, a repeated heading's `#2`, the newest section, and a commit between two Histories seen by the second only (31 versions, 31 parses) | n/a: tooling | none | none |
+| the newer text of a shared digest | `a_digest_two_versions_share_answers_with_the_newer_text`: a body and the same body with a `plan-archive` line share a block digest; the answer at HEAD, HEAD~1 and HEAD~2 is the newest version's at that reference. Green on the old code and after: the walk's answer kept | n/a: tooling | none | none |
+
+### T457 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing's first pass costs about the same whatever plan.md's history holds, and every plan answer is unchanged.
+2. **The constraints.** D63: versions are read newest first, in chunks, only as far back as a question needs. Each answer stays the first one the newest-first walk finds. A landing commits between its questions, so a History reads the versions of its own reference at the time it is asked.
+3. **Where each comes from.** O: the traced runs of (1) and (3). R: `history.rs`'s D63 comment and `status.rs`'s callers.
+4. **Do they describe the world here?** Yes. The runs were made over a copy of the clone's own history and verdict store, with the batch whose first pass took 2,031 s, measured 2026-11-27 (the clone's event log, its `step: cheap` line of 06:43Z).
+5. **The order.** After T419's batch, which showed the growth. Before T464 and T465, which take the rest of the first pass's plan cost.
+6. **The exits.** Green: the red test green, the before-and-after answers the same, and the first pass's plan calls timed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The 35-task tick checks run in 92 s, from 1,252 s, and `plan push` in 6.7 s, from 35.6 s, with the same 69 answers, measured 2026-11-27 (the scratch clone, load 9 to 16). The versions are fetched and parsed once a process, 477, from 18,100 fetched and 588,486 parsed.
+10. **Before moving a constant.** n/a. CHUNK stays 25.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A batch landing's first pass takes about 1.5 minutes where it took 34, measured 2026-11-27 (the traced runs), and no plan verdict changes.
+
+**Found and left?**
+- The tick checks still spend about 2.4 s a task outside History: 83 s of the 92 s for 35 tasks, in-process CPU (17.1 s user of 18.4 s for five tasks), observed 2026-11-27, method: the after-run's trace of time inside History against the run's wall time. Not fixed here: which function takes it is unmeasured (perf cannot open events in the container), and judging the feature once a landing rather than once a task is a change of the tick's shape. Filed as T464; lands before T22.
+- The versions are still read once in each process that asks: about 5 s of indexing in each of the tick checks, `plan push` and the push table's plan row, growing with every commit of plan.md, observed 2026-11-27, method: the after-run's trace. Not fixed here: an index kept on disk, keyed by the commits it covers, is a new store with its own catch-up and its own tests. Filed as T465; lands before T22.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings faster). The 35-task first pass's tick checks went from 1,252 s to 92 s and `plan push` from 35.6 s to 6.7 s, measured 2026-11-27 (the scratch clone). Not an engine-speed task: no checklist answers owed.
+
+### T464 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T464 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T465 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T465 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

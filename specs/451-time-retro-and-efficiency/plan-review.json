@@ -3901,12 +3901,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T449 (<why: the finding or measurement that files it>)": {
-   "sha256": "7286fa16a9d9acc855fa70451322a8235ea83a7afd3d92fa7c5040515c8930c8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T449 Approach (checklist part A)": {
    "sha256": "4fec2a7be1ffc25b71b398b2878998fa8474ead13ad68c8f1159de23fb6fd028",
    "verdict": "CLEAR",
@@ -3953,23 +3947,23 @@
    "sha256": "41c854ebfdae13e00d95f0b9e73a51dd62cb43edd3945dfddd723f9ebbc15ad7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T448 Approach (checklist part A)": {
    "sha256": "de64d17060e50beef577412a3038d0460633d26028e6e35f9d7c7f8aaa0657a3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T451 (<why: the finding or measurement that files it>)": {
    "sha256": "4102cd33ae2f24703ac18ab6d952bafa36c136d667f505f56dffe1b20ca961e8",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T451 Approach (checklist part A)": {
    "sha256": "12e0615563812f88c6507b9cd746fdc939d86416da2474e863530e09b9224e29",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
@@ -4071,6 +4065,42 @@
   },
   "### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)": {
    "sha256": "9180cce69c95fe1c112fa86099cd1a2b3c79384963c2c1721f6f31c0935f186d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)": {
+   "sha256": "58894ef3718d4c774db03d47d16e68969afd189ebd1882d0a790c6f213153eb2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T457 Approach (checklist part A)": {
+   "sha256": "7e38667c284eb294ff5fd19c1dca12328972bf87fde3ff85fd9265ad1cba90e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T464 (<why: the finding or measurement that files it>)": {
+   "sha256": "c2c9ababdbb08867184321b77b75586992fc8594ec41817631ae7540ceb68700",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T464 Approach (checklist part A)": {
+   "sha256": "57740864b56bf5e94019dc92bb99ccdeb49722916c15fd247a3829386f050b6f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T465 (<why: the finding or measurement that files it>)": {
+   "sha256": "2e6deda4839a440f7a91dd74cef63e98be349f07256baf720b07fdc5d809849b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T465 Approach (checklist part A)": {
+   "sha256": "241dfc2758426bc62a5f81a3d83c4fab0ba860e4cd861dec86d07f4ba10ba0ee",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36720,6 +36750,73 @@
      "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
      "class": "within",
      "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (<why: the finding or measurement that files it>)",
+    "### T451 Approach (checklist part A)",
+    "### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)",
+    "### T457 Approach (checklist part A)",
+    "### T464 (<why: the finding or measurement that files it>)",
+    "### T464 Approach (checklist part A)",
+    "### T465 (<why: the finding or measurement that files it>)",
+    "### T465 Approach (checklist part A)",
+    "(removed) ### T449 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T457-cache",
+     "summary": "Each plan.md version is fetched and indexed once per process (block key -> digest and text, task -> section digest and section) in a thread-local store keyed by (commit, path), shared by every History and question; the raw text dropped once indexed.",
+     "class": "within",
+     "why": "Performance work on the landings, which FR-013 and the GM's 2026-11-20 words put first; it changes how fast answers are reached, not what they are."
+    },
+    {
+     "id": "T457-answers-kept",
+     "summary": "The newest-first walk in chunks of 25 (D63) is kept, each answer the one the walk gave; an unreadable version indexed as empty text, as the walk read it; CHUNK stays 25; the 69 distinct answers and both commands' outputs diffed the same before and after.",
+     "class": "within",
+     "why": "Keeps existing plan-answer behavior that the request does not ask to change; a speed change that alters no verdict."
+    },
+    {
+     "id": "T457-version-list",
+     "summary": "A History's version list is keyed by (path, the commit its reference names when asked), so a commit made between two Histories during a landing gives the second its own list.",
+     "class": "within",
+     "why": "Correctness of the same answers under the landing's own commits; pinned by the test's 31-version case."
+    },
+    {
+     "id": "T457-tests",
+     "summary": "Two tests in history/tests.rs: one red on the old code pinning one fetch and one parse per version across Histories and questions (plus first-block-of-key, #2 headings, newest section, a mid-run commit); one green on both pinning a shared digest's newest text.",
+     "class": "within",
+     "why": "Enforcement of the requested change and of the unchanged answers; serves the request, not unrequested scope."
+    },
+    {
+     "id": "T457-defer-T464",
+     "summary": "About 2.4 s a task of in-process CPU outside History is left; Not fixed here, filed as T464, lands before T22.",
+     "class": "within",
+     "why": "A remaining slowness, not a wrong outcome (no crash, hang, wrong answer or refused good work), so not a known defect owed under fix-as-we-go; it is filed as its own performance task in D15's deferral form."
+    },
+    {
+     "id": "T457-defer-T465",
+     "summary": "Versions are still indexed once per process (about 5 s each in tick checks, plan push and the push table's plan row); an on-disk index is left; Not fixed here, filed as T465, lands before T22.",
+     "class": "within",
+     "why": "Further speed-up, not a defect; filed in D15's form as its own task. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T448/T451/T464/T465-templates",
+     "summary": "The four tasks' blocks are the unfilled task template, the same text as when last judged (only their digests in the bundle markers differ).",
+     "class": "within",
+     "why": "An unfilled template decides nothing the spec left open."
+    },
+    {
+     "id": "T449-removed",
+     "summary": "T449's block, an unfilled task template when last judged (CLEAR), is removed.",
+     "class": "within",
+     "why": "Removing an empty template takes away no decision and no requested behavior."
     }
    ]
   }
