@@ -283,6 +283,9 @@ impl fmt::Display for HandInState {
         match self {
             Self::Landed => f.write_str("landed"),
             Self::Superseded => f.write_str("superseded"),
+            Self::Ejected(r) if r.starts_with("ask:") => {
+                write!(f, "ejected -> the round arbiter {r}")
+            }
             Self::Ejected(r) => write!(f, "ejected -> repair {r}"),
             Self::InBatch(b) => write!(f, "in batch {b}"),
             Self::Waiting => f.write_str("waiting"),
@@ -335,7 +338,7 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     if ejected.is_none() {
         return HandInState::Waiting;
     }
-    // to the repair its last `eject` line names
+    // to the repair its last `eject` line names, or the round arbiter's trigger it waits on (461 T18: the tripwire files no repair)
     let ejection = w
         .log
         .iter()
@@ -343,7 +346,7 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
         .find(|l| l["event"] == "eject" && mentions(l, &h.commit));
     HandInState::Ejected(
         ejection
-            .and_then(|l| l["repair"].as_str())
+            .and_then(|l| l["repair"].as_str().or_else(|| l["arbiter"].as_str()))
             .unwrap_or_default()
             .to_owned(),
     )

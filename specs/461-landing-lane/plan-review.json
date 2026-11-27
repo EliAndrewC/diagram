@@ -708,6 +708,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T18 (D6 step 4, D7's table: the lane's own red-gate tripwire, keyed by task, with the arbiter and its repair entry; T17's stand-down leaves the lane's runs to it)": {
+   "sha256": "2e551fec69edcde782f7aabd7497c30aa08c62e8921b5f2e0a07bf9febb5f48b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "495e11245631d71939e740c29d582d5bd83923979545cb47aad33acda6f57b32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4538,6 +4550,70 @@
      "why": "A status line that names a repair no command offers is a wrong answer (a defect), but it is in the lane crate T15/T18 own, filed with a landing order before T23, not carried past the feature; nothing the GM asked for is narrowed by fixing it in its own task."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T18 (D6 step 4, D7's table: the lane's own red-gate tripwire, keyed by task, with the arbiter and its repair entry; T17's stand-down leaves the lane's runs to it)",
+    "### T18 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T18 D1",
+     "summary": "Pins counted one a batch and keyed by (feature, task); a bundle's change pins each of its tasks; a change no hand-in names pins nothing; ejections with why red, inferred or unplaced count.",
+     "class": "within",
+     "why": "How the plan's D6 tripwire identifies a task's repeat ejection; it changes nothing the GM asked for. The request's red path (eject the failing change, land the rest, return it as a repair entry) is kept, and a task is still returned as a repair, now through the arbiter's ruling."
+    },
+    {
+     "id": "T18 D2",
+     "summary": "The held change's own eject line (no repair, the trigger it waits on) is the hold; the batch's stop line lists it as held, so other changes read waiting and land in the next batch.",
+     "class": "within",
+     "why": "Data-model mechanics. Per the end-to-end test, an innocent hand-in lands while a held change waits, so the hold does not block the rest of the batch. That is the request's 'the rest of the batch lands'."
+    },
+    {
+     "id": "T18 D3",
+     "summary": "The ruling is read from the clone's specs/<spec>/arbiter.jsonl, where make arbiter-ruled writes it, not from the lane's tree, which is reset to origin/main each batch.",
+     "class": "within",
+     "why": "Says where an existing record is read from. No scope change."
+    },
+    {
+     "id": "T18 D4",
+     "summary": "The runner stops at the trip, and its next start (make lane-start or a hand-in's own start) files the ruling's repair.",
+     "class": "within",
+     "why": "Takes the plan's 'the lane stops' literally. A hand-in's own start restarts the runner, so other work is not held waiting on the coordinator, and the coordinator gets one owed line, which is FR-005's wake 'otherwise only for US5's cases'."
+    },
+    {
+     "id": "T18 D5",
+     "summary": "A third pin asks the arbiter under its own trigger lane-<task>-<n>; a bundle's tasks are joined in the subject.",
+     "class": "within",
+     "why": "Needed because arbiter-ask refuses a trigger that has already been ruled. A naming choice with no change to what is asked."
+    },
+    {
+     "id": "T18 D6",
+     "summary": "The ruling's eject line carries of_batch, not batch, so the three readers do not read a closed batch as reopened.",
+     "class": "within",
+     "why": "Internal field naming, recorded in data-model.md. No scope effect."
+    },
+    {
+     "id": "T18 D7",
+     "summary": "An ask the arbiter refuses still stops the batch and holds the change, and the owed line names the make arbiter-ask command to run by hand. No retry.",
+     "class": "within",
+     "why": "The fallback still ends in one owed line naming the action, and no check or route is dropped (FR-008)."
+    },
+    {
+     "id": "T18 D8",
+     "summary": "The WHY text avoids the pool-route words that arbiter bundle --check-ask would refuse without a pool result.",
+     "class": "within",
+     "why": "A wording convention so that an existing check accepts the ask. No scope effect."
+    },
+    {
+     "id": "T18 approach A12",
+     "summary": "Fixes a defect in the T15 tests: their stand-in Phase line had no newline, so a second red attempt's line was glued to the first. The new tests write it with its newline.",
+     "class": "within",
+     "why": "A known defect fixed on the way, as the fix-as-we-go rule asks. The old tests are unchanged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5347,6 +5423,68 @@
      "summary": "make lane's status (lane crate log.rs repairs_open) lists a superseded repair as open; not fixed here, filed as T65 to land before T23",
      "class": "within",
      "why": "A status line that names a repair no command offers is a wrong answer (a defect), but it is in the lane crate T15/T18 own, filed with a landing order before T23, not carried past the feature; nothing the GM asked for is narrowed by fixing it in its own task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T18": {
+   "section_sha256": "0d168473a9768e680c470e438ebec8f6d7cff364cb682bd877e3cd16e4b906ac",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T18 D1",
+     "summary": "Pins counted one a batch and keyed by (feature, task); a bundle's change pins each of its tasks; a change no hand-in names pins nothing; ejections with why red, inferred or unplaced count.",
+     "class": "within",
+     "why": "How the plan's D6 tripwire identifies a task's repeat ejection; it changes nothing the GM asked for. The request's red path (eject the failing change, land the rest, return it as a repair entry) is kept, and a task is still returned as a repair, now through the arbiter's ruling."
+    },
+    {
+     "id": "T18 D2",
+     "summary": "The held change's own eject line (no repair, the trigger it waits on) is the hold; the batch's stop line lists it as held, so other changes read waiting and land in the next batch.",
+     "class": "within",
+     "why": "Data-model mechanics. Per the end-to-end test, an innocent hand-in lands while a held change waits, so the hold does not block the rest of the batch. That is the request's 'the rest of the batch lands'."
+    },
+    {
+     "id": "T18 D3",
+     "summary": "The ruling is read from the clone's specs/<spec>/arbiter.jsonl, where make arbiter-ruled writes it, not from the lane's tree, which is reset to origin/main each batch.",
+     "class": "within",
+     "why": "Says where an existing record is read from. No scope change."
+    },
+    {
+     "id": "T18 D4",
+     "summary": "The runner stops at the trip, and its next start (make lane-start or a hand-in's own start) files the ruling's repair.",
+     "class": "within",
+     "why": "Takes the plan's 'the lane stops' literally. A hand-in's own start restarts the runner, so other work is not held waiting on the coordinator, and the coordinator gets one owed line, which is FR-005's wake 'otherwise only for US5's cases'."
+    },
+    {
+     "id": "T18 D5",
+     "summary": "A third pin asks the arbiter under its own trigger lane-<task>-<n>; a bundle's tasks are joined in the subject.",
+     "class": "within",
+     "why": "Needed because arbiter-ask refuses a trigger that has already been ruled. A naming choice with no change to what is asked."
+    },
+    {
+     "id": "T18 D6",
+     "summary": "The ruling's eject line carries of_batch, not batch, so the three readers do not read a closed batch as reopened.",
+     "class": "within",
+     "why": "Internal field naming, recorded in data-model.md. No scope effect."
+    },
+    {
+     "id": "T18 D7",
+     "summary": "An ask the arbiter refuses still stops the batch and holds the change, and the owed line names the make arbiter-ask command to run by hand. No retry.",
+     "class": "within",
+     "why": "The fallback still ends in one owed line naming the action, and no check or route is dropped (FR-008)."
+    },
+    {
+     "id": "T18 D8",
+     "summary": "The WHY text avoids the pool-route words that arbiter bundle --check-ask would refuse without a pool result.",
+     "class": "within",
+     "why": "A wording convention so that an existing check accepts the ask. No scope effect."
+    },
+    {
+     "id": "T18 approach A12",
+     "summary": "Fixes a defect in the T15 tests: their stand-in Phase line had no newline, so a second red attempt's line was glued to the first. The new tests write it with its newline.",
+     "class": "within",
+     "why": "A known defect fixed on the way, as the fix-as-we-go rule asks. The old tests are unchanged."
     }
    ],
    "verdict": "CLEAR"

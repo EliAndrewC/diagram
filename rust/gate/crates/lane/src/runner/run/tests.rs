@@ -45,6 +45,14 @@ const PUSH_LINES: &str = concat!(
 
 const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n@PUSH@\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
 
+/// The round arbiter's ask (461 T18), as the lane runs it in its tree: its words kept in the common directory's `asked` file, the
+/// bundle named on stdout; with an `ask-fails` file there, refused.
+const ASK: &str = concat!(
+    "arbiter-ask:\n\t",
+    r#"@c=$$(git rev-parse --git-common-dir); printf '%s\n' "SUBJECT=$(SUBJECT) FILES=$(FILES) spec=$$SPECIFY_FEATURE dir=$$SPECIFY_FEATURE_DIRECTORY" '$(WHY)' >> "$$c/asked"; if [ -f "$$c/ask-fails" ]; then echo refused >&2; exit 1; fi; echo "bundle: /tmp/arbiter-$(SUBJECT)/MANIFEST.md""#,
+    "\n"
+);
+
 struct World {
     dir: TempDir,
     clone: PathBuf,
@@ -73,9 +81,10 @@ fn world(tag: &str) -> World {
     put(
         &clone,
         "Makefile",
-        &MAKEFILE
+        &(MAKEFILE
             .replace("@RED@", RED_LINES)
-            .replace("@PUSH@", PUSH_LINES),
+            .replace("@PUSH@", PUSH_LINES)
+            + ASK),
     );
     put(
         &clone,
@@ -873,3 +882,5 @@ fn a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_n
         .unwrap()
         .ends_with("461-1-2.log"));
 }
+
+mod tripwire;

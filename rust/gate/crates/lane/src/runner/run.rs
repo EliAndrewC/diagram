@@ -41,7 +41,11 @@
 //!
 //! THE SEAMS LEFT: a carry that stops ends the step with an error after its line, and a `make` that cannot start (exit -1, no
 //! change's fault) or a first pass that refused with a row naming no change of the batch (461 T15's plan review) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
-//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25), the halving that replaces the whole-batch ejection T24's, the tripwire by task T18's.
+//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25), the halving that replaces the whole-batch ejection T24's.
+//!
+//! THE TRIPWIRE BY TASK (461 T18, `crate::tripwire`): an ejection that pins a task a second time files no repair - the change held by
+//! its `eject` line, the arbiter asked, the batch's `stop` line, the runner stopped ([`trip`]) - and each step first files the repair
+//! of every hold whose ruling the clone now records ([`file_ruled`]).
 
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
@@ -54,6 +58,7 @@ use serde_json::{json, Value};
 
 use crate::attribute::{self, Change, Refusal, Verdict};
 use crate::log::{self, Batch, HandIn, World};
+use crate::tripwire::{self, Trip};
 use crate::{batch, repairs};
 
 /// What `make` in the lane's tree never inherits from the runner's caller (the module's doc).
@@ -143,10 +148,11 @@ fn all_hand_ins(common: &Path) -> Vec<HandIn> {
 ///
 /// The run's own (the module's doc), or a line that could not be written.
 pub fn step(l: &Lane) -> Result<bool, String> {
+    let filed = file_ruled(l)?;
     let lane = log::read(l.common);
     let batches = log::batches(&lane);
     if batches.iter().any(Batch::open) {
-        return Ok(false);
+        return Ok(filed);
     }
     let refs: BTreeSet<String> = done_refs(l.common).into_iter().map(|(_, s)| s).collect();
     let hand_ins = log::on_lane(all_hand_ins(l.common), &refs, &lane);
@@ -163,13 +169,58 @@ pub fn step(l: &Lane) -> Result<bool, String> {
         .cloned()
         .collect();
     let Some(first) = picked.first() else {
-        return Ok(false);
+        return Ok(filed);
     };
     let id = batch::next_id(&lane, &first.feature);
     let shas: Vec<&str> = picked.iter().map(|h| h.commit.as_str()).collect();
     l.append("batch", &json!({"batch": id, "changes": shas}))?;
     run_batch(l, &id, &picked)?;
     Ok(true)
+}
+
+/// THE RULING'S REPAIR (461 T18, D7's table): each hold of a stopped batch whose ruling the clone's `specs/<spec>/arbiter.jsonl`
+/// now records filed as ONE repair entry (`why` `arbiter`, its units the ruling, `attempt` the trigger), then an `eject` line of each
+/// held change naming it (`of_batch`, `crate::tripwire`'s doc) and one `owed` line; true where one was filed. A kill between the entry
+/// and its lines files it again under the same id (`repairs::file`).
+fn file_ruled(l: &Lane) -> Result<bool, String> {
+    let mut filed = false;
+    for h in crate::tripwire::awaiting(&log::read(l.common)) {
+        let dir = l.clone_dir().join("specs").join(&h.spec);
+        let rulings = l7r_shared::checks::arbiter::rulings_of(&dir);
+        let Some(ruling) = rulings.get(&h.trigger) else {
+            continue;
+        };
+        let units = crate::tripwire::units(ruling);
+        let entry = repairs::Entry {
+            feature: h.spec.clone(),
+            tasks: h.tasks.clone(),
+            kind: "fix".to_owned(),
+            ejected: h.changes.clone(),
+            batch: h.batch.clone(),
+            why: "arbiter".to_owned(),
+            units: units.clone(),
+            attempt: h.trigger.clone(),
+        };
+        let r = repairs::file(l.common, &l7r_gate_core::record::repo::utc_now(), &entry)?;
+        for c in &h.changes {
+            l.append(
+                "eject",
+                &json!({"of_batch": h.batch, "change": c, "repair": r, "why": "arbiter"}),
+            )?;
+        }
+        let feature = h.spec.split('-').next().unwrap_or_default();
+        let line = format!(
+            "lane: the round arbiter ruled {} {} - {feature} {} of batch {} filed as repair {r} (arbiter: {}) - make builder-next hands it to a fresh builder",
+            h.trigger,
+            ruling["ruling"].as_str().unwrap_or_default(),
+            h.tasks.join(" "),
+            h.batch,
+            units.join(", ")
+        );
+        l.append("owed", &json!({"batch": h.batch, "line": line}))?;
+        filed = true;
+    }
+    Ok(filed)
 }
 
 /// RECOVERY's run (data-model.md): the open batch `b` of a killed runner, its `remaining` changes run as a new attempt on the tree
@@ -287,7 +338,7 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
                 break;
             }
             Attempt::Red(out) => {
-                let ejected = eject(l, id, &todo, &out)?;
+                let ejected = eject(l, id, &tree, &todo, &out)?;
                 let rest: Vec<HandIn> = todo
                     .into_iter()
                     .filter(|h| !ejected.contains(&h.commit))
@@ -640,9 +691,17 @@ fn integrate(
 
 /// PHASE 2'S EJECTION (D6 "By phase", D7): the `attribute` line, then each placed change as a repair entry of its own (`why` `red`,
 /// its units), or, unplaced, every change of `todo` as ONE entry (`why` `unplaced`, every unit read) - each entry filed before its
-/// `eject` lines (`repairs`' doc), then one `owed` line an entry, naming it and the attempt file. The ejected commits, returned.
-fn eject(l: &Lane, id: &str, todo: &[&HandIn], red: &Redden) -> Result<Vec<String>, String> {
-    let groups: Vec<(Vec<&HandIn>, Vec<String>, &str)> = match &red.verdict {
+/// `eject` lines (`repairs`' doc), then one `owed` line an entry, naming it and the attempt file. The ejected commits, returned. A
+/// group a task of which this ejection pins a SECOND time (461 T18, `crate::tripwire`) files no repair: once every other group is
+/// filed, [`trip`] holds it for the round arbiter and stops the runner.
+fn eject(
+    l: &Lane,
+    id: &str,
+    tree: &Path,
+    todo: &[&HandIn],
+    red: &Redden,
+) -> Result<Vec<String>, String> {
+    let groups: Vec<Group> = match &red.verdict {
         Verdict::Unplaced => vec![(
             red.unplaced.iter().map(|&i| todo[i]).collect(),
             red.units.clone(),
@@ -666,7 +725,29 @@ fn eject(l: &Lane, id: &str, todo: &[&HandIn], red: &Redden) -> Result<Vec<Strin
         "attribute",
         &json!({"batch": id, "candidates": candidates, "how": how}),
     )?;
-    for (hs, units, why) in &groups {
+    // each group's trips, read before any line of this ejection is written (the pins are other batches')
+    let (history, entries, hand_ins) = (
+        log::read(l.common),
+        repairs::read(l.common),
+        all_hand_ins(l.common),
+    );
+    let trips: Vec<Vec<Trip>> = groups
+        .iter()
+        .map(|(hs, _, _)| {
+            hs.iter()
+                .flat_map(|h| {
+                    tripwire::trips(&history, &entries, &hand_ins, &h.feature, &h.tasks, id)
+                })
+                .collect()
+        })
+        .collect();
+    let mut held: Vec<(&Group, &[Trip])> = Vec::new();
+    for (group, trip) in groups.iter().zip(&trips) {
+        if !trip.is_empty() {
+            held.push((group, trip));
+            continue;
+        }
+        let (hs, units, why) = group;
         let tasks: Vec<String> = hs.iter().flat_map(|h| h.tasks.clone()).collect();
         let entry = repairs::Entry {
             feature: red.spec.clone(),
@@ -685,21 +766,124 @@ fn eject(l: &Lane, id: &str, todo: &[&HandIn], red: &Redden) -> Result<Vec<Strin
                 &json!({"batch": id, "change": h.commit, "repair": r, "why": why}),
             )?;
         }
-        let named = if units.is_empty() {
-            "the record names none".to_owned()
-        } else {
-            units.join(", ")
-        };
         let feature = hs.first().map_or("", |h| h.feature.as_str());
         let line = format!(
-            "lane: batch {id} red at attempt {} - {feature} {} ejected as repair {r} ({why}: {named}) - make builder-next hands it to a fresh builder: {}",
+            "lane: batch {id} red at attempt {} - {feature} {} ejected as repair {r} ({}) - make builder-next hands it to a fresh builder: {}",
             red.n,
             tasks.join(" "),
+            said(group),
             red.attempt
         );
         l.append("owed", &json!({"batch": id, "line": line}))?;
     }
-    Ok(candidates.into_iter().map(str::to_owned).collect())
+    if held.is_empty() {
+        return Ok(candidates.into_iter().map(str::to_owned).collect());
+    }
+    trip(l, id, tree, red, &held)
+}
+
+/// An ejection's group: its changes, its units and its `why`.
+type Group<'a> = (Vec<&'a HandIn>, Vec<String>, &'static str);
+
+/// A group's `<why>: <units>`, or that the record names none.
+fn said(group: &Group) -> String {
+    let (_, units, why) = group;
+    let named = if units.is_empty() {
+        "the record names none".to_owned()
+    } else {
+        units.join(", ")
+    };
+    format!("{why}: {named}")
+}
+
+/// A command's exit, stdout and stderr; one that could not start is exit -1, its error the stderr.
+fn outcome(o: std::io::Result<std::process::Output>) -> (i32, String, String) {
+    match o {
+        Ok(o) => (
+            o.status.code().unwrap_or(-1),
+            String::from_utf8_lossy(&o.stdout).into_owned(),
+            String::from_utf8_lossy(&o.stderr).into_owned(),
+        ),
+        Err(e) => (-1, String::new(), e.to_string()),
+    }
+}
+
+/// THE TRIPWIRE FIRED (461 T18, D6 step 4; `crate::tripwire`'s doc): each held change's `eject` line with no repair and the trigger
+/// it waits on, `make arbiter-ask` in the lane's tree with the two attempt files (its output beside the attempt's, `.arbiter.log`),
+/// the batch's `stop` line, and the runner stopped through [`stopped`] - its one `owed` line.
+fn trip(
+    l: &Lane,
+    id: &str,
+    tree: &Path,
+    red: &Redden,
+    held: &[(&Group, &[Trip])],
+) -> Result<Vec<String>, String> {
+    let trips: Vec<Trip> = held.iter().flat_map(|(_, t)| t.iter().cloned()).collect();
+    let subject = tripwire::subject(&trips);
+    let trigger = format!("ask:{subject}");
+    let changes: Vec<&HandIn> = held.iter().flat_map(|(g, _)| g.0.iter().copied()).collect();
+    for ((hs, _, why), _) in held {
+        for h in hs {
+            l.append(
+                "eject",
+                &json!({"batch": id, "change": h.commit, "repair": null, "why": why, "arbiter": trigger, "attempt": red.attempt}),
+            )?;
+        }
+    }
+    let files = tripwire::files(&trips, &red.attempt).join(" ");
+    let tasks: Vec<String> = changes.iter().flat_map(|h| h.tasks.clone()).collect();
+    let feature = changes.first().map_or("", |h| h.feature.as_str());
+    let reds: Vec<String> = held.iter().map(|(g, _)| said(g)).collect();
+    let mut before: Vec<&str> = trips.iter().map(|t| t.before.batch.as_str()).collect();
+    before.dedup();
+    let pin = trips.iter().map(|t| t.n).max().unwrap_or(2);
+    let why = format!(
+        "{feature} {} was ejected red by the landing lane again (pin {pin}): batch {}, then batch {id} at attempt {} ({}). The lane filed no second repair. Rule: continue (the work its repair then does), accept, or a process fault.",
+        tasks.join(" "),
+        before.join(", "),
+        red.n,
+        reds.join("; ")
+    );
+    let spec_dir = format!("specs/{}", red.spec);
+    let env = [
+        ("SPECIFY_FEATURE", red.spec.as_str()),
+        ("SPECIFY_FEATURE_DIRECTORY", spec_dir.as_str()),
+    ];
+    let words = [
+        "--no-print-directory".to_owned(),
+        "arbiter-ask".to_owned(),
+        format!("SUBJECT={subject}"),
+        format!("WHY={why}"),
+        format!("FILES={files}"),
+    ];
+    let words: Vec<&str> = words.iter().map(String::as_str).collect();
+    let (code, out, err) = outcome(in_tree(tree, &words, &env).output());
+    let kept = format!("{}.arbiter.log", red.attempt);
+    let _ = std::fs::write(&kept, format!("{out}{err}"));
+    let shas: Vec<&str> = changes.iter().map(|h| h.commit.as_str()).collect();
+    l.append(
+        "stop",
+        &json!({"batch": id, "why": "arbiter", "trigger": trigger, "spec": red.spec, "tasks": tasks, "held": shas, "attempts": files}),
+    )?;
+    let asked = match (code, tripwire::manifest(&out)) {
+        (0, Some(m)) => format!("dispatch round-arbiter on {m}"),
+        (0, None) => format!("dispatch round-arbiter on the bundle its output names ({kept})"),
+        _ => format!(
+            "make arbiter-ask SUBJECT={subject} FILES=\"{files}\" failed (exit {code}: {}), its output {kept}: ask it by hand, then dispatch round-arbiter on its bundle",
+            err.lines().next().unwrap_or_default().trim()
+        ),
+    };
+    stopped(
+        l,
+        id,
+        format!(
+            "lane: batch {id} stopped at attempt {} - {feature} {} red again ({}; pinned before in batch {}), no repair filed: the round arbiter is owed {trigger} - {asked}; once make arbiter-ruled records its ruling, make lane-start files its repair (why arbiter)",
+            red.n,
+            tasks.join(" "),
+            reds.join("; "),
+            before.join(", ")
+        ),
+    )
 }
 
 #[cfg(test)]

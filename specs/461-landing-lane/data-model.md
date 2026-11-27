@@ -89,12 +89,13 @@ naming several crates (a `cover-build` of a family) one unit over all of them, `
 | `event` | written when | its own fields |
 |---|---|---|
 | `start`, `stop` | the runner starts or ends | `pid`, `why` |
+| `stop` (of a batch) | the tripwire by task fires (461 T18) | `batch`, `why` `arbiter`, `trigger` (`ask:lane-<task>`, `-<n>` from a third pin), `spec`, `tasks`, `held` (the changes it holds), `attempts` |
 | `batch` | a batch is formed | `batch`, `changes` |
 | `carry` | the batch's carries end | `code`, `conflict` (files) |
 | `run` | a gate attempt ends | `n`, `set`, `code`, `minutes`, `attempt`, `red` (the attributed units) |
 | `attribute` | a red is read | `candidates` (the changes it names), `how` (`record`, `none`) |
 | `push` | a set is pushed, or its push failed after a green gate | `set`, `code` (0, 3 merged, other); `failed: true` where the push failed (461 T19: the batch's first runs the set again on the new `origin/main`, its second files the `integrate` entry) |
-| `eject` | a change leaves the batch | `change`, `repair`, `why` |
+| `eject` | a change leaves the batch | `change`, `repair`, `why`; at a second pin (461 T18) `repair` null, `arbiter` (the trigger it waits on) and `attempt`; the ruling's repair's line `of_batch` in place of `batch` (the batch ended at its `stop`), `why` `arbiter` |
 | `landed` | the batch is done | `landed`, `ejected`, `runs`, `minutes` |
 | `owed` | the coordinator is owed a line | `line` (the status `make lane-wait` prints); `stopped: true` on the runner's own line that it stopped with the batch open (461 T15), which no death line follows |
 

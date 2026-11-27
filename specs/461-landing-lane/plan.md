@@ -1050,31 +1050,43 @@ measurement task counts).
 
 
 <!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T18 (<why: the finding or measurement that files it>)
+### T18 (D6 step 4, D7's table: the lane's own red-gate tripwire, keyed by task, with the arbiter and its repair entry; T17's stand-down leaves the lane's runs to it)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/tripwire.rs` (new, pure) reads a task's PINS - the `eject` lines of `lane.jsonl` with `why` `red`, `inferred` or `unplaced`, any batch, whose change is a hand-in of that feature's task (the pool log's `done` lines) - ONE A BATCH. `runner/run.rs`'s `eject` reads every group's trips before writing any line of the ejection: a group with no task pinned in another batch is filed as T15 filed it; a group with one is held, and once the others are filed `trip` writes each held change's `eject` line (`repair` null, `arbiter` the trigger, `attempt`), runs `make arbiter-ask SUBJECT=lane-<task> WHY=... FILES="<the pin before's attempt> <this attempt>"` in the lane's tree under `SPECIFY_FEATURE=<spec>` (its output kept as `<attempt>.arbiter.log`), writes the batch's `stop` line (`why` `arbiter`, `trigger`, `spec`, `tasks`, `held`, `attempts`) and stops the runner through `stopped()` - the coordinator's ONE owed line, naming the trigger and the bundle (the `MANIFEST.md` the ask printed), or, the ask refused, the command to run by hand. `step` first runs `file_ruled`: each such hold whose ruling the clone's `specs/<spec>/arbiter.jsonl` records is filed as ONE repair entry (`why` `arbiter`, `units` `<ruling>: <what>`, `attempt` the trigger), an `eject` line naming it a held change, and one owed line. `log::state` reads a held change `ejected -> the round arbiter <trigger>`, so it forms no batch while it waits. Red first, 2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::tripwire"` on the old run.rs: 0 passed, 2 failed (the second pin's step returned `Ok`, a second repair filed). Green: the crate 80 of 80; `make builder-checks CRATE="rust/gate/crates/lane"` clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **Pins are counted by batch and keyed by (feature, task).** A task ejected twice in one batch - a kill between an entry and its `eject` lines, 461 T15 Decision 7 - is one pin; `T01` of 451 never pins `T01` of 461; a bundle's change pins each of its tasks; a change no hand-in names pins nothing. Label: D6's "each batch ejects a task at most once" and "keyed by TASK", the feature the easier and stricter reading. Pinned by `tripwire::tests::a_task_s_pins_are_its_pinning_ejections_one_a_batch_keyed_by_feature_and_task`.
+2. **The held change's `eject` line is the hold.** A `stop` line of the batch closes it, so its other changes read `waiting` and land in the next batch; the held one's own `eject` line (no repair, the trigger it waits on) keeps it off every batch until the ruling's repair. Label: the easier route; the `stop` line's changes are `held`, not `changes`, so `log::mentions` never reads them as the last line naming the change. Pinned by the end-to-end test (a step with no ruling forms nothing; an innocent hand-in lands meanwhile).
+3. **The ruling is read in the clone's `specs/<spec>/arbiter.jsonl`**, where `make arbiter-ruled` run in the clone writes it, uncommitted until the coordinator's push; not the lane's tree, which each batch resets to `origin/main`. Label: the easier route.
+4. **The runner stops at the trip, and its next start files the ruling's repair** (`make lane-start`, which the owed line names, or a hand-in's own start). Label: the task's "the lane stops" read literally; no runner waits on a ruling the coordinator dispatches.
+5. **A third pin asks under `lane-<task>-<n>`**, n the pin: `arbiter-ask` refuses a ruled trigger (one ruling a trigger, binding), so the second ruling needs a trigger of its own, and the first ruling, read under its own trigger, files nothing for the new hold. A bundle's tasks are joined `lane-<task>-<task>`. Label: the plan is silent; the easier route. Pinned by `runner::run::tests::tripwire::the_held_task_waits_on_its_ruling_whose_repair_is_filed_once_and_a_third_pin_asks_anew`.
+6. **The ruling's `eject` line carries `of_batch`, not `batch`.** The batch ended at its `stop`; `log::state_of`, `tree/state.rs`'s `batch_open` and `builder_tree.rs`'s open check would read a later `eject` of it as the batch reopened. Label: the easier route over three readers' edits; data-model.md's `eject` row says it.
+7. **An ask the arbiter refuses still stops the batch and holds the change**, its line naming `make arbiter-ask SUBJECT= FILES=` to run by hand; the hold waits on the same trigger. Label: the easier route (no retry). Pinned by `an_ask_the_arbiter_refuses_still_stops_the_batch_and_its_line_names_the_ask_to_run_by_hand`.
+8. **The WHY avoids the pool-route words** (`route`, `regress`), which `arbiter bundle --check-ask` would refuse without a pool result (`sections::pool_unstated`), read 2026-11-27. Label: convention.
 
 ### T18 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task the lane ejects red a second time - its repair red again, or one task ejected from two batches - stops the lane with no second repair and one line for the coordinator: dispatch the round arbiter on the bundle the lane asked for; once ruled, the lane files the ruling's work as one repair a fresh builder takes.
+2. **The constraints.** D6 step 4 (the pin rule, the second pin, `make arbiter-ask SUBJECT=lane-<task>` with the two attempt files, one owed line), D7's table (the arbiter's row: the repair `why` `arbiter` filed once `make arbiter-ruled` records the ruling), FR-005, FR-008, data-model.md's batch and repair entry.
+3. **Where each comes from.** R: plan.md D6, D7; tasks.md T18's line; data-model.md. O: `arbiter.rs`'s `ask_cli` and `home.rs` (the ask's feature, its "already ruled" refusal), `sections.rs`'s `pool_unstated`, and the three readers of a batch's `stop` line, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the owed triggers live in the git common directory the lane's tree shares (`arbiter-owed.json`), and the ruling in the clone's feature directory where the coordinator's round arbiter records it.
+5. **The order.** After T15 (the red path, the repairs writer, `stopped()`) and T17 (the stand-down); before T22 (T17's plan review) and T24 (the halving's `inferred` pins).
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The lane crate 80 of 80, 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`); the red-first counts above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new behavior. One test defect fixed on the way: the T15 tests' stand-in Phase line had no newline, so a second red attempt's line was glued to the first and neither parsed - the new tests write it with its newline (`red()`); the old tests write it once and are unchanged.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T19 (phase 2's failed push: a green batch whose push fails runs again once on the new `origin/main`, and a second failure is one `integrate` repair entry)

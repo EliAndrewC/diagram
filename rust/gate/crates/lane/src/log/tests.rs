@@ -255,10 +255,20 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
         HandInState::Ejected(String::new())
     );
     let stop = json!({"event": "stop", "batch": "461-1", "why": "arbiter"});
-    assert_eq!(ask(&b, &all, &[], &[formed, stop]), HandInState::Waiting);
+    assert_eq!(
+        ask(&b, &all, &[], &[formed.clone(), stop.clone()]),
+        HandInState::Waiting
+    );
+    // held by the tripwire (461 T18): its ejection names no repair but the round arbiter's trigger, and the stop holds it no less
+    let held = json!({"event": "eject", "batch": "461-1", "change": A, "repair": null, "why": "red", "arbiter": "ask:lane-T01"});
+    assert_eq!(
+        ask(&a, &all, &[], &[formed, held, stop]),
+        HandInState::Ejected("ask:lane-T01".into())
+    );
     let shown: Vec<String> = [
         HandInState::Landed,
         HandInState::Superseded,
+        HandInState::Ejected("ask:lane-T01".into()),
         HandInState::Ejected("r2".into()),
         HandInState::InBatch("461-3".into()),
         HandInState::Waiting,
@@ -271,6 +281,7 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
         [
             "landed",
             "superseded",
+            "ejected -> the round arbiter ask:lane-T01",
             "ejected -> repair r2",
             "in batch 461-3",
             "waiting"
