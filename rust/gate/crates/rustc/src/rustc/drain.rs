@@ -3,7 +3,8 @@
 //! phase for that process's life (measured 2026-11-26 in the pool tree diagram-backlog-t270, three runs at load 9.7 to 11.4: the
 //! binary exited at 2.00 to 2.04 s, the pipe ended at 5.16 to 5.18 s). Here each pipe is read on a thread of its own while the run
 //! waits on the program; once it has exited, the readers get `DRAIN` to reach the pipe's end. A pipe still open after that is cut
-//! only where another process holds it (`holders`, read from `/proc`): what was read is taken, and the holders are named on stderr
+//! only where another process holds it (`holders`, read from `/proc`, found twice `AGAIN` apart, never a spawn of this process between
+//! its fork and its exec, 451 T535): what was read is taken, and the holders are named on stderr
 //! under `HELD`, one line that `answer` shows on a green crate too, so the leak is seen rather than waited for. Where none holds it
 //! the only writer has exited and the reader is merely late (a loaded machine), so the run waits for the pipe's end: a cut there
 //! would lose the output's tail - a test build's last `executable` lines among it. A test run's leak fails its crate, and the
@@ -17,9 +18,14 @@ use std::sync::{mpsc, Arc, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
 /// How long, after the program's exit, the readers have to reach the pipes' end before the run asks who still holds them: what is
-/// left then is at most a pipe's buffer each, so this is slack for a loaded machine's scheduling, and it is what a leak now costs, a
-/// tenth of the 3.1 s T340's cost. A GUESS knob: a late reader no other process holds is waited for, never cut, so it loses no output.
+/// left then is at most a pipe's buffer each, so this is slack for a loaded machine's scheduling, and with `AGAIN` it is what a leak now
+/// costs, a tenth of the 3.1 s T340's cost. A GUESS knob: a late reader no other process holds is waited for, never cut, so it loses no output.
 const DRAIN: Duration = Duration::from_millis(250);
+
+/// How long after a pipe's holders are first found they are looked for again, a holder being one found both times (451 T535): a
+/// child between its fork and its exec is skipped by `holders`, but the kernel names its new program a moment before it drops the
+/// descriptors it copied, and that moment is far shorter than this. A GUESS knob, paid only where a pipe is still held at `DRAIN`.
+const AGAIN: Duration = Duration::from_millis(50);
 
 /// The opening of the line that names a pipe still held after its program exited.
 pub(super) const HELD: &str = "rust-checks: HELD";
@@ -77,10 +83,21 @@ pub(super) fn ended(program: &str, out: &Reader, err: &Reader) -> (String, Strin
         .into_iter()
         .filter(|r| !r.ended_by(deadline))
         .collect();
-    let held = if open.is_empty() {
+    let first = if open.is_empty() {
         Vec::new()
     } else {
         holders(&[out.inode, err.inode])
+    };
+    // a holder is one found twice: a spawn's child caught in the instant its exec has named the new program but not yet dropped its
+    // close-on-exec descriptors is gone by the second look (451 T535)
+    let held: Vec<String> = if first.is_empty() {
+        first
+    } else {
+        std::thread::sleep(AGAIN);
+        holders(&[out.inode, err.inode])
+            .into_iter()
+            .filter(|h| first.contains(h))
+            .collect()
     };
     if held.is_empty() {
         // nothing else holds a pipe still open: its reader is late, never cut
@@ -112,10 +129,15 @@ pub(super) fn late_pipe(late: Duration, text: &'static str) -> Reader {
     Reader::start(read)
 }
 
-/// Each process but this one with a descriptor on one of the pipes, as `pid N (its command line)`, read from `/proc`.
+/// Each process but this one with a descriptor on one of the pipes, as `pid N (its command line)`, read from `/proc`. A child of this
+/// process still running this process's program is no holder (451 T535): it is another thread's spawn between its fork and its exec,
+/// which copied every descriptor here, the pipes' close-on-exec ends among them, and drops them at its exec; counted, a parallel run's
+/// spawn cut a late reader's tail and named itself `HELD` (red 3 of 3 with the window forced, measured 2026-11-27). The run's own
+/// child is reaped before `ended` asks, and this program runs no copy of itself, so no real holder is skipped.
 fn holders(inodes: &[u64]) -> Vec<String> {
     let wanted: Vec<String> = inodes.iter().map(|i| format!("pipe:[{i}]")).collect();
     let me = std::process::id().to_string();
+    let program = std::fs::read_link("/proc/self/exe").ok();
     let mut found = Vec::new();
     for entry in std::fs::read_dir("/proc").into_iter().flatten().flatten() {
         let pid = entry.file_name().to_string_lossy().into_owned();
@@ -123,8 +145,14 @@ fn holders(inodes: &[u64]) -> Vec<String> {
             .into_iter()
             .flatten()
             .flatten();
+        let forking = || {
+            std::fs::read_link(entry.path().join("exe")).ok() == program
+                && std::fs::read_to_string(entry.path().join("status"))
+                    .is_ok_and(|s| s.lines().any(|l| l == format!("PPid:\t{me}")))
+        };
         let holds = pid != me
             && pid.bytes().all(|b| b.is_ascii_digit())
+            && !forking()
             && fds
                 .filter_map(|fd| std::fs::read_link(fd.path()).ok())
                 .any(|l| wanted.iter().any(|w| l.as_os_str() == w.as_str()));

@@ -7308,31 +7308,32 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T535 (<why: the finding or measurement that files it>)
+### T535 (the batch gate of 2026-11-27 19:10Z failed T364's late-reader test once on good work; the round arbiter's ruling on red-gate@2026-11-27T19:10:08Z: a defect in the test or the drain, found red first)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the defect is in the drain, not the test. `late_pipe`'s pipe is already close-on-exec (`flags: 02000000` and `02000001` in `/proc/self/fdinfo`, observed 2026-11-27, method: a scratch program printing a `std::io::pipe()`'s two ends), so no exec'd child can inherit it. But a child that another thread has forked and not yet exec'd holds a copy of every descriptor, close-on-exec or not, and `holders` (`rustc/drain.rs`) counted it. The test then failed, and the real gate would too, because `run_in`'s reader holds the pipe's read end, which a parallel run's spawn copies. The late reader was cut, its tail lost, and the spawn named on a false `HELD` line. RED FIRST: the new test `a_late_reader_is_not_cut_for_a_child_of_this_process_between_its_fork_and_its_exec` parks a child in that window past `DRAIN` with `pre_exec`. The child writes a byte to say it is there, so the window is forced, not hoped for. On the old code it failed 3 of 3 runs, and the existing `a_late_reader_with_no_holder_is_waited_for_not_cut` failed with it each time, its pipes copied by the parked child, 4 passed and 2 failed of 6 each run, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::drain"`, three runs, load 7 to 9). The HELD line named the test binary itself, `pid N (.../l7r_gate_rustc-... --report-time rustc::tests::drain)`, observed 2026-11-27, method: those runs' output. THE FIX, in `holders`: a process is skipped when its parent is this process and its `/proc/<pid>/exe` is this process's program, because that is a spawn between its fork and its exec. Sound because the run's own child is reaped before `ended` asks, and nothing under this program runs a copy of itself. The kernel names the new program a moment before an exec drops its close-on-exec descriptors (`begin_new_exec`), so `ended` also counts a holder only where it is found twice, `AGAIN` (50 ms, a GUESS knob, paid only where a pipe is still held at `DRAIN`) apart, as `left.rs` does with `GRACE`. Green: 5 of 5 runs of the drain and left tests (9 tests), and the crate's 158 tests, measured 2026-11-27 (`make rust-test ... ONLY=` five times; `make builder-checks CRATE="rust/gate/crates/rustc"`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a spawn between its fork and its exec is no holder of a late pipe (`rustc/drain.rs`), red first 2 of 6 failed on 3 of 3 runs, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T535 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A late reader is cut only for a real holder of its pipe, never for a parallel run's spawn, so the gate loses no tail and names no false `HELD`.
+2. **The constraints.** T364's drain (a held pipe costs about `DRAIN` past the exit) and T363's leak pin are unchanged. The round arbiter's ruling of red-gate@2026-11-27T19:10:08Z applies: find the defect with a red-first test.
+3. **Where each comes from.** O: the batch gate's failure of 2026-11-27 19:10Z, in T535's line. O: this task's red-first and green runs, measured 2026-11-27 (`make rust-test`). O: the pipe's flags, observed 2026-11-27, method: `/proc/self/fdinfo` read by a scratch program.
+4. **Do they describe the world here?** Yes. The forced window reproduced the gate's exact assertion failure in the old test, 3 of 3, measured 2026-11-27 (`make rust-test`).
+5. **The order.** After T364 and T363, whose code it changes.
+6. **The exits.** Green: the red-first test and the crate's tests passing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The forced window fails 3 of 3 runs on the old code and passes 5 of 5 on the new, and the crate passes 158 tests, measured 2026-11-27 (`make rust-test`, `make builder-checks`).
+10. **Before moving a constant.** `AGAIN` is new, a GUESS knob (above). `DRAIN` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map: this is tooling. A batch gate no longer fails this test for a parallel spawn. A real leak's `HELD` line comes `AGAIN` (50 ms, a GUESS knob) later.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: it fixes a false red in the gate's checks and makes nothing faster.
 
 ### T534 (<why: the finding or measurement that files it>)
 

@@ -4800,6 +4800,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T535 (the batch gate of 2026-11-27 19:10Z failed T364's late-reader test once on good work; the round arbiter's ruling on red-gate@2026-11-27T19:10:08Z: a defect in the test or the drain, found red first)": {
+   "sha256": "b1cd793814425c9e93c849e45be1543698b21a038b96fa24d841fb79c281c2f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T535 Approach (checklist part A)": {
+   "sha256": "7d393533fb9a58925c654ec3bd1105dca680b63e5131f27c9c0316d985af33a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43698,6 +43710,46 @@
      "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
      "class": "within",
      "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T535 (the batch gate of 2026-11-27 19:10Z failed T364's late-reader test once on good work; the round arbiter's ruling on red-gate@2026-11-27T19:10:08Z: a defect in the test or the drain, found red first)",
+    "### T535 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T535-D1 locate the defect in the drain",
+     "summary": "The false red is put in rustc/drain.rs's holders, which counted a sibling thread's spawn caught between its fork and its exec as a holder of the late pipe. The test is kept as it is.",
+     "class": "within",
+     "why": "The arbiter's ruling (red-gate@2026-11-27T19:10:08Z, quoted in the block heading) is that the defect is in the test or the drain and must be found red first. The GM's 2026-11-26 words in request.md on the test that fails under load ('I agree with prioritizing the test that fails under load being fixed') and the fix-as-we-go rule both call for fixing a check that refuses good work. Fixing the root cause in the drain, rather than relaxing the test, keeps the test's job intact."
+    },
+    {
+     "id": "T535-D2 red-first forced-window test",
+     "summary": "A new test parks a child in the fork-to-exec window past DRAIN with pre_exec, and the child signals that it is there. On the old code it failed 3 of 3 runs and took the existing no-holder test down with it.",
+     "class": "within",
+     "why": "This is enforcement of the fix the arbiter ruled must be found red first. If the fix is deleted the test fails, so it is verification and not new behavior."
+    },
+    {
+     "id": "T535-D3 skip rule in holders",
+     "summary": "A process is not counted as a holder when its parent is this process and its /proc/<pid>/exe is this process's program, i.e. a spawn that has forked but not yet exec'd.",
+     "class": "within",
+     "why": "This is the fix itself. It narrows nothing the GM asked for. T363's leak pin and T364's drain are stated as unchanged, and a real holder (any exec'd process, or anything not a child of this program) is still counted. The soundness premise ('nothing under this program runs a copy of itself') is a design claim. It is not a narrowing of the request."
+    },
+    {
+     "id": "T535-D4 AGAIN double observation",
+     "summary": "ended counts a holder only if it is found twice, AGAIN apart (50 ms, a GUESS knob, paid only when a pipe is still held at DRAIN), as left.rs does with GRACE. This closes the gap where the exe is renamed just before begin_new_exec drops close-on-exec descriptors.",
+     "class": "within",
+     "why": "Part of the same fix, closing a race in the skip rule. It is labeled a GUESS knob. It costs 50 ms only on a real leak's HELD line, and the block states that cost (checklist item 12). It is not a narrowing of anything asked."
+    },
+    {
+     "id": "T535-D5 not performance work, found-and-left none, one landing",
+     "summary": "Classed as a false-red fix, not performance work. Nothing found and left. Budget of one landing. Ordered after T364 and T363.",
+     "class": "within",
+     "why": "A gate check that refuses good work is a defect to fix as it is found. Nothing is deferred, so no narrowing arises. Ordering after the tasks whose code it changes is mechanical."
     }
    ]
   }

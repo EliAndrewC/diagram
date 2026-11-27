@@ -55,6 +55,35 @@ fn a_late_reader_with_no_holder_is_waited_for_not_cut() {
     assert!(stdout == "late\n" && stderr.is_empty());
 }
 
+/// A child another thread of this process has forked and not yet exec'd holds a copy of every descriptor this process has, the late
+/// pipe's ends among them, close-on-exec or not: it is no holder of the pipe, and the late reader is still waited for, not cut (451
+/// T535; the batch gate of 2026-11-27 19:10Z failed the test above once so). The child here parks in that window past `DRAIN`, and
+/// says when it is there.
+#[test]
+fn a_late_reader_is_not_cut_for_a_child_of_this_process_between_its_fork_and_its_exec() {
+    use std::io::{Read as _, Write as _};
+    use std::os::unix::process::CommandExt as _;
+    let (out, err) = (
+        super::super::drain::late_pipe(std::time::Duration::from_millis(400), "late\n"),
+        super::super::drain::late_pipe(std::time::Duration::ZERO, ""),
+    );
+    let (mut there, told) = std::io::pipe().unwrap();
+    let forking = std::thread::spawn(move || {
+        let (mut child, park) = (Command::new("true"), std::time::Duration::from_secs(1));
+        // SAFETY: the closure runs in the forked child before its exec and only writes a byte and sleeps, write(2) and nanosleep(2);
+        // on one line, since what runs only in the child is never counted by coverage
+        unsafe {
+            child.pre_exec(move || (&told).write_all(b"x").map(|()| std::thread::sleep(park)))
+        };
+        child.status()
+    });
+    let mut byte = [0u8; 1];
+    there.read_exact(&mut byte).unwrap();
+    let (stdout, stderr) = super::super::drain::ended("x", &out, &err);
+    assert!(forking.join().unwrap().unwrap().success());
+    assert!(stdout == "late\n" && stderr.is_empty(), "{stderr}");
+}
+
 /// A crate whose test run left a process on its output says so, is red for it (451 T363, `left.rs`), and the run does not wait for it.
 #[test]
 fn a_crate_whose_run_left_a_holder_names_it_and_is_red() {
