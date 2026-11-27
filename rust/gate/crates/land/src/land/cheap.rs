@@ -7,6 +7,7 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
+use l7r_gate_task::tick::Section;
 use l7r_shared::py_text::strip;
 use l7r_shared::speckit::splitlines;
 
@@ -56,6 +57,8 @@ pub enum Pass {
     HandIn {
         /// The commit the work was applied onto.
         base: String,
+        /// Whether the tasks' plan sections are owed here: `Later` for a build half's or a measurement's (461 T44).
+        section: Section,
     },
 }
 
@@ -260,12 +263,12 @@ impl Land {
         pass: &Pass,
         deferred: Option<&mut Vec<String>>,
     ) -> Result<Vec<String>, String> {
-        let base = match pass {
-            Pass::Landing => None,
-            Pass::HandIn { base } => Some(base.clone()),
+        let (base, section) = match pass {
+            Pass::Landing => (None, Section::Owed),
+            Pass::HandIn { base, section } => (Some(base.clone()), *section),
         };
         let prior = self.hand_in.replace(base);
-        let out = self.first_pass(d, tasks, note, deferred);
+        let out = self.first_pass(d, tasks, note, section, deferred);
         let hand_in = self.hand_in.replace(prior).is_some();
         // a builder runs `make builder-done` again, never `make land` (each cure's last words)
         Ok(out?
@@ -285,6 +288,7 @@ impl Land {
         d: &Path,
         tasks: &[String],
         note: &str,
+        section: Section,
         deferred: Option<&mut Vec<String>>,
     ) -> Result<Vec<String>, String> {
         let base = self.hand_in.borrow().clone();
@@ -304,9 +308,11 @@ impl Land {
         // the landing tree's HEAD, read once for every task's named files (451 T294, [`super::named`])
         let held = self.held()?;
         // each task's tick refusal and `refusal(..., landed=False)`, in process (feature 449 T131, where this ran `tick-task.py
-        // --land-check` by path): a raise there is the landing's, as the import's was
+        // --land-check` by path): a raise there is the landing's, as the import's was; the plan section owed but at a build half's or a
+        // measurement's hand-in (461 T44)
+        let env = self.tick_env();
         for checked in
-            l7r_gate_task::tick::checks(&self.root, d, note, tasks, self.boxes, &self.tick_env())?
+            l7r_gate_task::tick::checks(&self.root, d, note, tasks, self.boxes, &env, section)?
         {
             if checked.box_open {
                 self.box_open.borrow_mut().push(checked.task.clone());

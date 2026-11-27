@@ -173,14 +173,21 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
     // TWO TIERS (451 T308; the GM 2026-11-26, docs/process-decisions.md "Two tiers of checking"): every kind that changes source runs
     // the first tier and no coverage - the closing half too, which ran `make crate-checks` until the GM's ruling that coverage is the
     // second tier's alone. The one builder that runs coverage is the one whose job is the repair of a batch gate red on it.
-    let first_tier = format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).");
+    // ...its one exception named in a fix's block alone, since a batch gate's coverage repair is briefed as a fix (461 T44: a build
+    // half's block with every option given ran past the 2,000-character cap once it carried the hand-in line)
+    let repair = if a.kind == "fix" {
+        " (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names)"
+    } else {
+        ""
+    };
+    let first_tier = format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run{repair}.");
     let (stop, checks) = match a.kind {
         "measurement" => (
             format!("STOP POINT (measurement, {} things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.", a.measures),
             "CHECKS: none - you change no source.".to_owned(),
         ),
         "build-half" => (
-            format!("STOP POINT (build half): build and test, red-first, then END at a handoff, {}, by about 200k of context: what is built, each decision and why, the red-first counts, what is not done or not tested. No plan section, `make decide`, plan review or claims step.", handoff.display()),
+            format!("STOP POINT (build half): build and test, red-first, then END at a handoff, {}, by about 200k: what is built, each decision and why, the red-first counts, what is not done or tested. No plan section, `make decide`, plan review or claims step.", handoff.display()),
             first_tier,
         ),
         "closing-half" => (
@@ -202,31 +209,26 @@ fn block(a: &Ask, key: &str, name: &str, tree: &Path, handoff: &Path) -> String 
         plan_read(a.task)
     );
     if a.jobs > 1 {
-        let _ = writeln!(out, "ORDER: the {} jobs in the order this brief names; if they will not fit, finish one whole, stop, and report the rest as not started.", a.jobs);
+        let _ = writeln!(out, "ORDER: the {} jobs in this brief's order; if they will not fit, finish one whole, stop, report the rest as not started.", a.jobs);
     }
     if a.load {
-        out.push_str(
-            "This task LOADS the machine: it runs ALONE in its batch, bounded (451 T321).\n",
-        );
+        out.push_str("This task LOADS the machine: it runs ALONE in its batch, bounded.\n");
     }
     let _ = writeln!(out, "{stop}\n{checks}");
     if a.kind != "measurement" {
-        out.push_str("Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n");
+        out.push_str("Test every new line as if coverage ran (each closure counts); an assertion's message stays on its own line or is left out.\n");
     }
-    // 461 T43 (US2: "A refusal a builder can answer is answered by the builder that has the context"): a fix and a closing half hand
-    // in themselves, last, so a conflict or a first-pass refusal reaches the builder that holds the context. A build half and a
-    // measurement leave their Approach block a stub, which the hand-in's first pass refuses (the tick check's approach refusal), so
-    // the session hands those in, as before, until 461 T44 gives the hand-in a mode for them.
-    let own = matches!(a.kind, "fix" | "closing-half");
-    if own {
-        let _ = writeln!(out, "HAND IN last, review CLEAR: `make builder-done T={} F={key} MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve it, `git add`, rerun; a refusal: answer it and rerun, or report a claims one verbatim. Report the outcome and the done ref.", a.task);
-    }
-    let end = if own {
-        "Commit only by `make builder-done`; never land or push"
-    } else {
-        "Do NOT stage, commit, land or push"
+    // 461 T43 (US2: "A refusal a builder can answer is answered by the builder that has the context"): every builder hands in itself,
+    // last, so a conflict or a first-pass refusal reaches the builder that holds the context - a fix and a closing half once their
+    // review is CLEAR, a build half once its handoff is written and a measurement once its record is, their sections' asks put off at
+    // their hand-in (461 T44: `land/hand_in.rs`'s `section_of`, the kind read from this brief's line of the pool's log)
+    let after = match a.kind {
+        "build-half" => "the handoff written",
+        "measurement" => "the record written",
+        _ => "review CLEAR",
     };
-    let _ = writeln!(out, "FILE what you find and leave, from your tree: `make task-add F={key} TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\nReport in the fixed format of scripts/container/builder-report-format.md, read at your stop point. {end}; never rewrite history.");
+    let _ = writeln!(out, "HAND IN last, {after}, your one commit: `make builder-done T={} F={key} MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve, `git add`, rerun; a refusal: answer, rerun, or report a claims one verbatim.", a.task);
+    let _ = writeln!(out, "FILE what you find and leave, from your tree: `make task-add F={key} TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\nReport in the fixed format of scripts/container/builder-report-format.md, read at your stop point. Never land or push; never rewrite history.");
     out
 }
 

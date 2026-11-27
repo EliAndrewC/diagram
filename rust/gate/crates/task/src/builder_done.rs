@@ -25,8 +25,9 @@
 //!    carries their done commits itself (451 T397 part (c), the land crate's `carry_done.rs`), `make carry` named beside it for a
 //!    carry by hand or one a landing stopped on (451 T450); after a hand-in (`l7r-gate land --hand-in`, 461 T08) the second is
 //!    `handed in to the lane (make lane for its place)`. It never carries, lands or pushes. Since 461 T43 a fix or closing-half
-//!    builder runs it itself at its stop point (`builder_brief.rs`'s HAND IN line), so it is the builder that reads these lines
-//!    and its report relays the next dispatch; the session runs it for a build half or a measurement.
+//!    builder runs it itself at its stop point (`builder_brief.rs`'s HAND IN line), and since 461 T44 a build half and a
+//!    measurement too, their hand-in putting off the plan section's asks ([`Found::kind`], the kind their brief logged), so it is
+//!    the builder that reads these lines and its report relays the next dispatch; the session runs it for a builder stopped short.
 //!
 //! THE GUARD-FILE RULE IS ASKED HERE, IN PROCESS: the guards are hooks on a tool call, and a `git commit` this command runs is none,
 //! so nothing else would hold the commit to its `GUARD_EDIT_OK:` line. [`guard_file`] is a COPY of the guard's list
@@ -176,11 +177,8 @@ fn tree_of(p: &Pool, sha: &str) -> PathBuf {
         .unwrap_or_else(|| p.clone.clone())
 }
 
-/// THE QUEUE ENTRY THE TREE'S BUILDER SERVED (451 T313's review, round 1): the last `brief` line naming an entry that the pool's log
-/// holds for `tree` and `holder` since the tree was last taken, made or adopted. A successor briefed on the tree it already held
-/// writes a `brief` line and no take, so it inherits the entry its tree was briefed for; a tree briefed for none names none, and
-/// the queue counts its done line as before.
-fn entry_of(p: &Pool, tree: &Path, holder: &str) -> Option<u64> {
+/// The `brief` lines the pool's log holds for `tree` and `holder` since the tree was last taken, made or adopted, oldest first.
+fn briefs(p: &Pool, tree: &Path, holder: &str) -> Vec<Value> {
     let log = std::fs::read_to_string(p.common.join("builder-pool.log")).unwrap_or_default();
     let ours: Vec<Value> = log
         .lines()
@@ -192,7 +190,26 @@ fn entry_of(p: &Pool, tree: &Path, holder: &str) -> Option<u64> {
     ours[from..]
         .iter()
         .filter(|e| e["event"] == "brief" && e["detail"] == holder)
+        .cloned()
+        .collect()
+}
+
+/// THE QUEUE ENTRY THE TREE'S BUILDER SERVED (451 T313's review, round 1): the last [`briefs`] line naming an entry. A successor
+/// briefed on the tree it already held writes a `brief` line and no take, so it inherits the entry its tree was briefed for; a tree
+/// briefed for none names none, and the queue counts its done line as before.
+fn entry_of(p: &Pool, tree: &Path, holder: &str) -> Option<u64> {
+    briefs(p, tree, holder)
+        .iter()
         .filter_map(|e| e["entry"].as_u64())
+        .next_back()
+}
+
+/// THE KIND THE TREE'S BUILDER WAS BRIEFED AS (461 T44): the last [`briefs`] line's `kind` - `make builder-brief` writes it, the
+/// builder never names it, so no builder can choose the hand-in's milder mode for itself. None for a tree briefed by no command.
+fn kind_of(p: &Pool, tree: &Path, holder: &str) -> Option<String> {
+    briefs(p, tree, holder)
+        .iter()
+        .filter_map(|e| e["kind"].as_str().map(str::to_owned))
         .next_back()
 }
 
@@ -416,6 +433,18 @@ impl Found {
         &self.feature
     }
 
+    /// The kind of builder the tree was last briefed for (`fix`, `measurement`, `build-half`, `closing-half`), from the pool's log
+    /// ([`kind_of`], 461 T44); none where no brief names one.
+    #[must_use]
+    pub fn kind(&self) -> Option<String> {
+        kind_of(&self.p, &self.tree, &self.holder())
+    }
+
+    /// The hold as the pool's log names it: the feature, then the tasks.
+    fn holder(&self) -> String {
+        format!("{} {}", self.feature, self.tasks.join(","))
+    }
+
     /// The command as it was run, to print as a re-run.
     #[must_use]
     pub fn command(&self) -> String {
@@ -474,7 +503,7 @@ impl Found {
             git(&p.clone, &["update-ref", &name, sha]);
             kept.push(name);
         }
-        let holder = format!("{} {}", a.feature, a.tasks.join(","));
+        let holder = self.holder();
         let mut line =
             json!({"utc": env.now, "event": "done", "tree": tree, "detail": holder, "commit": sha});
         if let Some(k) = entry_of(p, tree, &holder) {

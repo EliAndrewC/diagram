@@ -34,7 +34,9 @@
 //! 6. everything staged, a conflict's markers in a staged file refused; the first pass - T06's hand-in mode ([`Pass::HandIn`], D4),
 //!    wired in at [`FirstPass`] by 461 T08 ([`first_pass`]): a landing rooted at the tree, asked with the tree detached at the base,
 //!    HEAD the base, the work applied, the commit's subject its note - asked, a refusal printing every reason with its fixing command
-//!    and committing nothing - the next run resumes at step 5;
+//!    and committing nothing - the next run resumes at step 5. The tree's builder's kind, from its brief's line of the pool's log
+//!    (`Found::kind`, 461 T44), says what the plan section owes: a build half's and a measurement's asks of it are put off
+//!    ([`section_of`]), a measurement's record under `dev/measurements/` asked in their place;
 //! 7. EVERYTHING staged again (`git add -A`: the verified end reads the working tree, not the index, T05; and the records a clear
 //!    first pass writes into the tree go into the commit with the work, D4) and committed with the scratch
 //!    commit's message (`git commit -C`), its parent the base; a base already holding every change hands nothing in, said with the
@@ -50,6 +52,7 @@ use std::path::{Path, PathBuf};
 
 use l7r_gate_core::Reply;
 use l7r_gate_task::builder_done::{self, Found};
+use l7r_gate_task::tick::Section;
 use l7r_shared::guards::conflict_marker_hooks::has_conflict;
 
 use super::carry::apply::{apply, ended, verified, Applied};
@@ -71,6 +74,45 @@ pub(super) struct Asked<'a> {
     pub feature: &'a str,
     pub tasks: &'a [String],
     pub note: &'a str,
+    /// The kind the tree's builder was briefed as (`Found::kind`, 461 T44), "" where no brief names one.
+    pub kind: &'a str,
+}
+
+/// Where the record a measurement hands in stands (`builder_brief.rs`'s measurement STOP POINT).
+const RECORDS: &str = "dev/measurements/";
+
+/// WHAT A BUILDER'S KIND OWES OF ITS PLAN SECTION AT HAND-IN (461 T44): a build half's section is its closing half's to write, and a
+/// measurement writes none, so both hand in with the section's asks put off ([`Section::Later`]); a fix, a closing half and a tree
+/// no brief names owe it, as a landing does. The kind is read from the pool's log, written by `make builder-brief`, never named by
+/// the builder.
+pub(super) fn section_of(kind: &str) -> Section {
+    match kind {
+        "build-half" | "measurement" => Section::Later,
+        _ => Section::Owed,
+    }
+}
+
+/// A MEASUREMENT'S RECORD STANDS IN FOR ITS SECTION (461 T44, a decision: the algorithmically easier stand-in, a file present, its
+/// content the reviewers'): a measurement's hand-in whose work, staged against `base`, holds nothing under [`RECORDS`] is refused.
+fn record_refusal(asked: &Asked) -> Option<String> {
+    if asked.kind != "measurement" {
+        return None;
+    }
+    let staged = match must(
+        asked.tree,
+        &["diff", "--cached", "--name-only", asked.base, "--"],
+    ) {
+        Ok(staged) => staged,
+        Err(why) => {
+            return Some(format!(
+                "a measurement's record could not be looked for: {why}"
+            ))
+        }
+    };
+    if staged.lines().any(|p| p.starts_with(RECORDS)) {
+        return None;
+    }
+    Some(format!("a measurement hands in its record, which stands in for its plan section, and the work holds nothing under {RECORDS} - write the record (its commands, figures and units) at {RECORDS}<date>/<topic>/results.md in {}, then run make builder-done again", asked.tree.display()))
 }
 
 /// The first pass's seam (D3 step 4): each reason it refuses the applied tree, with its fixing command.
@@ -104,9 +146,13 @@ pub(super) fn pass(land: &Land, asked: &Asked) -> Vec<String> {
     };
     let at = Pass::HandIn {
         base: asked.base.to_owned(),
+        section: section_of(asked.kind),
     };
-    land.cheap_refusals(&d, asked.tasks, asked.note, &at, None)
-        .unwrap_or_else(|why| vec![format!("the first pass could not be asked: {why}")])
+    let mut reasons = land
+        .cheap_refusals(&d, asked.tasks, asked.note, &at, None)
+        .unwrap_or_else(|why| vec![format!("the first pass could not be asked: {why}")]);
+    reasons.extend(record_refusal(asked));
+    reasons
 }
 
 /// No first pass: nothing refused (the tests' clear pass).
@@ -345,13 +391,14 @@ fn committed(hand: &Hand, first: FirstPass) -> Result<Reply, String> {
     if let Some(path) = staged.iter().find(marked) {
         return Ok(said(format!("hand-in: refused - nothing committed: a conflict's markers stand in {path} of {tree}; resolve them, then run it again: {again}\n"), 2));
     }
-    let message = hand.f.message();
+    let (message, kind) = (hand.f.message(), hand.f.kind().unwrap_or_default());
     let reasons = first(&Asked {
         tree: &hand.tree,
         base: &hand.base,
         feature: hand.f.feature(),
         tasks: hand.f.tasks(),
         note: message.lines().next().unwrap_or_default(),
+        kind: &kind,
     });
     if !reasons.is_empty() {
         return Ok(said(format!("hand-in: refused by the first pass - nothing committed, the work applied onto {tree}'s base {base} uncommitted; answer each, then run it again ({again}):\n  {}\n", reasons.join("\n  ")), 2));

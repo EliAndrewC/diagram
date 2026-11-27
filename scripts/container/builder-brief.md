@@ -91,12 +91,15 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   never lands or pushes, touches the tree no more after `handed in`, and reports the outcome, the done ref and the next dispatch the
   command printed. WHY: since T08 the session ran it after the report, so a conflict or a refusal reached the coordinator, who had to
   re-read what the builder already knew (found by T08's builder). Past the context cap the wrap-up band lets `make builder-done`
-  through (`context_cap_hooks/band.rs`'s `MAKE`) but no edit: a conflict there goes to the handoff. A `build-half` or a
-  `measurement` builder writes no plan section, and the hand-in's first pass asks its task's tick check, whose approach refusal
-  refuses a stub's Approach block, so its block still says "Do NOT stage, commit" and the session hands it in - refused the same way
-  until 461 T44 gives the hand-in a mode for those kinds.
-- AT A BUILDER'S END, your steps in this order (451 T394): where the builder has not handed in (a build half, a measurement, a
-  builder stopped short), `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>" [GUARD="<guard-edit reason>"]`,
+  through (`context_cap_hooks/band.rs`'s `MAKE`) but no edit: a conflict there goes to the handoff. A `build-half` builder hands
+  in once its handoff is written and a `measurement` builder once its record is (461 T44): neither writes a plan section, so their
+  hand-in puts off the two asks a stub section fails - the plan gate's of the task and its Approach block's - reading the kind from
+  the brief's line of the pool's log, never from the builder; a measurement's hand-in is refused while its work holds nothing under
+  `dev/measurements/`, the record standing in for the section. Every other ask stands, and the landing asks both whatever the kind.
+  WHY: the tick check's approach refusal refused a stub's Approach block, so from T08 to T44 neither kind could hand in, whoever ran
+  it. The block's CHECKS line names the coverage-repair exception in a fix's block alone (a repair is briefed as a fix): with the
+  hand-in line, a build half's block with every option given ran past the 2,000-character cap (2,256 in the test, 2026-11-27).
+- AT A BUILDER'S END, your steps in this order (451 T394): where the builder has not handed in (a builder stopped short), `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>" [GUARD="<guard-edit reason>"]`,
   as above; THEN THE NEXT DISPATCH (`make builder-brief` for the queue's next task no tree holds, the one `make builder-done` printed,
   or `make builder-next`), and only then - in phase 1, until the lane runs it - the landing, `make land F= T=`, which
   carries the commit itself (`make carry FROM=<the tree> COMMIT=<the commit>` by hand, or after a carry stopped), while the next

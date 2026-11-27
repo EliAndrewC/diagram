@@ -1564,29 +1564,75 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T42 to T34 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T43 to T08 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T44 (<why: the finding or measurement that files it>)
+### T44 (phase 1: a build half's and a measurement's hand-in passes its own first pass; found by T43's builder)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in pool tree `diagram-backlog-t269`, on T43 as landed.
+  - **What refused, measured** (observed 2026-11-27, method: `scripts/gates/l7r-gate.sh tick --land-check 461 "probe note" T44`
+    on this task's own unfilled stub): TWO reasons, not the one the task line named - the tick's plan gate (`tick_gate_in`: "461's
+    plan decisions have no current CLEAR review", the stub's two blocks unreviewed, since `status.rs`'s `written_only` keeps an
+    unwritten stub owed at its own task's tick) and `approach_refusal` (part A item 12 unanswered). The other gates, asked the same
+    way on the same stub: `scripts/gates/plan-gate.sh HEAD~3` with `L7R_LAND_TICKS=T44` exit 0, silent (its push form drops an
+    unwritten stub); `l7r-gate push-checks <tree> --every` (the first pass's skips) exit 0.
+  - **The mode** (`rust/gate/crates/task/src/tick/refusal.rs`): `Section { Owed, Later }` on the tick's `Ask`, `Owed` by default;
+    at `Later` the plan gate's ask of the task and the Approach block's ask are put off, every other ask kept (the task line, the
+    boxes, waits, the arbiter fix, the checkpoint, a task built inside another's - its host's CLEAR still asked - the wording, the
+    closing check). `tick::checks` takes it; `l7r-gate tick --land-check` and `make tick`/`make land`'s tick ask `Owed`.
+  - **Where the mode comes from**: `Pass::HandIn { base, section }` (`land/cheap.rs`), set by `land/hand_in.rs`'s `section_of` from
+    `Found::kind` (`task/builder_done.rs`) - the last `brief` line of the pool's log for the tree and its holder since the take,
+    whose `kind` `make builder-brief` writes; `entry_of` now reads the same lines (`briefs`). `build-half` and `measurement` give
+    `Later`; `fix`, `closing-half` and a tree no brief names give `Owed`. `Pass::Landing` is always `Owed`.
+  - **Decision: the kind from the pool's log, never an argument or the environment.** A `KIND=` on `make builder-done` would let a
+    fix's builder skip its own review; `tick_env` falls through to the process's environment, so an exported mode would loosen
+    `make land`. Label: the algorithmically easier route that cannot loosen the landing.
+  - **Decision: a measurement's record stands in for its section** (`hand_in.rs` `record_refusal`): its hand-in is refused while the
+    work staged against the base holds nothing under `dev/measurements/`, the fix printed. A file present, its content the
+    reviewers' - the algorithmically easier stand-in. A build half gets none: its handoff lives in the git directory, not the work,
+    and `make builder-brief` already notes a closing half briefed before it is written.
+  - **The block** (`task/builder_brief.rs`): every kind carries the HAND IN line, worded after its stop point - `review CLEAR` (fix,
+    closing half), `the handoff written` (build half), `the record written` (measurement) - with `your one commit`, and every
+    block ends `Never land or push; never rewrite history.` (the hand-in line says what commits). To keep under the 2,000-character
+    cap (`agent-prefix-hooks`; the build half with every option given measured 2,256 in the test on the first wording, observed
+    2026-11-27, method: the test's count): the CHECKS line's coverage-repair exception is a fix's alone (a repair is briefed as a
+    fix), "Report the outcome and the done ref" dropped (the report format's STATE carries it, T43), the LOAD line's "(451 T321)"
+    dropped and the ORDER, build-half STOP POINT and coverage lines shortened - 1,982 after (the test's paths, a `ONLY=` run; the
+    whole crate's run reads about 4 more, its directories' counters longer), the test passing.
+  - **The docs**: `scripts/container/builder-brief.md`'s THE BUILDER HANDS IN ITSELF (the kinds, the two asks put off, the kind's
+    source, the record, the cap) and AT A BUILDER'S END (the session hands in only a builder stopped short); `builder_done.rs`'s
+    step 6 and `hand_in.rs`'s step 6. The Makefile's `builder-done` line is still true and is a guard file: left.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"` with the new
+    tests on the old code): 24 passed, 2 failed (`a_build_half_hands_in_with_its_section_still_to_come`,
+    `a_measurement_hands_in_its_record_in_place_of_its_section`); the two that pin the strict side
+    (`a_fix_a_closing_half_and_an_unbriefed_tree_still_owe_the_section_at_hand_in`,
+    `a_build_half_s_tree_still_owes_its_section_at_the_landing`) passed on the old code, as they must. After: 27 passed, with
+    `a_measurement_s_record_that_cannot_be_looked_for_is_a_reason` (its `git diff` given a `--`, so a bad base is a bad revision,
+    never a path). `tick::tests::a_section_owed_later_puts_off_only_the_plan_gate_and_the_approach_ask` pins the mode at the tick's
+    level, `builder_done::tests::the_kind_is_the_tree_s_last_brief_since_its_take` the kind's source. `make builder-checks
+    CRATE="rust/gate/crates/task rust/gate/crates/land"`: task 150 passed, land 219, lint and format clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the hand-in's section mode | n/a - no map | n/a | none | n/a |
 
 ### T44 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every kind of builder hands its own work in (US2): a build half with its section still to come, a
+   measurement with its record in its place; the landing still owes every section.
+2. **The constraints.** US2, FR-002 (no coverage at hand-in), D3 and D4 (the hand-in's first pass), T08's and T43's wiring; the
+   block's 2,000-character cap; the tick at a landing unchanged.
+3. **Where each comes from.** G: US2's words (spec.md); R: D3, D4, T43's section; O: the probes and tests above (2026-11-27).
+4. **Do they describe the world here?** Yes: the probe ran the real tick check on this task's own stub; the tests run the real first
+   pass end to end through the hand-in.
+5. **The order.** After T43; before T10.
+6. **The exits.** Green: the task and land crates' tests and `make builder-checks`; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"` green (observed 2026-11-27, method:
+   that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** the cap's room given first: the block's lines shortened, nothing a builder needs cut (above).
+12. **Before any fix.** a build half's or a measurement's hand-in refused whoever runs it, since T08: fixed here.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - it lets two kinds of builder hand in themselves, and measures no time.
 

@@ -650,3 +650,33 @@ fn a_found_tree_s_commit_made_elsewhere_is_kept_as_a_hand_in() {
     );
     assert!(pool_of(&root)[0].free());
 }
+
+/// 461 T44: the kind a tree's builder was briefed as is its last `brief` line's since the take, for its own holder only; none where
+/// no brief names one - the hand-in's section mode is read from it, never from the builder.
+#[test]
+fn the_kind_is_the_tree_s_last_brief_since_its_take() {
+    let (_dir, root, _e, tree) = held("done-kind", "T01");
+    let kind = || {
+        super::found(&words(&["T01", "9001"]), &tree, "s", "")
+            .ok()
+            .unwrap()
+            .kind()
+    };
+    assert_eq!(kind(), None);
+    let common = root.join(".git");
+    let brief = |holder: &str, kind: &str| {
+        let line =
+            serde_json::json!({"event": "brief", "tree": tree, "detail": holder, "kind": kind});
+        builder_tree::log_in(&common, &line);
+    };
+    brief("9001 T01", "fix");
+    brief("9001 T01", "build-half");
+    brief("9001 T09", "measurement");
+    assert_eq!(kind().as_deref(), Some("build-half"));
+    // a take since: the briefs before it were another hold's
+    builder_tree::log_in(
+        &common,
+        &serde_json::json!({"event": "take", "tree": tree, "detail": "9001 T01"}),
+    );
+    assert_eq!(kind(), None);
+}

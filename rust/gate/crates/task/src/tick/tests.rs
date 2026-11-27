@@ -5,7 +5,7 @@ use std::path::Path;
 
 use l7r_gate_core::ci::fixtures::{git, put};
 
-use super::{checks, cli, cli_with, repo_root, spec_dir, tick, Checked};
+use super::{checks, cli, cli_with, repo_root, spec_dir, tick, Checked, Section};
 use crate::tests::{ask, env_of, repo, root_of, REASON};
 
 fn words(a: &[&str]) -> Vec<String> {
@@ -158,7 +158,8 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
         ("PLAN_REVIEW_OK", REASON),
         ("L7R_GATE_TREE", &root.to_string_lossy()),
     ]);
-    let first = |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env).unwrap();
+    let first =
+        |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env, Section::Owed).unwrap();
     let said = first(&["T02"]).remove(0).refusal;
     let why = "tick: refused - this tick would close the feature, and:\n  9001-x has no report.md";
     assert!(said.contains(why), "{said}");
@@ -307,7 +308,16 @@ fn the_land_s_first_pass_asks_every_task_in_one_reading() {
         ("PLAN_REVIEW_OK", REASON),
         ("L7R_GATE_TREE", &root.to_string_lossy()),
     ]);
-    let rows = checks(&root, &d, "n", &words(&["T01", "T03", "T09"]), false, &env).unwrap();
+    let rows = checks(
+        &root,
+        &d,
+        "n",
+        &words(&["T01", "T03", "T09"]),
+        false,
+        &env,
+        Section::Owed,
+    )
+    .unwrap();
     assert_eq!(
         rows[0],
         Checked {
@@ -320,7 +330,7 @@ fn the_land_s_first_pass_asks_every_task_in_one_reading() {
     assert!(rows[1].refusal.contains("research box unticked") && rows[1].box_open);
     assert_eq!(rows[2].tick, "T09 is already ticked");
     // under BOXES=1 the open box is no refusal, and is still read
-    let boxed = checks(&root, &d, "n", &words(&["T03"]), true, &env).unwrap();
+    let boxed = checks(&root, &d, "n", &words(&["T03"]), true, &env, Section::Owed).unwrap();
     assert!(boxed[0].refusal.is_empty() && boxed[0].box_open);
     // the command's form: JSON, its usage, a missing feature and a raise
     let said = cli_with(
@@ -348,7 +358,7 @@ fn the_land_s_first_pass_asks_every_task_in_one_reading() {
     // a refusal that raises fails the pass
     put(&d, "tasks.md", "- [ ] T01 a\n");
     std::fs::write(d.join("plan.md"), [0xff]).unwrap();
-    assert!(checks(&root, &d, "n", &words(&["T01"]), false, &env).is_err());
+    assert!(checks(&root, &d, "n", &words(&["T01"]), false, &env, Section::Owed).is_err());
 }
 
 #[test]
@@ -396,7 +406,7 @@ fn a_fix_landing_with_its_task_holds_that_landing_s_first_pass_no_longer() {
         ("L7R_GATE_TREE", &root.to_string_lossy()),
     ]);
     let held = |task: &str| {
-        checks(&root, &d, "n", &words(&[task]), false, &env).unwrap()[0]
+        checks(&root, &d, "n", &words(&[task]), false, &env, Section::Owed).unwrap()[0]
             .refusal
             .contains("tooling fix is open")
     };
@@ -443,7 +453,8 @@ fn a_task_built_inside_another_s_section_closes_with_it() {
         ("PLAN_REVIEW_OK", REASON),
         ("L7R_GATE_TREE", &root.to_string_lossy()),
     ]);
-    let first = |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env).unwrap();
+    let first =
+        |ids: &[&str]| checks(&root, &d, "n", &words(ids), false, &env, Section::Owed).unwrap();
     // alone, its host neither landing nor ticked; beside it, in either order, nothing
     let alone = first(&["T05"]).remove(0).refusal;
     assert!(alone.contains("T05 is named built inside T01's section (`Built here: T05 - the half it absorbed`), but T01 is neither in this landing nor ticked - make land F=9001 T=\"T01 T05\""), "{alone}");
@@ -538,4 +549,50 @@ fn a_task_built_inside_an_archived_host_closes_and_an_unreadable_plan_raises() {
     rw.set_readonly(false);
     std::fs::set_permissions(d.join("plan.md"), rw).unwrap();
     assert_ne!(raised.code, 0);
+}
+
+/// 461 T44: a stub section's two asks - the plan gate's of the task and its Approach block's - are put off at `Section::Later` (a
+/// build half's or a measurement's hand-in), every other ask standing; `Section::Owed`, and the tick itself, still ask both.
+#[test]
+fn a_section_owed_later_puts_off_only_the_plan_gate_and_the_approach_ask() {
+    let dir = repo("section-later");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    let stub = l7r_gate_plan::plan::template::stubs("T05")[1].clone();
+    put(&root, "specs/9001-x/plan.md", &stub);
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [ ] T05 a build half\n- [ ] T06 left open\n",
+    );
+    put(
+        &root,
+        "docs/approach-checklist.md",
+        "## A. the approach\n\n1. one\n13. one the stub leaves unanswered\n",
+    );
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    let asked = |section| {
+        checks(&root, &d, "n", &words(&["T05"]), false, &env, section)
+            .unwrap()
+            .remove(0)
+    };
+    let owed = asked(Section::Owed).refusal;
+    let unreviewed = owed.contains("plan decisions have no current CLEAR review");
+    let approach = owed.contains("T05's Approach block leaves part A item(s) 13 unanswered");
+    assert!(unreviewed && approach, "{owed}");
+    let later = asked(Section::Later);
+    assert_eq!((later.tick.as_str(), later.refusal.as_str()), ("", ""));
+    // the tick owes it whatever: its ask is Owed
+    let mut a = ask(&root, &d, "T05", "n");
+    a.escaped = None;
+    assert!(tick(&a, false, true)
+        .stderr
+        .contains("plan decisions have no current CLEAR review"));
+    // ...and another ask still stands at Later: the task's line already ticked
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [x] T05 a build half\n- [ ] T06 left open\n",
+    );
+    assert!(asked(Section::Later).tick.contains("already ticked"));
 }

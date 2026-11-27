@@ -146,19 +146,23 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         assert!(n < 2000, "{n}");
         // `context_cap_hooks/split.rs` knows a code builder by this line
         assert!(r.stdout.lines().any(|l| l.starts_with("STOP POINT (")),);
-        // 461 T43: a fix and a closing half hand in themselves, through `make builder-done` alone; the other kinds commit nothing
-        let own = a[2] == "fix" || a[2] == "closing-half";
-        let end = if own {
-            "Commit only by `make builder-done`; never land or push; never rewrite history.\n"
-        } else {
-            "Do NOT stage, commit, land or push; never rewrite history.\n"
-        };
+        // 461 T43, T44: every kind hands in itself, through `make builder-done` alone, after what its stop point ends at
+        let end = "read at your stop point. Never land or push; never rewrite history.\n";
         assert!(r.stdout.ends_with(end), "{}", r.stdout);
-        assert_eq!(r.stdout.contains("HAND IN"), own);
+        let after = match a[2] {
+            "build-half" => "the handoff written",
+            "measurement" => "the record written",
+            _ => "review CLEAR",
+        };
+        let line = format!(
+            "HAND IN last, {after}, your one commit: `make builder-done T={} F=9001 MSG=",
+            a[0]
+        );
+        assert!(r.stdout.contains(&line), "{}", r.stdout);
         r
     };
     // the hand-in line (461 T43, US2: "A refusal a builder can answer is answered by the builder that has the context")
-    let hand_in = "HAND IN last, review CLEAR: `make builder-done T=T01 F=9001 MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve it, `git add`, rerun; a refusal: answer it and rerun, or report a claims one verbatim. Report the outcome and the done ref.\n";
+    let hand_in = "HAND IN last, review CLEAR, your one commit: `make builder-done T=T01 F=9001 MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve, `git add`, rerun; a refusal: answer, rerun, or report a claims one verbatim.\n";
     let marker = |kind: &str, jobs: usize| Marker {
         feature: "9001".to_owned(),
         task: "T01".to_owned(),
@@ -182,7 +186,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         "Read your plan sections with `make plan-section T=T01`, never by grep, sed or a Read over plan.md or plan-done.md.\n".to_owned(),
         "STOP POINT (fix): red-first - the test failing on the old code, its counts reported - then the plan section, `make decide`, the plan review (`make plan-delta F=9001`) and `make claims-triage`; you dispatch no claims-triage or impl-drift agent.\n".to_owned(),
         "CHECKS, the first tier only: `make builder-checks CRATE=\"<the crates you changed>\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n".to_owned(),
-        "Test every new line as if coverage ran (a closure passed to max_by, filter or any counts); an assertion's message stays on the assertion's own line or is left out.\n".to_owned(),
+        "Test every new line as if coverage ran (each closure counts); an assertion's message stays on its own line or is left out.\n".to_owned(),
         "FILE what you find and leave, from your tree: `make task-add F=9001 TITLE=\"<title, paths, figures>\"`; its id goes in your report's CANDIDATES.\n".to_owned(),
         "Report in the fixed format of scripts/container/builder-report-format.md, read at your stop point.".to_owned(),
         hand_in.to_owned(),
@@ -205,9 +209,9 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     assert_eq!(parse(&build.stdout), Some(marker("build-half", 3)));
     for words in [
         "\nBlocks: 9001 T02\n".to_owned(),
-        "ORDER: the 3 jobs in the order this brief names; if they will not fit, finish one whole, stop, and report the rest as not started.\n".to_owned(),
-        "This task LOADS the machine: it runs ALONE in its batch, bounded (451 T321).\n".to_owned(),
-        format!("STOP POINT (build half): build and test, red-first, then END at a handoff, {}, by about 200k of context:", handoff.display()),
+        "ORDER: the 3 jobs in this brief's order; if they will not fit, finish one whole, stop, report the rest as not started.\n".to_owned(),
+        "This task LOADS the machine: it runs ALONE in its batch, bounded.\n".to_owned(),
+        format!("STOP POINT (build half): build and test, red-first, then END at a handoff, {}, by about 200k:", handoff.display()),
         "No plan section, `make decide`, plan review or claims step.\n".to_owned(),
         "`make builder-checks CRATE=\"rust/guard rust/gate/crates/task\"`".to_owned(),
     ] {
@@ -225,13 +229,14 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     assert!(closing.stdout.contains(&format!("STOP POINT (closing half): read {} first. Then the tests it lists as owed, the plan section,", handoff.display())), "{}", closing.stdout);
     assert!(closing.stdout.contains(hand_in), "{}", closing.stdout);
     // TWO TIERS (451 T308): the closing half runs the first tier like every kind, and no coverage - the second tier's alone
-    assert!(closing.stdout.contains("CHECKS, the first tier only: `make builder-checks CRATE=\"rust/guard\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run (the one exception: a brief whose JOB is the coverage repair of a red batch gate runs `make crate-checks` on the crates it names).\n"), "{}", closing.stdout);
+    // ...its exception, a batch gate's coverage repair, a fix's alone (461 T44)
+    assert!(closing.stdout.contains("CHECKS, the first tier only: `make builder-checks CRATE=\"rust/guard\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run.\n"), "{}", closing.stdout);
     let was = ["real coverage", "(tests, lint, format, coverage)"];
     assert!(!was.iter().any(|w| closing.stdout.contains(w)));
     // a measurement changes no source and is told of no test
     let measured = ask(&["T01", "9001", "measurement", "2", "6"]);
     assert_eq!(parse(&measured.stdout), Some(marker("measurement", 2)));
-    assert!(measured.stdout.contains("STOP POINT (measurement, 6 things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.\nCHECKS: none - you change no source.\nFILE what you find"), "{}", measured.stdout);
+    assert!(measured.stdout.contains("STOP POINT (measurement, 6 things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.\nCHECKS: none - you change no source.\nHAND IN last, the record written, your one commit: `make builder-done T=T01 F=9001 MSG="), "{}", measured.stdout);
     assert!(!measured.stdout.contains("as if coverage ran"));
 }
 

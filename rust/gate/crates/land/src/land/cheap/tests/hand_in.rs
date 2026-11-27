@@ -13,6 +13,7 @@ use crate::land::Pass;
 fn at(base: &str) -> Pass {
     Pass::HandIn {
         base: base.to_owned(),
+        section: l7r_gate_task::tick::Section::Owed,
     }
 }
 

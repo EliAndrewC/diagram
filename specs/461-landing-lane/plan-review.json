@@ -360,6 +360,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T44 (phase 1: a build half's and a measurement's hand-in passes its own first pass; found by T43's builder)": {
+   "sha256": "3f38fb972b8ef59c2d6a671f9e854f4f89c4e9a588ff98a3b29f2377a51c22e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T44 Approach (checklist part A)": {
+   "sha256": "783d22b13b79e38e7eecd61c58705367ff1184f42a1c8c7b3dfd45057996b5c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2041,6 +2053,53 @@
      "summary": "The exits run the crates' tests and make builder-checks. Coverage runs at the landing.",
      "class": "within",
      "why": "FR-002 says so verbatim, following the struck 'coverage for its own crates'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T44 (phase 1: a build half's and a measurement's hand-in passes its own first pass; found by T43's builder)",
+    "### T44 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T44 section mode (Later for build-half and measurement hand-ins)",
+     "summary": "At hand-in (Pass::HandIn) a build half's or a measurement's tick puts off exactly two asks - the plan gate's ask of the task and the Approach block's ask - keeping every other ask; fix, closing half and an unbriefed tree stay Owed; Pass::Landing and make tick/make land always Owed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request's item 2 has builders run 'the landing's first pass' before handing in, and FR-002 carries it. Run literally on a build half or a measurement it is impossible to pass, not merely awkward: the measured probe on T44's own stub shows the refusal is the unwritten section itself (tick_gate_in on the stub's unreviewed blocks, approach_refusal on part A), and a build half's section is by its kind written later by its closing half, so the hand-in would be refused whoever ran it - which defeats the request's purpose (builders hand in their own work so the coordinator stays thin; refusals fixed by the builder with the context). Judged per kind: build half - its section is the closing half's to write; measurement - its record stands in (next decision). The narrowing is confined to the hand-in pre-check: the landing still owes every section through the same gate and push checks (FR-008), pinned by a_build_half_s_tree_still_owes_its_section_at_the_landing, and the strict kinds pinned by their own test. Nothing reserved at hand-in escapes the landing, so the carve-out does not gut the rule's purpose."
+    },
+    {
+     "id": "Decision: the kind from the pool's log, never an argument or the environment",
+     "summary": "section_of derives the mode from the tree's last brief line in the pool's log since its take; no KIND= argument and no environment variable.",
+     "class": "within",
+     "why": "Chooses the source of the mode so that a fix's builder cannot skip its own review and an exported value cannot loosen make land; it narrows nothing the GM asked and protects FR-008."
+    },
+    {
+     "id": "Decision: a measurement's record stands in for its section",
+     "summary": "A measurement's hand-in is refused while the staged work holds nothing under dev/measurements/, the fix printed; a build half gets no stand-in.",
+     "class": "within",
+     "why": "Adds a hand-in refusal with its fixing command (FR-002's shape) in place of the asks put off; it tightens the Later mode rather than narrowing the request. The build half's lack of a stand-in is the Later decision already ruled, and its handoff living in the git directory is a stated fact of the existing brief."
+    },
+    {
+     "id": "The brief's HAND IN line per kind, and the wording cuts to fit the 2,000-character cap",
+     "summary": "Every kind's block carries a HAND IN line after its stop point and ends 'Never land or push; never rewrite history.'; to fit the cap the coverage-repair exception becomes a fix's alone, 'Report the outcome and the done ref' dropped (the report's STATE carries it), a reference and some lines shortened; 1,982 characters measured after.",
+     "class": "within",
+     "why": "Wording that tells each kind of builder to hand in itself serves item 2; the cuts remove nothing a builder needs (what was dropped is carried elsewhere, T43), and no coverage is added at hand-in (FR-002)."
+    },
+    {
+     "id": "Docs updated; the Makefile's builder-done line left",
+     "summary": "builder-brief.md, builder_done.rs and hand_in.rs step 6 describe the kinds, the two asks put off, the kind's source, the record and the cap; the Makefile line is still true and left.",
+     "class": "within",
+     "why": "Documentation of the behavior above; leaving a line that is still true is no defect left."
+    },
+    {
+     "id": "Approach part A: exits, order, budget",
+     "summary": "After T43, before T10; green is the task and land crates' tests and make builder-checks, coverage left to the gate at the landing; one landing.",
+     "class": "within",
+     "why": "Coverage at the landing only is FR-002 and the 2026-11-26 reversal the request records; order and budget settle nothing the GM asked."
     }
    ]
   }

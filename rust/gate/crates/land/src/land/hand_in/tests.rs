@@ -659,6 +659,7 @@ fn a_first_pass_that_cannot_be_asked_refuses_never_clears() {
         feature: "9001",
         tasks: &tasks,
         note: "9001 T01: the work",
+        kind: "",
     };
     let why = super::first_pass(&asked).join("\n");
     has(&why, "no single specs/9001* directory with a tasks.md in ");
@@ -684,9 +685,107 @@ fn a_first_pass_that_cannot_be_asked_refuses_never_clears() {
         feature: "449",
         tasks: &["T1".to_owned()],
         note: "449 T1: the work",
+        kind: "",
     };
     has(
         &pass(&fx.land, &asked).join("\n"),
         "the first pass could not be asked: ",
+    );
+}
+
+/// 461 T44: the fixture's hand-in with T1's plan section the unfilled stub (`make task-add`'s), the approach checklist beside it and
+/// the tree's builder briefed as `kind` on the pool's log (none where empty), as `make builder-brief` logs it.
+fn briefed_as(tag: &str, kind: &str) -> (Fx, PathBuf) {
+    let (fx, tree) = at_hand_in(tag);
+    let stub = l7r_gate_plan::plan::template::stubs("T1")[1].clone();
+    put(&tree, "specs/449-x/plan.md", &format!("# Plan\n\n{stub}"));
+    put(
+        &tree,
+        "docs/approach-checklist.md",
+        "## A. the approach\n\n1. one\n13. one the stub leaves unanswered\n",
+    );
+    if !kind.is_empty() {
+        let line =
+            serde_json::json!({"event": "brief", "tree": tree, "detail": "449 T1", "kind": kind});
+        put(&fx.root, ".git/builder-pool.log", &format!("{line}\n"));
+    }
+    (fx, tree)
+}
+
+/// The two asks of a stub section (observed 2026-11-27 on 461 T44's own: `l7r-gate tick --land-check 461 <note> T44`, which left
+/// item 12 of the real checklist unanswered; the fixture's checklist asks an item 13 no stub answers).
+const UNREVIEWED: &str = "449-x's plan decisions have no current CLEAR review (feature 243)";
+const NO_APPROACH: &str = "T1's Approach block leaves part A item(s) 13 unanswered";
+
+#[test]
+fn a_build_half_hands_in_with_its_section_still_to_come() {
+    let (fx, tree) = briefed_as("hand-in-build-half", "build-half");
+    landed(&handed_in(&fx, &tree));
+    has(
+        &git(
+            &fx.root,
+            &["show", "--name-only", "--format=", "refs/l7r/done/449-T1"],
+        ),
+        "rust/held.rs",
+    );
+}
+
+#[test]
+fn a_fix_a_closing_half_and_an_unbriefed_tree_still_owe_the_section_at_hand_in() {
+    for kind in ["fix", "closing-half", ""] {
+        let (fx, tree) = briefed_as(&format!("hand-in-owed-{}", kind.len()), kind);
+        let said = handed_in(&fx, &tree);
+        refused_by_the_first_pass(&fx, &said, UNREVIEWED);
+        has(&said.stderr, NO_APPROACH);
+    }
+}
+
+#[test]
+fn a_build_half_s_tree_still_owes_its_section_at_the_landing() {
+    let (fx, tree) = briefed_as("hand-in-landing-owed", "build-half");
+    let d = tree.join("specs/449-x");
+    let stops = fx
+        .land
+        .cheap_refusals(
+            &d,
+            &["T1".to_owned()],
+            "449 T1: the work",
+            &super::super::Pass::Landing,
+            None,
+        )
+        .unwrap()
+        .join("\n");
+    has(&stops, UNREVIEWED);
+    has(&stops, NO_APPROACH);
+}
+
+#[test]
+fn a_measurement_hands_in_its_record_in_place_of_its_section() {
+    let (fx, tree) = briefed_as("hand-in-measurement", "measurement");
+    let said = handed_in(&fx, &tree);
+    refused_by_the_first_pass(&fx, &said, "a measurement hands in its record, which stands in for its plan section, and the work holds nothing under dev/measurements/");
+    assert!(!said.stderr.contains(UNREVIEWED), "{}", said.stderr);
+    put(
+        &tree,
+        "dev/measurements/2026-11-27/x/results.md",
+        "| a | 1 s |\n",
+    );
+    landed(&handed_in(&fx, &tree));
+}
+
+#[test]
+fn a_measurement_s_record_that_cannot_be_looked_for_is_a_reason() {
+    let (fx, tree) = briefed_as("hand-in-measurement-raise", "measurement");
+    let asked = Asked {
+        tree: &tree,
+        base: "no-such-base",
+        feature: "449",
+        tasks: &["T1".to_owned()],
+        note: "449 T1: the work",
+        kind: "measurement",
+    };
+    has(
+        &pass(&fx.land, &asked).join("\n"),
+        "a measurement's record could not be looked for: git diff --cached --name-only no-such-base -- failed",
     );
 }

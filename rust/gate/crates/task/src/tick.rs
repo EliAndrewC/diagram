@@ -30,7 +30,7 @@ use l7r_shared::speckit::{py_path, tasks};
 use serde_json::{json, Value};
 
 use crate::{raised, read_strict, reply, Reply};
-pub use refusal::{Ask, Env};
+pub use refusal::{Ask, Env, Section};
 use text::Refused;
 
 /// What raised, as its message: the Python's uncaught exception.
@@ -100,6 +100,8 @@ pub struct Checked {
 /// The first pass's question of every task in `dir`, its tasks.md read once (`land_check` in the Python, one process for every task as
 /// `land.py`'s import asked them in one; in the land's own process since feature 449 T131).
 ///
+/// `section` says whether the tasks' plan sections are owed ([`Section`]): `Later` only at a build half's or a measurement's hand-in.
+///
 /// # Errors
 /// What the Python raised: tasks.md missing or unreadable, a refusal that could not be asked.
 pub fn checks(
@@ -109,6 +111,7 @@ pub fn checks(
     tasks: &[String],
     boxes: bool,
     env: Env,
+    section: Section,
 ) -> Raise<Vec<Checked>> {
     let text = read_strict(&dir.join("tasks.md"))?;
     let deferred = l7r_shared::switches::research(root).deferred();
@@ -128,6 +131,7 @@ pub fn checks(
                 let mut ask = Ask::with_env(root, dir, task, note, env);
                 ask.landing = tasks.to_vec();
                 ask.shared = Some(&shared);
+                ask.section = section;
                 Checked {
                     task: task.clone(),
                     tick: String::new(),
@@ -219,7 +223,7 @@ fn land_check_cli(words: &[String], cwd: &Path, env: Env) -> Reply {
         return no_dir(args[0], &root);
     };
     let tasks: Vec<String> = args[2..].iter().map(|t| (*t).clone()).collect();
-    match checks(&root, &dir, args[1], &tasks, boxes, env) {
+    match checks(&root, &dir, args[1], &tasks, boxes, env, Section::Owed) {
         Ok(rows) => {
             let list: Vec<Value> = rows
                 .into_iter()

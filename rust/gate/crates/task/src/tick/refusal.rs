@@ -41,6 +41,23 @@ pub struct Ask<'a> {
     /// The plan's task-free judgment, kept across the tasks of one first pass ([`super::checks`], 451 T464); None for a tick, which
     /// writes what the judgment reads.
     pub shared: Option<&'a l7r_gate_plan::plan::Shared>,
+    /// Whether the task's plan section is owed at this ask ([`Section`], 461 T44): always at a tick and a landing.
+    pub section: Section,
+}
+
+/// WHETHER A TASK'S PLAN SECTION IS OWED WHERE IT IS ASKED (461 T44). A build half's section is its closing half's to write, and a
+/// measurement writes none (its record under `dev/measurements/` stands in), so at their hand-in the plan gate's ask of the task
+/// (`tick_gate_in`: its stub's blocks have no CLEAR review) and its Approach block's ask (`approach_refusal`: part A unanswered) are
+/// put off - both refused T44's own stub, observed 2026-11-27, method: `l7r-gate tick --land-check 461 <note> T44`. Every other
+/// ask stands, and a tick or a landing always owes the section: only the hand-in sets [`Section::Later`], from the kind its tree's
+/// brief logged.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum Section {
+    /// The section is owed: a tick, a landing, a fix's or a closing half's hand-in.
+    #[default]
+    Owed,
+    /// Owed later, by the closing half, or never, a measurement's record standing in: a build half's or a measurement's hand-in.
+    Later,
 }
 
 impl<'a> Ask<'a> {
@@ -66,6 +83,7 @@ impl<'a> Ask<'a> {
             landing: Vec::new(),
             env,
             shared: None,
+            section: Section::Owed,
         }
     }
 }
@@ -297,8 +315,13 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
     // block of its own asked, and [`inside_refusal`] beside the rest
     let host = l7r_gate_plan::plan::built_inside(dir, task);
     let gated = host.as_ref().map_or(task, |h| h.task.as_str());
-    let (permitted, message) =
-        l7r_gate_plan::plan::tick_gate_in(dir, root, ask.escaped.as_deref(), gated, ask.shared);
+    // the plan gate's ask of the task, and its Approach block's, put off where its section is owed later (461 T44)
+    let later = ask.section == Section::Later;
+    let (permitted, message) = if later {
+        (true, String::new())
+    } else {
+        l7r_gate_plan::plan::tick_gate_in(dir, root, ask.escaped.as_deref(), gated, ask.shared)
+    };
     let plan = dir.join("plan.md");
     let plan_text = if plan.is_file() {
         read_strict(&plan)?
@@ -330,6 +353,7 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         l7r_gate_reviews::reviews::checkpoint::hold(root, None),
         match &host {
             Some(h) => inside_refusal(ask, h, &text, &plan_text)?,
+            None if later => String::new(),
             None => l7r_gate_plan::plan::approach_refusal(dir, root, task).unwrap_or_default(),
         },
         wording::refusal(root, dir, task, section.as_deref())?,
