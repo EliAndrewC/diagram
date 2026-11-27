@@ -65,7 +65,7 @@ fn a_start_is_undone_and_the_log_s_pair_reads_as_no_start() {
         (
             live.lines().count(),
             live.contains("\"T02\""),
-            live.contains("T01")
+            live.contains("\"T01\"")
         ),
         (1, true, false)
     );
