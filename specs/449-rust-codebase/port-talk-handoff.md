@@ -14,10 +14,13 @@ T430 T384 T469 T456 T477 T472 (c3b5e8f433, about 12:10Z) - 85 tasks on main over
 running its changed crates' coverage first (the round arbiter's 09:39Z ruling allowed it), which caught three would-be reds
 before they cost a gate.
 
-**Still building at that time:** T353 with T360 (builders escaping the brief guard), T478 with T473 (pruning two stores),
-T479 with T481 (a landing's ticks scoped to its feature; the pool-idle block's flag). Open and unbuilt in 451 besides those:
-T447 (superseded by T397, to close), T470, T475, T480, T482, the gate-write message's cut, T310, T363, T386-T388, and the
-GM-held T302, T405, T307 part 3, T321, T415, T308, T401, T354.
+**Landed after those:** T478 T473 T353 T360 T482 T475 T479 T481 T310 T483 T480 T386 T485 T447 (fabc9c464e, about 13:30Z) -
+99 tasks on main overnight in all, in six batches.
+
+**Still building at about 13:30Z:** T387 (the plan hold's re-save of the 3 MB check state on every Bash call), T388 (where an
+Agent call's hooks spend their 150 ms - its first trace: a switched-off step-back check reading the whole 50 MB event log on
+every Agent call). Open and unbuilt in 451 besides those: T470, T486, T487, T363, and the GM-held T302, T405, T307 part 3, T321,
+T415, T308, T401, T354.
 
 **Two more of my mistakes, besides those listed below:** a red-gate trigger id derived by hand, 3 s off the guard's (an arbiter
 ruling under it discharged nothing; T477 now refuses such an id), and three coverage repairs reshaped without running coverage,
