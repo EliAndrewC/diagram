@@ -4453,12 +4453,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T490 (<why: the finding or measurement that files it>)": {
-   "sha256": "a80cca2d4b77f3b7a46e983189c47eb1c6e216b6678ebcda9db8a9acf40b90c3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T490 Approach (checklist part A)": {
    "sha256": "0017e2660b560e8816066b6b0171d79adf504aa57941fe965a5927595712a6f6",
    "verdict": "CLEAR",
@@ -41558,6 +41552,21 @@
      "summary": "after T494 and T500, before T501; one landing; exits green on the red tests, suites and walk count, red routed through make arbiter-ask",
      "class": "within",
      "why": "Sequencing and exits inside the feature; the task is performance work, which FR-013 puts first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T490 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T490-stub",
+     "summary": "Delete the T490 block, which was an unfilled template skeleton (placeholder heading, placeholder Approach line, a table header with no rows)",
+     "class": "within",
+     "why": "The removed text carried no decision, no requirement and no commitment owed to the GM's request: every field was the template's own placeholder and the table had no rows. Deleting an empty stub withdraws nothing the request or the accepted spec asks for, so it narrows nothing."
     }
    ]
   }
