@@ -7037,31 +7037,38 @@ that batch; the red was not in its change.
 
 
 
-### T473 (<why: the finding or measurement that files it>)
+### T473 (found by 451 T463's build: nothing prunes the event-log directory's `alive/` records it writes, at most 64 KiB each (`CAP`, a GUESS knob), one for each test program run past 30 s, so the directory grows without bound, observed 2026-11-27, method: reading `rust/gate/crates/rustc/src/rustc/alive.rs`'s `write`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each record written prunes `alive/` to its newest `KEEP`, in `rust/gate/crates/rustc/src/rustc/alive.rs`.
+  - **(1) The knob.** `KEEP`, 50 records, the one just written among them, a GUESS knob, its why beside it: at `CAP` each the directory stays under about 3.2 MiB, and slow runs are rare - T455 saw six in its window and 70 runs reproduced none, measured 2026-11-27 (`dev/measurements/2026-11-27/land-test-time/results.md`) - so 50 holds weeks of them.
+  - **(2) The prune.** `write` writes the record, then `prune(dir, kept, KEEP)`: every other file of the directory ordered oldest first by mtime, then name (several crates' watch threads can write in one second, so the name's epoch alone does not order them), and the oldest removed until `KEEP` are left, a removal's failure ignored (another run's prune may have taken the file first). The record just written is never dropped. A record that could not be written prunes nothing.
+  - **(3) The fixture.** The stand-in test (`tests/alive.rs`'s `lingering`) waited for any file in the directory, so a seeded record would have ended it before its bound; it now waits for crate `rust/a`'s own record (`-rust-a-` in its name).
+  - **(4) Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY=rustc::tests::alive` on the old code, the test only added): 4 passed, 1 failed of 5 - `a_record_written_keeps_only_the_newest_records`, 60 seeded records with old mtimes and a run past a 100 ms bound, left 61 where 50 were owed. Green after: 5 of 5, the new test 1.55 s, measured 2026-11-27 (`/usr/bin/time` over its `make rust-test ONLY=`).
+
+**T473-D1 - The newest N, not those under M days.** The task line offers both. A count bounds the disk at `KEEP` times `CAP` whatever the rate, and a slow run is the rare thing worth keeping, so an age limit would throw away the last catch after a quiet month. Chosen by the builder.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the alive records pruned to the newest `KEEP` at each write (`rustc/alive.rs`, `tests/alive.rs`), red first 1 of 5, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T473 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The event-log directory's `alive/` holds the last slow test runs' records and stays bounded however many runs pass their bound.
+2. **The constraints.** T473's line and the brief (the newest N, a GUESS knob, pruned where a record is written, red first); T463's rule that the run is never signalled, polled or waited on (the prune runs on the watch thread after the record, which the run joins only if it ends past its bound); 451 FR-013; the two tiers.
+3. **Where each comes from.** O: T455's record of six slow runs and 70 unreproduced, measured 2026-11-27; this task's red-first run. G: the GM's ranking of disk below time but not at nothing, as the brief states it.
+4. **Do they describe the world here?** Yes: the test runs the real `answer` path with a stand-in binary past a real 100 ms bound over a seeded directory, measured 2026-11-27 (`make rust-test ONLY=rustc::tests::alive`).
+5. **The order.** After T463, which writes the records; with T478 in one builder's tree.
+6. **The exits.** Green: the red-first test passing and the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first test fails on the old code and passes on the new, and `make builder-checks CRATE="rust/gate/crates/plan rust/gate/crates/rustc"` is clean, measured 2026-11-27.
+10. **Before moving a constant.** n/a: `KEEP` is a new GUESS knob with its why beside it.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: the event-log directory's disk is bounded; no Phase line changes, and the record a line names is the newest, which the prune keeps.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it bounds the disk the slow-run records take, at most about 3.2 MiB (`KEEP` times `CAP`, both GUESS knobs), which the GM ranks below time but not at nothing. Not an engine-speed task: no checklist answers owed.
 
 ### T475 (<why: the finding or measurement that files it>)
 
@@ -7093,31 +7100,41 @@ that batch; the red was not in its change.
 <!-- plan-archive: T474 to T465 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T474 to T474 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T478 (<why: the finding or measurement that files it>)
+### T478 (found by 451 T465's build half: plan.md's digest index keeps every answered text under the clone's `.git/plan-index/texts/` and nothing prunes it, 60 files, 728 KB after one 35-task `tick --land-check` and `plan push`, measured 2026-11-27, method: `du` over T457's scratch clone, and the clone diagram-backlog's own directory held 108 files, 1.3 MB, observed 2026-11-27, method: `ls | wc -l` and `du -sh`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the kept texts are pruned when one is written, least recently used first, to a byte cap, in `rust/gate/crates/plan/src/plan/history/index.rs` and `history.rs`.
+  - **(1) The cap.** `TEXTS_CAP`, 4 MiB over the whole `texts/` directory (every plan path's texts share it), a GUESS knob, its why beside it: about five 35-task passes' answers at T465's 728 KB a pass, and about three times what the clone's directory held on 2026-11-27.
+  - **(2) The prune.** `keep_text` writing a new or changed text then runs `prune(dir, kept, cap)`: every file in the directory but the one just written, newest mtime first, counted after that one's own size; each file past the cap is removed, its failure ignored (a pool tree may have removed it first). Every file counts, so a temporary file a killed process left is dropped in its turn too. The text just written is never dropped, even when it alone passes the cap.
+  - **(3) What counts as read.** A text's mtime is touched (`index::touch`, `File::set_modified`, never atime, which `relatime` makes unreliable) on `kept_text`'s hit, a digest the question's, and on `keep_text` finding the same text already kept (an answer read from the thread's version that the file already holds). A miss touches nothing.
+  - **(4) The cost.** A prune is one `read_dir` and a `stat` a file: 1.5 ms median, 2.1 ms longest of 20 over 432 files (5.0 MB, four copies of the clone's 108 texts), measured 2026-11-27 (a `scandir` and stat loop in the scratchpad, load 13). It runs only where a text is written, so a warm pass, whose answers are kept already, prunes little, and a cold pass writing about 60 texts spends about 0.09 s of its 12 s on it, measured 2026-11-27 (T465's 60 texts times that 1.5 ms, against T465's cold tick of 12.6-13.2 s).
+  - **(5) Red first**, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/plan ONLY=plan::history` on the old code, the tests only added): 14 passed, 2 failed of 16 - `index/tests.rs` `a_kept_text_written_prunes_the_texts_to_their_cap_least_recent_first` left all 7 files where 4 were owed, and `tests.rs` `a_kept_section_text_is_found_by_its_section_digest` found a hit's mtime untouched. Green after: 16 of 16.
+
+**T478-D1 - A byte cap, least recently used first, not a time window.** A window (drop what was not read for N days) bounds the directory by how busy the clone was, not by size: a day of many landings grows it as far as that day's answers go. A cap bounds the disk whatever the rate, which is what the task line asks; ordering it by a touched mtime keeps a text asked again and again, where a cap ordered by write time alone (first in, first out) would drop the hottest text, fetch it and write it back. Chosen by the builder; the cost is one `set_modified` a read, and texts a quiet week never asked stay until the cap is reached.
+
+**T478-D2 - A prune at each write, not once a process.** The brief says prune when a text is written. Measured at 1.5 ms a write, about 0.09 s of a cold pass, measured 2026-11-27 (the scan's timing in (4), times T465's 60 texts), and once a process would save that but let one process's writes pass the cap, and its once-flag is a static the tests' threads share. Accepted by the builder as the cost.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the kept texts pruned to `TEXTS_CAP` at a write, least recently used first, a read touching its text (`history/index.rs`, `history.rs`), red first 2 of 16, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T478 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The clone's `.git/plan-index/texts/` stays under a known size however many landings ask the plan's history, and every question still gets the answer it got before.
+2. **The constraints.** T478's line and the brief (prune when a text is written; a dropped text costs a fetch, never a wrong answer; red first); T465-D3 and D4 (never stale, a lost race a re-fetch); 451 FR-013 (performance work); the two tiers.
+3. **Where each comes from.** O: T465's `du` of 728 KB and the clone's 1.3 MB, the scan's timing in (4), measured 2026-11-27. G: the GM's ranking of disk below time but not at nothing, as the brief states it.
+4. **Do they describe the world here?** Yes: the tests drive the real `keep_text` and `kept_text` over files aged with real mtimes, and the scan was timed on copies of the clone's own texts.
+5. **The order.** After T465, which filed it; with T473, the other unbounded store, in one builder's tree.
+6. **The exits.** Green: the red-first tests passing and the crate's first-tier checks clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The two red-first tests fail on the old code and pass on the new, and `make builder-checks CRATE="rust/gate/crates/plan rust/gate/crates/rustc"` is clean, measured 2026-11-27.
+10. **Before moving a constant.** n/a: `TEXTS_CAP` is a new GUESS knob with its why beside it.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows: the disk a clone's git directory takes is bounded; no plan verdict changes, since `kept_text` checks each text's digest and a dropped text is fetched from git.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): it bounds the disk the landings' plan history takes, which the GM ranks below time but not at nothing, at about 1.5 ms a text written, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
 
 ### T480 (<why: the finding or measurement that files it>)
 

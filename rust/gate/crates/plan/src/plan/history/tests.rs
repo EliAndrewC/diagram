@@ -374,4 +374,13 @@ fn a_kept_section_text_is_found_by_its_section_digest() {
         Some(body)
     );
     assert_eq!(super::kept_text(&file, "c0", false, "T1", "other"), None);
+    // 451 T478: a hit is a read, which touches the text so the prune keeps it; a miss touches nothing
+    let old = std::time::SystemTime::now() - std::time::Duration::from_secs(9 * 86_400);
+    let file_at = std::fs::File::options().write(true).open(&at).unwrap();
+    file_at.set_modified(old).unwrap();
+    let mtime = || std::fs::metadata(&at).unwrap().modified().unwrap();
+    assert_eq!(super::kept_text(&file, "c0", false, "T1", "other"), None);
+    assert_eq!(mtime(), old);
+    assert!(super::kept_text(&file, "c0", false, "T1", &digest(body.as_bytes())).is_some());
+    assert!(mtime() > old);
 }

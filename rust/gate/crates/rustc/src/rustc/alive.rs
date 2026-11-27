@@ -6,7 +6,7 @@
 //! working directory, command line and ignored and caught signals (`SigIgn`, `SigCgt`: T455's one lead is a TERM that may not land),
 //! and each of its threads' name, state and wait channel - libtest names a test's thread after the test, cut by the kernel to 15
 //! characters (`land::stop::tes` at best). The file goes beside the event logs, in `alive/`, as the sampler's `samples/` does, and
-//! the run's `test` Phase line names it (`"alive"`). The run is never signalled, never polled and never waited on for the record: a
+//! the run's `test` Phase line names it (`"alive"`); each record written prunes the directory to its newest `KEEP` (451 T473). The run is never signalled, never polled and never waited on for the record: a
 //! run inside its bound joins a thread that ended when the run did.
 
 use std::fmt::Write as _;
@@ -28,6 +28,12 @@ const KNOB: &str = "L7R_RUST_ALIVE_MS";
 
 /// A record's most bytes: a GUESS knob. A test binary's threads are about a line each, so this holds a run of hundreds of processes.
 const CAP: usize = 64 * 1024;
+
+/// The most records the directory keeps, the one just written among them: a GUESS knob (451 T473). WHY 50: a record is at most
+/// `CAP`, so the directory stays under about 3.2 MiB, and a slow run is rare - T455 saw six in its window and 70 runs reproduced
+/// none (`dev/measurements/2026-11-27/land-test-time/results.md`) - so 50 holds weeks of them; a loaded day of large crates past
+/// `AFTER` costs the oldest records first.
+const KEEP: usize = 50;
 
 /// A command line's most characters in the record, as `watch.sh` cut it.
 const ARGS: usize = 300;
@@ -91,7 +97,26 @@ fn write(dir: &Path, name: &str, pid: u32, head: &str) -> Option<PathBuf> {
     let path = dir.join(format!("{secs}-{name}-{pid}.txt"));
     let text = bounded(record(Path::new("/proc"), pid, head), CAP);
     std::fs::create_dir_all(dir).ok()?;
-    std::fs::write(&path, text).ok().map(|()| path)
+    std::fs::write(&path, text).ok()?;
+    prune(dir, &path, KEEP);
+    Some(path)
+}
+
+/// Drop the oldest files of `dir`, by mtime and then name, until `keep` are left, `kept` (the record just written, never dropped)
+/// among them; a file another run removes first is skipped (451 T473).
+fn prune(dir: &Path, kept: &Path, keep: usize) {
+    let mut records: Vec<(SystemTime, PathBuf)> = std::fs::read_dir(dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter(|e| e.path() != kept)
+        .filter_map(|e| Some((e.metadata().ok()?.modified().ok()?, e.path())))
+        .collect();
+    records.sort();
+    let over = (records.len() + 1).saturating_sub(keep);
+    for (_, path) in records.into_iter().take(over) {
+        let _ = std::fs::remove_file(path);
+    }
 }
 
 /// `text` cut to at most `cap` bytes, at a character's edge, with a line saying so.

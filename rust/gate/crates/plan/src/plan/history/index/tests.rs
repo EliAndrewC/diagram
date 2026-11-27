@@ -1,7 +1,7 @@
 //! The digest index's file: what it writes it reads back, anything else it reads as nothing, and a save keeps what is on disk.
 
 use super::super::Version;
-use super::{entries, file, header, header_of, read, runs, save, unruns, Index, HEADER};
+use super::{entries, file, header, header_of, keep_text, read, runs, save, unruns, Index, HEADER};
 use crate::checks::scratch;
 use crate::plan::sections::digests::{stamp, stamp_of, SOURCES};
 
@@ -126,4 +126,53 @@ fn an_index_written_by_other_digest_code_reads_as_nothing() {
     let written = two().encode().replacen(header(), &theirs, 1);
     assert_eq!(Index::decode(&written), None);
     assert!(Index::decode(&two().encode()).is_some());
+}
+
+/// A text aged `days` back, `bytes` long, at `path`.
+fn aged(path: &std::path::Path, bytes: usize, days: u64) {
+    std::fs::write(path, "x".repeat(bytes)).unwrap();
+    let at = std::time::SystemTime::now() - std::time::Duration::from_secs(days * 86_400);
+    let file = std::fs::File::options().write(true).open(path).unwrap();
+    file.set_modified(at).unwrap();
+}
+
+/// The names in `dir`, sorted.
+fn names(dir: &std::path::Path) -> Vec<String> {
+    let mut left: Vec<String> = std::fs::read_dir(dir)
+        .unwrap()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .collect();
+    left.sort();
+    left
+}
+
+/// 451 T478: writing a text prunes the texts' directory to its cap, least recently used first, never the text just written; the
+/// same text kept again is a read, which touches it.
+#[test]
+fn a_kept_text_written_prunes_the_texts_to_their_cap_least_recent_first() {
+    let held = scratch("plan-index-texts");
+    let dir = held.join("texts");
+    std::fs::create_dir_all(&dir).unwrap();
+    let mib = 1 << 20;
+    for day in 1..=5 {
+        aged(&dir.join(format!("old-{day}.txt")), mib, day);
+    }
+    aged(&dir.join(".stale.1.0.tmp"), 10, 30);
+    let new = dir.join("new.txt");
+    keep_text(&new, &"y".repeat(mib));
+    // 4 MiB: the new text and the three most recent of the old; the two oldest and the stale temporary file dropped
+    assert_eq!(
+        names(&dir),
+        ["new.txt", "old-1.txt", "old-2.txt", "old-3.txt"]
+    );
+    // the same text again is a read: it touches the file and writes and prunes nothing
+    aged(&new, mib, 9);
+    keep_text(&new, &"x".repeat(mib));
+    let touched = std::fs::metadata(&new).unwrap().modified().unwrap();
+    assert!(touched.elapsed().unwrap() < std::time::Duration::from_secs(86_400));
+    assert_eq!(names(&dir).len(), 4);
+    // a text larger than the cap is kept alone
+    keep_text(&dir.join("huge.txt"), &"z".repeat(5 * mib));
+    assert_eq!(names(&dir), ["huge.txt"]);
 }

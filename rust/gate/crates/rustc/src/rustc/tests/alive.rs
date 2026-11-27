@@ -23,11 +23,11 @@ fn alive_dir(root: &Path) -> PathBuf {
     root.join(".git/l7r-events/alive")
 }
 
-/// A stand-in test that starts `sleep 46.3` and waits until a record is in `dir` (at most about 10 s), then ends its child and
-/// passes on its own.
+/// A stand-in test that starts `sleep 46.3` and waits until crate `rust/a`'s record is in `dir` (at most about 10 s; records seeded
+/// there are not its), then ends its child and passes on its own.
 fn lingering(dir: &Path) -> String {
     format!(
-        "sleep 46.3 &\ns=$!\ni=0\nwhile [ $i -lt 200 ] && ! ls \"{}\" 2>/dev/null | grep -q .; do sleep 0.05; i=$((i+1)); done\n\
+        "sleep 46.3 &\ns=$!\ni=0\nwhile [ $i -lt 200 ] && ! ls \"{}\" 2>/dev/null | grep -q -- -rust-a-; do sleep 0.05; i=$((i+1)); done\n\
          kill $s\nwait $s 2>/dev/null\necho 'test result: ok. 1 passed'",
         dir.display()
     )
@@ -77,6 +77,47 @@ fn a_built_binary_past_its_bound_is_caught_once_and_named_on_its_test_line() {
     assert_eq!(done.code, 0, "{}", done.stderr);
     let lines = phases(&root);
     caught(&root, test_line(&lines, "rust/a"), &root.join("rust/a"));
+}
+
+/// 451 T473: a record written prunes the directory to the newest 50 (`alive.rs`'s `KEEP`), oldest first by mtime, never the one
+/// just written.
+#[test]
+fn a_record_written_keeps_only_the_newest_records() {
+    let (root, _, _) = kept_crates();
+    let dir = alive_dir(&root);
+    std::fs::create_dir_all(&dir).unwrap();
+    let now = std::time::SystemTime::now();
+    for i in 0..60u64 {
+        let seed = dir.join(format!("1000000000-old-{i:02}-1.txt"));
+        std::fs::write(&seed, "seeded").unwrap();
+        let at = now - std::time::Duration::from_secs(86_400 + (60 - i) * 60);
+        std::fs::File::options()
+            .write(true)
+            .open(&seed)
+            .unwrap()
+            .set_modified(at)
+            .unwrap();
+    }
+    let world = bounded(world_with(&root, ONE_BINARY), &root, "100");
+    let exe = world.target.join("a-lib");
+    crate::write_executable(&exe, &format!("#!/bin/sh\n{}\n", lingering(&dir)));
+    let done = answer(&world, "test", &["rust/a".to_owned()], false);
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    let named = PathBuf::from(
+        test_line(&phases(&root), "rust/a")["alive"]
+            .as_str()
+            .unwrap(),
+    );
+    let mut left: Vec<String> = std::fs::read_dir(&dir)
+        .unwrap()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .collect();
+    left.sort();
+    // the new record and the newest 49 seeds: seeds 00 to 10, the oldest, dropped
+    assert_eq!(left.len(), 50);
+    assert_eq!(left[0], "1000000000-old-11-1.txt");
+    assert!(named.exists());
 }
 
 #[test]

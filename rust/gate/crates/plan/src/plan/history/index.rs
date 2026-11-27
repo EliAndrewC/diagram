@@ -20,6 +20,10 @@
 //!
 //! WRITTEN by the reader, through a temporary file and a rename, after merging what is on disk then: two processes racing lose at
 //! most the loser's additions, a re-index, never a wrong answer.
+//!
+//! THE KEPT TEXTS (`texts/`, a question's answers) are BOUNDED (451 T478): each write prunes the directory to `TEXTS_CAP`, least
+//! recently used first - a text's mtime is touched when a question reads it - so a text asked again and again stays; a dropped one
+//! costs a fetch of that one version.
 
 use std::collections::HashMap;
 use std::fmt::Write as _;
@@ -259,10 +263,53 @@ pub(super) fn text_file(file: &Path, commit: &str, block: bool, key: &str) -> Pa
     file.with_file_name("texts").join(format!("{name}.txt"))
 }
 
-/// Keep `text` at `path` where it is not kept already.
+/// The kept texts' most bytes, every plan's together: a GUESS knob (451 T478). WHY 4 MiB: one 35-task landing check and plan push
+/// kept 60 texts, 728 KB (T465's scratch clone, measured 2026-11-27), and the clone's own directory held 108, 1.3 MB, that day, so
+/// the cap holds about five such passes; a text past it costs one version's fetch when it is asked again, never a wrong answer.
+pub(super) const TEXTS_CAP: u64 = 4 << 20;
+
+/// Keep `text` at `path` where it is not kept already, the directory then pruned to [`TEXTS_CAP`]; where it is, a read (touched).
 pub(super) fn keep_text(path: &Path, text: &str) {
-    if std::fs::read_to_string(path).ok().as_deref() != Some(text) {
+    if std::fs::read_to_string(path).ok().as_deref() == Some(text) {
+        touch(path);
+    } else {
         put(path, text);
+        prune(path.parent().unwrap_or(path), path, TEXTS_CAP);
+    }
+}
+
+/// Mark the kept text at `path` read now (its mtime, which [`prune`] orders by); a failure, or a text gone, marks nothing.
+pub(super) fn touch(path: &Path) {
+    let file = std::fs::File::options().write(true).open(path);
+    let _ = file.and_then(|f| f.set_modified(std::time::SystemTime::now()));
+}
+
+/// Drop the files of `dir` read least recently until what is left, `kept` (the text just written, never dropped) counted first,
+/// is at most `cap` bytes. Every file counts, a temporary one a killed process left too; a file another process removes first, or
+/// reads as it goes, is a later fetch of its version, never a wrong answer (`kept_text` checks a text's digest).
+fn prune(dir: &Path, kept: &Path, cap: u64) {
+    let mut files: Vec<(std::time::SystemTime, u64, PathBuf)> = std::fs::read_dir(dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter(|e| e.path() != kept)
+        .filter_map(|e| {
+            e.metadata().ok().map(|m| {
+                (
+                    m.modified().unwrap_or(std::time::UNIX_EPOCH),
+                    m.len(),
+                    e.path(),
+                )
+            })
+        })
+        .collect();
+    files.sort_by(|a, b| b.cmp(a));
+    let mut total = std::fs::metadata(kept).map_or(0, |m| m.len());
+    for (_, len, path) in files {
+        total += len;
+        if total > cap {
+            let _ = std::fs::remove_file(path);
+        }
     }
 }
 

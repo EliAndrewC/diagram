@@ -367,13 +367,15 @@ impl History {
 
 /// The text kept beside the index `file` that `key` had at `commit`, where its digest is still `sha`.
 fn kept_text(file: &Path, commit: &str, block: bool, key: &str, sha: &str) -> Option<String> {
-    let text = std::fs::read_to_string(index::text_file(file, commit, block, key)).ok()?;
+    let path = index::text_file(file, commit, block, key);
+    let text = std::fs::read_to_string(&path).ok()?;
     let at = if block {
         block_digest(&text)
     } else {
         digest(text.as_bytes())
     };
-    (at == sha).then_some(text)
+    // a hit is a read: touched, so the texts' prune keeps it (451 T478)
+    (at == sha).then(|| index::touch(&path)).map(|()| text)
 }
 
 /// Each of `revs`' version of `rel`, read by one `cat-file --batch` and parsed; None for one that could not be read whole.

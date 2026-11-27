@@ -4200,6 +4200,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T473 (found by 451 T463's build: nothing prunes the event-log directory's `alive/` records it writes, at most 64 KiB each (`CAP`, a GUESS knob), one for each test program run past 30 s, so the directory grows without bound, observed 2026-11-27, method: reading `rust/gate/crates/rustc/src/rustc/alive.rs`'s `write`)": {
+   "sha256": "646a8391da8d30e3e9ec361dd0ba3023dccab9d6e89bb37dd4c42bed5833f596",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T473 Approach (checklist part A)": {
+   "sha256": "ec5eac28aa118ab3ac6b770d5b710bc4fe9298faba536076ee739e5535c03567",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T478 (found by 451 T465's build half: plan.md's digest index keeps every answered text under the clone's `.git/plan-index/texts/` and nothing prunes it, 60 files, 728 KB after one 35-task `tick --land-check` and `plan push`, measured 2026-11-27, method: `du` over T457's scratch clone, and the clone diagram-backlog's own directory held 108 files, 1.3 MB, observed 2026-11-27, method: `ls | wc -l` and `du -sh`)": {
+   "sha256": "e5365af802c18048f010f0473428e48a5b5c5753f1fa781634ca1c47f1cb7b27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T478 Approach (checklist part A)": {
+   "sha256": "e6bc9470b33c833d7a1be1c5f58675614dd2172b76472a965c776ab38001f822",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -39306,6 +39330,98 @@
      "why": "The plan reports the brief as naming the bundle alone, so leaving the ruled-side refusal to its own task narrows nothing T477 was asked. FR-009's three parts are present: why not here (the brief's scope), the filed id (T482) and its order (lands before T475, and part A item 5 places T482 after T477). The defect is carried forward with an order, not dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T473 (found by 451 T463's build: nothing prunes the event-log directory's `alive/` records it writes, at most 64 KiB each (`CAP`, a GUESS knob), one for each test program run past 30 s, so the directory grows without bound, observed 2026-11-27, method: reading `rust/gate/crates/rustc/src/rustc/alive.rs`'s `write`)",
+    "### T473 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T473-D1",
+     "summary": "Bound alive/ by a count (the newest KEEP), not by age",
+     "class": "within",
+     "why": "The task line offers both forms; choosing one of the offered forms narrows nothing. A count bounds disk at KEEP x CAP whatever the rate, which serves the GM's 2026-11-22 ask that we clean up after ourselves on the file system, and keeping the newest slow-run records honors his 2026-11-26 principle that time saved outranks disk (the newest catches stay, so nothing a later diagnosis needs is thrown away by idleness)."
+    },
+    {
+     "id": "T473-(1)",
+     "summary": "KEEP = 50, a GUESS knob with its why beside it (about 3.2 MiB at CAP; slow runs rare per T455's measured window)",
+     "class": "within",
+     "why": "The newest-N form needs an N; it is labeled GUESS with its reasoning and measured source, as the project's knob rule asks. No part of the request is narrowed."
+    },
+    {
+     "id": "T473-(2)",
+     "summary": "Prune at each write: other files ordered oldest first by mtime then name, oldest removed until KEEP remain, removal failures ignored, the just-written record never dropped, a failed write prunes nothing",
+     "class": "within",
+     "why": "Mechanism of the prune where the record is written, as the task asks. Tie-breaking by name, tolerating a concurrent prune's removal and protecting the new record are correctness details of doing the asked thing, not exceptions to it."
+    },
+    {
+     "id": "T473-(3)",
+     "summary": "The lingering stand-in test waits for crate rust/a's own record rather than any file",
+     "class": "within",
+     "why": "A fixture adjustment so the existing test still tests what it did once the directory is seeded; enforcement of existing behavior, no scope change."
+    },
+    {
+     "id": "T473-(4)",
+     "summary": "Red-first test a_record_written_keeps_only_the_newest_records (60 seeded, 61 left on old code, 50 owed)",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested bound; it fails only when the prune is absent. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T473-perf",
+     "summary": "Filed as a [perf] task under 451 FR-013 (disk bound), not an engine-speed task",
+     "class": "within",
+     "why": "The GM 2026-11-25 (T245): disk audit 'is probably something we should add to our performance tuning and checks'. Classing disk-bounding work as performance work follows his words and narrows nothing; the plan also states disk ranks below time, consistent with his 2026-11-26 principle."
+    },
+    {
+     "id": "T473-order",
+     "summary": "Lands after T463 (which writes the records), with T478 in one builder's tree; found-and-left none",
+     "class": "within",
+     "why": "Ordering and bundling; no defect is deferred and nothing asked is set aside."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T478 (found by 451 T465's build half: plan.md's digest index keeps every answered text under the clone's `.git/plan-index/texts/` and nothing prunes it, 60 files, 728 KB after one 35-task `tick --land-check` and `plan push`, measured 2026-11-27, method: `du` over T457's scratch clone, and the clone diagram-backlog's own directory held 108 files, 1.3 MB, observed 2026-11-27, method: `ls | wc -l` and `du -sh`)",
+    "### T478 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T478-D1",
+     "summary": "Bound .git/plan-index/texts/ by a byte cap evicted least recently used first (mtime touched on read), not a time window or FIFO.",
+     "class": "within",
+     "why": "The GM asked (2026-11-22) that we clean up after ourselves so stuff is not 'suddenly eaten without us realizing it', and (2026-11-26) that time saved outranks disk, so nothing is cleaned if it costs time later. A size cap bounds the store whatever the landing rate; LRU ordering keeps the texts asked again and again, so the only cost is a git re-fetch of a text nobody has asked for recently. That serves both of his statements and narrows neither."
+    },
+    {
+     "id": "T478-D2",
+     "summary": "Prune on every text write rather than once per process.",
+     "class": "within",
+     "why": "The brief says to prune when a text is written. The cost is measured (1.5 ms a write, about 0.09 s of a 12 s cold pass, 2026-11-27, with method), and a once-per-process prune would let one process push past the cap. This is an implementation choice inside what was asked."
+    },
+    {
+     "id": "T478-A1",
+     "summary": "TEXTS_CAP = 4 MiB over the whole texts/ directory, shared by every plan path, a GUESS knob with its why beside it.",
+     "class": "within",
+     "why": "The value is a labeled guess, about five passes' working set at T465's 728 KB a pass and about three times what the clone holds now. That leaves room so hot texts are not evicted, as the time-before-disk principle wants. It is a tunable value, not a narrowing."
+    },
+    {
+     "id": "T478-A2",
+     "summary": "The prune counts every file in the directory (temporary leftovers too), ignores removal failures, and never drops the text just written.",
+     "class": "within",
+     "why": "These are mechanics of the bound. Never dropping the text just written means a write never costs an immediate re-fetch. Ignoring a removal failure matches T465-D3/D4: a lost race costs a re-fetch, never a wrong answer."
+    },
+    {
+     "id": "T478-A3",
+     "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
+     "class": "within",
+     "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -59381,6 +59497,94 @@
      "summary": "classed as a speed change, not a defect fix; found-and-left none",
      "class": "within",
      "why": "No wrong outcome is involved: every verdict is kept, so constitution XIV's defect rules do not reach it; the slower clean-untitled row is the unchanged path under load, as the block states, not a regression the code could cause (it does strictly less on the dirty path and the same on the clean one)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T473": {
+   "section_sha256": "396d8bda3d869abb7cfb091dda05c7b73b1d6a04cb17ca4b54ae0f23b4e43829",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T473-D1",
+     "summary": "Bound alive/ by a count (the newest KEEP), not by age",
+     "class": "within",
+     "why": "The task line offers both forms; choosing one of the offered forms narrows nothing. A count bounds disk at KEEP x CAP whatever the rate, which serves the GM's 2026-11-22 ask that we clean up after ourselves on the file system, and keeping the newest slow-run records honors his 2026-11-26 principle that time saved outranks disk (the newest catches stay, so nothing a later diagnosis needs is thrown away by idleness)."
+    },
+    {
+     "id": "T473-(1)",
+     "summary": "KEEP = 50, a GUESS knob with its why beside it (about 3.2 MiB at CAP; slow runs rare per T455's measured window)",
+     "class": "within",
+     "why": "The newest-N form needs an N; it is labeled GUESS with its reasoning and measured source, as the project's knob rule asks. No part of the request is narrowed."
+    },
+    {
+     "id": "T473-(2)",
+     "summary": "Prune at each write: other files ordered oldest first by mtime then name, oldest removed until KEEP remain, removal failures ignored, the just-written record never dropped, a failed write prunes nothing",
+     "class": "within",
+     "why": "Mechanism of the prune where the record is written, as the task asks. Tie-breaking by name, tolerating a concurrent prune's removal and protecting the new record are correctness details of doing the asked thing, not exceptions to it."
+    },
+    {
+     "id": "T473-(3)",
+     "summary": "The lingering stand-in test waits for crate rust/a's own record rather than any file",
+     "class": "within",
+     "why": "A fixture adjustment so the existing test still tests what it did once the directory is seeded; enforcement of existing behavior, no scope change."
+    },
+    {
+     "id": "T473-(4)",
+     "summary": "Red-first test a_record_written_keeps_only_the_newest_records (60 seeded, 61 left on old code, 50 owed)",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested bound; it fails only when the prune is absent. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T473-perf",
+     "summary": "Filed as a [perf] task under 451 FR-013 (disk bound), not an engine-speed task",
+     "class": "within",
+     "why": "The GM 2026-11-25 (T245): disk audit 'is probably something we should add to our performance tuning and checks'. Classing disk-bounding work as performance work follows his words and narrows nothing; the plan also states disk ranks below time, consistent with his 2026-11-26 principle."
+    },
+    {
+     "id": "T473-order",
+     "summary": "Lands after T463 (which writes the records), with T478 in one builder's tree; found-and-left none",
+     "class": "within",
+     "why": "Ordering and bundling; no defect is deferred and nothing asked is set aside."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T478": {
+   "section_sha256": "1b24bd94255ebcee1eef6b7981db148264ecb904f399c0b90c0200cd9a60086d",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T478-D1",
+     "summary": "Bound .git/plan-index/texts/ by a byte cap evicted least recently used first (mtime touched on read), not a time window or FIFO.",
+     "class": "within",
+     "why": "The GM asked (2026-11-22) that we clean up after ourselves so stuff is not 'suddenly eaten without us realizing it', and (2026-11-26) that time saved outranks disk, so nothing is cleaned if it costs time later. A size cap bounds the store whatever the landing rate; LRU ordering keeps the texts asked again and again, so the only cost is a git re-fetch of a text nobody has asked for recently. That serves both of his statements and narrows neither."
+    },
+    {
+     "id": "T478-D2",
+     "summary": "Prune on every text write rather than once per process.",
+     "class": "within",
+     "why": "The brief says to prune when a text is written. The cost is measured (1.5 ms a write, about 0.09 s of a 12 s cold pass, 2026-11-27, with method), and a once-per-process prune would let one process push past the cap. This is an implementation choice inside what was asked."
+    },
+    {
+     "id": "T478-A1",
+     "summary": "TEXTS_CAP = 4 MiB over the whole texts/ directory, shared by every plan path, a GUESS knob with its why beside it.",
+     "class": "within",
+     "why": "The value is a labeled guess, about five passes' working set at T465's 728 KB a pass and about three times what the clone holds now. That leaves room so hot texts are not evicted, as the time-before-disk principle wants. It is a tunable value, not a narrowing."
+    },
+    {
+     "id": "T478-A2",
+     "summary": "The prune counts every file in the directory (temporary leftovers too), ignores removal failures, and never drops the text just written.",
+     "class": "within",
+     "why": "These are mechanics of the bound. Never dropping the text just written means a write never costs an immediate re-fetch. Ignoring a removal failure matches T465-D3/D4: a lost race costs a re-fetch, never a wrong answer."
+    },
+    {
+     "id": "T478-A3",
+     "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
+     "class": "within",
+     "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
     }
    ],
    "verdict": "CLEAR"
