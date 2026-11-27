@@ -14,7 +14,8 @@
 //!   days), and nothing at all while any cargo, rustc or clippy process runs.
 //! - `landed <feature> <task-starts.jsonl> <task>...`: `make land`'s last step once it lands, the landed tasks' own `/tmp/t<N>`
 //!   scratch removed (`sweep/tmp.rs`) and their directories in the git directory holding `task-starts.jsonl` - `t<N>...` and
-//!   `l7r-handoffs/T<N>-...` (451 T246, `sweep/leftovers.rs`) - and every clean scratch worktree idle past the scratch threshold
+//!   `l7r-handoffs/T<N>-...` (451 T246, `sweep/leftovers.rs`), their `t<N>...` scratch worlds in the landing session's scratchpad
+//!   unless another feature's start of the number is still open (451 T517) - and every clean scratch worktree idle past the scratch threshold
 //!   (`sweep/trees.rs`).
 //! - `trees`: the scratch worktrees (a registered worktree of a clone or the mirror outside the clones directory), each with the
 //!   command that removes it; `make land` prints the ones left at its end (a modified or untracked file, a commit no ref holds,
@@ -258,6 +259,13 @@ pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
     let removed: Vec<Item> = gone
         .into_iter()
         .chain(sweep::landed_leftovers(c, git, &ours))
+        // ...and their scratch worlds in the landing session's scratchpad (451 T517, `sweep/leftovers.rs`)
+        .chain(sweep::landed_scratchpad(
+            c,
+            feature,
+            Path::new(starts),
+            &ours,
+        ))
         .filter(sweep::remove)
         .collect();
     let input = json!({ "session_id": c.keep });

@@ -434,3 +434,84 @@ fn a_build_elsewhere_holds_no_prune_and_one_in_the_profile_holds_it_all() {
     let held = cache(&c, now(), true);
     assert!(!held.stdout.contains("pool-tree/debug/"), "{}", held.stdout);
 }
+
+#[test]
+fn a_landing_takes_its_tasks_scratch_worlds_in_the_landing_session_s_scratchpad() {
+    let (base, mut c) = world();
+    let args = |a: &[&str]| a.iter().map(|s| (*s).to_owned()).collect::<Vec<String>>();
+    c.tmp = base.join("tmp");
+    std::fs::create_dir_all(&c.tmp).unwrap();
+    c.root = base.join("root");
+    c.keep = "sess".to_owned();
+    // 451 T517: the landing session's scratchpad, under whichever slug holds it
+    let pad = c.root.join("-diagram/sess/scratchpad");
+    for f in [
+        "t158/world/a.rs",
+        "t158-sizes.txt",
+        "t158r.log",
+        "t1580/x",
+        "t15-y.txt",
+        "t160-shared.log",
+        "t163-open/x",
+        "t158-held.log",
+        "m14/A/x",
+    ] {
+        put(&base, &pad.join(f), 0);
+    }
+    // another session's scratchpad is not the landing's
+    put(&base, &c.root.join("-diagram/other/scratchpad/t158-q"), 0);
+    // a live process holds one file
+    std::fs::create_dir_all(c.proc.join("1/fd")).unwrap();
+    std::os::unix::fs::symlink(pad.join("t158-held.log"), c.proc.join("1/fd/3")).unwrap();
+    // T160: another feature started it within the day; T163: another feature's start, old, its task still open
+    let git = base.join("clone/.git");
+    std::fs::create_dir_all(&git).unwrap();
+    let starts = git.join("task-starts.jsonl");
+    std::fs::write(
+        &starts,
+        concat!(
+            r#"{"feature": "449-rust", "task": "T160", "utc": "2999-01-01T00:00:00Z"}"#,
+            "\n",
+            r#"{"feature": "417-all-seeds-pass", "task": "T163", "utc": "2000-01-01T00:00:00Z"}"#,
+            "\n"
+        ),
+    )
+    .unwrap();
+    put(
+        &base,
+        &base.join("clone/specs/417-all-seeds-pass/tasks.md"),
+        0,
+    );
+    std::fs::write(
+        base.join("clone/specs/417-all-seeds-pass/tasks.md"),
+        "- [ ] T163 open\n",
+    )
+    .unwrap();
+    let s = starts.display().to_string();
+    let out = with(
+        &args(&["landed", "451", &s, "T158,T160,T163"]),
+        &mut c,
+        now(),
+    );
+    assert_eq!(out.code, 0);
+    assert!(out.stdout.contains("a session's scratchpad"));
+    for gone in ["t158", "t158-sizes.txt", "t158r.log"] {
+        assert!(!pad.join(gone).exists(), "{gone} taken");
+    }
+    for kept in [
+        "t1580",
+        "t15-y.txt",
+        "t160-shared.log",
+        "t163-open",
+        "t158-held.log",
+        "m14",
+    ] {
+        assert!(pad.join(kept).exists(), "{kept} kept");
+    }
+    assert!(c.root.join("-diagram/other/scratchpad/t158-q").exists());
+    // no session to judge, nothing taken
+    put(&base, &pad.join("t170/x"), 0);
+    c.keep = String::new();
+    let blind = with(&args(&["landed", "451", &s, "T170"]), &mut c, now());
+    assert!(blind.stdout.is_empty() && pad.join("t170").exists());
+}

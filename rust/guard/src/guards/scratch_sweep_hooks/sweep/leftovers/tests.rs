@@ -5,7 +5,7 @@ use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime};
 
-use super::{dead_stores, git_dirs, landed, number, snapshots};
+use super::{dead_stores, git_dirs, landed, number, open_elsewhere, scratchpad, snapshots};
 use crate::guards::scratch_sweep_hooks::Config;
 use crate::shared::tempdir::TempDir;
 
@@ -137,4 +137,76 @@ fn a_landing_takes_its_tasks_directories_in_the_git_directory_and_never_a_note_o
     assert_eq!(number("T432-scratch", 'T'), Some(432));
     assert_eq!(number("tmp.x", 't'), None);
     assert_eq!(number("probe", 'T'), None);
+}
+
+#[test]
+fn a_landing_takes_its_tasks_scratch_worlds_in_its_own_session_s_scratchpad_by_whole_number() {
+    let (base, mut c) = world();
+    let top = &*base;
+    c.root = base.join("root");
+    c.keep = "sess".to_owned();
+    let pad = c.root.join("-diagram--clones-x/sess/scratchpad");
+    for f in [
+        "t51-a.txt",
+        "t515-b/x",
+        "t51/x",
+        "t51x.log",
+        "tmp.y",
+        "notes.md",
+    ] {
+        put(top, &pad.join(f), 0);
+    }
+    put(top, &c.root.join("-diagram/other/scratchpad/t51-c"), 0);
+    // an entry holding a registered worktree's tree stays
+    let tree = pad.join("t51-wt/tree");
+    std::fs::create_dir_all(tree.parent().unwrap()).unwrap();
+    crate::guards::scratch_sweep_hooks::sweep::fixture::worktree(&c.clones, &tree);
+    assert_eq!(
+        names(&scratchpad(&c, &[51]), &pad),
+        ["t51", "t51-a.txt", "t51x.log"]
+    );
+    assert_eq!(names(&scratchpad(&c, &[515]), &pad), ["t515-b"]);
+    assert!(scratchpad(&c, &[]).is_empty());
+    c.keep = String::new();
+    assert!(scratchpad(&c, &[51]).is_empty());
+}
+
+#[test]
+fn another_feature_s_start_holds_the_number_while_its_task_is_open_whatever_its_age() {
+    let base = TempDir::new("guard-sweep-open-elsewhere");
+    let git = base.join("clone/.git");
+    std::fs::create_dir_all(&git).unwrap();
+    let specs = base.join("clone/specs");
+    for (dir, text) in [
+        (
+            "417-seeds",
+            "- [ ] T163 open\n- [x] T164 done\n- [ ] T1650 other\n",
+        ),
+        ("451-time", "- [ ] T170 ours\n"),
+    ] {
+        std::fs::create_dir_all(specs.join(dir)).unwrap();
+        std::fs::write(specs.join(dir).join("tasks.md"), text).unwrap();
+    }
+    let starts = git.join("task-starts.jsonl");
+    std::fs::write(
+        &starts,
+        [
+            r#"{"feature": "417-seeds", "task": "T163", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"feature": "417-seeds", "task": "T164", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"feature": "417-seeds", "task": "T165", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"feature": "451-time", "task": "T170", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"feature": "999-gone", "task": "T171", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"feature": "417-seeds", "task": "T172", "utc": "2000-01-01T00:00:00Z"}"#,
+            r#"{"unstart": {"feature": "417-seeds", "task": "T172"}, "utc": "2000-01-01T00:00:01Z"}"#,
+            "not json",
+        ]
+        .join("\n"),
+    )
+    .unwrap();
+    // open elsewhere: held; ticked elsewhere, a T1650 for a T165, our own feature's, unstarted: not; no tasks.md to read: held
+    assert_eq!(
+        open_elsewhere(&starts, "451", &[163, 164, 165, 170, 171, 172]),
+        [163, 171]
+    );
+    assert!(open_elsewhere(&base.join("none.jsonl"), "451", &[163]).is_empty());
 }

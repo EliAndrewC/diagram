@@ -142,6 +142,26 @@ pub(crate) fn landed_leftovers(c: &Config, git: &Path, numbers: &[u64]) -> Vec<I
     items(leftovers::landed(git, numbers), &live)
 }
 
+/// The landed tasks' scratch worlds in the landing session's scratchpad (451 T517, `leftovers::scratchpad`), but a number another
+/// feature started and has not ticked (`leftovers::open_elsewhere`), held by no live process; none where `/proc` cannot be read.
+pub(crate) fn landed_scratchpad(
+    c: &Config,
+    feature: &str,
+    starts: &Path,
+    numbers: &[u64],
+) -> Vec<Item> {
+    let Some(live) = live_paths(&c.proc) else {
+        return Vec::new();
+    };
+    let held = leftovers::open_elsewhere(starts, feature, numbers);
+    let ours: Vec<u64> = numbers
+        .iter()
+        .copied()
+        .filter(|n| !held.contains(n))
+        .collect();
+    items(leftovers::scratchpad(c, &ours), &live)
+}
+
 /// THE CACHE'S SIZE BUDGET (451 T158): past `L7R_CACHE_BUDGET_GB` in all, the cache's share takes every dead tree's build directory
 /// and every variant past a crate's newest sixteen whatever its age - never one in use, never while a build runs - not only the idle;
 /// and (451 T245, `evict.rs`) live trees' idle profiles until the cache is back within it, or `short` more bytes are free (the

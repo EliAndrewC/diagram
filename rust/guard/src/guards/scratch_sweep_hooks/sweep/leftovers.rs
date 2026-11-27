@@ -122,5 +122,69 @@ pub(super) fn landed(git: &Path, numbers: &[u64]) -> Vec<(PathBuf, &'static str)
     out
 }
 
+/// THE LANDING SESSION'S SCRATCHPAD (451 T517): the landed tasks' own scratch worlds in it - an entry named for the task's number,
+/// `t<N>` then anything but a digit (`t373/`, `t386-bench/`, `t517-sizes.txt`; `t51` is never `t515`'s), a file or a directory,
+/// holding no registered worktree's tree. The session is the one landing (`CLAUDE_CODE_SESSION_ID`, the sweep's `keep`), found under
+/// whichever slug of the root holds it: builders write into their coordinator's scratchpad (451 T271), and its slug is the tree the
+/// session started in, not the clone it lands from. No session, none: another session's scratchpad is judged by the age rule alone.
+pub(super) fn scratchpad(c: &Config, numbers: &[u64]) -> Vec<(PathBuf, &'static str)> {
+    if c.keep.is_empty() {
+        return Vec::new();
+    }
+    let trees: Vec<PathBuf> = super::worktrees(c).into_iter().map(|w| w.tree).collect();
+    children(&c.root)
+        .into_iter()
+        .flat_map(|(slug, _, _)| children(&slug.join(&c.keep).join("scratchpad")))
+        .filter(|(p, name, _)| {
+            number(name, 't').is_some_and(|n| numbers.contains(&n))
+                && !trees.iter().any(|t| t.starts_with(p))
+        })
+        .map(|(p, _, _)| {
+            (
+                p,
+                "its task landed: its scratch world in a session's scratchpad",
+            )
+        })
+        .collect()
+}
+
+/// The numbers of `numbers` another feature than `feature` started and has not ticked, whatever the start's age (451 T517): a live
+/// scratchpad has no age rule to fall back on, as `/tmp`'s has (`tmp::landed`'s day), so a start of another feature still open in its
+/// `tasks.md` (the clone's `specs/<feature>/`, beside the git directory holding `starts`) holds the number. A start whose `tasks.md`
+/// cannot be read holds it too.
+pub(super) fn open_elsewhere(starts: &Path, feature: &str, numbers: &[u64]) -> Vec<u64> {
+    let text = crate::shared::speckit::marks::live_starts(
+        &std::fs::read_to_string(starts).unwrap_or_default(),
+    );
+    let specs = starts
+        .parent()
+        .and_then(Path::parent)
+        .unwrap_or(Path::new(""))
+        .join("specs");
+    let ours = |f: &str| f == feature || f.starts_with(&format!("{feature}-"));
+    let open = |f: &str, task: &str| {
+        let line = format!("- [ ] {task} ");
+        children(&specs)
+            .into_iter()
+            .find(|(_, name, _)| name == f || name.starts_with(&format!("{f}-")))
+            .and_then(|(d, _, _)| std::fs::read_to_string(d.join("tasks.md")).ok())
+            .is_none_or(|t| t.lines().any(|l| format!("{l} ").starts_with(&line)))
+    };
+    numbers
+        .iter()
+        .copied()
+        .filter(|n| {
+            text.lines().any(|l| {
+                let v: serde_json::Value = serde_json::from_str(l).unwrap_or_default();
+                let (f, task) = (
+                    v["feature"].as_str().unwrap_or(""),
+                    v["task"].as_str().unwrap_or(""),
+                );
+                !f.is_empty() && !ours(f) && number(task, 'T') == Some(*n) && open(f, task)
+            })
+        })
+        .collect()
+}
+
 #[cfg(test)]
 mod tests;

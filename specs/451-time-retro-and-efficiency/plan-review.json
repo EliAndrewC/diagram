@@ -4752,6 +4752,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T517 (T515's second half, the session's scratch at 21.8 GB, observed 2026-11-27, method: `make disk-audit`)": {
+   "sha256": "ca4f9805ee691a05bb21cc4272f4085a3f136cf4f17f344230815ebd5a8da34a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T517 Approach (checklist part A)": {
+   "sha256": "3e1400ef63eb145cd83925957d8053ec121ee43ae0ac9f2a5c52522e1d7e3b35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43398,6 +43410,59 @@
      "why": "The GM placed disk work under performance tuning himself (2026-11-25: 'having some kind of audit of disk space ... is probably something we should add to our performance tuning and checks'); the block keeps the builders' warm trees and changes no engine speed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T517 (T515's second half, the session's scratch at 21.8 GB, observed 2026-11-27, method: `make disk-audit`)",
+    "### T517 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 landing takes its tasks' scratch",
+     "summary": "make land's --scratch-sweep landed also removes the landed tasks' t<N> entries (file or directory) in the landing session's scratchpad, as it takes their .git/t<N> scratch (T246)",
+     "class": "within",
+     "why": "The GM 2026-11-27 (T515's words): 'we are leaving things around that are causing my hard drive to slowly fill up in a way which our current tooling is not preventing'; and on T515's remainder, ~200 GB for this container 'is more than what I would have expected'. A landed task's measurement worlds in a live coordinator's scratchpad are such a hole: the age rule (T246) keeps the running session's scratchpad, so nothing took them. Taking them at landing is the request."
+    },
+    {
+     "id": "D2 whole-number match",
+     "summary": "an entry matches when its name is t, the task's whole number, then a non-digit or end (t51 never matches t515), the rule tmp::landed already uses",
+     "class": "within",
+     "why": "Correctness of D1: a prefix match would delete an open task's worlds. Enforces the request, takes nothing from it."
+    },
+    {
+     "id": "D3 what is kept",
+     "summary": "an entry holding a registered worktree's tree, an entry a live process holds, and everything when /proc cannot be read, are kept",
+     "class": "within",
+     "why": "Protects live work. The GM 2026-11-26: 'we definitely don't want to clean things up if it is going to cost us time later'; the constraint 'never a task still open, never a file a live process holds' serves it. Not a narrowing of what the GM asked to have removed."
+    },
+    {
+     "id": "D4 which session",
+     "summary": "the landing session's scratchpad, found by CLAUDE_CODE_SESSION_ID under any slug (builders write into their coordinator's scratchpad, T271); no session id takes nothing; other sessions' scratchpads stay with the age rule",
+     "class": "within",
+     "why": "The hole measured is the live landing session's scratchpad, which the age rule cannot reach; other sessions' scratchpads are already covered by T246's age sweep once finished, and a live other session's are its own open work. The scope matches the hole the GM's words point at; nothing he asked for is left uncovered by some rule."
+    },
+    {
+     "id": "D5 numbers another feature holds",
+     "summary": "tmp::landed's day rule kept; on top, a number another feature started (live start in task-starts.jsonl) and has not ticked is held whatever its age, and an unreadable tasks.md holds its number",
+     "class": "within",
+     "why": "Numbers are shared across features, so without this a landing of 451 Tn would delete another feature's open Tn's worlds - the cost-us-time-later case the GM ruled out (2026-11-26). Measured today: none of the 17.86 GB landed entries is held by it, so it keeps nothing the GM asked to have taken."
+    },
+    {
+     "id": "D6 m14 left to the age rule",
+     "summary": "the 2.4 GB m14 entry carries no task prefix and is not taken by a landing",
+     "class": "within",
+     "why": "A landing can attribute only entries named for its tasks; an unprefixed entry is not a landed task's scratch and may be live work. T517's line asks for landed tasks' scratch; this leaves nothing of that class. (Note: it stays while this session lives, since the age rule keeps the running session's scratchpad; not a defect a reader of the disk audit would call a hole in the landing rule.)"
+    },
+    {
+     "id": "D7 backlog filed as T533",
+     "summary": "the 17.86 GB in 2,792 entries of tasks landed before this rule is not taken by T517 and is filed as T533, ordered before T525",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -63993,6 +64058,57 @@
      "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
      "class": "within",
      "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T517": {
+   "section_sha256": "82f19dea49b19f08ad884a9acfd4fda086f6abbf907cf8a3252f6ca2bb32a092",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 landing takes its tasks' scratch",
+     "summary": "make land's --scratch-sweep landed also removes the landed tasks' t<N> entries (file or directory) in the landing session's scratchpad, as it takes their .git/t<N> scratch (T246)",
+     "class": "within",
+     "why": "The GM 2026-11-27 (T515's words): 'we are leaving things around that are causing my hard drive to slowly fill up in a way which our current tooling is not preventing'; and on T515's remainder, ~200 GB for this container 'is more than what I would have expected'. A landed task's measurement worlds in a live coordinator's scratchpad are such a hole: the age rule (T246) keeps the running session's scratchpad, so nothing took them. Taking them at landing is the request."
+    },
+    {
+     "id": "D2 whole-number match",
+     "summary": "an entry matches when its name is t, the task's whole number, then a non-digit or end (t51 never matches t515), the rule tmp::landed already uses",
+     "class": "within",
+     "why": "Correctness of D1: a prefix match would delete an open task's worlds. Enforces the request, takes nothing from it."
+    },
+    {
+     "id": "D3 what is kept",
+     "summary": "an entry holding a registered worktree's tree, an entry a live process holds, and everything when /proc cannot be read, are kept",
+     "class": "within",
+     "why": "Protects live work. The GM 2026-11-26: 'we definitely don't want to clean things up if it is going to cost us time later'; the constraint 'never a task still open, never a file a live process holds' serves it. Not a narrowing of what the GM asked to have removed."
+    },
+    {
+     "id": "D4 which session",
+     "summary": "the landing session's scratchpad, found by CLAUDE_CODE_SESSION_ID under any slug (builders write into their coordinator's scratchpad, T271); no session id takes nothing; other sessions' scratchpads stay with the age rule",
+     "class": "within",
+     "why": "The hole measured is the live landing session's scratchpad, which the age rule cannot reach; other sessions' scratchpads are already covered by T246's age sweep once finished, and a live other session's are its own open work. The scope matches the hole the GM's words point at; nothing he asked for is left uncovered by some rule."
+    },
+    {
+     "id": "D5 numbers another feature holds",
+     "summary": "tmp::landed's day rule kept; on top, a number another feature started (live start in task-starts.jsonl) and has not ticked is held whatever its age, and an unreadable tasks.md holds its number",
+     "class": "within",
+     "why": "Numbers are shared across features, so without this a landing of 451 Tn would delete another feature's open Tn's worlds - the cost-us-time-later case the GM ruled out (2026-11-26). Measured today: none of the 17.86 GB landed entries is held by it, so it keeps nothing the GM asked to have taken."
+    },
+    {
+     "id": "D6 m14 left to the age rule",
+     "summary": "the 2.4 GB m14 entry carries no task prefix and is not taken by a landing",
+     "class": "within",
+     "why": "A landing can attribute only entries named for its tasks; an unprefixed entry is not a landed task's scratch and may be live work. T517's line asks for landed tasks' scratch; this leaves nothing of that class. (Note: it stays while this session lives, since the age rule keeps the running session's scratchpad; not a defect a reader of the disk audit would call a hole in the landing rule.)"
+    },
+    {
+     "id": "D7 backlog filed as T533",
+     "summary": "the 17.86 GB in 2,792 entries of tasks landed before this rule is not taken by T517 and is filed as T533, ordered before T525",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
     }
    ],
    "verdict": "CLEAR"
