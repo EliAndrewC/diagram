@@ -294,3 +294,27 @@ fn a_landed_task_carries_its_size_counts_turns_and_tokens_with_their_shares() {
         assert!(out.contains(want), "{want}\n---\n{out}");
     }
 }
+
+/// A landed task whose builders stopped (451 T512's own table): its own path beside its stopped stretches, each category's minutes
+/// largest first, summed - another task's stopped seconds never in its line.
+#[test]
+fn a_tasks_own_table_lists_its_stopped_stretches_by_what_was_in_flight() {
+    let key: Key = ("451-x".to_owned(), "T1".to_owned());
+    let other: Key = ("451-x".to_owned(), "T2".to_owned());
+    let cell = |k: &Key, cat: &str| (k.clone(), cat.to_owned(), String::new());
+    let mut l = Ledger::default();
+    l.own.insert(cell(&key, "builders: reading code"), 60.0);
+    l.stopped.insert(cell(&key, "tests"), 120.0);
+    l.stopped.insert(cell(&key, book::STOPPED), 30.0);
+    l.stopped.insert(cell(&other, "tests"), 600.0);
+    let mut out = String::new();
+    beside::own_table(&mut out, &l, &key);
+    assert!(out.contains("Its own path (451 T512): 1.0 min."), "{out}");
+    let row = "| builders: reading code | 1.0 | 100.0% |";
+    assert!(out.contains(row), "{out}");
+    let want = format!(
+        "\nBeside its path, its builders stopped (451 T512): 2.5 min - tests 2.0 - {} 0.5.\n\n",
+        book::STOPPED
+    );
+    assert!(out.ends_with(&want), "{out}");
+}

@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use serde_json::json;
 
 use super::super::super::events::Event;
-use super::tests::{at, booked_to, by_cat, line, post, pre};
+use super::tests::{at, booked_beside, booked_to, by_cat, line, post, pre};
 use super::*;
 
 fn agent(ev: &str, t: &str, aid: &str, kind: &str) -> Event {
@@ -288,4 +288,43 @@ fn a_builders_own_path_is_its_spans_not_its_stopped_stretches() {
     assert_eq!(stopped, want);
     let t9 = ("451-x".to_owned(), "T9".to_owned());
     assert!(l.cells.keys().any(|(k, _, _)| k == &t9));
+}
+
+/// 451 T512's clip where a builder's segment STRADDLES a span's start: B's resumption at 02:10 is logged in another feature's log
+/// only, so its own lines run 01:00 (its stop) to 02:20 (its edit) as one segment, and the span its start opens cuts it - 01:00 to
+/// 02:10 is B stopped (its own test to 02:00, then nothing in flight), 02:10 to 02:20 its own path - the path still its builder
+/// minutes, 109 s.
+#[test]
+fn a_segment_across_a_spans_start_is_stopped_before_it() {
+    let (mut stream, aside) = builder_day();
+    let resumed = |e: &Event| is(e, "ev", "SubagentStart") && or_s(e, "t") == at("02:10");
+    let elsewhere: Vec<Event> = stream.iter().filter(|e| resumed(e)).cloned().collect();
+    assert_eq!(elsewhere.len(), 1);
+    stream.retain(|e| !resumed(e));
+    let l = booked_beside(
+        &stream,
+        &aside,
+        &elsewhere,
+        &HashMap::new(),
+        &[],
+        (&at("00:00"), &at("04:10")),
+    );
+    let key = ("451-x".to_owned(), "T1".to_owned());
+    assert_eq!(l.builders[&key], (109.0, 1));
+    let sum = |m: &HashMap<(Key, String, String), f64>| {
+        let mut by: HashMap<String, f64> = HashMap::new();
+        for ((k, cat, _), s) in m {
+            assert_eq!(k, &key);
+            *by.entry(cat.clone()).or_default() += s;
+        }
+        by
+    };
+    let own = sum(&l.own);
+    assert!((own.values().sum::<f64>() - 109.0).abs() < 1e-6, "{own:?}");
+    // 01:00 to 02:00 on its own test, 02:00 to 02:10 and 02:40 to 03:00 on being resumed
+    let want: HashMap<String, f64> = [("tests", 60.0), (STOPPED, 30.0)]
+        .into_iter()
+        .map(|(k, v)| (k.to_owned(), v))
+        .collect();
+    assert_eq!(sum(&l.stopped), want);
 }

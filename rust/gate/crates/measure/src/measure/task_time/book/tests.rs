@@ -125,6 +125,18 @@ pub(super) fn booked_to(
     aside: &[Event],
     commands: &HashMap<String, String>,
     pages: &[Page],
+    window: (&str, &str),
+) -> Ledger {
+    booked_beside(stream, aside, &[], commands, pages, window)
+}
+
+/// [`booked_to`], with agent start and stop lines that another feature's log holds and `stream` does not (`columns::flight`).
+pub(super) fn booked_beside(
+    stream: &[Event],
+    aside: &[Event],
+    elsewhere: &[Event],
+    commands: &HashMap<String, String>,
+    pages: &[Page],
     (from, until): (&str, &str),
 ) -> Ledger {
     let end = ts(until).unwrap();
@@ -140,6 +152,7 @@ pub(super) fn booked_to(
     let agents: Vec<Event> = stream
         .iter()
         .filter(|e| is(e, "ev", "SubagentStart") || is(e, "ev", "SubagentStop"))
+        .chain(elsewhere)
         .cloned()
         .collect();
     let flight = columns::flight(&runs, &agents, stream, end).unwrap();
