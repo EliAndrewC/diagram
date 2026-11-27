@@ -21,7 +21,8 @@ sides) and T512 (a task's size, counts, turns, tokens and own path); the 451 par
 ## Why
 
 Over the night of 2026-11-27 the builders were not the bottleneck: their pool trees were busy 93%, 98% and 83% of 02:00Z to 14:29Z
-(t269, t270, t271; `dev/measurements/2026-11-27/tree-idle/`). Integration was. The coordinating session carried every builder's
+(t269, t270, t271; the session's run of `tree-idle.py` with its window start edited to 02:00Z, 2026-11-27 about 14:40Z, reported in
+`port-talk-orchestrator-update.md`; the script as committed reads only its own 17:00Z window). Integration was. The coordinating session carried every builder's
 commit into its own clone, ran each batch's gate there, and repaired every red gate and refusal in its own turns, one at a time.
 Each figure below is from `port-talk-orchestrator-update.md` (one read-only agent over the event log, the pool log, the landing
 logs and the transcripts, 02:00Z to 15:00Z) unless it names `make task-time`:
@@ -33,8 +34,10 @@ logs and the transcripts, 02:00Z to 15:00Z) unless it names `make task-time`:
 - A landing ran in the clone 44% of the window; 74% of those minutes were attempts that did not land.
 - 15 of 93 carries (16%) conflicted and were resolved by hand, 8 of them in `plan.md`.
 - `make task-time SINCE=2026-11-27T02:00:00Z UNTIL=2026-11-27T14:29:00Z` (130 tasks landed, its header; 451 T510's split): the
-  landings' side 569.1 blocking minutes; the tasks' side 137.1, of which 26.3 a task's work waited on a landing (the cross-blocking
-  row).
+  landings' side 569.1 blocking minutes. The tasks' side read 137.1, of which 26.3 a task's work waited on a landing (the
+  cross-blocking row), at 451 T510's builder's run (2026-11-27, about 15:00Z), and 143.2 and 32.3 at spec-fidelity's re-run (the same
+  day, about 16:30Z): the row is an upper bound that counts a tree free from its release to its next handout, so handouts after the
+  window move it. This spec's baseline is the later run, 32.3 minutes over 130 tasks.
 - Tokens: the coordinator 0.58M output and 616M cache-read over 1,007 calls, its context 540k to 966k tokens a call and growing
   about 100k an hour; the builders 4.88M output and 1,026M cache-read over 105 transcripts; review and check agents 1.1M output.
 
@@ -44,8 +47,8 @@ note - queued behind a gate. The GM: "I worry that they are symptomatic of somet
 ## What current practice says (the two notes)
 
 Systems that run parallel coding agents converge on four roles: a THIN COORDINATOR that plans, dispatches and talks to the human;
-SHORT-LIVED WORKERS each in a worktree; a MERGE QUEUE that is mostly a script - batch, gate, find the failing change, eject it,
-land the rest (bors, GitHub's merge queue, Chromium's commit queue, Mergify, Gas Town's Refinery) - where the failing change goes
+SHORT-LIVED WORKERS each in a worktree; a MERGE QUEUE that is mostly a script - batch, gate, bisect a red batch to find the failing
+change, eject it, land the rest (bors, GitHub's merge queue, Chromium's commit queue, Mergify, Gas Town's Refinery) - where the failing change goes
 back to its author for repair; and a WATCHER of workers' health. Cursor built an integrator agent and dropped it ("Workers were
 already capable of handling conflicts themselves"). A long-lived context is the token cost to avoid; where judgment is needed at
 integration, a fresh agent per batch, not a standing one.
@@ -64,8 +67,8 @@ The coordinating session dispatches builders, reads their short reports, files t
 repairs a red gate or answers a landing's refusal in its own turns or its own tree, and nothing it writes waits on a gate.
 
 **Acceptance**: over a like window (eight hours or more of builder work), the cross-blocking row - minutes a task's work waited
-on a landing - is no higher than the night's (26.3 minutes over 130 tasks); the main session's landing turns are a small share of
-the night's (a GUESS: under a tenth); a filing or a note in the session's tree during a gate is never held.
+on a landing - is no higher than the night's (32.3 minutes over 130 tasks, the baseline run above); a filing or a note in the
+session's tree during a gate is never held.
 
 ### US2 - builders hand in work that is ready to land (P1)
 
@@ -93,7 +96,7 @@ failing change to the queue as a repair entry. The repair goes to a FRESH builde
 its report (451 T308, the GM).
 
 **Acceptance**: where the gate's report attributes the red, the batch's other changes land on the next gate run; where it does not,
-in at most ceil(log2 n) + 1 further runs for a batch of n changes; no batch is repaired whole by the coordinator.
+in at most ceil(log2 n) + 1 further runs for a batch of n changes with one bad change (more bad changes, one bisection each); no batch is repaired whole by the coordinator.
 
 ### US5 - judgment at integration goes to a fresh agent (P3)
 
@@ -129,10 +132,14 @@ for that batch with the conflict or the gate's output - never a standing integra
 Chosen by reading every open 451 task held for the GM (T302, T307, T308, T321, T354, T401, T405, T415) against FR-001 to FR-005;
 moved when this feature's tasks are written, each closed in 451 with a pointer here:
 
-- **T302 part 1** (a landing needs a clean clone) - US3, FR-003. Its parts 2 (pool trees for page sessions) and 3 (a guard
-  confining each builder to its tree) stay in 451.
-- **T307 parts 1 and 3** (the gate-write guard's reach; what a landing waits on that it need not) - FR-001, US3.
-- **T308** (two tiers of checking: the fast one in the builder's tree, the full gate once where work reaches main) - US2, US3.
+- **T302 parts 1 and 4** (only a session's own clone uses land-alone; a landing refuses an unclean clone and land-alone retires)
+  - US3, FR-003. Its parts 2 (pool trees for page sessions) and 3 (a guard confining each builder to its tree) stay in 451.
+- **T307 parts 1, 2 and 3** (the gate-write guard's reach; the push refusing after the gate, every push check also in the first
+  pass - the cause of the night's 3 refused at the tick; what a landing waits on that it need not) - FR-001, FR-003, FR-008, US3.
+- **T308** (two tiers of checking: the fast one in the builder's tree, the full gate once where work reaches main) - its two-tier
+  split and its measurements, US2 and US3. Two of its clauses are replaced, not taken: a gate failure repaired "by whoever is
+  cheapest", the coordinating session among them (replaced by US1, US4 and FR-004: a fresh builder, never the coordinator), and the
+  changed crate's coverage in the builder's tree (replaced by US2 and FR-002: coverage in the landing's gate only).
 - **T405** (the gate's tree check voids a gate for a write it never read) - FR-001.
 - **T415** (the second tier's gate proposed at the threshold) - FR-004, with trial 458's finding.
 
@@ -141,8 +148,8 @@ T321 (a reproduction helper), T354 (brief sizing) and T401 (the tree-idle re-mea
 ## Decisions the plan makes (the record is silent; each a knob or the easier route, said which)
 
 - The lane's tree: b1 (idle since 10:20Z on 2026-11-27 at `L7R_BUILDERS` = 3) or a tree of its own.
-- The rebase at hand-in, the first pass at hand-in and bisection are the session's additions to current practice's shape (the
-  sketch in `request.md`); the plan rules on each with its measurement, none assumed.
+- The rebase and the first pass at hand-in are the session's additions to current practice's shape, approved with the sketch
+  (`request.md`, "very sensible"); the plan measures each against FR-006 and FR-007 and does not reopen them.
 
 ## Out of scope
 
