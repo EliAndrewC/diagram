@@ -717,32 +717,84 @@ engine speed, so the performance checklist does not apply.
 
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T08 (<why: the finding or measurement that files it>)
+### T08 (phase 1: the first pass at hand-in wired, and `make builder-done` pointed at the hand-in, D3 step 4 and 6, D4)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in pool tree `diagram-backlog-t269`, on T05-T07, T34/T37/T38/T40-T42 as landed there.
+  - **The seam widened** (`rust/gate/crates/land/src/land/hand_in.rs`): T07's `FirstPass` took the tree's path only, and T06's
+    `cheap_refusals` needs the spec directory, every task, a note and the base. It now takes `Asked { tree, base, feature, tasks,
+    note }`, built in `committed` from the hand-in (`hand.base`, `Found::feature`, `Found::tasks` - a bundle's every task); the
+    tests' three closures and `none` (now `#[cfg(test)]`) take it.
+  - **The pass** (`pass`, `first_pass`): `cli` hands `first_pass` to `run`, which roots a landing at the builder's TREE, not at
+    `cwd` (the registry finds the tree, so `make builder-done` may be run from the clone), its tools where a landing's are
+    (`scripts_of`), finds the feature's spec directory in the tree and asks `cheap_refusals(.., &Pass::HandIn { base }, None)`.
+    No `deferred` list: an owed claim with a round in flight is quiet (T06), the landing's to wait on - phase 1 has no lane to hand
+    it to. The base reaches the gates as `L7R_DELTA_BASE` and the in-process claims as `--delta-base` through T06/T34/T38's own
+    code, unchanged here. A pass that cannot be asked is a REASON, never a clear: no spec directory for the feature in the tree
+    (said with `make builder-done T=<tasks> F=<feature>`), or a raise (`the first pass could not be asked: <why>`).
+  - **Decision: the note is the commit's subject.** A hand-in takes no `NOTE=`, and the tick check refuses an empty note
+    (`tick/text.rs` `tick`); it reads the note for nothing else at `landed=false` (`landed_refusal`, the only other reader, is
+    asked only at `landed=true`; observed 2026-11-27, method: reading `tick.rs` `checks` and `tick/refusal.rs`). So MSG's subject
+    (`Found::message`'s first line) stands in. Label: the algorithmically easier route, the record silent.
+  - **The printed line** (`rust/gate/crates/task/src/builder_done.rs` `kept_in`): with `handed_in` the second item is
+    `handed in to the lane (make lane for its place)` in place of the `make land` line (D3 step 6, `contracts/lane-cli.md`,
+    the task line's words); a plain `builder-done`'s output is unchanged, its tests untouched.
+  - **Decision: the literal line, though `make lane` is T11's.** Phase 1's own text says "The coordinator still runs `make land`
+    by hand", and no `lane:` target exists until T11 (observed 2026-11-27, method: `grep -n "^lane:" Makefile`, none). The
+    task line, the contract and D3 step 6 agree on the words, so they are printed as written (constitution XVI); the session's
+    route in phase 1 is kept in `scripts/container/builder-brief.md`'s AT A BUILDER'S END, which now says the hand-in prints the
+    lane's line and that the session still runs `make land F= T=` until the lane does. Label: the literal thing, the gap named for
+    the session.
+  - **The Makefile** (`builder-done`, through `make guard-edit`): the recipe runs `l7r-gate.sh land --hand-in "$(T)" "<F>"`,
+    its help line says the hand-in (the apply, the conflict stop and resume, the first pass, `HAND_IN_BASE`), and
+    `docs/make-targets.html` regenerated (`make docs`). `MSG`, `GUARD` and `HAND_IN_BASE` reach the binary as make's
+    command-line variables, exported to the recipe. Doc rows: `hand_in.rs`'s module doc steps 6 and 8, `builder_done.rs`'s step 6,
+    `rust/gate/CLAUDE.md`'s land row.
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"`): with
+    `pass`'s `cheap_refusals` call deleted (the pass returning no reason, as `none` did), 19 passed, 3 failed - the plan review
+    owed (the hand-in landed, exit 0, where it must refuse), the ledger row owed (the same), and the pass that cannot be asked (no
+    raise said); restored, 22 passed, 0 failed.
+  - **The tests** (`land/hand_in/tests.rs`, 3 new; the fixture `at_hand_in` takes the landing's `fx` - its tools stubbed, its
+    in-process asks faked - adds a pool tree off its clone held by 449 T1 and re-roots the landing at that tree, as `first_pass`
+    roots it; each drives `run` end to end): a hand-in whose plan review is owed (`plan-gate.sh` at the base) refused with
+    `make plan-delta F=449`, nothing committed, the tree held - then answered and landed on the base, one commit, parent the
+    clone's HEAD; one whose ledger row is owed refused with `make ledger-owed WRITE=`, its stub log holding the push's table over
+    the TREE and no coverage, `crate-checks`, `done` or `rust` run (FR-002); the real `first_pass` with no spec directory, alone and
+    through the hand-in (nothing committed), and `pass` over a tasks.md that is not text (the raise said). The task crate's
+    hand-in test asserts the lane's line and no `make land F=`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the first pass at hand-in, `make builder-done` pointed at it | n/a - no map | n/a | none | n/a |
 
 ### T08 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's `make builder-done` applies the work onto the clone's HEAD, asks the landing's first
+   pass there, and commits only work that pass clears, each refusal named with its fixing command (US2).
+2. **The constraints.** D3 steps 4 and 6, D4 (the hand-in mode, T06's), FR-002 (no coverage), `contracts/lane-cli.md`'s row,
+   D15 (`land.rs` untouched: the wiring is in `hand_in.rs`), constitution XVI (the literal printed line).
+3. **Where each comes from.** G: FR-002's request (spec.md); R: D3, D4, T06's and T07's sections; O: the tests above
+   (2026-11-27).
+4. **Do they describe the world here?** Yes: the tests run the landing's own fixture with a pool tree as `make builder-tree`
+   leaves one, the hand-in found through the registry.
+5. **The order.** After T06, T07 and T40; before T09's door, T10 and T11.
+6. **The exits.** Green: the land and task crates' tests and `make builder-checks`; coverage is the gate's, at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/land rust/gate/crates/task"` green: the land crate 214 passed
+   (211 + 3), the task crate 148, 0 failed; lint and format clean (observed 2026-11-27, method: that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** none - a wiring of the existing mode, no defect fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The builder never meets its hand-in's refusals: `make builder-brief`'s block ("Do NOT stage, commit, land or push") and
+  `builder-brief.md`'s AT A BUILDER'S END have the coordinating session run `make builder-done` after the builder has reported,
+  so a conflict or a first-pass refusal at hand-in lands on the coordinator, not the builder with the context (US2's "A refusal a
+  builder can answer is answered by the builder that has the context"; observed 2026-11-27, method: reading both).
+  Not fixed here: it changes the builders' stop point and the brief's standing block, outside this task's wiring. Filed as T43; lands before T10.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no - it moves the first pass's refusals from the landing to the hand-in (D4) but makes no step faster and
+measures no time.
 
 ### T09 (<why: the finding or measurement that files it>)
 
@@ -1588,3 +1640,30 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 <!-- plan-archive: T41 to T37 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T42 to T34 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
+### T43 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

@@ -312,6 +312,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T08 (phase 1: the first pass at hand-in wired, and `make builder-done` pointed at the hand-in, D3 step 4 and 6, D4)": {
+   "sha256": "db07b3bef8d90064b14b0b5411a7ea3fd8fac658aa3931bbab39b7b550f63c1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T08 Approach (checklist part A)": {
+   "sha256": "4b9a2f079de6fd597eb053192bfa71ea728f37dd6238abd189300e99a5fefea4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T35 (<why: the finding or measurement that files it>)": {
+   "sha256": "d8b58ae3193980712b572abe14c57afc3d5ece6e6b86d181ec41cd10a3928b1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Approach (checklist part A)": {
+   "sha256": "f95493848832aab6969e83b920b4da262700293b0bc6e25273f9943e5b09acc1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T40 (<why: the finding or measurement that files it>)": {
+   "sha256": "6b99a98460c15bc52318b7cc85daacaca1b18bcb79c24ec8f7c75b57db92f0e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T40 Approach (checklist part A)": {
+   "sha256": "55703653b9494ecda76517f1744c838c8461cef0bdd8155ffa5a3bd5fdc7fadf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1872,6 +1908,74 @@
      "summary": "Both tasks run after T37 and before T08, one landing each, red-first tests then builder-checks over claims, owed and reviews.",
      "class": "within",
      "why": "Sequencing and exits within the plan; decide nothing the request or spec left open about what is built. No coverage is run, consistent with FR-002 and the struck 'coverage for its own crates'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T08 (phase 1: the first pass at hand-in wired, and `make builder-done` pointed at the hand-in, D3 step 4 and 6, D4)",
+    "### T08 Approach (checklist part A)",
+    "### T35 (<why: the finding or measurement that files it>)",
+    "### T35 Approach (checklist part A)",
+    "### T40 (<why: the finding or measurement that files it>)",
+    "### T40 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08 seam",
+     "summary": "FirstPass takes Asked { tree, base, feature, tasks, note } built from the hand-in, so cheap_refusals gets what it needs",
+     "class": "within",
+     "why": "Internal plumbing so FR-002's 'runs the landing's cheap first pass before it commits' can actually be asked; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "T08 pass rooted at the tree, no deferred list",
+     "summary": "The pass roots the landing at the builder's tree, asks cheap_refusals in HandIn mode; an owed claim with a round in flight is quiet, left for the landing to wait on",
+     "class": "within",
+     "why": "FR-002/SC-002 ask that what the landing's first pass would refuse be refused at hand-in; a claim round in flight is something the landing waits on rather than refuses (T06's mode, already judged), so being quiet about it mirrors the landing and narrows nothing."
+    },
+    {
+     "id": "T08 un-askable pass refuses",
+     "summary": "No spec directory or a raise is a refusal with its reason and fixing command, never a clear",
+     "class": "within",
+     "why": "Fail-closed; strictly serves FR-002 'a refusal names the fixing command' and FR-008 (nothing dropped)."
+    },
+    {
+     "id": "T08 note is the commit subject",
+     "summary": "A hand-in takes no NOTE=; MSG's first line stands in for the tick check's note, which at landed=false is read only for non-emptiness",
+     "class": "within",
+     "why": "Implementation detail with no effect on what is checked (measured by reading tick.rs and tick/refusal.rs); the request and spec are silent on it."
+    },
+    {
+     "id": "T08 literal printed line",
+     "summary": "builder-done prints 'handed in to the lane (make lane for its place)' as the contract and D3 step 6 say, though make lane is T11's; the brief tells the session to run make land until the lane exists",
+     "class": "within",
+     "why": "Prints what the accepted contract and task line say (XVI) and names the phase-1 gap for the session rather than inventing different wording; no part of the request is narrowed."
+    },
+    {
+     "id": "T08 Makefile builder-done runs the hand-in",
+     "summary": "builder-done's recipe runs l7r-gate.sh land --hand-in with MSG/GUARD/HAND_IN_BASE exported; help, docs and module docs updated",
+     "class": "within",
+     "why": "This is FR-002 itself (make builder-done rebases/applies and runs the first pass before commit), with no coverage run, as FR-002 and the spec's strike of 'coverage for its own crates' require."
+    },
+    {
+     "id": "T08 tests and exits",
+     "summary": "Three end-to-end hand-in tests (plan review owed, ledger row owed with no coverage/crate-checks/done/rust run, un-askable pass) plus the task crate's printed-line test; green is builder-checks, coverage left to the gate at landing",
+     "class": "within",
+     "why": "Tests that only fail when FR-002's behavior is absent are enforcement of the request; the no-coverage assertion enforces FR-002's last sentence."
+    },
+    {
+     "id": "T08 found-and-left: builder never meets its refusals",
+     "summary": "The coordinating session, not the builder, still runs make builder-done, so hand-in refusals land on the coordinator; deferred to T43, which lands before T10",
+     "class": "within",
+     "why": "Not a carve-out: the GM's sketch item 2 and US2 ('answered by the builder that has the context') are not excepted but carried whole by an open task sequenced before the lane (T10), with the reason (it changes the brief's standing stop point, outside this wiring) and the visible effect named. It is sequencing inside the feature, not a narrowing of what was asked; it would become one only if T43 were dropped or moved past T10."
+    },
+    {
+     "id": "T35 and T40 blocks",
+     "summary": "Both blocks are the unfilled section template",
+     "class": "within",
+     "why": "Template placeholders decide nothing; there is no decision in them to rule on."
     }
    ]
   }

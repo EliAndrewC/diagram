@@ -11,9 +11,9 @@ use l7r_shared::builder_pool;
 use l7r_shared::tempdir::TempDir;
 use serde_json::Value;
 
-use super::super::tests::has;
+use super::super::tests::{fx, has, key, push_call, tool, Fx};
 use super::super::unfinished::tests::{repo, TASKS};
-use super::{io, must, none as clear, run, FirstPass};
+use super::{io, must, none as clear, pass, run, Asked, FirstPass};
 
 const TASKS_MD: &str = "specs/451-x/tasks.md";
 const SCRATCH: &str = "refs/l7r/hand-in/9001-T01";
@@ -191,7 +191,8 @@ fn a_first_pass_refusal_commits_nothing_and_the_resume_reads_the_rules_resolved_
         &[("docs/a.md", "ONE two three\n")],
     );
     put(&tree, "docs/a.md", "one two THREE\n");
-    let owed = |_: &Path| vec!["the plan review is owed: make plan-review T=T01 F=9001".to_owned()];
+    let owed =
+        |_: &Asked| vec!["the plan review is owed: make plan-review T=T01 F=9001".to_owned()];
     let said = handed(&tree, "", &owed);
     nothing_done(
         &root,
@@ -308,7 +309,7 @@ fn a_hand_in_commit_git_refuses_is_said_and_the_next_run_resumes() {
     put(&tree, "rust/held.rs", "fn held() {}\n");
     let flag = root.join(".git/no-commit");
     // the first pass is the last step before the commit: it arms the hook
-    let arm = |_: &Path| {
+    let arm = |_: &Asked| {
         std::fs::write(&flag, "").unwrap();
         Vec::new()
     };
@@ -526,8 +527,8 @@ fn the_records_a_clear_first_pass_writes_are_committed_with_the_work() {
     // D4: the first pass writes its records into the tree uncommitted, so the hand-in's commit carries them with the work
     let (_dir, root, tree) = pool("hand-in-records");
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let records = |at: &Path| {
-        put(at, "dev/review-ledger.md", "a row\n");
+    let records = |at: &Asked| {
+        put(at.tree, "dev/review-ledger.md", "a row\n");
         Vec::new()
     };
     landed(&handed(&tree, "", &records));
@@ -544,4 +545,148 @@ fn a_file_step_that_fails_is_said_as_its_error() {
     assert_eq!(io(std::fs::write(&under, "x")), Ok(()));
     let why = io(std::fs::write(under.join("base"), "x")).unwrap_err();
     has(&why, "Not a directory");
+}
+
+/// A landing's fixture (`fx`: its tools stubbed, its in-process asks faked) with a pool tree off its clone held by 449 T1, the landing
+/// re-rooted at that tree, as [`super::first_pass`] roots it: T06's hand-in mode asked by the hand-in itself, end to end (461 T08).
+fn at_hand_in(tag: &str) -> (Fx, PathBuf) {
+    let mut fx = fx(tag);
+    let tree = fx.dir.join("t1");
+    git(
+        &fx.root,
+        &["worktree", "add", "-q", "--detach", &tree.to_string_lossy()],
+    );
+    let held = builder_pool::Tree {
+        tree: tree.clone(),
+        feature: "449".to_owned(),
+        tasks: vec!["T1".to_owned()],
+        since: String::new(),
+    };
+    builder_pool::write(&fx.root.join(".git"), &[held]).unwrap();
+    fx.land.root = fx.land.root.at(tree.clone());
+    put(&tree, "rust/held.rs", "fn held() {}\n");
+    (fx, tree)
+}
+
+/// `make builder-done T=T1 F=449` with the real first pass over the fixture's landing.
+fn handed_in(fx: &Fx, tree: &Path) -> Reply {
+    let args = ["T1".to_owned(), "449".to_owned()];
+    run(&args, tree, "449 T1: the work", "", "", &|a| {
+        pass(&fx.land, a)
+    })
+}
+
+/// The hand-in refused by its first pass, nothing committed, the tree still held, the reason said with its command.
+fn refused_by_the_first_pass(fx: &Fx, said: &Reply, reason: &str) {
+    nothing_done(
+        &fx.root,
+        said,
+        2,
+        "hand-in: refused by the first pass - nothing committed",
+    );
+    has(&said.stderr, reason);
+    assert!(!holds(&fx.root, &format!("{REFS_DONE}449-T1")));
+}
+
+const REFS_DONE: &str = "refs/l7r/done/";
+
+#[test]
+fn a_hand_in_whose_plan_review_is_owed_is_refused_with_its_command() {
+    let (fx, tree) = at_hand_in("hand-in-plan-owed");
+    let base = git(&fx.root, &["rev-parse", "HEAD"]);
+    // plan-gate.sh asked over the hand-in's delta: the working tree against the base it stands on (D4)
+    let line = format!("{} {base}", tool("gates/plan-gate.sh"));
+    fx.answer(&line, "rc", "1");
+    fx.answer(
+        &line,
+        "out",
+        "T1's plan review is owed - make plan-delta F=449\n",
+    );
+    let said = handed_in(&fx, &tree);
+    refused_by_the_first_pass(
+        &fx,
+        &said,
+        "plan-gate.sh: T1's plan review is owed - make plan-delta F=449",
+    );
+    // answered, the next run commits on the base with the work
+    std::fs::remove_file(fx.stub.join(format!("{}.rc", key(&line)))).unwrap();
+    let resumed = handed_in(&fx, &tree);
+    landed(&resumed);
+    let names = git(
+        &fx.root,
+        &[
+            "show",
+            "--name-only",
+            "--format=",
+            &format!("{REFS_DONE}449-T1"),
+        ],
+    );
+    has(&names, "rust/held.rs");
+    let parent = git(&fx.root, &["rev-parse", &format!("{REFS_DONE}449-T1^")]);
+    assert_eq!(parent, base);
+}
+
+#[test]
+fn a_hand_in_whose_ledger_row_is_owed_is_refused_with_its_command_and_runs_no_coverage() {
+    let (fx, tree) = at_hand_in("hand-in-ledger-owed");
+    *fx.answers.ledger.borrow_mut() = "| ? | a pass |\n".to_owned();
+    let said = handed_in(&fx, &tree);
+    refused_by_the_first_pass(
+        &fx,
+        &said,
+        "review passes with no ledger row - make ledger-owed WRITE=",
+    );
+    // FR-002: the first pass at hand-in asks no coverage run, nor the gate
+    // ...and the push's table over the builder's tree, never the clone's
+    let log = fx.log();
+    let clone = fx.root.display().to_string();
+    has(
+        &log,
+        &push_call(&fx).replace(&clone, &tree.display().to_string()),
+    );
+    let runs = |w: &str| ["cover", "crate-checks", "done", "rust"].contains(&w);
+    assert!(!log.split_whitespace().any(runs), "{log}");
+}
+
+#[test]
+fn a_first_pass_that_cannot_be_asked_refuses_never_clears() {
+    // no spec directory for the feature in the tree: the real pass, rooted at the tree as the process roots it
+    let (_dir, root, tree) = pool("hand-in-no-spec");
+    let tasks = ["T01".to_owned()];
+    let asked = Asked {
+        tree: &tree,
+        base: "HEAD",
+        feature: "9001",
+        tasks: &tasks,
+        note: "9001 T01: the work",
+    };
+    let why = super::first_pass(&asked).join("\n");
+    has(&why, "no single specs/9001* directory with a tasks.md in ");
+    has(&why, "make builder-done T=T01 F=<feature>");
+    // through the hand-in, nothing committed
+    put(&tree, "rust/held.rs", "fn held() {}\n");
+    let args = ["T01".to_owned(), "9001".to_owned()];
+    let said = run(
+        &args,
+        &tree,
+        "9001 T01: the work",
+        "",
+        "",
+        &super::first_pass,
+    );
+    nothing_done(&root, &said, 2, "no single specs/9001* directory");
+    // a pass that raises: its tasks.md unreadable as text
+    let (fx, tree) = at_hand_in("hand-in-raise");
+    std::fs::write(tree.join("specs/449-x/tasks.md"), b"\xff\xfe\n").unwrap();
+    let asked = Asked {
+        tree: &tree,
+        base: "HEAD",
+        feature: "449",
+        tasks: &["T1".to_owned()],
+        note: "449 T1: the work",
+    };
+    has(
+        &pass(&fx.land, &asked).join("\n"),
+        "the first pass could not be asked: ",
+    );
 }

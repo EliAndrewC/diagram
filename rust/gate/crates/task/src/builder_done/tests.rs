@@ -629,6 +629,14 @@ fn a_found_tree_s_commit_made_elsewhere_is_kept_as_a_hand_in() {
     let sha = git(&b1, &["rev-parse", "HEAD"]);
     let said = f.kept(&sha, true);
     assert_eq!(said.code, 0, "{}", said.stderr);
+    // 461 T08: the lane's line where the landing's stood
+    assert!(
+        said.stdout
+            .ends_with("handed in to the lane (make lane for its place)\n"),
+        "{}",
+        said.stdout
+    );
+    assert!(!said.stdout.contains("make land F="), "{}", said.stdout);
     assert_eq!(git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]), sha);
     let log = std::fs::read_to_string(root.join(".git/builder-pool.log")).unwrap();
     let done = log

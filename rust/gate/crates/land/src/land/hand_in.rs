@@ -31,16 +31,17 @@
 //!    what tells a file a rule resolved back to the base's own text from one missing (T05). The tree's HEAD is the base: a resume
 //!    never reads the clone's HEAD again, which may have moved since the stop. A scratch ref with no base file in this tree, or a
 //!    tree no longer at that base, is another tree's or a stale one, refused with its `git update-ref -d`, never resumed;
-//! 6. everything staged, a conflict's markers in a staged file refused; the first pass (called with the tree detached at the base,
-//!    HEAD the base, the work applied) (D3 step 4: T08 wires T06's hand-in mode in at [`FirstPass`],
-//!    none here yet) asked, a refusal printing every reason and committing nothing - the next run resumes at step 5;
+//! 6. everything staged, a conflict's markers in a staged file refused; the first pass - T06's hand-in mode ([`Pass::HandIn`], D4),
+//!    wired in at [`FirstPass`] by 461 T08 ([`first_pass`]): a landing rooted at the tree, asked with the tree detached at the base,
+//!    HEAD the base, the work applied, the commit's subject its note - asked, a refusal printing every reason with its fixing command
+//!    and committing nothing - the next run resumes at step 5;
 //! 7. EVERYTHING staged again (`git add -A`: the verified end reads the working tree, not the index, T05; and the records a clear
 //!    first pass writes into the tree go into the commit with the work, D4) and committed with the scratch
 //!    commit's message (`git commit -C`), its parent the base; a base already holding every change hands nothing in, said with the
 //!    release to run, the scratch ref deleted;
 //! 8. the commit kept as `make builder-done` keeps one (`Found::kept`: the done ref, the `done` line with `"handed_in": true`, the
-//!    tree released, the next two commands printed - the `make land` line kept, since in phase 1 the session still lands by hand;
-//!    T08's "handed in to the lane" replaces it), then the scratch refs and this tree's hand-in files deleted.
+//!    tree released, the next dispatch printed and `handed in to the lane (make lane for its place)` where `make land`'s line stood,
+//!    461 T08), then the scratch refs and this tree's hand-in files deleted.
 //!
 //! No history is rewritten: the scratch commit is never moved or amended, only left unreferenced once its work is committed again
 //! on the base.
@@ -54,24 +55,63 @@ use l7r_shared::guards::conflict_marker_hooks::has_conflict;
 use super::carry::apply::{apply, ended, verified, Applied};
 use super::carry::{resolve_all, Form};
 use super::unfinished::{git, git_dir, lines};
+use super::{Land, Pass};
 
 /// Where a hand-in's scratch commit is kept while it stands (data-model.md, "Refs").
 const REFS: &str = "refs/l7r/hand-in/";
 /// The directory of the tree's own git directory holding a standing hand-in's base and its rules' resolved list.
 const FILES: &str = "l7r-hand-in";
 
-/// The first pass's seam (D3 step 4, T08's): each reason it refuses the applied tree, with its fixing command.
-pub(super) type FirstPass<'a> = &'a dyn Fn(&Path) -> Vec<String>;
+/// What the first pass is asked over (D3 step 4): the tree as applied, the base it stands detached at, the feature and every task of
+/// the hand-in, and the note its tick check is asked with - the commit's subject, since a hand-in takes no `NOTE=` (the tick check reads
+/// a note only to refuse an empty one and, at `landed=true`, never asked here, a "landed" one).
+pub(super) struct Asked<'a> {
+    pub tree: &'a Path,
+    pub base: &'a str,
+    pub feature: &'a str,
+    pub tasks: &'a [String],
+    pub note: &'a str,
+}
 
-/// `l7r-gate land --hand-in <tasks> <feature>`, `MSG`, `GUARD` and `HAND_IN_BASE` from the environment; no first pass yet (T08).
+/// The first pass's seam (D3 step 4): each reason it refuses the applied tree, with its fixing command.
+pub(super) type FirstPass<'a> = &'a dyn Fn(&Asked) -> Vec<String>;
+
+/// `l7r-gate land --hand-in <tasks> <feature>`, `MSG`, `GUARD` and `HAND_IN_BASE` from the environment; the first pass T06's hand-in
+/// mode (461 T08).
 pub(super) fn cli(args: &[String], cwd: &Path) -> Reply {
     let var = |n: &str| std::env::var(n).unwrap_or_default();
     let (msg, guard, knob) = (var("MSG"), var("GUARD"), var("HAND_IN_BASE"));
-    run(args, cwd, &msg, &guard, &knob, &none)
+    run(args, cwd, &msg, &guard, &knob, &first_pass)
 }
 
-/// No first pass (T08 wires one in): nothing refused.
-pub(super) fn none(_: &Path) -> Vec<String> {
+/// The first pass at hand-in as the process asks it: a landing rooted at the builder's tree - never at `cwd`, since the registry
+/// finds the tree and `make builder-done` may be run from the clone - its tools where a landing's are.
+pub(super) fn first_pass(asked: &Asked) -> Vec<String> {
+    pass(
+        &Land::new(asked.tree, &super::scripts_of(asked.tree)),
+        asked,
+    )
+}
+
+/// T06's hand-in mode ([`Pass::HandIn`], D4) asked of `land` over the applied tree: each reason with its fixing command. A pass that
+/// cannot be asked - no spec directory for the feature in the tree, or a raise - is a reason too, never a clear. No `deferred` list: an
+/// owed claim with a round in flight is quiet, the landing's to wait on (phase 1 has no lane to hand it to).
+pub(super) fn pass(land: &Land, asked: &Asked) -> Vec<String> {
+    let found = l7r_gate_task::tick::spec_dir(asked.tree, asked.feature)
+        .filter(|d| d.join("tasks.md").is_file());
+    let Some(d) = found else {
+        return vec![format!("no single specs/{}* directory with a tasks.md in {} - the first pass cannot be asked; name the feature as F= names it (make builder-done T={} F=<feature>)", asked.feature, asked.tree.display(), asked.tasks.join(","))];
+    };
+    let at = Pass::HandIn {
+        base: asked.base.to_owned(),
+    };
+    land.cheap_refusals(&d, asked.tasks, asked.note, &at, None)
+        .unwrap_or_else(|why| vec![format!("the first pass could not be asked: {why}")])
+}
+
+/// No first pass: nothing refused (the tests' clear pass).
+#[cfg(test)]
+pub(super) fn none(_: &Asked) -> Vec<String> {
     Vec::new()
 }
 
@@ -305,7 +345,14 @@ fn committed(hand: &Hand, first: FirstPass) -> Result<Reply, String> {
     if let Some(path) = staged.iter().find(marked) {
         return Ok(said(format!("hand-in: refused - nothing committed: a conflict's markers stand in {path} of {tree}; resolve them, then run it again: {again}\n"), 2));
     }
-    let reasons = first(&hand.tree);
+    let message = hand.f.message();
+    let reasons = first(&Asked {
+        tree: &hand.tree,
+        base: &hand.base,
+        feature: hand.f.feature(),
+        tasks: hand.f.tasks(),
+        note: message.lines().next().unwrap_or_default(),
+    });
     if !reasons.is_empty() {
         return Ok(said(format!("hand-in: refused by the first pass - nothing committed, the work applied onto {tree}'s base {base} uncommitted; answer each, then run it again ({again}):\n  {}\n", reasons.join("\n  ")), 2));
     }

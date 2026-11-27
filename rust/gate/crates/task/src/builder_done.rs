@@ -23,7 +23,8 @@
 //! 5. releases the tree, as `make builder-tree-release` does ([`builder_tree::release`]);
 //! 6. prints, last, the two commands the session runs next, IN THIS ORDER: the next dispatch, then `make land` of these tasks, which
 //!    carries their done commits itself (451 T397 part (c), the land crate's `carry_done.rs`), `make carry` named beside it for a
-//!    carry by hand or one a landing stopped on (451 T450). It never carries, lands or pushes.
+//!    carry by hand or one a landing stopped on (451 T450); after a hand-in (`l7r-gate land --hand-in`, 461 T08) the second is
+//!    `handed in to the lane (make lane for its place)`. It never carries, lands or pushes.
 //!
 //! THE GUARD-FILE RULE IS ASKED HERE, IN PROCESS: the guards are hooks on a tool call, and a `git commit` this command runs is none,
 //! so nothing else would hold the commit to its `GUARD_EDIT_OK:` line. [`guard_file`] is a COPY of the guard's list
@@ -483,7 +484,19 @@ impl Found {
         builder_tree::log_line(p, &line);
         let freed = builder_tree::release(p, a.tasks, a.feature, env);
         let next = crate::builder_queue::dispatch(p, a.feature);
-        let out = format!(
+        // a hand-in's commit stands on where work lands, its first pass answered: the lane's to land, not `make land`'s (461 T08, D3
+        // step 6, `contracts/lane-cli.md`)
+        let out = if handed_in {
+            format!(
+                "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT - the next dispatch (the tree is free now; ONLY these tasks' own next builder, a closing half, waits for this commit to reach the clone's HEAD - its tree starts there):\n  1. {next}handed in to the lane (make lane for its place)\n",
+                tree.display(),
+                sha.get(..10).unwrap_or(sha),
+                a.subject,
+                kept.join(", "),
+                freed.stdout,
+            )
+        } else {
+            format!(
             "builder-done: {} committed as {} (\"{}\"), kept at {}\n{}builder-done: NEXT, in this order - the next dispatch FIRST, the landing after it (the tree is free now; the landing carries this commit and can run while the next builder works; ONLY these tasks' own next builder, a closing half, is dispatched after the commit is carried by `make carry`, before any landing - its tree starts at the clone's HEAD):\n  1. {next}  2. make land F={} T=\"{}\" NOTE=\"<what was verified>\" - it carries this commit first (by hand, or where a carry stopped: {})\n",
             tree.display(),
             sha.get(..10).unwrap_or(sha),
@@ -493,7 +506,8 @@ impl Found {
             a.feature,
             a.tasks.join(" "),
             carry_command(p, sha)
-        );
+            )
+        };
         reply(out, freed.stderr, freed.code)
     }
 }

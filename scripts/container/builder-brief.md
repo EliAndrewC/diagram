@@ -81,9 +81,11 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
   agent briefed from those. A message to a builder is for a question it asked before it reported.
 - AT A BUILDER'S END, your steps in this order (451 T394): `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>"
-  [GUARD="<guard-edit reason>"]` - it commits the builder's tree (found in the pool's registry), keeps the commit under
-  `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next two commands; THEN THE NEXT DISPATCH (`make builder-brief`
-  for the queue's next task no tree holds), and only then the landing it printed, `make land F= T=`, which
+  [GUARD="<guard-edit reason>"]` - the HAND-IN since 461 T08: it applies the builder's tree (found in the pool's registry) onto the
+  clone's HEAD, asks the landing's first pass there (a conflict or a refusal is the builder's to answer, and it runs it again),
+  commits it, keeps the commit under `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next dispatch and `handed in
+  to the lane`; THEN THE NEXT DISPATCH (`make builder-brief` for the queue's next task no tree holds), and only then - in phase 1,
+  until the lane runs it - the landing, `make land F= T=`, which
   carries the commit itself (`make carry FROM=<the tree> COMMIT=<the commit>` by hand, or after a carry stopped), while the next
   builder works. Never a hand `git add`/`git commit` in a pool tree, and never the
   carry before the dispatch: measured 2026-11-27, the three warm trees stood idle 23% of an eight-hour window with the queue never
