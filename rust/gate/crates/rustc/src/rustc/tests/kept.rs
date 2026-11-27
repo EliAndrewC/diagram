@@ -751,7 +751,7 @@ fn a_compiled_in_path_never_spans_a_line_so_the_kept_views_read_back_as_they_wer
 }
 
 /// The code views are kept by each file's path and content (feature 449 T160): a file whose blob id stands is not read again, one that
-/// moved is, and a cache another binary wrote is not trusted.
+/// moved is, and a cache under another stamp is not trusted.
 #[test]
 fn the_code_views_are_kept_by_content_and_read_again_where_it_moved() {
     let (root, _, _) = two_crates();
@@ -768,9 +768,9 @@ fn the_code_views_are_kept_by_content_and_read_again_where_it_moved() {
         super::super::kept::code_ids_kept(&root, &ids, Some(&cache)),
         first
     );
-    // another binary's cache is not read: with the file gone there is nothing to answer
+    // a cache under another stamp (its views code moved) is not read: with the file gone there is nothing to answer
     let text = std::fs::read_to_string(&cache).unwrap();
-    std::fs::write(&cache, text.replacen("l7r-rust views", "another binary", 1)).unwrap();
+    std::fs::write(&cache, text.replacen("l7r-rust views", "another stamp", 1)).unwrap();
     assert!(super::super::kept::code_ids_kept(&root, &ids, Some(&cache))
         .0
         .is_empty());
@@ -785,21 +785,16 @@ fn the_code_views_are_kept_by_content_and_read_again_where_it_moved() {
     assert!(kept.contains("rust/a/src/lib.rs id2\t") && !kept.contains(" id1\t"));
 }
 
-/// A touch keeps the kept views (feature 451 T341): the launcher touches `l7r-rust` after each build it asks, and a cache stamped by
-/// the binary's time alone was read again whole, every Rust file, on the next run; a binary whose content moved is another.
+/// The views are kept by the code that computes them (feature 451 T434, restating T341's test, whose last step held a rebuilt binary
+/// to nothing kept): a rebuilt `l7r-rust` whose views code is the same keeps every view, and a cache under another stamp - the views
+/// code moved - is thrown away whole and written again under the new one.
 #[test]
-fn a_touched_binary_keeps_its_views_and_a_rebuilt_one_does_not() {
+fn a_rebuilt_binary_keeps_its_views_and_a_moved_views_code_does_not() {
     let (root, _, _) = two_crates();
-    let (cache, exe, lib) = (
-        root.join("views"),
-        root.join("l7r-rust"),
-        "rust/a/src/lib.rs",
-    );
-    std::fs::write(&exe, "one build").unwrap();
+    let (cache, lib) = (root.join("views"), "rust/a/src/lib.rs");
     std::fs::write(root.join(lib), "fn f() {}\n").unwrap();
     let ids = BTreeMap::from([(lib.to_owned(), "id1".to_owned())]);
-    let by = |exe: &Path| super::super::kept::code_ids_kept_by(&root, &ids, Some(&cache), exe);
-    let first = by(&exe);
+    let first = super::super::kept::code_ids_kept(&root, &ids, Some(&cache));
     let stamp = || {
         std::fs::read_to_string(&cache)
             .unwrap()
@@ -809,21 +804,17 @@ fn a_touched_binary_keeps_its_views_and_a_rebuilt_one_does_not() {
             .to_owned()
     };
     let before = stamp();
-    // the file gone, so only the kept views can answer; the binary touched an hour on
+    assert!(before.starts_with("l7r-rust views "));
+    // the file gone, so only the kept views can answer; the binary's own size, time and content are no part of the stamp
     std::fs::remove_file(root.join(lib)).unwrap();
-    let later = std::time::SystemTime::now() + std::time::Duration::from_secs(3600);
-    std::fs::File::options()
-        .write(true)
-        .open(&exe)
-        .unwrap()
-        .set_modified(later)
-        .unwrap();
-    assert_eq!(by(&exe), first);
-    // restamped with the new time, so the next run reads no binary
-    let after = stamp();
-    assert!(after != before && after.rsplit(' ').next() == before.rsplit(' ').next());
-    assert_eq!(by(&exe), first);
-    // a rebuilt binary of the same size is another: nothing kept answers
-    std::fs::write(&exe, "two build").unwrap();
-    assert!(by(&exe).0.is_empty());
+    assert_eq!(
+        super::super::kept::code_ids_kept(&root, &ids, Some(&cache)),
+        first
+    );
+    assert_eq!(stamp(), before);
+    // the views code moved: nothing kept answers, and the cache is written again under the new stamp
+    let moved =
+        super::super::kept::code_ids_kept_by(&root, &ids, Some(&cache), "l7r-rust views other");
+    assert!(moved.0.is_empty());
+    assert_eq!(stamp(), "l7r-rust views other");
 }

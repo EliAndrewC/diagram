@@ -304,31 +304,6 @@ pub(super) type Views<'a> = (
 /// The files each Rust file compiles in (`include_str!`, `include_bytes!`, `include!`), as paths from the tree's root.
 pub(super) type Includes = BTreeMap<String, Vec<String>>;
 
-/// A path is on one line: a string that only names the macro (`core`'s reader of these lines) once ran to the next quote, lines and
-/// all, and the kept views, a line a file, gave that "path" back cut short, so a key moved after each rebuild (feature 451 T347).
-static INCLUDE: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"\binclude(?:_str|_bytes)?!\s*\(\s*"([^"\n]+)""#));
-
-/// The paths a Rust file at `path` (from the root) compiles in, resolved from its directory.
-fn included(path: &str, text: &str) -> Vec<String> {
-    let dir: Vec<&str> = path.split('/').collect();
-    INCLUDE
-        .captures_iter(text)
-        .map_while(Result::ok)
-        .map(|c| {
-            let mut at: Vec<&str> = dir[..dir.len() - 1].to_vec();
-            for part in c[1].split('/') {
-                match part {
-                    ".." => drop(at.pop()),
-                    "." => {}
-                    p => at.push(p),
-                }
-            }
-            at.join("/")
-        })
-        .collect()
-}
-
 /// The checks a comment cannot change (T112): clippy, the tests and coverage. rustfmt formats comments, and the dead check counts a
 /// word in one as a use, so they read the whole text.
 const BY_CODE: [&str; 4] = ["lint", "test", "test-counters", "cover"];
@@ -460,46 +435,38 @@ pub(super) fn code_ids(
     code_ids_kept(root, ids, None)
 }
 
-/// One Rust file's views: its code id, its interface id and the files it compiles in.
-type Views3 = (String, String, Vec<String>);
-
 /// THE VIEWS KEPT BY CONTENT (feature 449 T160): `code_ids` read and hashed all 1,000 tracked Rust files, 10 MB, on every `l7r-rust`
 /// call - 0.63-0.69 s of the 0.72-0.78 s each check spent before it ran anything, six calls a `make done` (observed 2026-11-17, a timer
 /// around each step, reverted). A file's views are a function of its path and its content, which its blob id names, so they are kept in
-/// `cache` under `<path> <blob id>` and a run reads only the files whose content moved. The cache is this binary's alone - its first line
-/// names the binary (`this_binary`) - so a change to how a view is read starts it again; it holds only the tree's current files, and is
-/// replaced whole by a rename, so two checks running at once each leave a whole one.
+/// `cache` under `<path> <blob id>` and a run reads only the files whose content moved. The cache's first line is the hash of the code
+/// that computes a view (`code::stamp`, feature 451 T434), so a change to how a view is read starts it again and no other rebuild of
+/// the checks does; it holds only the tree's current files, and is replaced whole by a rename, so two checks running at once each leave
+/// a whole one.
 pub(super) fn code_ids_kept(
     root: &Path,
     ids: &BTreeMap<String, String>,
     cache: Option<&Path>,
 ) -> (BTreeMap<String, String>, BTreeMap<String, String>, Includes) {
-    code_ids_kept_by(
-        root,
-        ids,
-        cache,
-        &std::env::current_exe().unwrap_or_default(),
-    )
+    code_ids_kept_by(root, ids, cache, &code::stamp())
 }
 
-/// `code_ids_kept`, its cache stamped by the binary at `exe`.
+/// `code_ids_kept`, its cache stamped `stamp`: a kept cache is read only where its first line is that stamp.
 pub(super) fn code_ids_kept_by(
     root: &Path,
     ids: &BTreeMap<String, String>,
     cache: Option<&Path>,
-    exe: &Path,
+    stamp: &str,
 ) -> (BTreeMap<String, String>, BTreeMap<String, String>, Includes) {
     let text = cache
         .and_then(|c| std::fs::read_to_string(c).ok())
         .unwrap_or_default();
-    let (stamp, same) = this_binary(exe, text.lines().next().unwrap_or_default());
-    let kept: BTreeMap<String, Views3> = if same {
-        text.lines().skip(1).filter_map(views_line).collect()
+    let same = text.lines().next() == Some(stamp);
+    let kept: BTreeMap<String, code::View> = if same {
+        text.lines().skip(1).filter_map(code::View::parse).collect()
     } else {
         BTreeMap::new()
     };
-    let restamp = text.lines().next() != Some(stamp.as_str());
-    let mut now: BTreeMap<String, Views3> = BTreeMap::new();
+    let mut now: BTreeMap<String, code::View> = BTreeMap::new();
     let (mut code, mut interface, mut includes) =
         (BTreeMap::new(), BTreeMap::new(), Includes::new());
     for (p, id) in ids
@@ -509,28 +476,18 @@ pub(super) fn code_ids_kept_by(
         let at = format!("{p} {id}");
         let views = kept.get(&at).cloned().or_else(|| {
             let t = std::fs::read_to_string(root.join(p)).ok()?;
-            Some((
-                format!("code:{}", sha256::hex(code::code_text(&t).as_bytes())),
-                format!(
-                    "interface:{}",
-                    sha256::hex(code::interface_text(&t).as_bytes())
-                ),
-                included(p, &t),
-            ))
+            Some(code::View::of(p, &t))
         });
         let Some(views) = views else { continue };
-        code.insert(p.clone(), views.0.clone());
-        interface.insert(p.clone(), views.1.clone());
-        if !views.2.is_empty() {
-            includes.insert(p.clone(), views.2.clone());
+        code.insert(p.clone(), views.code().to_owned());
+        interface.insert(p.clone(), views.interface().to_owned());
+        if !views.includes().is_empty() {
+            includes.insert(p.clone(), views.includes().to_vec());
         }
         now.insert(at, views);
     }
-    if let Some(c) = cache.filter(|_| restamp || now != kept) {
-        let body: String = now
-            .iter()
-            .map(|(at, (c, i, inc))| format!("{at}\t{c}\t{i}\t{}\n", inc.join("\t")))
-            .collect();
+    if let Some(c) = cache.filter(|_| !same || now != kept) {
+        let body: String = now.iter().map(|(at, v)| v.line(at)).collect();
         let tmp = c.with_extension(format!("{}.tmp", std::process::id()));
         let _ = std::fs::create_dir_all(c.parent().unwrap_or(Path::new(".")));
         if std::fs::write(&tmp, format!("{stamp}\n{body}")).is_ok() {
@@ -538,44 +495,6 @@ pub(super) fn code_ids_kept_by(
         }
     }
     (code, interface, includes)
-}
-
-/// A kept line, `<path> <blob id>\t<code id>\t<interface id>[\t<included>...]`.
-fn views_line(line: &str) -> Option<(String, Views3)> {
-    let mut parts = line.split('\t');
-    let at = parts.next()?.to_owned();
-    let code = parts.next()?.to_owned();
-    let interface = parts.next()?.to_owned();
-    let inc: Vec<String> = parts.filter(|s| !s.is_empty()).map(str::to_owned).collect();
-    Some((at, (code, interface, inc)))
-}
-
-/// THE BINARY'S STAMP (feature 451 T341): `l7r-rust views <size> <modification time> <content id>`, and whether a kept cache stamped
-/// `kept` was written by this binary. A kept stamp of the same size and time is this binary's without reading it; one whose time moved
-/// is still this binary's where its content id is the same. Named by size and time alone, the cache was thrown away whole by a touch:
-/// `scripts/gates/l7r-gate.sh` touches `l7r-rust` after each build it asks, and it asks one whenever a file under `rust/guard` is newer
-/// than the binary, though `l7r-rust` builds from none of `rust/guard`'s own sources - so every run after a one-line edit of the guard
-/// read and hashed all 1,504 Rust files again (measured 2026-11-27, `dev/measurements/2026-11-27/checks-start/`: 5.8 to 6.5 s of
-/// the run's 6.7 to 7.5 s before its build at load 38 to 45, against 0.06 s where the binary was not touched). The content id costs
-/// one read of the binary (5.2 MB), only on a run whose stamp moved.
-fn this_binary(exe: &Path, kept: &str) -> (String, bool) {
-    let meta = std::fs::metadata(exe);
-    let (len, when) = meta.map_or((0, 0), |m| {
-        let when = m
-            .modified()
-            .ok()
-            .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
-            .map_or(0, |d| d.as_nanos());
-        (m.len(), when)
-    });
-    let quick = format!("l7r-rust views {len} {when} ");
-    if kept.starts_with(&quick) {
-        return (kept.to_owned(), true);
-    }
-    let content = hash_file(exe);
-    let same = kept.starts_with(&format!("l7r-rust views {len} "))
-        && kept.ends_with(&format!(" {content}"));
-    (format!("{quick}{content}"), same)
 }
 
 /// The second key, asked only when the first moved (feature 449 T93): the crate's compiled test binaries and what its tests read at run

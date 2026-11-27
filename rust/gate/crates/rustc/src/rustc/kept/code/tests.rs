@@ -107,3 +107,5 @@ fn an_unclosed_text_keeps_its_code() {
         assert_eq!(interface_text(text), code_text(text), "{text}");
     }
 }
+
+mod reach;

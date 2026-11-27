@@ -3,9 +3,178 @@
 //! clippy lints it and rustdoc runs its code. A line a removed comment leaves empty goes; every other line, blank ones too, stays as it
 //! was, so an edit of a line's code or of the blank lines a lint reads still moves the key. Clippy's `too_many_lines` counts no comment
 //! line (observed 2026-11-11, method: 98 code lines and 10 comment lines drew no warning, 102 code lines did).
+//!
+//! THE VIEWS ARE KEYED BY THIS CODE (feature 451 T434): a kept view (`View`, built here and nowhere else - its fields are private to
+//! this file) is a function of a file's path and text computed by this file and by the files `SOURCES` names, compiled in, and of the
+//! Unicode tables std's `char` methods read (`char::UNICODE_VERSION`). The cache's stamp is their hash (`stamp`), so an edit of any of
+//! them throws the kept views away and no other rebuild of `l7r-rust` does. Keyed by the whole binary, every rebuild - an edit of
+//! `rust/guard/shared`, `core`, `tree` or `rustc` - read and hashed all 1,504 Rust files again, 1.9 s at load 12 (measured 2026-11-27,
+//! `dev/measurements/2026-11-27/checks-start/`). The test `the_views_reach_nothing_outside_their_hashed_sources` holds every file
+//! `SOURCES` names to reaching only std and the other files it names: no `super`, `crate` or other crate's path, no module file, no
+//! cfg but the test module's, no compiled-in file outside the set.
+
+use l7r_shared::sha256;
+
+/// The files the views are computed from, compiled in, by their paths from the tree's root.
+const SOURCES: [(&str, &str); 2] = [
+    (
+        "rust/gate/crates/rustc/src/rustc/kept/code.rs",
+        include_str!("code.rs"),
+    ),
+    (
+        "rust/guard/shared/src/sha256.rs",
+        include_str!("../../../../../../guard/shared/src/sha256.rs"),
+    ),
+];
+
+/// The views cache's first line: the hash of the code that computes a view (`SOURCES`) and of the Unicode version its `char` methods
+/// read. A cache whose first line is another is thrown away whole.
+pub(super) fn stamp() -> String {
+    stamp_of(&SOURCES, char::UNICODE_VERSION)
+}
+
+fn stamp_of(sources: &[(&str, &str)], unicode: (u8, u8, u8)) -> String {
+    let mut all = format!("unicode {unicode:?}\n").into_bytes();
+    for (path, text) in sources {
+        all.extend(format!("{path} {}\n", text.len()).into_bytes());
+        all.extend(text.as_bytes());
+    }
+    format!("l7r-rust views {}", sha256::hex(&all))
+}
+
+/// One Rust file's views: its code id, its interface id and the files it compiles in. Built only by `View::of` and read back only by
+/// `View::parse`, both here, so what a kept line holds is computed by the hashed code alone.
+#[derive(Clone, PartialEq, Debug)]
+pub(super) struct View {
+    code: String,
+    interface: String,
+    includes: Vec<String>,
+}
+
+impl View {
+    /// The views of the file at `path` (from the root) whose text is `text`.
+    pub(super) fn of(path: &str, text: &str) -> Self {
+        View {
+            code: format!("code:{}", sha256::hex(code_text(text).as_bytes())),
+            interface: format!("interface:{}", sha256::hex(interface_text(text).as_bytes())),
+            includes: included(path, text),
+        }
+    }
+
+    pub(super) fn code(&self) -> &str {
+        &self.code
+    }
+
+    pub(super) fn interface(&self) -> &str {
+        &self.interface
+    }
+
+    pub(super) fn includes(&self) -> &[String] {
+        &self.includes
+    }
+
+    /// The kept line, `<at>\t<code id>\t<interface id>[\t<included>...]`, `at` the file's `<path> <blob id>`.
+    pub(super) fn line(&self, at: &str) -> String {
+        format!(
+            "{at}\t{}\t{}\t{}\n",
+            self.code,
+            self.interface,
+            self.includes.join("\t")
+        )
+    }
+
+    /// A kept line read back: its `<path> <blob id>` and its views.
+    pub(super) fn parse(line: &str) -> Option<(String, Self)> {
+        let mut parts = line.split('\t');
+        let at = parts.next()?.to_owned();
+        let code = parts.next()?.to_owned();
+        let interface = parts.next()?.to_owned();
+        let includes = parts.filter(|s| !s.is_empty()).map(str::to_owned).collect();
+        Some((
+            at,
+            View {
+                code,
+                interface,
+                includes,
+            },
+        ))
+    }
+}
+
+/// The paths a Rust file at `path` (from the root) compiles in - each string a compiling-in macro opens with, on one line - resolved
+/// from its directory. A path is on one line: a string that only names the macro (`core`'s reader of these lines) once ran to the
+/// next quote, lines and all, and the kept views, a line a file, gave that "path" back cut short, so a key moved after each rebuild
+/// (feature 451 T347). Read by hand, not by a pattern, so the views reach no regex crate (451 T434).
+fn included(path: &str, text: &str) -> Vec<String> {
+    let chars: Vec<char> = text.chars().collect();
+    let dir: Vec<&str> = path.split('/').collect();
+    let mut found = Vec::new();
+    let mut i = 0;
+    while i < chars.len() {
+        if let Some((name, end)) = include_at(&chars, i) {
+            let mut at: Vec<&str> = dir[..dir.len() - 1].to_vec();
+            for part in name.split('/') {
+                match part {
+                    ".." => drop(at.pop()),
+                    "." => {}
+                    p => at.push(p),
+                }
+            }
+            found.push(at.join("/"));
+            i = end;
+        } else {
+            i += 1;
+        }
+    }
+    found
+}
+
+/// A compiling-in macro's path at `at` - the word `include`, `include_str` or `include_bytes`, then `!`, `(` and a string of one line
+/// or more characters, spaces allowed between - and one past its closing quote.
+fn include_at(chars: &[char], at: usize) -> Option<(String, usize)> {
+    let starts = |i: usize, w: &str| {
+        chars[i.min(chars.len())..]
+            .iter()
+            .copied()
+            .take(w.len())
+            .eq(w.chars())
+    };
+    if at.checked_sub(1).is_some_and(|b| ident(chars[b])) || !starts(at, "include") {
+        return None;
+    }
+    let mut i = at + "include".len();
+    if starts(i, "_str") {
+        i += "_str".len();
+    } else if starts(i, "_bytes") {
+        i += "_bytes".len();
+    }
+    let skip = |mut i: usize| {
+        while chars.get(i).is_some_and(|c| c.is_whitespace()) {
+            i += 1;
+        }
+        i
+    };
+    if chars.get(i) != Some(&'!') {
+        return None;
+    }
+    i = skip(i + 1);
+    if chars.get(i) != Some(&'(') {
+        return None;
+    }
+    i = skip(i + 1);
+    if chars.get(i) != Some(&'"') {
+        return None;
+    }
+    let body = i + 1;
+    let len = chars[body..]
+        .iter()
+        .position(|&c| c == '"' || c == '\n')
+        .filter(|&n| n > 0 && chars[body + n] == '"')?;
+    Some((chars[body..body + len].iter().collect(), body + len + 1))
+}
 
 /// The text with its plain comments removed, string, raw string, byte and char literals read as such (a `//` inside one is no comment).
-pub(super) fn code_text(text: &str) -> String {
+fn code_text(text: &str) -> String {
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len());
     let mut line = String::new();
@@ -146,7 +315,7 @@ fn char_end(chars: &[char], at: usize) -> usize {
 /// a body holding an `impl` block or a `macro_rules!`, seen crate-wide. A `macro_rules!` stays whole. Not exact (the plan's design
 /// review): a lint that reads another crate's body through the compiler would go unrun until the interface moves. A text the lexer
 /// cannot read to its end keeps all its code.
-pub(super) fn interface_text(text: &str) -> String {
+fn interface_text(text: &str) -> String {
     let code = code_text(text);
     let chars: Vec<char> = code.chars().collect();
     let mut out = String::with_capacity(code.len());

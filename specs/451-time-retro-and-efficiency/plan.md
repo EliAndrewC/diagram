@@ -7170,31 +7170,36 @@ batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
    anywhere else a new finding for its own task.
 
-### T434 (<why: the finding or measurement that files it>)
+### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the code views (`rustc/kept.rs`, `code_ids_kept_by`) are keyed by the code that computes them, not by the binary.
+  - **DECISION, the stamp is the hash of the views code** (label: tooling convention). `kept/code.rs` holds everything that shapes a kept line: `code_text`, `interface_text`, the compiled-in paths (`included`, moved from `kept.rs`), the `code:` and `interface:` prefixes, the line's format and its reading back. They are gathered in `View`, whose fields are private to `code.rs`, so `kept.rs` can only build one with `View::of` or read one back with `View::parse`; the compiler refuses any other construction. `SOURCES` compiles in `code.rs` itself and `rust/guard/shared/src/sha256.rs`. `code::stamp()` is `l7r-rust views <sha256 of each source's path, length and text, and char::UNICODE_VERSION>`, the Unicode version standing for the std tables that `chars`, `is_alphanumeric`, `is_whitespace` and `trim_end` read (linked at build time, the advisor's point 4). A cache is read only where its first line equals the stamp. `this_binary` and the binary's size, time and content are gone from the key.
+  - **DECISION, the compiled-in paths are read by hand, not by a pattern** (label: tooling convention). With a regex, the views would reach `fancy_regex` and `l7r_shared::regex`, and through them `Cargo.lock` and the manifests' features, which the lockfile does not record. `include_at` reads the old pattern `\binclude(?:_str|_bytes)?!\s*\(\s*"([^"\n]+)"` by hand. Over every tracked `.rs` file the two gave the same paths: 1,521 files, 44 paths, measured 2026-11-27 (a temporary test, `make rust-test`, removed). `a_compiled_in_path_is_read_as_the_pattern_read_it` pins its cases.
+  - **DECISION, a test holds the key to every function the views call** (label: tooling convention). `the_views_reach_nothing_outside_their_hashed_sources` (`kept/code/tests/reach.rs`) reads each file that `SOURCES` names, with its comments and literals blanked and its test module cut. It reports every reach outside the set: a path through `super`, `crate` or another crate (`l7r_shared::<m>` only where `m`'s file is in the set), a `use` of one, a `mod` or `#[path]`, a cfg other than the test module's (which must be the file's last item), a macro std does not give, a derive std does not give, a closure, fn pointer, `dyn` or generic function handed in, and a compiled-in file outside the set. A function the views call that is added outside the set fails it until its file is named, and so hashed. `each_reach_rule_fires_on_a_file_that_breaks_it` proves each rule on a fixture, and a clean fixture draws none. Mutation check: an outside call (`super::kept_reads`) added to `View::of` failed it, 139 passed and 1 failed, `["the path super::"]`, measured 2026-11-27 (`make rust-test`, reverted).
+  - **RESTATED, T341's test** (the advisor's point 1). The last step of `a_touched_binary_keeps_its_views_and_a_rebuilt_one_does_not` held a rebuilt binary to nothing kept, which is now the opposite of the requirement. It is `a_rebuilt_binary_keeps_its_views_and_a_moved_views_code_does_not`: the binary is no part of the stamp, and a cache under another stamp is thrown away whole and written again under the new one.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| views keyed by their code | T341's test with its last step stated as required (a rebuilt binary keeps its views), on the old code: 134 passed, 1 failed, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`); after, restated on the new seam, with `the_views_reach_nothing_outside_their_hashed_sources`, `each_reach_rule_fires_on_a_file_that_breaks_it`, `the_stamp_moves_with_every_hashed_source_and_the_unicode_version`, `a_kept_line_reads_back_as_its_view` and `a_compiled_in_path_is_read_as_the_pattern_read_it`: 140 passed | n/a: tooling | none | none |
 
 ### T434 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** After an edit of `rust/guard/shared`, `core`, `tree` or `rustc` that rebuilds `l7r-rust`, the checks read no Rust file again whose content did not move. An edit of the views code itself still throws every view away.
+2. **The constraints.** A stale view after a change to its computation must be impossible, not unlikely (the brief). FR-013 (performance work first). Constitution XIII: no regression, measured.
+3. **Where each comes from.** O: `dev/measurements/2026-11-27/checks-start/results.md` ("Left"). O: the step lines of this task, below. R: `rust/gate/crates/rustc/src/rustc/kept.rs` and `kept/code.rs`, read.
+4. **Do they describe the world here?** Yes. A content-changing edit of `rust/guard/shared/src/regex.rs` (a `std::hint::black_box` line, restored after) rebuilt `l7r-rust`, and the old code then recomputed every view: 1.939 s at load 12.0, measured 2026-11-27 (a temporary `T434_STEPS` step line around `code_ids_kept` in `Kept::read`, one run, `make rust-test CRATE=rust/gate/crates/rustc`). An edit that only appended an unused `pub const` left the binary's content unchanged, so T341's content id kept the views (0.066 s, measured 2026-11-27, same method). That is why the measurement used an edit that changes the binary.
+5. **The order.** After T341 (landed). Before T365.
+6. **The exits.** Green: the same edit's run spends no time on the views. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The same `regex.rs` edit (now outside the hashed set), after one priming run under the new stamp (1.391 s, the stamp's one-time recompute): views 0.012 s at load 14.6, against 1.939 s at load 12.0 before, measured 2026-11-27 (the step line, one run each, removed after).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of the map sees. The checks' start after a rebuild of their own tool is shorter, by 1.9 s, measured 2026-11-27 (step lines, one run each).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the checks faster). After a rebuild of `l7r-rust` that leaves the views code unchanged, the views step went from 1.939 s (load 12.0) to 0.012 s (load 14.6), measured 2026-11-27 (step lines, one run each). It is not an engine-speed task, so there is no checklist.
 
 ### T439 (<why: the finding or measurement that files it>)
 

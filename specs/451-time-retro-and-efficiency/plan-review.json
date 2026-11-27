@@ -3583,14 +3583,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T434 (<why: the finding or measurement that files it>)": {
-   "sha256": "5bf29f7cdfd291807ce0708883778b71c5985e91a7f030877da1c959ed908a3d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T434 Approach (checklist part A)": {
-   "sha256": "20b9bdedc98f126b577538ae4a50bf235879632d36c91094d9432bfb960e4ecb",
+   "sha256": "41475e0aef910ca013c8f9fb59cdce61c3c691a8b766cc2aa9dc0d6a0fab9631",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3920,7 +3914,7 @@
    "declared": "spec-fidelity"
   },
   "### T449 Approach (checklist part A)": {
-   "sha256": "4b54bbd6864fe3a622c9660e051d69001e6ae82730686ca294b0830c78afe85b",
+   "sha256": "4fec2a7be1ffc25b71b398b2878998fa8474ead13ad68c8f1159de23fb6fd028",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4047,6 +4041,12 @@
   },
   "### T452 Approach (checklist part A)": {
    "sha256": "a7092f91bde2118e541df408f5174bcfb732ca70db9cdb6a41e56b72bca49578",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))": {
+   "sha256": "a41ede100356cda39ae2b0dc1a05c6518703ee2e870de8e4dd3ef917cfb2517f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36143,6 +36143,77 @@
    ],
    "tasks": [
     "T448"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))",
+    "### T434 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T434 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T434 stamp = hash of the views code",
+     "summary": "The views cache is keyed by code::stamp(): sha256 of each SOURCES file's path, length and text (kept/code.rs, shared sha256.rs) plus char::UNICODE_VERSION; the binary's identity (this_binary, size, time, content) leaves the key; View's private fields force construction through View::of/parse.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'prioritize performance improvements'): it removes a 1.9 s full recompute after a rebuild of l7r-rust while keeping the brief's constraint that a stale view after a change to its computation is impossible - every input that shapes a kept line is in the hash. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T434 compiled-in paths read by hand, not by regex",
+     "summary": "include_at parses the old include!/include_str!/include_bytes! pattern by hand so the hashed set does not reach fancy_regex, l7r_shared::regex, Cargo.lock or crate features; same paths as the regex over every tracked .rs file (1,521 files, 44 paths, measured 2026-11-27), pinned by a_compiled_in_path_is_read_as_the_pattern_read_it.",
+     "class": "within",
+     "why": "An implementation choice that keeps the stamp's hashed set closed; the behavior is shown to work (same paths) and nothing asked for is left out."
+    },
+    {
+     "id": "T434 reach test",
+     "summary": "the_views_reach_nothing_outside_their_hashed_sources fails when the views code reaches any function, macro, derive, module, cfg or compiled-in file outside SOURCES; each rule proved on a fixture; mutation check recorded.",
+     "class": "within",
+     "why": "Enforcement of the task's own no-stale-view constraint, which the stamp's correctness depends on; a test that fails only when that guarantee is broken serves what was asked and is not new behavior."
+    },
+    {
+     "id": "T434 T341's test restated",
+     "summary": "T341's last step (a rebuilt binary keeps nothing) becomes a_rebuilt_binary_keeps_its_views_and_a_moved_views_code_does_not.",
+     "class": "within",
+     "why": "T341's pinned step was that task's mechanism for freshness, not anything the GM asked for; the freshness property is kept (a moved views code throws the cache away whole) and only the over-conservative key is dropped, which is the performance work itself."
+    },
+    {
+     "id": "T434 step table and no checklist",
+     "summary": "Step table: fresh block vs HEAD 'n/a: tooling', pool manifests moved and last resort 'none'; a [perf] task that is not engine-speed, so no performance checklist.",
+     "class": "within",
+     "why": "Classification of the task's own reach under the feature's process; it leaves out nothing the GM asked for."
+    },
+    {
+     "id": "T434 Unicode version stands for the std tables",
+     "summary": "char::UNICODE_VERSION is in the stamp in place of the std tables that chars, is_alphanumeric, is_whitespace and trim_end read.",
+     "class": "within",
+     "why": "A scoping choice of what the key covers, made to keep the freshness constraint; whether the proxy suffices is design, not fidelity."
+    },
+    {
+     "id": "T434 order and exits",
+     "summary": "After T341 (landed), before T365; green is the same edit's run spending no time on views (0.012 s vs 1.939 s, measured 2026-11-27); Found and left: none.",
+     "class": "within",
+     "why": "Ordering and an exit inside the feature's process; it carries no known defect forward."
+    },
+    {
+     "id": "T443, T449 template blocks",
+     "summary": "Both tasks' blocks are the unfilled template.",
+     "class": "within",
+     "why": "A placeholder decides nothing."
+    },
+    {
+     "id": "removed T311, T392, T434 template blocks",
+     "summary": "Three unfilled template blocks removed; T434's is replaced by its filled section above.",
+     "class": "within",
+     "why": "Their earlier text held no decision, so removing them narrows nothing; T434's content now stands under its full heading."
+    }
    ]
   }
  ],
