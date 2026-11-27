@@ -1546,14 +1546,69 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 <!-- plan-archive: T48 to T09 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T49 (<why: the finding or measurement that files it>)
+
+### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)
+
+- **Approach**: `drop_tree` (`rust/gate/crates/task/src/builder_tree.rs`) takes the lane's tree itself: a tree held by
+  `builder_pool::LANE` is asked `lane_busy` in place of the held refusal - refused while the lane's runner lives
+  (`l7r-lane/lane.lock` held, probed by `flock -n` as the lane's `runner::held`; the refusal names `make lane-stop`) or while a
+  batch of `l7r-lane/lane.jsonl` is open (the refusal names the batch and `make lane-start`, which runs it to its landing or its
+  stop); otherwise removed as any free tree is - REASON owed, the worktree, its cache and its registry line gone, a `drop` line
+  logged - and adoptable again. THE LOG'S READING mirrors the lane's own grouping, not T17's one-batch question (`lane/src/log.rs`,
+  `batches` and `state_of`, read 2026-11-27): a batch's lines are those naming it after its `batch` line (a later `batch` line of
+  the same id a new batch), `landed` or `stop` naming it ends it, `carry`/`eject`/`run`/`attribute`/`push` reopen it, and a line
+  naming no batch - the runner's own `stop` (`runner.rs`, `{pid, why}`), whose batch is resumed at the next start - or a torn line
+  changes nothing. Read here, as `tree`'s `state::lane_run` reads it (461 T17), because the lane crate builds on `task`; a third
+  reader of the log beside the lane and T17 (kept private here rather than making `tree`'s helpers public, which asks a different
+  question - one named batch - and would put a second crate in this task). Every builder tree's rules are as they were: the
+  not-free branch and its message unchanged. No guard-rendered message changed: the builder-pool guard's REMOVE message (T45)
+  already names `make builder-tree-drop TREE=<path>`, which now works for the lane's tree.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_tree::tests::lane"` on the old code): 3 passed,
+  1 failed - `the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open` answered `is held by lane - make
+  builder-tree-release T=lane first`. Green: `builder_tree::tests` 13 of 13; `make builder-checks CRATE="rust/gate/crates/task"`
+  clean, the crate 157 of 157. The test covers the REASON, the lock held (refused) and present but free (passes), a batch open
+  beside a runner's batch-less `stop`, a batch-keyed `stop` and a torn line (refused, the tree and registry kept), a batch landed,
+  reopened by a `run` and landed again (drops, tree and cache gone, the registry's `lane` line gone), and a re-adoption then a
+  drop of the tree gone from disk.
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** A session retiring `<clone>-land` runs `make builder-tree-drop TREE=<it> REASON=` once the lane is
+   idle, and is told what to stop first while it is not, with no `BUILDER_TREE_OK` escape.
+2. **The constraints.** D1 (the lane's tree and its holder), T13 (`lane` reserved: no release frees it), T45 (the REMOVE message
+   names the drop), T17 (the log and lock read without depending on the lane crate), the brief: refused while the runner lives or a
+   batch is open, every builder tree's rules kept.
+3. **Where each comes from.** R: tasks.md T49's line, T45's found-and-left item; O: `drop_tree`'s held check, the lane's
+   `log::batches`/`state_of` and `runner::held`/`stop`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the red test shows the old drop refused the lane's tree with the release T13 refuses.
+5. **The order.** After T13, T17 and T45; before T22.
+6. **The exits.** Green: the lane test and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one caller of the held refusal (`drop_tree`), read.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane drop test green; in use, `make builder-tree-drop TREE=/diagram/.clones/diagram-backlog-land
+   REASON=...` with no runner and no open batch removes it.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session retiring the lane's tree is no longer left only the guard's escape; nothing else a reader sees
+    changes.
+
+**Found and left?**
+- The lane's tree gone from disk mid-batch is still a dead end: `builder-tree lane`'s gone-from-disk refusal names the drop, which
+  is refused while the runner lives (it made the call) and, after `make lane-stop`, while its batch stays open (resumed at the next
+  start, which calls `lane` again). Not fixed here: the task's words refuse the drop while a batch is open, and the route a gone
+  tree needs is a decision of its own. Filed as T50; lands before T22.
+
+**Performance work?** no
+
+
+### T50 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T49 Approach (checklist part A)
+### T50 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

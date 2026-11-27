@@ -715,7 +715,13 @@ fn drop_tree(p: &Pool, arg: &str, env: &Env) -> Reply {
             "builder-tree-drop: {arg} is not a pool tree (make builder-trees lists them)\n"
         ));
     };
-    if !trees[i].free() {
+    if trees[i].lane() {
+        if let Some(why) = lane_busy(&p.common) {
+            return refused(format!(
+                "builder-tree-drop: {arg} is the lane's tree and {why} first\n"
+            ));
+        }
+    } else if !trees[i].free() {
         return refused(format!(
             "builder-tree-drop: {arg} is held by {} - make builder-tree-release T={} first\n",
             trees[i].holder(),
@@ -749,6 +755,42 @@ fn drop_tree(p: &Pool, arg: &str, env: &Env) -> Reply {
     let failed = save(p, &trees);
     let code = i32::from(!failed.is_empty());
     reply(said, failed, code)
+}
+
+/// Why the lane's tree may not go yet (feature 461 T49), None when it may: the lane's runner lives (`l7r-lane/lane.lock` held, the
+/// lane's `runner::held`), or a batch of `l7r-lane/lane.jsonl` is open (the lane's `log::batches` and `Batch::open`: a batch's
+/// lines are those naming it after its `batch` line, and only a `landed` or a `stop` naming it ends it - the runner's own `stop`
+/// names none, and its batch is resumed at the next start). Read here as `tree`'s `state::lane_run` reads them (461 T17): the
+/// lane crate builds on this one, so a dependency on it would be a cycle.
+fn lane_busy(common: &Path) -> Option<String> {
+    let dir = common.join("l7r-lane");
+    if std::fs::File::open(dir.join("lane.lock")).is_ok_and(|f| !l7r_shared::tool::flock(&f, "-n"))
+    {
+        return Some("the lane's runner lives - make lane-stop".to_owned());
+    }
+    let mut batches: Vec<(String, bool)> = Vec::new();
+    let text = std::fs::read_to_string(dir.join("lane.jsonl")).unwrap_or_default();
+    for line in text
+        .lines()
+        .filter_map(|l| serde_json::from_str::<serde_json::Value>(l).ok())
+    {
+        let Some(id) = line["batch"].as_str() else {
+            continue;
+        };
+        let event = line["event"].as_str().unwrap_or_default();
+        if event == "batch" {
+            batches.push((id.to_owned(), true));
+        }
+        if let Some(b) = batches.iter_mut().rev().find(|b| b.0 == id) {
+            match event {
+                "landed" | "stop" => b.1 = false,
+                "carry" | "eject" | "run" | "attribute" | "push" => b.1 = true,
+                _ => {}
+            }
+        }
+    }
+    let open: Vec<String> = batches.into_iter().filter(|b| b.1).map(|b| b.0).collect();
+    (!open.is_empty()).then(|| format!("its batch {} is open in l7r-lane/lane.jsonl - make lane-start runs it to its landing or its stop", open.join(", ")))
 }
 
 fn adopt(p: &Pool, arg: &str, tasks: &[String], feature: &str, env: &Env) -> Reply {

@@ -231,3 +231,76 @@ fn the_knob_names_another_tree_and_the_pool_holds_one_lane() {
         failed.stderr
     );
 }
+
+fn lane_log(root: &Path, lines: &[&str]) {
+    let dir = root.join(".git/l7r-lane");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join("lane.jsonl"), format!("{}\n", lines.join("\n"))).unwrap();
+}
+
+/// THE LANE'S TREE GOES BY THE DROP (feature 461 T49): no release frees the lane's holder (T13), so the drop takes the lane's tree
+/// itself - refused while the lane's runner holds `l7r-lane/lane.lock` or a batch of `l7r-lane/lane.jsonl` is open, the tree and its
+/// cache removed otherwise, and adopted again after.
+#[test]
+fn the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open() {
+    let (dir, root) = world("pool-lane-drop");
+    let mut e = env(&dir);
+    let land = dir.join("repo-land");
+    let land_text = land.to_string_lossy().into_owned();
+    worktree(&root, &land);
+    assert_eq!(run(&words(&["adopt", &land_text]), &root, &e).code, 0);
+    std::fs::create_dir_all(e.cache.join("repo-land/debug")).unwrap();
+    let asked = |e: &super::Env| run(&words(&["drop", &land_text]), &root, e);
+    assert!(asked(&e).stderr.contains("REASON needs two words"));
+    e.reason = "the lane retires".to_owned();
+    // the runner lives: its lock held
+    let lock = root.join(".git/l7r-lane/lane.lock");
+    std::fs::create_dir_all(lock.parent().unwrap()).unwrap();
+    std::fs::write(&lock, "4242\n").unwrap();
+    let held = l7r_shared::tool::flock_within(&lock, 1.0).unwrap().unwrap();
+    let live = asked(&e);
+    assert!(
+        live.code == 2
+            && live.stderr.contains(&format!("builder-tree-drop: {land_text} is the lane's tree and the lane's runner lives - make lane-stop first"))
+    );
+    std::mem::drop(held);
+    // a batch open, the runner's own stop (no batch named) and a torn line closing nothing; another batch stopped
+    lane_log(
+        &root,
+        &[
+            r#"{"event":"batch","batch":"b1"}"#,
+            r#"{"event":"batch","batch":"b2"}"#,
+            r#"{"event":"stop","pid":4242,"why":"make lane-stop NOW=1"}"#,
+            r#"{"event":"stop","batch":"b2"}"#,
+            r#"{"event":"landed","bat"#,
+        ],
+    );
+    let open = asked(&e);
+    assert!(
+        open.code == 2
+            && open.stderr.contains(&format!("builder-tree-drop: {land_text} is the lane's tree and its batch b1 is open in l7r-lane/lane.jsonl - make lane-start runs it to its landing or its stop first"))
+    );
+    assert!(registry(&root).contains("\"lane\"") && land.exists());
+    // landed, then opened again by a run, then landed: no batch open, the lock file free
+    lane_log(
+        &root,
+        &[
+            r#"{"event":"batch","batch":"b1"}"#,
+            r#"{"event":"landed","batch":"b1"}"#,
+            r#"{"event":"run","batch":"b1","code":1}"#,
+            r#"{"event":"landed","batch":"b1"}"#,
+            r#"{"event":"owed","batch":"b9"}"#,
+        ],
+    );
+    let done = asked(&e);
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    assert!(done.stdout.contains("are removed (the lane retires)"));
+    assert!(!land.exists() && !e.cache.join("repo-land").exists());
+    assert!(!registry(&root).contains("\"lane\""), "{}", registry(&root));
+    // adopted again, and gone from disk: the drop takes it
+    worktree(&root, &land);
+    assert_eq!(run(&words(&["adopt", &land_text]), &root, &e).code, 0);
+    git(&root, &["worktree", "remove", "--force", &land_text]);
+    let late = asked(&e);
+    assert!(late.code == 0 && !registry(&root).contains("\"lane\""));
+}

@@ -462,6 +462,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)": {
+   "sha256": "51e1ca29fdd4c28c5fa104aaf1e94e8bdc5c82f2699e8a1ab8531700ebb7f725",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T49 Approach (checklist part A)": {
+   "sha256": "cfb0764ccdac324c286d7b1d2bcd96be0a7f319b54fbf677550a17037014da37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2888,6 +2900,74 @@
      "why": "A real defect, but it is scheduled inside this feature as its own task and lands before the next dependent task (T22), so it is not carried into the next step; the escape keeps the lane's tree removable in the interim. Splitting a gate crate's command out of a guard brief narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T49-drop-lane-tree",
+     "summary": "drop_tree takes the lane's tree (held by builder_pool::LANE): refused while the lane's runner lives (lane.lock held, flock -n probe, names make lane-stop) or a batch of lane.jsonl is open (names the batch and make lane-start); otherwise removed as any free tree is (REASON owed, worktree, cache and registry line gone, drop logged) and adoptable again; no BUILDER_TREE_OK escape.",
+     "class": "within",
+     "why": "Tooling for the lane's own worktree (FR-003: the lane runs in its own worktree). It adds a safe route to retire that tree and keeps the refusals the task's brief names (runner alive, batch open). It removes no check (FR-008) and narrows nothing the GM asked for."
+    },
+    {
+     "id": "T49-log-reading",
+     "summary": "The open-batch test follows the lane's own grouping (log::batches/state_of): a batch line opens, landed/stop end, carry/eject/run/attribute/push reopen, batch-less stop and torn lines change nothing. It is read privately in the task crate, not by depending on the lane crate or making tree's helpers public.",
+     "class": "within",
+     "why": "An implementation choice about how to read whether a batch is open. It matches the lane's semantics and is forced by crate dependency direction. The request and spec do not settle it, and it narrows nothing."
+    },
+    {
+     "id": "T49-other-trees-unchanged",
+     "summary": "Every other builder tree's rules and the not-free branch's message are unchanged. No guard-rendered message changes, because the REMOVE message (T45) already names make builder-tree-drop.",
+     "class": "within",
+     "why": "Keeps existing behavior outside the lane's tree. Nothing is narrowed or added beyond the task."
+    },
+    {
+     "id": "T49-found-and-left-T50",
+     "summary": "A lane tree gone from disk mid-batch is still a dead end: the gone-from-disk refusal names the drop, which stays refused while the runner lives or a batch is open. Not fixed here: filed as T50, to land before T22.",
+     "class": "within",
+     "why": "Fixing it here would contradict this task's own brief (refuse the drop while a batch is open), and it needs a separate route decision. The defect is not left unfixed or carried past the next step: it is filed as T50 and ordered to land before T22, as fix-as-we-go requires. That defers a defect to a scheduled task rather than narrowing the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T49-D1",
+     "summary": "drop_tree accepts the lane's tree (held by builder_pool::LANE): refused while the lane's runner lives (lane.lock held, refusal names make lane-stop) or a batch of lane.jsonl is open (refusal names the batch and make lane-start); otherwise removed like any free tree, REASON owed, drop logged, adoptable again; no BUILDER_TREE_OK escape.",
+     "class": "within",
+     "why": "Repairs a defect T45 found and left: the guard's REMOVE message names make builder-tree-drop, which refused the lane's tree with a release T13 refuses, a dead end. Fixing a tool that refuses valid work serves the lane of FR-003 and drops no check (FR-008). The refusals are the brief's own words."
+    },
+    {
+     "id": "T49-D2",
+     "summary": "The log is read in the task crate by a private third reader that mirrors lane/src/log.rs batches/state_of grouping (batch, landed/stop ends, carry/eject/run/attribute/push reopen, batch-less runner stop and torn lines change nothing), rather than depending on the lane crate or making tree's one-batch helpers public.",
+     "class": "within",
+     "why": "An implementation choice under T17's constraint (the lane crate builds on task). It narrows nothing the GM or spec asked for."
+    },
+    {
+     "id": "T49-D3",
+     "summary": "Every other builder tree's rules unchanged: the not-free branch and its message as before; no guard-rendered message changed.",
+     "class": "within",
+     "why": "Keeps existing behavior where the task did not ask for change. Nothing requested is cut."
+    },
+    {
+     "id": "T49-D4",
+     "summary": "Found and left: the lane's tree gone from disk mid-batch stays a dead end (builder-tree lane's gone-from-disk refusal names the drop, refused while the runner lives or the batch stays open). Not fixed in T49 and filed as T50, to land before T22.",
+     "class": "within",
+     "why": "Nothing the GM or the spec asked for is cut. The defect is not carried past the step: it is filed as its own task and set to land before T22. T49's own brief refuses the drop while a batch is open, so a fix through the drop would contradict the brief, and the route a gone tree needs is a separate decision. It would be NOT LEGITIMATE only if T50 were not ordered ahead of the work that relies on it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3276,6 +3356,38 @@
      "summary": "The REMOVE message's make builder-tree-drop is a dead end for the held lane tree (drop_tree refuses held trees, T13 refuses releasing lane); not fixed here, filed as T49, landing before T22, BUILDER_TREE_OK escape meanwhile",
      "class": "within",
      "why": "A real defect, but it is scheduled inside this feature as its own task and lands before the next dependent task (T22), so it is not carried into the next step; the escape keeps the lane's tree removable in the interim. Splitting a gate crate's command out of a guard brief narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T49": {
+   "section_sha256": "c7e9cbaa71dd3fa2743612408679d923155216d1ac66d7ee75e119dfa2f23a1c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T49-drop-lane-tree",
+     "summary": "drop_tree takes the lane's tree (held by builder_pool::LANE): refused while the lane's runner lives (lane.lock held, flock -n probe, names make lane-stop) or a batch of lane.jsonl is open (names the batch and make lane-start); otherwise removed as any free tree is (REASON owed, worktree, cache and registry line gone, drop logged) and adoptable again; no BUILDER_TREE_OK escape.",
+     "class": "within",
+     "why": "Tooling for the lane's own worktree (FR-003: the lane runs in its own worktree). It adds a safe route to retire that tree and keeps the refusals the task's brief names (runner alive, batch open). It removes no check (FR-008) and narrows nothing the GM asked for."
+    },
+    {
+     "id": "T49-log-reading",
+     "summary": "The open-batch test follows the lane's own grouping (log::batches/state_of): a batch line opens, landed/stop end, carry/eject/run/attribute/push reopen, batch-less stop and torn lines change nothing. It is read privately in the task crate, not by depending on the lane crate or making tree's helpers public.",
+     "class": "within",
+     "why": "An implementation choice about how to read whether a batch is open. It matches the lane's semantics and is forced by crate dependency direction. The request and spec do not settle it, and it narrows nothing."
+    },
+    {
+     "id": "T49-other-trees-unchanged",
+     "summary": "Every other builder tree's rules and the not-free branch's message are unchanged. No guard-rendered message changes, because the REMOVE message (T45) already names make builder-tree-drop.",
+     "class": "within",
+     "why": "Keeps existing behavior outside the lane's tree. Nothing is narrowed or added beyond the task."
+    },
+    {
+     "id": "T49-found-and-left-T50",
+     "summary": "A lane tree gone from disk mid-batch is still a dead end: the gone-from-disk refusal names the drop, which stays refused while the runner lives or a batch is open. Not fixed here: filed as T50, to land before T22.",
+     "class": "within",
+     "why": "Fixing it here would contradict this task's own brief (refuse the drop while a batch is open), and it needs a separate route decision. The defect is not left unfixed or carried past the next step: it is filed as T50 and ordered to land before T22, as fix-as-we-go requires. That defers a defect to a scheduled task rather than narrowing the request."
     }
    ],
    "verdict": "CLEAR"
