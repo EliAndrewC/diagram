@@ -17,8 +17,14 @@
 //!
 //! PROVEN DEAD (451 T158, the GM's condition, no loss of performance): a build directory goes whole only once no current code path
 //! builds into its name and every tree its dep-info names is gone; one whose dep-info cannot be read is kept. "No worktree of that
-//! name" was no proof: `rc` (11 GB) was a plain scratch clone's (`/tmp/t94/rc`), and `clone`, `tree` and `main-tree` are names the
-//! hooks suites, a mirror stand-in and the model trial build into (`BUILT_INTO`).
+//! name" was no proof: `rc` (11 GB) was a plain scratch clone's (`/tmp/t94/rc`), and `clone` is a name the hooks suites and a mirror
+//! stand-in build into (`BUILT_INTO`; the model trial's `tree` and `main-tree` until 451 T523).
+//!
+//! NO BUILD DIRECTORY (451 T523): what at the cache's root is no build directory goes once idle past the threshold and held by none -
+//! a loose file (27 `fixture-*.profraw`, `fixture-profraw-list` and `fixture.profdata`, 5.06 MB with the root's two cargo files, 2026-10-30, 444 T17's
+//! Python-era coverage run, which no live code writes, and cargo's `.rustc_info.json` of a run that once built into the root itself;
+//! observed 2026-11-27, method: `ls -la` and `du` of the cache root), and a shell of cargo's markers alone (`shell`) - but never the
+//! root's own `CACHEDIR.TAG`, which marks the whole cache as one to backup tools.
 //!
 //! THE LIVE TREES (451 T158): a tree's build directory is named for its basename, so a worktree made outside the clones directory
 //! (`git -C <clone> worktree add /tmp/t33/wt`) builds into `wt`, shared by every tree of that name; a name any registered worktree of
@@ -40,8 +46,9 @@ const STORES: [&str; 4] = ["deps", "incremental", ".fingerprint", "build"];
 /// The names a current code path builds into whatever tree last used them (451 T158, by every `CARGO_TARGET_DIR` and `${TREE##*/}`
 /// user, 2026-11-22): `clone`, the hooks suites' fixture clones that run the real wrapper (`clone/build.log` named
 /// `/tmp/l7r-hooks-suite-pair-hooks.sh-*/clone`), a `git clone -q . $T/clone` standing in the mirror (451 T79) and a review
-/// snapshot's side; `tree` and `main-tree`, the model trial's own clones (`trials/src/measure/model_trial/case.rs`).
-pub(crate) const BUILT_INTO: [&str; 3] = ["clone", "tree", "main-tree"];
+/// snapshot's side. `tree` and `main-tree`, the model trial's checkouts until 451 T523, are no longer: each arm's checkout has a name
+/// of its own (`trials/src/measure/model_trial/case.rs`, `arm_checkout`), proven dead by its dep-info once its case is deleted.
+pub(crate) const BUILT_INTO: [&str; 1] = ["clone"];
 /// A clone's landing trees beside it: `make land`'s worktree (`scripts/land-alone.sh`, its target "built once and kept"), the tooling
 /// landing's worktree (`scripts/land-tooling.sh`, the gate's build) and that landing's guard build.
 const LANDING: [&str; 3] = ["-land", "-tooling", "-land-tooling"];
@@ -62,7 +69,14 @@ pub(super) fn plan(
     let live = trees(c);
     let mut kept = Vec::new();
     for (target, name, meta) in children(&c.cargo) {
-        if !meta.is_dir() || in_use(&target, held, &c.proc) {
+        if in_use(&target, held, &c.proc) {
+            continue;
+        }
+        // WHAT AT THE ROOT IS NO BUILD DIRECTORY (451 T523), once idle: a loose file, and a shell of cargo's markers alone
+        if !meta.is_dir() || shell(&target, &name, live.as_deref()) {
+            if name != MARKERS[1] && super::idle(&target, cutoff) {
+                out.push((target, LOOSE));
+            }
             continue;
         }
         // no idle wait (451 T245: a removed worktree's build directory goes with it, at the next sweep, where the day's trials left
@@ -98,6 +112,25 @@ pub(super) fn dead(target: &Path, name: &str, live: Option<&[String]>) -> bool {
     live.is_some_and(|l| !l.iter().any(|n| n == name))
         && !BUILT_INTO.contains(&name)
         && built_from(target).is_some_and(|trees| trees.iter().all(|t| !t.exists()))
+}
+
+/// The files cargo writes at a target directory's root before it builds anything; a directory holding nothing else is a SHELL.
+const MARKERS: [&str; 2] = [".rustc_info.json", "CACHEDIR.TAG"];
+const LOOSE: &str =
+    "no build directory at the cache's root (a loose file, or a shell of cargo's markers alone)";
+
+/// A shell (451 T523): a directory of no live tree's name that holds nothing but cargo's markers, so nothing built is lost - `tree/`'s
+/// 12 KB after its profile was evicted (2026-11-27 12:45Z). "No subdirectory" is no test: `diagram-research/` has none and holds a
+/// kept guard binary. A build starting into a shell is safe whether or not the idle wait applies (past the budget the cutoff is now):
+/// the cache's share is planned only while no build runs, `take` asks again before each removal, and a held path is `in_use`.
+fn shell(target: &Path, name: &str, live: Option<&[String]>) -> bool {
+    live.is_some_and(|l| !l.iter().any(|n| n == name))
+        && std::fs::read_dir(target).is_ok_and(|d| {
+            d.flatten().all(|e| {
+                e.file_type().is_ok_and(|t| t.is_file())
+                    && MARKERS.iter().any(|m| e.file_name() == *m)
+            })
+        })
 }
 
 /// What the cache's budget asks of a plan (451 T245): the bytes to free (0 within the budget), and the time before which a live tree's

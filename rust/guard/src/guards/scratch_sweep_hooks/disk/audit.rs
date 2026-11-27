@@ -347,7 +347,7 @@ fn owner(c: &Config, name: &str) -> String {
         return format!("the worktree {} of {}", w.tree.display(), w.repo.display());
     }
     if sweep::BUILT_INTO.contains(&name) {
-        return "the hooks suites' and trials' fixture trees".to_owned();
+        return "the hooks suites' fixture clones".to_owned();
     }
     "no tree of that name on disk (a landing tree between landings, or gone)".to_owned()
 }

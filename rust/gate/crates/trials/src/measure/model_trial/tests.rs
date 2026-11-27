@@ -375,7 +375,7 @@ fn prepare_builds_a_case_at_head_with_the_tested_model() {
         &["--head", "--omit-claude-md", "yes"],
     );
     assert_eq!(got.code, 0, "{}{}", got.stdout, got.stderr);
-    let tree = out.join("tree");
+    let tree = super::case::arm_checkout(&out, "");
     let there = tree.display();
     assert_eq!(
         std::fs::read_to_string(out.join("prompt.txt")).unwrap(),
@@ -651,7 +651,9 @@ fn a_snapshot_is_rebuilt_on_both_sides_with_its_dispatch() {
                 .stdout
                 .contains("; no dispatch.md read in the recorded run")
     );
-    let dest = out.join("tree/.git/review-snapshot").join(unit);
+    let dest = super::case::arm_checkout(&out, "")
+        .join(".git/review-snapshot")
+        .join(unit);
     assert!(
         dest.join("clone/x.json").is_file()
             && dest.join("main/x.json").is_file()
@@ -659,8 +661,65 @@ fn a_snapshot_is_rebuilt_on_both_sides_with_its_dispatch() {
     );
     assert!(std::fs::read_to_string(dest.join("dispatch.md"))
         .unwrap()
-        .contains(&out.join("tree/x").display().to_string()));
+        .contains(
+            &super::case::arm_checkout(&out, "")
+                .join("x")
+                .display()
+                .to_string()
+        ));
     assert_eq!(top.join("case"), out);
+}
+
+/// The checkouts in a case's folder (each holding a `.git`), by name.
+fn checkouts(out: &Path) -> Vec<String> {
+    let mut names: Vec<String> = std::fs::read_dir(out)
+        .unwrap()
+        .flatten()
+        .filter(|e| e.path().join(".git").is_dir())
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .collect();
+    names.sort();
+    names
+}
+
+/// Two arms never share a build target (451 T523): the launcher names a tree's target by its basename, so m14's eight arms, each
+/// checkout named `tree`, shared one cargo lock and one tool binary. Two arms of one name under two trials get checkouts of their own
+/// names, `prepare`, `snapshot` and `run` find the same one, and a re-prepare keeps it.
+#[test]
+fn each_arm_checks_out_under_a_name_of_its_own() {
+    let (top, mut t) = world("mt-arms");
+    let tr = transcript(&top, "p").display().to_string();
+    let script = top.join("claude-pwd");
+    crate::write_executable(&script, "#!/bin/sh\npwd > ../ran-in\nprintf '{}'\n");
+    t.claude = script.display().to_string();
+    let mut seen = Vec::new();
+    for trial in ["A", "B"] {
+        let out = top.join(trial).join("d1-opus");
+        let there = out.display().to_string();
+        for _ in 0..2 {
+            assert_eq!(cli(&words(&["prepare", &tr, &there, "--head"]), &t).code, 0);
+        }
+        assert_eq!(cli(&words(&["snapshot", &there]), &t).code, 0);
+        let names = checkouts(&out);
+        assert_eq!(names.len(), 2, "{names:?}");
+        let shared = names.iter().any(|n| n == "tree" || n == "main-tree");
+        assert!(!shared, "{names:?}");
+        assert_eq!(cli(&words(&["run", &there, "--runs", "1"]), &t).code, 0);
+        let _ = (0..2000).find(|_| {
+            std::thread::sleep(std::time::Duration::from_millis(2));
+            std::fs::read_to_string(out.join("ran-in")).is_ok_and(|t| t.ends_with('\n'))
+        });
+        let ran = std::fs::read_to_string(out.join("ran-in")).unwrap();
+        let ran = Path::new(ran.trim())
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+            .into_owned();
+        assert!(names.contains(&ran), "{ran} {names:?}");
+        seen.extend(names);
+    }
+    let unique: std::collections::BTreeSet<&String> = seen.iter().collect();
+    assert_eq!(unique.len(), 4, "{seen:?}");
 }
 
 #[test]

@@ -129,6 +129,52 @@ fn a_gone_tree_s_build_goes_whole_and_a_live_one_loses_only_old_variants() {
     assert!(plan(&blind, cutoff(), &[], within()).is_empty());
 }
 
+/// What at the cache's root is no build directory goes once idle (451 T523): a loose file (444 T17's `fixture-*.profraw`,
+/// `fixture.profdata`, cargo's `.rustc_info.json` of a run that used the root as its target), and a shell that holds nothing but
+/// cargo's two markers (`tree/`, its profile evicted) - whatever its name, `tree` and `main-tree` no longer built into; never the
+/// root's `CACHEDIR.TAG`, a fresh one, a held one, a live tree's shell, or a directory with anything else in it.
+#[test]
+fn what_at_the_root_is_no_build_directory_goes_once_idle() {
+    let (_base, c) = world();
+    let k = &c.cargo;
+    for f in [
+        "fixture-1-2_3.profraw",
+        "fixture.profdata",
+        ".rustc_info.json",
+        "CACHEDIR.TAG",
+    ] {
+        put(k, &k.join(f), 9);
+    }
+    put(k, &k.join("fresh.profraw"), 0);
+    put(k, &k.join("held.profraw"), 9);
+    for shell in ["tree", "main-tree", "old-shell", "live-clone", "held-shell"] {
+        put(k, &k.join(shell).join(".rustc_info.json"), 9);
+        put(k, &k.join(shell).join("CACHEDIR.TAG"), 9);
+    }
+    dir(k, &k.join("empty-shell"), 9);
+    put(k, &k.join("fresh-shell/CACHEDIR.TAG"), 0);
+    // the guard's kept binary beside the markers is no shell (`diagram-research/`, no profile, no dep-info)
+    put(k, &k.join("kept-binary/CACHEDIR.TAG"), 9);
+    put(k, &k.join("kept-binary/l7r-guard.good"), 9);
+    // a model trial's arm, its checkout under its own name and gone: proven dead by its dep-info
+    put(k, &k.join("tree/debug/x"), 9);
+    built_from(k, &k.join("tree"), &k.join("no/such/arm/tree"), 9);
+    let held = [k.join("held.profraw"), k.join("held-shell/CACHEDIR.TAG")];
+    let got = plan(&c, cutoff(), &held, within());
+    assert_eq!(
+        names(&got, &c),
+        [
+            ".rustc_info.json",
+            "empty-shell",
+            "fixture-1-2_3.profraw",
+            "fixture.profdata",
+            "main-tree",
+            "old-shell",
+            "tree",
+        ]
+    );
+}
+
 /// A build directory's top dep-info, `<target>/<profile>/<bin>.d`, naming the tree it was built from, `days` old.
 fn built_from(top: &Path, target: &Path, tree: &Path, days: u64) {
     let d = target.join("tool/l7r-gate.d");
@@ -160,8 +206,8 @@ fn a_target_is_taken_whole_only_once_proven_dead() {
     std::fs::write(k.join("rc/rust-checks-run.json"), r#"{"members":[]}"#).unwrap();
     age(&k, &k.join("rc/rust-checks-run.json"), 9);
     built_from(&k, &k.join("rc"), &living, 9);
-    // names a current code path builds into, their last tree gone: the hooks suites' and the review snapshot's `clone`, the model
-    // trial's `tree` and `main-tree`, a clone's landing worktrees - kept
+    // names a current code path builds into, their last tree gone: the hooks suites' and the review snapshot's `clone`, a clone's
+    // landing worktrees - kept; the model trial's `tree` and `main-tree`, built into by no code since 451 T523 - taken
     let gone = base.join("nowhere");
     for name in [
         "clone",
@@ -186,7 +232,7 @@ fn a_target_is_taken_whole_only_once_proven_dead() {
     built_from(&k, &k.join("trial-wt"), &gone.join("t300/trial-wt"), 0);
     assert_eq!(
         names(&plan(&c, cutoff(), &[], within()), &c),
-        ["head", "trial-wt"]
+        ["head", "main-tree", "tree", "trial-wt"]
     );
 }
 

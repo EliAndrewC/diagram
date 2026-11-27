@@ -7024,31 +7024,45 @@ that batch; the red was not in its change.
 
 
 <!-- plan-archive: T520 to T515 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T523 (<why: the finding or measurement that files it>)
+### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two fixes, no new command or guard.
+  - **The arms' names** (`rust/gate/crates/trials/src/measure/model_trial/case.rs`, `arm_checkout`; its callers in `case.rs` and `runs.rs`). Every arm's checkout was `<out>/tree`, and `snapshot`'s was `<out>/main-tree`. Five places name a tree's build target by its basename: `scripts/gates/l7r-gate.sh` line 14, `scripts/hooks/l7r-guard.sh`, the Makefile's `HAMLET_RUN`, `tool.rs` `gate_binary` and `rustc.rs` `target_of`. So m14's eight arms (2026-11-26 17:39Z) shared one cargo lock and one tool binary, observed 2026-11-27, method: T520's `ls`/`stat` of the cache root and the scratchpad's `m14/A/*/tree`. The fix is in the trial, not the launcher. Re-keying the launcher would re-home every live tree's warm cache (230 GiB, observed 2026-11-27, method: T520's `du -xsh`). An environment variable on the spawned run would miss `render`'s `make map`, which goes through `HAMLET_RUN`. Each checkout is now `<out>/<out's name>-<the first 8 hex of the SHA-256 of out's canonical path>`, and main's adds `-main`. Two arms of one name under two trials (m14's `A/d1-opus` and `B/d1-opus`) therefore differ. `prepare`, `snapshot` and `run` find the same checkout whether `out` is given relative or absolute, and a re-prepare reuses it. A case prepared before this change (its checkout `tree`) must be prepared again. There is no fallback, since one would keep the sharing.
+  - **The sweep** (`rust/guard/src/guards/scratch_sweep_hooks/sweep/cargo.rs`). At the cache's root, two kinds of thing are taken once idle past the threshold and held by no process: a loose file, and a shell holding nothing but cargo's markers (`.rustc_info.json`, `CACHEDIR.TAG`) under no live tree's name. The root's own `CACHEDIR.TAG` stays: it marks the whole cache for backup tools, and it is 177 B. `diagram-research/` is no shell, since it holds a kept `l7r-guard.good`. `tree` and `main-tree` leave `BUILT_INTO`, which is now `["clone"]`, so a target of those names whose trees are gone is proven dead like any other. The cache root held 31 files of 5.06 MB apparent: 27 `fixture-*.profraw` (T520 and the task line say 28), `fixture-profraw-list`, `fixture.profdata`, the root's `.rustc_info.json` and `CACHEDIR.TAG`, beside `tree/` at 12 KB with its 2 markers, observed 2026-11-27, method: `find -maxdepth 1 -type f -printf '%s'`, `ls | grep -c profraw$` and `du -sh` of the cache root.
+  - **Checked read-only on the real cache:** `make cache-clean DRY=1` from this tree lists 31 entries under the new reason: the 27 profraw files, the list, the profdata, the root's `.rustc_info.json` and `tree/`, its other 3 entries the budget's existing evictions, and it lists no `CACHEDIR.TAG`, no `diagram-research/`, no mirror and no pool tree, observed 2026-11-27, method: `make cache-clean DRY=1` once no build ran, its lines grepped. Nothing was removed. No live code writes a file at the cache root, observed 2026-11-27, method: a grep of `rust/` and `scripts/` for joins on the cache root (`solo.rs` writes under `~/.cache/l7r`, a different directory). `make disk-audit`'s owner text for `clone` drops "trials'". The Makefile's `cache-clean` help line names the new rule, and `docs/make-targets.html` was regenerated from it.
+  - **The cost:** each arm's first gate call now builds its own tool cold, which is the price of each arm having timings of its own. A cold `builder-checks` costs 165.9 s on the guard and 197.8 s on measure, observed 2026-11-27, method: T520's `b-cold-warm.sh`.
+  - **Red first:**
+    - `each_arm_checks_out_under_a_name_of_its_own` (trials) failed on the old code with 1 of 1 failed: the checkouts were `["main-tree", "tree"]`.
+    - `what_at_the_root_is_no_build_directory_goes_once_idle` (guard) failed with 1 of 1 failed: it planned `[]` against the 7 entries expected, observed 2026-11-27, method: `make rust-test ... ONLY=` on the old code.
+    - Both pass on the new code: the trial's `model_trial` module 26 of 26, the guard's `scratch_sweep_hooks` 46 of 46, observed 2026-11-27, method: `make rust-test ... ONLY=`.
+    - `a_target_is_taken_whole_only_once_proven_dead` pinned the old `BUILT_INTO`. It now expects `tree` and `main-tree` taken, as the change intends.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| arm naming and the root sweep, with red-first tests | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T523 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every model-trial arm builds into a target of its own, so the arms' timings are their own. The build cache's root holds nothing but build directories and its `CACHEDIR.TAG`.
+2. **The constraints.**
+   - T520's found-and-left item and T523's line.
+   - The GM's 2026-11-26 rule, *"we definitely don't want to clean things up if it is going to cost us time later"*: the sweep takes only what holds no build, and only once idle and held by no process.
+   - T158's proven-dead rule, kept for every build directory.
+   - Nothing is deleted outside a fixture.
+3. **Where each comes from.** G: the 2026-11-26 rule. R: `sweep/cargo.rs`'s module doc and `l7r-gate.sh`'s target line. O: T520's census and this task's measurements of the cache root.
+4. **Do they describe the world here?** Yes: the real cache root was listed and sized read-only, and the new rule was dry-run on it (the Approach's last item).
+5. **The order.** After T520. Before T517, as T520 filed it.
+6. **The exits.** Green: both red-first tests pass and the dry run lists exactly the root's loose files and `tree/`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One. The task line's 28 profraw files are 27 on disk.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The two new tests and the updated proven-dead test pass. The real-cache dry run lists 31 new-reason entries and none of the kept ones, observed 2026-11-27, method: `make cache-clean DRY=1`.
+10. **Before moving a constant.** `BUILT_INTO` shrinks to `["clone"]`, since no code path builds into `tree` or `main-tree` now. No knob moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. The defect is skewed arm timings in the model trial (shared lock and binary), plus 5.06 MB the sweep never took, observed 2026-11-27, method: `find -maxdepth 1 -type f -printf '%s'` of the cache root.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, a `[perf]` fix (451 FR-013). It makes the model trial's per-arm timings trustworthy and keeps the build cache's root clean. It is no engine-speed task, so the performance checklist does not apply.
 
 
 

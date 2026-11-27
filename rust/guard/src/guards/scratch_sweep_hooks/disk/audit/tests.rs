@@ -70,7 +70,7 @@ fn the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_tota
         "the build cache ",
         "/work  (the tree ",
         "/diagram  (the mirror's: the guard's kept binary",
-        "/clone  (the hooks suites' and trials' fixture trees",
+        "/clone  (the hooks suites' fixture clones",
         "/gone  (no tree of that name on disk",
         "Claude Code's scratch ",
         "(session sess-1;",

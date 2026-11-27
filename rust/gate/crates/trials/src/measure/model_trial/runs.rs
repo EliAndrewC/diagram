@@ -74,7 +74,7 @@ impl Trial {
         let mut command = Command::new(&cmd[0]);
         command
             .args(&cmd[1..])
-            .current_dir(out.join("tree"))
+            .current_dir(super::case::arm_checkout(out, ""))
             .stdin(Stdio::null())
             .stdout(file)
             .stderr(copy);

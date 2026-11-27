@@ -125,6 +125,20 @@ fn must_git(root: &Path, args: &[&str]) -> Result<String, String> {
     }
 }
 
+/// A case's own checkout (`<out>/<out's name>-<8 hex of its path>`) and the one of main at the time (`...-main`), never `tree` (451 T523):
+/// the launcher names a tree's build target by its basename (`scripts/gates/l7r-gate.sh`, `HAMLET_RUN`, `l7r-guard.sh`), so m14's eight
+/// arms (2026-11-26), every checkout `tree`, shared one cargo lock and one tool binary, skewing the arms' timings; two arms of one name
+/// under two trials (`A/d1-opus`, `B/d1-opus`) differ by the path's digest. The folder is read canonical, so `prepare`, `snapshot` and
+/// `run` name the same checkout from a relative or an absolute path. Once the case's folder is deleted, the target its dep-info names is
+/// proven dead and the sweep takes it (`sweep/cargo.rs`). Each arm's first gate call builds its own tool cold, the price of timings
+/// of its own. A case prepared before T523 (its checkout `tree`) is prepared again.
+pub fn arm_checkout(out: &Path, side: &str) -> PathBuf {
+    let full = std::fs::canonicalize(out).unwrap_or_default();
+    let name = full.file_name().unwrap_or_default().to_string_lossy();
+    let id = &l7r_shared::sha256::hex(text_path(&full).as_bytes())[..8];
+    out.join(format!("{name}-{id}{side}"))
+}
+
 /// A clone of its own, not a worktree: a check's last act writes review state into its git directory, and a worktree's is this clone's - a trial
 /// would overwrite a real verdict.
 fn own_clone(source: &Path, tree: &Path, commit: &str) -> Result<(), String> {
@@ -292,7 +306,7 @@ impl Trial {
         let run = read(transcript);
         std::fs::create_dir_all(out).map_err(text_err)?;
         let commit = self.commit_for(&run, asked)?;
-        let tree = out.join("tree");
+        let tree = arm_checkout(out, "");
         own_clone(&self.clone, &tree, &commit)?;
         self.agent_copies(&tree, &run.agent, asked)?;
         let frozen = Self::freeze(&run, out, &tree)?;
@@ -441,7 +455,7 @@ impl Trial {
             .ok()
             .and_then(|t| serde_json::from_str(&t).ok())
             .ok_or("meta.json does not read")?;
-        let (tree, main_tree) = (out.join("tree"), out.join("main-tree"));
+        let (tree, main_tree) = (arm_checkout(out, ""), arm_checkout(out, "-main"));
         let commit = meta["commit"].as_str().unwrap_or("");
         let mirror = self
             .clone

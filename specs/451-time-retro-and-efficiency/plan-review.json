@@ -4788,6 +4788,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)": {
+   "sha256": "5553f881d9f4a3a9bc16fa006724b212c771984038596eddd86c4c8d1f5fd605",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T523 Approach (checklist part A)": {
+   "sha256": "78761da0c37e273a0d302311dcbfb602f0309b9ed387350a10a0baabdb4de574",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -43572,6 +43584,122 @@
      "why": "Ordering only; 451 FR-013's performance-first rule is not engaged (neither is filed as [perf])."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)",
+    "### T523 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T523-D1 arm checkout naming",
+     "summary": "Each model-trial arm checks out to <out>/<out name>-<first 8 hex of SHA-256 of out's canonical path>, main's adding -main, so arms (including same-named arms under two trials) build into targets of their own; relative and absolute out resolve to the same checkout and a re-prepare reuses it.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (arms sharing one cargo lock and tool binary, so their timings were not their own) found and left by T520; it is the defect fix the GM's fix-all-known-bugs rule asks for and narrows nothing asked."
+    },
+    {
+     "id": "T523-D2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left as they are; an env-var override is rejected because render's make map goes through HAMLET_RUN.",
+     "class": "within",
+     "why": "A design choice of where to fix; keeping every live tree's warm cache (230 GiB) instead of re-homing it follows the GM's 2026-11-26 principle that time saved outweighs disk and that nothing is cleaned if it costs time later."
+    },
+    {
+     "id": "T523-D3 no fallback for cases prepared under the old name",
+     "summary": "A case whose checkout is the old 'tree' must be prepared again; no compatibility fallback.",
+     "class": "within",
+     "why": "A fallback would keep the very sharing being fixed; it narrows no requirement or GM instruction."
+    },
+    {
+     "id": "T523-D4 cache-root sweep rule",
+     "summary": "At the build cache's root, loose files and shells holding only cargo markers under no live tree's name are taken once idle past the threshold and held by no process; the root's CACHEDIR.TAG and diagram-research/ (holding a kept l7r-guard.good) stay.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-25/27 asks that the container stop leaving artifacts its tooling does not clean, while respecting the 2026-11-26 rule: what is taken holds no build, nothing live writes there (grep recorded), and it is gated on idle and unheld, so it cannot cost later build time."
+    },
+    {
+     "id": "T523-D5 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO so a target of those names whose trees are gone is proven dead under T158's rule like any other; disk-audit owner text and cache-clean help/doc updated to match.",
+     "class": "within",
+     "why": "Follows from D1 (no code path builds into tree or main-tree now); T158's proven-dead rule is kept, not weakened; the text updates keep the tooling's descriptions true."
+    },
+    {
+     "id": "T523-D6 accepted cost: each arm's first gate call builds cold",
+     "summary": "Per-arm cold builds (builder-checks 165.9 s guard, 197.8 s measure) are accepted as the price of per-arm timings.",
+     "class": "within",
+     "why": "The trial exists to measure arms; a shared warm build is what made its timings untrustworthy. This is the cost of the fix, not a carve-out from anything asked."
+    },
+    {
+     "id": "T523-D7 order and classification",
+     "summary": "Lands after T520 and before T517; tagged [perf] under FR-013 as work that makes the trial's timings trustworthy; found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "FR-013 counts measurement work as performance work for ordering (GM 2026-11-20); the order is T520's filing; leaving nothing found and unfixed narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)",
+    "### T523 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T523-1 arm naming",
+     "summary": "Each model-trial arm's checkout is <out>/<out's name>-<8 hex of sha256 of out's canonical path>, main's with -main, so no two arms share a basename-keyed build target, cargo lock or tool binary.",
+     "class": "within",
+     "why": "Arms sharing one target give timings that are not their own: a measuring tool that answers wrongly, a defect. Measurement work is performance work by FR-013 and the GM's 2026-11-20 words, and 2026-11-22 asks that 'everything [be] measured so we know where our time goes'. Fixing the defect is inside what was asked."
+    },
+    {
+     "id": "T523-2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left alone, and the trial names its trees apart instead of re-keying the launcher or setting an environment variable.",
+     "class": "within",
+     "why": "This is a choice of mechanism and narrows nothing. Re-keying would re-home every live tree's warm cache, which is the time cost the GM's 2026-11-26 principle forbids, and the env-var route would miss render's make map. The defect is still fixed for every arm."
+    },
+    {
+     "id": "T523-3 no fallback for old checkouts",
+     "summary": "A case prepared before the change (checkout 'tree') must be prepared again, with no fallback.",
+     "class": "within",
+     "why": "A fallback would keep the sharing that is the defect. A one-time re-prepare of a trial case is a cost of the fix and removes nothing the GM asked for."
+    },
+    {
+     "id": "T523-4 cold build per arm",
+     "summary": "Each arm's first gate call builds its own tool cold (165.9 s / 197.8 s observed), giving up the cross-arm warm cache.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'reusing the same build cache' and the 2026-11-26 time-over-disk principle are about the working build cache. Inside a trial whose purpose is comparing arms' timings, a cache shared across arms is the defect itself. Paying the cold build is what a correct measurement costs. It does not clean anything that saves time later."
+    },
+    {
+     "id": "T523-5 root sweep of loose files and marker-only shells",
+     "summary": "At the cache root, loose files (27 fixture profraw, the list, fixture.profdata, .rustc_info.json) and marker-only shells under no live tree's name are taken once idle past the threshold and held by no process.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 and 2026-11-25/27 asks to clean up what the container leaves behind. It respects the 2026-11-26 principle: 'that one coverage' is a coverage build variant, which stays under T158's proven-dead rule, and these are orphans that no live code writes (observed by grep) and that hold no build. Deleting them costs no later time."
+    },
+    {
+     "id": "T523-6 kept: root CACHEDIR.TAG and diagram-research/",
+     "summary": "The root's CACHEDIR.TAG (backup marker) and diagram-research/ (holds a kept l7r-guard.good) are not taken.",
+     "class": "within",
+     "why": "Keeping things that serve a purpose narrows nothing the GM asked. The 2026-11-26 principle is satisfied."
+    },
+    {
+     "id": "T523-7 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO, so targets of those names whose trees are gone are proven dead like any other. The proven-dead test is updated to expect them taken.",
+     "class": "within",
+     "why": "No code builds into those names after T523-1. T158's proven-dead rule is kept unchanged for every build directory, and the new per-arm targets are ordinary tree-keyed targets that go when their tree goes, as T246 item 2 relays."
+    },
+    {
+     "id": "T523-8 text and docs",
+     "summary": "disk-audit's owner text for clone drops \"trials'\"; the cache-clean help line names the new rule; docs/make-targets.html is regenerated.",
+     "class": "within",
+     "why": "These keep the descriptions true to the change. They add no behavior."
+    },
+    {
+     "id": "T523-9 order and found-and-left",
+     "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -64218,6 +64346,68 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T523": {
+   "section_sha256": "13511dac79ad7916953ced00bb4d949d9b076901163f516f4b06413188923ed1",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T523-1 arm naming",
+     "summary": "Each model-trial arm's checkout is <out>/<out's name>-<8 hex of sha256 of out's canonical path>, main's with -main, so no two arms share a basename-keyed build target, cargo lock or tool binary.",
+     "class": "within",
+     "why": "Arms sharing one target give timings that are not their own: a measuring tool that answers wrongly, a defect. Measurement work is performance work by FR-013 and the GM's 2026-11-20 words, and 2026-11-22 asks that 'everything [be] measured so we know where our time goes'. Fixing the defect is inside what was asked."
+    },
+    {
+     "id": "T523-2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left alone, and the trial names its trees apart instead of re-keying the launcher or setting an environment variable.",
+     "class": "within",
+     "why": "This is a choice of mechanism and narrows nothing. Re-keying would re-home every live tree's warm cache, which is the time cost the GM's 2026-11-26 principle forbids, and the env-var route would miss render's make map. The defect is still fixed for every arm."
+    },
+    {
+     "id": "T523-3 no fallback for old checkouts",
+     "summary": "A case prepared before the change (checkout 'tree') must be prepared again, with no fallback.",
+     "class": "within",
+     "why": "A fallback would keep the sharing that is the defect. A one-time re-prepare of a trial case is a cost of the fix and removes nothing the GM asked for."
+    },
+    {
+     "id": "T523-4 cold build per arm",
+     "summary": "Each arm's first gate call builds its own tool cold (165.9 s / 197.8 s observed), giving up the cross-arm warm cache.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'reusing the same build cache' and the 2026-11-26 time-over-disk principle are about the working build cache. Inside a trial whose purpose is comparing arms' timings, a cache shared across arms is the defect itself. Paying the cold build is what a correct measurement costs. It does not clean anything that saves time later."
+    },
+    {
+     "id": "T523-5 root sweep of loose files and marker-only shells",
+     "summary": "At the cache root, loose files (27 fixture profraw, the list, fixture.profdata, .rustc_info.json) and marker-only shells under no live tree's name are taken once idle past the threshold and held by no process.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 and 2026-11-25/27 asks to clean up what the container leaves behind. It respects the 2026-11-26 principle: 'that one coverage' is a coverage build variant, which stays under T158's proven-dead rule, and these are orphans that no live code writes (observed by grep) and that hold no build. Deleting them costs no later time."
+    },
+    {
+     "id": "T523-6 kept: root CACHEDIR.TAG and diagram-research/",
+     "summary": "The root's CACHEDIR.TAG (backup marker) and diagram-research/ (holds a kept l7r-guard.good) are not taken.",
+     "class": "within",
+     "why": "Keeping things that serve a purpose narrows nothing the GM asked. The 2026-11-26 principle is satisfied."
+    },
+    {
+     "id": "T523-7 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO, so targets of those names whose trees are gone are proven dead like any other. The proven-dead test is updated to expect them taken.",
+     "class": "within",
+     "why": "No code builds into those names after T523-1. T158's proven-dead rule is kept unchanged for every build directory, and the new per-arm targets are ordinary tree-keyed targets that go when their tree goes, as T246 item 2 relays."
+    },
+    {
+     "id": "T523-8 text and docs",
+     "summary": "disk-audit's owner text for clone drops \"trials'\"; the cache-clean help line names the new rule; docs/make-targets.html is regenerated.",
+     "class": "within",
+     "why": "These keep the descriptions true to the change. They add no behavior."
+    },
+    {
+     "id": "T523-9 order and found-and-left",
+     "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
     }
    ],
    "verdict": "CLEAR"
