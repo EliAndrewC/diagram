@@ -121,7 +121,7 @@ M="$T/m"; mkdir -p "$M/.clones/c/.git"; PT="$M/.clones/c-t271"
 printf '{"trees": [{"tree": "%s", "feature": "451", "tasks": ["T334"], "since": ""}]}\n' "$PT" > "$M/.clones/c/.git/builder-pool.json"
 OPTS="{agentType: 'general-purpose' /* SESSION_MODEL: builds the task */}"
 CLONE_MAIN="$M" wf "$(script "await agent('Build 451 T334 in $PT.', $OPTS)")"
-[ "$(rc)" -eq 2 ] && grep -q 'has no BUILDER-BRIEF line' "$T/err" && grep -q "in this Workflow's agent() call" "$T/err" && ok "a builder's agent() call naming a pool tree with no marker is refused" || no "the builder's call went" "(rc=$(rc)) $(head -3 "$T/err")"
+[ "$(rc)" -eq 2 ] && grep -q 'has no BUILDER-BRIEF line' "$T/err" && grep -q "(Workflow agent() call: 'Build 451 T334 in " "$T/err" && ok "a builder's agent() call naming a pool tree with no marker is refused" || no "the builder's call went" "(rc=$(rc)) $(head -3 "$T/err")"
 CLONE_MAIN="$M" wf "$(script "await agent('BUILDER-BRIEF 451 T334 KIND=fix JOBS=1 TREE=$PT\\nWork in $PT.', $OPTS)")"
 [ "$(rc)" -eq 0 ] && ok "...and with the marker the pool bears out, passes" || no "the marked call was refused" "(rc=$(rc)) $(head -3 "$T/err")"
 

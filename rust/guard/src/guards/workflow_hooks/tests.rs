@@ -430,7 +430,7 @@ fn a_builder_s_agent_call_is_held_to_the_builder_brief() {
     ] {
         let got = run(&format!("agent({prompt}, {opts})"));
         assert!(refused(&got, "BLOCKED (builder-brief): "), "{prompt}");
-        assert!(refused(&got, "in this Workflow's agent() call"), "{prompt}");
+        assert!(refused(&got, "(Workflow agent() call: '"), "{prompt}");
     }
     let marker = format!("BUILDER-BRIEF 451 T334 KIND=fix JOBS=1 TREE={t}");
     // the marker on its own line after the quote, or after an escaped newline, and borne out by the pool: passes
@@ -478,4 +478,13 @@ fn inside_a_repository_the_decider_is_reached() {
         input: json!({"tool_name": "Bash", "cwd": d}),
     };
     assert!(decide(&bash, &Session::from_input(&bash.input)).is_empty());
+}
+
+#[test]
+fn a_refused_builder_s_call_is_told_by_its_prompt_s_opening() {
+    assert_eq!(super::opening("short"), "short");
+    assert_eq!(
+        super::opening(&"x".repeat(50)),
+        format!("{}...", "x".repeat(40))
+    );
 }

@@ -165,6 +165,18 @@ fn defined(root: &Path) -> Vec<String> {
         .collect()
 }
 
+/// A refused builder's call as its reader tells it apart: its prompt's first 40 characters, `...` where more follow (message-check,
+/// 2026-11-27: the whole call's 120 characters were a scratch path and a cut token).
+fn opening(prompt: &str) -> String {
+    let flat = prompt.replace('\n', " ");
+    let head: String = flat.chars().take(40).collect();
+    if head.len() < flat.len() {
+        head + "..."
+    } else {
+        head
+    }
+}
+
 fn short(call: &str) -> String {
     call.chars()
         .take(120)
@@ -271,8 +283,10 @@ fn briefs(script: &str, clones: &Path) -> Vec<(Said, String)> {
         .iter()
         .filter_map(|call| {
             let kind = agent_type(call).unwrap_or_default();
-            let input = json!({"tool_name": "Agent", "tool_input": {"subagent_type": kind, "prompt": prompt_of(call)?}});
-            Some((builder_brief_hooks::verdict(&input, &pool), short(call)))
+            let prompt = prompt_of(call)?;
+            let label = opening(&prompt);
+            let input = json!({"tool_name": "Agent", "tool_input": {"subagent_type": kind, "prompt": prompt}});
+            Some((builder_brief_hooks::verdict(&input, &pool), label))
         })
         .filter(|(said, _)| *said != Said::Pass)
         .collect()
@@ -302,7 +316,7 @@ fn brief_answers(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> {
                 session,
             );
             return vec![Answer::Refuse(format!(
-                "{text}\n(in this Workflow's agent() call: {call})"
+                "{text}\n(Workflow agent() call: '{call}')"
             ))];
         }
     }
