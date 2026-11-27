@@ -2683,12 +2683,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T314 (<why: the finding or measurement that files it>)": {
-   "sha256": "538311dad18702262304c31612d1f4274e210955d021c4207d23b3f4838c193e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T314 Approach (checklist part A)": {
    "sha256": "4543522facd30e43e87b05485b1a7667ea39cab9ce61387097754381aaa7a9e0",
    "verdict": "CLEAR",
@@ -3591,6 +3585,84 @@
   },
   "### T414 Approach (checklist part A)": {
    "sha256": "aa4999e71d24a88548b15e016aa54c07ddbf788698b6ddbe966143ed49bafea4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367 part B (2026-11-27T04:14Z)": {
+   "sha256": "4ea88c80cb88993df1b09be3dd9d1d62cf00a7107ac69c26e66af4bb81a32291",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T411 part B (2026-11-27T04:14Z)": {
+   "sha256": "26d6232c509ce041cf3712ffedcad6a9fe2f335724f29935297e00a77c316d10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T417 (<why: the finding or measurement that files it>)": {
+   "sha256": "fbe0d2d16609620a08afa4a1afb79f2b3e4be6653b3fa52527af80bc1b68d6d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T417 Approach (checklist part A)": {
+   "sha256": "7d5c86ab19682190c8e3070aadacbd636b2b3825dadef976b27ff176add79908",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T419 (<why: the finding or measurement that files it>)": {
+   "sha256": "6e4b7d3dcc8489ac2a77b19de4cab7a59c429a26929bd3c1801227c7cf5b7a50",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T419 Approach (checklist part A)": {
+   "sha256": "3da5f54a4955a870e122e4741e175d2121cb3975a85bea78d42672159ec2d85b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T414 part B (2026-11-27T04:14Z)": {
+   "sha256": "8cb9c775ce35ed9723d552a867730efefa9073d371511d5c474a6965f8c831e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T413 (<why: the finding or measurement that files it>)": {
+   "sha256": "4a464b253d79d6e6fe1ceeda0d5d742e5c216b35708f2c293568957a8b62e87a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T413 Approach (checklist part A)": {
+   "sha256": "9d2034d7354e3c4aa08e13cc696f32db01cd7bf7f1ddd01fa444210572b4d8d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T420 (<why: the finding or measurement that files it>)": {
+   "sha256": "837605826108660b62726cd2b714382a07ee8f079645cac5eeb6b182080db9bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T420 Approach (checklist part A)": {
+   "sha256": "65b4df711b33570f37854fe7771cfab0053c473c504d989abb674e4cc8a67983",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T424 (<why: the finding or measurement that files it>)": {
+   "sha256": "400fc7cfa405e46b548efa32fab7fa02abff67d9c0a544dd57be77c908bb1b51",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T424 Approach (checklist part A)": {
+   "sha256": "af6c2343962e69f844ec9dcfae1c1fb9bbc77e699a9610767748a2fbe9440e9d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32963,6 +33035,58 @@
      "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
      "class": "within",
      "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T367 part B (2026-11-27T04:14Z)",
+    "### T411 part B (2026-11-27T04:14Z)",
+    "### T413 (<why: the finding or measurement that files it>)",
+    "### T413 Approach (checklist part A)",
+    "### T414 part B (2026-11-27T04:14Z)",
+    "### T417 (<why: the finding or measurement that files it>)",
+    "### T417 Approach (checklist part A)",
+    "### T419 (<why: the finding or measurement that files it>)",
+    "### T419 Approach (checklist part A)",
+    "### T420 (<why: the finding or measurement that files it>)",
+    "### T420 Approach (checklist part A)",
+    "### T424 (<why: the finding or measurement that files it>)",
+    "### T424 Approach (checklist part A)",
+    "(removed) ### T314 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T367/T411/T414 part B: pipe-race line",
+     "summary": "The line of tests/hooks/test-parts.3.sh that piped into grep -q, refused by the pipe-race check, is rewritten with a here-string; nothing else of the tasks changes.",
+     "class": "within",
+     "why": "A check catching a real race in a test line is fixed where it was found (fix as we go); it narrows no task's goal or any request clause."
+    },
+    {
+     "id": "T367/T411/T414 part B: pre-warm test to T424",
+     "summary": "The prewarm test it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling, red once under coverage and green on three later runs, is not diagnosed here; its cause is T424's to find.",
+     "class": "within",
+     "why": "The known defect is not left: it goes to a filed task (T424, present in the plan) and the two tasks whose change it covers wait for that fix, so it is fixed before they land. The GM's 2026-11-26 words on T104 ('prioritizing the test that fails under load being fixed') ask for exactly such a test to be fixed, which T424 does; nothing is dropped."
+    },
+    {
+     "id": "T367/T411/T414 part B: landing order",
+     "summary": "The batch gate is run once more as it stands (the arbiter's continue); if red only on the prewarm test, T367 and T411 are taken out, T414 lands alone, and T367 and T411 wait for T424's fix.",
+     "class": "within",
+     "why": "An ordering of landings that delays two tasks behind a fix of the test that covers their loop; it removes no requested work (the GM's 2026-11-27 go-ahead for all load-bearing and refinement tasks still stands for both) and keeps a red test from being landed over."
+    },
+    {
+     "id": "T413/T417/T419/T420/T424 sections and Approach blocks",
+     "summary": "Newly filed task sections holding the template's placeholders only.",
+     "class": "within",
+     "why": "A placeholder decides nothing; there is no decision in these blocks to rule on. Their content is judged when it is written and decided."
+    },
+    {
+     "id": "(removed) T314 section",
+     "summary": "The empty template section of T314 is removed from plan.md; T314 was ticked at its landing.",
+     "class": "within",
+     "why": "Its earlier text was a placeholder that decided nothing (verdict CLEAR); removing a finished task's empty section drops no decision and narrows nothing."
     }
    ]
   }

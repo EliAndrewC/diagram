@@ -5223,6 +5223,48 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** yes: a `[perf]` task of the builders' loop, not of the engine. A builder's first test build and lint of a crate after a handout were told wide 28 of 29 times (tests) and 4 of 9 passes (lint) between 00:20Z and 03:30Z on 2026-11-27, and after the change both are told alone on a real handout (`slot-tell 0` at the test build and both passes; the build 0.13 s, the lint 0.3 s) at a cost of 17.3 s of lint passes added to that handout's pre-warm, which nobody waited on, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/`). The wide waits the first builds could save were small in the window: one of 13, 4.0 of 283.5 s, measured 2026-11-27 (`tellings.py`).
 
 
+### T367 part B (2026-11-27T04:14Z)
+
+Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
+and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
+test, and its second run was refused by the tripwire before it ran. Of this task: the pre-warm test covers the loop this bundle changed.
+
+1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
+   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
+   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
+   `make rust-test` runs).
+2. **A3 again.** The goal and the options stand as the section has them.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
+6. **The one-sentence test.** "Why is T367 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
+   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
+8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
+   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
+
+### T411 part B (2026-11-27T04:14Z)
+
+Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
+and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
+test, and its second run was refused by the tripwire before it ran. Of this task: the pre-warm test covers the loop this bundle changed.
+
+1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
+   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
+   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
+   `make rust-test` runs).
+2. **A3 again.** The goal and the options stand as the section has them.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
+6. **The one-sentence test.** "Why is T411 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
+   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
+8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
+   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
+
 ### T368 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6008,6 +6050,27 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 - The user-level self-test's FAIL line (`missing-program-hook`) lost its log the same way, from the same work directory: fixed here, through `hookrun.sh --keep`.
 
 **Performance work?** no - a defect's evidence kept: it makes nothing faster and measures no time.
+
+### T414 part B (2026-11-27T04:14Z)
+
+Owed by red-gate@2026-11-27T04:09:16Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T367, T411
+and T414 was red at about 04:03Z (observed 2026-11-27, method: the landing's log) on the pipe-race check and on a pre-warm
+test, and its second run was refused by the tripwire before it ran. Of this task: the pipe-race line was its own test.
+
+1. **What exactly is refusing?** The batch gate: the pipe-race check on a line of `tests/hooks/test-parts.3.sh` that piped
+   into `grep -q` (fixed with a here-string), and `rustc::tests::prewarm::it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling`,
+   red once under the coverage run and green alone with FRESH=1 on each of the next runs (observed 2026-11-27, method: three
+   `make rust-test` runs).
+2. **A3 again.** The goal and the options stand as the section has them.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** The test line's form only; the pre-warm test's cause is 451 T424's to find.
+6. **The one-sentence test.** "Why is T414 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The gate once more as the batch stands (the arbiter's ruling); red only on that pre-warm
+   test, T367 and T411 are taken out and T414 lands alone, and they wait for T424's fix.
+8. **Every route measured?** The pipe-race line is clean under the check and its suite green (observed 2026-11-27, method:
+   `l7r-gate check pipe-race` and the suite run); the pre-warm test is T424's.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`.
 
 ### T413 (<why: the finding or measurement that files it>)
 
