@@ -1,0 +1,28 @@
+# Feature 461: the GM's words
+
+<!-- SOURCE: GM NOTES -->
+
+2026-11-27, on the task time breakdown putting the second tier at 84% of blocking:
+
+> Wait. So The entire point of the second tier was to make what happens in the second tier not block anything. Are you telling me that The overwhelming majority of our blocking was the second tier?!
+
+2026-11-27, on the filings that had to wait for a gate:
+
+> And I suppose that once we switch to the main session as an orchestrator, then we won't have to delay writing tasks such as this, because everything will be worktree based, right?
+
+> Okay, to be clear, I don't think that those delays in filing are that big of a deal. I mainly ask because I worry that they are symptomatic of something that is a big deal in other interactions.
+
+2026-11-27, opening the orchestration talk:
+
+> Okay, thanks. And while that is all information that we will want before talking about our process reviewer, it occurs to me that we can probably start talking about the orchestration refactor now. So at a high level, what do the best practices seem to be here? Like, I don't want to completely reinvent the wheel, but I also don't think that we need to overhaul our project to use some other framework, because we have put a lot of work into making things that work for us. So there probably is a kind of best of both worlds thing that we can do, in which we take existing best practices and, heck, I mean, I would even download somebody's skill or whatever if that helped, just in the same way that we have done with SpecKit. But mostly right now I just want to understand the current state of the art, because I think that that will be better than just saying, hey, let's go start using Gastown or one of its competitors, you know?
+
+2026-11-27, after the session's account of current practice and its best-of-both-worlds sketch:
+
+> Okay, yeah, that seems very sensible. It sounds like we have enough to make this its own feature and begin working on it now. Does that sound right? don't actually start it yet. I just want to make sure I understand the state of things.
+
+> Okay, yeah, go ahead and write the spec for the feature now, but don't actually get started on it just yet. I have one or two more questions about our overnight work before we do that.
+
+<!-- END SOURCE -->
+
+The token-cost goal this feature is held to is the GM's fifth process-reviewer message, kept verbatim in
+`specs/449-rust-codebase/port-talk-gm-goal.md` ("token cost ... That's just as important as task throughput").
