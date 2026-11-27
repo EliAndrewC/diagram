@@ -92,3 +92,20 @@ after his second message, of "one stated number that every proposal is judged ag
 > What I am saying here needs to be the fundamental framing for this feature. And so I think that this message should be captured alongside the others in the feature so that when we proceed with it, we can keep all of this in mind as we figure out how to balance these different needs which exist in tension with one another. because optimizing ruthlessly just for the metrics leads to disasters of the sort that Goodhart's Law calls out, but just going by what feels right at the expense of metrics leads us to absolutely unacceptable places where 5 lines of code take 15 minutes to implement.
 
 <!-- END SOURCE -->
+
+## His fifth message (2026-11-27, the morning after): TOKEN COST is as important as throughput
+
+He asks that it be added to these notes. It extends the fourth message's holistic assessment: token cost is one of the measures
+that assessment must weigh, with a breakdown by task, and the tooling it needs belongs to the process reviewer feature.
+
+<!-- SOURCE: GM NOTES -->
+
+> Sure - something I didn't emphasize in my discussion of a process reviewer before but which is crucially important, is token cost.  That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens.  So whatever metrics we gather must include token cost, such that our holistic assessment of whether things are getting better or worse includes the token costs of each task, ideally with some kind of breakdown.  that will probably require additional tooling improvements, which we can handle as part of that feature - please update our notes so far to include this message about it
+
+<!-- END SOURCE -->
+
+What the session knows today of where token cost is and is not recorded (2026-11-27; a starting point for the feature, not a
+design): `make review-cost` and `dev/review-ledger.md` record each review pass's tokens in and out (cached and not); a builder's
+own report carries `subagent_tokens` at its end, but nothing books it to a task; 451's request (item 4) notes an agent's token cost
+is "Not logged today"; `make task-time` books minutes by category, never tokens. 451 T499 (in flight) measures one slice: how
+many bytes of the plan builders read into context.
