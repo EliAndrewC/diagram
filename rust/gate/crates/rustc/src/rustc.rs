@@ -300,7 +300,7 @@ fn tail(text: &str) -> &str {
 fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> Ran {
     match cmd {
         // told nothing, so each pass a wide slot: a run's lint is `stepped`'s, which hands the run's content ids on (`lint.rs`)
-        "lint" => lint::linted(world, manifest, None),
+        "lint" => lint::linted(world, manifest, None).0,
         "test" | "test-counters" | "test-no-counters" => tested(world, cmd, manifest).0,
         "hamlet" => {
             // `HAMLET_BIN` runs another of the crate's binaries, `HAMLET_DEV` it in the dev profile (feature 449 T224: the work-budget
@@ -388,19 +388,25 @@ fn stepped(
     inputs: Option<&Kept>,
 ) -> Ran {
     if phase::step_of(cmd) == Some("test") && !built {
-        let words = test_args(cmd, manifest, true);
+        let mut words = test_args(cmd, manifest, true);
+        // counted (feature 451 T528, `phase::counted`): its JSON read and taken out, so a failure still reads as cargo's
+        words.push(phase::JSON.to_owned());
         let args: Vec<&str> = words.iter().map(String::as_str).collect();
         let began = std::time::SystemTime::now();
         // a link on a session a killed build left mixed is healed and asked once more (`stale.rs`, feature 451 T336)
-        let built = stale::built(world, &args, manifest, told);
-        phase::wrote(world, "build", &[manifest], began, built.code);
+        let (built, count) = phase::counted(stale::built(world, &args, manifest, told));
+        phase::wrote_compiled(world, "build", &[manifest], (began, built.code), count);
         if built.code != 0 {
             return built;
         }
     }
     let began = std::time::SystemTime::now();
+    if cmd == "lint" {
+        let (done, count) = lint::linted(world, manifest, inputs);
+        phase::wrote_compiled(world, "lint", &[manifest], (began, done.code), count);
+        return done;
+    }
     let (done, caught) = match phase::step_of(cmd) {
-        _ if cmd == "lint" => (lint::linted(world, manifest, inputs), None),
         // a test run past its bound is recorded alive, its record named on its line (`alive.rs`, feature 451 T463)
         Some("test") => tested(world, cmd, manifest),
         _ => (check(world, cmd, manifest, formatting_check), None),

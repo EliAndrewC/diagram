@@ -8,7 +8,8 @@
 //! - the FEATURE: a make command's `F=` (read outside its heredocs, 451 T53) where the command carries its own `T=` or no brief names a
 //!   feature; else the dispatch's brief - the Agent call's own `description`, or a subagent's meta file's, or for a first start, whose meta
 //!   file is not written yet, its dispatch's (`dispatches.rs`, 451 T53) - the feature it names ([`brief_feature`]); else the feature whose
-//!   task-start names the line's task, a start older than [`STALE_START_S`] naming none (451 T53); else the
+//!   task-start names the line's task, a start older than [`STALE_START_S`] naming none (451 T53); else the feature the builder pool
+//!   says holds the line's tree ([`pool_feature`], 451 T529); else the
 //!   FALLBACK, `feature_of` (the session's environment, then feature.json), and the line is marked `"fallback": true` unless the session's environment declared that feature;
 //! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`), or a `closing-checks` one's (451 T106); else, for an
 //!   Agent call, the `T<n>` its own description names; else the agent's CORRECTION (451 T106, [`renumbered`]); else the `T<n>` the
@@ -332,7 +333,8 @@ pub fn in_force(starts: &[Start], feature: &str) -> Option<String> {
 /// The task the builder pool says holds the tree at `root` for `feature` (451 T332, T344): the first task of the registry's entry
 /// for this tree (`builder_pool`, `<git common dir>/builder-pool.json`), where its feature - `make builder-tree`'s key, the
 /// feature's number, or its directory's name - is the line's; None for a tree the pool does not list, a free one, and one held
-/// for another feature or for none, which leave the start in force to answer as before. A start the tree's builder made AFTER
+/// for another feature or for none, which leave the start in force to answer as before. (Since 451 T529 a line no word files is
+/// filed under the holder's feature, [`pool_feature`], so "another feature" is only a line whose own word named one.) A start the tree's builder made AFTER
 /// the handout (`since`) is its own later word and names the task instead - a bundle's member, `make task-start T=<b>` in a tree
 /// held for `a,b`; a start with no time is not one, and a handout whose time does not read is older than every timed start.
 /// WHY the pool and not the start log alone: a handout moves no start, and a builder that never runs `make task-start` (a
@@ -356,6 +358,22 @@ fn pool_task(root: &Path, feature: &str, starts: &[Start]) -> Option<String> {
         .filter(|(_, _, at)| at.is_some() && *at >= since)
         .map(|(_, t, _)| t.clone())
         .or_else(|| held.tasks.first().cloned())
+}
+
+/// The feature directory the builder pool says holds the tree at `root` (451 T529): its registry entry's feature, read as a word of
+/// the line's own ([`Specs::named`]); None for a tree the pool does not list, a free one, and a feature naming no one directory. Asked
+/// after every word the line carries and before the fallback, so [`pool_task`] then names the holder's task. WHY: the pool tree
+/// `diagram-backlog-b1` has no `.specify/feature.json`, so the fallback read no feature and the pool was never asked - 647 of its
+/// `Phase` lines of 2026-11-27, T417's builder-checks and rust-test runs among them, went to `_unassigned.jsonl` with no task; and
+/// `diagram-backlog-t269`, held for 461 T08, filed 6 lines in the 451 log under T285 by its stale `feature.json` (observed
+/// 2026-11-27, method: every log's `Phase` lines counted by clone, log, task and fallback). The holder beats the session's
+/// environment too: that is the whole session's, shared by every builder, where the registry names this tree's.
+fn pool_feature(root: &Path, specs: &Specs) -> Option<String> {
+    crate::builder_pool::read(&common_git_dir(root))
+        .into_iter()
+        .find(|t| crate::speckit::marks::same_tree(&t.tree, root))
+        .filter(|t| !t.feature.trim().is_empty())
+        .and_then(|t| specs.named(&t.feature))
 }
 
 /// The feature a task belongs to by the starts: the latest feature whose task in force it is, else the latest that started it at all -
@@ -518,7 +536,8 @@ pub(super) fn filed(
     .or_else(|| {
         task.as_deref()
             .and_then(|t| started(&starts, t, crate::iso::parse(now)))
-    });
+    })
+    .or_else(|| pool_feature(root, &specs));
     let (feature, fallback) = match feature {
         Some(f) => (f, false),
         // a session that declares its feature (a page session's `L7R_FEATURE_DIRECTORY`, a `SPECIFY_FEATURE` naming a feature) is

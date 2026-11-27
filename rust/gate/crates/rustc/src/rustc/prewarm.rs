@@ -174,26 +174,39 @@ fn build(
     hold: Option<slot::Hold>,
     until: Instant,
 ) -> End {
-    let (words, after) = job.words(manifest);
+    let (mut words, after) = job.words(manifest);
+    // counted, as the checks' own builds are (feature 451 T528, `phase::compiled`): cargo's JSON on stdout, read on a thread of its
+    // own to its end so a full pipe never holds cargo; the format moves no fingerprint, so the run after it still finds it fresh
+    words.push(phase::JSON.to_owned());
     let args: Vec<&str> = words.iter().map(String::as_str).collect();
     let (all, mut env) = cargo_call(world, &args, manifest, after, None);
     // as under any holder (`slot::around`): nothing the build starts takes a second slot
     env.insert(slot::MARK.to_owned(), "1".to_owned());
     let began = SystemTime::now();
     let mut asked: Option<Instant> = None;
-    let code = told.keeping(STEP, || {
+    let (code, count) = told.keeping(STEP, || {
         let started = Command::new(&world.cargo)
             .current_dir(&*world.root)
             .args(&all)
             .envs(&env)
             .env_remove("L7R_GATE_TREE")
             .stdin(Stdio::null())
-            .stdout(Stdio::null())
+            .stdout(Stdio::piped())
             .process_group(0)
             .spawn();
+        let mut read = None;
         let code = match started {
             Err(_) => 127,
             Ok(mut child) => loop {
+                if read.is_none() {
+                    read = child.stdout.take().map(|mut out| {
+                        std::thread::spawn(move || {
+                            let mut text = String::new();
+                            let _ = std::io::Read::read_to_string(&mut out, &mut text);
+                            text
+                        })
+                    });
+                }
                 if let Some(status) = child.try_wait().ok().flatten() {
                     break status.code().unwrap_or(1);
                 }
@@ -205,10 +218,12 @@ fn build(
                 std::thread::sleep(knobs.poll);
             },
         };
-        (code, code == 0)
+        let text = read.and_then(|r| r.join().ok()).unwrap_or_default();
+        let count = phase::compiled(&text).filter(|_| code == 0);
+        ((code, count), code == 0)
     });
     drop(hold);
-    phase::wrote(world, STEP, &[manifest], began, code);
+    phase::wrote_compiled(world, STEP, &[manifest], (began, code), count);
     End {
         code,
         past: asked.map(|at| at.elapsed()),

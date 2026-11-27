@@ -65,8 +65,6 @@ fn the_start_in_force_stands_where_the_pool_names_no_holder_or_the_builder_start
     let b = Builders::new("pool-no-holder");
     b.held("", &[], "");
     assert_eq!(b.phase_task(), json!("T236"));
-    b.held("451", &["T26"], "2026-11-22T00:00:00Z");
-    assert_eq!(b.phase_task(), json!("T236"));
     b.held("44", &["T26"], "2026-11-22T00:00:00Z");
     assert_eq!(b.phase_task(), json!("T236"));
     b.held("", &["T26"], "2026-11-22T00:00:00Z");
@@ -91,4 +89,51 @@ fn the_start_in_force_stands_where_the_pool_names_no_holder_or_the_builder_start
     b.started_at("449-b", "T322", "2026-11-23T00:05:00Z");
     b.held("449", &["T320"], "when");
     assert_eq!(b.phase_task(), json!("T322"));
+}
+
+impl Builders {
+    /// The log and the task a `Phase` line written in the tree now is filed under, and whether it is marked a fallback.
+    fn phase_filed(&self, env: &dyn Fn(&str) -> Option<String>) -> (String, Value, Value) {
+        let log = append_row_in(&self.d, None, phase(), "T", env).unwrap();
+        let line = last_line(&log);
+        let name = log.file_stem().unwrap().to_string_lossy().into_owned();
+        (name, line["task"].clone(), line["fallback"].clone())
+    }
+}
+
+/// Feature 451 T529: a held tree's line is its holder's feature's, whatever the tree's own `feature.json` says or lacks. WHY: the
+/// pool tree `diagram-backlog-b1` has no `.specify/feature.json`, so its lines' feature read empty, the pool was never asked, and 647
+/// of its `Phase` lines of 2026-11-27 (T417's builder-checks and rust-test runs among them) went to `_unassigned.jsonl` with no task
+/// and `fallback: true`; and `diagram-backlog-t269`, held for 461 T08, filed 6 lines in the 451 log under T285 by its stale
+/// `feature.json` (observed 2026-11-27, method: every log's `Phase` lines counted by clone, log, task and fallback).
+#[test]
+fn a_held_trees_line_is_filed_under_its_holders_feature_and_task() {
+    let b = Builders::new("pool-holder-feature");
+    // the tree's feature.json names 449-b; the pool holds it for 451
+    b.held("451", &["T26"], "2026-11-22T00:00:00Z");
+    assert_eq!(
+        b.phase_filed(&none),
+        ("451-a".into(), json!("T26"), Value::Null)
+    );
+    // no feature.json at all (b1): the holder's still
+    std::fs::remove_file(b.d.join(".specify/feature.json")).unwrap();
+    b.held("450-c", &["T40"], "2026-11-22T00:00:00Z");
+    assert_eq!(
+        b.phase_filed(&none),
+        ("450-c".into(), json!("T40"), Value::Null)
+    );
+    // the session's environment declaring another feature does not move a held tree's line
+    let declared = |k: &str| (k == "SPECIFY_FEATURE").then(|| "449-b".to_owned());
+    assert_eq!(b.phase_filed(&declared).0, "450-c");
+    // a free tree, and a holder naming no feature directory, leave the fallback as it was
+    b.held("", &[], "");
+    assert_eq!(
+        b.phase_filed(&none),
+        ("_unassigned".into(), Value::Null, json!(true))
+    );
+    b.held("44", &["T26"], "2026-11-22T00:00:00Z");
+    assert_eq!(
+        b.phase_filed(&none),
+        ("_unassigned".into(), Value::Null, json!(true))
+    );
 }

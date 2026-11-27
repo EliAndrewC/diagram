@@ -11,14 +11,60 @@
 //! build that took the small lane `slot-small` (`slot.rs`), its span its wait for the lane, its code 2 where the lane was held and
 //! it took a free wide slot instead (feature 451 T425): booked to no category either. Either slot
 //! line taken on a scratch slot directory says `"scratch": true` (feature 451 T426), and its wait is booked to no category.
+//!
+//! WHETHER A COMPILE COMPILED (feature 451 T528, the writer half of T522; the GM 2026-11-27: "I would have expected the number of
+//! compiler runs to actually be strictly higher than the number of test runs"): each `build`, `cover-build`, `lint` and `prewarm` line
+//! carries `compiled`, the crates cargo built afresh - read from its JSON messages ([`JSON`]: a `compiler-artifact` whose `fresh` is
+//! false), so `make task-time` tells a no-op check from real work by cargo's word, not by the span (its `NOOP_BELOW_S` knob stays for
+//! a line without the field). The field is left out where cargo exited non-zero or named no artifact (a fake cargo, a spawn that
+//! failed): the reader's span decides those. WHY JSON and not the `Checking` lines: every pass runs `--quiet`, which prints none
+//! (observed 2026-11-27, method: `cargo clippy --quiet --all-targets` on a scratch crate, stderr empty); the JSON build leaves the
+//! run after it fresh (the same crate's `cargo test -v` read `Fresh`), and a red pass's diagnostics stay rendered on stderr.
 
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
-use serde_json::json;
+use std::collections::BTreeSet;
 
-use super::{shown, slot, World};
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
+use serde_json::{json, Value};
+
+use super::{shown, slot, Ran, World};
+
+/// The message format a counted compile asks for: cargo's messages as JSON on stdout, its diagnostics rendered on stderr as ever.
+pub(super) const JSON: &str = "--message-format=json-render-diagnostics";
+
+/// The crates a build's JSON says cargo compiled (feature 451 T528): the packages of its `compiler-artifact` messages not `fresh`;
+/// None where it names no artifact at all.
+pub(super) fn compiled(stdout: &str) -> Option<usize> {
+    let mut seen = false;
+    let mut built = BTreeSet::new();
+    for v in stdout
+        .lines()
+        .filter(|l| l.starts_with('{'))
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(|v| v["reason"] == "compiler-artifact")
+    {
+        seen = true;
+        if v["fresh"] == Value::Bool(false) {
+            built.insert(v["package_id"].to_string());
+        }
+    }
+    seen.then_some(built.len())
+}
+
+/// A counted compile's answer as its caller shows it: its count, and its stdout with cargo's JSON messages taken out, so a failure
+/// reads in cargo's own words.
+pub(super) fn counted(mut ran: Ran) -> (Ran, Option<usize>) {
+    let count = compiled(&ran.stdout).filter(|_| ran.code == 0);
+    ran.stdout = ran
+        .stdout
+        .lines()
+        .filter(|l| serde_json::from_str::<Value>(l).map_or(true, |v| v.get("reason").is_none()))
+        .map(|l| format!("{l}\n"))
+        .collect();
+    (ran, count)
+}
 
 /// The run's make target (plan D4): the outermost `make`'s first goal, read from its command line (the run lock's `run_what`) as the
 /// event log's writer reads a Bash call's (D1); with no `make` above, the gate's own form, `rust-<cmd>`, as D1 reads
@@ -55,7 +101,18 @@ pub(super) fn wrote<P: AsRef<Path>>(
     began: SystemTime,
     code: i32,
 ) {
-    wrote_alive(world, step, manifests, began, code, None);
+    write(world, step, manifests, (began, code), None, None);
+}
+
+/// `wrote`, for a compile: its `compiled` count where cargo gave one (feature 451 T528).
+pub(super) fn wrote_compiled<P: AsRef<Path>>(
+    world: &World,
+    step: &str,
+    manifests: &[P],
+    (began, code): (SystemTime, i32),
+    compiled: Option<usize>,
+) {
+    write(world, step, manifests, (began, code), None, compiled);
 }
 
 /// `wrote`, naming the record of a test run caught past its bound (`alive`, feature 451 T463, `alive.rs`) where there is one.
@@ -66,6 +123,17 @@ pub(super) fn wrote_alive<P: AsRef<Path>>(
     began: SystemTime,
     code: i32,
     alive: Option<&Path>,
+) {
+    write(world, step, manifests, (began, code), alive, None);
+}
+
+fn write<P: AsRef<Path>>(
+    world: &World,
+    step: &str,
+    manifests: &[P],
+    (began, code): (SystemTime, i32),
+    alive: Option<&Path>,
+    compiled: Option<usize>,
 ) {
     let crates: Vec<String> = manifests.iter().map(|m| shown(world, m.as_ref())).collect();
     let mut row = phase_row(
@@ -87,6 +155,9 @@ pub(super) fn wrote_alive<P: AsRef<Path>>(
     }
     if let Some(alive) = alive {
         row.insert("alive".into(), json!(alive.display().to_string()));
+    }
+    if let Some(n) = compiled {
+        row.insert("compiled".into(), json!(n));
     }
     let _ = append_row_with(&world.root, None, row, world.root.reader());
 }

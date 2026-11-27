@@ -119,8 +119,9 @@ fn a_fresh_test_run_books_its_build_apart_and_lint_and_format_one_line_a_crate()
         .filter(|c| c.starts_with("test"))
         .collect();
     assert!(
-        asked[0].starts_with("test --no-run --quiet --manifest-path")
-            && asked[1].starts_with("test --quiet --manifest-path"),
+        asked[0].starts_with(
+            "test --no-run --quiet --message-format=json-render-diagnostics --manifest-path"
+        ) && asked[1].starts_with("test --quiet --manifest-path"),
         "{asked:?}"
     );
     assert!(lines[0]["t1"].as_str() <= lines[1]["t0"].as_str());
@@ -164,7 +165,7 @@ fn a_counting_free_run_books_its_build_apart_and_a_failed_build_runs_nothing() {
         .filter(|c| c.starts_with("test"))
         .collect();
     assert!(
-        asked[0].starts_with("test --no-run --quiet --features other --manifest-path")
+        asked[0].starts_with("test --no-run --quiet --features other --message-format=json-render-diagnostics --manifest-path")
             && asked[1].starts_with("test --quiet --features other --manifest-path"),
         "{asked:?}"
     );
@@ -215,6 +216,9 @@ fn a_coverage_run_writes_its_family_s_build_and_each_crate_s_run() {
             step("cover-run", "rust/a", 0)
         ]
     );
+    // the family's build names the crates cargo compiled (451 T528), a run none
+    let counted: Vec<&Value> = lines.iter().map(|l| &l["compiled"]).collect();
+    assert_eq!(counted, [&Value::from(1), &Value::Null]);
     // a failing crate's run says its code
     std::fs::write(world.target.join("failtest"), "").unwrap();
     let fresh = world.map(|w| World {

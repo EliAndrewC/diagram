@@ -146,7 +146,7 @@ fn an_unchanged_crate_keeps_its_green_result_and_a_failure_is_never_kept() {
     let clippy = |w: &World| {
         calls(w)
             .iter()
-            .filter(|c| c.starts_with("clippy --quiet --all-targets --manifest"))
+            .filter(|c| c.starts_with("clippy --quiet --all-targets --message-format=json-render-diagnostics --manifest"))
             .count()
     };
     assert_eq!(answer(&world, "lint", &[], false).code, 0);
@@ -292,7 +292,9 @@ fn a_moved_binary_or_a_failed_build_runs_and_a_fresh_run_runs_every_crate() {
     assert_eq!(
         calls(&world)
             .iter()
-            .filter(|c| c.starts_with("test --no-run --quiet --manifest"))
+            .filter(|c| c.starts_with(
+                "test --no-run --quiet --message-format=json-render-diagnostics --manifest"
+            ))
             .count(),
         1
     );

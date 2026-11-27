@@ -19,3 +19,9 @@ test runs: "I would have expected the number of compiler runs to actually be str
 `Phase` line says nothing of what cargo did, so the reader tells a no-op by the span alone, a GUESS knob. The exact answer is the
 writer's (`rustc/kept.rs` already reads cargo's `--message-format=json`, whose `compiler-artifact` messages carry `fresh`; a lint's
 clippy names each `Checking` crate), filed as its own task; the reader takes a line's `compiled` count first where it carries one.
+
+451 T528 (2026-11-27): the writer now writes it. Each `build`, `cover-build`, `lint` and `prewarm` line carries `compiled` (the
+crates cargo's `--message-format=json-render-diagnostics` names built afresh, `rustc/phase.rs`), left out where cargo exited
+non-zero or named no artifact; the reader takes it first, so this knob decides only the lines written before T528 and those
+without the field. The falsifier is now readable: on the first 11 lines with the field (`diagram-backlog-t271`, 2026-11-27) the
+field and the span agreed on all 11 (one of 0 at 0.08 s; ten of 1 to 4 at 1.16 to 15.21 s).

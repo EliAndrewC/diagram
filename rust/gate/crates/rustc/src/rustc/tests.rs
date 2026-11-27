@@ -17,6 +17,7 @@ mod alive;
 mod alone;
 mod assertline;
 mod caller;
+mod compiled;
 mod cover;
 mod drain;
 mod fmtfile;
@@ -271,7 +272,7 @@ case "$1 $2" in
   "test --no-run") m=""; prev=""; for a in "$@"; do [ "$prev" = --manifest-path ] && m="$a"; prev="$a"; done
     exe="$CARGO_TARGET_DIR/debug/deps/l7r_x-keep"; mkdir -p "${exe%/*}"
     printf '#!/bin/sh\npwd > "%s/ran-in"\necho "$CARGO_MANIFEST_DIR $LLVM_PROFILE_FILE $*" >> "%s/ran-in"\necho "$CARGO_MANIFEST_DIR" >> "%s/runs"\n[ -f "%s/failtest" ] && { echo boom; exit 1; }\nexit 0\n' "$d" "$d" "$d" "$d" > "$exe"; chmod +x "$exe"
-    echo '{"executable":"'"$exe"'","manifest_path":"'"$m"'"}'; echo 'not json'; echo '{"reason":"x"}';;
+    echo '{"reason":"compiler-artifact","package_id":"x","fresh":false,"executable":"'"$exe"'","manifest_path":"'"$m"'"}'; echo 'not json'; echo '{"reason":"x"}';;
 esac
 exit 0"#;
 

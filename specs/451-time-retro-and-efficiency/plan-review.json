@@ -4579,14 +4579,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T529 (<why: the finding or measurement that files it>)": {
-   "sha256": "92cb894e68adaf982620c02602e70042958582f5dcdc1dc5d39456a329df80c3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T529 Approach (checklist part A)": {
-   "sha256": "dc036d3803e6ea9887f1087528a45634f58691eaeb0f28e350a29dc0748c08df",
+   "sha256": "6d8a3faca207f01229e69c020fd43a7496fc1940ae9b808d52215fd7cb3dccc7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4647,6 +4641,24 @@
   },
   "### T535 Approach (checklist part A)": {
    "sha256": "7d393533fb9a58925c654ec3bd1105dca680b63e5131f27c9c0316d985af33a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T528 (451 T522's writer half: the compile lines did not say whether cargo compiled anything, so `make task-time` told a no-op by a 1.0 s GUESS span, `NOOP_BELOW_S`)": {
+   "sha256": "07254e8bb7c7f62217e17abd59fb877111f6ec3dd3449e7766dea1103b62e776",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T528 Approach (checklist part A)": {
+   "sha256": "686fad4d57ec7f0d3caccaf1838cd10f351c6629abcdf24ebb4ce82d6a919a32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T529 (451 T522-D5: a pool tree's `Phase` lines filed in `_unassigned.jsonl` with no task, so `make where-time F=451` missed them)": {
+   "sha256": "f85ef0e43e2ec0b465f34f0fe1895abf6fb2f2657a66bc4bc7cbf5cf00f0705f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -43767,6 +43779,98 @@
      "summary": "451 T511's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
      "class": "within",
      "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T511 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T528 (451 T522's writer half: the compile lines did not say whether cargo compiled anything, so `make task-time` told a no-op by a 1.0 s GUESS span, `NOOP_BELOW_S`)",
+    "### T528 Approach (checklist part A)",
+    "### T529 (451 T522-D5: a pool tree's `Phase` lines filed in `_unassigned.jsonl` with no task, so `make where-time F=451` missed them)",
+    "### T529 Approach (checklist part A)",
+    "(removed) ### T529 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T528 Approach",
+     "summary": "Each build, cover-build, lint and prewarm Phase line carries `compiled`, the distinct crates cargo's JSON reports built afresh; the reader takes it first and NOOP_BELOW_S stays only for lines without it.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 question on T417's row (whether 19 compiler runs against 28 test runs reflect what really happened, and whether make test invokes the compiler unseen): a compile is counted as work by cargo's own report, not by a GUESS span."
+    },
+    {
+     "id": "T528-D1",
+     "summary": "The count comes from cargo's --message-format=json-render-diagnostics, not clippy's Checking lines as the task line said, because every pass runs --quiet and prints none (observed 2026-11-27).",
+     "class": "within",
+     "why": "A change of means, not of scope: the task line's wording is not the GM's, and the deviation reaches the same goal (a count of what cargo compiled) by the only source the --quiet passes leave. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T528-D2",
+     "summary": "The JSON flag is added at each call site, never inside lint::passes() or test_args, so no small-lane key or fingerprint moves; failures still render on stderr and JSON is stripped from the returned stdout.",
+     "class": "within",
+     "why": "Keeps earlier accepted tasks' behavior (T347, T355, T367, T411) intact while adding the field; a constraint on how, not a narrowing of what."
+    },
+    {
+     "id": "T528-D3",
+     "summary": "The field is omitted where cargo exited non-zero or named no artifact; a lint line's count is its passes' sum, none where a pass gave none.",
+     "class": "within",
+     "why": "Where cargo gives no word there is nothing to report, so the reader's span fallback decides; that is the field's natural boundary, not a carve-out from the request."
+    },
+    {
+     "id": "T528-D4",
+     "summary": "The pre-warm's stdout goes from Stdio::null() to piped and drained on its own thread, so the never-cuts polling loop is unchanged.",
+     "class": "within",
+     "why": "An implementation means of writing the field on prewarm lines without changing the pre-warm's behavior."
+    },
+    {
+     "id": "T528-D5",
+     "summary": "T417's task-time row is unchanged before and after (its lines predate the field); on this task's own 11 runs the field and the 1.0 s knob agree.",
+     "class": "within",
+     "why": "A measurement that verifies the change, carrying date and method; no backfill was asked (the GM 2026-11-27: no backfill expected for past tasks)."
+    },
+    {
+     "id": "T528 Found and left: report text",
+     "summary": "The report's compile cell and sources paragraph still describe the count by the span, though a line now carries cargo's word; deferred as T538, lands before T380 (the next reading of the compile figures), because it is the reader's text in measure's task_time.",
+     "class": "within",
+     "why": "A deferral in FR-009's own form (why, filed task, order), ordered before the next consumer of the figures; the field itself, which carries the substance of the GM's question, lands here. No part of the request is dropped."
+    },
+    {
+     "id": "T529 Approach",
+     "summary": "filed::filed asks the builder pool for the held tree's holder's FEATURE after the line's own words and before the environment/feature.json fallback; pool_task then names the holder's task.",
+     "class": "within",
+     "why": "Serves the request's per-feature reports (FR-005, make where-time F=) and the GM's concern that the figures reflect what really happened: a builder's compile and test lines were missing from its feature's log."
+    },
+    {
+     "id": "T529-D1",
+     "summary": "Cause: diagram-backlog-b1 has no feature.json, so the fallback read no feature and pool_task was never asked; 648 lines went to _unassigned.jsonl (observed 2026-11-27).",
+     "class": "within",
+     "why": "A measured diagnosis, dated with method; decides nothing beyond the fix."
+    },
+    {
+     "id": "T529-D2",
+     "summary": "The pool's holder beats feature.json and the session environment for a line no word files, reversing T344's rule that a tree held for another feature leaves the start in force; a line whose own word names a feature keeps it.",
+     "class": "within",
+     "why": "T344's rule is an earlier task's design, not the GM's words (request.md does not carry it); reversing it on measured evidence (t269's 6 lines misfiled under T285 by a stale feature.json) widens correct filing and narrows nothing asked."
+    },
+    {
+     "id": "T529-D3",
+     "summary": "A free tree, a tree the registry does not list, and a holder naming no one feature directory keep the marked fallback.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The rule cannot apply: a free or unlisted tree has no holder to name, and a holder naming no single feature directory gives no one feature to file under. The fallback stays marked, so these lines remain visible as unassigned rather than silently misfiled; the purpose (lines filed where a holder determines them) is not gutted."
+    },
+    {
+     "id": "T529 Found and left: lines already filed",
+     "summary": "The 648 b1 lines in _unassigned.jsonl and t269's 6 lines stay where filed; make events-refile cannot read pool holds; deferred as T539, lands before T22 (the close that reads where-time per feature); make task-time already books them through held::retask.",
+     "class": "within",
+     "why": "A deferral in FR-009's form, ordered before the consumer that would read them wrongly, with the task-time report already correct; no backfill was asked beyond the overnight window, which task-time covers."
+    },
+    {
+     "id": "(removed) T529 placeholder",
+     "summary": "The template-only T529 block is replaced by the filled T529 block under its real heading.",
+     "class": "within",
+     "why": "The removed text was an unfilled template carrying no decision."
     }
    ]
   }

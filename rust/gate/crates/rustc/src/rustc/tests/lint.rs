@@ -69,14 +69,18 @@ fn a_crate_that_names_itself_is_linted_a_third_time_with_no_dev_dependency_read(
     let world = world_with(&root, "exit 0");
     assert_eq!(check(&world, "lint", &b, false).code, 0);
     let two = [
-        "clippy --quiet --all-targets",
-        "clippy --quiet --all-targets --all-features",
+        "clippy --quiet --all-targets --message-format=json-render-diagnostics",
+        "clippy --quiet --all-targets --all-features --message-format=json-render-diagnostics",
     ];
     assert_eq!(passes(&world), two);
     assert_eq!(check(&world, "lint", &a, false).code, 0);
     assert_eq!(
         passes(&world)[2..],
-        [two[0], two[1], "clippy --quiet --lib"]
+        [
+            two[0],
+            two[1],
+            "clippy --quiet --lib --message-format=json-render-diagnostics"
+        ]
     );
     assert!(calls(&world)[4].ends_with("rust/a/Cargo.toml -- -D warnings"));
     // a pass that fails is the answer, and no later pass runs
@@ -170,7 +174,9 @@ fn all_three_passes_of_a_crate_that_names_itself_take_the_lane_each_by_its_own_k
     assert_eq!(lint(&world, &root, "one"), (0, passes_of(3, WIDE)));
     assert_eq!(lint(&world, &root, "two"), (0, passes_of(3, SMALL)));
     let said = clippy(&world);
-    assert!(said[5].starts_with("clippy --quiet --lib --manifest-path"));
+    assert!(said[5].starts_with(
+        "clippy --quiet --lib --message-format=json-render-diagnostics --manifest-path"
+    ));
     // each pass by its own key: with the third's gone, the first two take the lane and the third a wide slot
     let third = world.target.join(DIR).join("rust_a-lint--lib");
     std::fs::remove_file(&third).unwrap();

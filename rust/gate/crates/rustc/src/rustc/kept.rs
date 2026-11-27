@@ -515,7 +515,9 @@ fn binary_key(
     let began = std::time::SystemTime::now();
     // in the lane it was told: a build of this crate alone takes the small lane, never a wide slot (feature 451 T347)
     let built = told.cargo(world, &args, manifest);
-    super::phase::wrote(world, "build", &[manifest], began, built.code);
+    // its JSON says whether cargo compiled anything (feature 451 T528, `phase::compiled`)
+    let count = super::phase::compiled(&built.stdout).filter(|_| built.code == 0);
+    super::phase::wrote_compiled(world, "build", &[manifest], (began, built.code), count);
     *passed = built.code == 0;
     let exes = executables(&built.stdout);
     let order = test_targets(&built.stdout);

@@ -170,7 +170,8 @@ fn build(
     let at = std::time::SystemTime::now();
     let built = run_in(Some(&world.root), &world.cargo, &args, &env);
     drop(slot);
-    super::phase::wrote(world, "cover-build", group, at, built.code);
+    let count = super::phase::compiled(&built.stdout).filter(|_| built.code == 0);
+    super::phase::wrote_compiled(world, "cover-build", group, (at, built.code), count);
     said.push_str(&took(&format!("build of {} crate(s)", group.len()), began));
     if built.code != 0 && group.len() > 1 {
         return group

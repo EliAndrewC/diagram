@@ -26,7 +26,7 @@
 
 use std::path::Path;
 
-use super::{names_itself, Kept, Ran, Told, World};
+use super::{names_itself, phase, Kept, Ran, Told, World};
 
 /// What every pass denies.
 pub(super) const DENY: [&str; 2] = ["-D", "warnings"];
@@ -57,23 +57,36 @@ pub(super) fn told(world: &World, words: &[&str], manifest: &Path, kept: &Kept) 
     Told::of(world, &name, manifest, kept, &keyed)
 }
 
-/// One pass, in the lane it is told by its own key (`inputs`: the run's content ids; none, or none read, is a wide slot).
-fn pass(world: &World, words: &[&str], manifest: &Path, inputs: Option<&Kept>) -> Ran {
+/// One pass, in the lane it is told by its own key (`inputs`: the run's content ids; none, or none read, is a wide slot), counted
+/// (feature 451 T528, `phase::counted`): cargo's JSON asked for after the pass's words, so its key, named by them, is unmoved.
+fn pass(
+    world: &World,
+    words: &[&str],
+    manifest: &Path,
+    inputs: Option<&Kept>,
+) -> (Ran, Option<usize>) {
     let told = inputs
         .filter(|k| !k.git_dir.is_empty())
         .map_or_else(Told::wide, |k| told(world, words, manifest, k));
-    told.cargo_with(world, words, manifest, &DENY)
+    let counted = [words, &[phase::JSON]].concat();
+    phase::counted(told.cargo_with(world, &counted, manifest, &DENY))
 }
 
-/// The lint of `manifest`'s crate: a pass that fails is the answer, and no later pass runs.
-pub(super) fn linted(world: &World, manifest: &Path, inputs: Option<&Kept>) -> Ran {
+/// The lint of `manifest`'s crate: a pass that fails is the answer, and no later pass runs. Its count is the passes' crates compiled
+/// summed, none where a pass gave none.
+pub(super) fn linted(
+    world: &World,
+    manifest: &Path,
+    inputs: Option<&Kept>,
+) -> (Ran, Option<usize>) {
     let all = passes(manifest);
-    let mut ran = pass(world, all[0], manifest, inputs);
+    let (mut ran, mut count) = pass(world, all[0], manifest, inputs);
     for words in &all[1..] {
         if ran.code != 0 {
             break;
         }
-        ran = pass(world, words, manifest, inputs);
+        let (next, more) = pass(world, words, manifest, inputs);
+        (ran, count) = (next, count.zip(more).map(|(a, b)| a + b));
     }
-    ran
+    (ran, count)
 }

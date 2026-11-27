@@ -138,7 +138,10 @@ fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before
         .stdout
         .contains("prewarm: rust/b - its test build is warm ("));
     let b = root.join("rust/b/Cargo.toml");
-    let asked = format!("test --no-run --quiet --manifest-path {}", b.display());
+    let asked = format!(
+        "test --no-run --quiet --message-format=json-render-diagnostics --manifest-path {}",
+        b.display()
+    );
     assert_eq!(builds(&world), [asked.clone()]);
     // one phase line a build - the test build's, then each lint pass's (451 T411) - its step and crate named: never a `build`,
     // which the readers book as the task's compile
@@ -157,9 +160,12 @@ fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before
     assert_eq!(
         builds(&world),
         [
-            format!("test --no-run --quiet --manifest-path {}", a.display()),
             format!(
-                "test --no-run --quiet --manifest-path {}",
+                "test --no-run --quiet --message-format=json-render-diagnostics --manifest-path {}",
+                a.display()
+            ),
+            format!(
+                "test --no-run --quiet --message-format=json-render-diagnostics --manifest-path {}",
                 root.join("rust/b/Cargo.toml").display()
             )
         ]
@@ -414,11 +420,13 @@ fn the_pre_warm_keeps_the_keys_a_builders_first_test_build_and_lint_are_told_alo
     assert_eq!(lint(&world, &root, "one"), (0, passes_of(2, SMALL)));
     // the pre-warm asked the test build, then each pass of the lint in the words the lint asks
     let m = root.join("rust/a/Cargo.toml").display().to_string();
-    let lint_of = |pass: &str| format!("clippy --quiet {pass} --manifest-path {m} -- -D warnings");
+    let lint_of = |pass: &str| {
+        format!("clippy --quiet {pass} --message-format=json-render-diagnostics --manifest-path {m} -- -D warnings")
+    };
     assert_eq!(
         warmed,
         [
-            format!("test --no-run --quiet --manifest-path {m}"),
+            format!("test --no-run --quiet --message-format=json-render-diagnostics --manifest-path {m}"),
             lint_of("--all-targets"),
             lint_of("--all-targets --all-features")
         ]
@@ -497,9 +505,9 @@ fn a_crate_that_names_itself_is_warmed_at_all_three_passes_and_the_lint_is_off_a
     assert_eq!(
         passes[1..],
         [
-            "clippy --quiet --all-targets",
-            "clippy --quiet --all-targets --all-features",
-            "clippy --quiet --lib"
+            "clippy --quiet --all-targets --message-format=json-render-diagnostics",
+            "clippy --quiet --all-targets --all-features --message-format=json-render-diagnostics",
+            "clippy --quiet --lib --message-format=json-render-diagnostics"
         ]
     );
     assert!(!world.target.join(DIR).exists());
@@ -508,4 +516,20 @@ fn a_crate_that_names_itself_is_warmed_at_all_three_passes_and_the_lint_is_off_a
     let off = run(&world, &since(&from), &knobs(60_000));
     assert_eq!(asked(&world).len(), 5);
     assert!(!off.stdout.contains("lint pass"), "{}", off.stdout);
+}
+
+/// Each pre-warm build's line names the crates cargo compiled (451 T528): the test build one, each lint pass two.
+#[test]
+fn each_pre_warm_build_writes_the_crates_cargo_compiled() {
+    let (root, _) = fixture();
+    let from = handed_out(&root);
+    let dir = scratch("prewarm-compiled");
+    let world = lane_world(&root, super::compiled::JSON_CARGO, &dir);
+    assert_eq!(run(&world, &since(&from), &knobs(60_000)).code, 0);
+    let counted: Vec<serde_json::Value> = phases(&root)
+        .iter()
+        .filter(|l| l["step"] == STEP)
+        .map(|l| l["compiled"].clone())
+        .collect();
+    assert_eq!(counted, [1, 2, 2].map(serde_json::Value::from));
 }

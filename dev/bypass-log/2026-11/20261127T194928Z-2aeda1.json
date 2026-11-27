@@ -1,0 +1,41 @@
+{
+  "utc": "2026-11-27T19:49:28Z",
+  "target": "plan-gate push",
+  "commit": "c225c57fb6",
+  "why": "the 27 removed blocks were reviewed CLEAR as moves to 462, verdict in the clone's plan-review.json, which the hand-in base predates",
+  "held": [
+    {
+      "feature": "specs/451-time-retro-and-efficiency",
+      "rule": "plan-review-stale",
+      "blocks": [
+        "(removed) ### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+        "(removed) ### T22 Approach (checklist part A)",
+        "(removed) ### T51 Approach (checklist part A)",
+        "(removed) ### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+        "(removed) ### T122 Approach (checklist part A)",
+        "(removed) ### T128 Approach (checklist part A)",
+        "(removed) ### T140 Approach (checklist part A)",
+        "(removed) ### T181 Approach (checklist part A)",
+        "(removed) ### T208 Approach (checklist part A)",
+        "(removed) ### T264 Approach (checklist part A)",
+        "(removed) ### T266 Approach (checklist part A)",
+        "(removed) ### T273 Approach (checklist part A)",
+        "(removed) ### T280 Approach (checklist part A)",
+        "(removed) ### T283 Approach (checklist part A)",
+        "(removed) ### T291 Approach (checklist part A)",
+        "(removed) ### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+        "(removed) ### T301 Approach (checklist part A)",
+        "(removed) ### T302 Approach (checklist part A)",
+        "(removed) ### T330 Approach (checklist part A)",
+        "(removed) ### T319 Approach (checklist part A)",
+        "(removed) ### T335 Approach (checklist part A)",
+        "(removed) ### T350 Approach (checklist part A)",
+        "(removed) ### T357 Approach (checklist part A)",
+        "(removed) ### T484 Approach (checklist part A)",
+        "(removed) ### T503 Approach (checklist part A)",
+        "(removed) ### T509 Approach (checklist part A)",
+        "(removed) ### T511 Approach (checklist part A)"
+      ]
+    }
+  ]
+}
