@@ -7,3 +7,9 @@
 2026-11-26, later, on whether two sessions filing tasks in one feature would conflict:
 
 > It sounds like this would only be a problem for multiple sessions if multiple sessions were working the same feature. And to be honest, I'm just not concerned about that because that is not an actual use case. every circumstance under which I would have multiple sessions running is one in which they would be working different features.
+
+2026-11-27, after the orchestrator design (feature 461), on whether several sessions are still a core requirement:
+
+<!-- SOURCE: GM NOTES -->
+> Here's a related question for you then, which I guess is that I had previously identified being able to have multiple concurrent Claude Code sessions as like a core requirement for me. But as we move to this model, then should that even be a thing that I'm doing? Like, it is beginning to sound to me as if that's something that the industry is largely moving away from. And that if I wanted to do something in the diagram repo, that I would just do all of it a single Claude Code session. Does that sound right to you? I mean, obviously I will have the option of spinning up multiple Claude Code sessions, and I should understand the consequences of doing that. But as we design this, it does occur to me that there is a lot of benefit in just following whatever the best practices in the industry seem to be converging on. And if those best practices seem to largely suggest that I should just do everything out of one Claude Code session, because that session itself will be managing the workload between the background short-lived workers, then I am actually pretty happy to align on that. And this seems like an important thing to communicate, given that I had previously identified multiple sessions as a core requirement, whereas now I'm basically saying that I don't think it has to be.
+<!-- END SOURCE -->

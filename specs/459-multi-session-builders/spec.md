@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-26
 
-**Status**: Draft - filed to be thought about, not worked now ("we don't worry about right now ... I don't have any need for multiple sessions between now and then")
+**Status**: Deferred - the GM, 2026-11-27, no longer holds several concurrent sessions a core requirement: one session coordinates the builders (feature 461); this stays filed for the case he runs several anyway ("I will have the option of spinning up multiple Claude Code sessions, and I should understand the consequences of doing that")
 
 **Affects**: tooling
 
