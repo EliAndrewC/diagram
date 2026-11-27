@@ -251,6 +251,8 @@ impl Land {
             Some((_, ts)) => ts.push(task.to_owned()),
             None => by_why.push((why, vec![task.to_owned()])),
         };
+        // the landing tree's HEAD, read once for every task's named files (451 T294, [`super::named`])
+        let held = self.held()?;
         // each task's tick refusal and `refusal(..., landed=False)`, in process (feature 449 T131, where this ran `tick-task.py
         // --land-check` by path): a raise there is the landing's, as the import's was
         for checked in
@@ -267,10 +269,11 @@ impl Land {
             if !checked.refusal.is_empty() {
                 add(checked.refusal, task);
             }
-            // each said, as T20 D2 has it
+            // each said, as T20 D2 has it - and a file its own words name that HEAD lacks, its code not carried (451 T294)
             for why in [
                 self.phase_refusal(d, &text, task)?,
                 self.open_claims_refusal(d, &text, task)?,
+                super::named::refused(d, &text, task, &held),
             ] {
                 if !why.is_empty() {
                     add(why, task);

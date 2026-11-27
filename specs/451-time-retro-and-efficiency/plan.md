@@ -3026,31 +3026,41 @@ engine speed, so no checklist.
 <!-- plan-archive: T292 to T292 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T293 to T293 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T294 (<why: the finding or measurement that files it>)
+### T294 (451 T292's candidate: on 2026-11-26 451 T270 landed WITHOUT ITS CODE (0526d8b7df, repaired by 83f65718d7) - the cherry-pick that would have carried it stood unfinished and the landing pushed a HEAD lacking `rust/gate/crates/measure/src/measure/audit/held.rs`, the new module its plan section named; T292 refuses the unfinished carry, and the cheap true check under it was missing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the landing's first pass refuses a task whose own words name a file the landing tree's HEAD does not hold, naming each file and `make builder-trees` (which lists each done commit not carried with its `make carry`). New module `rust/gate/crates/land/src/land/named.rs` (`Held`, `missing`, `refusal`, `refused`), called once a task in `cheap_refusals`' per-task loop beside the phase and open-claims refusals, the HEAD read once a landing (`git ls-tree -r --name-only -z HEAD`, `Land::held`). It runs in the landing alone's inner landing too, whose root is the landing worktree.
+  - **DECISION, what is read: the task's own Occasions line, every path; its own plan sections, only paths named AS NEW** (label: tooling convention). The brief: "restrict to the files the section says it CHANGED or ADDED if the form lets you tell ... else to the Occasions line alone". A section's prose names files it read, deleted or moved and other tasks' files, with no field for "changed"; the one form that tells is a path named new - "`<path>`, new", "`<path>` (new", "a new module|file|test file|test|suite|crate|script|guard|binary `<path>`", an `::item` dropped. Measured 2026-11-27 over today's `specs/451-time-retro-and-efficiency/plan-done.md` (`dev/measurements/2026-11-27/landing-named-files/plan-scan.py` and the same reading of every path inline): 53 of 862 paths no section marks new are absent from HEAD (deleted or moved since), which a whole-section rule would refuse; of 19 marked new, 3 absent, each moved since or an `::item` suffix (now dropped). The Occasions line ALONE would not have refused T270: at `0526d8b7df^` tasks.md held no T270 line (it came with the code in the unfinished pick), while plan.md held the section's "A new module, `.../audit/held.rs`" - so both are read.
+  - **DECISION, a line's names, and a short one held by suffix** (label: tooling convention). A line's backquoted tokens under `rust/`, `scripts/` or `tests/`, or ending `.rs`, `.sh`, `.py` or `.toml` (no `*`, `<`, `>`, `{`, `}`, `$`, `=` or space; trailing `:,;.` dropped). A token is held where HEAD holds it as a file or a directory, or where a file under those three trees ends with `/<token>` by whole components - lines write relative names (`audit/held.rs`, `sweep/leftovers.rs`, `tests/idle.rs` meaning `set_down_hooks/tests/idle.rs`), so a relative name never refuses falsely; a name held nowhere does (T270's `audit/held.rs` among them). A line is the task's own where its argument's leading task ids hold it (`- none: T299, T282 - ...`, both tasks') or the ids after its subject's ` - ` do (`- placement-changed: marsh on kuwabata - T236: ...`); a wrapped continuation is joined on. A section is the task's own where its `### ` heading's leading ids hold it (`### T419, T404 (bundle)` is both tasks'). A `Built here:` task has no section of its own, so its host's section is read only for the host.
+  - **The replay** (`dev/measurements/2026-11-27/landing-named-files/replay.py`, its output `replay.txt`; measured 2026-11-27): every `<feature>: T.. ticked (make land)` commit since 2026-11-20, each task's Occasions lines and sections read from the tick's parent and held against the parent's tree - 486 task landings, 115 with a line naming 224 paths, 9 with a section naming 9 paths as new, and ONE refusal: `0526d8b7df` T270, its section's `audit/held.rs`. No false refusal.
+  - **No escape** (label: tooling convention): a refusal is true wherever the line or section is, and a line that misnames a file is answered by restating it (constitution XIV), as the refusal says.
+  - **Part (2), land-alone's attribution of a carry's files: it cannot reach a landing unattributed now, but one route, and that one is T302's** (label: tooling convention; no change to `scripts/land-alone.sh`). Read 2026-11-27: `make land` still sends a clone dirty at its start to `scripts/land-alone.sh` (`alone.rs`'s `alone_owed`, its one runner; the other mentions of land-alone in the code are its worktree's path), which attributes a dirty file by the clone's event-log edits. A carry's files reach the clone three ways: `make carry` ends by committing the pick (in HEAD, nothing to attribute); a pick stopped or not committed leaves `CHERRY_PICK_HEAD`, an unmerged path or staged changes, each refused by 451 T292 (`unfinished.rs`) before the landing is sent to land alone; and the one route left, a stopped pick then backed out by hand with its files kept (`git cherry-pick --quit` and `git restore --staged`, or a `git reset`), leaves them unstaged and unnamed - listed by land-alone as "left uncommitted in the clone, not landed" while the inner landing's HEAD lacks them. That route is now refused by this check wherever the carry ADDS a file the task's line or section names (land-alone's step 2 commits the task's own plan sections and tasks.md lines from the clone's files, so the inner landing's HEAD holds the words that name the file; observed 2026-11-27, method: `scripts/land-alone.sh` read, its steps 2, 3 and 6); a carry that only MODIFIES files is not caught, and attributing by the carried commit's subject is not built because 451 T302 (4) retires land-alone and its event-log attribution outright, making a landing refuse an unclean clone - its line says it "supersedes the unstaged-file part of 451 T294". The cheap check that would catch a modifies-only carry in the meantime, a landing task's done ref not carried, is filed (Found and left).
+  - **Docs**: `rust/gate/CLAUDE.md`'s land row names `named.rs`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a task whose section names a new file HEAD lacks is refused in the first pass, naming it and `make builder-trees`, and lands once the file is committed | `t270s_landing_without_its_new_module_is_refused_in_the_first_pass` of `rust/gate/crates/land`, red with `missing` stubbed (item 9) | n/a: tooling | none | n/a |
+| a line's full and short names, a bundle's line and a declaration's tag, a section's new paths only, a directory held by its files | `an_occasions_line_names_its_files_by_full_and_short_paths`, `a_bundle_s_line_and_a_declaration_s_tag_are_each_task_s_own`, `a_section_s_path_is_read_only_where_it_is_named_new`, `a_directory_named_is_held_by_its_files`, red with `missing` stubbed (item 9) | n/a: tooling | none | n/a |
 
 ### T294 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing never pushes a task's tick over a HEAD that lacks the code the task's own words name: the first pass refuses it in seconds, naming the file and the carry to look for.
+2. **The constraints.** 451 T292's refusal of an unfinished carry stands first and apart (`unfinished.rs`); the first pass says every refusal together (`cheap_refusals`); a found false refusal is a wrong outcome, so the rule reads only words that name files a task touched (constitution XIV); T302 retires land-alone, so no new attribution is built into it.
+3. **Where each comes from.** O: T270's landing, 0526d8b7df and its parent, read 2026-11-27; O: the replay of 486 landings and the plan-done.md scan, measured 2026-11-27. The brief's words for the rule's scope.
+4. **Do they describe the world here?** Yes: the replay over the real landings since 2026-11-20 refuses exactly T270's and nothing else, measured 2026-11-27 (`replay.py`).
+5. **The order.** After 451 T292 (landed). Before 451 T302, which retires land-alone and supersedes part (2); T447 (filed here) may land before or after it.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/land"` in the builder's tree - 169 passed, lint and format clean, 2026-11-27; the full gate with its coverage at the batch's landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/land` with `missing` stubbed to return nothing, the old code's answer): 164 passed, 5 failed - the five tests above, the T270 replay among them; with the check, 169 passed.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map, sheet or research claim changes. What a session sees differently: a landing whose task's line or section names a file HEAD lacks is refused before its gate with the file named and `make builder-trees`, where it was ticked and pushed without the code.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A carry that only modifies files, backed out of a stopped pick by hand and left unstaged, still lands its task without them: no new file is named for this check to miss, and land-alone lists the files as nobody's. Its visible effect: main says the task landed while its edits sit uncommitted in the clone (T270's outcome, for a modify-only task). Not fixed here: refusing a landing task's done ref not carried is `builder_done`'s `waits` asked of the landing tree, a second crate's change outside this brief. Filed as T447; lands before T22.
+- The same route's root, land-alone attributing files by the event log so a carried file is nobody's: Not fixed here: 451 T302 (4) retires land-alone and its attribution, making a landing refuse an unclean clone, and supersedes this part of T294 by its own line. Filed as T302; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the landings. A landing refused after its gate, or a task landed without its code, costs the gate's minutes and a repair commit (T270's: 83f65718d7 and the session's diagnosis); the refusal now comes in the first pass, one `git ls-tree` and a text scan a task, before the gate.
 
 
 <!-- plan-archive: T295 to T281 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
@@ -6927,6 +6937,32 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T446 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T447 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T447 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

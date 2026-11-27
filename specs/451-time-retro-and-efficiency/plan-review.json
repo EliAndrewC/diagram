@@ -2539,14 +2539,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T294 (<why: the finding or measurement that files it>)": {
-   "sha256": "20bb096dbe03a69ca6b2871e3a30181aad92743b62d683a0d9d37a2781f92a47",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T294 Approach (checklist part A)": {
-   "sha256": "b2d0c49dfffb0aa2f83b071acd24a66c7cad600ec5e725dab7d74a830625b060",
+   "sha256": "2dcc511e10f3b4a398fc0e4090f1a5ebc2d4dd2e6e8469228153d87928680a94",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3933,6 +3927,24 @@
   },
   "### T297 (2026-11-26: two builders dispatched at once on tasks that edited the same files could not land independently - 451 T292 was held by T285 over the Makefile, `docs/guards.md` and the builder brief, the second held until the first landed)": {
    "sha256": "bffca7a1d385758edb3cf307fe5b4dd98ce716f4766707ec7ce15e8272fb6026",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T294 (451 T292's candidate: on 2026-11-26 451 T270 landed WITHOUT ITS CODE (0526d8b7df, repaired by 83f65718d7) - the cherry-pick that would have carried it stood unfinished and the landing pushed a HEAD lacking `rust/gate/crates/measure/src/measure/audit/held.rs`, the new module its plan section named; T292 refuses the unfinished carry, and the cheap true check under it was missing)": {
+   "sha256": "ae8743126a00dbecef9e46d666f5d4965ca6e67f0202c50e1b23bf089690cad6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T447 (<why: the finding or measurement that files it>)": {
+   "sha256": "470659946d4c37a128e96c6832a61c058723496468b2ac988f3d71cb677c3cc2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T447 Approach (checklist part A)": {
+   "sha256": "9bdebbd423625e1ace72c14c4caedf7a082f9a6d18ff280e71d99d41a30fca71",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35295,6 +35307,69 @@
      "summary": "How a message to a builder in mid-work is delivered is measured once (220 of 229 sends located, none lost, delays over 60 s all advisor calls), its rule written into the builder brief, and no lever filed",
      "class": "within",
      "why": "This is the asked measurement, and the rule is placed in the brief's one copy. The GM's 2026-11-20 words count it as performance work. No lever is filed because the record shows no loss, so nothing asked is cut. 'None lost' with 9 of 229 sends unlocated is as the record states."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T294 (451 T292's candidate: on 2026-11-26 451 T270 landed WITHOUT ITS CODE (0526d8b7df, repaired by 83f65718d7) - the cherry-pick that would have carried it stood unfinished and the landing pushed a HEAD lacking `rust/gate/crates/measure/src/measure/audit/held.rs`, the new module its plan section named; T292 refuses the unfinished carry, and the cheap true check under it was missing)",
+    "### T294 Approach (checklist part A)",
+    "### T447 (<why: the finding or measurement that files it>)",
+    "### T447 Approach (checklist part A)",
+    "(removed) ### T294 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T294-D1 what is read",
+     "class": "within",
+     "summary": "The task's own Occasions lines are read for every path; its own plan sections only for paths named as NEW.",
+     "why": "A design choice inside a session-filed defect fix that no GM clause or FR settles. It serves the fix's purpose (T270's case is caught: its section's 'A new module, .../audit/held.rs'; the Occasions line alone would have missed it) while not refusing good work: per the dated scan (2026-11-27, plan-scan.py), a whole-section rule would refuse 53 paths that were deleted or moved, and refusing correct work is a defect under constitution XIV. The replay (486 landings, 2026-11-27, replay.py) refuses T270 alone."
+    },
+    {
+     "id": "T294-D2 names and suffix holding",
+     "class": "within",
+     "summary": "Backquoted tokens under rust/, scripts/, tests/ or with a code extension are a line's names; a token is held by a whole-component suffix match anywhere under those trees; line and section ownership by leading task ids.",
+     "why": "Says how the check recognizes a name without refusing relative names falsely. It cuts nothing the GM asked for, and the replay shows T270's 'audit/held.rs' still refused."
+    },
+    {
+     "id": "T294-D3 no escape",
+     "class": "within",
+     "summary": "The refusal has no escape; a line that misnames a file is answered by restating it.",
+     "why": "FR-012's escape requirement lists the refusals of FR-006 to FR-009, FR-011 and FR-013. This landing refusal is none of those, so no FR requires an escape. Restating a wrong line is the constitution XIV remedy, and real enforcement is what the GM asked for (2026-11-19, 'real enforcement and not just instructions'; T285, tooling that 'automatically enforces')."
+    },
+    {
+     "id": "T294-D4 part (2) land-alone attribution left to T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "summary": "No attribution change in scripts/land-alone.sh. The route the check reaches (a carry that ADDS a named file) is refused now, and the rest of part (2) goes to 451 T302, which retires land-alone.",
+     "why": "The defect is not dropped. Its added-file case is refused by this task's check. Its root, land-alone's event-log attribution, is carried by T302 (4), which retires land-alone outright and makes a landing refuse an unclean clone. The plan quotes T302's line as superseding 'the unstaged-file part of 451 T294'; the bundle does not let me read that line myself, so I take the quote as given. Building attribution into a script that T302 deletes would add work the fix does not need. The deferral has the D15/FR-009 form, and the GM's words (2026-11-26, 'fix all of this as part of our tasking ... before resuming our port'; 2026-11-27, 'do all of the load-bearing ones ... and the other sixteen refinements') require only that the defect is fixed in this feature's tasking, not inside T294. The bundle does not show what T22 is, so 'lands before T22' as the step boundary is the plan's statement, which make decide's OPEN-id test checks."
+    },
+    {
+     "id": "T294-D5 modify-only carry deferred to T447",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "summary": "A carry that only MODIFIES files, backed out of a stopped pick by hand, still lands its task without those edits. The fix (refuse a landing whose task's done ref was not carried) is filed as T447, to land before T22.",
+     "why": "This is a real defect with a stated visible effect, so the ruling cannot rest on it being 'not a defect'. Its stated reason ('a second crate's change outside this brief') does not carry the ruling either, since scope convenience is not grounds. What carries it is the FR-009/D15 sanctioned route: a formed deferral to an open task of the same feature, with its order. The GM's fix-as-we-go rule (2026-11-18) and his 2026-11-26 words require known defects fixed before the next port step, and filing T447 inside this pre-port tooling feature keeps the defect out of the next step. The route is narrow (a stopped pick backed out by hand with its files kept). The bundle cannot show what T22 is; if T22 is not before the port resumes, this ruling does not hold."
+    },
+    {
+     "id": "T294-D6 performance work: yes",
+     "class": "within",
+     "summary": "T294 is declared performance work (the landings).",
+     "why": "FR-013 counts a task that makes 'the landings' faster. A refusal in the first pass replaces a pushed landing plus a repair commit and a gate run (T270's 83f65718d7) with a refusal in seconds, which reduces landing rework. The reading is borderline, because it is a correctness check whose saving is rework avoided. But it narrows nothing asked, and the build is already done, so the queue priority it would confer is past."
+    },
+    {
+     "id": "removed T294 placeholder block",
+     "class": "within",
+     "summary": "T294's template heading block is replaced by the filled heading block.",
+     "why": "The template is replaced by its filled section. Nothing judged is lost."
+    },
+    {
+     "id": "T447 template blocks",
+     "class": "within",
+     "summary": "T447's heading and checklist blocks are the unfilled template.",
+     "why": "They make no decision. T447's plan is owed when it is decided."
     }
    ]
   }

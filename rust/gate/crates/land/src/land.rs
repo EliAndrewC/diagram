@@ -33,6 +33,7 @@ mod claims_wait;
 mod inproc;
 mod long_runs;
 mod memory;
+mod named;
 mod parity;
 mod phase;
 mod ready;
