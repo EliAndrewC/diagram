@@ -1,3 +1,54 @@
+# Overnight summary, 2026-11-27 (feature 451's worktree and builder tooling)
+
+Written by the coordinating session about 08:30Z; the state at that time.
+
+**Landed on main overnight:** one batch, T367, T411 and T414 (2988fee630). **Nothing since.** Every later landing attempt was
+refused or red, so the built work below is committed in the session clone (`/diagram/.clones/diagram-backlog`) and not yet
+on main.
+
+**Built and committed in the clone, waiting for one landing (46 tasks):** T419 T404 T417 T352 T403 T424 T409 T406 T313
+(with T395, T416 and T421 built inside it) T413 T427 T428 T369 T364 T341 T365 T373 T420 T425 T312 T275 T392 T426 T311 T143
+T342 T288 T304 T296 T297 T294 T408 T397 T286 T306 T445 T449 T434 T454 T435 T443 T433 T436. Done in pool trees, not yet
+carried: T439, T455, T460, T450. Their commits and plan sections say what each does; the largest effects measured:
+an Edit's hook 100 to 31 ms in a pool tree (T392, T443), the views cache kept across a tool rebuild 1.9 s to 0.012 s
+(T434), a hook call 4 ms faster (T439), the guards no longer taking the clone's index lock (125-200 of 200 commits refused
+beside them before, 0 after, T446 - in flight), a builder iterating on one module's tests in 2-4 s where the crate takes
+8-10 (T435).
+
+**In flight:** T457, T462, T458, T437 with T440, and T446 (done, not carried).
+
+**Snags, with their causes:**
+- **A landing's first pass grew from about 40 s to 34 min over the night** (its `cheap` Phase lines: 43-119 s until 04:17Z,
+  then 226, 379, 719, 1,399 and 2,031 s). Cause found by reading the process (gdb and perf are refused in this container):
+  the plan's history reader (`rust/gate/crates/plan/src/plan/history.rs`) walks every version of plan.md (1 MB, 477
+  versions) for each block whose earlier text is found nowhere, once per question - 2.1 GB read in 4 minutes. Filed and in
+  flight as T457. The next landing waits for it, so the attempt both lands and proves it.
+- **The clone's guard binary failed to link from about 05:47Z** (a compiled rlib with 10 undefined `.llvm` symbols under a
+  fresh fingerprint) and every hook ran an hour-old binary silently; the batch gate's hook suites then failed for a cause
+  none named. Repaired by hand; T449 (built) heals it once and makes `make hooks-test` name the build's error; its likely
+  writer, the wrapper's own 45 s timeout, is T452.
+- **Two red gates in a row** went to the round arbiter (continue); its ruling owed a part B section of each of the 23 started
+  tasks, written. The part B sections I wrote for T395, T416 and T421 broke the rule that a task built inside another's
+  section keeps its own section blank, and cost a 30-minute refusal; removed.
+- **A blank task stub counted review rounds** (T448's template rode in other tasks' plan-delta bundles and tripped a third-round
+  tripwire, holding every plan review of the feature): the round arbiter ruled it a process fault; the fix is T462, in flight.
+- **T286's plan review** reached its third round; the round arbiter accepted the plan as written.
+- **T439 brings back a block an earlier version dropped** (`find -newer` in the guard launcher, with the measurement that
+  reverses the drop): a tripwire owed the round arbiter before its carry.
+
+**My mistakes tonight, corrected:** I wrote to the clone while a gate ran there twice before tonight's window (the gates
+voided); I told T439's builder its tree held T449's change when a new task starts from a fresh base (it noticed); I briefed
+T342's stale queue entry twice; the T424 commit message names the wrong cause (a slot lock held by another test thread's
+child, not a ceiling's timing); the T427/T428 builder skipped the arbiter on a third message-check round.
+
+**New tasks filed tonight, for triage:** T443-T463 (T443, T445, T446, T449, T454, T455 built; T447 superseded by T397; T461
+withdrawn as a placeholder; T444 audit fixture rows, T448 and T451 closing-checks residue, T452 the guard build's own
+timeout, T453 unused spellings, T456 the env hop of every hook call, T458 the index's cold rebuild, T459 a temp file a killed
+hook leaves, T463 catching a slow land test run alive).
+
+**Still for the GM, not built:** T302, T405, T307 part 3, T321, T415 (held for the talk); the process reviewer feature, the
+orchestrator question and the old step-back - all in `port-talk-gm-goal.md` and `port-talk-orchestrator-research.md`.
+
 # Morning handoff: the talk before the port resumes (written 2026-11-26, overnight)
 
 For the FRESH session that holds the talk with the GM (449 T437). Everything below is on GitHub `main`, and the tooling state is in its private repository (step 2). What does NOT outlive the
