@@ -172,10 +172,7 @@ fn a_hold_kept_by_record_edit_is_written_back_by_checks_hooks() {
     assert!(pre("b").is_empty());
     std::fs::write(&plan, "# p\n\n## T01 x\n\nCHANGED\n").unwrap();
     let got = run("PostToolUse", &call("b"));
-    assert!(
-        matches!(&got[..], [Answer::Refuse(t)] if t.contains("written back")),
-        "{got:?}"
-    );
+    assert!(matches!(&got[..], [Answer::Refuse(t)] if t.contains("written back")));
     assert!(std::fs::read_to_string(&plan).unwrap().contains("before"));
     assert_eq!(std::fs::metadata(&state_file).unwrap().ino(), kept);
 }

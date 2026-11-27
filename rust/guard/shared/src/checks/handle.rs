@@ -177,7 +177,7 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
                 .get("tool_response")
                 .filter(|v| v.is_object())
                 .cloned()
-                .unwrap_or_else(|| json!({}));
+                .unwrap_or(json!({}));
             planhold::launched(state, text(payload, "tool_use_id"), text(&resp, "agentId"));
             rounds::launched(
                 state,

@@ -68,10 +68,7 @@ fn a_command_that_overwrote_held_text_is_still_written_back() {
     // another call begins while the first's change stands: it must not take the changed text as the held text
     assert_eq!(handle("edit", &bash(&root, "b"), Some(1000.0)), "");
     let msg = handle("after", &bash(&root, "a"), Some(1000.0));
-    assert!(
-        msg.contains("T01's section of specs/900-a/plan.md"),
-        "{msg}"
-    );
+    assert!(msg.contains("T01's section of specs/900-a/plan.md"));
     assert_eq!(plan(&root), PLAN);
     assert_eq!(handle("after", &bash(&root, "b"), Some(1000.0)), "");
     // a later call's change is written back too
@@ -125,4 +122,29 @@ fn an_agent_launch_no_check_or_hold_names_writes_nothing() {
     let waiting = inode(&root);
     assert_eq!(handle("returned", &stop, Some(1000.0)), "");
     assert_ne!(inode(&root), waiting);
+}
+
+/// A return concerns the state where a wave's row still waits: pending, or returned with no reply yet (451 T387's `concerns`).
+#[test]
+fn a_return_concerns_a_wave_row_that_waits_for_its_reply() {
+    let row = |state: &str, reply: Value| json!({"dispatches": {"t1": {"aid": "x", "wave": true, "state": state, "reply": reply}}});
+    let ret = json!({"agent_id": "y"});
+    assert!(super::concerns(
+        "returned",
+        "Agent",
+        &row("pending", Value::Null),
+        &ret
+    ));
+    assert!(super::concerns(
+        "returned",
+        "Agent",
+        &row("returned", Value::Null),
+        &ret
+    ));
+    assert!(!super::concerns(
+        "returned",
+        "Agent",
+        &row("returned", json!("done")),
+        &ret
+    ));
 }

@@ -920,11 +920,8 @@ fn a_rounded_dispatch_drops_what_only_its_return_read() {
     returned(&mut state, "a1", "VERDICT: PASS", None);
     for (tid, kept) in [("old", false), ("new", false), ("wait", true)] {
         let d = &state["dispatches"][tid];
-        assert_eq!(
-            (d.get("counted").is_some(), d.get("quote_notes").is_some()),
-            (kept, kept),
-            "{tid}"
-        );
+        let had = (d.get("counted").is_some(), d.get("quote_notes").is_some());
+        assert_eq!(had, (kept, kept));
     }
     assert_eq!(state["rounds"]["quote-check|q:0105"], json!(1));
 }
