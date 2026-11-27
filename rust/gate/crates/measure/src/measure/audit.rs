@@ -7,7 +7,8 @@
 //! Each prints what its one-liner printed, ANSI bold and all, and fails where it raised: a record that is no JSON, one missing a field
 //! the line reads, a value Python cannot format - exit 1, what was printed before kept, a `Traceback` line and the reason after.
 //! The bypasses end, since feature 451 T270, with the plan gate's escapes counted by what each record says was held (`held.rs`), which
-//! no recipe printed.
+//! no recipe printed. The guard firings leave out, since 451 T444, the test fixtures' rows content tells apart (`fixtures.rs`), and
+//! say how many.
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -394,9 +395,21 @@ fn guard_files(dir: &Path) -> Vec<PathBuf> {
         .collect()
 }
 
+/// The guard log's rows less the test fixtures' rows content tells apart, which are tallied (451 T444): left out first, so every
+/// count, rate and list of the section is of the rest.
+fn guard_rows(dir: &Path, cwd: &Path) -> Result<(Vec<Value>, fixtures::LeftOut), String> {
+    let mut left = fixtures::LeftOut::default();
+    let specs = cwd.join("specs");
+    let rows = load(&guard_files(dir))?
+        .into_iter()
+        .filter(|r| !left.take(r, &specs))
+        .collect();
+    Ok((rows, left))
+}
+
 /// The guard firings.
-fn guards(dir: &Path, out: &mut Out) -> Result<(), String> {
-    let rows = load(&guard_files(dir))?;
+fn guards(dir: &Path, cwd: &Path, out: &mut Out) -> Result<(), String> {
+    let (rows, left) = guard_rows(dir, cwd)?;
     out.line(&format!("{BOLD}Guard firings{PLAIN} (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped"));
     // `defaultdict(Counter)` by guard, in the order first met; `sorted(by.items())` compares the guards
     let mut by: Vec<(Value, Counter)> = Vec::new();
@@ -495,6 +508,7 @@ fn guards(dir: &Path, out: &mut Out) -> Result<(), String> {
         format!(", {} to {}", s(&ordered[0]), s(&ordered[ordered.len() - 1]))
     };
     out.line(&format!("  {} entries{span}", rows.len()));
+    left.lines().iter().for_each(|l| out.line(l));
     out.line("");
     Ok(())
 }
@@ -564,7 +578,7 @@ pub fn cli(args: &[String], cwd: &Path, guard_dir: &Path) -> Reply {
     };
     let done = match args {
         [one] if one == "runs" => runs(cwd, &mut out),
-        [one] if one == "guards" => guards(guard_dir, &mut out),
+        [one] if one == "guards" => guards(guard_dir, cwd, &mut out),
         [one] if one == "claims" => claims(cwd, &mut out),
         _ => {
             return Reply {
@@ -603,6 +617,7 @@ pub fn guard_dir(value: Option<&str>, home: &Path) -> PathBuf {
     }
 }
 
+mod fixtures;
 mod held;
 
 #[cfg(test)]

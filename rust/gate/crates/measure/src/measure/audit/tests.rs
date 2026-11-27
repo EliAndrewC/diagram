@@ -346,3 +346,142 @@ fn a_plan_gate_escape_is_classed_by_what_its_record_says_was_held() {
         )
     );
 }
+
+/// 451 T444's fixture log: each row's file name, guard, event, rule and detail (a JSON value) - each class left out and each look-alike.
+const FIXTURE_ROWS: [(&str, &str, &str, &str, &str); 15] = [
+    (
+        "c1",
+        "checks",
+        "escaped",
+        "check-closed",
+        r#""nothing to close here""#,
+    ),
+    (
+        "c2",
+        "checks",
+        "escaped",
+        "check-closed",
+        r#""nothing to close here""#,
+    ),
+    (
+        "c3",
+        "checks",
+        "escaped",
+        "check-closed",
+        r#""nothing to close here: the session's own""#,
+    ),
+    (
+        "p1",
+        "plan-gate",
+        "blocked",
+        "plan-review-stale",
+        r#""449-x: 1 block(s) of plan.md changed""#,
+    ),
+    (
+        "p2",
+        "plan-gate",
+        "escaped",
+        "plan-review-ok",
+        r#""449-x: 451 T41 reviewed CLEAR""#,
+    ),
+    (
+        "p3",
+        "plan-gate",
+        "blocked",
+        "plan-review-missing",
+        r#""specs/600-x""#,
+    ),
+    (
+        "p4",
+        "plan-gate",
+        "escaped",
+        "plan-review-ok",
+        r#""451-real: T1 reviewed CLEAR""#,
+    ),
+    (
+        "p5",
+        "plan-gate",
+        "blocked",
+        "plan-review-stale",
+        r#""451-real: 1 block(s)""#,
+    ),
+    (
+        "p6",
+        "plan-gate",
+        "escaped",
+        "plan-review-ok",
+        r#""3-way split reviewed CLEAR""#,
+    ),
+    ("p7", "plan-gate", "blocked", "plan-missing", "null"),
+    ("p8", "plan-gate", "blocked", "plan-missing", "7"),
+    (
+        "p9",
+        "plan-gate",
+        "escaped",
+        "plan-review-ok",
+        r#""the reason: a colon in it""#,
+    ),
+    (
+        "t1",
+        "task-add",
+        "blocked",
+        "quick-red",
+        r#""9001-x T03: sh q.sh: failed (exit 1)""#,
+    ),
+    (
+        "t2",
+        "task-add",
+        "blocked",
+        "quick-red",
+        r#""451-real T37: l7r-gate check spec-lint --delta .: failed (exit 1)""#,
+    ),
+    (
+        "s1",
+        "sync-with-main",
+        "blocked",
+        "closing-owes",
+        r#""closing""#,
+    ),
+];
+
+/// Feature 451 T444: the test fixtures' rows already on the live guard log (451 T143 stopped new ones) are left out where content
+/// tells them apart, and the count says how many; their look-alikes - a real reason, a filed feature, a refusal - stay counted.
+#[test]
+fn the_test_fixtures_rows_are_left_out_and_counted() {
+    let dir = scratch("audit-fixtures");
+    let log = dir.join("guard-log");
+    for (name, guard, event, rule, detail) in FIXTURE_ROWS {
+        let text = format!(
+            r#"{{"utc": "2026-11-22T10:00:00Z", "guard": "{guard}", "event": "{event}", "rule": "{rule}", "detail": {detail}}}"#
+        );
+        put(&log, &format!("{name}.json"), &text);
+    }
+    // with no specs/ directory nothing names a feature that is missing, so only the check-closed rows are left out
+    let bare = run(&["guards"], &dir, &log);
+    assert!(bare
+        .stdout
+        .contains("  plan-gate    blocked=5, escaped=4   escape rate 44%\n"));
+    assert!(bare.stdout.contains("  left out, as test fixtures' rows (451 T444): 2 - checks check-closed \"nothing to close here\" 2\n"));
+    put(&dir, "specs/451-real/spec.md", "");
+    let said = run(&["guards"], &dir, &log);
+    assert_eq!(said.code, 0);
+    assert!(said
+        .stdout
+        .contains("  checks       escaped=1   escape rate 100%\n"));
+    assert!(said
+        .stdout
+        .contains("  plan-gate    blocked=3, escaped=3   escape rate 50%\n"));
+    assert!(said
+        .stdout
+        .contains("  task-add     blocked=1   escape rate 0%\n"));
+    assert!(said
+        .stdout
+        .contains("  sync-with-main blocked=1   escape rate 0%\n"));
+    assert!(said.stdout.contains("  9 entries, "));
+    assert!(said.stdout.contains(concat!(
+        "  left out, as test fixtures' rows (451 T444): 6 - checks check-closed \"nothing to close here\" 2; ",
+        "plan-gate naming a feature with no specs/ directory 3 (449-x 2, 600-x 1); ",
+        "task-add naming a feature with no specs/ directory 1 (9001-x 1)\n",
+        "  still counted: sync-with-main closing-owes 1 - a fixture's row is a real refusal's byte for byte\n",
+    )));
+}

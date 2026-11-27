@@ -7479,32 +7479,41 @@ batch; the red was not in its change.
 
 **Performance work?** yes: the builders' loop and the session's own, every Edit's hook. Before and after: the PreToolUse hook on an Edit of a doc 51.9 / 219.4 ms to 30.9 / 71.2 ms for a builder in a pool worktree and 137.9 / 148.2 ms to 115.7 / 123.1 ms for the session in its clone at load1 15.4 to 17.9, and 68.1 / 149.0 to 41.5 / 105.8 and 253.9 / 559.5 to 239.8 / 640.5 at load1 30.6 to 35.3 (median / 90th centile, 20 runs each, LOADED), measured 2026-11-27 (`t443-time.py` in T373's sandbox, the old binary and the new as interleaved arms). At T373's day's counts (185 Edits in a worktree or outside, 29 in the clone) that is 185 x 0.0210 + 29 x 0.0222 = 4.5 s a day at the lower load, measured 2026-11-27 (this run's medians times T373's counts of 2026-11-26), and the tripwire's share no longer grows with the log but with its tail since the index (at most `STALE`). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
-### T444 (<why: the finding or measurement that files it>)
+### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: route (a) of the line. `make audit`'s guard section (`rust/gate/crates/measure/src/measure/audit.rs`, `guards`) leaves out, before it counts anything, the rows a content rule tells apart as a fixture's (`audit/fixtures.rs`, new: `LeftOut::take` and `lines`), so every rate, by-rule line, escape listed, the entry count and the span are of the rest; a line after the entry count says how many it left out, by class and by feature slug, and that the `closing-owes` rows stay counted. Route (b), a move of rows out of the live log, was not taken: (a) changes no live file and is undone by reverting the code. The live log was never written: every figure here is over a copy (`t444-log`, 127,416 files, copied 2026-11-27 08:46Z, measured 2026-11-27 (`ls | wc -l` of the copy)).
+  - **DECISION, the check-closed class** (label: CONVENTION): a `checks` row, rule `check-closed`, whose detail is exactly "nothing to close here", the reason the `checks` and `arbiter` crates' tests close with. 2,230 of the 2,234 `check-closed` rows on the copy (2026-11-10 to 11-26); the other four carry a session's own reason and stay counted, observed 2026-11-27, method: the copy's `check-closed` rows grouped by detail and date (`t444-pg.py`). A real session closing its checks with that reason word for word would be left out; none of the four real ones does.
+  - **DECISION, the no-specs class** (label: CONVENTION): a `plan-gate` row whose detail opens `<feature>: ` or is `specs/<feature>`, or a `task-add` row whose detail opens `<feature> `, the feature shaped `<digits>-<slug>`, where the reading tree's `specs/` holds no such directory - the gates' own detail forms (`plan.rs`'s `{name}: {why}`, `task_add.rs`'s `{name} {tid}: ...`). On the copy: plan-gate 997 (`449-x` 977, `600-x` 18, `444-x` 2; 982 blocked and 15 escaped, observed 2026-11-27, method: every plan-gate row's leading token checked against `specs/` (`t444-pg.py`)) and task-add 9 (`9001-x`). The 15 escaped `449-x` rows carry real-looking reasons ("451 T41 and T43 reviewed CLEAR by spec-fidelity on 2026-11-20"): a session's exported `PLAN_REVIEW_OK` read by a fixture, the leak T143 closed; each real escape was logged under its own feature beside it. A tree with no `specs/` directory leaves out none of this class, so a run outside the repository cannot drop every plan-gate row (pinned by the test's first half).
+  - **What a real firing could match, ruled**: a plan-gate or task-add row of a feature filed in another clone and not yet in the reading tree's `specs/` (a clone behind main) would be left out. Accepted, by the builder, within the line's route (a): its cost is a stale tree's audit under-counting that feature's firings until it syncs; the left-out line names every slug with its count, so such a drop shows by name; the alternative priced, requiring the fixtures' `-x` slug as well, was not taken because it would hold the rule to today's fixture names rather than to the condition the line states. The 685 plan-gate escapes that name no feature (records before the gate prefixed its name) were read by detail: all a session's own reasons, none fixture-shaped, observed 2026-11-27, method: grouped by detail (`t444-odd.py`); they stay counted.
+  - **The task-add line's tenth row is real and stays counted**: of the line's "task-add quick-red 10 (11-20/21)", nine are `9001-x` (2026-11-21) and one is `451-time-retro-and-efficiency T37: l7r-gate check spec-lint --delta .: failed (exit 1)` (2026-11-20T16:07:19Z), a filed feature, followed five seconds later by a real `QUICK_OK` probe of T37; content cannot tell it from a real refusal, observed 2026-11-27, method: every task-add row of 11-20/21 on the copy, read whole. Left out: 9.
+  - **The `sync-with-main` `closing-owes` rows stay counted** (label: CONVENTION): 1,017 on the copy (2026-10-25 to 11-27), a fixture's row byte for byte a real refusal's (detail "closing", session `unknown`, `cwd` and `transcript` empty), so no content rule separates them; the section prints `still counted: sync-with-main closing-owes 1017 - a fixture's row is a real refusal's byte for byte`. Its escape rate reads 8% (87 escaped of 1,104) with them, measured 2026-11-27 (`make audit`'s guard section over the copy). Every blocked row of that guard is one of them (1,104 less 87 escaped is 1,017), so the 8%, measured 2026-11-27 (`make audit`'s guard section over the copy), rests on a split between fixture and real rows that is not known: the writer stopped with T143's landing (2026-11-27T06:41Z; the copy's last `closing-owes` row 06:32:57Z, observed 2026-11-27, method: the copy's rows by time against `git log --grep T143`), and the rows' file-name pid pairs, the fixture's two a run, account for 20 of the 1,017, observed 2026-11-27, method: the copy's `closing-owes` rows grouped by the pid in their file names (`t444-co.py`), so they do not separate them either. Deferred below.
+  - **Before and after**, measured 2026-11-27 (`scripts/gates/l7r-gate.sh measure audit guards` with `GUARD_LOG_DIR` the copy; HEAD's code, then this task's; `t444-before.txt`, `t444-after.txt`): plan-gate `blocked=1684, escaped=1575, escape rate 48%` to `blocked=702, escaped=1560, escape rate 69%` (68.97% of 2,262, measured 2026-11-27 (`make audit`'s guard section over the copy), the line's 69.1% of 2,259 on the earlier read), checks `escaped=2559` to `escaped=329`, task-add `blocked=10, escaped=1` (9%) to `blocked=1, escaped=1` (50%), measured 2026-11-27 (`make audit`'s guard section over the copy); entries 127,410 to 124,174, with `left out, as test fixtures' rows (451 T444): 3236 - checks check-closed "nothing to close here" 2230; plan-gate naming a feature with no specs/ directory 997 (449-x 977, 600-x 18, 444-x 2); task-add naming a feature with no specs/ directory 9 (9001-x 9)`.
+  - **Red first**: `the_test_fixtures_rows_are_left_out_and_counted` (`audit/tests.rs`) over a fixture log of each class and its look-alike - a check-closed row with another reason, a filed feature's plan-gate rows, a plan-gate escape whose reason opens `3-way` with no colon, one with a colon and no feature, a null and a numeric detail, the T37-shaped task-add row, a closing-owes row - first with no `specs/` directory, then with one. On HEAD's `audit.rs`: 1 failed, 6 passed of the module's 7 (`make rust-test ... ONLY="measure::audit"`, 2026-11-27); with the change, the crate's 284 pass.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the guard section's filter | n/a: a report's count, no map | the T444 section | none: no engine code | the left-out line names each slug, so a wrong drop shows |
 
 ### T444 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make audit`'s guard rates are of real firings: a reader of the plan gate's escape rate sees 69%, not 48%, measured 2026-11-27 (`make audit`'s guard section over the copy), and is told how many rows were left out and which classes could not be.
+2. **The constraints.** The live guard log is never written (the brief); constitution XIV, a defect is a wrong outcome: the rate the audit prints was wrong; the line's preference for route (a).
+3. **Where each comes from.** G: the task line's routes and classes; O: the copy of the live log read by guard, rule, detail, date and feature (2026-11-27); O: the gates' detail formats read in `plan.rs` and `task_add.rs`.
+4. **Do they describe the world here?** Each class's count matches the line's figures but where the log grew (check-closed 2,230, closing-owes 1,017) and the task-add tenth row, which is real, measured 2026-11-27 (`t444-pg.py` over the copy).
+5. **The order.** After 451 T143 (which stopped new fixture rows); before T22, as T143's section files it.
+6. **The exits.** Green: the after figures above and the crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none: a counting rule over a closed set of rows.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make audit` over the copy prints plan-gate 702 blocked, 1,560 escaped, 69%, and the left-out line of 3,236, measured 2026-11-27 (`make audit`'s guard section over the copy).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make audit` sees the plan gate's escape rate at 69% and the checks guard at 329 escapes, not 48% and 2,559, measured 2026-11-27 (`make audit`'s guard section over the copy); nothing on a map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make audit`'s `sync-with-main` escape rate, 8% (87 of 1,104, measured 2026-11-27 (`make audit`'s guard section over the copy)), rests on the 1,017 `closing-owes` rows above, a mix of the cohort push tests' fixture rows and real refusals in a split no field or content tells; its visible effect is a guard rate in `make audit` that could be anywhere from 8% to 100%, measured 2026-11-27 (the same section's counts: 87 escaped, 1,017 blocked, each possibly a fixture's). Not fixed here: separating them needs a signal outside the row (the event log's or the run log's push runs by time), a measurement of its own past this fix's size. Filed as T468; lands before T22.
+- None other: the classes the line names are left out or ruled counted above with their figures; no other fixture-shaped class was found among the rows read (the 685 unnamed plan-gate escapes, the `checks` `freeze-ok` "a test escape" rows, 2 of 2026-10-10, observed 2026-11-27, method: the copy's rows grouped by detail (`t444-odd2.py`), which are before T143's tests and too few to move a rate - read, not a defect: a rate of 100% escaped stays 100%).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)
 
@@ -8120,6 +8129,33 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T467 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T468 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T468 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

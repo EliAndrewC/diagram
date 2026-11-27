@@ -3781,14 +3781,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T444 (<why: the finding or measurement that files it>)": {
-   "sha256": "bcb9041052c95b45f876167c8960d76ca2589393eb758ebb8691c61ff79e434e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T444 Approach (checklist part A)": {
-   "sha256": "269f8497271f5b380483f05e39eeaaba2acb4a93cb4c2b7d0cbda4db7920ac72",
+   "sha256": "908e92e2b8b59019b064a2a5792916962a380600f26347579b12ad8dfd66bf37",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,12 @@
   },
   "### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)": {
    "sha256": "39a78dcbe7f03c9237f65342ac078851f9df43f1f3ae79d68e0772353b96921b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)": {
+   "sha256": "eae81fdfca445eaa5bd6f93763139109352205550af190e45fe0a50c07e61ae6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37932,6 +37932,150 @@
      "summary": "four removed blocks (T437, T440, T453, T464) were unfilled templates",
      "class": "within",
      "why": "a template stub holds no decision; removing it narrows nothing (T453's is replaced by the filled sections above)"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)",
+    "### T444 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T444 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T444-route-a",
+     "summary": "Filter fixture rows in make audit's guard section (route a); never write the live guard log (route b not taken)",
+     "class": "within",
+     "why": "Fixes the wrong rate the audit prints (constitution XIV: a tool answering wrongly) without touching live state; reversible by reverting code. Decides how, not whether, the defect is fixed."
+    },
+    {
+     "id": "T444-check-closed-class",
+     "summary": "Leave out checks/check-closed rows whose detail is exactly 'nothing to close here' (2,230); the 4 with a session's own reason stay counted",
+     "class": "within",
+     "why": "Measured on the copy by detail and date; no real row is dropped. Its false-positive surface (a real session using those words verbatim) is hypothetical and none of the four real rows matches."
+    },
+    {
+     "id": "T444-no-specs-class",
+     "summary": "Leave out plan-gate/task-add rows naming a <digits>-<slug> feature with no specs/ directory in the reading tree (997 + 9); no specs/ at all leaves out none",
+     "class": "within",
+     "why": "All 1,006 dropped rows on the copy carry -x fixture slugs (449-x, 600-x, 444-x, 9001-x); no real firing is dropped on the measurement. The stale-clone case is hypothetical, shows by name in the left-out line, and is a design choice of the rule, not a known wrong outcome. (The builder's own 'accepted' is not what clears it; the measurement is.)"
+    },
+    {
+     "id": "T444-escaped-449-x",
+     "summary": "The 15 escaped 449-x plan-gate rows with real-looking reasons are left out as fixture rows",
+     "class": "within",
+     "why": "Explained as a session's exported PLAN_REVIEW_OK read by a fixture (the T143 leak), with each real escape logged under its own feature; leaving them out does not drop a real firing."
+    },
+    {
+     "id": "T444-task-add-tenth-row",
+     "summary": "Of the line's 10 task-add rows, 9 (9001-x) left out; the 451 T37 row kept as real",
+     "class": "within",
+     "why": "Read whole and corroborated by a real QUICK_OK probe five seconds later; correcting the task line's count by measurement keeps the audit's figures of real firings."
+    },
+    {
+     "id": "T444-closing-owes-kept",
+     "summary": "The 1,017 sync-with-main closing-owes rows (2026-10-25 to 11-27), named as a fixture class, stay counted with a 'still counted' note; sync-with-main reads 8% escaped (87 of 1,104); 'Found and left? none'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the defect T444 exists to fix, left in one guard. 1,104 - 1,017 = 87 and 87 escaped: every blocked sync-with-main row is in this class, so the printed 8% rests entirely on an unmeasured fixture/real split and could be anywhere up to 100% - a larger distortion than the plan gate's 48% vs 69% that items 1-2 call a defect. The audit register's purpose (the GM 2026-11-25: re-audit whether a process still makes sense or should be tweaked or eliminated) is defeated by a guard rate that is wrong. The impossibility shown is only that no CONTENT rule separates the rows; it does not show the rows cannot be separated another way, and it never addresses why they run to 11-27 when the heading says T143 stopped fixtures adding them (if a fixture still writes them, the leak is live). A disclosure line does not make the printed rate right. 'Found and left? none' records a known defect as no defect, bypassing FR-009's deferral form. Clears when either: the rows are separated or the writer stopped and the rate fixed here, with its before/after; or it is deferred by the form - 'Not fixed here: <why>. Filed as T<n>; lands before T<m>.' with the task filed (make task-add) and named under Found and left."
+    },
+    {
+     "id": "T444-freeze-ok-rows",
+     "summary": "2 checks freeze-ok 'a test escape' rows (2026-10-10) read and left counted",
+     "class": "within",
+     "why": "Measured: the rate is 100% escaped with or without them, so no outcome a reader sees is wrong - not a defect (constitution XIV)."
+    },
+    {
+     "id": "removed-T437",
+     "summary": "Removal of an empty T437 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    },
+    {
+     "id": "removed-T440",
+     "summary": "Removal of an empty T440 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    },
+    {
+     "id": "removed-T444-placeholder",
+     "summary": "Removal of T444's empty placeholder template, replaced by the filled T444 block",
+     "class": "within",
+     "why": "Template placeholders only; superseded by the filled block."
+    },
+    {
+     "id": "removed-T464",
+     "summary": "Removal of an empty T464 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)",
+    "### T444 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T444 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T444-route-a",
+     "summary": "Fix the audit's count by filtering fixture rows inside make audit's guard section (route a); the live guard log is not rewritten (route b not taken).",
+     "class": "within",
+     "why": "The task line's own preferred route; it fixes the wrong outcome (guard rates counting test fixtures as real firings) and leaves the live log unwritten, as the brief requires."
+    },
+    {
+     "id": "T444-check-closed-class",
+     "summary": "Leave out checks/check-closed rows whose detail is exactly 'nothing to close here' (2,230 of 2,234); the four with a session's own reason stay counted.",
+     "class": "within",
+     "why": "A content rule matching the tests' fixed close reason; the measured real rows are not matched. Part of fixing the defect the task names."
+    },
+    {
+     "id": "T444-no-specs-class",
+     "summary": "Leave out plan-gate and task-add rows naming a <digits>-<slug> feature with no specs/ directory in the reading tree; none left out when the tree has no specs/ at all.",
+     "class": "within",
+     "why": "A content rule on the gates' own detail forms (plan.rs, task_add.rs) for a feature that does not exist in specs/. On the copy every slug it leaves out is a fixture's -x slug (449-x, 600-x, 444-x, 9001-x, as the block's left-out line measures), so it drops no filed feature's row. It is part of fixing the defect the task names: the audit counting the fixtures' rows as real firings."
+    },
+    {
+     "id": "T444-stale-clone-acceptance",
+     "summary": "Accepted by the builder: a plan-gate or task-add row of a feature filed in another clone, not yet in the reading tree's specs/, would be left out until that tree syncs. The alternative, also requiring the fixtures' -x slug, was not taken.",
+     "class": "within",
+     "why": "Adjudicated here, not taken on the builder's word. On the measured log the rule drops no filed feature's row: every left-out slug is a fixture's -x slug. The case the builder accepted has not been observed, would be transient (it lasts only until the tree syncs), and announces itself, since the left-out line names every slug with its count, so a wrong drop shows by name. Like the check-closed rule's exact-reason match, it is the false-positive margin of a content rule, not a wrong outcome that occurs. It does not narrow 'count real firings, not fixtures' on any row that exists (constitution XIV v2.36.0: a defect is a wrong outcome, not a gap no reader sees). If a filed feature's slug ever shows in the left-out line, that is a defect to fix then."
+    },
+    {
+     "id": "T444-task-add-tenth-row",
+     "summary": "The tenth task-add quick-red row (451 T37, 2026-11-20) is a real refusal and stays counted; 9 left out.",
+     "class": "within",
+     "why": "Measured as a real firing of a filed feature, followed by a real QUICK_OK probe. Counting it is the correct outcome, not something carved out."
+    },
+    {
+     "id": "T444-unnamed-and-freeze-ok-rows",
+     "summary": "The 685 plan-gate escapes naming no feature and the two checks freeze-ok 'a test escape' rows of 2026-10-10 stay counted.",
+     "class": "within",
+     "why": "The 685 were read by detail and are all sessions' own reasons. The two freeze-ok rows cannot change a 100% rate, so they are a difference no reader of the audit would see, not a defect (constitution XIV, GM 2026-11-19)."
+    },
+    {
+     "id": "T444-closing-owes-deferred-T468",
+     "summary": "The 1,017 sync-with-main closing-owes rows stay counted, with a printed 'still counted' line. Separating fixture rows from real ones is deferred to T468, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The guard's 8% rate may be wrong: it could be anywhere from 8% to 100%. So this is a known defect that this task leaves unfixed, and the ruling rests on three things. First, the deferral meets FR-009 and the fix-as-we-go rule (GM 2026-11-18). The block states why: no field or content of the row tells a fixture's row from a real refusal, the pid pairs separate only 20 of 1,017 (measured), and a separate signal (the event or run log's push runs by time) needs a measurement of its own. It files T468. It orders T468 before T22, the same point T444 itself must land by, so the defect is not carried past the step. Second, the audit does not hide the rows: it prints them by name as still counted, with their reason. Third, the blocker in the earlier BLOCKED text, a found-and-left of 'none' while this defect stood, is what changed. This text is the only changed part besides the closing-owes paragraph."
+    },
+    {
+     "id": "removed-template-stubs",
+     "summary": "The empty template stubs for T437, T440, T444 and T464 are removed.",
+     "class": "within",
+     "why": "Each held only the unfilled section template, with no approach and no decision. Removing them decides nothing about scope, and T444's real section stands in its place."
     }
    ]
   }
