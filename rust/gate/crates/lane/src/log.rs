@@ -145,7 +145,7 @@ pub fn on_lane(all: Vec<HandIn>, refs: &BTreeSet<String>, log: &[Value]) -> Vec<
 
 /// Whether `named`, a commit as a line writes it (whole, or the short sha of a `run`'s `set`), is `sha`: the shorter a prefix of
 /// the longer, at least seven characters.
-fn names(sha: &str, named: &str) -> bool {
+pub(crate) fn names(sha: &str, named: &str) -> bool {
     let short = sha.len().min(named.len());
     short >= 7 && sha.get(..short) == named.get(..short)
 }

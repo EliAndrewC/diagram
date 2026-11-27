@@ -7,14 +7,14 @@
 //! killed runner never names a live one. A second start finds the lock held and is a no-op naming the first's pid.
 //!
 //! ITS LOOP ([`work`]), each [`POLL_S`]: a stop request naming this runner ends it; a hand-in the runner has not seen moves the idle
-//! clock; the batch step runs (T14's: forms and runs a batch - until then a stand-in that forms nothing); and [`LANE_IDLE_S`] with no
+//! clock; the batch step runs (T14's [`run::step`]: forms D5's batch where none is open and runs it); and [`LANE_IDLE_S`] with no
 //! new hand-in and no batch run ends it. The clock runs from the newest hand-in, not from "nothing waiting", so a runner over a
 //! hand-in it cannot yet batch still idles out. Every start and stop is a line of the lane's log, with `pid` and `why` and never a
 //! `batch` field: `log::state_of` reads a `stop` naming a batch as that batch `stopped`, which Recovery skips.
 //!
 //! RECOVERY: at start the log's last batch, where open (neither `landed` nor `stopped`), is handed to the resume step with the
 //! changes its own lines leave ([`remaining`]: not ejected); the production step asks `origin/main` too and runs them as a new attempt
-//! on the tree brought to `origin/main` again - T14's, since the batch run is. Its `start` line says `resume <batch>`.
+//! on the tree brought to `origin/main` again ([`run::resume`], T14). Its `start` line says `resume <batch>`.
 //!
 //! THE STOP ([`stop`], `make lane-stop`): a request file naming the runner's pid, which the runner reads between batches, so the batch
 //! in flight finishes first; the stop waits [`STOP_WAIT_S`] for it and otherwise says it is asked. `NOW=1` ends the runner's process
@@ -33,6 +33,8 @@ use l7r_shared::tool::{flock, flock_within};
 use serde_json::json;
 
 use crate::log::{self, Batch};
+
+pub mod run;
 
 /// The runner's lock, in the lane's directory.
 pub const LOCK: &str = "lane.lock";
@@ -139,6 +141,36 @@ fn close_inherited() {
     }
 }
 
+/// The runner's spawn: `launcher` over `words`, from the common directory `words` ends in, its standard streams `/dev/null`, and
+/// none of [`run::STRIPPED`] inherited (461 T14, T12's "For T14": a runner a hand-in started kept `make builder-done`'s `MSG`,
+/// `GUARD`, `T`, `F` and `L7R_GATE_TREE` for its life, and `T` and `F` would reach the `make land` it runs).
+fn spawn_command(launcher: &str, words: &[String]) -> std::process::Command {
+    let mut c = std::process::Command::new(launcher);
+    c.args(words)
+        .current_dir(words.last().map_or(".", String::as_str))
+        .stdin(std::process::Stdio::null())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null());
+    for k in run::STRIPPED {
+        c.env_remove(k);
+    }
+    c
+}
+
+/// THE PROGRAM THE RUNNER RUNS (461 T14, T12's "For T14"): the lane's tree's own `scripts/gates/l7r-gate.sh` - which builds that
+/// tree's `l7r-gate` where stale and `exec`s it, so the runner's argv is still `<target>/tool/l7r-gate lane --work <common>`, the
+/// stall watchdog's - where the pool's registry holds a lane's tree with the script; else `fallback`, the caller's binary (no lane's
+/// tree adopted yet: phase 1, or a scratch repository). The caller's own was the pool tree's build, rebuilt or recycled under it.
+#[must_use]
+pub fn runner_exe(common: &Path, fallback: &Path) -> PathBuf {
+    l7r_shared::builder_pool::read_all(common)
+        .into_iter()
+        .find(l7r_shared::builder_pool::Tree::lane)
+        .map(|t| t.tree.join("scripts/gates/l7r-gate.sh"))
+        .filter(|p| p.is_file())
+        .unwrap_or_else(|| fallback.to_path_buf())
+}
+
 /// `make lane-start`: the runner of `common` started detached through `launcher`, or the one running named. Exit 0 either way; 1
 /// where the spawn failed or the runner took no lock within `wait_s`.
 #[must_use]
@@ -153,13 +185,7 @@ pub fn start(common: &Path, exe: &Path, launcher: &str, wait_s: f64) -> Reply {
     let _ = std::fs::create_dir_all(common.join(log::DIR));
     close_inherited();
     let words = argv(exe, common);
-    let spawned = std::process::Command::new(launcher)
-        .args(&words)
-        .current_dir(common)
-        .stdin(std::process::Stdio::null())
-        .stdout(std::process::Stdio::null())
-        .stderr(std::process::Stdio::null())
-        .spawn();
+    let spawned = spawn_command(launcher, &words).spawn();
     if let Err(e) = spawned {
         return reply(String::new(), format!("lane: {launcher}: {e}\n"), 1);
     }
@@ -368,8 +394,7 @@ fn on_lane(common: &Path) -> BTreeSet<String> {
 }
 
 /// `l7r-gate lane --work <common>`: the detached runner itself. It takes the lock or leaves at once (another runner won the race),
-/// writes its pid into the lock file and runs [`work`] with the standing seams: the batch step and the resume are T14's, so until
-/// then the step forms nothing and an open batch is named on the `start` line and left open.
+/// writes its pid into the lock file and runs [`work`] with the standing seams: the batch step and the resume of [`run`] (T14).
 #[must_use]
 pub fn work_cli(common: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
     let knobs = knob(env, "LANE_IDLE_S", LANE_IDLE_S)
@@ -409,8 +434,9 @@ pub fn work_cli(common: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
     };
     let sleep = |s: f64| std::thread::sleep(Duration::from_secs_f64(s.max(0.0)));
     let hand_ins = || on_lane(common);
-    let mut resume = |_: &Batch, _: &[String]| Ok(());
-    let mut step = || Ok(false);
+    let lane = run::Lane { common, now: &now };
+    let mut resume = |b: &Batch, r: &[String]| run::resume(&lane, b, r);
+    let mut step = || run::step(&lane);
     let mut run = Run {
         common,
         pid,
@@ -460,7 +486,7 @@ pub fn on_hand_in(
         );
         return done;
     };
-    let started = start(&common, exe, "setsid", START_WAIT_S);
+    let started = start(&common, &runner_exe(&common, exe), "setsid", START_WAIT_S);
     done.stdout += &started.stdout;
     done.stderr += &started.stderr;
     done

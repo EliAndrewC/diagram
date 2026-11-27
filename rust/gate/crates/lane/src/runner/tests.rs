@@ -526,11 +526,48 @@ fn the_work_command_sees_a_real_hand_in_and_resumes_an_open_batch_of_the_log() {
     )
     .unwrap();
     let env = quick;
+    // the resume runs the batch (T14): with no lane's tree in the pool it fails, the runner stops on it and the batch stays open
     let worked = work_cli(&common, &env);
-    assert_eq!(worked.stdout, "lane: the runner stopped (idle)\n");
+    assert_eq!(worked.code, 1);
+    assert!(worked.stderr.contains("no lane's tree is in the pool"));
     let lines = log::read(&common);
     let start_line = lines.iter().find(|l| l["event"] == "start").unwrap();
     assert_eq!(start_line["why"], "resume 461-1");
-    // the batch is left open for T14's run: the next runner resumes it again
+    let why = lines.last().unwrap()["why"].as_str().unwrap();
+    assert!(why.starts_with("error: lane: batch 461-1: builder-tree lane: "));
     assert!(log::batches(&lines).pop().unwrap().open());
+}
+
+#[test]
+fn the_runner_runs_the_lane_tree_s_own_wrapper_and_inherits_none_of_the_hand_in_s_call() {
+    let dir = repo("lane-exe");
+    let common = common_of(dir.path());
+    let mine = Path::new("/pool/tree/l7r-gate");
+    // no lane's tree in the pool: the caller's binary
+    assert_eq!(super::runner_exe(&common, mine), mine);
+    let land = dir.path().join("repo-land");
+    let held_by_lane = l7r_shared::builder_pool::Tree {
+        tree: land.clone(),
+        feature: String::new(),
+        tasks: vec![l7r_shared::builder_pool::LANE.to_owned()],
+        since: String::new(),
+    };
+    l7r_shared::builder_pool::write(&common, &[held_by_lane]).unwrap();
+    // a lane's tree with no wrapper: still the caller's
+    assert_eq!(super::runner_exe(&common, mine), mine);
+    let script = land.join("scripts/gates/l7r-gate.sh");
+    std::fs::create_dir_all(script.parent().unwrap()).unwrap();
+    l7r_gate_core::write_executable(&script, "#!/bin/sh\n");
+    assert_eq!(super::runner_exe(&common, mine), script);
+    let words = argv(&script, &common);
+    let c = super::spawn_command("setsid", &words);
+    assert_eq!(c.get_current_dir(), Some(common.as_path()));
+    let removed: Vec<String> = c
+        .get_envs()
+        .filter(|(_, v)| v.is_none())
+        .map(|(k, _)| k.to_string_lossy().into_owned())
+        .collect();
+    for k in ["MSG", "GUARD", "T", "F", "L7R_GATE_TREE", "MAKEFLAGS"] {
+        assert!(removed.iter().any(|r| r == k), "{k}");
+    }
 }

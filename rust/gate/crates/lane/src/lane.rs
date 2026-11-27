@@ -28,7 +28,14 @@ pub fn cli(args: &[String], cwd: &Path, exe: &Path, env: &dyn Fn(&str) -> Option
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     match words.as_slice() {
         ["status", ..] => status(cwd),
-        ["start"] => in_clone(&|c| runner::start(c, exe, "setsid", runner::START_WAIT_S)),
+        ["start"] => in_clone(&|c| {
+            runner::start(
+                c,
+                &runner::runner_exe(c, exe),
+                "setsid",
+                runner::START_WAIT_S,
+            )
+        }),
         ["stop"] => in_clone(&|c| runner::stop(c, false, runner::STOP_WAIT_S)),
         ["stop", "--now"] => in_clone(&|c| runner::stop(c, true, runner::STOP_WAIT_S)),
         ["--work", common] => runner::work_cli(Path::new(common), env),
