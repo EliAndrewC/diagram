@@ -405,12 +405,13 @@ fn a_fix_entry_whose_task_line_names_a_mechanism_is_flagged_with_the_build_half_
     let pad = "              ";
     let want = format!("  line   2  T10            fix           READY\n{pad}{FLAG10}\n{pad}  {HALF10}\n{pad}  {MISREAD}\n  line   3  T11");
     assert!(listed.stdout.contains(&want), "{}", listed.stdout);
-    // the bundle behind T10, waiting, and the misread `make -C`, flagged; the plain fix, the measurement and the landed T09 not
+    // the bundle behind T10, waiting, flagged; `make -C rust lint` no longer misread since 451 T431 reads past make's flags, so T12 is
+    // not, nor the plain fix, the measurement and the landed T09
     assert!(listed
         .stdout
         .contains("FLAG: T02,T10 (line 4) is typed fix, but T10's line names"));
-    assert!(listed.stdout.contains("FLAG: T12 (line 5) is typed fix, but T12's line names a new mechanism (`make -`, no target of the Makefile yet)"));
-    assert_eq!(listed.stdout.matches("FLAG: ").count(), 3);
+    assert!(!listed.stdout.contains("FLAG: T12"));
+    assert_eq!(listed.stdout.matches("FLAG: ").count(), 2);
     // builder-next names T02 first, unflagged; with T02 landed, T10 with its flag under its command
     let first = ask("builder-next", &["9001"], &root).stdout;
     assert!(first.contains("KIND=fix ENTRY=1\n") && !first.contains("FLAG"));
