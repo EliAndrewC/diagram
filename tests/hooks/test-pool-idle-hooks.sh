@@ -114,14 +114,14 @@ expect_allow 'no queue'
 P="$W/proc"; mkdir -p "$P/self" "$C/.git/l7r-lane"
 export POOL_IDLE_PROC="$P"
 printf '{"event": "batch", "batch": "461-1", "changes": ["abcdef1"]}\n' > "$C/.git/l7r-lane/lane.jsonl"
-expect_block 'an open batch with no wait' "the lane holds batch 461-1 is open and no make lane-wait of this clone runs"
+expect_block 'an open batch with no wait' "batch 461-1 is open on the lane, and no make lane-wait of this clone runs"
 expect_block 'with the command to start' "make -C $C lane-wait"
 expect_block 'the bare lane escape' 'LANE_WAIT_OK with no reason' 'LANE_WAIT_OK: later'
 expect_allow 'the lane escape' $'Stopping.\nLANE_WAIT_OK: the GM asked to stop'
 grep -rqs '"rule": *"LANE_WAIT_OK"' "$W/log" && pass=$((pass+1)) || { fail=$((fail+1)); echo "FAIL: the lane escape's use is not in the guard log"; }
 expect_allow 'a subagent over an open batch' 'done' '{"agent_id": "a1b2"}'
 mkdir -p "$P/12"; printf 'make\0lane-wait\0' > "$P/12/cmdline"; ln -s /elsewhere "$P/12/cwd"
-expect_block 'a wait of another tree' 'the lane holds batch 461-1 is open'
+expect_block 'a wait of another tree' 'batch 461-1 is open on the lane'
 rm "$P/12/cwd"; ln -s "$C" "$P/12/cwd"
 expect_allow 'the wait runs in the clone'
 rm -r "$P/12"

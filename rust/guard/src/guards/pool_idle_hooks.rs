@@ -152,7 +152,7 @@ pub(crate) fn lane_refusal(lane: &Lane) -> Option<String> {
             "pool-idle: {LANE_TOKEN} with no reason. Start a line with: {LANE_TOKEN}: <why nothing need wake this session, two words or more>\n"
         )),
         Lane::Held { why, clone } => Some(format!(
-            "pool-idle: the lane holds {why} and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: {LANE_TOKEN}: <why not, two words or more>\n",
+            "pool-idle: {why} on the lane, and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: {LANE_TOKEN}: <why not, two words or more>\n",
             clone.display()
         )),
     }

@@ -253,7 +253,7 @@ fn a_stop_over_an_open_batch_with_no_lane_wait_is_held_with_the_command() {
             clone: clone.clone()
         }
     );
-    let want = format!("pool-idle: the lane holds batch 461-1 is open and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: LANE_WAIT_OK: <why not, two words or more>\n", clone.display());
+    let want = format!("pool-idle: batch 461-1 is open on the lane, and no make lane-wait of this clone runs, so nothing wakes this session when the lane owes it a line. Start it before this turn ends, with run_in_background: true:\n  make -C {} lane-wait\nOr start a line of your final message with: LANE_WAIT_OK: <why not, two words or more>\n", clone.display());
     assert_eq!(lane_refusal(&said), Some(want));
     // no wait: another process, a wait of another clone
     process(&proc, "10", "make\0static\0", &clone);
