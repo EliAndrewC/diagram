@@ -2983,18 +2983,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T352 (<why: the finding or measurement that files it>)": {
-   "sha256": "5b3cfa122c48c8f4dbd9b75f04079690d7359b6cc87729c3d5fdef39bacf864d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T352 Approach (checklist part A)": {
-   "sha256": "eec34249ca483ae79e24703f32b4de33b5462f3ca7b7454f4d1e3871e81fa22a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T353 (<why: the finding or measurement that files it>)": {
    "sha256": "b57e11b831695f9dd35aabda95472672c4dc2790088a4bcffadcc0bd92e19156",
    "verdict": "CLEAR",
@@ -3421,18 +3409,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T404 (<why: the finding or measurement that files it>)": {
-   "sha256": "dc833e2365dfea5e2865b7e92f4d0b517a8b54cc7aecb1538b1e4ed8148b6a8b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T404 Approach (checklist part A)": {
-   "sha256": "fa580fffb22115bc893520796c781d385aaa923b4b1e0b345e968adfd9ff8e23",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T394 part B (2026-11-27T01:51Z)": {
    "sha256": "a0bcab4d1276b0c3c4e3673dfd3191eb3b90f6c1fa98d90fd3277797b73daa87",
    "verdict": "CLEAR",
@@ -3595,30 +3571,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T417 (<why: the finding or measurement that files it>)": {
-   "sha256": "fbe0d2d16609620a08afa4a1afb79f2b3e4be6653b3fa52527af80bc1b68d6d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T417 Approach (checklist part A)": {
-   "sha256": "7d5c86ab19682190c8e3070aadacbd636b2b3825dadef976b27ff176add79908",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T419 (<why: the finding or measurement that files it>)": {
-   "sha256": "6e4b7d3dcc8489ac2a77b19de4cab7a59c429a26929bd3c1801227c7cf5b7a50",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T419 Approach (checklist part A)": {
-   "sha256": "3da5f54a4955a870e122e4741e175d2121cb3975a85bea78d42672159ec2d85b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T414 part B (2026-11-27T04:14Z)": {
    "sha256": "8cb9c775ce35ed9723d552a867730efefa9073d371511d5c474a6965f8c831e1",
    "verdict": "CLEAR",
@@ -3645,12 +3597,6 @@
   },
   "### T420 Approach (checklist part A)": {
    "sha256": "65b4df711b33570f37854fe7771cfab0053c473c504d989abb674e4cc8a67983",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T424 (<why: the finding or measurement that files it>)": {
-   "sha256": "400fc7cfa405e46b548efa32fab7fa02abff67d9c0a544dd57be77c908bb1b51",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3693,6 +3639,66 @@
   },
   "### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: \"assertion failed: builds(&world).is_empty() && spare(&world.slots)\", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)": {
    "sha256": "16790d68b06333f3b7d4d75300c4a4baa07b121e4ad2caf828e1f3309b6a3b8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T423 (<why: the finding or measurement that files it>)": {
+   "sha256": "8e399d5fdbe3a3c1fd8fa59196fb6bbb1f0793f5b987f31a3246f9f3dfbc948e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T423 Approach (checklist part A)": {
+   "sha256": "21388c36516370c1ec9597d943e8789a98733695306578e9ebc1f4e32ad7f3b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T425 (<why: the finding or measurement that files it>)": {
+   "sha256": "b8bb962b50a62c8b1505c6baba002d9e32af767837ae382132a876a8e2b2aac9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T425 Approach (checklist part A)": {
+   "sha256": "44816069c066b8dd2aa575f8c1f2e32aaf4de580b8278d3cd907a9edb5805f31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T426 (<why: the finding or measurement that files it>)": {
+   "sha256": "1597c947558e66deb4fbec5a547ecfeadfb54d3bac5a9705f6f6034288252a77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T426 Approach (checklist part A)": {
+   "sha256": "b0ad9fb4ed28462956c4bde39820316e6c6309d6be1d80c736e2cb0525b529b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T427 (<why: the finding or measurement that files it>)": {
+   "sha256": "5282aaeaa61d980b84d51acf8adb1f34a041c81d8600a626266f9612b1cb29fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T427 Approach (checklist part A)": {
+   "sha256": "4329f759e3f38f54d7d5d9d31c09e1626be1aad03b056975d4e3a57741c41bdc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T428 (<why: the finding or measurement that files it>)": {
+   "sha256": "d66388613a56caeaff98b555649a1657275d522bbe3069f356dac167d75dec8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T428 Approach (checklist part A)": {
+   "sha256": "5afa7f96c689a25970e4e62ae427982ae120e3eed1348d5f1e13bf81b473221b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -33383,6 +33389,45 @@
      "summary": "T314's empty template block removed.",
      "class": "within",
      "why": "Its earlier text (verdict CLEAR) was an unfilled placeholder carrying no decision, so its removal narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T423 (<why: the finding or measurement that files it>)",
+    "### T423 Approach (checklist part A)",
+    "### T425 (<why: the finding or measurement that files it>)",
+    "### T425 Approach (checklist part A)",
+    "### T426 (<why: the finding or measurement that files it>)",
+    "### T426 Approach (checklist part A)",
+    "### T427 (<why: the finding or measurement that files it>)",
+    "### T427 Approach (checklist part A)",
+    "### T428 (<why: the finding or measurement that files it>)",
+    "### T428 Approach (checklist part A)",
+    "(removed) ### T352 (<why: the finding or measurement that files it>)",
+    "(removed) ### T352 Approach (checklist part A)",
+    "(removed) ### T404 (<why: the finding or measurement that files it>)",
+    "(removed) ### T404 Approach (checklist part A)",
+    "(removed) ### T417 (<why: the finding or measurement that files it>)",
+    "(removed) ### T417 Approach (checklist part A)",
+    "(removed) ### T419 (<why: the finding or measurement that files it>)",
+    "(removed) ### T419 Approach (checklist part A)",
+    "(removed) ### T424 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T423/T425/T426/T427/T428 new blocks",
+     "summary": "Ten new blocks (a heading block and a checklist part A block for each of T423, T425, T426, T427, T428), every one the unfilled template: angle-bracket placeholders only, no approach, no constraint, no figure, no Found-and-left item.",
+     "class": "within",
+     "why": "An unfilled template decides nothing the spec leaves open. Its only fixed wording, the Performance work? line, restates FR-013 (measurement tasks count as performance work for scheduling, the GM 2026-11-20), and the Found and left? line restates D15's deferral form; neither narrows the request."
+    },
+    {
+     "id": "removed T352/T404/T417/T419/T424 blocks",
+     "summary": "Nine blocks deleted (T352, T404, T417, T419 heading and part A; T424 heading), each judged CLEAR earlier as the same unfilled template.",
+     "class": "within",
+     "why": "Per earlier.md each removed block carried only template placeholders, so its removal withdraws no decision, approach, constraint or deferral; nothing the GM asked for is narrowed by deleting text that held no content."
     }
    ]
   }
