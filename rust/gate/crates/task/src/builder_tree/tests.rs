@@ -11,11 +11,11 @@ use l7r_shared::builder_pool;
 use super::{run, Env};
 use crate::tests::{repo, root_of};
 
-fn words(a: &[&str]) -> Vec<String> {
+pub(crate) fn words(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
 }
 
-fn env(dir: &Path) -> Env {
+pub(crate) fn env(dir: &Path) -> Env {
     Env {
         cache: dir.join("cache"),
         cap: 2,
@@ -30,7 +30,7 @@ fn env(dir: &Path) -> Env {
 }
 
 /// The fixture's clone with a guard wrapper committed, which leaves `<tree>.guard-built` beside the tree it runs from.
-fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
+pub(crate) fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
     let dir = repo(tag);
     let root = root_of(&dir);
     std::fs::create_dir_all(root.join("scripts/hooks")).unwrap();
@@ -43,7 +43,7 @@ fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
     (dir, root)
 }
 
-fn pool_of(root: &Path) -> Vec<builder_pool::Tree> {
+pub(crate) fn pool_of(root: &Path) -> Vec<builder_pool::Tree> {
     builder_pool::read(&root.join(".git"))
 }
 

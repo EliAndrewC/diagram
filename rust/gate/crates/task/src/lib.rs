@@ -10,6 +10,7 @@
 //! T359): a filed task closed as withdrawn, and a start undone.
 
 pub mod builder_brief;
+pub mod builder_done;
 pub mod builder_tree;
 pub mod phase_sources;
 mod plan_hold;
@@ -29,11 +30,12 @@ use std::process::Command;
 use l7r_gate_core::Reply;
 use l7r_shared::py_text::strip;
 
-/// `l7r-gate tick|task-start|task-unstart|task-withdraw|task-add|set-down|phase-read|builder-tree|builder-brief <args>` from `cwd`, as the binary dispatches them.
+/// `l7r-gate tick|task-start|task-unstart|task-withdraw|task-add|set-down|phase-read|builder-tree|builder-brief|builder-done <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
 pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
     match verb {
         "builder-brief" => builder_brief::cli(args, cwd),
+        "builder-done" => builder_done::cli(args, cwd),
         "builder-tree" => builder_tree::cli(args, cwd),
         "tick" => tick::cli(args, cwd),
         "task-start" => task_start::cli(args, cwd),

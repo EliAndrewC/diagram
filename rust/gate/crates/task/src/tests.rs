@@ -133,6 +133,9 @@ fn the_binary_s_three_verbs_are_dispatched() {
     assert!(crate::cli("phase-read", &[], &root)
         .stderr
         .starts_with("usage: phase_sources.py"));
+    assert!(crate::cli("builder-done", &[], &root)
+        .stderr
+        .starts_with("usage: make builder-done"));
 }
 
 #[test]

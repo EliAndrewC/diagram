@@ -657,10 +657,10 @@ land:           ## [project] land one task or several and tick them: every cheap
 # `git worktree add` under the clones directory, and the removal of a pool tree or its cache, are refused by `builder_pool_hooks`.
 .PHONY: builder-tree builder-trees builder-tree-release builder-tree-adopt builder-tree-drop
 builder-tree: export DISCARD := $(DISCARD)
-builder-tree:   ## [project] a builder's worktree from the clone's standing pool: a free tree brought to the clone's HEAD and held by the task, its path printed; none free, ONE more made up to the cap (L7R_BUILDER_POOL, 4), said to be cold, its guard built; make land releases it (feature 451 T285); a warm handout pre-warms the tree in the background - the test builds of the crates moved since its last handout, starting a crate only while a build slot is spare and never cutting one in flight (451 T336), L7R_PREWARM=0 for none (451 T316); every handout starts the clone's memory sampler where none runs, L7R_SAMPLER=0 for none (451 T274)   T=<task(s)> [F=<feature>] [DISCARD="<why a free tree's uncommitted work may go>"]
+builder-tree:   ## [project] a builder's worktree from the clone's standing pool: a free tree brought to the clone's HEAD and held by the task, its path printed; none free, ONE more made up to the cap (L7R_BUILDER_POOL, 4), said to be cold, its guard built; make land releases it (feature 451 T285); refused for a task whose own make builder-done commit is not yet carried, the make carry to run printed (451 T398); a warm handout pre-warms the tree in the background - the test builds of the crates moved since its last handout, starting a crate only while a build slot is spare and never cutting one in flight (451 T336), L7R_PREWARM=0 for none (451 T316); every handout starts the clone's memory sampler where none runs, L7R_SAMPLER=0 for none (451 T274)   T=<task(s)> [F=<feature>] [DISCARD="<why a free tree's uncommitted work may go>"]
 	@if [ -z "$(T)" ]; then printf 'make builder-tree: T=<task> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree take "$(T)" "$(or $(F),$(SPECIFY_FEATURE))"
-builder-trees:  ## [project] the builder pool: each tree, the task holding it, since when, its build cache's size (feature 451 T285)
+builder-trees:  ## [project] the builder pool: each tree, the task holding it, since when, its build cache's size (feature 451 T285); then each commit make builder-done kept that the clone's HEAD does not hold yet, with its make carry (451 T394)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree list
 builder-tree-release:  ## [project] free the pool tree a task holds, the tree and its build cache left in place - what make land does for a landed task (feature 451 T285)   T=<task(s)> [F=<feature>]
 	@if [ -z "$(T)" ]; then printf 'make builder-tree-release: T=<task> is required\n' >&2; exit 2; fi
@@ -698,6 +698,16 @@ builder-brief:  ## [project] the standing block of a builder's brief, printed to
 	$(if $(SIZING_OK),$(LOGESCAPE) SIZING_OK "$$SIZING_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-brief "$(T)" "$(or $(F),$(SPECIFY_FEATURE))" "$$KIND" "$(JOBS)" "$(MEASURES)" "$(CRATE)" "$(BLOCKS)" "$(LOAD)"
 
+# A POOL TREE GOES TO ITS NEXT TASK AS SOON AS ITS BUILDER'S WORK IS COMMITTED (451 T394; the GM, 2026-11-27: "if our tooling
+# indicates that we have spent over 2 hours blocking on the second tier then that's a HUGE problem"): the three warm trees stood
+# idle 23% of an eight-hour window with the queue never short, the session working a builder's end as commit, carry, resolve,
+# check, land and only then the next brief (dev/measurements/2026-11-27/tree-idle/results.md). MSG and GUARD are free text: the
+# binary reads them from the environment, never from the recipe. `rust/gate/crates/task/src/builder_done.rs`.
+.PHONY: builder-done
+builder-done:   ## [project] a builder's end in one command, run BEFORE the carry: the task's pool tree (found in the registry) committed whole - MSG the subject, the guard-edit reason's line from GUARD=, the co-author trailer, stray default_*.profraw removed - the commit kept under refs/l7r/done/<feature>-<task> and on the pool's log, the tree released, and the two next commands printed in order: the next dispatch, then make carry FROM= COMMIT=; refused with nothing done on an unfinished cherry-pick or merge, an unmerged path, a conflict's markers, nothing to commit, a guard file changed with no GUARD= (the re-run printed), or the task's earlier done commit not yet carried; it never carries, lands or pushes (feature 451 T394)   T=<task(s)> MSG="<the commit's subject>" [F=<feature>] [GUARD="<guard-edit reason>"]
+	@if [ -z "$(T)" ] || [ -z "$$MSG" ]; then printf 'make builder-done: T=<task(s)> and MSG="<the commit'"'"'s subject>" are required   [F=<feature>] [GUARD="<guard-edit reason>"]\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-done "$(T)" "$(or $(F),$(SPECIFY_FEATURE))"
+
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 
@@ -705,9 +715,9 @@ coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from
 # A BUILDER'S WORK REACHES THE CLONE BY ONE COMMAND (451 T292): three landings ran over a hand cherry-pick left unfinished on a
 # conflict (451 T235, T262, T270), which `make land` now refuses; this carries the commit, keeps both sides of the conflicts every
 # parallel carry-over met (a tasks.md list line each side added, plan-review.json), stops on any other, and verifies its end.
-carry:           ## [project] carry a builder worktree's HEAD commit (or COMMIT=) into this tree by cherry-pick: both sides kept where each only added a specs/*/tasks.md list line (a filed task's box whole, 451 T289; a bare open box given back the lines a side holds under it) or a specs/*/request.md dated section, a specs/*/plan.md merged by `### T<n>` section (the builder's filled stub taken, its removed one dropped, the clone's kept; one section both changed stops, 451 T300) and a plan-review.json by the record's merge, any other conflict stopped with the files and the next command; ends verified - nothing in progress, unmerged or staged, the commit's non-spec files in HEAD - its last line naming each file resolved and its rule (451 T292)   FROM=<builder's worktree> [COMMIT=<sha>]
-	@if [ -z "$(FROM)" ]; then printf 'make carry: FROM=<the builder worktree> is required   [COMMIT=<sha>; its HEAD otherwise]\n' >&2; exit 2; fi
-	@$(LAND_RUN) --carry "$(abspath $(FROM))" $(COMMIT)
+carry:           ## [project] carry a builder worktree's HEAD commit (or COMMIT=) into this tree by cherry-pick: both sides kept where each only added a specs/*/tasks.md list line (a filed task's box whole, 451 T289; a bare open box given back the lines a side holds under it) or a specs/*/request.md dated section, a specs/*/plan.md merged by `### T<n>` section (the builder's filled stub taken, its removed one dropped, the clone's kept; one section both changed stops, 451 T300) and a plan-review.json by the record's merge, any other conflict stopped with the files and the next command; ends verified - nothing in progress, unmerged or staged, the commit's non-spec files in HEAD - its last line naming each file resolved and its rule (451 T292); COMMIT= alone carries a commit this clone's own objects hold, as make builder-done keeps one, and the ref it was kept under is deleted at the carry's verified end, an empty pick's too (451 T397)   FROM=<builder's worktree> [COMMIT=<sha>] | COMMIT=<sha>
+	@if [ -z "$(FROM)" ] && [ -z "$(COMMIT)" ]; then printf 'make carry: FROM=<the builder worktree> is required   [COMMIT=<sha>; its HEAD otherwise] - or COMMIT=<sha> alone, a commit this clone holds (make builder-trees lists the done commits)\n' >&2; exit 2; fi
+	@$(LAND_RUN) --carry "$(if $(FROM),$(abspath $(FROM)))" $(COMMIT)
 
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
 	@$(LAND_RUN) --stop

@@ -390,3 +390,15 @@ builder's test builds waiting for a build slot (the waits and compiles it lists,
 the order of work it asks for: measure the memory of a one-crate test build first, then let that class of build take no slot or
 a slot of its own kind, and say what `make task-time`'s minutes waiting on a build slot were before and after. The slot itself
 is 451 T284's, whose section above carries his words on it.
+
+## 2026-11-27: a pool tree is handed on as soon as its builder's work is committed (451 T394)
+
+`make task-time` booked 123.3 blocking minutes to the second tier over the eight hours to 2026-11-27T01:00Z. The GM, 2026-11-27, as
+the coordinating session recorded his words on T394's line in `tasks.md` (copied here from that line by T394's closing builder, who
+did not hear them; the spelling is the line's):
+
+> if our tooling indicates that we have spent over 2 hours blocking on the second tier then that's a HUGE problem, either with our measurements or with our process, and we should get to the botom of that ASAP
+
+The rest of T394's line is the coordinating session's: the measurement his question led to (the pool trees' idle minutes,
+`dev/measurements/2026-11-27/tree-idle/results.md`), the command it proposes, `make builder-done`, and what the line asks beyond
+that command - `make land` carrying by commit, the Stop hook's refusal with 451 T313, and the re-measurement.

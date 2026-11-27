@@ -144,7 +144,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("claims") => claims::cli(&args[1..]),
         Some(
             verb @ ("tick" | "task-start" | "task-unstart" | "task-withdraw" | "task-add"
-            | "set-down" | "phase-read" | "builder-tree" | "builder-brief"),
+            | "set-down" | "phase-read" | "builder-tree" | "builder-brief" | "builder-done"),
         ) => l7r_gate_task::cli(
             verb,
             &args[1..],

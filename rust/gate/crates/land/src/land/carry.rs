@@ -4,7 +4,9 @@
 //! carry-over of the parallel trials conflicted in the same two files, each time resolved by hand the same way.
 //!
 //! The commit carried is the tree's HEAD, or the one named; it is cherry-picked, never merged (the worktree's branch is not the
-//! clone's). A conflict is resolved here only where keeping both sides is provably what a hand would do:
+//! clone's). With no tree and a commit named (`make carry COMMIT=<sha>`, 451 T397) the commit is looked for where the carry runs:
+//! a linked worktree's commit is in the clone's own objects, and one `make builder-done` kept under `refs/l7r/done/` stays there
+//! after its tree's next handout, so no tree need be named for it. A conflict is resolved here only where keeping both sides is provably what a hand would do:
 //!
 //! - `specs/*/tasks.md`, where every conflicting hunk is one both sides only ADDED to (nothing of the base between them) and every
 //!   added line is a list line, its continuation or blank - an Occasions line, a task's line appended: ours, then theirs' lines ours
@@ -29,6 +31,7 @@
 //!
 //! A commit whose changes HEAD already holds - carried before under another sha, or its lines kept from both sides equal to ours -
 //! makes an EMPTY pick: it is skipped, verified the same way, and said to change nothing (exit 0, nothing left in progress; T304).
+//! At that verified end, empty or not, the ref `make builder-done` kept the commit under is deleted ([`spent`], 451 T397).
 //!
 //! Exit: 0 carried and verified (or already in HEAD's history), 2 refused or stopped (the stop leaves the pick in progress), 1 the
 //! end's verification failed.
@@ -36,6 +39,7 @@
 use std::path::Path;
 
 use l7r_gate_core::Reply;
+use l7r_gate_task::builder_done::REFS as DONE_REFS;
 
 use super::unfinished::{git, git_dir, lines, refusals};
 
@@ -43,7 +47,7 @@ mod boxes;
 mod sections;
 
 const USAGE: &str =
-    "usage: l7r-gate land --carry <tree> [<commit>]   (make carry FROM=<builder's worktree> [COMMIT=<sha>])";
+    "usage: l7r-gate land --carry <tree> [<commit>]   (make carry FROM=<builder's worktree> [COMMIT=<sha>]; COMMIT=<sha> alone for a commit this clone's objects hold, as make builder-done keeps one)";
 /// The pick's own continue, its editor answered.
 const CONTINUE: &str = "-c core.editor=true cherry-pick --continue";
 
@@ -356,6 +360,34 @@ fn skipped_empty(root: &Path) -> Result<bool, String> {
     Ok(empty && git(root, &["cherry-pick", "--skip"])?.0 == 0)
 }
 
+/// The refs `make builder-done` kept `sha` under (`refs/l7r/done/<feature>-<task>`), deleted, and the words that say so; nothing
+/// where it is under none. A done ref says "this commit waits on its carry", and this is the carry's verified end - carried, in
+/// HEAD's history already, or an EMPTY pick skipped because HEAD holds its changes by another route. WHY HERE (451 T397, the plan
+/// review of T394, 2026-11-27): `make builder-trees` and `make builder-tree` tell a carried commit by its author's time and
+/// subject in HEAD, which an empty pick never leaves there, so its ref stayed and the task was refused its next tree though
+/// its work was in HEAD.
+fn spent(root: &Path, sha: &str) -> Result<String, String> {
+    let listed = git(
+        root,
+        &[
+            "for-each-ref",
+            "--format=%(refname)",
+            "--points-at",
+            sha,
+            DONE_REFS,
+        ],
+    )?;
+    let refs = lines(&listed.1);
+    for name in &refs {
+        git(root, &["update-ref", "-d", name])?;
+    }
+    Ok(if refs.is_empty() {
+        String::new()
+    } else {
+        format!("; no longer waiting on its carry: {}", refs.join(", "))
+    })
+}
+
 /// The carry, after its arguments: what it printed and its exit code.
 fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32, String> {
     let tree = root.display();
@@ -395,8 +427,9 @@ fn carry(root: &Path, from: &Path, commit: &str, said: &mut Said) -> Result<i32,
         }
     }
     if git(root, &["merge-base", "--is-ancestor", &sha, "HEAD"])?.0 == 0 {
+        let spent = spent(root, &sha)?;
         said.say(&format!(
-            "carry: {short} is already in {tree}'s history - nothing to carry\n"
+            "carry: {short} is already in {tree}'s history - nothing to carry{spent}\n"
         ));
         return Ok(0);
     }
@@ -483,7 +516,8 @@ fn end(
     } else {
         format!("carried into {tree} as {head}")
     };
-    said.say(&format!("carry: {short} {how} - verified: nothing in progress, nothing unmerged, nothing staged, its {count} non-spec file(s) in HEAD{both}\n"));
+    let spent = spent(root, sha)?;
+    said.say(&format!("carry: {short} {how} - verified: nothing in progress, nothing unmerged, nothing staged, its {count} non-spec file(s) in HEAD{both}{spent}\n"));
     Ok(0)
 }
 
@@ -493,15 +527,20 @@ pub(super) fn cli(args: &[String], root: &Path) -> Reply {
         out: String::new(),
         err: String::new(),
     };
-    let (Some(from), true) = (args.first().filter(|f| !f.is_empty()), args.len() <= 2) else {
+    // no tree named and a commit given: a commit the clone's own objects hold, as `make builder-done` keeps one (451 T397)
+    let first = args.first().map_or("", String::as_str);
+    let named = args.get(1).filter(|c| !c.is_empty());
+    if args.len() > 2 || (first.is_empty() && named.is_none()) {
         said.err = format!("{USAGE}\n");
         return said.reply(2);
+    }
+    let from = if first.is_empty() {
+        root
+    } else {
+        Path::new(first)
     };
-    let commit = args
-        .get(1)
-        .filter(|c| !c.is_empty())
-        .map_or("HEAD", String::as_str);
-    match carry(root, Path::new(from), commit, &mut said) {
+    let commit = named.map_or("HEAD", String::as_str);
+    match carry(root, from, commit, &mut said) {
         Ok(code) => said.reply(code),
         Err(why) => {
             said.warn(&format!("carry: {why}\n"));

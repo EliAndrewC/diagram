@@ -69,7 +69,19 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
 - A builder ENDS at its report and is not kept for follow-up (the GM 2026-11-26): what a successor needs is in its plan
   section, its commit and its report, and a later fix - a gate failure, even a design that proved wrong - goes to a fresh
   agent briefed from those. A message to a builder is for a question it asked before it reported.
-- A builder's commit reaches the clone by `make carry FROM=<its worktree>` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
+- AT A BUILDER'S END, your steps in this order (451 T394): `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>"
+  [GUARD="<guard-edit reason>"]` - it commits the builder's tree (found in the pool's registry), keeps the commit under
+  `refs/l7r/done/<feature>-<task>`, releases the tree and prints the next two commands; THEN THE NEXT DISPATCH (`make builder-brief`
+  for the queue's next task no tree holds), and only then the carry it printed, `make carry FROM=<the tree> COMMIT=<the commit>`,
+  the checks and the landing, while the next builder works. Never a hand `git add`/`git commit` in a pool tree, and never the
+  carry before the dispatch: measured 2026-11-27, the three warm trees stood idle 23% of an eight-hour window with the queue never
+  short, because the tree waited on the carry, its conflicts, the gate and the landing
+  (`dev/measurements/2026-11-27/tree-idle/results.md`). `make builder-trees` lists every done commit not yet carried, each with
+  its carry. THE ONE EXCEPTION to dispatch-first: the SAME task's next builder (its closing half) is dispatched AFTER its carry -
+  a handout brings the tree to the clone's HEAD, so before the carry it would start without the build half's work: `make builder-tree`
+  (and so `make builder-brief`) refuses that handout with the carry to run (451 T398), and a task's second `make builder-done`
+  is refused until its first commit is carried. A done commit is also carried by `make carry COMMIT=<sha>` alone (451 T397).
+- A builder's commit reaches the clone by `make carry FROM=<its worktree> [COMMIT=<sha>]` run in the clone (451 T292), never a hand `git cherry-pick`: `make land` refuses a carry-over left unfinished.
 - TWO code builders at once, each in a REUSED worktree (its build cache warm); three or four at once only for batches that
   compile nothing (`docs/process-decisions.md`, "Two code builders at once"; `dev/audits/parallel-builder-count.md`).
 - The memory sampler starts with a handout: `make builder-tree` starts the clone's sampler where none runs, and the hand-started

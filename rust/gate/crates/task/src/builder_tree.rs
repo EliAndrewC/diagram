@@ -115,17 +115,17 @@ fn sampler_words(exe: Option<PathBuf>, knob: &str) -> Vec<String> {
 }
 
 /// The clone a command runs in: its git common directory, its main worktree and that tree's HEAD.
-struct Pool {
-    common: PathBuf,
-    clone: PathBuf,
-    head: String,
+pub(crate) struct Pool {
+    pub(crate) common: PathBuf,
+    pub(crate) clone: PathBuf,
+    pub(crate) head: String,
 }
 
-fn text(out: &[u8]) -> String {
+pub(crate) fn text(out: &[u8]) -> String {
     String::from_utf8_lossy(out).trim().to_owned()
 }
 
-fn pool(cwd: &Path) -> Option<Pool> {
+pub(crate) fn pool(cwd: &Path) -> Option<Pool> {
     let (common, _) = marks::places(cwd)?;
     let clone = marks::main_top(&common);
     let head = text(&git(&clone, &["rev-parse", "HEAD"]).1);
@@ -164,7 +164,14 @@ fn lock(common: &Path, tries: u32) -> Lock {
 
 /// A line of the pool's log.
 fn note(p: &Pool, env: &Env, event: &str, tree: &Path, detail: &str) {
-    let line = json!({"utc": env.now, "event": event, "tree": tree, "detail": detail});
+    log_line(
+        p,
+        &json!({"utc": env.now, "event": event, "tree": tree, "detail": detail}),
+    );
+}
+
+/// `line` appended to the pool's log.
+pub(crate) fn log_line(p: &Pool, line: &serde_json::Value) {
     if let Ok(mut f) = std::fs::OpenOptions::new()
         .create(true)
         .append(true)
@@ -207,7 +214,7 @@ pub(crate) fn task_list(t: &str) -> Vec<String> {
 }
 
 /// `tree` is held by one of `tasks` (of `feature`, where both name one).
-fn holds(tree: &Tree, tasks: &[String], feature: &str) -> bool {
+pub(crate) fn holds(tree: &Tree, tasks: &[String], feature: &str) -> bool {
     tree.tasks.iter().any(|t| tasks.contains(t))
         && (feature.is_empty() || tree.feature.is_empty() || tree.feature == feature)
 }
@@ -301,7 +308,7 @@ fn landed(p: &Pool, tree: &Tree) -> bool {
 }
 
 /// Where a tree keeps the commit it was last handed out at, and its pre-warm's log: its own git directory.
-fn tree_git_dir(tree: &Path) -> PathBuf {
+pub(crate) fn tree_git_dir(tree: &Path) -> PathBuf {
     PathBuf::from(text(&git(tree, &["rev-parse", "--absolute-git-dir"]).1))
 }
 
@@ -384,7 +391,7 @@ fn sampler(p: &Pool, env: &Env) -> String {
     }
 }
 
-fn refused(why: String) -> Reply {
+pub(crate) fn refused(why: String) -> Reply {
     reply(String::new(), why, 2)
 }
 
@@ -404,6 +411,10 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
             ),
             0,
         );
+    }
+    // the task's own done commit not yet carried: its next builder would start without it (451 T398)
+    if let Some(why) = crate::builder_done::handout_waits(p, tasks, feature) {
+        return refused(why);
     }
     let mut notes = String::new();
     for t in &mut trees {
@@ -525,7 +536,7 @@ fn make_cold(
     reply(format!("{tree_text}\n"), notes, 0)
 }
 
-fn release(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
+pub(crate) fn release(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
     let _turn = lock(&p.common, env.lock_tries);
     let mut trees = builder_pool::read(&p.common);
     let mut said = String::new();
@@ -602,6 +613,7 @@ fn list(p: &Pool, env: &Env) -> Reply {
             cache_size(&builder_pool::cache(&env.cache, &t.tree))
         );
     }
+    out.push_str(&crate::builder_done::listed(p));
     reply(out, String::new(), 0)
 }
 
@@ -752,4 +764,4 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env) -> Reply {
 }
 
 #[cfg(test)]
-mod tests;
+pub(crate) mod tests;

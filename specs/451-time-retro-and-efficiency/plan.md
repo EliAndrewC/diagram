@@ -5437,31 +5437,58 @@ engine speed, so no checklist.
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
-### T394 (<why: the finding or measurement that files it>)
+### T394 (the GM's question of 2026-11-27 on the blocking minutes `make task-time` booked to the second tier, and the measurement it led to, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`), because the session worked a builder's end as commit, carry, resolve, check, land and only then briefed the next builder)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one command at a builder's end, `make builder-done T=<task(s)> MSG="<subject>" [F=<feature>] [GUARD="<guard-edit reason>"]` (`l7r-gate builder-done`, `rust/gate/crates/task/src/builder_done.rs`, new; wired in `rust/gate/crates/task/src/lib.rs` and `rust/gate/src/lib.rs`; the Makefile's `builder-done` target), which commits the builder's pool tree, keeps the commit where the tree's next handout cannot lose it, releases the tree and prints the next dispatch AHEAD of the carry. The idle figures are the measurement's, measured 2026-11-27 (`tree-idle.py`, read-only over the session's transcript and the 451 event log; the record is `dev/measurements/2026-11-27/tree-idle/results.md`, which the clone holds and this builder's tree, handed out before it was committed, does not). The command's effect on those figures is NOT measured here (Found and left, T401).
+  - **What it does, in order**, in the pool tree the registry says the tasks hold (the tree is never passed): refuses with nothing done (below); removes the stray `default_*.profraw` files an instrumented binary dropped; `git add -A`; `git commit -F` a message file in the tree's own git directory (the subject, a `GUARD_EDIT_OK:` line when `GUARD=` is given, the co-author trailer); writes the commit under `refs/l7r/done/<feature>-<task>`, one ref a task; appends a `done` line (the tree, the holder, the commit, the time) to the pool's log; releases the tree through `builder_tree::release`, which brings it to the clone's HEAD; prints the commit, the release, then `1. make builder-brief ...` and `2. make carry FROM=<tree> COMMIT=<sha>`. It never carries, lands or pushes.
+  - **What it refuses, nothing done and the tree still held** (exit 2): no task, no feature, a subject that is empty or more than one line, a `GUARD=` of one word; a tree the tasks do not hold, or hold only as part of a bundle (the exact `T=` printed); a tree gone from disk; an operation git left unfinished in the tree (a cherry-pick, merge, revert, pick of several commits, rebase); an unmerged path; nothing to commit; a conflict's markers in a changed file (the guard's own `conflict_marker_hooks::has_conflict`); a guard file changed with no `GUARD=` (the exact re-run printed, the subject shell-quoted); a done commit of one of the tasks not yet carried. A `git commit` that fails (a hook) is exit 1 with git's words, nothing left staged, the tree still held.
+  - **DECISION, the commit is kept by a ref** (label: tooling convention). The release detaches the tree at the clone's HEAD, so nothing but the tree's reflog would name the builder's commit, and an unreferenced commit is git's to prune. `refs/l7r/done/<feature>-<task>` keeps it until it is carried; a ref whose commit is carried is deleted at the next `make builder-done`. A bundle's tree is done only by the whole bundle and gets one ref a task on the one commit.
+  - **DECISION, "carried" is told by the author's time and the subject** (label: tooling convention). A carry is a cherry-pick, so the carried commit has another id: `git branch --contains` never names it, and `git cherry` (a patch-id) misses a carry that kept both sides of a `tasks.md` conflict. A cherry-pick keeps the author's time and the subject, so a done commit is carried where the clone's HEAD holds a commit of the same two, read in ONE `git log --since` from the oldest done commit. A pick the carry skips as empty leaves no such commit in HEAD, so that test alone would list it forever: the carry itself now deletes the done ref at its verified end (below), and this test is what remains for a commit that reached HEAD without the carry's end (a carry stopped on a conflict and finished by hand). One known miss, not reached by a real subject: a done commit made in the same second and with the same subject as a commit already in HEAD would read as carried, which the fixture's commits (all named `c`) showed in this builder's first version of one test and no `make builder-done` subject, which names its task, repeats.
+  - **DEVIATION from the task line's sketch: the guard-file rule is asked in process** (label: deliberate deviation). The line says the command "commits the builder's tree with the message given"; the session's hand commit was held to the guard-file rule by the Bash hook that reads a `git commit` command, and a commit this binary runs passes no hook. So the command asks the rule itself: a changed guard file with no `GUARD=` is refused. `guard_file()` is a COPY of the guard's list (`rust/guard/src/guards/guard_file_hooks.rs`, `named`), because a gate crate may not read the guard's binary crate (`check guard-deps`); the copy is named as one in the code. Not fixed here: one list in `l7r_shared` is an edit of the guard's own sources and suites. Filed as T396; lands before T313.
+  - **DEVIATION from the task line: the queue's next task is not named** (label: deliberate deviation). The line says the command "prints the queue's next task and its make builder-brief command". `specs/451-time-retro-and-efficiency/queue.md` is prose the session edits (numbered items naming several tasks, "after T316", "LANDED"), which code could only guess at, so the command prints `make builder-brief T=<the first task of specs/<feature>/queue.md no tree holds> F=<n> KIND=<...>` with the placeholder left for the session. Not fixed here: a queue code reads is 451 T313's design. Filed as T395; lands before T313.
+  - **DECISION, the printed carry keeps `FROM=`** (label: tooling convention). The pool's log supplies the tree for `FROM=` (the clone where the log names none). `make carry` only resolves the commit there, and any worktree of the clone resolves it, released or handed out again; the land crate's test below runs exactly that.
+  - **Built here from the build half's filed holes, in the same files.** (a) T398, `make builder-tree` refuses a handout for a task whose own done commit is not yet carried (`builder_tree.rs`, `take`, asking `builder_done::handout_waits`), printing the `make carry` to run: a handout starts at the clone's HEAD, so a closing half handed its tree before its build half's carry would start without the work it closes, and `make builder-done` refused only at that builder's end. `make builder-brief` takes its tree through the same step and passes the refusal on. The refusal at `make builder-done` stays as the backstop for a tree held some other way. (b) T397's second part, `make carry COMMIT=<sha>` with no `FROM=` (`rust/gate/crates/land/src/land/carry.rs`, `cli`; the Makefile's `carry` recipe): with no tree named the commit is looked for where the carry runs. (c) T397's first part, on the plan review's first round (a DEVIATION from this builder's brief, which left it open; label: deliberate deviation): `make carry` deletes the ref a done commit was kept under at its verified end - carried, already in HEAD's history, or an EMPTY pick skipped because HEAD holds its changes by another route (`carry.rs`, `spent`) - and says so on its last line. Without it T398 turned a stale listing into a refusal of valid input: a task whose work was in HEAD was refused its next tree. The case is real: the clone landed this task's own one-line test fix by another route (`4f244987ac`) while its tree still held it. T397's third part stays open with its box.
+  - **`make builder-trees`** ends with each done commit the clone's HEAD does not hold, its tasks and its carry (`builder_done::listed`, called from `builder_tree.rs`, `list`), read from the refs, since the ref is what must exist for the carry.
+  - **Fixed in passing** (the build half): `rust/gate/crates/task/src/task_unstart/tests.rs` asserted that a log line holds `T01`, true of any timestamp from 01:00 to 01:59 UTC; it failed at 01:01 UTC on 2026-11-27 and now asks for the quoted id. The clone has since landed the same one-line fix (`4f244987ac`), so that file's carry comes out empty.
+  - **The audit entry** `dev/audits/builder-done.md` (kind `adopted`): its falsifier is the tree-idle table re-measured over a like window still showing the warm trees idle 10% or more (GUESS), or a done commit lost. That threshold is a GUESS knob (the task line's own "idle under 10% (a GUESS)"): no measurement sets it, it is the goal the re-measurement is read against, and it moves on the first re-measurement's evidence.
+  - **Docs**: `scripts/container/builder-brief.md` (the session's steps at a builder's end, dispatch before carry, and the one exception), `docs/efficiency-tooling.md` (the table row), `rust/gate/CLAUDE.md` (the task and land crates' rows), `docs/make-targets.html` (regenerated by `make docs`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a tree committed, kept under its ref, released, the next dispatch printed before the carry | `a_tree_is_committed_kept_and_released_in_one_call_and_its_commit_outlives_the_next_handout`, red on a stub that refuses | n/a: tooling | none | n/a |
+| each refusal leaves the tree held and nothing committed | `each_refusal_leaves_the_tree_held_and_nothing_committed`, `an_unmerged_path_is_refused`, `a_commit_git_refuses_leaves_nothing_staged_and_the_tree_held` | n/a: tooling | none | n/a |
+| a guard file is committed only with its reason | `a_guard_file_is_committed_only_with_its_reason_and_the_refusal_prints_the_re_run` (the copied list's thirteen held paths and seven free ones) | n/a: tooling | none | n/a |
+| a bundle is one commit under a ref a task | `a_bundle_is_one_commit_under_a_ref_for_each_task` | n/a: tooling | none | n/a |
+| a done ref is never written over while its commit waits | `a_done_commit_not_yet_carried_is_never_written_over` | n/a: tooling | none | n/a |
+| T398: a task is handed no tree while its own done commit waits | `a_task_is_handed_no_tree_while_its_own_done_commit_waits_on_its_carry`, red with the check off | n/a: tooling | none | n/a |
+| the sequence the command exists for; T397's first and second parts | `a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task` (the land crate), red with the ref deleted, red on the old argument check, and red with the carry's end deleting no ref | n/a: tooling | none | n/a |
 
 ### T394 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A pool tree goes to its next task as soon as its builder's work is committed: the session's first act at a builder's end is one command and the next dispatch, and the carry, its conflicts, the gate and the landing run while the next builder works. No builder's commit is lost by its tree moving on.
+2. **The constraints.** The pool's registry and its release are 451 T285's (`builder_tree.rs`), reused, not copied. A builder's commit reaches the clone only by `make carry` (451 T292), never a hand cherry-pick. A guard file's commit owes its `GUARD_EDIT_OK:` reason (feature 170). The second tier stays the session's (the GM's ruling of 2026-11-26, `docs/process-decisions.md`, "Two tiers of checking"): this command runs no check. A gate crate reads nothing of the guard's binary crate (451 T66, `check guard-deps`). No history is rewritten: the command commits and writes refs, nothing else.
+3. **Where each comes from.** G: the GM's words of 2026-11-27 on T394's line, copied to `request.md` ("a pool tree is handed on as soon as its builder's work is committed (451 T394)"); they ask that the blocking be got to the bottom of, and the command is the coordinating session's answer to what the measurement found. O: the tree-idle measurement. The constraints are earlier tasks' and are named with them above.
+4. **Do they describe the world here?** Yes for the cause: 170 of the 336 idle tree-minutes fell while the session was in its own turn and 105 while a landing ran, measured 2026-11-27 (`tree-idle.py`, each idle 10 seconds classed by what the session was doing). Whether the command removes them is not known until it has been used over a like window (T401).
+5. **The order.** After 451 T285 (the pool) and T292 (`make carry`), both landed. Before T313 (the pool kept full, which reads the queue and adds the Stop hook's refusal), T395, T396 and T397. T398 and T397's first and second parts are built here.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/task rust/gate rust/gate/crates/land"` and `tests/hooks/test-make-only-hooks.sh` in the builder's tree, the full gate with its coverage at the batch's landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, the build half, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task` against a stub whose `run` refused and whose `listed` was empty): 111 passed, 7 failed, the seven `builder_done` tests. The closing half, measured 2026-11-27 (the same command with `take`'s check switched off): 117 passed, 2 failed, the handout test and the written-over test as it then stood; and measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/land`): 128 passed, 1 failed with the done ref deleted before the prune (`holds no commit`), 128 passed, 1 failed on the old argument check (`COMMIT=` alone), and 128 passed, 1 failed with the carry's end deleting no ref (the plan review's first round). After, measured 2026-11-27 (`make builder-checks` over the three crates): the task crate 119 passed, 0 failed, the land crate 129 passed, 0 failed, lint and format clean on the three; `tests/hooks/test-make-only-hooks.sh` 144 passed, 0 failed; `make docs` 217 targets, 0 undocumented. The task crate's tests run fresh six times in a row, 119 passed each, measured 2026-11-27 (`FRESH=1 make rust-test CRATE=rust/gate/crates/task`), after one test of this half failed once on the fixture's shared subject (the Approach's second known miss). Live, read-only, observed 2026-11-27, method: `make carry` with neither argument printed the recipe's refusal, and `make carry COMMIT=no-such-commit` reached the binary and was refused "holds no commit". NOT run: coverage (the second tier's, by the GM's ruling), `make static`, `make hooks-test`, `make quick`; the command on the live pool - this task's own builder's end is its first use.
+10. **Before moving a constant.** n/a: no constant moves. The audit entry's 10% is new, a GUESS knob no verdict depends on.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map: no map, sheet, verdict or guard message changes. What a session sees differently: a builder's end is one command, `make builder-trees` lists the commits that wait, `make builder-tree` refuses a task its next tree while its own commit waits, `make carry` takes `COMMIT=` alone, and its last line names the done ref it cleared.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make land` does not carry by commit: T394's line asks that "make land carries what is staged by commit, the tree gone on", and the landing still expects the session to have run each `make carry`. Its visible effect: one more hand command a task between `make builder-done` and `make land`, and a done commit the session forgets is caught only by `make builder-trees`. Not fixed here: it is a change to the landing's first pass, a builder of its own by the sizing rule. Filed as T397; lands before T313.
+- The Stop hook does not refuse a turn's end while a tree is free: T394's line asks it "with 451 T313". Its visible effect: a free tree and a ready task can still wait on the session's memory. Not fixed here: it needs the queue code reads and T313's overlap rule. Filed as T313; lands before T22.
+- The queue's next task is a placeholder in the printed dispatch (the second DEVIATION above). Its visible effect: the session reads `queue.md` itself. Not fixed here: T313's design. Filed as T395; lands before T313.
+- The guard-file list is held twice (the first DEVIATION above). Its visible effect: a guard file added to the guard's list alone would be committed by `make builder-done` with no reason asked. Not fixed here: an edit of the guard's sources. Filed as T396; lands before T313.
+- The tree-idle table is not re-measured: T394's line ends "Then re-measure the same table over a like window: idle under 10% (a GUESS)". Its visible effect: the audit entry's falsifier is unread, and the command's worth is unshown. Not fixed here: it needs an eight-hour window of the session using the command, which no builder's tree can supply; it is the session's. Filed as T401; lands before T313.
+- This builder's tree did not hold T394's own box or plan stub: the tree was handed out at `fb8cde0206`, before the clone committed the line. Its visible effect: the box was copied here from the clone's `tasks.md` word for word (the carry drops a block ours holds whole), and the clone's unfilled `### T394` stub will meet this section at the carry, which stops on one task's section written on both sides - the session takes this side. fixed here as far as a builder can; nothing is filed, since a handout now starts at the clone's HEAD and the session commits a task's line before it briefs.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**The landing: split, not an open box.** Recommended: T394 is ticked as `make builder-done` with this section, T398 is ticked with it (built here whole), and what the line asks beyond the command lives in the tasks named above (T397's third part, T313, T401), each open. An open box with landed work reads to every tool as a started task that holds its files, and nothing would say which words of the line remain; the filed tasks say exactly that. T397 stays open for its third part alone.
+
+**Performance work?** yes: the builders' loop. It answers the measurement of 2026-11-27 (`dev/measurements/2026-11-27/tree-idle/results.md`): the three warm trees idle 336 of 1,440 tree-minutes (23%) over eight hours with the queue never short, measured 2026-11-27 (`tree-idle.py`), about nine tasks at the window's median of 37 builder minutes a task (the record's own arithmetic). There is no after yet: the command's first use is this task's own builder's end, and the re-measurement over a like window is T401, read against the audit entry's 10% (a GUESS knob). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 ### T399 (<why: the finding or measurement that files it>)
 
@@ -5498,6 +5525,194 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T400 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T395 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T395 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T396 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T396 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T397 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T397 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T398 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T398 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T401 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T401 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T403 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T403 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T404 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T404 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -4,6 +4,7 @@
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::ci::fixtures::{git, put};
+use l7r_shared::builder_pool;
 use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
@@ -489,12 +490,131 @@ fn the_end_refuses_a_carry_whose_files_head_does_not_hold() {
     assert_eq!(missing(&root, &sha, &head), Ok((1, Vec::new())));
 }
 
+/// `tasks` hold `tree` in the clone's pool, as a handout writes it.
+fn hold(root: &Path, tree: &Path, task: &str) {
+    let held = builder_pool::Tree {
+        tree: tree.to_path_buf(),
+        feature: "9001".to_owned(),
+        tasks: vec![task.to_owned()],
+        since: String::new(),
+    };
+    builder_pool::write(&root.join(".git"), &[held]).unwrap();
+}
+
+/// `make builder-done T=<task> F=9001 MSG=<subject>` run in the clone: the commit it kept under the task's ref.
+fn done(root: &Path, task: &str, subject: &str) -> String {
+    let args = [task.to_owned(), "9001".to_owned()];
+    let said = l7r_gate_task::builder_done::cli_with(&args, root, subject, "");
+    assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+    git(root, &["rev-parse", &format!("refs/l7r/done/9001-{task}")])
+}
+
+/// The done refs the clone still keeps.
+fn waiting(root: &Path) -> String {
+    git(
+        root,
+        &["for-each-ref", "--format=%(refname)", "refs/l7r/done"],
+    )
+}
+
+/// THE SEQUENCE `make builder-done` EXISTS FOR (451 T394): a pool tree's work committed and the tree released by it, the tree
+/// handed out again - brought, detached, to a HEAD of the clone that has moved on - and only then the carry, which finds the commit
+/// by nothing but the ref that kept it (every reflog expired, every unreachable object pruned). The handout is the git step a
+/// handout takes (`builder_tree`'s `bring`), not `make builder-tree`: that command starts the pre-warm and the sampler from its
+/// own program, which here is the test's. Then a second done commit carried with no tree named, and each carry's verified end -
+/// carried, an empty pick, a commit already in HEAD's history - deleting the ref that said the commit waits (451 T397).
+#[test]
+fn a_done_commit_is_carried_by_its_ref_after_its_tree_went_to_the_next_task() {
+    let (_dir, root, builder) = trees("carry-done");
+    // a pool tree stands on no branch
+    git(&builder, &["checkout", "-q", "--detach"]);
+    hold(&root, &builder, "T01");
+    put(&builder, "rust/held.rs", "fn held() {}\n");
+    put(&builder, TASKS_MD, &with_line("T270"));
+    let sha = done(&root, "T01", "9001 T01: the build half");
+    assert!(builder_pool::read(&root.join(".git"))[0].free());
+    assert!(!builder.join("rust/held.rs").exists());
+    // the clone moves on and the tree goes to its next task
+    commit(&root, "later", &[("rust/later.rs", "fn later() {}\n")]);
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    git(&builder, &["checkout", "-q", "-f", "--detach", &head]);
+    hold(&root, &builder, "T02");
+    put(&builder, "rust/next.rs", "fn next() {}\n");
+    git(&root, &["reflog", "expire", "--expire=now", "--all"]);
+    git(&root, &["gc", "-q", "--prune=now"]);
+    let said = cli(
+        &[builder.to_string_lossy().into_owned(), sha.clone()],
+        &root,
+    );
+    assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+    has(&said.stdout, &format!("carry: {} carried into", &sha[..10]));
+    has(
+        &said.stdout,
+        "; no longer waiting on its carry: refs/l7r/done/9001-T01\n",
+    );
+    assert_eq!(waiting(&root), "");
+    assert_eq!(
+        std::fs::read_to_string(root.join("rust/held.rs")).unwrap(),
+        "fn held() {}\n"
+    );
+    assert_eq!(
+        git(&root, &["log", "-1", "--format=%s"]),
+        "9001 T01: the build half"
+    );
+    // the next task's work in the tree is untouched by the carry, and its own done commit is carried with no tree named
+    assert_eq!(git(&builder, &["status", "--porcelain"]), "?? rust/next.rs");
+    let next = done(&root, "T02", "9001 T02: the next task");
+    let said = cli(&[String::new(), next.clone()], &root);
+    assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+    has(
+        &said.stdout,
+        &format!("carry: {} carried into", &next[..10]),
+    );
+    assert!(root.join("rust/next.rs").exists());
+    assert_eq!(git(&root, &["status", "--porcelain"]), "");
+    assert_eq!(waiting(&root), "");
+    // a done commit whose changes reached HEAD by another route: the pick comes out empty, and its ref is spent all the same
+    hold(&root, &builder, "T03");
+    put(&builder, "rust/twice.rs", "fn twice() {}\n");
+    let twice = done(&root, "T03", "9001 T03: fixed in two places");
+    commit(
+        &root,
+        "the same fix, landed by the clone",
+        &[("rust/twice.rs", "fn twice() {}\n")],
+    );
+    assert_eq!(waiting(&root), "refs/l7r/done/9001-T03");
+    let said = cli(&[String::new(), twice.clone()], &root);
+    assert_eq!((said.code, said.stderr.as_str()), (0, ""));
+    has(&said.stdout, "already holds its changes - nothing to carry");
+    has(
+        &said.stdout,
+        "; no longer waiting on its carry: refs/l7r/done/9001-T03\n",
+    );
+    assert_eq!(waiting(&root), "");
+    // a done commit HEAD's history holds as itself: said, and its ref spent
+    git(&root, &["update-ref", "refs/l7r/done/9001-T04", "HEAD"]);
+    let said = cli(&[String::new(), "HEAD".to_owned()], &root);
+    assert_eq!(said.code, 0);
+    has(
+        &said.stdout,
+        "history - nothing to carry; no longer waiting on its carry: refs/l7r/done/9001-T04\n",
+    );
+    // a commit no tree need be named for is still one the clone must hold
+    let said = cli(&[String::new(), "no-such".to_owned()], &root);
+    assert_eq!(said.code, 2);
+    has(
+        &said.stderr,
+        &format!("{} holds no commit no-such\n", root.display()),
+    );
+}
+
 #[test]
 fn the_arguments_are_checked() {
     let (dir, root, builder) = trees("carry-args");
     for args in [
         vec![],
         vec![String::new()],
+        vec![String::new(), String::new()],
         vec!["a".to_owned(), "b".to_owned(), "c".to_owned()],
     ] {
         let said = cli(&args, &root);

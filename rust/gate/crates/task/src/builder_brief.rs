@@ -100,7 +100,7 @@ fn task_line(all: &str, task: &str) -> Option<String> {
 }
 
 /// The feature's directory under `specs/` of `clone`: the one whose name is `key` or opens `key-`.
-fn feature_dir(clone: &Path, key: &str) -> Option<PathBuf> {
+pub(crate) fn feature_dir(clone: &Path, key: &str) -> Option<PathBuf> {
     let prefix = format!("{key}-");
     let mut dirs: Vec<PathBuf> = std::fs::read_dir(clone.join("specs"))
         .map(|d| d.filter_map(Result::ok).map(|e| e.path()).collect())
