@@ -26,3 +26,15 @@
 
 The token-cost goal this feature is held to is the GM's fifth process-reviewer message, kept verbatim in
 `specs/449-rust-codebase/port-talk-gm-goal.md` ("token cost ... That's just as important as task throughput").
+
+## The sketch the GM called "very sensible" (the session's words, 2026-11-27, not his)
+
+The session's message he answered, its proposal section as sent:
+
+> 1. **A landing lane of its own.** Like the Refinery, it would run as a script in its own worktree rather than in my turns: carry the done commits, run the cheap checks and the gate, and push. On a red result it bisects and ejects the failing change. The rest of the batch lands, and the ejected task returns to the queue as a repair entry.
+> 2. **Builders submit only once their change is ready to land.** Before handing in, a builder rebases onto current main and runs the landing's first pass and coverage for its own crates. Conflicts and bookkeeping refusals then get fixed by the builder that has the context, in its own tree.
+> 3. **I become the thin coordinator.** I'd dispatch, read short reports and talk with you. The only integration work left to me would be the rare case that needs judgment, and there a fresh agent per batch beats me doing it.
+
+"Coverage for its own crates" in item 2 is struck by the spec (spec-fidelity, 2026-11-27): it reinstates the closing step's coverage
+the GM questioned and that was reversed on 2026-11-26 (`docs/process-decisions.md`, around line 191), and the reopening condition
+there is not met.
