@@ -11,7 +11,7 @@ use serde_json::json;
 
 use super::{
     argv, held, holder, lock_path, on_hand_in, remaining, start, stop, stop_path, work, work_cli,
-    Run, STOP,
+    Resume, Run, STOP,
 };
 use crate::log::{self, BatchState};
 
@@ -32,6 +32,26 @@ fn common_of(dir: &Path) -> PathBuf {
 
 fn no_env(_: &str) -> Option<String> {
     None
+}
+
+/// The fast knobs: the runner asks only `LANE_IDLE_S` and `LANE_POLL_S`, so every other name is `LANE_POLL_S`'s.
+#[expect(
+    clippy::unnecessary_wraps,
+    reason = "the runner's env seam is an Option"
+)]
+fn quick(k: &str) -> Option<String> {
+    Some(if k == "LANE_IDLE_S" { "0.05" } else { "0.01" }.to_owned())
+}
+
+/// A resume that fails: where the loop must resume nothing, `work` ending `Ok` shows it never called this.
+fn refuse_resume(_: &log::Batch, _: &[String]) -> Result<(), String> {
+    Err("no tree".to_owned())
+}
+
+/// A batch step that runs no batch.
+#[expect(clippy::unnecessary_wraps, reason = "the loop's step seam is a Result")]
+fn idle_step() -> Result<bool, String> {
+    Ok(false)
 }
 
 #[test]
@@ -193,11 +213,8 @@ fn the_runner_stops_idle_once_no_hand_in_arrives_for_the_knob_s_seconds() {
     let f = Fake::new(&[&["a"], &["a"], &["a", "b"], &["a", "b"]]);
     let (now, sleep) = (|| f.clock.get(), |s: f64| f.clock.set(f.clock.get() + s));
     let hand_ins = || f.hand_ins();
-    let mut resumed = Vec::new();
-    let mut resume = |b: &log::Batch, r: &[String]| {
-        resumed.push((b.id.clone(), r.to_vec()));
-        Ok(())
-    };
+    // no batch is open, so nothing is resumed: `refuse_resume` asked would have ended the loop with its error
+    let mut resume = refuse_resume;
     let steps = Cell::new(0);
     let mut step = || {
         steps.set(steps.get() + 1);
@@ -218,7 +235,6 @@ fn the_runner_stops_idle_once_no_hand_in_arrives_for_the_knob_s_seconds() {
     // `b` arrived at the third tick (t = 1020), so the idle clock ran from there: stopped at 1050, not 1030
     assert!((f.clock.get() - 1050.0).abs() < 1e-9);
     assert_eq!(steps.get(), 6);
-    assert!(resumed.is_empty());
     let lines = log::read(dir.path());
     assert_eq!(lines.len(), 2);
     assert_eq!(lines[0]["event"], "start");
@@ -234,7 +250,7 @@ fn a_batch_run_resets_the_idle_clock_and_a_failing_step_ends_the_runner_with_its
     let f = Fake::new(&[&[]]);
     let (now, sleep) = (|| f.clock.get(), |s: f64| f.clock.set(f.clock.get() + s));
     let hand_ins = || f.hand_ins();
-    let mut resume = |_: &log::Batch, _: &[String]| Ok(());
+    let mut resume = refuse_resume;
     let n = Cell::new(0);
     let mut step = || {
         n.set(n.get() + 1);
@@ -274,8 +290,8 @@ fn a_stop_request_ends_its_own_runner_and_one_left_for_another_is_dropped() {
         std::fs::write(stop_path(common), "9").unwrap();
     };
     let hand_ins = || f.hand_ins();
-    let mut resume = |_: &log::Batch, _: &[String]| Ok(());
-    let mut step = || Ok(false);
+    let mut resume = refuse_resume;
+    let mut step = idle_step;
     let mut run = Run {
         common,
         pid: 9,
@@ -325,26 +341,14 @@ fn a_killed_runner_s_open_batch_is_resumed_from_the_log_and_a_closed_one_is_not(
     let on_main: BTreeSet<String> = ["ccccccc3".to_owned()].into();
     assert_eq!(remaining(&batch, &on_main), ["eeeeeee5"]);
     let f = Fake::new(&[&[]]);
-    let (now, sleep) = (|| f.clock.get(), |s: f64| f.clock.set(f.clock.get() + s));
-    let hand_ins = || f.hand_ins();
     let mut resumed = Vec::new();
     let mut resume = |b: &log::Batch, r: &[String]| {
         resumed.push((b.id.clone(), r.to_vec()));
         Ok(())
     };
-    let mut step = || Ok(false);
-    let mut run = Run {
-        common,
-        pid: 11,
-        idle_s: 0.0,
-        poll_s: 1.0,
-        now: &now,
-        sleep: &sleep,
-        hand_ins: &hand_ins,
-        resume: &mut resume,
-        step: &mut step,
-    };
-    assert_eq!(work(&mut run).unwrap(), "idle");
+    assert_eq!(work_on(common, 11, &f, &mut resume).unwrap(), "idle");
+    // one poll's sleep after the resume, then idle: the resume does not count as a hand-in
+    assert!((f.clock.get() - 1001.0).abs() < 1e-9);
     // `remaining` here is asked of `origin/main` by the production seam; the loop hands the batch's own reading to `resume`
     assert_eq!(
         resumed,
@@ -360,30 +364,33 @@ fn a_killed_runner_s_open_batch_is_resumed_from_the_log_and_a_closed_one_is_not(
         .unwrap();
     assert_eq!(start_line["why"], "resume 461-2");
     assert!(start_line.get("batch").is_none());
-    // the resumed batch is still open (its run is T14's), and a batch closed by a `stop` naming it is never resumed
+    // the resumed batch is still open (its run is T14's), and a batch closed by a `stop` naming it is never resumed:
+    // `refuse_resume` asked would end this run with its error
     put(
         "stop",
         json!({"batch": "461-2", "pid": 11, "why": "arbiter owed"}),
     );
-    let mut again = Vec::new();
-    let mut resume = |b: &log::Batch, _: &[String]| {
-        again.push(b.id.clone());
-        Ok(())
-    };
-    let mut step = || Ok(false);
-    let mut run = Run {
+    assert_eq!(work_on(common, 12, &f, &mut refuse_resume).unwrap(), "idle");
+    assert_eq!(log::read(common).pop().unwrap()["pid"], 12);
+}
+
+/// The loop on `f`'s clock and hand-ins with `resume`, a step that runs no batch, and a second's idle and poll: its closures
+/// are shared by every test that calls it, so each is reached by one that sleeps.
+fn work_on(common: &Path, pid: u32, f: &Fake, resume: &mut Resume<'_>) -> Result<String, String> {
+    let (now, sleep) = (|| f.clock.get(), |s: f64| f.clock.set(f.clock.get() + s));
+    let hand_ins = || f.hand_ins();
+    let mut step = idle_step;
+    work(&mut Run {
         common,
-        pid: 12,
-        idle_s: 0.0,
+        pid,
+        idle_s: 1.0,
         poll_s: 1.0,
         now: &now,
         sleep: &sleep,
         hand_ins: &hand_ins,
-        resume: &mut resume,
+        resume,
         step: &mut step,
-    };
-    assert_eq!(work(&mut run).unwrap(), "idle");
-    assert!(again.is_empty());
+    })
 }
 
 #[test]
@@ -397,23 +404,13 @@ fn a_resume_that_fails_ends_the_runner_with_its_line() {
         &json!({"batch": "461-3", "changes": ["fffffff6"]}),
     )
     .unwrap();
-    let now = || 0.0;
-    let sleep = |_: f64| {};
-    let hand_ins = BTreeSet::new;
-    let mut resume = |_: &log::Batch, _: &[String]| Err("no tree".to_owned());
-    let mut step = || Ok(false);
-    let mut run = Run {
-        common,
-        pid: 13,
-        idle_s: 0.0,
-        poll_s: 1.0,
-        now: &now,
-        sleep: &sleep,
-        hand_ins: &hand_ins,
-        resume: &mut resume,
-        step: &mut step,
-    };
-    assert_eq!(work(&mut run).unwrap_err(), "no tree");
+    let f = Fake::new(&[&[]]);
+    assert_eq!(
+        work_on(common, 13, &f, &mut refuse_resume).unwrap_err(),
+        "no tree"
+    );
+    // ended before the loop's first tick: the clock never slept
+    assert!((f.clock.get() - 1000.0).abs() < 1e-9);
     assert_eq!(log::read(common).pop().unwrap()["why"], "error: no tree");
 }
 
@@ -421,11 +418,7 @@ fn a_resume_that_fails_ends_the_runner_with_its_line() {
 fn the_work_command_holds_the_lock_reads_its_knobs_and_a_second_runner_leaves_quietly() {
     let dir = repo("lane-work");
     let common = common_of(dir.path());
-    let env = |k: &str| match k {
-        "LANE_IDLE_S" => Some("0.05".to_owned()),
-        "LANE_POLL_S" => Some("0.01".to_owned()),
-        _ => None,
-    };
+    let env = quick;
     let done = work_cli(&common, &env);
     assert_eq!(done.code, 0);
     assert_eq!(done.stdout, "lane: the runner stopped (idle)\n");
@@ -532,11 +525,7 @@ fn the_work_command_sees_a_real_hand_in_and_resumes_an_open_batch_of_the_log() {
         &json!({"batch": "461-1", "changes": [sha]}),
     )
     .unwrap();
-    let env = |k: &str| match k {
-        "LANE_IDLE_S" => Some("0.05".to_owned()),
-        "LANE_POLL_S" => Some("0.01".to_owned()),
-        _ => None,
-    };
+    let env = quick;
     let worked = work_cli(&common, &env);
     assert_eq!(worked.stdout, "lane: the runner stopped (idle)\n");
     let lines = log::read(&common);

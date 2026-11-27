@@ -52,6 +52,12 @@ fn the_runner_s_verbs_are_asked_of_the_clone_s_common_directory() {
     let dir = repo("lane-verbs");
     let common = dir.path().join(".git");
     // `start` runs the binary through setsid: one that does not exist takes no lock, an error naming the command
+    // `--work` reads its knobs from the environment (none set here) before it asks for the common directory it was named
+    let gone = ask(&["--work", "/no/such/.git"], dir.path());
+    assert_eq!(
+        (gone.code, gone.stderr.as_str()),
+        (1, "lane: /no/such/.git is no git directory\n")
+    );
     let failed = ask(&["start"], dir.path());
     assert_eq!(failed.code, 1);
     assert!(failed.stderr.contains("/no/such/l7r-gate lane --work"));
