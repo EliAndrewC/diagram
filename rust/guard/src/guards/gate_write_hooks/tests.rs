@@ -548,6 +548,7 @@ fn the_inert_method_blanks_only_what_it_can_read() {
         "git -c x=y commit -F - <<'EOF'\ngit add\nEOF",
         "git --no-pager log <<'EOF'\ngit add\nEOF",
         "git <<'EOF'\ngit add\nEOF",
+        "cat > /tmp/n <<'EOF'\ngit add\nEOF\ngit -C /tmp/x",
         "git push <<'EOF'\ngit add\nEOF",
         "git commit -m x -c HEAD <<'EOF'\ngit add\nEOF",
         "git log <<'EOF'\ngit add\nEOF",

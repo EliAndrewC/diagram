@@ -191,24 +191,17 @@ fn a_bundles_tasks_each_read_the_bundles_counts_turns_and_tokens_whole() {
     };
     let mark = " (bundle T1 T2: its counts, turns and tokens the bundle's, whole)";
     assert!(out.contains(&row("T1", mark)), "{out}");
-    assert!(
-        out.contains(&row("T2", &mark.replace("T1 T2:", "T2 T1 T4:"))),
-        "{out}"
-    );
+    assert!(out.contains(&row("T2", &mark.replace("T1 T2:", "T2 T1 T4:"))));
     assert!(
         out.contains(
             "| 451-x T6 | 0 (shared with T7) | +0 -0 | +0 -0 | +0 -0 | 0 | 0 | 0 (0 of 1.0 s or more) | 0 | 89 |"
-        ),
-        "{out}"
+        )
     );
     let line = beside::line(&whole, &key("T2"), &[], &x);
-    assert!(
-        line.starts_with(&format!(
-            "Beside its minutes (451 T512){}: ",
-            mark.replace("T1 T2:", "T2 T1 T4:")
-        )),
-        "{line}"
-    );
+    assert!(line.starts_with(&format!(
+        "Beside its minutes (451 T512){}: ",
+        mark.replace("T1 T2:", "T2 T1 T4:")
+    )));
     assert!(line.contains(": 2 unit-test runs, 1.0 min each,"), "{line}");
     let built_inside =
         " (bundle T5 T3: its counts, turns and tokens the bundle's, whole) | 0 (shared with T3) |";

@@ -160,12 +160,6 @@ fn all(t: &Tok) -> f64 {
     t.out + t.fresh + t.cached + t.created
 }
 
-/// The ledger's counts for `key` (its counted lines, 451 T522, [`counts`]) and its make runs.
-#[must_use]
-pub fn counts(l: &Ledger, key: &Key) -> (Counts, usize) {
-    counts_of(l, std::slice::from_ref(key))
-}
-
 /// The ledger's counts and make runs over the tasks `keys`, each counted once (a bundle's, 451 T514).
 fn counts_of(l: &Ledger, keys: &[Key]) -> (Counts, usize) {
     let makes = l
