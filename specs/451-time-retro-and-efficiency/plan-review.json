@@ -500,9 +500,9 @@
    "declared": "spec-fidelity"
   },
   "### T139 Approach (checklist part A)": {
-   "sha256": "89d9e256fa4bf2ea126551156267c56eb7f885fea0a27c7b2276f1cabec603de",
+   "sha256": "b07b0f02fb33c17f00acba1f2417bec85c1e7aaf15a884ead006a3f83216454b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
+   "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T140 (<why: the finding or measurement that files it>)": {
@@ -3513,6 +3513,12 @@
   },
   "### T410 Approach (checklist part A)": {
    "sha256": "3ce0b5bbaa003b074e133c3315981cb8a6338a90826b985a0e11958e2dfb39d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case \"two waiters on one quiet file and no run: still gone\" failed good work under load - \"expected dead, rc=0\" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)": {
+   "sha256": "62f9ad2ff7022a60f93bcc8b490c1bfaaf19b9a82a7ca903e6984381398bb90c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -32234,6 +32240,52 @@
      "why": "Round 1 found only T301-not-perf NOT LEGITIMATE. These blocks have not changed since that reading, and this round's diff shows no new decision in them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case \"two waiters on one quiet file and no run: still gone\" failed good work under load - \"expected dead, rc=0\" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)",
+    "### T139 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T139-D1",
+     "summary": "The T71 case of 6b ends its call shell first (pgrep the children, kill the shell, wait, kill the children read before), one line of test-no-poll-hooks.sh plus its comment and the later case's comment.",
+     "class": "within",
+     "why": "Mends a check that refuses good work (a red gate on good work, constitution XIV's defect; the GM 2026-11-26 under T104: 'I agree with prioritizing the test that fails under load being fixed'), without changing what either case asserts. The one interleaving that leaves a 'sleep 30' running leaves no writer of fresh.log, which is the cause the section names, and the cases above already end shell first. No guard, message or crate changes, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T139-D2",
+     "summary": "Not built: run the call in its own process group (setsid) and end the group with one signal.",
+     "class": "within",
+     "why": "A rejected alternative for the same mend. Turning it down leaves nothing asked for undone, and it would have changed how the T71 case's call starts, which is what that case proves."
+    },
+    {
+     "id": "T139-D3",
+     "summary": "Not built: move the later case onto a file of its own.",
+     "class": "within",
+     "why": "A rejected alternative. Turning it down keeps the leak's cause fixed rather than moved, so the requested outcome (no red on good work) is reached more fully, not less."
+    },
+    {
+     "id": "T139-D4",
+     "summary": "Not built: have the later case wait on a condition (no process names fresh.log).",
+     "class": "within",
+     "why": "A rejected alternative that the section shows cannot be certain. Turning it down narrows nothing."
+    },
+    {
+     "id": "T139-same-shape-left",
+     "summary": "The two reader cases (WA_R1, WA_R3 with WA_R4) that also end pkill -P then kill are left as they are.",
+     "class": "within",
+     "why": "Their shells go on to reads (grep, a file test, tail -1 of quiet.log), which the helper counts as no producer (451 T61), so they give no wrong outcome (labeled observation 2026-11-27 with its method). A difference that works is not a defect (constitution XIV v2.36.0), so leaving it is not a deferred defect and needs no ruling."
+    },
+    {
+     "id": "T139-exits",
+     "summary": "Red first by a deliberate delay (a slowed tee plus a 0.5 s gap, no load generator). Green is the fixed order 3 of 3 under the same delays and the whole suite 30 runs in a row.",
+     "class": "within",
+     "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -49992,6 +50044,50 @@
      "summary": "Found and left: none; no engine speed, so no performance checklist.",
      "class": "within",
      "why": "Nothing deferred, so no ruling is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T139": {
+   "section_sha256": "9526208adf84f8226fd8242a554e2bd8ff7ca597d69e39df34ce1ac8e9fbfe30",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T139-D1",
+     "summary": "The T71 case of 6b ends its call shell first (pgrep the children, kill the shell, wait, kill the children read before), one line of test-no-poll-hooks.sh plus its comment and the later case's comment.",
+     "class": "within",
+     "why": "Mends a check that refuses good work (a red gate on good work, constitution XIV's defect; the GM 2026-11-26 under T104: 'I agree with prioritizing the test that fails under load being fixed'), without changing what either case asserts. The one interleaving that leaves a 'sleep 30' running leaves no writer of fresh.log, which is the cause the section names, and the cases above already end shell first. No guard, message or crate changes, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T139-D2",
+     "summary": "Not built: run the call in its own process group (setsid) and end the group with one signal.",
+     "class": "within",
+     "why": "A rejected alternative for the same mend. Turning it down leaves nothing asked for undone, and it would have changed how the T71 case's call starts, which is what that case proves."
+    },
+    {
+     "id": "T139-D3",
+     "summary": "Not built: move the later case onto a file of its own.",
+     "class": "within",
+     "why": "A rejected alternative. Turning it down keeps the leak's cause fixed rather than moved, so the requested outcome (no red on good work) is reached more fully, not less."
+    },
+    {
+     "id": "T139-D4",
+     "summary": "Not built: have the later case wait on a condition (no process names fresh.log).",
+     "class": "within",
+     "why": "A rejected alternative that the section shows cannot be certain. Turning it down narrows nothing."
+    },
+    {
+     "id": "T139-same-shape-left",
+     "summary": "The two reader cases (WA_R1, WA_R3 with WA_R4) that also end pkill -P then kill are left as they are.",
+     "class": "within",
+     "why": "Their shells go on to reads (grep, a file test, tail -1 of quiet.log), which the helper counts as no producer (451 T61), so they give no wrong outcome (labeled observation 2026-11-27 with its method). A difference that works is not a defect (constitution XIV v2.36.0), so leaving it is not a deferred defect and needs no ruling."
+    },
+    {
+     "id": "T139-exits",
+     "summary": "Red first by a deliberate delay (a slowed tee plus a 0.5 s gap, no load generator). Green is the fixed order 3 of 3 under the same delays and the whole suite 30 runs in a row.",
+     "class": "within",
+     "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
     }
    ],
    "verdict": "CLEAR"

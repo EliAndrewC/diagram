@@ -1581,32 +1581,66 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T139 (<why: the finding or measurement that files it>)
+### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case "two waiters on one quiet file and no run: still gone" failed good work under load - "expected dead, rc=0" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the T71 case of section 6b ("a live call whose command opens with its assignment and tees into it: alive") ends its
+  call SHELL FIRST. One line of `tests/hooks/test-no-poll-hooks.sh` changes, with its comment, and the comment over the later
+  case's touch is restated; no guard, no guard message and no crate changes.
+  - THE CAUSE, as proved. The call is `bash -c "... eval 'B=<dir>; sleep 30; echo ... | tee -a $B/fresh.log'"`. The case ended it
+    with `pkill -P "$WA_RUN"` (its sleep), then `kill "$WA_RUN"` (its shell), then `wait "$WA_RUN"`. A shell whose sleep has died
+    goes on to its next command: where it ran between the two kills it forked `echo | tee -a fresh.log`, and that tee, no child of
+    the suite, outlived the `wait`. The next case touches `fresh.log` two hours old and expects "gone"; a tee that writes it after
+    the touch (the staleness belt), holds it open for writing, or is read as a live process that writes it, answers alive.
+  - **T139-D1, built: the shell is killed first.** `WA_KIDS=$(pgrep -P "$WA_RUN"); kill "$WA_RUN"; wait "$WA_RUN"; kill $WA_KIDS`.
+    A shell killed while its `sleep 30` still runs forks nothing more, so no tee exists in any interleaving: the shell dead before
+    it forked the sleep, or the sleep forked after the `pgrep`, each ends with no pipeline (in the second, a `sleep 30` is left to
+    end by itself, as the cases above this one already leave theirs: they end `kill "$WA_RUN"; wait "$WA_RUN"`, shell first).
+    The sleep's pid is read before the kill because `pkill -P` finds no child of a dead shell. What the T71 case proves is its
+    `alive` assertion, made before the teardown and unchanged; the later case keeps `fresh.log`, its two waiters and its touch.
+  - **T139-D2, NOT built: the call in a process group of its own, ended in one signal** (`setsid bash -c ...`, `kill -- -<pgid>`).
+    Priced, not measured: it changes how the T71 case's call is STARTED, which is what that case proves (the walk reads the
+    call's command line, which would open `setsid bash -c` until the exec, and `wa_settle` would accept that line), and one
+    signal to a group still reaches its members one after another. D1 changes only the end, and is ordered by a `wait`.
+  - **T139-D3, NOT built: the later case on a file of its own.** It would pass, and would leave the stray tee running into the
+    cases after it (the "a process holding it open: alive" check at the section's end reads `fresh.log` too) and past the
+    section's `rm -rf`. It moves the reader away from the leak rather than ending it.
+  - **T139-D4, NOT built: the later case waiting on a condition** (no process naming `fresh.log` but its waiters). The stray tee
+    may not be forked yet when such a wait looks, so the condition is met a moment before it is false; only an end that forks
+    nothing is certain.
+  - THE SAME SHAPE ELSEWHERE, left as it is: the two reader cases later in 6b end `pkill -P` then `kill` too (`WA_R1`, and `WA_R3`
+    with `WA_R4`). What their shells run on to is a `grep`, a file test or a `tail -1` of `quiet.log` - reads, which the helper
+    counts as no producer (451 T61) - so no outcome is wrong there (observed 2026-11-27, method: each of the section's `pkill -P`
+    lines read with the command its shell runs next).
+- **Red first**, observed 2026-11-27, method: a scratch copy of the suite at HEAD (`t139-red/old.sh` in the session's scratchpad,
+  `HERE` pinned to this tree's `tests/hooks`) with `sleep 0.5` between the `pkill -P` and the `kill`, run as `PARTS_CASES=case_6b`
+  with a `tee` first on `PATH` that sleeps 2 s before the real one - a deliberate delay, no load: 3 of 3 runs red, each
+  `27 passed, 1 failed`, the one failure this case's "expected dead, rc=0". The same copy with the 0.5 s delay and the real
+  `tee`, observed 2026-11-27, method: that copy run without the slowed `tee` on `PATH`: 2 of 2 green (`28 passed, 0 failed`), the tee done before the touch - the race needs both. The fixed order under the
+  same slowed `tee`, with 0.5 s after the `pgrep`, after the `kill` and after the `wait`, observed 2026-11-27, method: `t139-red/new.sh` run as the red copy was: 3 of 3 green,
+  `28 passed, 0 failed`, the sleep's pid gone after each.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the T71 case of `test-no-poll-hooks.sh` 6b ends its call shell first, then the sleep whose pid it read before | n/a - no map | n/a | none | n/a |
 
 ### T139 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The no-poll suite fails only when the guard or `writer-alive.sh` is wrong: a batch gate under load is not turned red by one of the suite's own fixtures writing a file a later case reads.
+2. **The constraints.** The task's line (the fix ends the call's whole tree before the touch, red first on a slowed copy); constitution XIV (a defect is a wrong outcome: a red gate on good work is one); each case goes on proving what it proves; no guard message changes; the brief's red-first by a deliberate delay, never a load generator.
+3. **Where each comes from.** O: the red of 2026-11-22 (T118's closing run, `hooks-test.log` line 88) and of 2026-11-27 (a batch gate), and T115's builder's slowed copy, 3 of 3 red (measured 2026-11-22, the task's line). O: this task's own slowed copy, above.
+4. **Do they describe the world here?** Yes: 3 of 3 runs red on this case alone, measured 2026-11-27 (the scratch copy of the suite at HEAD with the tee slowed 2 s and the second kill 0.5 s late, run as `PARTS_CASES=case_6b`).
+5. **The order.** After T97 (the touch moved after the waiters, which narrowed the window and did not close it) and T71 (the case whose end this is); before nothing.
+6. **The exits.** Green: the fixed order 3 of 3 green under the delays that made the old order 3 of 3 red, and the whole suite green 30 times in a row. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Observed 2026-11-27, method: `bash tests/hooks/test-no-poll-hooks.sh`, whole, 30 times one after another in this tree (`t139-30runs.sh`, one line a run in `t139-30runs.log`): 30 of 30 green, each `146 passed, 0 failed` (and 30 of 30 on a first loop, run before a date in the new comment was corrected). The red-first figures are the Approach's.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** No map changes. The check it mends: `make hooks-test` (in `make done` and a batch gate) read red on good work - "two waiters on one quiet file and no run: still gone (expected dead, rc=0)" - twice on record, each costing a gate's re-run.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T140 (<why: the finding or measurement that files it>)
 
@@ -5769,6 +5803,33 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T410 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T407 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T407 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -408,12 +408,18 @@ kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
 bash -c "source /dev/null && eval 'B=$WA_DIR; sleep 30; echo \"pointers rc=0\" | tee -a \$B/fresh.log'" </dev/null >/dev/null 2>&1 & WA_RUN=$!
 wa_settle "$WA_RUN" fresh.log
 alive "a live call whose command opens with its assignment and tees into it: alive" alive "$WA_DIR/fresh.log"
-pkill -P "$WA_RUN" 2>/dev/null; kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
+# The call is ended SHELL FIRST, its sleep after (451 T139): with the sleep killed first (`pkill -P` then `kill`), a shell that ran on
+# between the two forked its `echo | tee -a fresh.log`, and that tee outlived `wait $WA_RUN` to write or hold fresh.log after the
+# next case's touch - "expected dead, rc=0" under load (2026-11-22 at T118's closing run, 2026-11-27 in a batch gate; 3 of 3 red on a
+# copy with the tee slowed 2 s and the second kill 0.5 s late, 0 of 3 with the order below under the same delays, measured
+# 2026-11-27). A shell killed while its sleep still runs forks nothing more; the sleep's pid is read before, since `pkill -P` finds
+# no child of a dead shell.
+WA_KIDS=$(pgrep -P "$WA_RUN" 2>/dev/null); kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null; kill $WA_KIDS 2>/dev/null
 bash -c "until grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W1=$!
 bash -c "while ! grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W2=$!
 wa_settle "$WA_W1" NEVER-T61; wa_settle "$WA_W2" NEVER-T61
-# Quiet again: the call above, its `sleep` killed before its shell, can run its `tee` first, which wrote fresh.log in 7 of 20 trials
-# (451 T97, measured 2026-11-21, /tmp/t97/race.sh) and turned this case alive on the staleness belt, reproducibly at one and two parts.
+# Quiet again, touched after the waiters settled (451 T97: the call above once ran its `tee` before this touch, 7 of 20 trials,
+# measured 2026-11-21, /tmp/t97/race.sh; since 451 T139 that call forks no tee at its end, and the touch stays here all the same).
 touch -d "2 hours ago" "$WA_DIR/fresh.log"
 alive "two waiters on one quiet file and no run: still gone" dead "$WA_DIR/fresh.log"
 kill "$WA_W1" "$WA_W2" 2>/dev/null; wait "$WA_W1" "$WA_W2" 2>/dev/null
