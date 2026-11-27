@@ -7023,33 +7023,39 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T499 (<why: the finding or measurement that files it>)
+### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a read-only count (`dev/measurements/2026-11-27/plan-reads/plan-reads.py`, `results.md`, measured 2026-11-27): the bytes of text the Read and Bash calls naming plan.md or plan-done.md returned to each of the 114 builders of 2026-11-26/27 (the subagent transcripts whose first prompt has a `BUILDER-BRIEF` line, deduplicated by agent id).
+  - **The sum** (measured 2026-11-27, `plan-reads.py`): 3,683,572 bytes of 24,977,891 tool-result bytes, 14.7%, and 110 of 114 builders read some.
+  - **Per builder** (measured 2026-11-27, `plan-reads.py`): median 30,377 bytes, 90th centile 63,808, max 116,795 (T296,T297, 58.5% of its tool results).
+  - **By shape** (measured 2026-11-27, `plan-reads.py`): grep 563 calls 1,830,901 bytes (49.7%), sed range 114 calls 1,206,194 (32.7%), Read with offset/limit 64 calls 411,273 (11.2%), cat/head/tail 146 calls 154,440 (4.2%), awk 7 calls 60,080 (1.6%), other Bash 19 calls 20,684 (0.6%), Read whole file 0 calls.
+  - **Tokens** (an ESTIMATE at 4 bytes a token, from the measured bytes of 2026-11-27): about 8,000 a builder on the mean and 29,000 the worst, against a 300k cap about 2.7% and 10%. A Bash call's whole output is counted where its command names a plan file, so every figure is an upper bound.
+  - **No lever filed** (T499-D1): a target printing one task's section could save only what a builder reads beyond its own section, a third of the sum at most (an estimate from the measured sum of 2026-11-27), about 2,500 tokens a builder (ESTIMATE) of a 300k cap.
+
+**T499-D1 - No `make` target or brief line for a task's plan section is filed.** The task line: "file a lever only if it pays". The mean is 2.7% of the cap (an ESTIMATE from the measured bytes of 2026-11-27) and a third of it recoverable at most, and the builders' own section reads are needed; the cost of a new command (a builder of its own, per the brief rules) exceeds it. What would reopen it: a builder reaching the cap with plan reads above 25% of its tool results (the worst, T296,T297, measured 2026-11-27 at 58.5%, did not reach it). Chosen by the builder on the brief.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a count of plan bytes in 114 builders' tool results (`plan-reads.py`), measured 2026-11-27 | n/a: measurement, no map drawn | n/a | none | n/a |
 
 ### T499 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The session knows how much of a builder's context the plan files take, as a figure.
+2. **The constraints.** T499's line and the brief (read-only, per builder, shapes, tokens labeled an estimate, a lever only if it pays); 451 FR-013.
+3. **Where each comes from.** O: the 114 transcripts, counted 2026-11-27.
+4. **Do they describe the world here?** Yes: the transcripts are the builders' own tool results; the caveat is that a Bash call's whole output is counted where it names a plan file.
+5. **The order.** Independent of the other open tasks.
+6. **The exits.** Green: `results.md` written with the figures and a verdict on a lever. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `python3 -I dev/measurements/2026-11-27/plan-reads/plan-reads.py` prints the table and the figures above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows; no check it breaks: a measurement.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 ### T501 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

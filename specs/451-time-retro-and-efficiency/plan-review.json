@@ -4416,6 +4416,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)": {
+   "sha256": "8ccc5c26da6856281b8a7316147688a3f19e4a1c739e51a835b61e0b544628f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T499 Approach (checklist part A)": {
+   "sha256": "30fba6f2b281109bffb695ce01c758baa0e7f9f6428eab3ce7fd79a5f3e85737",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -40989,6 +41001,46 @@
      "why": "FR-013 counts a task that makes the checks or the hooks faster as performance work, and the plan's timing (dated, method stated) shows it does."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)",
+    "### T499 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T499-D1",
+     "summary": "No make target or brief line printing one task's plan section is filed; reopened when a builder reaches the cap with plan reads above 25% of its tool results",
+     "class": "within",
+     "why": "request.md holds no clause asking that builders' plan-file reads be cut or that a lever be filed; the GM's question (paraphrased in the block heading) asked how much reaches context, and the block answers with measured figures. Declining to add unrequested behavior narrows nothing. The GM's token words (request.md 2026-11-27: efficient token use a huge project goal) are a goal, not an ask for this lever, and his 2026-11-26 words weigh complexity cost against token cost. Whether the lever pays is design and cost, outside this review."
+    },
+    {
+     "id": "T499-population",
+     "summary": "The 114 builders of 2026-11-26/27, picked by a BUILDER-BRIEF line in the first prompt, deduplicated by agent id",
+     "class": "within",
+     "why": "The face-value population for a question about what builders read; dated and methoded."
+    },
+    {
+     "id": "T499-counting",
+     "summary": "Counts Read and Bash calls naming plan.md or plan-done.md, a Bash call's whole output counted, so every figure is an upper bound",
+     "class": "within",
+     "why": "Answers the question as asked (those two files entering context), with its bias stated."
+    },
+    {
+     "id": "T499-tokens",
+     "summary": "Tokens estimated at 4 bytes a token, labeled ESTIMATE",
+     "class": "within",
+     "why": "A labeled estimate derived from measured bytes; the arithmetic follows (32,312 bytes mean / 4 = about 8,000; 116,795 / 4 = about 29,000)."
+    },
+    {
+     "id": "T499-perf",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -61330,6 +61382,44 @@
      "summary": "Classed as performance work through its measurement clause: it books a pool builder's checks to its task. It is not an engine-speed task.",
      "class": "within",
      "why": "FR-013 and the GM's words of 2026-11-20 count measurement work as performance work for scheduling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T499": {
+   "section_sha256": "48ea890a26c59718b34b5f5c14367bd656d94e9cea719a90e059d61b89297a94",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T499-D1",
+     "summary": "No make target or brief line printing one task's plan section is filed; reopened when a builder reaches the cap with plan reads above 25% of its tool results",
+     "class": "within",
+     "why": "request.md holds no clause asking that builders' plan-file reads be cut or that a lever be filed; the GM's question (paraphrased in the block heading) asked how much reaches context, and the block answers with measured figures. Declining to add unrequested behavior narrows nothing. The GM's token words (request.md 2026-11-27: efficient token use a huge project goal) are a goal, not an ask for this lever, and his 2026-11-26 words weigh complexity cost against token cost. Whether the lever pays is design and cost, outside this review."
+    },
+    {
+     "id": "T499-population",
+     "summary": "The 114 builders of 2026-11-26/27, picked by a BUILDER-BRIEF line in the first prompt, deduplicated by agent id",
+     "class": "within",
+     "why": "The face-value population for a question about what builders read; dated and methoded."
+    },
+    {
+     "id": "T499-counting",
+     "summary": "Counts Read and Bash calls naming plan.md or plan-done.md, a Bash call's whole output counted, so every figure is an upper bound",
+     "class": "within",
+     "why": "Answers the question as asked (those two files entering context), with its bias stated."
+    },
+    {
+     "id": "T499-tokens",
+     "summary": "Tokens estimated at 4 bytes a token, labeled ESTIMATE",
+     "class": "within",
+     "why": "A labeled estimate derived from measured bytes; the arithmetic follows (32,312 bytes mean / 4 = about 8,000; 116,795 / 4 = about 29,000)."
+    },
+    {
+     "id": "T499-perf",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
     }
    ],
    "verdict": "CLEAR"
