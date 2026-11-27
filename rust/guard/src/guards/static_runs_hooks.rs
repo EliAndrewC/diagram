@@ -17,7 +17,8 @@
 //!   backgrounded, so its end line comes back at the launch (405 of 492 such calls in 451's log have one, all `PostToolUse` with a `bg`
 //!   id, none a failure, measured 2026-11-27) whether the run then died at the disk floor or not: a fresh tree's two dead starts of
 //!   2026-11-26 were counted, and its third start needed `STATIC_OK`. A call with no `T=`, and every line from before `own_t`, is
-//!   counted by its call as above, under its own task: its script writes no launch line, whose task would be the tree's guess;
+//!   counted by its call as above, under its own task: its script writes no launch line, whose task would be the tree's guess; since
+//!   451 T451 such a call is refused before it runs ([`bare_answer`]), so only the lines from before it are counted so;
 //! - SINCE the task's last landing that succeeded - a landing's `end` line (feature 451 T06) whose `landed` is true and whose `tasks`
 //!   names it, whatever its exit code (3 with its ticks standing is a landing; a refused landing is not) - else since its FIRST
 //!   `task-starts.jsonl` entry for the feature (a later `make task-start` resets nothing: 48 of the clone's 498 started tasks have more
@@ -33,7 +34,7 @@ use std::path::{Path, PathBuf};
 use serde_json::Value;
 
 use crate::guards::event_log_hooks::read::read_jsonl;
-use crate::guards::event_log_hooks::{common_git_dir, filed_at};
+use crate::guards::event_log_hooks::{common_git_dir, filed_at, own_task};
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::checks::git_stdout;
 use crate::shared::escape::{escape_or_refuse, Escape};
@@ -59,6 +60,9 @@ pub const GUARD: Guard = Guard {
 pub const STATIC_RUNS_A_TASK: usize = 2;
 
 const TOKEN: &str = "STATIC_OK";
+
+/// The bare-closing refusal's escape (451 T451): its own token, as the foreground rule's is.
+const BARE_TOKEN: &str = "CLOSING_BARE_OK";
 
 /// The `src` and `step` of the `Phase` line `scripts/gates/closing-checks.sh` writes as it launches `make static` (451 T286): a
 /// `make closing-checks` is a run of `make static` only where that line follows its start.
@@ -99,10 +103,67 @@ fn answer(
     let log = |kind: &str, detail: &str, rule: &str| {
         fire("static-runs", kind, detail, rule, &event.input, session);
     };
-    // both rules' answers together: a call that breaks both hears both at once
+    // every rule's answers together: a call that breaks several hears them all at once
     let mut out = refusals(said, &log);
+    out.extend(bare_answer(&event.input, here, env, &log));
     out.extend(order_answer(&event.input, here, env, &log));
     out
+}
+
+/// A BARE CLOSING RUN IS REFUSED (451 T451): a `make closing-checks` with no `T=` of its own ([`own_task`], the reading that marks a
+/// line's `own_t`) writes no launch line, so the count reads its call, whose end line comes back at its launch: a start that died
+/// before `make static` (at the disk floor) cost the task a run. Refused before it runs, it leaves no end line and is no run; the
+/// refusal names the caller's own closing run. WHY A REFUSAL, NOT A TIE of a bare run's launch line to its call: in the week's
+/// transcripts 54 Bash calls ran it bare, every one on 2026-11-21 before the `T=` form (451 T86) took hold, and 0 of the 625 since,
+/// none of which the pattern would refuse (measured 2026-11-27, `t448-bare-closing.py` over every `-diagram*` session's Bash
+/// commands from 2026-11-20). [`BARE_TOKEN`] with a reason escapes, recorded (451 FR-012, the plan review of 2026-11-27): for a call
+/// whose task the pattern misreads, or a caller filed under no task; such a call is counted by its call as before.
+fn bare_answer(
+    input: &Value,
+    here: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+    log: &dyn Fn(&str, &str, &str),
+) -> Option<Answer> {
+    let cmd = input.get("tool_input").map_or("", |t| field(t, "command"));
+    if !cmd.contains("closing-checks")
+        || !invoked(cmd).iter().any(|t| t == "closing-checks")
+        || own_task(cmd).is_some()
+    {
+        return None;
+    }
+    match escape_or_refuse(cmd, BARE_TOKEN) {
+        Escape::Escaped(why) => {
+            log("escaped", &why, "closing-bare-ok");
+            return None;
+        }
+        Escape::Refused(text) => {
+            let rule = format!("{BARE_TOKEN}-no-reason");
+            log("blocked", &format!("{BARE_TOKEN} with no reason"), &rule);
+            return Some(Answer::Refuse(text));
+        }
+        Escape::None => {}
+    }
+    let (feature, task) = filed_at(input, here, env)
+        .map(|(_, feature, _, task)| (feature, task))
+        .unwrap_or_default();
+    log(
+        "blocked",
+        "make closing-checks with no T=",
+        "closing-checks-bare",
+    );
+    Some(Answer::Refuse(bare(&order::closing_run(
+        &feature,
+        task.as_deref(),
+    ))))
+}
+
+fn bare(run: &str) -> String {
+    format!(
+        "\n\u{1b}[1mBLOCKED (static-runs): `make closing-checks` with no `T=` of its own.\u{1b}[0m\n\n\
+Without `T=` its start counts as a `make static` run even if it dies before static (disk floor).\n\
+Start `{run}` with run_in_background: true (`T=a,b` for a bundle).\n\n\
+Escape: {BARE_TOKEN}=\"<reason, two words or more>\" in the command.\n"
+    )
 }
 
 /// The closing step's order (T55, `order.rs`): a decide told it, a foreground closing check refused, each firing recorded.

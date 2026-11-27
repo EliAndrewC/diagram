@@ -993,7 +993,7 @@ mod filed;
 pub mod read;
 mod reversal;
 
-pub use fields::blocks_line;
+pub use fields::{blocks_line, own_task};
 pub use filed::{brief_feature, every_start, in_force, started, starts, Start};
 
 #[cfg(test)]

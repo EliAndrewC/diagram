@@ -375,4 +375,7 @@ landing on its own, each small; T22 last.
 - [x] T471 x Withdrawn 2026-11-27: filed by mistake: a builder's probe of task-add's output, no task
       research: rendering
 - [ ] T473 nothing prunes the event-log directory's alive/ records that T463 writes (rust/gate/crates/rustc/src/rustc/alive.rs, at most 64 KiB each): a loaded run of any crate's tests past 30 s writes one, so the directory grows without bound; keep the newest N or those under M days, a GUESS knob, pruned where a record is written
+- [ ] T475 the shared escape helper's no-reason refusal (rust/guard/shared/src/escape.rs escape_or_refuse, every token's 'BLOCKED: <TOKEN> with no reason given' wording, 519-555 characters, BASELINE in dev/guard-messages.tsv for each token) failed message-check BREVITY on 2026-11-27 (451 T451's CLOSING_BARE_OK unit ebf269213127bfc4: the workaround rationale, the GM 2026-08-30 history and a restated sentence cut, about 230 characters for 543); also its comment form '# TOKEN: <why>' beside guards whose own refusal prints TOKEN="<reason>" - cut the one wording, re-render every guard's, one message-check
+      research: rendering
+- [x] T476 x Withdrawn 2026-11-27: filed by mistake as a probe of the task-add refusal, no defect
       research: rendering

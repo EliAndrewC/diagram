@@ -1624,6 +1624,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T143 to T312 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T312 to T309 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T144 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1852,6 +1853,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T164 to T289 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T164 to T164 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused "review passes with no ledger row" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)
 
 - **Approach**: two changes, each with a test that is red on HEAD.
@@ -2306,6 +2308,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T227 to T227 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
 <!-- plan-archive: T239 to T433 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)
 
 - **Approach**: one reading of whose a ledger row is - `ledger_passes/left.rs`'s split, which the push's check (`--refuse`) and the landing's check (`--refuse --landing --tasks`) already asked - asked by every reader and writer of the rows.
@@ -2346,6 +2349,7 @@ engine speed, so no checklist.
 <!-- plan-archive: T233 to T233 moved to plan-done.md, 2026-11-25 (feature 375 FR-044) -->
 
 <!-- plan-archive: T433 to T427 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)
 
 - **Approach**: The guard already held a plan review's third round on one task (`review_round_hooks.rs`, `PLAN_ROUND_CAP`). What failed is its count. `plan_rounds` counts the task's rows of `plan-review.json`'s `block_reviews` back to the last CLEAR, and a section review never wrote a BLOCKED row.
@@ -2520,6 +2524,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T275 to T267 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T275 to T275 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T276 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2689,6 +2694,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T286 to T286 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T286 to T286 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T287 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2718,6 +2724,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T288 to T369 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T288 to T288 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T290 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2778,6 +2785,7 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T294 to T292 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T294 to T294 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)
 
 - **Approach**: `make carry` resolves by rule the three spec-file conflicts the session resolved by script that day (`resolve3.py`, kept at `/home/agent/.claude/jobs/c6fd72d1/tmp/`, read as the specification by example). Measured 2026-11-26 by REPLAY (`dev/measurements/2026-11-26/carry-replay/`: `t300-replay.sh` redoes each builder commit's pick onto the parent of the clone's commit of it in a scratch clone and compares the carry's tree with the session's commit; `t300-pin.py` is the box check): of the clone's 68 commits since 2026-11-26 opening `451 T`, 54 pair with a builder's commit (same author time and subject), 30 of those conflict under a plain `git cherry-pick`; the carry before this task carried 16 of the 30 (`t300-before.txt`) and now carries 24 (`t300-job1.txt`), 16 identical to the session's commit and 8 differing only where the hand resolution was wrong (below). The 6 still stopping are this task's second job (4: `docs/make-targets.html`, the one-line and adjacent-block conflicts of T274, T285, T334 and T336's carries) and T399's (2: a `.jsonl`).
@@ -2962,6 +2970,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 <!-- plan-archive: T304 to T304 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T306 to T295 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T306 to T306 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))
 
 - **Approach**: this section is ONE PART of T307, its part (1); the task is not ticked from this landing.
@@ -3186,6 +3195,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 <!-- plan-archive: T311 to T305 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T311 to T311 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T143 to T143 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T312 Approach (checklist part A)
 
 1. **The goal, in the world.** The bundle, task, land and plan crates' tests give one answer whatever the machine's home directory holds, and read none of its transcripts, guard log or git identity.
@@ -4281,6 +4291,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T340 to T315 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
 <!-- plan-archive: T342 to T315 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T351 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -4503,6 +4514,7 @@ that batch; the red was not in its change.
 
 
 <!-- plan-archive: T365 to T340 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T365 Approach (checklist part A)
 
 1. **The goal, in the world.** The session knows why the guard crate's tests run slow under `/tmp`, who else pays the same cost, and which levers on it are worth building, before any is built.
@@ -4615,6 +4627,7 @@ that batch; the red was not in its change.
    is a process fault; a red only in work carried since 09:39Z is new material.
 
 <!-- plan-archive: T370 to T365 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T371 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5041,6 +5054,7 @@ that batch; the red was not in its change.
 
 
 <!-- plan-archive: T369 to T359 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T369 Approach (checklist part A)
 
 1. **The goal, in the world.** A task started in two trees (a builder's pool tree, then the clone that carries its work) and unstarted in one reads, to every reader, as started in the other alone: its mark, its live start row and the hold on that tree's landings agree, and that tree can unstart it too.
@@ -5152,6 +5166,7 @@ that batch; the red was not in its change.
    is a process fault; a red only in work carried since 09:39Z is new material.
 
 <!-- plan-archive: T383 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T384 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5292,6 +5307,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T392 to T383 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T392 to T392 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T399 (2 of the 30 conflicting carries of 2026-11-26 stopped on a line-per-record file both sides appended to or pruned, each resolved by hand and each hand resolution losing something; built with T300's part 2 as its rule (g))
 
 - **Approach**: built in T300's part 2, in the same code and the same landing: `### T300 part 2`, rule (g), holds the rule, why an identical appended record is kept, and the two real carries compared with the session's commits (`rust/gate/crates/land/src/land/carry/records.rs`; measured 2026-11-26 by the replay, `dev/measurements/2026-11-26/carry-replay/t300-job2.txt`: both carry, T298's skip log with the builder's record the hand lost, T250 batch 8's baseline byte-identical to the session's later hand prune 72fdac1313). `merge=union`, the task line's other option, was not taken: it cannot drop a record one side pruned, which is the baseline's whole case.
@@ -5397,6 +5413,7 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 
 <!-- plan-archive: T397 to T397 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T398 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6011,6 +6028,7 @@ that batch; the red was not in its change.
    is a process fault; a red only in work carried since 09:39Z is new material.
 
 <!-- plan-archive: T420 to T367 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T420 Approach (checklist part A)
 
 1. **The goal, in the world.** The session knows what the build slots' waits after the small lane really were, what held the slots, and whether any change of the slots' count or lanes is worth building inside the memory budget.
@@ -6122,6 +6140,7 @@ that batch; the red was not in its change.
    is a process fault; a red only in work carried since 09:39Z is new material.
 
 <!-- plan-archive: T424 to T414 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T424 Approach (checklist part A)
 
 1. **The goal, in the world.** The pre-warm test fails only where a pre-warm leaves a slot held, never on a copy of a let-go slot's file another test's child holds for a moment.
@@ -6588,6 +6607,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T426 to T355 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T426 to T426 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T431 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6643,6 +6663,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T408 to T297 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T408 to T408 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T412 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6753,6 +6774,7 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 <!-- plan-archive: T427 to T417 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T427, T428 Approach (checklist part A)
 
 1. **The goal, in the world.** A builder in its wrap-up band can write nothing but its handoff and scratch under `/tmp`, by any route; and a session reading a resume refusal is told truly what the resumed builder may run.
@@ -6957,6 +6979,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T436 to T427 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T437 to T369 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T438 to T369 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T364, T341 Approach (checklist part A)
 
 1. **The goal, in the world.** A test run's phase ends when its binary exits, whatever the binary left behind, and the leak is said. A one-line edit of a guard crate starts its build in about 0.3 s, not 2 s, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`).
@@ -7157,6 +7180,7 @@ that batch; the red was not in its change.
    is a process fault; a red only in work carried since 09:39Z is new material.
 
 <!-- plan-archive: T434 to T341 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T439 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7191,6 +7215,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T442 to T442 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T444 to T143 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T444 to T444 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T447 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7219,59 +7244,73 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T450 to T397 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T450 to T450 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T448 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said "its guard binary did NOT build", and its note said the first closing checks "may stop on the hook wrapper's 45 s limit" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)
+
+- **Approach**: the note restated; the lock half found already closed, so `L7R_GUARD_COLD_SECS` is NOT passed from the handout - a deviation from the task line's sketch, priced below.
+  - **The lock half is closed on HEAD.** `build_guard` (`rust/gate/crates/task/src/builder_tree.rs`) runs the tree's wrapper with `L7R_GUARD_PRINT_FRESH=1` and `L7R_GUARD_BUILD_SECS` (1800 s, `L7R_BUILDER_GUARD_SECS`, a GUESS knob). Since 451 T449 (98b632638d, 2026-11-27 02:10, fourteen minutes after T286's landing, which filed this task from the wrapper's `build` alone) a print-fresh call that finds no fresh binary WAITS for the build lock within `L7R_GUARD_BUILD_SECS` and builds (`scripts/hooks/l7r-guard.sh`, "A print-fresh call is never a hook's"), so the `flock -n` in `build` is followed by a bounded wait. Measured 2026-11-27 (`t448-measure.sh` in the session scratchpad: the real wrapper copied into a scratch tree beside a stub cargo, another process holding `guard.lock`, the handout's environment): a lock held 2 s with a 5 s limit, rc 0, built after 1.92 s, and one held 8 s, rc 1 "another call's build held the lock past the 5 s limit", the bound and not the lock taken without waiting. The wrapper suite already pins the wait (`tests/hooks/test-l7r-guard.sh`, "print-fresh: a lock held a moment is waited for, then built and named", T449's case).
+  - **Why `L7R_GUARD_COLD_SECS` is not passed.** On a print-fresh call the seam adds a SECOND wait before the print-fresh one rather than replacing it: measured 2026-11-27 (the same script), two 5 s bounds against a lock held 12 s waited 10.0 s and failed (rc 1), and against one held 8 s waited 8.0 s - the seam's wait in `build` and then print-fresh's - with the seam's "no guard binary has been built ... building it first" line printed twice. So passing it would let a handout block for up to twice `L7R_BUILDER_GUARD_SECS` (an hour at the default) and add nothing a handout lacks. Left so, with the reason in `build_guard`'s doc comment. What would reopen it: a print-fresh path that no longer waits on the lock.
+  - **The note.** A handout whose build failed or passed its bound now says what builds the guard next: "the disk floor of its first `make closing-checks`, `make done` or `make land` builds it, waiting up to L7R_GUARD_COLD_SECS (600 s) for another call's build" (the Makefile's `DISK_FLOOR`, a GUESS knob, 451 T286). The "45 s limit" wording (a GUESS knob) was in this one place only, measured 2026-11-27 (a grep of `rust`, `scripts` and `docs`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a handout whose guard did not build names the disk floor's bounded build, not the 45 s limit (a GUESS knob) | `what_cannot_be_done_says_so_and_a_landing_s_release_never_fails` (`rust/gate/crates/task/src/builder_tree/tests.rs`), red on HEAD's code | n/a: tooling | none | n/a |
+| a handout's build beside another call's build waits for it within its limit | `tests/hooks/test-l7r-guard.sh`'s print-fresh lock case (451 T449), a pin standing on HEAD | n/a: tooling | none | n/a |
 
 ### T448 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A new pool tree's handout builds its guard even while another call builds it, and when it cannot it says truly what builds it next.
+2. **The constraints.** T448's line; 451 T286's floor (`L7R_GUARD_COLD_SECS`, 600 s, a GUESS knob at `DISK_FLOOR`); 451 T449's print-fresh wait; hooks keep their bounded, no-wait build (449 T004).
+3. **Where each comes from.** O: T286's Found and left; the scratch measurements above (2026-11-27). R: `scripts/hooks/l7r-guard.sh`, the Makefile's `DISK_FLOOR`.
+4. **Do they describe the world here?** Yes for the note (read in `builder_tree.rs`); no for the lock, measured above: T449 closed it after this task was filed.
+5. **The order.** After 451 T286 and T449; before T296.
+6. **The exits.** Green: the red test green with `make builder-checks CRATE="rust/gate/crates/task"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task ONLY="builder_tree"` with the new assertions on the old note): 7 passed, 1 failed. After: the same 8 of 8; `make builder-checks CRATE="rust/gate/crates/task"` test, lint and format clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcome: a handout's note told a builder its closing checks might stop on a 45 s limit (a GUESS knob) that no longer applies to them. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task of the builders' loop: a handout's guard build that waits instead of failing spares the tree's first make a dead start (451 T286's two dead starts, observed 2026-11-26, method: T286's line); here measured already so since T449, the note made true.
 
 
-### T451 (<why: the finding or measurement that files it>)
+### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the bare form REFUSED before it runs, naming the caller's own closing run - chosen over tying a bare run's launch line to its call, by the count.
+  - **The count, measured 2026-11-27** (`t448-bare-closing.py` in the session scratchpad, read-only over every transcript under `/home/agent/.claude/projects/-diagram*/` from 2026-11-20: each Bash call's command, heredoc bodies and quoted strings dropped, split at its separators, a `make` whose targets name `closing-checks`; bare = no `T=` word in that make): 54 bare calls and 625 with `T=` in the week. Every bare call is on 2026-11-21 (the last 16:50Z), when 451 T86 (a08216cd2b, 2026-11-21 12:16 -0500) made `T=` the closing step's form; 0 since. The guard's own reading, the `TASK` pattern on the heredoc-stripped command (now `event_log_hooks::own_task`, in `fields.rs`), finds its task in all 625 with `T=` (a bundle's `T="T06,T07"` too), so the refusal would have fired on none of them.
+  - **Why a refusal.** A tie needs a new field on each of the call's line and the launch line - the `PreToolUse` line's tree and the launch line's clone - and the count reading both, across the shared crate, the script and the guard, to serve a form no call has used since 2026-11-21 (measured 2026-11-27, the count above). A refusal is one rule in the guard, and it removes the defect outright: a call refused at `PreToolUse` gets no end line, so `runs` never counts it. The count's path for a bare call's line stays for the lines written before this task.
+  - **The rule** (`rust/guard/src/guards/static_runs_hooks.rs` `bare_answer`): a Bash call whose make targets (`shared::make::invoked`) include `closing-checks` and whose command names no task of its own (`own_task`, the one reading `fields.rs`'s `own_t` mark now calls too) is refused, recorded `blocked` under `closing-checks-bare`, naming `make closing-checks T=<task> F=<feature>` from the task and feature its own line is filed under (`order::closing_run`, 451 T86). It is said beside the count's and the foreground rule's answers. Its escape is its own token, `CLOSING_BARE_OK="<reason>"` (two words or more, recorded `escaped` under `closing-bare-ok`; with no reason the shared helper's refusal), for a call whose task the pattern misreads or a caller filed under no task (451 FR-012); an escaped bare call is counted by its call as before, a cost borne only by a recorded choice.
+  - **The message** had its message-check by T338's hand route (`L7R_MESSAGE_CORPUS=<dir> bash tests/hooks/test-static-runs-hooks.sh`, its `messages.jsonl` over the tree's store): round 1, key dc5d63d56e1f00b3 (347 characters), FIDELITY PASS, BREVITY FAIL (the clone-wide clause and the task id in the header cut); round 2, key 2956ac4097dc0d1a (270 characters), FIDELITY PASS, BREVITY PASS; round 3, with the escape line, key 0408a2ef7388d662 (341 characters), FIDELITY PASS, BREVITY PASS, recorded in `dev/guard-messages.tsv` - measured 2026-11-27 (`make guard-messages BUNDLE=1`, each unit's own header). The token's no-reason refusal, key ebf269213127bfc4 (543 characters), is the shared helper's one wording every token uses: its check failed BREVITY, recorded BASELINE as every other token's is, and its cut is filed (below).
+  - **Fixed in passing, the plan review's round 1 (BLOCKED)**: the first version had no escape; the reviewer ruled that a narrowing of 451 FR-012 (every refusal of FR-006 to FR-009 has a recorded escape). Restated as above, with its cases in both tests. And `own_task` was first written in `event_log_hooks.rs`, which it took to 1,007 lines, past the 1,000-line bar (measured 2026-11-27, `make quick`'s file-scale check through `make task-add`): it lives in `fields.rs`, re-exported on the existing `pub use` line, the file back at 1,000.
+  - **Fixed in passing.** Observed 2026-11-27, method: the guard's tests and the suite run with the rule in, read for each failure - two cases of the guard's tests and two of the suite ran a bare `make closing-checks` to test the count or the foreground rule; each now names `T=T06`, so it tests its own rule and not the new one.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a bare closing run refused naming its `T=` form; one with its own `T=`, a bundle's, another target, a mention judged as before; a `T=` in a heredoc's body is not the call's; `CLOSING_BARE_OK` with a reason passes, recorded, with none refused | `through_the_guard_a_bare_closing_run_is_refused_with_its_own_t_form` (`rust/guard/src/guards/static_runs_hooks/tests.rs`), red on HEAD's code; `tests/hooks/test-static-runs-hooks.sh` section 10 | n/a: tooling | none | n/a |
+| `own_t` read through the one predicate | `a_closing_run_with_its_own_t_says_so` (shared crate), `tests/hooks/test-event-log-hooks.sh` | n/a: tooling | none | n/a |
 
 ### T451 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No `make closing-checks` that dies before `make static` costs its task a static run, bare or not.
+2. **The constraints.** T451's line; 451 FR-012 (every refusal of FR-006 to FR-009 a recorded escape); 451 D11 (every session and agent's run counts - a refusal counts nothing less, it prevents the bare run); 451 T86 (`T=` the closing step's form); the root `CLAUDE.md`'s guard rules (match invocations, not mentions; the compliant command produced); every changed guard message a message-check (451 T170, T338's hand route).
+3. **Where each comes from.** O: the transcript count above (2026-11-27); T286's Found and left. R: `static_runs_hooks.rs`, `event_log_hooks/fields.rs`.
+4. **Do they describe the world here?** Yes: measured 2026-11-27 (`t448-bare-closing.py` over the transcripts), the count, and the guard's pattern replayed over the 625 calls with `T=`.
+5. **The order.** After 451 T286; before T296.
+6. **The exits.** Green: the red test green with `make builder-checks CRATE="rust/guard rust/guard/shared"` and the static-runs and event-log suites. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY="guards::static_runs_hooks"` with the new test on the old guard): 29 passed, 1 failed. After: 30 of 30; `tests/hooks/test-static-runs-hooks.sh` 49 of 49 (section 10's six cases read red from the old rule, which passes a bare call, not run); `tests/hooks/test-event-log-hooks.sh` 25 of 25; measured 2026-11-27 (`make builder-checks CRATE="rust/guard rust/guard/shared rust/gate/crates/task"`): the guard 585 passed, 0 failed, the shared crate 571 passed, 0 failed, the task crate 143 passed, 0 failed, lint and format clean on the three.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The check it breaks: the static-runs count refused a correct third start (`STATIC_OK` owed) after bare starts that ran nothing. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The shared escape helper's no-reason refusal (`rust/guard/shared/src/escape.rs` `escape_or_refuse`), the one wording of every token's, 519 to 555 characters, failed `message-check` BREVITY on this task's token (observed 2026-11-27, method: round 3's dispatch on key ebf269213127bfc4: rationale and history a reader does not act on, about 230 characters for 543), a visible effect on every refusal of an escape given with no reason. Not fixed here: it changes every guard's no-reason wording, each owed its re-render and one review, outside this task's guard. Filed as T475; lands before T296.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes - a `[perf]` task of the builders' loop: a dead start is waiting, and an uncounted one spares the `STATIC_OK` round it caused (observed 2026-11-26, method: 451 T286's line); not an engine-speed task, so `docs/performance-checklist.md` has nothing to answer.
 <!-- plan-archive: T453 to T306 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T453 to T453 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
@@ -7345,6 +7384,7 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 <!-- plan-archive: T458 to T458 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T459 to T443 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T459 to T459 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T465 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7404,6 +7444,7 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 
 <!-- plan-archive: T466 to T464 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T466 to T466 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T467 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7592,4 +7633,31 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T475 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T475 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 

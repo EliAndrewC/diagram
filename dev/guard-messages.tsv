@@ -6,6 +6,7 @@ key	verdict	chars	guard	kind	by	over	head
 03d9ee43f73d1d0d	BASELINE	417	escalation-hooks	notice	unreviewed - stood before 451 T170		A review is running, so its findings will need the escalation-check filter
 03e312b4d9e619f1	BASELINE	362	gate-write-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (gate-write): an Edit of <path> while this tree's `make done` runs.
 03f9aacaeea8153f	PASS	643	review-round-hooks	refuse	ace1afc5bc6430da1		BLOCKED: <path> still carries the OLD value of something this change moved
+0408a2ef7388d662	PASS	341	static-runs-hooks	refuse	ab7363f8132304e56		BLOCKED (static-runs): `make closing-checks` with no `T=` of its own. Without `T=`
 041374740d13e541	PASS	734	pair-hooks	refuse	ace1afc5bc6430da1		BLOCKED: round N of settlement-review--testmap for glyph-check in this feature - the
 053435ccbd7b71ae	BASELINE	1043	feature-approval-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this would add a feature with open work the GM has
 06e260431ffb3863	BASELINE	863	static-runs-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (static-runs, the closing step's order - feature N TN): `make closing-checks`
@@ -67,6 +68,7 @@ key	verdict	chars	guard	kind	by	over	head
 26b127bc3fa8f46e	BASELINE	747	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over lNr prints lines of <path> - the old
 26d741c632ced2dd	BASELINE	778	phase-source-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this search over <path> prints lines of <path> - the old
 276084da33222382	PASS	619	review-round-hooks	refuse	ab27eab0ddbc290ad		BLOCKED: round N of TN's plan review. Nothing was dispatched. a tripwire
+2956ac4097dc0d1a	PASS	270	static-runs-hooks	refuse	a5c8671d9c72aeafc		BLOCKED (static-runs): `make closing-checks` with no `T=` of its own. Without `T=`
 2a0e76789d84a9f6	BASELINE	337	batching-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED (batching): N of your last N turns were one quick call
 2a1a90675db0715e	BASELINE	599	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `record-style` dispatch points the agent at files IN the repository.
 2ac25214d070dc67	BASELINE	771	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is TRACKED again in <path> - it must stay gitignored.
@@ -346,8 +348,8 @@ d73a8668d4643eb5	BASELINE	743	phase-source-hooks	refuse	unreviewed - stood befor
 d8913ed693ed3e72	PASS	824	context-cap-hooks	refuse	ae10733670bca1dd3		BLOCKED: this builder's context is N tokens, past the cap of N:
 d8fd7d4ec14a6145	BASELINE	838	main-tree-hooks	notice	unreviewed - stood before 451 T170		Your shell was standing in <path>, inside <path> - the MIRROR, main's
 d972b43b7f98d916	BASELINE	1008	agent-model-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `Explore` agent names no model, so it would run on
-d99594404fe99e9d	PASS	836	context-cap-hooks	refuse	ae10733670bca1dd3		BLOCKED: this builder's context is N tokens, past the cap of N:
 d9935f6360641cae	PASS	296	pool-idle-hooks	block	ac036fe6c7f77c2e2		pool-idle: <path> is free and N TN is READY, overlapping no task
+d99594404fe99e9d	PASS	836	context-cap-hooks	refuse	ae10733670bca1dd3		BLOCKED: this builder's context is N tokens, past the cap of N:
 d9979b11ff788329	PASS	419	pair-hooks	refuse	ace1afc5bc6430da1		BLOCKED: N dispatch(es) a guard refused this turn were neither sent again
 d9f116a975186ba7	BASELINE	244	engine-freeze-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine edit while a map review is still running -
 da7d5fa4f8518fbe	BASELINE	1263	readme-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: writing a README (> <path>). A README is not loaded into
@@ -376,6 +378,7 @@ ea1dad7c47624b11	PASS	406	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a
 ea631dc60c21494e	BASELINE	1072	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its task TN has landed or is ticked
 eb5c55f3156a1044	BASELINE	877	shell-check-hooks	refuse	unreviewed - shell-check's parse refusal, a family of 4 keys: 5 shown a session, 5,650 characters, under 4 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: the command does not parse: bash: -c: line N: syntax error
 eb8dbc9f738d4fce	BASELINE	467	gm-tree-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a write into gm-assistant's main working tree (<path>). A dirty main
+ebf269213127bfc4	BASELINE	543	static-runs-hooks	refuse	unreviewed - unreviewed - the shared escape helper's no-reason refusal, every token's one wording (STATIC_OK's 33ba29e6b75ebf59 BASELINE); its brevity cut filed as 451 T475		BLOCKED: CLOSING_BARE_OK with no reason given. An escape is a workaround, and
 ed8e85dd559d50a4	BASELINE	383	escalation-hooks	refuse	unreviewed - stood before 451 T170		QUESTION UNFILTERED: your final message puts something to the GM and no
 ee111d8def80a0e2	PASS	355	workflow-hooks	refuse	a066d53b0b706fa51		BLOCKED: an ad-hoc agent() call names no model and carries no SESSION_MODEL:
 ef61e1f3080925d4	PASS	157	context-cap-hooks	refuse	a428547a5cd4d6ca2		BLOCKED: SPLIT_OK with no reason. Put one in the prompt: SPLIT_OK="<why this

@@ -272,7 +272,10 @@ fn some(paths: &[String]) -> String {
     }
 }
 
-/// The new tree's guard binary, built by the tree's own hook wrapper with a limit a cold build fits (451 T286).
+/// The new tree's guard binary, built by the tree's own hook wrapper with a limit a cold build fits (451 T286). A print-fresh call
+/// waits for another call's build within that limit, then builds (451 T449), so it sets no `L7R_GUARD_COLD_SECS`: that seam would
+/// add a second wait of its own before the print-fresh one (two 5 s bounds against a lock held 12 s waited 10.0 s, measured
+/// 2026-11-27 with the wrapper's stub cargo; 451 T448).
 fn build_guard(tree: &Path, secs: &str) -> bool {
     Command::new(tree.join("scripts/hooks/l7r-guard.sh"))
         .env("L7R_GUARD_PRINT_FRESH", "1")
@@ -536,7 +539,7 @@ fn make_cold(
     if build_guard(&tree, &env.guard_secs) {
         notes.push_str("builder-tree: its guard binary is built\n");
     } else {
-        let _ = writeln!(notes, "builder-tree: its guard binary did NOT build (see {}/build.log): its first closing checks may stop on the hook wrapper's 45 s limit", builder_pool::cache(&env.cache, &tree).display());
+        let _ = writeln!(notes, "builder-tree: its guard binary did NOT build (see {}/build.log): the disk floor of its first `make closing-checks`, `make done` or `make land` builds it, waiting up to L7R_GUARD_COLD_SECS (600 s) for another call's build", builder_pool::cache(&env.cache, &tree).display());
     }
     reply(format!("{tree_text}\n"), notes, 0)
 }

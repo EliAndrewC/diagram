@@ -26,6 +26,13 @@ pattern!(EXIT_CODE, r"exit code (-?\d+)");
 pattern!(BLOCKS_LINE, r"(?m)^Blocks:[ \t]*(\S[^\n]*?)[ \t]*$");
 pattern!(BLOCKS_ENV, r#"\bL7R_BLOCKS=(?:"([^"]*)"|'([^']*)'|(\S+))"#);
 
+/// The task a command's own `T=` names, a heredoc's body left out (it is text written to a file, 451 T53): the one reading the
+/// line's `own_t` (451 T286) and the static-runs guard's refusal of a bare `make closing-checks` (451 T451) share.
+#[must_use]
+pub fn own_task(command: &str) -> Option<String> {
+    first_group(&TASK, &crate::shape::strip_heredocs(command))
+}
+
 /// A dispatch brief's or a page brief's BLOCKS CLUE (451 T243, the GM 2026-11-25: "to the extent that we can pass that kind of context
 /// clues to our tooling when the data is collected ... that will make it easier"): its line `Blocks: <feature> T<n>`, `Blocks: T<n>`
 /// or `Blocks: none` - the task whose next step waits on this work, or none - as written. The task time breakdown books by it.
@@ -62,9 +69,7 @@ pub(super) fn tool_fields(
         out.extend(blocks_env(&command).map(|b| ("blocks".to_owned(), Value::from(b))));
         // A CLOSING RUN'S OWN `T=` (451 T286): the static-run count reads such a run by the line its script writes under that task as it
         // launches `make static`, and a closing run with none by this call's own line, filed under its own task
-        if all.iter().any(|t| t == "closing-checks")
-            && first_group(&TASK, &crate::shape::strip_heredocs(&command)).is_some()
-        {
+        if all.iter().any(|t| t == "closing-checks") && own_task(&command).is_some() {
             out.insert("own_t".into(), Value::Bool(true));
         }
         if all.len() > 1 {
@@ -73,7 +78,7 @@ pub(super) fn tool_fields(
         if !target.is_empty() {
             if ["tick", "task-start", "decide", "land"].contains(&target.as_str()) {
                 // a `T=` inside a heredoc's body is text written to a file, not this call's (451 T53)
-                if let Some(task) = first_group(&TASK, &crate::shape::strip_heredocs(&command)) {
+                if let Some(task) = own_task(&command) {
                     out.insert("make".into(), Value::from(target.clone()));
                     out.insert("task".into(), Value::from(task));
                     return;

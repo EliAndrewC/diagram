@@ -640,6 +640,54 @@ fn through_the_guard_a_decide_before_the_closing_checks_is_told_the_order_and_re
     .is_empty());
 }
 
+/// 451 T451: a `make closing-checks` with no `T=` of its own is refused, naming the caller's own closing run - such a call is counted
+/// by its call, and its end line comes back at its launch, so a start that died before `make static` cost a run. A call naming its
+/// own `T=` (a bundle's too), another target, a mention and a `T=` in a heredoc's body are judged as the count's tests say.
+#[test]
+fn through_the_guard_a_bare_closing_run_is_refused_with_its_own_t_form() {
+    crate::shared::log::quiet();
+    let d = clone("bare", &[("T06", "2026-11-20T10:00:00Z")], &[]);
+    let at = |cmd: &str| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: input(&d, cmd),
+        };
+        answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
+    };
+    let refused = |cmd: &str| {
+        let got = at(cmd);
+        matches!(got.as_slice(), [Answer::Refuse(t)] if t.contains("no `T=` of its own") && t.contains("`make closing-checks T=T06 F=451`"))
+    };
+    for bare in [
+        "make closing-checks",
+        "make rust-test CRATE=rust/guard && make closing-checks HOOKS_ALL=1",
+        "cat > notes <<'EOF'\nT=T06\nEOF\nmake closing-checks",
+    ] {
+        assert!(refused(bare), "{bare}: {:?}", at(bare));
+    }
+    // its own escape (451 FR-012): with a reason it stands aside, with none it is the escape's refusal
+    let short = at("make closing-checks CLOSING_BARE_OK");
+    assert!(
+        matches!(short.as_slice(), [Answer::Refuse(t)] if t.contains("CLOSING_BARE_OK")),
+        "{short:?}"
+    );
+    assert!(
+        refused("make closing-checks")
+            && at("make closing-checks")
+                .iter()
+                .all(|a| format!("{a:?}").contains("CLOSING_BARE_OK="))
+    );
+    for judged in [
+        "CLOSING_BARE_OK=\"its task is misread here\" make closing-checks",
+        "make closing-checks T=T06",
+        "make closing-checks T=\"T06,T07\" F=451",
+        "make static",
+        "echo make closing-checks",
+    ] {
+        assert!(at(judged).is_empty(), "{judged}: {:?}", at(judged));
+    }
+}
+
 /// THE TWO RULES TOGETHER (T55): a foreground closing check is refused whatever the count, and past the count both refusals are said at
 /// once; each rule is escaped only by its own token.
 #[test]
@@ -680,7 +728,7 @@ fn through_the_guard_a_foreground_closing_check_is_refused_beside_the_count() {
     assert!(matches!(bare.as_slice(), [t] if t.contains("FOREGROUND_OK with no reason")));
     // past the count: both refusals at once
     let past = clone("fg-past", &[("T06", "2026-11-20T10:00:00Z")], &two_runs());
-    let both = refusals(&at(foreground(&past, "make closing-checks")));
+    let both = refusals(&at(foreground(&past, "make closing-checks T=T06")));
     assert_eq!(both.len(), 2);
     // both name the caller's own closing run, its task and feature read from the call's filing in the clone (451 T86)
     let run = "make closing-checks T=T06 F=451";
@@ -692,7 +740,7 @@ fn through_the_guard_a_foreground_closing_check_is_refused_beside_the_count() {
     // the count's escape stands the count aside, not the foreground rule
     let counted = refusals(&at(foreground(
         &past,
-        "STATIC_OK=\"the closing run of the task\" make closing-checks",
+        "STATIC_OK=\"the closing run of the task\" make closing-checks T=T06",
     )));
     assert!(matches!(counted.as_slice(), [t] if t.contains("run_in_background: true")));
     // the foreground rule's escape stands only it aside

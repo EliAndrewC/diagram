@@ -337,7 +337,8 @@ fn what_cannot_be_done_says_so_and_a_landing_s_release_never_fails() {
     assert!(pool_of(&root).is_empty());
     assert_eq!(super::size_word(""), "?");
     assert_eq!(super::size_word("8.1G\t/x\n"), "8.1G");
-    // a guard that does not build is said, the tree still handed out
+    // a guard that does not build is said, the tree still handed out, with what builds it next: the disk floor's bounded build
+    // (451 T286), not the hook wrapper's 45 s limit (451 T448)
     git(&root, &["rm", "-q", "scripts/hooks/l7r-guard.sh"]);
     git(&root, &["commit", "-qm", "no wrapper"]);
     let made = run(&words(&["take", "T01", "9001"]), &root, &e);
@@ -346,6 +347,8 @@ fn what_cannot_be_done_says_so_and_a_landing_s_release_never_fails() {
         "{}",
         made.stderr
     );
+    assert!(made.stderr.contains("the disk floor of its first `make closing-checks`, `make done` or `make land` builds it, waiting up to L7R_GUARD_COLD_SECS (600 s) for another call's build"), "{}", made.stderr);
+    assert!(!made.stderr.contains("45 s limit"), "{}", made.stderr);
     // the registry unwritable: a release says so and fails, a landing's says so and does not
     let registry = root.join(".git/builder-pool.json");
     let kept = std::fs::read_to_string(&registry).unwrap();

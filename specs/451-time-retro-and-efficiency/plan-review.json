@@ -3877,26 +3877,14 @@
    "reviewed": "2026-11-27",
    "declared": "round-arbiter"
   },
-  "### T448 (<why: the finding or measurement that files it>)": {
-   "sha256": "41c854ebfdae13e00d95f0b9e73a51dd62cb43edd3945dfddd723f9ebbc15ad7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T448 Approach (checklist part A)": {
-   "sha256": "de64d17060e50beef577412a3038d0460633d26028e6e35f9d7c7f8aaa0657a3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T451 (<why: the finding or measurement that files it>)": {
-   "sha256": "4102cd33ae2f24703ac18ab6d952bafa36c136d667f505f56dffe1b20ca961e8",
+   "sha256": "28ab2be2d39852779d66462859213d3fa8867d08841e6045a34adee6727923d8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T451 Approach (checklist part A)": {
-   "sha256": "12e0615563812f88c6507b9cd746fdc939d86416da2474e863530e09b9224e29",
+   "sha256": "ae1380c60353b8c5544a8e629c61dd0bb254b2da18dc6f5808a213025a7a2c17",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4143,18 @@
   },
   "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)": {
    "sha256": "31fcaeb9a01f080268d71105d81077130aff533568d661789d4e024ece399785",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)": {
+   "sha256": "34e07fe49f66fb14f52c9c5383744ae95ff3293ecba48118547b42e65289b405",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)": {
+   "sha256": "444697da90a42a8ad9227c11c0e38718f706d76617cfec7665ac4592a358df61",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38264,6 +38264,148 @@
      "summary": "The unfilled template blocks headed T441, T442 and T452 ('<why: the finding or measurement that files it>') are removed; T452's is replaced by the filled block above.",
      "class": "within",
      "why": "Their earlier text was placeholder template only, carrying no decision; removing them drops no approach, constraint or ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)",
+    "### T451 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T448 (<why: the finding or measurement that files it>)",
+    "(removed) ### T451 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T448-a",
+     "summary": "L7R_GUARD_COLD_SECS is not passed from the handout's guard build, against the task line's sketch, because the lock half was closed by 451 T449 (print-fresh waits on the lock within L7R_GUARD_BUILD_SECS) and the seam would add a second wait (measured 2026-11-27, scratch script)",
+     "class": "within",
+     "why": "The sketch is the coordinating session's means, not the GM's words or a requirement. The end the task serves (a new tree's handout builds its guard beside another call's build, bounded; the GM's T316 pre-warm and T284 synchronization over caps) is met on HEAD and measured, and a pin already stands (tests/hooks/test-l7r-guard.sh, T449's case). Nothing asked is narrowed; the reason and the reopening condition are recorded in build_guard's doc comment."
+    },
+    {
+     "id": "T448-b",
+     "summary": "The handout's failure note is restated to name the disk floor's bounded build (L7R_GUARD_COLD_SECS, 600 s, a GUESS knob) instead of the stale 45 s limit, with a red-first test",
+     "class": "within",
+     "why": "A message that told a builder something false (a wrong outcome, constitution XIV) is made true; the fix as we go of a defect T286 found."
+    },
+    {
+     "id": "T448-c",
+     "summary": "Checklist part A: order after T286 and T449, before T296; one landing; classed a [perf] task of the builders' loop",
+     "class": "within",
+     "why": "Fill-in of the template; perf classing follows FR-013 and the GM's 2026-11-20 words."
+    },
+    {
+     "id": "T451-a",
+     "summary": "The defect (a bare make closing-checks that died before make static was counted as a static run) is fixed by refusing the bare form at PreToolUse, naming make closing-checks T=<task> F=<feature>, rather than tying a bare run's launch line to its call",
+     "class": "within",
+     "why": "A choice between two fixes of a known defect in D11/FR-007's count. The refused call gets no end line, so D11's 'only runs that RAN count' holds; 'every session and agent's run counts' is untouched, as the T= form is the closing step's form since 451 T86 and was used by all 625 closing calls since 2026-11-21 (0 bare, measured 2026-11-27, dated method given). The guard matches invocations (shared::make::invoked) and the heredoc-stripped own_task, per the guard rules. Design and cost here are not fidelity findings; the escape is ruled apart (T451-b)."
+    },
+    {
+     "id": "T451-b",
+     "summary": "The new bare-closing refusal has 'No escape' (reason given: an escaped bare start that died would be counted again; a whole-clone run is still make static, make hooks-test and make quick)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The refusal is added to FR-007's guard (static_runs_hooks) to make FR-007's count correct, so it is a refusal of FR-007, and FR-012 gives every refusal of FR-006 to FR-009 a recorded escape of a reason of two words or more (the project's guard rules). The block's constraints quote the guard rules but leave out the escape, and do not cite FR-012. An escape is not impossible here. Nothing the GM said implies leaving it out. And it does not defeat the purpose: an escaped bare start that dies counts against only that recorded, chosen call, and the STATIC_OK escape already bounds what that costs. The escape exists for cases the guard cannot foresee: own_task misreading a call's task (for example an environment-prefixed T=), or a caller with no task line, where the compliant 'T=<task> F=<feature>' cannot be named. A 'no escape' leaves that caller stuck. The 'counted again' argument holds only because the tie was turned down on cost, and cost does not make an exception legitimate. Fix: give the refusal FR-012's recorded escape (a reason of two words or more), with a red-first test that it fires and that the escaped call passes. Or put the claim that FR-012 does not reach this refusal to the round arbiter through make arbiter-ask before ticking."
+    },
+    {
+     "id": "T451-c",
+     "summary": "The count's path for bare lines written before this task stays",
+     "class": "within",
+     "why": "It keeps D11's count readable over the existing log. 0 bare calls since 2026-11-21 (measured 2026-11-27), so no open task is shown to carry a dead bare start the old path miscounts. No defect with a visible effect is left."
+    },
+    {
+     "id": "T451-d",
+     "summary": "own_t (fields.rs) and the guard read a call's task through one predicate (event_log_hooks::own_task); four existing test cases that ran a bare closing-checks now name T=T06; the refusal's message passed its message-check (fidelity and brevity, round 2)",
+     "class": "within",
+     "why": "Supporting changes: one reading of a call's task, tests kept on their own rules, and the message route 451 T170/T338 requires."
+    },
+    {
+     "id": "T451-e",
+     "summary": "Checklist part A: goal, constraints (D11, T86, guard rules, message-check), order after T286 before T296, one landing, classed [perf] of the builders' loop, not engine-speed",
+     "class": "within",
+     "why": "Template fill-in consistent with FR-013 and the GM's 2026-11-20 words; the constraints line's omission of FR-012 is the T451-b finding."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The four (removed) blocks T441, T442, T448, T451 were empty template stubs; T448 and T451 are replaced by the filled blocks above",
+     "class": "within",
+     "why": "Each removed block held only placeholder text, so removing it drops no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)",
+    "### T451 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T448 (<why: the finding or measurement that files it>)",
+    "(removed) ### T451 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T448-lock",
+     "summary": "The lock half (a handout's build beside another call's build) is found already closed on HEAD by 451 T449's bounded print-fresh wait; no code change, pinned by the wrapper suite's T449 case.",
+     "class": "within",
+     "why": "The task's outcome - a handout builds its guard beside another call's build, within a bound - holds, measured 2026-11-27 (lock held 2 s under a 5 s limit: built; held 8 s: a bounded refusal naming the limit). Nothing asked is left undone."
+    },
+    {
+     "id": "T448-no-cold-secs",
+     "summary": "Self-labeled deviation from the task line's sketch: L7R_GUARD_COLD_SECS is not passed from the handout; the reason goes in build_guard's doc comment, with what would reopen it.",
+     "class": "within",
+     "why": "The sketch is the coordinating session's task line, not the GM's request or the accepted spec; nothing in request.md, FR-006..FR-013 or D11 carries it. The outcome the sketch served (a bounded wait for another call's build) is already delivered by T449's print-fresh wait, and passing the knob was measured 2026-11-27 to add a second wait (two 5 s bounds waited 10.0 s) with the seam's line printed twice - a mechanism choice inside the asked outcome, not a narrowing of it."
+    },
+    {
+     "id": "T448-note",
+     "summary": "The handout's note restated: a failed or timed-out guard build names the disk floor of the first closing-checks/done/land as what builds it next, waiting up to L7R_GUARD_COLD_SECS; the stale '45 s limit' wording removed (one place, by grep of rust, scripts, docs); red-first test in builder_tree tests.",
+     "class": "within",
+     "why": "Fixes the wrong outcome T286 found (a note telling a builder of a limit that no longer applies), red first (7 of 8 then 8 of 8)."
+    },
+    {
+     "id": "T451-refusal",
+     "summary": "The defect (a bare make closing-checks that died before make static counted as a static run) fixed by refusing the bare form at PreToolUse, naming make closing-checks T=<task> F=<feature>, rather than tying a bare call's launch line to its call; tests that used the bare form now name T=T06.",
+     "class": "within",
+     "why": "A refused call gets no end line, so the count never sees it; this fixes a defect in FR-007/D11's count (refusing a correct third start) by making the closing step's own form (451 T86) the only unescaped one. Measured 2026-11-27: 0 bare calls since 2026-11-21, and the guard's own task reading finds its task in all 625 calls with T=, so it refuses no current practice. It carries FR-012's three parts: red-first test, recorded escape, message naming the compliant command (message-checked, FIDELITY and BREVITY pass)."
+    },
+    {
+     "id": "T451-escape",
+     "summary": "CLOSING_BARE_OK=\"<reason>\" (two words or more, recorded escaped under closing-bare-ok; no reason refused by the shared helper) added after round 1 ruled the no-escape version a narrowing of FR-012.",
+     "class": "within",
+     "why": "Exactly what FR-012 requires of a refusal of FR-007's guard; tested in both suites."
+    },
+    {
+     "id": "T451-escaped-counted",
+     "summary": "An escaped bare call is counted by its call as before (the old count path kept for it and for lines written before this task), so a bare start that was escaped and then died before make static still costs its task a static run - while checklist item 1 states the goal as 'bare or not'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not resting on the cost argument in 'Why a refusal'. The residual is reachable only through the escape FR-012 itself requires of this refusal: an escape by definition lets through what the rule stops, with its known consequence, and is recorded so its cost is visible. Both escape cases are measured at zero - 0 of 625 T= calls misread, 0 bare calls since 2026-11-21 - and a caller filed under no task has no task's count to cost. Where it is reached, the cost is a STATIC_OK round, itself FR-007's recorded escape, not a silent wrong verdict. So no defect is left on any unescaped path. Note for the author: item 1's 'bare or not' overclaims and should read 'but for a recorded CLOSING_BARE_OK escape'; this is wording, not a block."
+    },
+    {
+     "id": "T451-own-task-fields",
+     "summary": "own_task placed in event_log_hooks/fields.rs, re-exported, keeping event_log_hooks.rs at the 1,000-line bar; own_t read through the one predicate.",
+     "class": "within",
+     "why": "Code placement under the project's file-scale check; no behavior asked is changed."
+    },
+    {
+     "id": "T451-found-left-T475",
+     "summary": "The shared escape helper's no-reason refusal wording (519 to 555 characters, BREVITY fail, recorded BASELINE like every other token's) is left; filed as T475, lands before T296.",
+     "class": "within",
+     "why": "A pre-existing shared wording that every guard's token uses, not introduced by this task. Changing it means re-rendering every guard's no-reason message, which is outside this guard. Deferred in FR-009's form (why, filed id, order before T296), so it is not carried past the next step."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "Four template placeholder blocks (T441, T442, T448, T451 '<why: ...>' skeletons with empty tables) removed.",
+     "class": "within",
+     "why": "They held no decision; T448 and T451 now have real sections, and the T441/T442 skeletons were empty."
     }
    ]
   }

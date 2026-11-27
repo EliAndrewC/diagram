@@ -2,7 +2,7 @@
 # Tests for static-runs-hooks (feature 451 T14, FR-007, plan D11): a task's third `make static` since its last landing that went out,
 # or since its first start, is refused naming the crate-scoped checks; STATIC_OK="<reason>" escapes, recorded. `make closing-checks`
 # is one run of it; a decide before the closing checks is told the closing step's order, and a foreground closing check is refused,
-# FOREGROUND_OK="<reason>" escaping it, recorded (feature 451 T55).
+# FOREGROUND_OK="<reason>" escaping it, recorded (feature 451 T55); a closing run with no `T=` of its own is refused (451 T451).
 # Run: tests/hooks/test-static-runs-hooks.sh   (exit 0 = all green)
 #
 # Every case drives the REAL guard (through the shim, `l7r-guard --only static-runs-hooks PreToolUse`) with a REAL payload against a
@@ -117,7 +117,7 @@ run "make static"
 printf '{"ev":"Phase","src":"closing-checks","step":"static-started","t0":"2026-11-20T10:02:01.000Z","t1":"2026-11-20T10:02:01.000Z","t":"2026-11-20T10:02:01.000Z","code":0,"make":"closing-checks","clone":"/c","task":"T06"}\n' >> "$LOG"
 run "make static"
 [ "$RC" -eq 2 ] && ok "a static run and a closing-checks run, then a third: refused" || no "a closing-checks run was not counted" "(rc=$RC)"
-run "make closing-checks"
+run "make closing-checks T=T06"
 [ "$RC" -eq 2 ] && seen OUT -q 'make closing-checks' && ok "a third run as closing-checks: refused, naming it" || no "a closing-checks call past the knob passed" "(rc=$RC)"
 
 echo "8. the closing step's order at make decide: a notice, never a refusal"
@@ -158,7 +158,7 @@ run "make decide F=451 T=T06"
 
 echo "9. a foreground closing check is refused, naming the background; FOREGROUND_OK escapes it (feature 451 T55)"
 starts T06@2026-11-20T10:00:00Z; fresh
-for cmd in "make static" "make hooks-test" "make closing-checks"; do
+for cmd in "make static" "make hooks-test" "make closing-checks T=T06"; do
   before=$(grep -l 'closing-check-foreground' "$GUARD_LOG_DIR"/* 2>/dev/null | wc -l)
   runfg "$cmd"
   [ "$RC" -eq 2 ] && seen OUT -q 'run_in_background: true' && seen OUT -q 'FOREGROUND_OK="<reason>"' \
@@ -183,6 +183,19 @@ for cmd in "echo 'make static'" "make quick"; do
   runfg "$cmd"; [ "$RC" -eq 0 ] || no "a foreground '$cmd' refused" "(rc=$RC)"
 done
 ok "a mention or another target passes in the foreground"
+
+echo "10. a bare make closing-checks is refused, naming the caller's own closing run (feature 451 T451)"
+starts T06@2026-11-20T10:00:00Z; fresh
+run "make closing-checks"
+[ "$RC" -eq 2 ] && seen OUT -q 'no `T=` of its own' && seen OUT -q 'make closing-checks T=T06 F=451' && ok "a bare closing run: refused, naming its T= form" || no "a bare closing run passed" "(rc=$RC: $OUT)"
+grep -l 'closing-checks-bare' "$GUARD_LOG_DIR"/* 2>/dev/null | xargs -r grep -lq '"blocked"' && ok "...and recorded blocked" || no "the bare refusal left no blocked record"
+run 'CLOSING_BARE_OK="its task is misread here" make closing-checks'
+[ "$RC" -eq 0 ] && grep -lq 'its task is misread here' "$GUARD_LOG_DIR"/* && ok "CLOSING_BARE_OK with a reason passes, recorded" || no "the bare escape was refused or unrecorded" "(rc=$RC: $OUT)"
+run "make closing-checks CLOSING_BARE_OK"
+[ "$RC" -eq 2 ] && seen OUT -q 'CLOSING_BARE_OK' && ok "a bare CLOSING_BARE_OK is refused" || no "an escape with no reason passed" "(rc=$RC)"
+for cmd in "make closing-checks T=T06" 'make closing-checks T="T06,T07" F=451'; do
+  run "$cmd"; [ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "'$cmd' passes" || no "'$cmd' was stopped" "(rc=$RC: $OUT)"
+done
 
 echo
 echo "static-runs-hooks: $PASS passed, $FAIL failed"
