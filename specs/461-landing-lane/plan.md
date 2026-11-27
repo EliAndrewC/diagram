@@ -2276,31 +2276,31 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** no
 
-### T62 (<why: the finding or measurement that files it>)
+### T62 (T58's found-and-left: a lane start or stop could name a dead runner's pid, `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 at load 31-86, measured 2026-11-27 (T58's lane binary 6x10))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`'s `holder()` names the pid read from the lock file only where that process holds the lock itself (`holds`: one of `/proc/<pid>/fd` is the lock file by device and inode, and its `/proc/<pid>/fdinfo/<fd>` lists a `FLOCK` lock - the kernel lists a lock only on the open file holding it, observed 2026-11-27 (a shell holding `flock` on fd 9 beside a second open of the same file: the lock line on the first alone)); `stop` in the window, the lock held and no holder named, signals nothing and says so. Its tests in `runner/tests.rs`. With it, three lines the session's pre-gate coverage named (2026-11-27 about 23:40Z), tests only: `work_cli`'s real `sleep` (a new test, the idle a minute and a stop request ending it, since with the 0.05 s idle a slow first step outlasts the idle and the loop never sleeps), `wake/tests.rs`'s `n == 50` guard (one line, `assert!(n < 50)`, so the guard no right answer reaches runs no unrun line and a regression is still a red, not a hang on the fake clock), and `rustc/run.rs` line 205 - covered in `tested`'s instance of the generic `leak_checked`, but its instances for `side::run_built` and `cover::run_job` were never called with an entry inside `l7r-tmp/` (the lcov's `FNDA:0` on both, observed 2026-11-27 (the cover run's `lcov-rustc.info`)), so `tests/side.rs`'s and the cover world's leaks gain one there.
+- **Decision 1 - the reader proves the pid, the writer's order unchanged.** The task offered writing the pid before the lock is seen held: a runner cannot write before it wins the lock without overwriting a live runner's pid when it loses, and the cited red went through the tests' shell stand-ins (`flock` then `echo $$`), which a `work_cli` reorder would not reach. So `holder()` refuses a pid not holding the lock - a dead pid, a zombie (descriptors closed) or a reused pid all hold none - rather than "a live child of" anything (the runner is in a session of its own, nobody's child). No retry knob: in the window `holder()` is `None`, which a start already polls through (`start_built`'s wait) and a stop already said before (the empty file after `set_len(0)`); a stop now says the lock is held and asks again. Label: the algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - Linux `/proc` read for the proof.** The lane runs only in the Linux container; the stall watchdog already reads `/proc` for the runner. Label: convention (the watchdog's own reading).
+- Red first, measured 2026-11-27 (make rust-test): `runner::tests::a_pid_is_named_only_where_its_process_holds_the_lock_itself` - the lock held in process, the file naming a dead pid (a reaped child's), then a live pid holding no lock, then this process's own - 0 passed, 1 failed on the old code (`holder` returned the dead pid); after, `runner` and `wake` 48 of 48. The lane test binary whole, 6x10 at once at load 10-53 on 22 cores: 0 red of 60, measured 2026-11-27 (the lane binary 6x10).
 
 ### T62 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A lane start or stop names, and a `NOW=1` stop signals, only the process that holds the runner's lock - never a killed runner's pid or whatever reused it.
+2. **The constraints.** T12 Decision 1 (the lock is the truth, the pid secondary) and Decision 9 (`TAKE_S`); T58's start bound; the crate's own-tests coverage; the brief's three named lines.
+3. **Where each comes from.** R: tasks.md T62, plan.md T12, T14, T58. O: T58's 6x10 red; the fdinfo observation and the lcov above (2026-11-27).
+4. **Do they describe the world here?** Yes: the red test forces the window in the crate's own test binary on this machine; the fdinfo lock line was observed on this kernel.
+5. **The order.** After T58; before T22 and T23.
+6. **The exits.** Green: the red test green, the lane binary 6x10 at load clean, and the cover run over `lane` and `rustc` naming no line. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one reader and its proof.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 0 passed, 1 failed before; green after; 0 red of 60 at load 10-53, measured 2026-11-27 (the lane binary 6x10).
+10. **Before moving a constant.** n/a: no constant moved or added.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a stop in the start's window says the lock is held and signals nothing, where it signalled the last runner's pid's group.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)

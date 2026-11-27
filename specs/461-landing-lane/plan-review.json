@@ -666,6 +666,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T62 (T58's found-and-left: a lane start or stop could name a dead runner's pid, `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 at load 31-86, measured 2026-11-27 (T58's lane binary 6x10))": {
+   "sha256": "6bd22e6f316a402810810cfc44dbd673cad1355d217f6c603e40e305cb9061c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Approach (checklist part A)": {
+   "sha256": "70e8a8926a77c81468aee29b6196710d1e68f9bea362b015ee37732c7e032c63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4251,6 +4263,34 @@
      "summary": "T60 is now classed as performance work under 451 FR-013 (it makes the builders' loop faster). The earlier text said no.",
      "class": "within",
      "why": "451 FR-013 counts a task that makes the builders' loop faster. Removing a refusal that cost a second builder's run fits that wording. This is a scheduling label and narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T62 (T58's found-and-left: a lane start or stop could name a dead runner's pid, `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 at load 31-86, measured 2026-11-27 (T58's lane binary 6x10))",
+    "### T62 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T62 Decision 1",
+     "summary": "Fix the stale-pid defect in the reader: holder() names the lock file's pid only where that process itself holds the lock; the writer's order (lock, then pid) is unchanged; no retry knob - in the window a start polls as it already does and a stop says the lock is held, signals nothing, and asks again.",
+     "class": "within",
+     "why": "It fixes a real defect (a start or stop naming, and a NOW=1 stop signalling, a dead or reused pid) found by T58, which the project's fix-as-we-go rule requires. Choosing the reader over the task's offered writer reorder is an implementation route to the same outcome, and the plan gives a concrete reason the reorder could not work (a loser would overwrite the live pid; the red came through shell stand-ins a work_cli reorder would not reach). A stop in the window that signals nothing is the corrected outcome, not a defect left. Nothing the request, FR-003's unchanged lock and push route, or FR-008 requires is narrowed."
+    },
+    {
+     "id": "T62 Decision 2",
+     "summary": "The proof of holding reads Linux /proc (/proc/<pid>/fd by device and inode, and its fdinfo FLOCK line).",
+     "class": "within",
+     "why": "A mechanism choice for the fix. The lane runs only in the Linux container, and the stall watchdog already reads /proc. No requirement is affected."
+    },
+    {
+     "id": "T62 coverage lines",
+     "summary": "Tests only, for the three lines the pre-gate coverage named: a work_cli test that reaches the real sleep, wake/tests.rs's n == 50 guard made an assert, and rustc/run.rs line 205 reached through the side::run_built and cover::run_job instances of leak_checked.",
+     "class": "within",
+     "why": "Tests that make the existing gate's coverage pass for code this feature wrote. They enforce the landing through unchanged checks (FR-008) and add no behavior. This is not the builder hand-in coverage that the spec struck from sketch item 2: no coverage step is added to builder-done."
     }
    ]
   }

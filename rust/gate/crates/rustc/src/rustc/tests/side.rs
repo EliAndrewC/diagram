@@ -89,7 +89,7 @@ fn a_failing_binary_stops_its_crate_and_a_leak_fails_it() {
     );
     crate::write_executable(
         &world.target.join("a-it"),
-        "#!/bin/sh\ntouch \"$TMPDIR/l7r-leak-t160\"\necho 'test result: ok. 1 passed'\n",
+        "#!/bin/sh\ntouch \"$TMPDIR/l7r-leak-t160\"\nmkdir -p \"$TMPDIR/l7r-tmp/l7r-leak-t62\"\necho 'test result: ok. 1 passed'\n",
     );
     let done = answer(&world, "test", &[], false);
     assert_eq!(done.code, 1);
@@ -106,7 +106,7 @@ fn a_failing_binary_stops_its_crate_and_a_leak_fails_it() {
         done.stderr.contains("test FAILED on rust/a")
             && done
                 .stderr
-                .contains("left 1 entry in their TMPDIR, which they must remove: l7r-leak-t160"),
+                .contains("left 2 entries in their TMPDIR, which they must remove: l7r-leak-t160, l7r-tmp/l7r-leak-t62"),
         "{}",
         done.stderr
     );

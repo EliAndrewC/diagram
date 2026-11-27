@@ -180,12 +180,9 @@ fn an_ejection_s_line_tells_no_death_so_a_runner_killed_after_it_is_said() {
     owed(c, "lane: batch 461-1 red at attempt 1 - 461 T02 ejected as repair r1 (red: lib/two test) - make builder-next hands it to a fresh builder: a.log");
     let (got, _) = run(c, false, &nothing);
     assert!(got.unwrap()[0].contains("ejected as repair r1"));
-    // far past the grace a line of its own ends a wait that said nothing, so the old rule's silence is a red, not a hang
-    let (got, _) = run(c, false, &|n| {
-        if n == 50 {
-            owed(c, "past the grace");
-        }
-    });
+    // far past the grace (50 polls against the grace's 6) a wait that said nothing fails here, so the old rule's silence is a red, not
+    // a hang on the fake clock; one line, so the guard no right answer reaches leaves no line unrun (461 T62)
+    let (got, _) = run(c, false, &|n| assert!(n < 50));
     assert!(got.unwrap()[0].starts_with("lane: the runner is not running and batch 461-1 is open"));
     assert_eq!(log::read(c).iter().filter(|l| l["why"] == DEAD).count(), 1);
 }

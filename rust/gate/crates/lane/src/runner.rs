@@ -3,8 +3,9 @@
 //! hand-in ([`on_hand_in`]) - starts it through `setsid`, so it has a session and a process group of its own, its standard streams
 //! `/dev/null` and none of the caller's descriptors (a caller reading the start through a pipe would otherwise wait for the RUNNER to
 //! end, as the page-session launch's first run did). It holds `l7r-lane/lane.lock` of the git common directory by `flock`; the lock is
-//! the truth of whether a runner lives, and the pid written into the file is read only while the lock is held, so a stale pid from a
-//! killed runner never names a live one. A second start finds the lock held and is a no-op naming the first's pid.
+//! the truth of whether a runner lives, and the pid written into the file is named only while the lock is held AND by a process that
+//! holds the lock itself ([`holder`], 461 T62: a new runner takes the lock before it writes its pid, so for an instant the file still
+//! names the last, killed runner). A second start finds the lock held and is a no-op naming the first's pid.
 //!
 //! ITS LOOP ([`work`]), each [`POLL_S`]: a stop request naming this runner ends it; a hand-in the runner has not seen moves the idle
 //! clock; the batch step runs (T14's [`run::step`]: forms D5's batch where none is open and runs it); and [`LANE_IDLE_S`] with no
@@ -95,17 +96,50 @@ fn release(lock: std::fs::File) {
     drop(lock);
 }
 
-/// The live runner's pid: the lock held, and the pid it wrote there.
+/// The live runner's pid: the lock held, and the pid written there only where that process holds the lock itself ([`holds`]).
+/// Why the second test (461 T62): a runner takes the lock BEFORE it writes its pid - it cannot write first without overwriting a live
+/// runner's pid on losing the race - so for that instant the file still names the last runner, killed; read alone, a stop then
+/// signalled that dead, possibly reused, pid's group (red 1 of 60 at load 31-86, 2026-11-27). In the window this is `None`.
 #[must_use]
 pub fn holder(common: &Path) -> Option<u32> {
+    let path = lock_path(common);
     if !held(common) {
         return None;
     }
-    std::fs::read_to_string(lock_path(common))
+    std::fs::read_to_string(&path)
         .ok()?
         .trim()
         .parse()
         .ok()
+        .filter(|pid| holds(*pid, &path))
+}
+
+/// Whether process `pid` holds the `flock` on `lock`: one of its descriptors is that file (by device and inode) and the kernel's
+/// `/proc/<pid>/fdinfo/<fd>` lists a `FLOCK` lock on it - which the kernel shows only on the open file holding the lock, never on
+/// another open of the same file. A dead pid, a zombie (its descriptors closed) or a pid reused by another process holds none.
+fn holds(pid: u32, lock: &Path) -> bool {
+    use std::os::unix::fs::MetadataExt as _;
+    let proc = PathBuf::from(format!("/proc/{pid}"));
+    std::fs::metadata(lock).is_ok_and(|want| {
+        std::fs::read_dir(proc.join("fd"))
+            .into_iter()
+            .flatten()
+            .flatten()
+            .filter(|fd| {
+                std::fs::metadata(fd.path())
+                    .is_ok_and(|m| (m.dev(), m.ino()) == (want.dev(), want.ino()))
+            })
+            .any(|fd| {
+                std::fs::read_to_string(proc.join("fdinfo").join(fd.file_name()))
+                    .is_ok_and(|info| flocked(&info))
+            })
+    })
+}
+
+/// A descriptor's `fdinfo` lists a `FLOCK` lock held on its open file.
+fn flocked(info: &str) -> bool {
+    info.lines()
+        .any(|l| l.starts_with("lock:") && l.contains("FLOCK"))
 }
 
 /// The runner's command line, which the stall watchdog matches exactly (`stall_watchdog_hooks/pass.rs`, `runs_lane`).
@@ -330,7 +364,12 @@ fn kill_group(sig: &str, pid: u32) {
 #[must_use]
 pub fn stop(common: &Path, now: bool, wait_s: f64) -> Reply {
     let Some(pid) = holder(common) else {
-        return reply("lane: no runner\n".to_owned(), String::new(), 0);
+        let said = if held(common) {
+            "lane: the lock is held, but the lock file names no live holder of it (a runner taking it, not yet written) - nothing signalled; run make lane-stop again\n"
+        } else {
+            "lane: no runner\n"
+        };
+        return reply(said.to_owned(), String::new(), 0);
     };
     if now {
         kill_group("TERM", pid);

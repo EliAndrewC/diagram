@@ -314,10 +314,11 @@ fn what_a_crate_s_tests_leave_in_their_tmpdir_fails_it_by_name_and_goes() {
     let cover = world_with(
         &root,
         &format!(
-            "[ \"$1 $2\" = \"llvm-cov report\" ] && touch \"$TMPDIR/l7r-cover\"\n{LCOV_CARGO}"
+            "[ \"$1 $2\" = \"llvm-cov report\" ] && touch \"$TMPDIR/l7r-cover\" && mkdir -p \"$TMPDIR/l7r-tmp/l7r-cover-2\"\n{LCOV_CARGO}"
         ),
     );
     std::fs::write(cover.target.join("lcov"), "").unwrap();
+    // an entry inside the `TempDir`s' subdirectory fails the coverage run's leak pin too (its own instance of `leak_checked`)
     assert_eq!(check(&cover, "cover", &a, false).code, 1);
 }
 

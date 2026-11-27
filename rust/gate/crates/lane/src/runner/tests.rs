@@ -168,6 +168,44 @@ fn a_runner_deaf_to_term_is_killed_and_one_that_reads_the_request_ends_after_its
     );
 }
 
+/// 461 T62: a runner holds the lock before it writes its pid, so in that window the file still names the last runner, killed. The
+/// window forced: the lock held here with the file naming a dead pid, then a live pid that holds no lock, then this process's own.
+#[test]
+fn a_pid_is_named_only_where_its_process_holds_the_lock_itself() {
+    let dir = repo("lane-holder");
+    let common = common_of(dir.path());
+    let mut dead = std::process::Command::new("true").spawn().unwrap();
+    dead.wait().unwrap();
+    let mut lock = l7r_shared::tool::flock_within(&lock_path(&common), 1.0)
+        .unwrap()
+        .unwrap();
+    let name = |lock: &mut std::fs::File, pid: u32| {
+        use std::io::{Seek as _, Write as _};
+        lock.set_len(0).unwrap();
+        lock.rewind().unwrap();
+        lock.write_all(pid.to_string().as_bytes()).unwrap();
+    };
+    name(&mut lock, dead.id());
+    assert_eq!(holder(&common), None);
+    // a stop in the window signals nothing, and says the lock is held
+    let stopped = stop(&common, true, 0.2);
+    assert_eq!(stopped.code, 0);
+    assert!(stopped.stdout.contains("names no live holder"));
+    assert!(log::read(&common).is_empty());
+    let mut live = std::process::Command::new("sleep")
+        .arg("30")
+        .spawn()
+        .unwrap();
+    name(&mut lock, live.id());
+    assert_eq!(holder(&common), None);
+    live.kill().unwrap();
+    live.wait().unwrap();
+    name(&mut lock, std::process::id());
+    assert_eq!(holder(&common), Some(std::process::id()));
+    release(lock);
+    assert_eq!(holder(&common), None);
+}
+
 #[test]
 fn the_runner_s_argv_is_its_own_verb_and_the_common_directory() {
     let words = argv(Path::new("/b/l7r-gate"), Path::new("/c/.git"));
@@ -372,6 +410,28 @@ fn a_killed_runner_s_open_batch_is_resumed_from_the_log_and_a_closed_one_is_not(
     );
     assert_eq!(work_on(common, 12, &f, &mut refuse_resume).unwrap(), "idle");
     assert_eq!(log::read(common).pop().unwrap()["pid"], 12);
+}
+
+/// 461 T62: the detached runner's real sleep between polls - with a 0.05 s idle a slow first batch step outlasts the idle and the loop
+/// ends before it sleeps, so here the idle is a minute and a stop request naming this process ends it once the runner is up and has
+/// polled a while.
+#[test]
+fn the_detached_runner_sleeps_between_polls_until_its_stop_request() {
+    let dir = repo("lane-work-sleeps");
+    let common = common_of(dir.path());
+    let env = |k: &str| Some(if k == "LANE_IDLE_S" { "60" } else { "0.01" }.to_owned());
+    let asked = std::thread::scope(|s| {
+        s.spawn(|| {
+            while log::read(&common).is_empty() {
+                std::thread::sleep(std::time::Duration::from_millis(20));
+            }
+            std::thread::sleep(std::time::Duration::from_millis(300));
+            std::fs::write(stop_path(&common), std::process::id().to_string()).unwrap();
+        });
+        work_cli(&common, &env)
+    });
+    assert_eq!(asked.stdout, "lane: the runner stopped (make lane-stop)\n");
+    assert!(!held(&common));
 }
 
 /// The loop on `f`'s clock and hand-ins with `resume`, a step that runs no batch, and a second's idle and poll: its closures
