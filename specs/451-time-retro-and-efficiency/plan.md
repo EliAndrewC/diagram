@@ -4266,31 +4266,41 @@ that batch; the red was not in its change.
 <!-- plan-archive: T359 to T358 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T359 to T359 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T353 (<why: the finding or measurement that files it>)
+### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, then built narrow. `builder-brief-hooks` now also takes for a builder's dispatch an ad-hoc call (`BUILDERS`) whose prompt holds a line opening `STOP POINT` - the line every kind's block carries and `context_cap_hooks/split.rs` already knows a code builder by - and, with no marker and no pool tree named, refuses it as `Said::Unbriefed` (rule `stop-point-no-marker`), printing `make builder-brief`; the escape `BUILDER_BRIEF_OK` is read first, as for every rule. The line's test moved to one reader, `l7r_shared::builder_brief::stop_point` (with `STOP`), which `split::is_code` now calls; `decide`'s prefilter reads no registry unless the prompt holds `.clones/`, the marker or `STOP POINT`.
+  - **The measurement.** Observed 2026-11-27, method: `dev/measurements/2026-11-27/builder-brief-clone/` - `t353-extract.py` takes every Agent call of the coordinating sessions' transcripts (`~/.claude/projects/-diagram/*.jsonl`) dated 2026-11-20..27 UTC, 977 in all, each joined to its subagent's own transcript; `t353-measure.py` keeps the ad-hoc ones naming no pool tree, no marker and not the claims round (464) and counts, from each agent's own Edit/Write calls (a floor: a write made from Bash is not counted, hand-checked below), whether it wrote into a tree; `t353-week.tsv` is the row per dispatch (no prompts). Of the 464: 357 wrote source, 356 of them in the clone `/diagram/.clones/diagram-backlog` and one in a hand worktree; 107 wrote nothing. A line opening `STOP POINT` first appears 2026-11-25T06:21Z: 331 of the 357 wrote before it, all in the clone; 26 after it, 23 with the line (all in the clone) and 3 without (P15 cascade and the barracks Guesses tab in the clone, T250 batch 3 in the hand worktree `diagram-backlog-t250b`). Of the week's 145 dispatches with the line, every one is an ad-hoc builder's, and none of the 107 that wrote nothing carries it. Since the pool landed (T285, 2026-11-26 15:28Z) five such dispatches went out, two of them since the guard (T334, 22:02Z): all five wrote only scratchpad files (four flagged by a Bash-write heuristic, each checked by hand) - every builder since the pool was briefed into a pool tree. The window is short: five dispatches do not show the hole unused, only unused so far.
+  - **T353-D1, built NARROW, and said to be: the clone's builder is known by the block's `STOP POINT` line, never by prose.** The task's line asks to "hold an ad-hoc dispatch that names the clone and orders an edit"; a rule that read "orders an edit" from prose would refuse readers, as T334-D3 and D10 say. The STOP line is a mark no reader carried: 23 of the 26 builders after the line existed carry it, 0 of the 107 readers. Label: CONVENTION (tooling). It does NOT catch a hand brief with no STOP line - 334 of the week's 357 writers (357 less the 23 caught: 331 before the line existed, 3 after it) - and the guard's header says so; that residual is filed as T484 (Found and left).
+  - **T353-D2, built: the rule does not ask that the prompt name the clone.** A brief with the STOP line that names no tree at all would work in the session's own tree, the clone, so the line alone is the builder; the 23 all named the clone. Label: CONVENTION.
+  - **T353-D3, built: the pool-tree rule and a marker come first.** A prompt naming a pool tree is the `no-marker` rule's (it knows the task), and a marker borne out passes whatever the prompt holds. Label: CONVENTION.
+  - **The replay.** Observed 2026-11-27, method: `t353-replay.py` pipes all 977 dispatches through the built guard (`tests/hooks/builder-brief-hooks.sh`) on a fixture pool of the trees the prompts name, all free (`t353-replay.txt`): 23 refused `stop-point-no-marker`, each one a dispatch that wrote into the clone; 75 `no-marker`; 98 `tree-not-held` (the fixture's trees are free, so no marker is borne out - an artifact of the replay, as in T334's); 781 passed, the 107 readers among them.
+  - **T353's line, restated where the record does not bear it out.** The line names T250 batches 5, 7 and 8 and "Close agenda items 6 and 12" among builders that edited in the clone; their transcripts show them writing from Bash in hand worktrees (`diagram-backlog-t250c`, `diagram-backlog-decide`), not in the clone - the case T285's guard on a hand `git worktree add` closes, not this one.
+  - **The message.** The new refusal was judged by `message-check` from the suite's rendering, copied into this tree's store by hand (451 T338's route): PASS on fidelity and brevity (key `443f474c470b9328`, `dev/guard-messages.tsv`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a hand brief with a STOP POINT line, no marker, no pool tree (T353-D1, D2, D3) | `builder_brief_hooks::tests::a_builder_s_brief_written_by_hand_into_the_clone_is_held_to_the_marker`, `tests/hooks/test-builder-brief-hooks.sh` | n/a: tooling | none | n/a |
+| the STOP line's one reader | `l7r_shared::builder_brief::tests::a_marker_round_trips_and_a_mention_is_none`, `context_cap_hooks` tests | n/a: tooling | none | n/a |
 
 ### T353 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder briefed by hand into the session clone is refused with the command that sizes its brief and hands it a pool tree, and no reader is refused.
+2. **The constraints.** T334's guard and its decisions (D3: a builder is known by the registry, not a name's shape; D4: the marker and escape on a line of their own; D5: the escape before every refusal); a guard that fires on correct work teaches a session to bypass every guard (root `CLAUDE.md`, "What is enforced"); the block's STOP POINT line (`split.rs`, T237).
+3. **Where each comes from.** O: the week's measurement and replay above; G: none beyond T334's.
+4. **Do they describe the world here?** Yes for the week measured: the STOP line separates builders from readers without exception. Not for a builder briefed without the line, which the rule misses (Found and left).
+5. **The order.** After T334 (the guard); before T360 (which reuses this verdict) and T302.
+6. **The exits.** Green: the guard's tests and suite, the replay refusing the 23 and no reader. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the rule was chosen from the measurement before any code, and replayed once.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: the new cases on the old guard - `bash tests/hooks/test-builder-brief-hooks.sh`, `30 passed, 2 failed`; `make rust-test CRATE=rust/guard ONLY="guards::builder_brief_hooks"`, `6 passed; 1 failed`. After, observed 2026-11-27: the suite `32 passed, 0 failed`; `make builder-checks CRATE="rust/guard rust/guard/shared"` green (guard `588 passed`, shared `571 passed`, lint and format clean); `bash tests/hooks/test-context-cap-hooks.sh` `107 passed, 0 failed`; `bash tests/hooks/test-agent-model-hooks.sh` `40 passed, 0 failed`. To see it by hand: an Agent call of type `general-purpose` whose prompt holds `STOP POINT (fix): red-first.` on a line and no marker is refused with `make builder-brief T=<task> F=<feature> KIND=...`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The check it adds: a builder briefed by hand with the block's STOP line into the session clone went out unsized.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A builder briefed by hand with no STOP POINT line and no pool tree named still passes into the session clone, unsized: 334 of the week's 357 writers - 331 before the line existed, 3 after it, two of those in the clone (P15 cascade, the barracks Guesses tab) and one in a hand worktree (T250 batch 3) (observed 2026-11-27, method: `t353-measure.py`, every ad-hoc dispatch of 2026-11-20..27 against its own Edit/Write calls); none in the five ad-hoc dispatches naming no pool tree since the pool landed (2026-11-26 15:28Z). Not fixed here: the brief's text cannot tell such a builder from a reader without refusing readers (T334-D10, T353-D1), so the hold must come from what the agent does, not what it is told - another guard's rule with its own red-first test. Filed as T484; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T354 (<why: the finding or measurement that files it>)
@@ -4320,31 +4330,37 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T360 (<why: the finding or measurement that files it>)
+### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `workflow-hooks` puts each ad-hoc `agent()` call of a script the other rules pass through `builder_brief_hooks::verdict` - the one verdict an Agent dispatch meets, T353's STOP POINT rule with it - and refuses the run on the first refusal, the builder-brief text with a line naming the call (`brief_answers`, `briefs`); an escape on the call's own prompt line is logged under `builder-brief`, as T334-D5 has it. The prompt is the call's first argument, read by `prompt_of` where it is a string literal, or literals joined by `+`, unescaped by `literal` (`\n`, `\t`, an escaped character; a template's `${...}` left as written), since a marker or an escape counts only on a line of its own (T334-D4) and a script's `\n` is no newline until unescaped. A defined type stays the `GUARDED` rule's, and a check-wave's units already meet the Agent hooks, this guard among them. No registry is read for a script that holds no `.clones/`, no marker and no `STOP POINT`.
+  - **T360-D1, built: the brief rule runs after the model rule, on what it passes.** A call that fails the model rule is refused for that first, as before; the brief rule adds a refusal, never lifts one. Label: CONVENTION.
+  - **T360-D2, built NARROW, and said to be: only a literal prompt is read.** A prompt held in a variable or built by a call, and a tree or marker interpolated as `${...}`, pass unseen (the guard's header, and asserted as passing in the test). Reading them would mean evaluating the script. Label: CONVENTION. No builder was sent from a workflow on the replay's day (T334's line), so the reach of the narrow reading is unmeasured.
+  - **T360-D3, built: the pool is read from the session's mirror (`session.main()`), as `builder-brief-hooks` reads it**, not from the Workflow's own tree, so a workflow run from a pool tree sees every clone's registry. Label: CONVENTION.
+  - **The message.** The refusal is the reviewed builder-brief text plus `(in this Workflow's agent() call: <the call>)`, judged by `message-check` from the suite's rendering (451 T338's hand route): PASS (key `c3ab9f497cf775dd`, `dev/guard-messages.tsv`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a builder's `agent()` call held to the marker (T360-D1, D2, D3) | `workflow_hooks::tests::a_builder_s_agent_call_is_held_to_the_builder_brief`, `tests/hooks/test-workflow-hooks.sh` (section 9) | n/a: tooling | none | n/a |
+| the prompt read from its literals | `workflow_hooks::tests::a_call_s_prompt_is_read_from_its_literals` | n/a: tooling | none | n/a |
 
 ### T360 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder sent into a pool tree from a Workflow script meets the same marker rule as one sent by the Agent tool.
+2. **The constraints.** T334's verdict, read and not copied (one reader); T334-D4's line-of-its-own rule; the model rule of 451 T216 and T217 unchanged; a guard that fires on correct work teaches a session to bypass every guard.
+3. **Where each comes from.** O: T334's finding (`dev/measurements/2026-11-26/builder-brief-replay/t334-results.md`); G: none beyond T334's.
+4. **Do they describe the world here?** No builder has been sent from a workflow yet (T334's replay), so the rule is built ahead of its first case; the forms it reads are those the workflow guard's own tests use (`agent('<prompt>', {...})`).
+5. **The order.** After T334 and T353 (whose verdict it reuses); before T302.
+6. **The exits.** Green: the guard's tests and suite, every older workflow case unchanged. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: the new test on the old guard, `make rust-test CRATE=rust/guard ONLY="guards::workflow_hooks"`, `9 passed; 1 failed`. After, observed 2026-11-27: `bash tests/hooks/test-workflow-hooks.sh`, `all workflow-hook tests passed (34)`; `make builder-checks CRATE="rust/guard rust/guard/shared"` green (guard `588 passed`, shared `571 passed`, lint and format clean). To see it by hand: a Workflow script `agent('Build 451 T334 in <a held pool tree>.', {agentType: 'general-purpose' /* SESSION_MODEL: builds it */})` is refused with `make builder-brief T=T334 F=451 KIND=...`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The check it adds: a builder sent from a workflow went out with no marker and no sizing.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 ### T361 (<why: the finding or measurement that files it>)
 
@@ -7252,6 +7268,33 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T483 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T484 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T484 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

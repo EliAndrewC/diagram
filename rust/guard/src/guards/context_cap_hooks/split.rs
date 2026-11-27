@@ -109,9 +109,7 @@ pub(super) fn brief(own: &Path) -> String {
 /// Whether `brief` is a code builder's: a line opening `STOP POINT`, and no claims round's.
 pub(super) fn is_code(brief: &str) -> bool {
     !brief.trim_start().starts_with("Run the claims round")
-        && brief
-            .lines()
-            .any(|l| l.trim_start().starts_with("STOP POINT"))
+        && crate::shared::builder_brief::stop_point(brief)
 }
 
 /// The verdict on a code builder's dispatch of `kind`, its escape read from `text`.

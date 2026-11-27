@@ -1,0 +1,4 @@
+98	BLOCKED (builder-brief): the marker's tree /diagram/.clones/
+75	no-marker
+781	pass
+23	stop-point-no-marker	wrote-clone

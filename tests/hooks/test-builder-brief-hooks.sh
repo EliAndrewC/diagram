@@ -50,6 +50,9 @@ expect_block '' "BUILDER-BRIEF 451 T299,T300 KIND=fix JOBS=2 TREE=$B" 'is not he
 # --- blocked: a measurement that orders a source edit; the escape with no reason
 expect_block '' "$M KIND=measurement JOBS=1 TREE=$T"$'\n'"Job 1, the measurement."$'\n'"Job 2, only if job 1 shows a safe rule: build it in the callers, red-first." 'make builder-brief T=T334 F=451 KIND=fix'
 expect_block '' "$BRIEF"$'\n'"BUILDER_BRIEF_OK:" 'BUILDER_BRIEF_OK with no reason'
+# --- blocked (451 T353): a builder's brief written by hand - the block's STOP POINT line, no marker - into the clone, or naming no tree
+expect_block '' "Fix 451 T240 in $C/c, the session clone."$'\n'"STOP POINT (fix): red-first, then the plan section." 'make builder-brief T=<task> F=<feature> KIND='
+expect_block general-purpose "Build 451 T237."$'\n'"  STOP POINT: stop at the plan review." 'a STOP POINT line and no BUILDER-BRIEF line'
 
 # --- allowed: the block's marker, borne out by the pool, for each kind
 for k in fix measurement build-half closing-half; do
@@ -65,6 +68,9 @@ expect_allow Explore "$BRIEF"
 expect_allow '' "Run the claims round for feature 451 T334; the builder's tree is $T."
 expect_allow '' "Read $C/c/docs/usage.md and $T-land/x and report."
 expect_allow '' "Summarize docs/usage.md"
+expect_allow '' "Read $C/c and report: a builder's STOP POINT is its plan review."
+expect_allow impl-drift "Fix it in $C/c."$'\n'"STOP POINT (fix): red-first."
+expect_allow '' "Fix it in $C/c."$'\n'"STOP POINT (fix): red-first."$'\n'"BUILDER_BRIEF_OK: a repair staged in the clone"
 expect_allow '' "Read the pre-warm log under $T and report its last line."$'\n'"BUILDER_BRIEF_OK: a reader of one log"
 printf '{}' | "$HOOK" pretool >/dev/null 2>&1
 [ $? -eq 0 ] && pass=$((pass+1)) || { fail=$((fail+1)); echo "FAIL: empty input should be a no-op"; }

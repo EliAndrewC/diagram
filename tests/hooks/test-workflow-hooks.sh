@@ -116,6 +116,15 @@ jq -nc '{"hooks":{"PreToolUse":[{"hooks":[{"type":"command","command":"echo a gu
 WORKFLOW_SETTINGS="$T/no-matcher.json" wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md"}]}}'
 [ "$(rc)" -eq 2 ] && grep -q 'a guard with no matcher' "$T/err" && ok "a hook entry with no matcher holds a wave's units too" || no "the entry with no matcher was skipped" "(rc=$(rc)) $(head -3 "$T/err")"
 
+echo "9. a builder sent from a script is held to the builder brief's marker (451 T360)"
+M="$T/m"; mkdir -p "$M/.clones/c/.git"; PT="$M/.clones/c-t271"
+printf '{"trees": [{"tree": "%s", "feature": "451", "tasks": ["T334"], "since": ""}]}\n' "$PT" > "$M/.clones/c/.git/builder-pool.json"
+OPTS="{agentType: 'general-purpose' /* SESSION_MODEL: builds the task */}"
+CLONE_MAIN="$M" wf "$(script "await agent('Build 451 T334 in $PT.', $OPTS)")"
+[ "$(rc)" -eq 2 ] && grep -q 'has no BUILDER-BRIEF line' "$T/err" && grep -q "in this Workflow's agent() call" "$T/err" && ok "a builder's agent() call naming a pool tree with no marker is refused" || no "the builder's call went" "(rc=$(rc)) $(head -3 "$T/err")"
+CLONE_MAIN="$M" wf "$(script "await agent('BUILDER-BRIEF 451 T334 KIND=fix JOBS=1 TREE=$PT\\nWork in $PT.', $OPTS)")"
+[ "$(rc)" -eq 0 ] && ok "...and with the marker the pool bears out, passes" || no "the marked call was refused" "(rc=$(rc)) $(head -3 "$T/err")"
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all workflow-hook tests passed ($PASS)"; exit 0; fi
 echo "SOME TESTS FAILED ($FAIL of $((PASS+FAIL)))"; exit 1

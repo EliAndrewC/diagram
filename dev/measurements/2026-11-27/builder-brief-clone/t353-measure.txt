@@ -1,0 +1,13 @@
+first STOP POINT line: 2026-11-25T06:21:09.597Z
+4	1-before-pool	reader	-	-	after-first-STOP
+2	1-before-pool	reader	-	-	before
+9	1-before-pool	reader	-	names-clone	after-first-STOP
+87	1-before-pool	reader	-	names-clone	before
+2	1-before-pool	wrote-clone	-	names-clone	after-first-STOP
+331	1-before-pool	wrote-clone	-	names-clone	before
+23	1-before-pool	wrote-clone	STOP	names-clone	after-first-STOP
+1	1-before-pool	wrote-other-tree	-	names-clone	after-first-STOP
+1	2-pool-no-guard	reader	-	-	after-first-STOP
+2	2-pool-no-guard	reader	-	names-clone	after-first-STOP
+1	3-guard	reader	-	-	after-first-STOP
+1	3-guard	reader	-	names-clone	after-first-STOP

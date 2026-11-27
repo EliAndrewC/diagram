@@ -1,0 +1,465 @@
+ts	era	verdict	stop	names the clone	desc	trees written (Edit/Write)
+2026-11-20T00:50	1-before-pool	reader	-	names-clone	T229: hold the guard sources	
+2026-11-20T01:14	1-before-pool	wrote-clone	-	names-clone	T222: render-sync on Rust, Python deleted	diagram-backlog
+2026-11-20T02:09	1-before-pool	wrote-clone	-	names-clone	T230: probe and maps-moved	diagram-backlog
+2026-11-20T03:03	1-before-pool	wrote-clone	-	names-clone	T231: review gate redraws stale hamlets	diagram-backlog
+2026-11-20T03:42	1-before-pool	wrote-clone	-	names-clone	T232: are deferred hamlet reviews kept	diagram-backlog
+2026-11-20T03:44	1-before-pool	reader	-	names-clone	Retrospective time breakdown, last 14 hours	
+2026-11-20T04:15	1-before-pool	wrote-clone	-	names-clone	T233: settlement reviews at the throw back	diagram-backlog
+2026-11-20T04:56	1-before-pool	wrote-clone	-	names-clone	Feature 451: plan and tasks	diagram-backlog
+2026-11-20T05:24	1-before-pool	wrote-clone	-	names-clone	T226: polder counters and claims	diagram-backlog
+2026-11-20T05:33	1-before-pool	wrote-clone	-	names-clone	Feature 451: revise the plan's five gaps	diagram-backlog
+2026-11-20T05:49	1-before-pool	wrote-clone	-	names-clone	Fix budget-accept's run and audit choice	diagram-backlog
+2026-11-20T06:11	1-before-pool	wrote-clone	-	names-clone	449 T234: the sluice gate drawn as researched	diagram-backlog
+2026-11-20T06:11	1-before-pool	wrote-clone	-	names-clone	451 T02: the shared make-target detector	diagram-backlog
+2026-11-20T06:48	1-before-pool	wrote-clone	-	names-clone	451 T23: one lock a cargo target dir	diagram-backlog
+2026-11-20T07:13	1-before-pool	wrote-clone	-	names-clone	449 T237: Rust drawing code owes reviews	diagram-backlog
+2026-11-20T07:13	1-before-pool	wrote-clone	-	names-clone	451 T03: the shared category table	diagram-backlog
+2026-11-20T07:59	1-before-pool	wrote-clone	-	names-clone	449 T236: the reed strip stops at the cuts	diagram-backlog
+2026-11-20T07:59	1-before-pool	wrote-clone	-	names-clone	451 T26: each line under its own feature	diagram-backlog
+2026-11-20T08:50	1-before-pool	reader	-	names-clone	T236: cut the reeds along the bed itself	
+2026-11-20T09:36	1-before-pool	reader	-	names-clone	449 T239: the settlement kept off the dike	
+2026-11-20T09:36	1-before-pool	wrote-clone	-	names-clone	451 T25: decide reports every finding	diagram-backlog
+2026-11-20T10:11	1-before-pool	wrote-clone	-	names-clone	449 T238: Rust placement changes owe reviews	diagram-backlog
+2026-11-20T10:11	1-before-pool	wrote-clone	-	names-clone	451 T04: a background run's end lines	diagram-backlog
+2026-11-20T10:50	1-before-pool	wrote-clone	-	names-clone	449 T238 round 2: the two refusal gaps	diagram-backlog
+2026-11-20T11:47	1-before-pool	wrote-clone	-	names-clone	449 T242: the verdict record's house style	diagram-backlog
+2026-11-20T11:47	1-before-pool	wrote-clone	-	names-clone	451 T05: the Rust checks' phase lines	diagram-backlog
+2026-11-20T12:21	1-before-pool	wrote-clone	-	names-clone	449 T241: claims bundle carries cited pages	diagram-backlog
+2026-11-20T12:21	1-before-pool	wrote-clone	-	names-clone	451 T06: the landing's phase lines	diagram-backlog
+2026-11-20T13:02	1-before-pool	wrote-clone	-	names-clone	451 T18: make land takes commas	diagram-backlog
+2026-11-20T13:02	1-before-pool	wrote-clone	-	names-clone	451 T24: the env-dependent gate test	diagram-backlog
+2026-11-20T13:08	1-before-pool	wrote-clone	-	names-clone	451 T28+T29: performance work first	diagram-backlog
+2026-11-20T13:11	1-before-pool	wrote-clone	-	names-clone	451 T15: refuse untracked detached runs	diagram-backlog
+2026-11-20T14:25	1-before-pool	wrote-clone	-	names-clone	451 T14: refuse a third make static	diagram-backlog
+2026-11-20T14:25	1-before-pool	wrote-clone	-	names-clone	451 T16: cap the main session's poll	diagram-backlog
+2026-11-20T15:23	1-before-pool	wrote-clone	-	names-clone	451 T12: the builder context cap	diagram-backlog
+2026-11-20T15:23	1-before-pool	wrote-clone	-	names-clone	451 T17: decide refuses unordered deferrals	diagram-backlog
+2026-11-20T15:56	1-before-pool	wrote-clone	-	names-clone	451 T13: refuse resuming a builder past cap	diagram-backlog
+2026-11-20T15:56	1-before-pool	wrote-clone	-	names-clone	451 T19: task-add lints its own line	diagram-backlog
+2026-11-20T16:02	1-before-pool	wrote-clone	-	names-clone	451 T13 (fresh): from the handoff	diagram-backlog
+2026-11-20T16:20	1-before-pool	wrote-clone	-	names-clone	451 T19 (fresh): finish from the handoff	diagram-backlog
+2026-11-20T16:41	1-before-pool	wrote-clone	-	names-clone	451 T20: the hook-suite shard form	diagram-backlog
+2026-11-20T16:41	1-before-pool	wrote-clone	-	names-clone	451 T32: guard tests' own environment	diagram-backlog
+2026-11-20T17:01	1-before-pool	wrote-clone	-	names-clone	451 T20 (fresh): finish from the handoff	diagram-backlog
+2026-11-20T17:24	1-before-pool	reader	-	names-clone	451 T32 (fresh): finish from the handoff	
+2026-11-20T17:41	1-before-pool	reader	-	names-clone	451 T35: the rustc timing test	
+2026-11-20T17:41	1-before-pool	wrote-clone	-	names-clone	451 T21: split the three slow suites	diagram-backlog
+2026-11-20T17:56	1-before-pool	wrote-clone	-	names-clone	451 T21 (fresh): measure, keep what's faster	diagram-backlog
+2026-11-20T19:05	1-before-pool	wrote-clone	-	names-clone	451 T39: does a FRESH run replay?	diagram-backlog
+2026-11-20T19:06	1-before-pool	wrote-clone	-	names-clone	451 T37: the bundle carries whole decisions	diagram-backlog
+2026-11-20T19:17	1-before-pool	wrote-clone	-	names-clone	451 T31: main-tree reads a read as a write	diagram-backlog
+2026-11-20T19:17	1-before-pool	wrote-clone	-	names-clone	451 T34: make format one file	diagram-backlog
+2026-11-20T19:37	1-before-pool	wrote-clone	-	names-clone	451 T31 (fresh): finish from the handoff	diagram-backlog
+2026-11-20T19:45	1-before-pool	wrote-clone	-	names-clone	451 T40: entry-gate's case-4 chain	diagram-backlog
+2026-11-20T19:56	1-before-pool	wrote-clone	-	names-clone	451 T31 (third): finish from the handoff	diagram-backlog
+2026-11-20T20:21	1-before-pool	reader	-	names-clone	451 T40 (fresh): finish from the handoff	
+2026-11-20T20:46	1-before-pool	wrote-clone	-	names-clone	451 T41: a broken guard edit blocks gates	diagram-backlog
+2026-11-20T20:46	1-before-pool	wrote-clone	-	names-clone	451 T43: owed units' base re-read	diagram-backlog
+2026-11-20T21:06	1-before-pool	reader	-	names-clone	451 T43 (fresh): finish from the handoff	
+2026-11-20T21:28	1-before-pool	wrote-clone	-	names-clone	451 T38: gate crates' own environment	diagram-backlog
+2026-11-20T21:28	1-before-pool	wrote-clone	-	names-clone	451 T42: judge stdin Python programs	diagram-backlog
+2026-11-20T22:13	1-before-pool	wrote-clone	-	names-clone	451 T38 (fresh): finish from the handoff	diagram-backlog
+2026-11-20T22:14	1-before-pool	wrote-clone	-	names-clone	451 T42 (fresh): finish from the handoff	diagram-backlog
+2026-11-20T22:28	1-before-pool	wrote-clone	-	names-clone	451 T38 (third): the last steps	diagram-backlog
+2026-11-20T22:37	1-before-pool	wrote-clone	-	names-clone	451 T44: py_c reads subprocess as a writer	diagram-backlog
+2026-11-20T22:37	1-before-pool	wrote-clone	-	names-clone	451 T46: the bundle's wrong decision	diagram-backlog
+2026-11-20T23:36	1-before-pool	wrote-clone	-	names-clone	451 T45: house-style verdict under load	diagram-backlog
+2026-11-20T23:36	1-before-pool	wrote-clone	-	names-clone	451 T47: the pages coverage flake	diagram-backlog
+2026-11-21T00:01	1-before-pool	wrote-clone	-	names-clone	451 T47 (fresh): the last steps	diagram-backlog
+2026-11-21T00:41	1-before-pool	wrote-clone	-	names-clone	451 T07: an agent's cost and task logged	diagram-backlog
+2026-11-21T00:41	1-before-pool	wrote-clone	-	names-clone	451 T33: four guard holes	diagram-backlog
+2026-11-21T01:11	1-before-pool	wrote-clone	-	names-clone	451 T33 (fresh): finish from the handoff	diagram-backlog
+2026-11-21T01:43	1-before-pool	wrote-clone	-	names-clone	451 T33 (third): finish from the handoff	diagram-backlog
+2026-11-21T02:05	1-before-pool	wrote-clone	-	names-clone	451 T33 (fourth): fix window#72	diagram-backlog
+2026-11-21T02:34	1-before-pool	wrote-clone	-	names-clone	451 T08: where-time's columns	diagram-backlog
+2026-11-21T02:34	1-before-pool	wrote-clone	-	names-clone	451 T36: the archived deferrals, read once	diagram-backlog
+2026-11-21T02:48	1-before-pool	wrote-clone	-	names-clone	451 T36 (fresh): the last checks	diagram-backlog
+2026-11-21T03:02	1-before-pool	wrote-clone	-	names-clone	451 T08 (fresh): land and gate booking	diagram-backlog
+2026-11-21T03:24	1-before-pool	wrote-clone	-	names-clone	451 T09: book each wait to its run	diagram-backlog
+2026-11-21T03:24	1-before-pool	wrote-clone	-	names-clone	451 T53: event-log lines filed wrong	diagram-backlog
+2026-11-21T03:57	1-before-pool	wrote-clone	-	names-clone	451 T53 (fresh): the plan corrections	diagram-backlog
+2026-11-21T04:10	1-before-pool	wrote-clone	-	names-clone	451 T10: the critical-path model minutes	diagram-backlog
+2026-11-21T04:10	1-before-pool	wrote-clone	-	names-clone	451 T55: closing checks at once	diagram-backlog
+2026-11-21T04:37	1-before-pool	wrote-clone	-	names-clone	451 T10 (fresh): clip agent spans	diagram-backlog
+2026-11-21T05:00	1-before-pool	wrote-clone	-	names-clone	451 T55 (fresh): refuse foreground closing runs	diagram-backlog
+2026-11-21T05:25	1-before-pool	wrote-clone	-	names-clone	451 T55 (fresh): judge the chain's check first	diagram-backlog
+2026-11-21T05:35	1-before-pool	wrote-clone	-	names-clone	451 T57: static's double build	diagram-backlog
+2026-11-21T05:35	1-before-pool	wrote-clone	-	names-clone	451 T58: guard edits rebuild 27 crates	diagram-backlog
+2026-11-21T06:06	1-before-pool	wrote-clone	-	names-clone	451 T57 (fresh): explain the 5 reds	diagram-backlog
+2026-11-21T06:06	1-before-pool	wrote-clone	-	names-clone	451 T58 (fresh): finish the split in its worktree	diagram-backlog
+2026-11-21T06:06	1-before-pool	wrote-clone	-	names-clone	451 T62: background builders' edits refused	diagram-backlog
+2026-11-21T06:41	1-before-pool	wrote-clone	-	names-clone	451 T11 in a worktree: feature-report columns	diagram-backlog
+2026-11-21T07:18	1-before-pool	reader	-	names-clone	451 T11 (fresh): finish in the worktree	
+2026-11-21T07:28	1-before-pool	wrote-clone	-	names-clone	451 T65: a resumed agent counts as running	diagram-backlog
+2026-11-21T07:28	1-before-pool	wrote-clone	-	names-clone	451 T66: pin the rebuild count	diagram-backlog
+2026-11-21T07:33	1-before-pool	wrote-clone	-	names-clone	451 T11: re-rounds across the window edge	diagram-backlog
+2026-11-21T07:40	1-before-pool	wrote-clone	-	names-clone	451 T66 (fresh): the leftovers	diagram-backlog
+2026-11-21T08:03	1-before-pool	wrote-clone	-	names-clone	451 T56: refile shares the writer's rule	diagram-backlog
+2026-11-21T08:03	1-before-pool	wrote-clone	-	names-clone	451 T59: the stop line's token count	diagram-backlog
+2026-11-21T08:03	1-before-pool	wrote-clone	-	names-clone	451 T64: the order notice after a landing	diagram-backlog
+2026-11-21T08:26	1-before-pool	reader	-	names-clone	451 T59 (fresh): long-reply probe	
+2026-11-21T08:34	1-before-pool	wrote-clone	-	names-clone	451 T61: the wait's proof-of-life	diagram-backlog
+2026-11-21T08:34	1-before-pool	wrote-clone	-	names-clone	451 T63: a read-only heredoc passes	diagram-backlog
+2026-11-21T08:34	1-before-pool	wrote-clone	-	names-clone	451 T68: the context cap and advisor rows	diagram-backlog
+2026-11-21T08:47	1-before-pool	wrote-clone	-	names-clone	451 T63 (fresh): f-string options in py_c	diagram-backlog
+2026-11-21T09:03	1-before-pool	wrote-clone	-	names-clone	451 T61 (fresh): only a writer is alive	diagram-backlog
+2026-11-21T09:23	1-before-pool	wrote-clone	-	names-clone	451 T54: stale-terms on a common word	diagram-backlog
+2026-11-21T09:23	1-before-pool	wrote-clone	-	names-clone	451 T69: the advisor's tokens booked	diagram-backlog
+2026-11-21T09:23	1-before-pool	wrote-clone	-	names-clone	451 T70: the browser test under load	diagram-backlog
+2026-11-21T09:58	1-before-pool	wrote-clone	-	names-clone	451 T54 (fresh): finish the stale-terms fix	diagram-backlog
+2026-11-21T10:08	1-before-pool	wrote-clone	-	names-clone	451 T72: closing-checks runs apart	diagram-backlog
+2026-11-21T10:09	1-before-pool	wrote-clone	-	names-clone	451 T60: handoffs under the session's clone	diagram-backlog
+2026-11-21T10:09	1-before-pool	wrote-clone	-	names-clone	451 T67: README guard on a cp to /tmp	diagram-backlog
+2026-11-21T10:40	1-before-pool	wrote-clone	-	names-clone	451 T67 (fresh): worktrees are the tree	diagram-backlog
+2026-11-21T11:22	1-before-pool	wrote-clone	-	names-clone	451 T67: README targets under the new worktree	diagram-backlog
+2026-11-21T11:53	1-before-pool	wrote-clone	-	names-clone	451 T71: a wait on an agent's own appends	diagram-backlog
+2026-11-21T11:53	1-before-pool	wrote-clone	-	names-clone	451 T73: a re-wrapped word is no stale use	diagram-backlog
+2026-11-21T11:53	1-before-pool	wrote-clone	-	names-clone	451 T74: the event log under the session's clone	diagram-backlog
+2026-11-21T12:31	1-before-pool	wrote-clone	-	names-clone	451 T50: git subcommands that write	diagram-backlog
+2026-11-21T12:31	1-before-pool	wrote-clone	-	names-clone	451 T76: the mirror's unassigned lines home	diagram-backlog
+2026-11-21T12:31	1-before-pool	wrote-clone	-	names-clone	451 T77: the plan hold's off-by-one	diagram-backlog
+2026-11-21T13:16	1-before-pool	wrote-clone	-	names-clone	451 T48: a clause naming another feature	diagram-backlog
+2026-11-21T13:16	1-before-pool	wrote-clone	-	names-clone	451 T78: the plan hold's shell path	diagram-backlog
+2026-11-21T13:16	1-before-pool	wrote-clone	-	names-clone	451 T79: the walk's continuation and braces	diagram-backlog
+2026-11-21T14:02	1-before-pool	wrote-clone	-	names-clone	451 T79 (fresh): finish the walk fix	diagram-backlog
+2026-11-21T14:58	1-before-pool	wrote-clone	-	names-clone	451 T79: resolve the text, keep D6 for the unknown	diagram-backlog
+2026-11-21T15:36	1-before-pool	wrote-clone	-	names-clone	451 T79 (fresh): close out the bind rule	diagram-backlog
+2026-11-21T16:29	1-before-pool	wrote-clone	-	names-clone	451 T84: builders finish their own tasks	diagram-backlog
+2026-11-21T16:29	1-before-pool	wrote-clone	-	names-clone	451 T85: Stop hook skips a running builder's runs	diagram-backlog
+2026-11-21T16:29	1-before-pool	wrote-clone	-	names-clone	451 T86: closing checks judge the task's own work	diagram-backlog
+2026-11-21T16:55	1-before-pool	wrote-clone	-	names-clone	451 T86 (fresh): close out the scoped closing checks	diagram-backlog
+2026-11-21T17:03	1-before-pool	wrote-clone	-	names-clone	451 T84 (fresh): close out the builder stop guard	diagram-backlog
+2026-11-21T17:29	1-before-pool	wrote-clone	-	names-clone	451 T81: house-style timing test under load	diagram-backlog
+2026-11-21T17:29	1-before-pool	wrote-clone	-	names-clone	451 T88: rolling dispatch, each task lands alone	diagram-backlog
+2026-11-21T17:29	1-before-pool	wrote-clone	-	names-clone	451 T93: shell write paths in the event log	diagram-backlog
+2026-11-21T18:02	1-before-pool	wrote-clone	-	names-clone	451 T88 (fresh): close out rolling dispatch	diagram-backlog
+2026-11-21T18:31	1-before-pool	wrote-clone	-	names-clone	451 T82: dashless FR ids in the bundle reader	diagram-backlog
+2026-11-21T18:31	1-before-pool	wrote-clone	-	names-clone	451 T95: BLOCKED tag reads coverage reds	diagram-backlog
+2026-11-21T18:31	1-before-pool	wrote-clone	-	names-clone	451 T97: the walk's per-process compile cost	diagram-backlog
+2026-11-21T18:48	1-before-pool	wrote-clone	-	names-clone	451 T100: land any ready task, its own section alone	diagram-backlog
+2026-11-21T18:50	1-before-pool	wrote-clone	-	names-clone	451 T99: idle-tests wall-clock case under load	diagram-backlog
+2026-11-21T19:06	1-before-pool	wrote-clone	-	names-clone	451 T97 (fresh): restore compile, close out	diagram-backlog
+2026-11-21T19:20	1-before-pool	wrote-clone	-	names-clone	451 T101 (fresh): close out ready-task landing	diagram-backlog
+2026-11-21T19:36	1-before-pool	wrote-clone	-	names-clone	451 T102: rolling dispatch skips a waiting task	diagram-backlog
+2026-11-21T19:39	1-before-pool	wrote-clone	-	names-clone	451 T103: gate the shape strippers' patterns	diagram-backlog
+2026-11-21T19:39	1-before-pool	wrote-clone	-	names-clone	451 T99 (fresh): the plan section's findings	diagram-backlog
+2026-11-21T19:58	1-before-pool	wrote-clone	-	names-clone	451 T96: Python writes named in the event log	diagram-backlog
+2026-11-21T20:17	1-before-pool	wrote-clone	-	names-clone	451 T92: an arbiter's accept and the verdict store	diagram-backlog
+2026-11-21T20:33	1-before-pool	wrote-clone	-	names-clone	451 T96 (fresh): the Python reader's per-call cost	diagram-backlog
+2026-11-21T20:41	1-before-pool	wrote-clone	-	names-clone	451 T103 (fresh): close out the shape gates	diagram-backlog
+2026-11-21T20:54	1-before-pool	wrote-clone	-	names-clone	451 T108: the quote scan's other two copies	diagram-backlog
+2026-11-21T20:58	1-before-pool	wrote-clone	-	names-clone	451 T49: a write through a program's own function	diagram-backlog
+2026-11-21T21:14	1-before-pool	wrote-clone	-	names-clone	451 T96 (third): finish and review	diagram-backlog
+2026-11-21T21:28	1-before-pool	wrote-clone	-	names-clone	451 T113: the hanging quote pattern in three guards	diagram-backlog
+2026-11-21T21:31	1-before-pool	wrote-clone	-	names-clone	451 T111: the stall-watchdog suite's fixed waits	diagram-backlog
+2026-11-21T21:33	1-before-pool	wrote-clone	-	names-clone	451 T106: a re-numbered builder's event lines	diagram-backlog
+2026-11-21T22:03	1-before-pool	wrote-clone	-	names-clone	451 T112: the quote pattern in tree and program	diagram-backlog
+2026-11-21T22:07	1-before-pool	wrote-clone	-	names-clone	451 T113 (fresh): after the scan's move to shape	diagram-backlog
+2026-11-21T22:10	1-before-pool	wrote-clone	-	names-clone	451 T114: a format pass after a green cover	diagram-backlog
+2026-11-21T22:30	1-before-pool	wrote-clone	-	names-clone	451 T51: a program run from a script file	diagram-backlog
+2026-11-21T22:40	1-before-pool	wrote-clone	-	names-clone	451 T110: a path built from a root and a parameter	diagram-backlog
+2026-11-21T22:47	1-before-pool	wrote-clone	-	names-clone	451 T114 (fresh): decide and review	diagram-backlog
+2026-11-21T22:51	1-before-pool	wrote-clone	-	names-clone	451 T80: the plan hold's write-back on split headings	diagram-backlog
+2026-11-21T23:07	1-before-pool	wrote-clone	-	names-clone	451 T83: a quoted destination the walk blanks	diagram-backlog
+2026-11-21T23:18	1-before-pool	wrote-clone	-	names-clone	451 T110 (fresh): replay, cost and review	diagram-backlog
+2026-11-21T23:39	1-before-pool	wrote-clone	-	names-clone	451 T87: a guard file's name in a scratch tree	diagram-backlog
+2026-11-21T23:48	1-before-pool	wrote-clone	-	names-clone	451 T83 (fresh): timing, replay and review	diagram-backlog
+2026-11-22T00:03	1-before-pool	wrote-clone	-	names-clone	451 T123: a plan hold bound to its own tree	diagram-backlog
+2026-11-22T00:15	1-before-pool	wrote-clone	-	names-clone	451 T87 (fresh): build, replay and review	diagram-backlog
+2026-11-22T00:38	1-before-pool	wrote-clone	-	names-clone	451 T83 (third): count, replay and review	diagram-backlog
+2026-11-22T00:46	1-before-pool	wrote-clone	-	names-clone	451 T123 (fresh): round 2, rebuild and re-review	diagram-backlog
+2026-11-22T01:14	1-before-pool	wrote-clone	-	names-clone	451 T105: land-alone's take-back on spec files	diagram-backlog
+2026-11-22T01:19	1-before-pool	wrote-clone	-	names-clone	451 T87 (third): CDPATH, worktrees, round 3	diagram-backlog
+2026-11-22T01:52	1-before-pool	wrote-clone	-	names-clone	451 T118: two Python shapes read as writes	diagram-backlog
+2026-11-22T02:00	1-before-pool	wrote-clone	-	names-clone	451 T129: the walk's ASSIGN scan on the automaton	diagram-backlog
+2026-11-22T02:00	1-before-pool	wrote-clone	-	names-clone	451 T89: a program's sys.argv as the command's words	diagram-backlog
+2026-11-22T02:28	1-before-pool	wrote-clone	-	names-clone	451 T118 (fresh): tests, replay and review	diagram-backlog
+2026-11-22T02:39	1-before-pool	wrote-clone	-	names-clone	451 T129 (fresh): read the runs, section and review	diagram-backlog
+2026-11-22T02:53	1-before-pool	wrote-clone	-	names-clone	451 T89 (fresh): bx replay, closing and review	diagram-backlog
+2026-11-22T03:02	1-before-pool	wrote-clone	-	names-clone	451 T115: fixed sleeps in four hook suites	diagram-backlog
+2026-11-22T03:30	1-before-pool	wrote-clone	-	names-clone	451 T118 (close-out): the seven uncovered lines	diagram-backlog
+2026-11-22T03:49	1-before-pool	wrote-clone	-	names-clone	451 T91: the bind rule's two scratch refusals	diagram-backlog
+2026-11-22T03:50	1-before-pool	wrote-clone	-	names-clone	451 T94: the land crate's tests read real state	diagram-backlog
+2026-11-22T03:58	1-before-pool	wrote-clone	-	names-clone	449 T244: stop before the parked hamlet stages	diagram-backlog
+2026-11-22T04:56	1-before-pool	wrote-clone	-	names-clone	451 T91 (fresh): replay, section and review	diagram-backlog
+2026-11-22T05:02	1-before-pool	wrote-clone	-	names-clone	451 T142: the gate tool's stale-incremental link failure	diagram-backlog
+2026-11-22T05:34	1-before-pool	wrote-clone	-	names-clone	449 T244 (fresh): lint, cover and closing run	diagram-backlog
+2026-11-22T05:42	1-before-pool	wrote-clone	-	names-clone	451 T141: one bundle, one section, one review, one landing	diagram-backlog
+2026-11-22T06:07	1-before-pool	wrote-clone	-	names-clone	449 T158: the deletion close	diagram-backlog
+2026-11-22T06:32	1-before-pool	wrote-clone	-	names-clone	449 T203 then T216: the lint's heading and the coverage unde	diagram-backlog
+2026-11-22T06:49	1-before-pool	reader	-	names-clone	451 T141 (fresh): performance-first per member, finish	
+2026-11-22T06:58	1-before-pool	wrote-clone	-	names-clone	449 T241 then T243: a bundle's cited pages; pool-sheet budge	diagram-backlog
+2026-11-22T07:08	1-before-pool	reader	-	names-clone	449 T240: the polder drawing's unconfirmed points	
+2026-11-22T07:10	1-before-pool	wrote-clone	-	names-clone	449 T158 (fresh): the four reds, the section and the review	diagram-backlog
+2026-11-22T07:19	1-before-pool	reader	-	names-clone	449 T216 (fresh): the coverage under-report	
+2026-11-22T07:34	1-before-pool	wrote-clone	-	names-clone	449 T235: the polder waterward stage's budget	diagram-backlog
+2026-11-22T07:53	1-before-pool	wrote-clone	-	names-clone	449 T243 (finish), then T228	diagram-backlog
+2026-11-22T07:56	1-before-pool	wrote-clone	-	names-clone	449 T197: the record corrections through page sessions	diagram-backlog
+2026-11-22T08:10	1-before-pool	reader	-	names-clone	449 T250: the polder bank bands' cost	
+2026-11-22T08:20	1-before-pool	reader	-	names-clone	449 T248: the .py files under specs against SC-005	
+2026-11-22T08:33	1-before-pool	wrote-clone	-	names-clone	449 T248 (carry out): delete, port and retire per the sectio	diagram-backlog
+2026-11-22T08:40	1-before-pool	wrote-clone	-	names-clone	449 T253 then T246's closing section	diagram-backlog
+2026-11-22T08:45	1-before-pool	wrote-clone	-	names-clone	449 T251: the constitution's other Python-era passages	diagram-backlog
+2026-11-22T09:02	1-before-pool	reader	-	names-clone	449 T249: claims owed on a page cited only in text	
+2026-11-22T09:02	1-before-pool	wrote-clone	-	names-clone	449 T197 (fresh): G2, the checks, the section and the review	diagram-backlog
+2026-11-22T09:07	1-before-pool	reader	-	names-clone	449 T250 (finish): file each dike corner once, then accept	
+2026-11-22T09:19	1-before-pool	wrote-clone	-	names-clone	449 T247: codeid.py and its callers	diagram-backlog
+2026-11-22T09:26	1-before-pool	wrote-clone	-	names-clone	449 T249 (finish): record, the dropped verdicts, the finding	diagram-backlog
+2026-11-22T09:41	1-before-pool	wrote-clone	-	names-clone	449 T247 (fresh): crates, re-pins, the deletion, the census 	diagram-backlog
+2026-11-22T09:55	1-before-pool	wrote-clone	-	names-clone	449 T265: the manor's armory and granary	diagram-backlog
+2026-11-22T10:14	1-before-pool	wrote-clone	-	names-clone	449 T247 (third): replay-owing, docs, review and closing	diagram-backlog
+2026-11-22T10:19	1-before-pool	wrote-clone	-	names-clone	451 T147: a landing owes ledger rows only for its own tasks	diagram-backlog
+2026-11-22T10:20	1-before-pool	wrote-clone	-	names-clone	449 T265 (fresh): record, pop-up, the reviews and closing	diagram-backlog
+2026-11-22T10:39	1-before-pool	wrote-clone	-	names-clone	451 T151: Workflow agents' passes traced to their session	diagram-backlog
+2026-11-22T10:40	1-before-pool	wrote-clone	-	names-clone	449 T273: the two Python test helpers	diagram-backlog
+2026-11-22T11:02	1-before-pool	wrote-clone	-	names-clone	449 bundle T258, T268, T269: three tooling follow-ups	diagram-backlog
+2026-11-22T11:02	1-before-pool	wrote-clone	-	names-clone	449 record bundle: nine pop-up and page follow-ups	diagram-backlog
+2026-11-22T11:03	1-before-pool	reader	-	names-clone	449 T271: a town's place card counts its farmhouses	
+2026-11-22T11:03	1-before-pool	wrote-clone	-	names-clone	449 T263: the polder's channels stop short of the ring canal	diagram-backlog
+2026-11-22T11:15	1-before-pool	reader	-	names-clone	449 T264: the dwelling band's bare GUESS	
+2026-11-22T11:18	1-before-pool	wrote-clone	-	names-clone	449 T274: the county sheet's granary, barracks and shrine do	diagram-backlog
+2026-11-22T11:20	1-before-pool	wrote-clone	-	names-clone	449 T261: Sawada's houses and 0031's back to the wind	diagram-backlog
+2026-11-22T11:38	1-before-pool	wrote-clone	-	names-clone	449 tooling bundle (fresh): the two review fixes, closing an	diagram-backlog
+2026-11-22T12:04	1-before-pool	wrote-clone	-	names-clone	449 T274 (fresh): the granary north of the offices, claims a	diagram-backlog
+2026-11-22T12:07	1-before-pool	reader	-	names-clone	449 T261 (finish): the 13 pop-ups owed modal-depiction	
+2026-11-22T12:30	1-before-pool	reader	-	names-clone	449 T274: building-review re-run on a green gate	
+2026-11-22T12:54	1-before-pool	reader	-	names-clone	449 record bundle (fresh): claims, arbiter, closing and revi	
+2026-11-22T13:20	1-before-pool	wrote-clone	-	names-clone	449 batch landing: clear the six refusals and land	diagram-backlog
+2026-11-22T13:57	1-before-pool	wrote-clone	-	names-clone	449 T252: the one self-scoping command over the Rust sweeps	diagram-backlog
+2026-11-22T13:58	1-before-pool	wrote-clone	-	names-clone	449 bundle T259, T277: stale budget file, off-wind belt	diagram-backlog
+2026-11-22T13:58	1-before-pool	wrote-clone	-	names-clone	449 bundle T275, T276, T278-T281: the magistracy sheets	diagram-backlog
+2026-11-22T14:23	1-before-pool	wrote-clone	-	names-clone	449 arbiter fix: refuse a building-review while its gate is 	diagram-backlog
+2026-11-22T14:50	1-before-pool	wrote-clone	-	names-clone	449: the tick misses a bundle's shared part B, then re-land	diagram-backlog
+2026-11-22T15:13	1-before-pool	wrote-clone	-	names-clone	449 bundle T275-T281, T288 (fresh): labels, claims, reviews	diagram-backlog
+2026-11-22T15:26	1-before-pool	reader	-	names-clone	449 bundle T259, T277 (fresh): record, ledger, closing	
+2026-11-22T16:12	1-before-pool	wrote-clone	-	names-clone	451 T153: every phase writes its timing line	diagram-backlog
+2026-11-22T16:16	1-before-pool	reader	-	names-clone	449 T289-T291, T295-T300: the magistracy follow-ups	
+2026-11-22T16:16	1-before-pool	wrote-clone	-	names-clone	449 T260, T282-T287: the shrine and record bundle	diagram-backlog
+2026-11-22T16:38	1-before-pool	reader	-	names-clone	451 T153 (fresh): static, the review's points, hook-suite li	
+2026-11-22T16:51	1-before-pool	wrote-clone	-	names-clone	451 T157: a landing skips other open tasks' record checks	diagram-backlog
+2026-11-22T16:56	1-before-pool	wrote-clone	-	names-clone	449 T289-T300 bundle (fresh): pages, claims, closing, map re	diagram-backlog
+2026-11-22T17:08	1-before-pool	reader	-	names-clone	449 shrine bundle T260, T282-T287 (fresh): the review block 	
+2026-11-22T19:44	1-before-pool	wrote-clone	-	names-clone	451 T158: clean up after ourselves on the disk	diagram-backlog
+2026-11-22T19:45	1-before-pool	reader	-	names-clone	451 T98: builder occupancy over the night after T88	
+2026-11-22T19:58	1-before-pool	wrote-clone	-	names-clone	451 T156: the Stop hook counts every running builder	diagram-backlog
+2026-11-22T20:17	1-before-pool	wrote-clone	-	names-clone	451 T158 (fresh): prove every candidate dead, review, run it	diagram-backlog
+2026-11-22T20:35	1-before-pool	wrote-clone	-	names-clone	449 bundle T289-T300 (fresh 2): read r3, finish, map reviews	diagram-backlog
+2026-11-22T20:35	1-before-pool	wrote-clone	-	names-clone	449 bundle T292-T294, T301, T303: wind, belt, armory form	diagram-backlog
+2026-11-22T20:51	1-before-pool	wrote-clone	-	names-clone	449 bundle T302, T304-T311: the last record and sheet follow	diagram-backlog
+2026-11-22T20:53	1-before-pool	wrote-clone	-	names-clone	449 T289 bundle: the glyph-owed fix, then the scoped map rev	diagram-backlog
+2026-11-22T21:23	1-before-pool	wrote-clone	-	names-clone	449 wind bundle (fresh): pop-ups, claims, closing; T303 late	diagram-backlog
+2026-11-22T21:35	1-before-pool	wrote-clone	-	names-clone	449 last bundle T302-T311 (fresh): tripwire, page queues, ch	diagram-backlog
+2026-11-22T22:04	1-before-pool	wrote-clone	-	names-clone	449 T303 (fresh): the armory form's three-way code	diagram-backlog
+2026-11-22T22:26	1-before-pool	wrote-clone	-	names-clone	449 last bundle (fresh 3): the clippy red, T320's E1, finish	diagram-backlog
+2026-11-22T22:27	1-before-pool	reader	-	names-clone	449 arbiter fix: the reversal tripwire holds only its own se	
+2026-11-22T22:45	1-before-pool	reader	-	names-clone	449 T303 (fresh 2): the drift fixes, claims, closing	
+2026-11-22T23:00	1-before-pool	wrote-clone	-	names-clone	449 four-bundle landing: re-run owed reviews and claims, lan	diagram-backlog
+2026-11-22T23:36	1-before-pool	reader	-	names-clone	451 T154 trial: compile the gate once, run tests once	
+2026-11-22T23:36	1-before-pool	wrote-clone	-	names-clone	449 T312-T316, T320, T321, T325, T326: the magistracy sheets	diagram-backlog
+2026-11-22T23:36	1-before-pool	wrote-clone	-	names-clone	449 T317-T319, T322-T324, T327: the last record items	diagram-backlog
+2026-11-23T00:10	1-before-pool	reader	-	names-clone	449 sheet bundle (fresh): verify, claims, reviews, closing	
+2026-11-23T00:18	1-before-pool	reader	-	names-clone	451 T155 trial: does a landing rebuild what the clone built?	
+2026-11-23T01:06	1-before-pool	wrote-clone	-	names-clone	449 sheet bundle (fresh 3): verify, the nine map reviews, cl	diagram-backlog
+2026-11-23T01:15	1-before-pool	wrote-clone	-	names-clone	449 T330, T333: the two record follow-up sessions	diagram-backlog
+2026-11-23T01:18	1-before-pool	wrote-clone	-	names-clone	451 T160, T161: a flaky pool test and edit attribution	diagram-backlog
+2026-11-23T01:35	1-before-pool	reader	-	names-clone	449: the quiet window - green gate, re-record, land both bun	
+2026-11-23T02:23	1-before-pool	wrote-clone	-	names-clone	451 T164: a review's gate judged on a committed snapshot	diagram-backlog
+2026-11-23T02:33	1-before-pool	wrote-clone	-	names-clone	449 T328-T340: the last sheet follow-ups	diagram-backlog
+2026-11-23T02:46	1-before-pool	wrote-clone	-	names-clone	451 T164 (fresh): red first, cost, plan, closing, review	diagram-backlog
+2026-11-23T02:54	1-before-pool	wrote-clone	-	names-clone	449 T328-T340 bundle (fresh): finish, review, close	diagram-backlog
+2026-11-23T03:19	1-before-pool	wrote-clone	-	names-clone	451 T90: gate-write reads the whole command, not a cut segme	diagram-backlog
+2026-11-23T03:25	1-before-pool	wrote-clone	-	names-clone	449 T328-T340 bundle (fresh 2): reviews, claims, closing	diagram-backlog
+2026-11-23T03:52	1-before-pool	wrote-clone	-	names-clone	449: finish T330, combined verify, five reviews, land both	diagram-backlog
+2026-11-23T03:53	1-before-pool	wrote-clone	-	names-clone	449 T341, T345-T348, T350: the code, docs and tool follow-up	diagram-backlog
+2026-11-23T03:53	1-before-pool	wrote-clone	-	names-clone	451 T167: book a page session's lines by its brief	diagram-backlog
+2026-11-23T04:24	1-before-pool	wrote-clone	-	names-clone	449 T342-T344, T349: the last record-page follow-ups	diagram-backlog
+2026-11-23T04:38	1-before-pool	wrote-clone	-	names-clone	449 final landing (fresh): claims on the commit, re-land	diagram-backlog
+2026-11-23T05:08	1-before-pool	wrote-clone	-	names-clone	449 T341 bundle (fresh): claims, pop-ups, decide, closing, r	diagram-backlog
+2026-11-23T05:09	1-before-pool	wrote-clone	-	names-clone	451 T169: a short hook command in the settings	diagram-backlog
+2026-11-23T05:23	1-before-pool	wrote-clone	-	names-clone	449 T342 bundle (fresh): depiction round 2, plan, MODE 4, cl	diagram-backlog
+2026-11-23T05:39	1-before-pool	wrote-clone	-	names-clone	449 T341 bundle (fresh 2): depiction, plan round 3, verify, 	diagram-backlog
+2026-11-23T05:40	1-before-pool	wrote-clone	-	names-clone	451 T168: re-task the misbooked page-session lines	diagram-backlog
+2026-11-23T05:42	1-before-pool	wrote-clone	-	names-clone	451 T169 (fresh): live check, plan figures, decide	diagram-backlog
+2026-11-23T05:48	1-before-pool	wrote-clone	-	names-clone	451 T171: an unchanged Stop block said once, not again and a	diagram-backlog
+2026-11-23T05:53	1-before-pool	wrote-clone	-	names-clone	449: commit and land the T341 and T342 bundles together	diagram-backlog
+2026-11-23T06:03	1-before-pool	wrote-clone	-	names-clone	449 T351-T368: the last sheet follow-ups	diagram-backlog
+2026-11-23T06:03	1-before-pool	wrote-clone	-	names-clone	449 T358, T360-T362, T369, T370: the last record follow-ups	diagram-backlog
+2026-11-23T06:14	1-before-pool	wrote-clone	-	names-clone	451 T171 (fresh): suites, red-on-HEAD, plan, MODE 4	diagram-backlog
+2026-11-23T06:28	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh): the rest, reviews, MODE 4	diagram-backlog
+2026-11-23T06:54	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh 3): decide, claims, reviews, MOD	diagram-backlog
+2026-11-23T07:05	1-before-pool	wrote-clone	-	names-clone	449 T358-T370 record bundle (fresh): brief C, pop-ups, claim	diagram-backlog
+2026-11-23T07:09	1-before-pool	wrote-clone	-	names-clone	451 T170: guard messages held to a word budget	diagram-backlog
+2026-11-23T07:14	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh 4): finish split, reviews, glyph	diagram-backlog
+2026-11-23T07:46	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh 5): county E1, re-review, glyphs	diagram-backlog
+2026-11-23T07:46	1-before-pool	wrote-clone	-	names-clone	451 T170 (fresh): review fixes, round 2, plan, MODE 4	diagram-backlog
+2026-11-23T07:57	1-before-pool	wrote-clone	-	names-clone	449 T358-T370 record bundle (fresh 2): plan fixes, MODE 4, c	diagram-backlog
+2026-11-23T08:12	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh 6): re-review scope, glyphs, MOD	diagram-backlog
+2026-11-23T08:18	1-before-pool	wrote-clone	-	names-clone	451 T170 (fresh 2): worst-case budgets, baseline task, MODE 	diagram-backlog
+2026-11-23T08:22	1-before-pool	wrote-clone	-	names-clone	449 T377 + 451 T176: reviews owed by drawn output	diagram-backlog
+2026-11-23T08:44	1-before-pool	wrote-clone	-	names-clone	449 T351-T368 bundle (fresh 7): cell fix, re-checks, MODE 4	diagram-backlog
+2026-11-23T08:50	1-before-pool	wrote-clone	-	names-clone	449 T377 + 451 T176 (fresh): finish, measure, MODE 4	diagram-backlog
+2026-11-23T08:50	1-before-pool	wrote-clone	-	names-clone	451 T170 (fresh 3): green, figures, review, MODE 4	diagram-backlog
+2026-11-23T09:16	1-before-pool	wrote-clone	-	names-clone	449: land the T351 and T358 bundles together	diagram-backlog
+2026-11-23T09:21	1-before-pool	wrote-clone	-	names-clone	451 T170 (fresh 4): repair record, round 6, MODE 4	diagram-backlog
+2026-11-23T09:24	1-before-pool	wrote-clone	-	names-clone	449 T377 (fresh 2) + T176 close: MODE 4 on the tool alone	diagram-backlog
+2026-11-23T09:38	1-before-pool	wrote-clone	-	names-clone	451 T175: the engine freeze holds only the review tree	diagram-backlog
+2026-11-23T09:43	1-before-pool	wrote-clone	-	names-clone	451 T180: land-alone commits only its own tasks' plan	diagram-backlog
+2026-11-23T09:44	1-before-pool	wrote-clone	-	names-clone	451 T100: set-down misses a builder's own run	diagram-backlog
+2026-11-23T10:13	1-before-pool	wrote-clone	-	names-clone	451 T170 fix: mask paths in guard-messages.tsv's text	diagram-backlog
+2026-11-23T10:14	1-before-pool	wrote-clone	-	names-clone	449 bundle T383, T384, T388, T391: the defects	diagram-backlog
+2026-11-23T10:14	1-before-pool	wrote-clone	-	names-clone	449 record bundle T371-T385: pages, passes, size check	diagram-backlog
+2026-11-23T10:36	1-before-pool	wrote-clone	-	names-clone	451 T170 landing blocker: pair-hooks gate-state probe	diagram-backlog
+2026-11-23T10:47	1-before-pool	wrote-clone	-	names-clone	449 record bundle T371-T385 (fresh): checks, claims, MODE 4	diagram-backlog
+2026-11-23T10:49	1-before-pool	wrote-clone	-	names-clone	449 defects bundle (fresh): T384, the lane, reviews, MODE 4	diagram-backlog
+2026-11-23T10:58	1-before-pool	wrote-clone	-	names-clone	451 T177: review baselined messages, costliest first	diagram-backlog
+2026-11-23T11:19	1-before-pool	wrote-clone	-	names-clone	449 defects bundle (fresh 2): notes, claims, reviews, MODE 4	diagram-backlog
+2026-11-23T11:24	1-before-pool	wrote-clone	-	names-clone	451 T177 (fresh): round 2, plan, MODE 4	diagram-backlog
+2026-11-23T11:42	1-before-pool	wrote-clone	-	names-clone	449 defects bundle (fresh 3): plan, decide, claims, reviews	diagram-backlog
+2026-11-23T11:52	1-before-pool	wrote-clone	-	names-clone	449 record bundle T371-T385 (fresh 2): H/I, pop-ups, claims,	diagram-backlog
+2026-11-23T11:53	1-before-pool	wrote-clone	-	names-clone	451 T177 (fresh 2): decide fixes, T179 note, MODE 4	diagram-backlog
+2026-11-23T12:26	1-before-pool	wrote-clone	-	names-clone	449 record bundle T371-T385 (fresh 3): last edit, decide, MO	diagram-backlog
+2026-11-23T12:44	1-before-pool	reader	-	names-clone	449: commit and land the T371 record bundle	
+2026-11-23T13:11	1-before-pool	wrote-clone	-	names-clone	451 T174: every guard's messages reach the budget	diagram-backlog
+2026-11-23T13:11	1-before-pool	wrote-clone	-	names-clone	451 T179 + T182: the arbiter's tooling defects	diagram-backlog
+2026-11-23T13:17	1-before-pool	wrote-clone	-	names-clone	449 defects bundle (fresh 4): the four reviews, closing	diagram-backlog
+2026-11-23T13:34	1-before-pool	wrote-clone	-	names-clone	451 T179 + T182 (fresh): compile, red-first, T182, MODE 4	diagram-backlog
+2026-11-23T13:36	1-before-pool	wrote-clone	-	names-clone	451 T174 (fresh): close, decide, MODE 4	diagram-backlog
+2026-11-23T13:59	1-before-pool	wrote-clone	-	names-clone	451 T179 + T182 (fresh 2): reword, stubs, last round	diagram-backlog
+2026-11-23T14:02	1-before-pool	wrote-clone	-	names-clone	449 defects bundle (fresh 5): claims, verify, reviews, closi	diagram-backlog
+2026-11-23T14:05	1-before-pool	reader	-	names-clone	451 T165, T166, T172: freeze check, verify's occasions, timi	
+2026-11-23T14:19	1-before-pool	reader	-	names-clone	Measure where 449's follow-ups came from	
+2026-11-23T14:21	1-before-pool	reader	-	names-clone	449 defects: the 8 owed county glyph checks, re-land	
+2026-11-23T14:41	1-before-pool	wrote-clone	-	names-clone	449 bundle T375-T402: the last seven defects	diagram-backlog
+2026-11-23T15:19	1-before-pool	wrote-clone	-	names-clone	449 bundle T375-T402 (fresh): T392, T375, plan, reviews	diagram-backlog
+2026-11-23T16:22	1-before-pool	reader	-	names-clone	449 last-seven bundle (fresh 2): last four items, land	
+2026-11-23T16:40	1-before-pool	wrote-clone	-	names-clone	451 T183: Stop hooks never block to keep busy; idle timer	diagram-backlog
+2026-11-23T17:11	1-before-pool	wrote-clone	-	names-clone	451 T183 (fresh): D10, D6, closing, MODE 4	diagram-backlog
+2026-11-23T18:09	1-before-pool	reader	-	names-clone	Which page edits could have needed pop-up re-checks	
+2026-11-23T19:23	1-before-pool	reader	-	names-clone	Blind re-classification test of the 136 page edits	
+2026-11-23T19:23	1-before-pool	wrote-clone	-	names-clone	451 T184: size edits never change a claim, repair 0009/0059	diagram-backlog
+2026-11-23T19:23	1-before-pool	wrote-clone	-	names-clone	451 T188, T189, T190: review rounds that converge	diagram-backlog
+2026-11-23T19:37	1-before-pool	wrote-clone	-	names-clone	451 T185 + T186: splits as moves, the triage filter	diagram-backlog
+2026-11-23T19:40	1-before-pool	reader	-	names-clone	Blind check: were the 30 pop-up edits needed	
+2026-11-23T20:08	1-before-pool	wrote-clone	-	names-clone	451 T187: labels as data, Guesses tabs generated	diagram-backlog
+2026-11-23T20:09	1-before-pool	wrote-clone	-	names-clone	451 T185 + T186 (fresh): finish T186, garden fix, MODE 4	diagram-backlog
+2026-11-23T20:23	1-before-pool	reader	-	names-clone	451: claims triage, commit and land T185 + T186	
+2026-11-23T20:33	1-before-pool	reader	-	names-clone	451 T191: the claims triage gets T186's filter	
+2026-11-23T21:37	1-before-pool	reader	-	names-clone	Why T184's split re-owed 63 pop-up checks	
+2026-11-23T21:38	1-before-pool	wrote-clone	-	names-clone	451 T193: a builder stuck on a dead watch is seen	diagram-backlog
+2026-11-23T21:45	1-before-pool	wrote-clone	-	names-clone	451 T194: fix T185/T186 split defects	diagram-backlog
+2026-11-23T21:55	1-before-pool	reader	-	names-clone	Audit the new cascade and idle rules for gaps	
+2026-11-23T22:09	1-before-pool	reader	-	names-clone	451 T184: the moved form, re-triage, checks, land	
+2026-11-23T22:09	1-before-pool	wrote-clone	-	names-clone	451 T193 (fresh) + audit 1, 2: no silent idling	diagram-backlog
+2026-11-23T22:10	1-before-pool	reader	-	names-clone	451 T196: claims and scoped rounds follow pointers	
+2026-11-23T22:50	1-before-pool	wrote-clone	-	names-clone	451 T192: tag the record's labels (sample first)	diagram-backlog
+2026-11-23T22:50	1-before-pool	wrote-clone	-	names-clone	451 T195 + T197: answers recorded truthfully	diagram-backlog
+2026-11-23T22:50	1-before-pool	wrote-clone	-	names-clone	451 T198 + T199 + T200: early checks, building-review, low g	diagram-backlog
+2026-11-23T23:25	1-before-pool	wrote-clone	-	names-clone	451 T195 + T197 (fresh): fixes, arbiter on REJUDGE, MODE 4	diagram-backlog
+2026-11-23T23:29	1-before-pool	wrote-clone	-	names-clone	451 T198-T200 (fresh): build T199's clause, MODE 4, close	diagram-backlog
+2026-11-23T23:40	1-before-pool	reader	-	names-clone	451 T204: naming an item on a claim owes no review	
+2026-11-23T23:40	1-before-pool	wrote-clone	-	names-clone	451 T201 + T202: no unseen waits; clone takes main back	diagram-backlog
+2026-11-24T00:04	1-before-pool	wrote-clone	-	names-clone	451 T192 bulk: tag the rest of the record	diagram-backlog
+2026-11-24T00:04	1-before-pool	wrote-clone	-	names-clone	451 T207: the flaky escape-record test	diagram-backlog
+2026-11-24T00:16	1-before-pool	reader	-	names-clone	451 T201 + T202 (fresh): replace_all case, timeouts, MODE 4	
+2026-11-24T04:21	1-before-pool	reader	-	names-clone	Cascade test step 1: need-check and predictions	
+2026-11-24T04:31	1-before-pool	wrote-clone	-	names-clone	Cascade test step 2: make the changes, compare	diagram-backlog
+2026-11-24T05:46	1-before-pool	reader	-	names-clone	Cascade test (fresh): record, close, file the defects	
+2026-11-24T12:18	1-before-pool	wrote-clone	-	names-clone	File feature 452 and move the 17 rows from 449	diagram-backlog
+2026-11-24T12:42	1-before-pool	wrote-clone	-	names-clone	Build 451 T209 and T212 (pop-up triage)	diagram-backlog
+2026-11-24T12:43	1-before-pool	reader	-	names-clone	Build 451 T214 (review-fixed)	
+2026-11-24T12:43	1-before-pool	wrote-clone	-	names-clone	Build 451 T210 T211 T213 (claims)	diagram-backlog
+2026-11-24T13:32	1-before-pool	reader	-	names-clone	Build 451 T215 (section words in repo)	
+2026-11-24T13:52	1-before-pool	reader	-	names-clone	Build 451 T216 (session-model rule)	
+2026-11-24T14:11	1-before-pool	reader	-	names-clone	Audit tasks opened Fri-Mon by cause	
+2026-11-24T14:14	1-before-pool	reader	-	-	Inheritance probe: claude type's model	
+2026-11-24T14:14	1-before-pool	reader	-	-	Inheritance probe: which model runs	
+2026-11-24T14:15	1-before-pool	reader	-	names-clone	Build 451 T217 (inherit list)	
+2026-11-24T14:29	1-before-pool	reader	-	names-clone	Build 449 T415 T416 (hamlet findings)	
+2026-11-24T14:29	1-before-pool	reader	-	names-clone	Triage 449's open found rows	
+2026-11-24T14:38	1-before-pool	reader	-	names-clone	Triage 449's older open found rows	
+2026-11-24T14:53	1-before-pool	reader	-	names-clone	Build 449 T419 T421 T420 (polder, hem)	
+2026-11-24T14:53	1-before-pool	reader	-	names-clone	Close stale found rows, file 452 items	
+2026-11-24T14:55	1-before-pool	reader	-	names-clone	Triage 444's remaining open found rows	
+2026-11-24T15:08	1-before-pool	reader	-	names-clone	Close 444's stale found rows	
+2026-11-24T15:13	1-before-pool	reader	-	names-clone	Audit 120 wording rows: any change needed?	
+2026-11-24T15:16	1-before-pool	reader	-	names-clone	Audit open restatements: any change needed?	
+2026-11-24T15:28	1-before-pool	reader	-	names-clone	Close the wording audit's fine rows	
+2026-11-24T15:30	1-before-pool	reader	-	names-clone	Build 452 restatement edits	
+2026-11-24T15:30	1-before-pool	wrote-clone	-	names-clone	Build 451 T218-T222 (check mechanisms)	diagram-backlog
+2026-11-24T15:31	1-before-pool	reader	-	names-clone	Build 449 T424 (claim restatements)	
+2026-11-24T15:43	1-before-pool	wrote-clone	-	names-clone	Build 449 T423 T418 T422 (hamlet)	diagram-backlog
+2026-11-24T15:53	1-before-pool	wrote-clone	-	names-clone	Continue 451 T219 T218 T220 T222	diagram-backlog
+2026-11-24T16:14	1-before-pool	wrote-clone	-	names-clone	Write page-session briefs (T420, T425, 452)	diagram-backlog
+2026-11-24T16:18	1-before-pool	wrote-clone	-	names-clone	Continue 449 T423 T418 T422	diagram-backlog
+2026-11-24T16:24	1-before-pool	reader	-	names-clone	Claims round: arch and shrine claims	
+2026-11-24T16:26	1-before-pool	reader	-	names-clone	Claims round: arch claim re-check	
+2026-11-24T16:31	1-before-pool	reader	-	names-clone	Write the 18 page-session briefs	
+2026-11-24T16:48	1-before-pool	reader	-	names-clone	Finish 449 T418 and T422	
+2026-11-24T17:40	1-before-pool	wrote-clone	-	names-clone	Build 451 T223 (mixed-build re-triage)	diagram-backlog
+2026-11-24T18:09	1-before-pool	reader	-	names-clone	Run the claims re-judging and P7's cascade	
+2026-11-24T18:33	1-before-pool	reader	-	names-clone	Re-run guest-quarters' 4 modal checks	
+2026-11-24T18:37	1-before-pool	reader	-	names-clone	Build 451 T224 (record-answer closure)	
+2026-11-24T18:56	1-before-pool	reader	-	names-clone	Build 451 T225 (stamp read by history)	
+2026-11-24T20:27	1-before-pool	reader	-	names-clone	Run page session P1's cascade	
+2026-11-24T21:03	1-before-pool	wrote-clone	-	names-clone	Build 449 T420 (dike-pond channel width)	diagram-backlog
+2026-11-24T21:33	1-before-pool	wrote-clone	-	names-clone	Finish 449 T420's close-out	diagram-backlog
+2026-11-24T21:59	1-before-pool	reader	-	names-clone	Build 449 T426 (refused seat, seed pool)	
+2026-11-24T22:31	1-before-pool	reader	-	names-clone	Write briefs for the new hamlet page items	
+2026-11-24T22:57	1-before-pool	reader	-	names-clone	Run page session P2's cascade	
+2026-11-24T23:01	1-before-pool	reader	-	names-clone	Audit "the GM's ruling" comments in the record	
+2026-11-25T00:15	1-before-pool	reader	-	names-clone	Run page session P3's cascade	
+2026-11-25T00:20	1-before-pool	reader	-	names-clone	Finish page session P3's cascade	
+2026-11-25T01:04	1-before-pool	reader	-	names-clone	Run page session P3b's cascade	
+2026-11-25T01:35	1-before-pool	reader	-	names-clone	Run page session P4's cascade	
+2026-11-25T02:14	1-before-pool	reader	-	names-clone	Run page session P10's cascade	
+2026-11-25T02:23	1-before-pool	wrote-clone	-	names-clone	Build 449 T427 (ring canal width)	diagram-backlog
+2026-11-25T03:44	1-before-pool	wrote-clone	-	names-clone	Run page session P11's cascade	diagram-backlog
+2026-11-25T03:52	1-before-pool	wrote-clone	-	names-clone	Build 449 T429 and T430 (pond placement)	diagram-backlog
+2026-11-25T04:11	1-before-pool	reader	-	names-clone	Write briefs P12, P13 for the last hamlet pages	
+2026-11-25T04:31	1-before-pool	wrote-clone	-	names-clone	Finish 449 T430's claims round	diagram-backlog
+2026-11-25T06:07	1-before-pool	wrote-clone	-	names-clone	Run page session P12's cascade	diagram-backlog
+2026-11-25T06:21	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T236 (UNRESEARCHED label)	diagram-backlog
+2026-11-25T06:49	1-before-pool	wrote-clone	STOP	names-clone	Finish 451 T236 to its stop point	diagram-backlog
+2026-11-25T06:56	1-before-pool	wrote-clone	STOP	names-clone	Build 449 T432 (wet ground at the toe)	diagram-backlog
+2026-11-25T08:12	1-before-pool	wrote-clone	STOP	names-clone	Finish 449 T432 to its stop point	diagram-backlog
+2026-11-25T08:27	1-before-pool	wrote-clone	STOP	names-clone	Build 449 T431 (feeder and outfall)	diagram-backlog
+2026-11-25T08:48	1-before-pool	wrote-clone	STOP	names-clone	Build 449 T433 (dry plot on water check)	diagram-backlog
+2026-11-25T09:14	1-before-pool	wrote-clone	STOP	names-clone	Build 449 T434 (three corner-only checks)	diagram-backlog
+2026-11-25T09:55	1-before-pool	wrote-clone	STOP	names-clone	Build 449 T435 (last point checks)	diagram-backlog
+2026-11-25T11:09	1-before-pool	wrote-clone	-	names-clone	P15 cascade: claims and pop-ups	diagram-backlog
+2026-11-25T12:12	1-before-pool	wrote-clone	STOP	names-clone	Fix 451 T230/T239 closing-checks attribution	diagram-backlog
+2026-11-25T12:23	1-before-pool	wrote-clone	STOP	names-clone	Fix 451 T238 size-edit measure	diagram-backlog
+2026-11-25T12:28	1-before-pool	wrote-clone	STOP	names-clone	Fix 451 T240 third-round arbiter guard	diagram-backlog
+2026-11-25T12:59	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T237 builder-split enforcement	diagram-backlog
+2026-11-25T13:18	1-before-pool	wrote-clone	STOP	names-clone	Fix 451 T241 pop-up not owed	diagram-backlog
+2026-11-25T13:32	1-before-pool	wrote-clone	STOP	names-clone	Fix 451 T226 new guess reaches pop-ups	diagram-backlog
+2026-11-25T13:58	1-before-pool	wrote-clone	-	names-clone	Guesses-tab looks: marsh and barracks	diagram-backlog
+2026-11-25T14:06	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T243 task time breakdown	diagram-backlog
+2026-11-25T14:32	1-before-pool	wrote-clone	STOP	names-clone	Finish 451 T243 from handoff	diagram-backlog
+2026-11-25T14:47	1-before-pool	reader	-	names-clone	Measure builder context cap trade-off	
+2026-11-25T15:08	1-before-pool	wrote-clone	STOP	names-clone	Finish 451 T243: arbiter and round 4	diagram-backlog
+2026-11-25T15:34	1-before-pool	wrote-clone	STOP	names-clone	Finish 451 T243: project-wide blocking	diagram-backlog
+2026-11-25T16:10	1-before-pool	wrote-clone	STOP	names-clone	Finish 451 T243: round 6	diagram-backlog
+2026-11-25T16:25	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T244 research switch	diagram-backlog
+2026-11-25T23:32	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T252 flaky closing-checks test	diagram-backlog
+2026-11-25T23:44	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T253 pipe races in suites	diagram-backlog
+2026-11-26T00:17	1-before-pool	reader	-	names-clone	Measure plan-review reversals	
+2026-11-26T02:12	1-before-pool	wrote-clone	STOP	names-clone	Build 451 T259 audit register	diagram-backlog
+2026-11-26T03:18	1-before-pool	reader	-	names-clone	Measure handoffs, arm (c), features, per-target	
+2026-11-26T03:28	1-before-pool	reader	-	-	Close agenda items 6 and 12 with rule changes	
+2026-11-26T03:28	1-before-pool	reader	-	-	Record talk measurements in the repo	
+2026-11-26T03:39	1-before-pool	reader	-	-	Narrow decision A per spec-fidelity ruling	
+2026-11-26T04:40	1-before-pool	wrote-other-tree	-	names-clone	T250 batch 3 of comment fixes	diagram-backlog-t250b
+2026-11-26T05:16	1-before-pool	reader	-	names-clone	T250 batch 5: pages 0140 and up	
+2026-11-26T05:25	1-before-pool	reader	-	names-clone	T250 batch 7: pages 0190 and up	
+2026-11-26T05:32	1-before-pool	reader	-	names-clone	T250 batch 8: pages 0228 and up	
+2026-11-26T05:58	1-before-pool	reader	-	-	Measure builder concurrency 1-4	
+2026-11-26T05:58	1-before-pool	reader	-	names-clone	Measure build disk/time levers	
+2026-11-26T15:24	1-before-pool	reader	-	names-clone	Measure file overlap between tasks	
+2026-11-26T15:24	1-before-pool	reader	-	names-clone	Measure task-route overhead vs tweak	
+2026-11-26T17:34	2-pool-no-guard	reader	-	-	Trial: escalation-check tier and bundle	
+2026-11-26T17:34	2-pool-no-guard	reader	-	names-clone	Measure builder report format	
+2026-11-26T18:24	2-pool-no-guard	reader	-	names-clone	Measure reproduce-then-fix split	
+2026-11-27T01:03	3-guard	reader	-	names-clone	Catalog the GM's process interrogations	
+2026-11-27T01:35	3-guard	reader	-	-	Research: orchestrator patterns for coding agents	

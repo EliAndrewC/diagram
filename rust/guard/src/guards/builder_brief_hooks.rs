@@ -9,7 +9,10 @@
 //!
 //! A BUILDER DISPATCH: an `Agent` call of an ad-hoc type that can build (`BUILDERS`: none named, `general-purpose`, `claude`) whose
 //! prompt names a pool tree - a path some clone's registry holds (`shared::builder_pool`), never a name's shape - or carries a marker
-//! line. A defined agent (a check) is never one, and neither is the claims round's own dispatch (its prompt opens `Run the claims
+//! line, or holds a line opening `STOP POINT` (`shared::builder_brief::stop_point`; 451 T353: a builder briefed by hand into the
+//! session clone names no pool tree - over 2026-11-20..27, 23 dispatches carried the line and named none, every one an Edit/Write
+//! into the clone, and none of the 107 that wrote nothing carried it; the 334 in-clone builders before the line existed, 2026-11-25,
+//! carried neither and would not be seen). A defined agent (a check) is never one, and neither is the claims round's own dispatch (its prompt opens `Run the claims
 //! round`, as `context_cap_hooks/split.rs` reads it), which names the builder's tree to read it.
 //!
 //! Refused, each printing the command that makes the brief:
@@ -23,7 +26,7 @@
 //!   ("change", "add a test"); it would wrongly catch a measurement job whose line uses one of those words of the thing measured.
 //!
 //! NOT caught at all: a marker typed by hand with a true tree and task (the sizing refusals are the command's); a brief whose jobs
-//! outnumber the `JOBS=` its caller stated; a builder briefed with no pool tree named and no marker; a mechanism briefed as one
+//! outnumber the `JOBS=` its caller stated; a builder briefed with no pool tree named, no marker and no STOP POINT line; a mechanism briefed as one
 //! `fix` (the command refuses it from the task's line, which this guard does not read).
 //!
 //! The escape, checked before any refusal: a prompt line `BUILDER_BRIEF_OK: <reason of two words or more>` (or `="..."`), recorded.
@@ -83,6 +86,8 @@ pub(crate) enum Said {
     NoReason,
     /// A builder with no marker: the task and feature its named tree is held for, where one is.
     NoMarker(String, String),
+    /// A builder's brief written by hand - a STOP POINT line, no marker, no pool tree named - so it builds in the clone (451 T353).
+    Unbriefed,
     /// A marker of no known kind.
     Kind(Marker),
     /// A marker of more jobs than a brief holds.
@@ -133,7 +138,7 @@ pub(crate) fn verdict(input: &Value, pool: &[Tree]) -> Said {
     }
     let marker = builder_brief::parse(prompt);
     let named: Vec<&Tree> = pool.iter().filter(|t| names(prompt, &t.tree)).collect();
-    if marker.is_none() && named.is_empty() {
+    if marker.is_none() && named.is_empty() && !builder_brief::stop_point(prompt) {
         return Said::Pass;
     }
     match escape(prompt) {
@@ -143,6 +148,9 @@ pub(crate) fn verdict(input: &Value, pool: &[Tree]) -> Said {
         None => {}
     }
     let Some(m) = marker else {
+        if named.is_empty() {
+            return Said::Unbriefed;
+        }
         // the tree a task holds, before a neighbor's free one the brief also names
         let held = named.iter().find(|t| !t.free()).unwrap_or(&named[0]);
         return Said::NoMarker(held.tasks.join(","), held.feature.clone());
@@ -198,6 +206,10 @@ pub(crate) fn refusal(said: &Said) -> Option<(String, &'static str)> {
             format!("BLOCKED (builder-brief): this dispatch works in a pool tree and its prompt has no BUILDER-BRIEF line.\n\nRun: {} [JOBS=<n>] [MEASURES=<n>] [CRATE=\"<crates>\"]\nand paste what it prints at the head of the brief.\n{OUT}", made(task, feature, ALL)),
             "no-marker",
         ),
+        Said::Unbriefed => (
+            format!("BLOCKED (builder-brief): this dispatch has a STOP POINT line and no BUILDER-BRIEF line: a builder briefed by hand, to build\nin the session clone with no pool tree and no sizing.\n\nRun: {} [JOBS=<n>] [MEASURES=<n>] [CRATE=\"<crates>\"]\nand paste what it prints at the head of the brief: it takes the task's tree from the pool.\n{OUT}", made("", "", ALL)),
+            "stop-point-no-marker",
+        ),
         Said::Kind(m) => (
             format!("BLOCKED (builder-brief): KIND={} is no builder's kind.\n\nRun: {}\nand paste what it prints in place of the marker's block.\n{OUT}", m.kind, made(&m.task, &m.feature, ALL)),
             "unknown-kind",
@@ -223,7 +235,10 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
         .get("tool_input")
         .map_or("", |t| field(t, "prompt"));
     // no read of any registry for a dispatch that names no clone's tree and no marker
-    if !prompt.contains(".clones/") && !prompt.contains(builder_brief::MARKER) {
+    if !prompt.contains(".clones/")
+        && !prompt.contains(builder_brief::MARKER)
+        && !prompt.contains(builder_brief::STOP)
+    {
         return Vec::new();
     }
     let pool = builder_pool::pools(&session.main().join(".clones"));

@@ -2893,14 +2893,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T353 (<why: the finding or measurement that files it>)": {
-   "sha256": "b57e11b831695f9dd35aabda95472672c4dc2790088a4bcffadcc0bd92e19156",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T353 Approach (checklist part A)": {
-   "sha256": "e4150baad3d353f5a47e65cc78b2db6f9439256ac969a0c8f9a160e93679980e",
+   "sha256": "9fa8632c44b630cb3e906f3374408fa4a8ff7fca98561fdd484b008aa4e05a2d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -2917,14 +2911,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T360 (<why: the finding or measurement that files it>)": {
-   "sha256": "2d5dbac4c4ac7688e972e1b69dcd2e61c4975b172e0fd0fcd27fbb01771a1d00",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T360 Approach (checklist part A)": {
-   "sha256": "504972974b2b289cbc4de2e7ebd46d48d7334a3f7b55cedf3335f8e599e7f972",
+   "sha256": "50a0159ae9d98f7c743529fc7d07eacb5d18590dfc49150844317a0b0951121d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4233,6 +4221,18 @@
   },
   "### T480 Approach (checklist part A)": {
    "sha256": "3800e5c328b0ee484c8f8f3289cdf3729dd0ae22a33b1e6524773686705bb580",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)": {
+   "sha256": "75c6fd22e79dc3d5e78533a4934d97e338563fe1853a69334cba64de57eca87d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)": {
+   "sha256": "ef89f867db0f78301b46a682f167169fce60934457786adb4e2407f63311d90d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -39452,6 +39452,275 @@
      "summary": "The two T463 sections are removed from plan.md; their earlier text (earlier.md) was the unfilled template - every field a <placeholder> - with no approach, constraint, exit or deferral filled in.",
      "class": "within",
      "why": "Removing a section that held only template placeholders drops no decision, constraint or deferral, so nothing the request or spec asks for is narrowed; it is the plan housekeeping FR-044 describes (finished sections leave the plan), and the archive comments beside it are generated lines that owe no review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T353-D1a",
+     "summary": "The clone's builder is recognized at dispatch by the block's STOP POINT line, not by reading 'orders an edit' from prose (the task line's wording).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the task line's 'names the clone and orders an edit' (the line is the coordinating session's; request.md holds no T353 section and spec-cited.md is empty, so the task line is known only from the block's own quotation). Legitimate as the dispatch-time recognizer: a rule that read an edit order from prose would refuse readers, a check that refuses good work, which constitution XIV counts as a defect and which teaches bypass, so the literal reading defeats the enforcement the GM asked for (2026-11-19: 'real enforcement and not just instructions'; T285: tooling 'without the opportunity for this kind of mistake'). The bundle records the STOP line on 0 of the week's 107 non-writing dispatches. This ruling covers the recognizer only; what it leaves uncaught is ruled under T353-D1b."
+    },
+    {
+     "id": "T353-D1b",
+     "summary": "The residual: a hand brief with no STOP POINT line and no pool tree still passes into the session clone, and the Found-and-left item leaves it 'not filed'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a check that passes bad work, a defect by constitution XIV's definition, and it is the incident T334 was filed for ('broke the sizing rules ... in its own briefs with nothing refusing'). It has observed instances: the block's own measurement finds 3 builders after the line existed that wrote source without it, at least 2 of them in the clone (P15 cascade, the barracks Guesses tab), plus the whole pre-line population. The item's ground, 'Not a defect seen since the block existed', contradicts those 3. Its fallback, the five post-pool dispatches, is a window the measurement paragraph itself says does 'not show the hole unused, only unused so far'. Approach item 12 names the wrong outcome as 'went out unsized', which is a visible effect, so under the found-and-left rule (FR-009, FIX AS WE GO) the item is fixed here or deferred with 'Not fixed here: <why>. Filed as T<n>; lands before T<m>.'. A defect is never left unfiled. Leaving it relies on the session remembering to use the tooling, which is what the GM's T285 and 2026-11-19 words rule out. Remedy: fix it in this task, or file it with an id and an order. This finding does not require a prose rule; T353-D1a stands. The figures should also be corrected: 357 wrote source and 23 were caught, so 334 = 357 - 23 is every uncaught writer, not 334 'all before the line' plus 3 after. By the block's own numbers 331 were before the line, and one of the 3 (T250 batch 3) was in a hand worktree, not the clone. D1's '23 of 23 builders' sits beside 26 post-line builders."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The rule does not require the prompt to name the clone; the STOP line with no marker and no pool tree is enough.",
+     "class": "within",
+     "why": "This widens the hold rather than narrowing it: a brief naming no tree works in the session clone, so it is the same case the line asks to hold. Readers are unaffected, since they carry no STOP line."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker are decided first.",
+     "class": "within",
+     "why": "An ordering between T334's rules and the new one. Every builder the line names is still held by one rule or the other."
+    },
+    {
+     "id": "T353-restate",
+     "summary": "T250 batches 5, 7 and 8 and agenda items 6 and 12, named on the task line as clone editors, are restated as hand-worktree writers and handed to T285's hand-worktree guard.",
+     "class": "within",
+     "why": "This corrects a factual premise of the task line from the transcripts, as constitution XIV has a claim the record does not bear out restated. The cases are not dropped: they are placed with the guard the GM asked for in T285 ('tooling ... without the opportunity for this kind of mistake'). Not verifiable from this bundle: whether T285's guard does close a hand `git worktree add` (spec-cited.md is empty). That is worth confirming, but it is not a narrowing of this block."
+    },
+    {
+     "id": "T353-prefilter",
+     "summary": "decide's prefilter reads no registry unless the prompt holds `.clones/`, the marker or `STOP POINT`.",
+     "class": "within",
+     "why": "A cost measure keyed on exactly the triggers the rules act on, so no case the rules hold is skipped."
+    },
+    {
+     "id": "T353-reader",
+     "summary": "The STOP line's test moves to one shared reader, `l7r_shared::builder_brief::stop_point`, which `split::is_code` now calls.",
+     "class": "within",
+     "why": "Implementation structure, with one reader of one convention. Nothing the GM asked for changes."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "The brief rule runs after the Workflow model rule, on what that rule passes; it adds refusals and never lifts one.",
+     "class": "within",
+     "why": "The model rule (T216/T217) is unchanged, and the requested hold is added to it."
+    },
+    {
+     "id": "T360-D2",
+     "summary": "Only a literal prompt (string literals, or literals joined by +) is read; a variable or computed prompt, and `${...}` interpolations, pass unseen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ground is impossibility. The block's premise is that a Workflow's agent() call meets no Agent hook, so the script's text is the only interception point, and a static hook cannot know a runtime-built string without evaluating the script. The gap is stated in the guard's header and asserted in a test. Its reach is unmeasured, which the block says plainly, since no builder has yet been sent from a workflow. So it is a hypothetical limit, not a known defect, and 'Found and left? none' is consistent with it, unlike T353's residual, which has observed instances."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror (`session.main()`), not from the Workflow's own tree.",
+     "class": "within",
+     "why": "This matches how builder-brief-hooks reads the pool, so a workflow run from a pool tree sees every clone's registry. It reaches more cases, not fewer."
+    },
+    {
+     "id": "T360-scope",
+     "summary": "A defined agent type stays the GUARDED rule's, check-wave units are left to the Agent hooks they already meet, and the run is refused on the first refusal with an escape logged under builder-brief.",
+     "class": "within",
+     "why": "FR-006 defines a builder as 'not a defined review agent', so defined types are outside the brief rule by the spec's own wording. Check-wave units are said already to meet this guard. Refusing the whole run and logging the escape follow T334-D5 and the existing workflow guard's form."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "The two template placeholder headings for T353 and T360 are removed, replaced by the filled blocks.",
+     "class": "within",
+     "why": "Template scaffolding replaced by its content. Nothing that was asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T353-D1",
+     "summary": "A hand-briefed builder into the clone is known only by its block's STOP POINT line, never by prose; briefs with no STOP line (334 of the week's 357 writers) are not caught here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block states that reading 'orders an edit' from prose would refuse readers (T334-D3/D10), and a guard that fires on correct work defeats its purpose. The measurement bears this out: 0 of the 107 readers carried the STOP line. The narrowing is stated in the guard's header. The residual is no longer left unfiled: per the block it is filed as T484, with why it is not fixed here and its order (lands before T302). That answers the GM's 'real enforcement and not just instructions' (request line 13) and fixes the earlier round's block, which left a measured defect unfiled. The counts are now consistent: 331+26=357, 357-23=334=331+3."
+    },
+    {
+     "id": "T353-D1-residual (Found and left, T484)",
+     "summary": "STOP-line-less hand briefs into the clone deferred to T484, a behavior-based hold, landing before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect deferred with a reason (the brief's text cannot tell such a builder from a reader without false refusals, so the hold has to come from what the agent does), a filed task id and a stated order, as FR-009 asks. No such dispatch has gone out since the pool landed (5 of 5 since 2026-11-26 15:28Z were readers)."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The STOP-line rule does not also require that the prompt name the clone",
+     "class": "within",
+     "why": "Widens the task line's 'names the clone' to briefs naming no tree, which would also work in the clone. It serves the purpose and refuses no reader."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker take precedence over the STOP-line rule",
+     "class": "within",
+     "why": "Sets the order of rules inside T334's guard. A properly briefed builder passes."
+    },
+    {
+     "id": "T353-one-reader",
+     "summary": "STOP-line test moved to l7r_shared::builder_brief::stop_point, called by split::is_code; registry not read unless .clones/, marker or STOP POINT present",
+     "class": "within",
+     "why": "Implementation detail and a cheap prefilter. Behavior is unchanged."
+    },
+    {
+     "id": "T353-restatement",
+     "summary": "The task line's examples (T250 batches 5/7/8, agenda items 6 and 12) restated: they wrote from Bash in hand worktrees, not the clone",
+     "class": "within",
+     "why": "Restates a claim the record does not bear out, per XIV's defect rule. Nothing is narrowed: those cases are T285's guard's."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "In a Workflow agent() call, the brief rule runs after the model rule and only adds refusals",
+     "class": "within",
+     "why": "Leaves the model rule (T216/T217) unchanged and holds workflow builders to the same marker rule as Agent dispatches, which is the task's goal."
+    },
+    {
+     "id": "T360-D2",
+     "summary": "Only literal prompts (string literals, literals joined by +, unescaped) are read; prompts in variables, built by calls, or with an interpolated tree or marker pass unseen",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reading every prompt would mean evaluating the script, which a static pre-run hook cannot do. The narrowing is declared in the guard's header and pinned by a test. No builder has ever been sent from a workflow (T334's replay), so no known defect is left. This is an unmeasured reach, stated as such, not a known wrong outcome carried forward."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror, not the Workflow's own tree",
+     "class": "within",
+     "why": "Matches builder-brief-hooks, so a workflow run from a pool tree sees every clone's registry. It serves the task."
+    },
+    {
+     "id": "T360-message-and-prefilter",
+     "summary": "Refusal reuses the reviewed builder-brief text plus the call named; escape logged under builder-brief; no registry read without .clones/, marker or STOP POINT",
+     "class": "within",
+     "why": "Reuses T334's verdict and escape (D4/D5), as FR-012's guard rules ask."
+    },
+    {
+     "id": "removed template blocks T353/T360",
+     "summary": "The empty task-add template blocks removed, replaced by the filled sections",
+     "class": "within",
+     "why": "The placeholder text is replaced. No decision is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T353-D1",
+     "summary": "A hand-briefed builder into the clone is known only by its block's STOP POINT line, never by prose; briefs with no STOP line (334 of the week's 357 writers) are not caught here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block states that reading 'orders an edit' from prose would refuse readers (T334-D3/D10), and a guard that fires on correct work defeats its purpose. The measurement bears this out: 0 of the 107 readers carried the STOP line. The narrowing is stated in the guard's header. The residual is no longer left unfiled: per the block it is filed as T484, with why it is not fixed here and its order (lands before T302). That answers the GM's 'real enforcement and not just instructions' (request line 13) and fixes the earlier round's block, which left a measured defect unfiled. The counts are now consistent: 331+26=357, 357-23=334=331+3."
+    },
+    {
+     "id": "T353-D1-residual (Found and left, T484)",
+     "summary": "STOP-line-less hand briefs into the clone deferred to T484, a behavior-based hold, landing before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect deferred with a reason (the brief's text cannot tell such a builder from a reader without false refusals, so the hold has to come from what the agent does), a filed task id and a stated order, as FR-009 asks. No such dispatch has gone out since the pool landed (5 of 5 since 2026-11-26 15:28Z were readers)."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The STOP-line rule does not also require that the prompt name the clone",
+     "class": "within",
+     "why": "Widens the task line's 'names the clone' to briefs naming no tree, which would also work in the clone. It serves the purpose and refuses no reader."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker take precedence over the STOP-line rule",
+     "class": "within",
+     "why": "Sets the order of rules inside T334's guard. A properly briefed builder passes."
+    },
+    {
+     "id": "T353-one-reader",
+     "summary": "STOP-line test moved to l7r_shared::builder_brief::stop_point, called by split::is_code; registry not read unless .clones/, marker or STOP POINT present",
+     "class": "within",
+     "why": "Implementation detail and a cheap prefilter. Behavior is unchanged."
+    },
+    {
+     "id": "T353-restatement",
+     "summary": "The task line's examples (T250 batches 5/7/8, agenda items 6 and 12) restated: they wrote from Bash in hand worktrees, not the clone",
+     "class": "within",
+     "why": "Restates a claim the record does not bear out, per XIV's defect rule. Nothing is narrowed: those cases are T285's guard's."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "In a Workflow agent() call, the brief rule runs after the model rule and only adds refusals",
+     "class": "within",
+     "why": "Leaves the model rule (T216/T217) unchanged and holds workflow builders to the same marker rule as Agent dispatches, which is the task's goal."
+    },
+    {
+     "id": "T360-D2a (prompt built by a call)",
+     "summary": "Only literal prompts are read (T360-D2). A prompt returned by a function call passes unseen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A hook that reads the script before it runs cannot know a call's return value without executing the script. Applying the general rule here is impossible, not just awkward. The block declares it in the guard's header and pins it as passing in a test."
+    },
+    {
+     "id": "T360-D2b (prompt held in a variable)",
+     "summary": "Only literal prompts are read (T360-D2). agent(p, ...) with p bound elsewhere passes unseen, including p bound to a literal.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the weakest of the three. A variable bound once to a literal could be resolved statically, so 'needs evaluation' holds only in general. It is legitimate on a different ground: the block states that no builder had been sent from a workflow by T334's replay (2026-11-26), so no wrong outcome is known. Under XIV's defect rule, NOT LEGITIMATE is only for a known defect left. T353 differs: its residual had 334 measured instances, which is why filing was owed there, and here there are none. If a real workflow builder ever arrives this way and passes, that is a known defect and must be filed."
+    },
+    {
+     "id": "T360-D2c (tree or marker interpolated as ${...})",
+     "summary": "Only literal prompts are read (T360-D2). A template's ${...} is left as written, so an interpolated tree or marker is not seen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An interpolated value is unknown without evaluation. The purpose is not gutted: a template that carries the block's STOP POINT line literally, names no pool tree literally and has no literal marker still meets T353's stop-point rule through the shared verdict. That covers a hand-written workflow brief, and the uncovered rest is the class already filed as T484. The case missed entirely is a brief interpolated whole. No such case is known (zero workflow builders, per the block), and the block says the reach is unmeasured instead of claiming coverage."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror, not the Workflow's own tree",
+     "class": "within",
+     "why": "Matches builder-brief-hooks, so a workflow run from a pool tree sees every clone's registry. It serves the task."
+    },
+    {
+     "id": "T360-message-and-prefilter",
+     "summary": "Refusal reuses the reviewed builder-brief text plus the call named; escape logged under builder-brief; no registry read without .clones/, marker or STOP POINT",
+     "class": "within",
+     "why": "Reuses T334's verdict and escape (D4/D5), as FR-012's guard rules ask."
+    },
+    {
+     "id": "removed template blocks T353/T360",
+     "summary": "The empty task-add template blocks removed, replaced by the filled sections",
+     "class": "within",
+     "why": "The placeholder text is replaced. No decision is lost."
     }
    ]
   }

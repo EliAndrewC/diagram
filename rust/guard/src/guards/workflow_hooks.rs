@@ -1,7 +1,11 @@
 //! `workflow-hooks` (feature 383 amendment 7, FR-045; ported from the shell of the same name and `lib/hm_workflow.py`, feature 449 T040): A WORKFLOW CALL IS
 //! HELD TO THE GUARDS ITS AGENTS WOULD MEET AS AGENT CALLS, because no Agent hook fires for an agent a workflow spawns (research R20). An untyped `agent(` is
 //! refused (`GP_OK` with a reason is the escape, its model decided as an ad-hoc Agent call's is: a reading tier named - an untyped stage may only read; a typed ad-hoc call the same, or no model and `SESSION_MODEL:` in the call where its type is measured to inherit, 451 T216, T217); a defined agent of this project runs through the saved `check-wave` workflow; and each unit of
-//! `check-wave` is put through every `PreToolUse` hook an Agent call meets, the first refusal refusing the whole run.
+//! `check-wave` is put through every `PreToolUse` hook an Agent call meets, the first refusal refusing the whole run. A script the
+//! other rules pass has each ad-hoc `agent()` call put through `builder_brief_hooks::verdict` (451 T360), so a builder sent into a pool
+//! tree from a workflow carries the brief's marker as an Agent dispatch must: its prompt is the call's first argument, read where it
+//! is a string literal or literals joined by `+`, escapes unescaped. NOT read: a prompt held in a variable or built by a call, and a
+//! tree or marker interpolated as `${...}` - such a call passes unseen.
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -10,6 +14,7 @@ use fancy_regex::Regex;
 use serde_json::{json, Value};
 
 use crate::guards::agent_model_hooks::{decided, inheriting, INHERITS, READING};
+use crate::guards::builder_brief_hooks::{self, Said};
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log;
@@ -17,6 +22,7 @@ use crate::shared::session::Session;
 use crate::shared::sha256;
 use crate::shared::state::field;
 use crate::shared::tool::ask;
+use crate::shared::{builder_brief, builder_pool};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -215,6 +221,94 @@ fn script_verdict(script: &str, root: &Path) -> String {
     .to_owned()
 }
 
+/// The string literal opening at `text[0]` (a quote), unescaped - `\n`, `\t` and an escaped character read as JavaScript reads them, a
+/// template's `${...}` left as written - and the rest of `text` after it; none where `text` opens no literal or the literal is open.
+fn literal(text: &str) -> Option<(String, &str)> {
+    let quote = text
+        .chars()
+        .next()
+        .filter(|c| matches!(c, '\'' | '"' | '`'))?;
+    let (mut out, mut chars) = (String::new(), text[1..].char_indices());
+    while let Some((i, c)) = chars.next() {
+        match c {
+            '\\' => match chars.next()?.1 {
+                'n' => out.push('\n'),
+                't' => out.push('\t'),
+                e => out.push(e),
+            },
+            c if c == quote => return Some((out, &text[i + 2..])),
+            c => out.push(c),
+        }
+    }
+    None
+}
+
+/// An `agent(...)` call's prompt, its first argument, where that is a literal or literals joined by `+`; none where it is any other
+/// expression (a variable, a call), which this guard cannot read (451 T360).
+fn prompt_of(call: &str) -> Option<String> {
+    let mut rest = call[call.find('(')? + 1..].trim_start();
+    let mut prompt = String::new();
+    loop {
+        let (part, after) = literal(rest)?;
+        prompt.push_str(&part);
+        match after.trim_start().strip_prefix('+') {
+            Some(more) => rest = more.trim_start(),
+            None => return Some(prompt),
+        }
+    }
+}
+
+/// What `builder_brief_hooks` says of each ad-hoc `agent()` call whose prompt is a literal (451 T360): a builder sent from a workflow
+/// is held to the marker as an Agent dispatch is - a defined type is the `GUARDED` rule's. None of the pool's registries is read for
+/// a script that names no clone's tree, no marker and no STOP POINT line.
+fn briefs(script: &str, clones: &Path) -> Vec<(Said, String)> {
+    let seen = [".clones/", builder_brief::MARKER, builder_brief::STOP];
+    if !seen.iter().any(|s| script.contains(s)) {
+        return Vec::new();
+    }
+    let pool = builder_pool::pools(clones);
+    calls(script, "agent")
+        .iter()
+        .filter_map(|call| {
+            let kind = agent_type(call).unwrap_or_default();
+            let input = json!({"tool_name": "Agent", "tool_input": {"subagent_type": kind, "prompt": prompt_of(call)?}});
+            Some((builder_brief_hooks::verdict(&input, &pool), short(call)))
+        })
+        .filter(|(said, _)| *said != Said::Pass)
+        .collect()
+}
+
+/// The builder-brief rule's answer on a script the other rules passed: its first refusal, each escape logged.
+fn brief_answers(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> {
+    let script = script_of(event, ctx);
+    for (said, call) in briefs(&script, &session.main().join(".clones")) {
+        if let Said::Escaped(why) = &said {
+            log::fire(
+                "builder-brief",
+                "escaped",
+                why,
+                "builder-brief-ok",
+                &event.input,
+                session,
+            );
+        }
+        if let Some((text, rule)) = builder_brief_hooks::refusal(&said) {
+            log::fire(
+                "builder-brief",
+                "blocked",
+                &call,
+                rule,
+                &event.input,
+                session,
+            );
+            return vec![Answer::Refuse(format!(
+                "{text}\n(in this Workflow's agent() call: {call})"
+            ))];
+        }
+    }
+    Vec::new()
+}
+
 /// The `PreToolUse` hook commands an Agent call meets, in order; an entry with no matcher takes every tool, Agent among them.
 fn agent_hooks(settings: &Path) -> Vec<String> {
     let text = std::fs::read_to_string(settings).unwrap_or_default();
@@ -402,11 +496,16 @@ pub(crate) fn verdict(event: &Event, ctx: &Ctx) -> String {
             why
         };
     }
-    let script = if !path.is_empty() {
-        let Ok(text) = std::fs::read_to_string(path) else {
-            return String::new();
-        };
-        text
+    script_verdict(&script_of(event, ctx), &ctx.root)
+}
+
+/// The script a Workflow call runs: its file, its saved workflow's or its inline text ("" where a file cannot be read).
+fn script_of(event: &Event, ctx: &Ctx) -> String {
+    let null = Value::Null;
+    let ti = event.input.get("tool_input").unwrap_or(&null);
+    let (name, path) = (field(ti, "name"), field(ti, "scriptPath"));
+    if !path.is_empty() {
+        std::fs::read_to_string(path).unwrap_or_default()
     } else if !name.is_empty() {
         std::fs::read_to_string(
             ctx.root
@@ -416,8 +515,7 @@ pub(crate) fn verdict(event: &Event, ctx: &Ctx) -> String {
         .unwrap_or_default()
     } else {
         field(ti, "script").to_owned()
-    };
-    script_verdict(&script, &ctx.root)
+    }
 }
 
 const TRAILER: &str = "(rust/guard/src/guards/workflow_hooks.rs; feature 383 amendment 7)";
@@ -476,7 +574,7 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
     }
     let got = verdict(event, ctx);
     match got.as_str() {
-        "" => Vec::new(),
+        "" => brief_answers(event, session, ctx),
         "WAVE-PASSED" => vec![Answer::Notice(PASSED.to_owned())],
         "ESCAPED" | "MARKED" | "ESCAPED MARKED" => {
             if got.starts_with("ESCAPED") {
@@ -499,7 +597,7 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
                     session,
                 );
             }
-            Vec::new()
+            brief_answers(event, session, ctx)
         }
         _ => {
             let kind = got.split(' ').next().unwrap_or("");

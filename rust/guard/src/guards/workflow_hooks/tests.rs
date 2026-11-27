@@ -4,7 +4,9 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{agent_hooks, agent_type, call_end, calls, decide, judge, verdict, Ctx};
+use super::{
+    agent_hooks, agent_type, call_end, calls, decide, judge, literal, prompt_of, verdict, Ctx,
+};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
@@ -377,6 +379,88 @@ fn the_answers() {
         input: json!({"tool_name": "Workflow", "cwd": "/no/such/place"}),
     };
     assert!(decide(&outside, &Session::from_input(&outside.input)).is_empty());
+}
+
+#[test]
+fn a_call_s_prompt_is_read_from_its_literals() {
+    assert_eq!(
+        literal(r"'a\tb\'c\\d' rest"),
+        Some(("a\tb'c\\d".to_owned(), " rest"))
+    );
+    assert_eq!(literal("`x ${y}`"), Some(("x ${y}".to_owned(), "")));
+    for open in ["'abc", "'abc\\", "abc'", ""] {
+        assert_eq!(literal(open), None, "{open}");
+    }
+    assert_eq!(prompt_of("agent( 'a' +\n 'b', {})").as_deref(), Some("ab"));
+    assert_eq!(prompt_of("agent('a' + p, {})"), None);
+    assert_eq!(prompt_of("agent(p, {})"), None);
+}
+
+#[test]
+fn a_builder_s_agent_call_is_held_to_the_builder_brief() {
+    // 451 T360: an ad-hoc agent() call of a builder's type is put through builder_brief_hooks::verdict, its prompt read as written
+    let (d, ctx) = world("brief", "exit 0");
+    let main = d.join("m");
+    std::fs::create_dir_all(main.join(".clones/c/.git")).unwrap();
+    let tree = main.join(".clones/c-t271");
+    let held = crate::shared::builder_pool::Tree {
+        tree: tree.clone(),
+        feature: "451".to_owned(),
+        tasks: vec!["T334".to_owned()],
+        since: String::new(),
+    };
+    crate::shared::builder_pool::write(&main.join(".clones/c/.git"), &[held]).unwrap();
+    let t = tree.display();
+    let run = |text: &str| {
+        let e = workflow(&json!({ "script": text }), &d);
+        let mut s = Session::from_input(&e.input);
+        s.main_seam = Some(main.to_string_lossy().into_owned());
+        judge(&e, &s, &ctx)
+    };
+    let refused =
+        |got: &[Answer], words: &str| matches!(got, [Answer::Refuse(t)] if t.contains(words));
+    let opts = "{agentType: 'general-purpose' /* SESSION_MODEL: builds the task */}";
+    // no marker: a pool tree named, in each quote; a STOP POINT line across an escaped newline; two literals joined by `+`
+    for prompt in [
+        format!("'Build 451 T334 in {t}.'"),
+        format!("\"Build 451 T334 in {t}.\""),
+        format!("`Build 451 T334\nin {t}.`"),
+        "'Fix 451 T240 in the clone.\\nSTOP POINT (fix): red-first.'".to_owned(),
+        format!("'Build 451 T334 ' + \"in {t}.\""),
+    ] {
+        let got = run(&format!("agent({prompt}, {opts})"));
+        assert!(refused(&got, "BLOCKED (builder-brief): "), "{prompt}");
+        assert!(refused(&got, "in this Workflow's agent() call"), "{prompt}");
+    }
+    let marker = format!("BUILDER-BRIEF 451 T334 KIND=fix JOBS=1 TREE={t}");
+    // the marker on its own line after the quote, or after an escaped newline, and borne out by the pool: passes
+    assert!(run(&format!("agent(`{marker}\nWork in {t}.`, {opts})")).is_empty());
+    assert!(run(&format!("agent('Brief:\\n{marker}', {opts})")).is_empty());
+    // a marker for another task's tree is refused; the escape on its own line passes, and is logged
+    let other = format!("BUILDER-BRIEF 451 T335 KIND=fix JOBS=1 TREE={t}");
+    assert!(refused(
+        &run(&format!("agent(`{other}`, {opts})")),
+        "is not held by 451 T335"
+    ));
+    let why = format!("agent('Read {t}/x.log.\\nBUILDER_BRIEF_OK: a reader of one log', {opts})");
+    assert!(run(&why).is_empty());
+    // what is not read: a prompt in a variable, an interpolated tree; a check's call is the GUARDED rule's; a reader of no pool tree
+    assert!(run(&format!("const p = 'Work in {t}.'; agent(p, {opts})")).is_empty());
+    assert!(run(&format!("agent(`Work in ${{tree}}.`, {opts})")).is_empty());
+    assert!(run(&format!(
+        "agent('Summarize {}/c/x.md', {opts})",
+        main.join(".clones").display()
+    ))
+    .is_empty());
+    assert!(
+        run("agent('Summarize docs/usage.md', {agentType: 'Plan', model: 'haiku'})").is_empty()
+    );
+    assert!(refused(
+        &run(&format!(
+            "agent('Work in {t}.', {{agentType: 'quote-check'}})"
+        )),
+        "check-wave"
+    ));
 }
 
 #[test]

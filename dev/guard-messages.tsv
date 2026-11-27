@@ -116,6 +116,7 @@ key	verdict	chars	guard	kind	by	over	head
 4273de804f7a6706	BASELINE	519	gate-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: GATE_OK with no reason given. An escape is a workaround, and
 4279a93032a15177	PASS	643	workflow-hooks	refuse	ac1df8d661090ad85		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a',
 440be6e83fa2e5a3	BASELINE	606	set-down-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: feature N-x has N open task(s), every one a parked hamlet
+443f474c470b9328	PASS	515	builder-brief-hooks	refuse	a7000c764a70b68af		BLOCKED (builder-brief): this dispatch has a STOP POINT line and no BUILDER-BRIEF
 455345e7f947028c	PASS	859	agent-model-hooks	refuse	ac1df8d661090ad85		BLOCKED: this `Explore` agent names no model and carries no `SESSION_MODEL:` line,
 45a9267c80f06976	BASELINE	485	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a settlement-review with no green gate for this content. A review
 46f4ccbe9c41c5a4	BASELINE	420	house-style-hooks	notice	unreviewed - house-style's edit notice, a family of 6 keys: 10 shown a session, 4,220 characters, under 6 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		House style was applied to this edit for you (`centre` -> `center`).
@@ -312,6 +313,7 @@ c11aee93b82d05bd	BASELINE	697	feature-approval-hooks	refuse	unreviewed - stood b
 c17d18157e842ed9	BASELINE	414	record-edit-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> is ASSEMBLED from <path> and is never written by hand
 c241986214d34bda	BASELINE	281	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
 c24e66fb2464681c	BASELINE	780	agent-prefix-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a Nth `quote-check` launch within seconds - a wave goes through
+c3ab9f497cf775dd	PASS	547	workflow-hooks	refuse	a7000c764a70b68af		BLOCKED (builder-brief): this dispatch works in a pool tree and its prompt
 c407a07a723c1f98	BASELINE	682	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
 c4c415afb650ac72	BASELINE	1031	shell-check-hooks	refuse	unreviewed - shell-check's -m pieces refusal: 0 shown a session - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		BLOCKED: a -m message assembled from several quoted pieces ("N: the pond's
 c4c7f40ed90172b7	PASS	286	pool-idle-hooks	block	aa0554b5ea2324c44		pool-idle: <path> is free and N TN is READY, overlapping no task

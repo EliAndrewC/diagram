@@ -97,6 +97,40 @@ fn only_a_builder_s_dispatch_is_judged() {
 }
 
 #[test]
+fn a_builder_s_brief_written_by_hand_into_the_clone_is_held_to_the_marker() {
+    // 451 T353: a brief with the block's STOP POINT line and no marker, naming the clone or no tree at all
+    let rule = |prompt: &str| refusal(&said(prompt)).map(|(_, rule)| rule);
+    for prompt in [
+        "Fix 451 T240 in /m/.clones/c, the session clone.\nSTOP POINT (fix): red-first, then the plan section.",
+        "  STOP POINT: stop at the plan review.\nBuild 451 T237.",
+    ] {
+        assert_eq!(rule(prompt), Some("stop-point-no-marker"), "{prompt}");
+        let claude = refusal(&verdict(&call("claude", prompt), &pool()));
+        assert_eq!(claude.map(|(_, rule)| rule), Some("stop-point-no-marker"));
+    }
+    // a pool tree named is the no-marker rule's; a marker borne out passes; a check, the claims round, a mention and the escape pass
+    let pooled = format!("Work in {T271}.\nSTOP POINT (fix): red-first.");
+    assert!(matches!(said(&pooled), Said::NoMarker(..)));
+    assert_eq!(
+        said(&brief("fix", "STOP POINT (fix): red-first.")),
+        Said::Pass
+    );
+    let stop = "Fix it in /m/.clones/c.\nSTOP POINT (fix): red-first.";
+    assert_eq!(verdict(&call("impl-drift", stop), &pool()), Said::Pass);
+    let round = format!("Run the claims round for feature 451.\n{stop}");
+    assert_eq!(said(&round), Said::Pass);
+    assert_eq!(
+        said("Read /m/.clones/c: a builder's STOP POINT is its plan review."),
+        Said::Pass
+    );
+    let why = format!("{stop}\nBUILDER_BRIEF_OK: a repair staged in the clone");
+    assert_eq!(
+        said(&why),
+        Said::Escaped("a repair staged in the clone".to_owned())
+    );
+}
+
+#[test]
 fn a_marker_is_held_to_its_kind_its_jobs_and_the_pool() {
     assert_eq!(said(&brief("build-half", "Build it.")), Said::Pass);
     assert_eq!(said(&brief("fix", "Job 2: fix the reader.")), Said::Pass);

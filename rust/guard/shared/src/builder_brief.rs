@@ -141,6 +141,17 @@ fn first_target(rest: &str) -> &str {
     ""
 }
 
+/// The first words of the block's STOP POINT line, which every kind's block holds (`rust/gate/crates/task/src/builder_brief.rs`).
+pub const STOP: &str = "STOP POINT";
+
+/// Whether `prompt` holds a line opening [`STOP`] - a builder's brief, as `context_cap_hooks/split.rs` knows a code builder and
+/// `builder_brief_hooks` a brief written by hand (451 T353). Measured over the coordinating sessions' 977 dispatches of
+/// 2026-11-20..27: 145 carried such a line, every one an ad-hoc builder's.
+#[must_use]
+pub fn stop_point(prompt: &str) -> bool {
+    prompt.lines().any(|l| l.trim_start().starts_with(STOP))
+}
+
 /// The first marker `prompt` holds on a line of its own; none where it only mentions one, or the line is not a whole marker.
 #[must_use]
 pub fn parse(prompt: &str) -> Option<Marker> {
@@ -165,6 +176,9 @@ mod tests {
         assert_eq!(line, want);
         let brief = format!("the task\n  {line}\nBlocks: none\n");
         assert_eq!(parse(&brief), Some(m));
+        assert!(
+            stop_point("x\n  STOP POINT (fix): red-first") && !stop_point("its STOP POINT line")
+        );
         // a sentence naming the marker, and a line short of a field, are no marker
         for text in [
             "a first line marker `BUILDER-BRIEF <feature> <task> KIND=<kind> JOBS=<n> TREE=<path>`",
