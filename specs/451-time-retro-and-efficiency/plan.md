@@ -6916,58 +6916,75 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T491 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T492 to T388 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T494 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))
+
+- **Approach**: one helper, `tool::ask_gate` (`rust/guard/shared/src/tool.rs`), which pair-hooks (`pair_hooks.rs` `gate`, through `reviews` and `review.rs` `decided`), review-round-hooks (`active_task`, `later_round`'s stale-terms call) and check-bundle-hooks (`decide_first`) now call. Measured 2026-11-27.
+  - **T494-D1, the launcher run by `bash`, not by its shebang.** `ask_gate` starts `bash <script> <args>`, as pair-hooks already did and as 451 T456 did for `l7r-hook`. A script that cannot start now answers bash's 127 where the exec answered -1. Every caller reads only exit 0 (`active_task`), exit 1 with output (`decide_first`) or the output (`stale-dirs`, the checkpoint), so 127 holds nothing, as -1 did.
+  - **T494-D2, the freshness signal: an earlier call through the same launcher, in the same hook process, exited 0.** After such a call to a plain subcommand, the later calls pass `L7R_GATE_FRESH=<the binary>`, 449 T205's seam, and the launcher skips `stale()`. Exit 0 means the launcher ran its binary, so that binary was fresh then or had just been built. Every way its build can fail exits 1 before the `exec`. The two ways it runs a stale binary anyway (`L7R_GATE_STALE_OK`, or an `L7R_GATE_FRESH` already exported) hold for the later call too, because that call runs under the same environment. So the guard may know the binary is fresh only under three conditions: the same launcher path, the same process, and a plain subcommand. A variant (`rust`, `browser`, `embed`, `mode-a`, `hamlet`) runs another binary built from other sources, so it neither proves freshness nor uses the proof. A failed call proves nothing, and an `L7R_GATE_FRESH` the process already exports is left as it is. The proof lives in a thread-local and lasts one hook process, tens of ms. A source edited inside that window is missed by the later call, as it would be by a call started that much earlier. The launcher still checks that the variable names its own binary and that the binary is executable. A wrong name here only walks as before, so no stale gate can run where it would not have run already. The binary is named as the launcher names it: `${L7R_GATE_TARGET:-<the account's home in /etc/passwd>/.cache/l7r-cargo-target/<the tree's name>}/tool/l7r-gate`, with no name for a launcher given by a relative path. `the_gate_binary_named_is_the_one_the_launcher_runs` pins that name: against the real launcher's `L7R_GATE_PRINT_FRESH=1` answer under a target, and against its own text for the default.
+  - **T494-D3, priced and declined: the guard launcher's walk, and an in-process walk.** `l7r-guard.sh`'s walk covers `rust/guard`, `rust/Cargo.toml`, `rust/Cargo.lock` and `.cargo/config.toml` against `l7r-guard.good`. It does not cover `rust/gate`, and it is not compared against the gate's binary, so it cannot stand for any part of the gate's walk. The gate's walk covers 1,859 paths over `rust/gate`, `rust/guard` and those files, measured 2026-11-27 (`t494-walk.py`'s count on T388's sandbox). An in-process walk would be the same check without the fork, but the stats are its cost: a Python `lstat` walk of the 1,859 paths took 111.6 ms median against `find`'s 51.4, 20 runs at load 22, measured 2026-11-27 (`t494-walk.py`). A kept stamp stays declined, for `l7r-guard.sh`'s 451 T439 reason. What would reopen it: a walk that costs less than the fork, measured. So pair-hooks' own first call on every Agent call still walks, 296 x 17.5 ms = 5 s a day, measured 2026-11-27 (T388's count of 2026-11-26's Agent calls times its walk).
+  - **Red first.** The helper is new, so its tests are new; there was no old code to fail. `a_gate_call_after_one_that_exited_0_skips_the_launcher_s_walk` uses a stub launcher that prints the `L7R_GATE_FRESH` it was given. A first call is given none. The call after a call that exited 0 is given the binary. A call after a failed call, a variant, another launcher and an exported variable are given none. A script that cannot start answers 127. The guard's 598 tests pass, and `make builder-checks CRATE="rust/guard rust/guard/shared"` is green, measured 2026-11-27 (`make builder-checks`). The suites passed, measured 2026-11-27 (each run by `bash tests/hooks/test-<guard>.sh`): review-round 91 passed, pair 104 passed, check-bundle 38 passed, none failed.
+  - **Before and after, on T388's sandbox.** The method is T491's `t491-time.py`, copied as `t494-time.py`. Two arms were added to it, `binafter` and `onlyafter`, so the before binary and the after binary run interleaved in the same rounds. Both binaries are this tree's own, with T497 in, copied before and after this change. The gate is T491's after copy, checked fresh against the sandbox's sources with `L7R_GATE_PRINT_FRESH=1`. Each arm ran 20 times after a warm-up, every run exiting 0, measured 2026-11-27 (`t494-pair1.tsv`, `t494-pair2.tsv`). Medians, before -> after, run 1 at load 11.1 to 19.2, run 2 at load 15.0 to 18.2:
+    - a plan review's whole PreToolUse (`sf`, every guard): 210.9 -> 181.6 ms, and 246.3 -> 214.0, measured 2026-11-27 (`t494-time.py`, 20 runs);
+    - a record check's (`rf`): 308.4 -> 295.6 ms, and 369.5 -> 306.6, measured 2026-11-27 (`t494-time.py`, 20 runs);
+    - review-round alone (`--only`, the bash start alone, with no earlier call to ride): 62.5 -> 56.2 ms, and 59.8 -> 56.3, measured 2026-11-27 (`t494-time.py`, 20 runs).
+  - **The walks counted.** A logging `find` was put first on `PATH`, because ptrace is refused in the container. One hook call, measured 2026-11-27 (`t494-find.log`): a plan review's launcher walks went 2 -> 1, a record check's 2 -> 1, and a builder's brief's stayed 1 -> 1.
+  - **The day.** About 98 x 0.030 + 65 x 0.0175 = 4 s, measured 2026-11-27 (T388's count of 2026-11-26's plan reviews and record checks, times the medians' saving above, with the walk's 17.5 ms standing for the noisier record-check pair). That is half of T388's 8 s, measured 2026-11-27 (T388's record): pair-hooks' own walk stays (D3).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the gate launcher run by bash, its walk shared within a hook process | n/a: guard tooling, no map | n/a: tooling | none | none |
 
 ### T494 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A guard's gate call starts no `env` process. A second gate call in the same hook process does not walk the gate's sources again.
+2. **The constraints.** A stale gate binary is never run where the launcher would not already run it (the brief). No guard message changes. A caller's reading of a failed start does not change.
+3. **Where each comes from.** O: 451 T388's record (lever D). R: `scripts/gates/l7r-gate.sh` (the `L7R_GATE_FRESH` branch, 449 T205; the build's exits) and `scripts/hooks/l7r-guard.sh` (the 451 T439 note). O: the timings and the walk count above.
+4. **Do they describe the world here?** Yes. pair-hooks runs first of the Agent PreToolUse guards (`lib.rs` `guards()`), and its `reviews checkpoint due` exits 0 in the sandbox, measured 2026-11-27 (the launcher run by hand, `rc=0`). The guard's computed binary equals the launcher's `L7R_GATE_PRINT_FRESH=1` answer (the test above).
+5. **The order.** After T497 (same tree, same file). Before T500.
+6. **The exits.** Green: the walk count drops on a plan review and on a record check, and the unit tests and suites pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** A plan review's whole PreToolUse went from 210.9 and 246.3 ms to 181.6 and 214.0 ms (medians, 20 runs each, interleaved, 2026-11-27). Its launcher walks went from 2 to 1.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every verdict and message is unchanged. Only the second gate call's source walk is gone.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Five more guards start the launcher by its shebang and outside the shared walk: `record_edit_hooks.rs`, `measure_hooks.rs`, `clone_sync_hooks.rs` (`own-make`), `gate_write_hooks.rs` (`ask_within`, which needs a bounded `ask_gate`) and `ledger_hooks.rs`. The visible effect is 2.5 ms of a Bash call's hook each, measured 2026-11-27 (T388's record), and the walk again after pair-hooks' call on a gate invocation. Not fixed here: they are Bash-call guards outside this brief's three measured sites, and each needs its own stubs run by bash. Filed as T500; lands before T498.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: it takes about 30 ms off every plan review's PreToolUse and one 17.5 ms walk off every record check's, measured 2026-11-27 (`t494-time.py`, 20 runs, interleaved).
 
 
-### T497 (<why: the finding or measurement that files it>)
+### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `review_round_hooks.rs` `plan_cap_refusal` reads the file once a dispatch. Measured 2026-11-27.
+  - **T497-D1, one read, the count per task unchanged.** `plan_rounds`' body becomes `rounds_in(doc, task)`, which counts from the file as `block_reviews` read it: the heading regex, the stub rule of 451 T462 and the walk back to the last CLEAR, all unchanged. `plan_cap_refusal` reads the file once, and only where the dispatch names a task that is not empty; a dispatch naming none still reads nothing. It then asks `plan_cap_held(root, dir, task, doc)` for each task, lazily, in the order the dispatch names them. The first task past its cap is still the one that trips the arbiter, and no task after it is asked. `plan_rounds(dir, task)` stays as the tests' entry (`#[cfg(test)]`), so T493's 15-shape differential still runs on it unchanged.
+  - **Red first.** `a_block_review_reads_the_review_file_once_for_all_its_tasks` uses a test-only read counter (`READS`, a thread-local at `block_reviews`' entry). A plan-delta dispatch names `T01-T02-T03-T14`, where only T14, the last, is held. On the old code it failed (1 failed of 24: `left: 4, right: 1`), measured 2026-11-27 (`make rust-test ONLY=guards::review_round_hooks`). After the change: 24 passed. The same test checks three more cases: T14 is still held, with the same trigger; a missing file is read once and holds nothing; a dispatch naming no task reads none. The guard's 598 tests pass, and `tests/hooks/test-review-round-hooks.sh` gave 91 passed, 0 failed, measured 2026-11-27 (`make builder-checks`, the suite run).
+  - **Not timed on the sandbox.** T388's plan-review case names its bundle `plan-451-blocks`, with no task list in the name, so it falls back to the active task and reads the file once, before and after alike. What a dispatch naming N tasks saves is (N - 1) reads, each about 18 ms, measured 2026-11-27 (the reads counted by the test above, each priced by the heading's figure), not timed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `plan_cap_refusal` reads `plan-review.json` once a dispatch | n/a: guard tooling, no map | n/a: tooling | none | none |
 
 ### T497 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan review naming several tasks reads the review file once.
+2. **The constraints.** The round count, its cap (`PLAN_ROUND_CAP`), the bundle rule (451 T141), the stub rule (451 T462) and which task trips first do not change. No guard message changes.
+3. **Where each comes from.** O: 451 T493's section and its timings. R: `review_round_hooks.rs`. O: the read count above.
+4. **Do they describe the world here?** Yes. A `make plan-delta` dispatch names every task whose blocks it holds (`DELTA`), for example `-blocks-T491-T493-` for the bundle T491 and T493 landed in.
+5. **The order.** After T493. Before T494, in the same tree.
+6. **The exits.** Green: the read count is 1 for N tasks, with every existing count test unchanged. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 4 reads became 1 for a four-task dispatch (the red test, 2026-11-27). `make builder-checks CRATE="rust/guard rust/guard/shared"` is green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every count, cap and message is unchanged.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a plan-delta review of N tasks reads the 4.7 MB file once rather than N times, about 18 ms a task saved past the first, measured 2026-11-27 (the heading's figure, the reads counted by the red test).
 
 
 ### T498 (<why: the finding or measurement that files it>)
@@ -7064,6 +7081,32 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T501 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T500 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T500 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

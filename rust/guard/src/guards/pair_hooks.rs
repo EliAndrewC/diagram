@@ -20,7 +20,6 @@ use serde_json::Value;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::log::{self, Entry};
 use crate::shared::session::Session;
-use crate::shared::tool::ask;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -73,32 +72,17 @@ impl Ctx<'_> {
     }
 }
 
-/// `<interpreter> <script> args` asked in `dir`.
-pub(crate) fn python(
-    interpreter: &str,
-    dir: &Path,
-    script: &Path,
-    args: &[&str],
-    stdin: &str,
-) -> crate::shared::tool::Said {
-    let s = script.to_string_lossy();
-    let all: Vec<&str> = std::iter::once(s.as_ref())
-        .chain(args.iter().copied())
-        .collect();
-    ask(dir, interpreter, &all, stdin)
-}
-
 /// `l7r-gate reviews <args>` from the guard's tree (feature 449 T89): the review lookups, the glyph hour and the checkpoint.
 pub(crate) fn reviews(cx: &Ctx, args: &[&str]) -> crate::shared::tool::Said {
     let mut all = vec!["reviews"];
     all.extend_from_slice(args);
-    python(
-        "bash",
-        &cx.clone,
-        &cx.tree.join("scripts/gates/l7r-gate.sh"),
-        &all,
-        "",
-    )
+    gate(cx, &all)
+}
+
+/// `l7r-gate <args>` from the guard's tree, its walk shared with the process's other gate calls (451 T494, `tool::ask_gate`).
+pub(crate) fn gate(cx: &Ctx, args: &[&str]) -> crate::shared::tool::Said {
+    let script = cx.tree.join("scripts/gates/l7r-gate.sh");
+    crate::shared::tool::ask_gate(&cx.clone, &script, args, "")
 }
 
 /// The tree the guard runs from: `L7R_GUARD_TREE`, which the wrapper and the suites' shim export, else `cwd`.

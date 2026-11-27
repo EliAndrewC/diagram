@@ -112,6 +112,78 @@ pub fn ask_started(dir: &Path, program: &str, args: &[&str], stdin: &str) -> std
     asked(command(program), dir, args, stdin)
 }
 
+thread_local! {
+    /// The gate launcher whose call in this process exited 0, and the binary it runs (451 T494).
+    static GATE_FRESH: std::cell::RefCell<Option<(std::path::PathBuf, std::path::PathBuf)>> = const { std::cell::RefCell::new(None) };
+}
+
+/// `bash <script> <args>`: a tree's gate launcher (`scripts/gates/l7r-gate.sh`) run by `bash`, not by its `#!/usr/bin/env bash`,
+/// whose `env` start cost 2.5 ms a call (451 T494, as 451 T456 took it out of `l7r-hook`). AND ITS SOURCE WALK ONCE A PROCESS: the
+/// launcher's `stale()` find over `rust/gate` and `rust/guard` (1,859 paths, 17.5 ms a call in T388's sandbox) runs before every
+/// call. A call of a plain subcommand that exited 0 means the launcher ran its binary, so that binary was fresh then or was built:
+/// its every failure to build exits 1 before the `exec`, and a stale binary it runs anyway (`L7R_GATE_STALE_OK`, an
+/// `L7R_GATE_FRESH` already exported) runs for the later call too, under the same environment. So a later call through the same
+/// launcher in this process passes `L7R_GATE_FRESH=<that binary>` (449 T205's seam), which the launcher honors only where it names
+/// its own binary and that binary is executable - a binary named wrongly here walks as before. The first call always walks. Not a
+/// kept stamp (`l7r-guard.sh`'s 451 T439 note says why none can stand for a walk): the proof lasts one hook process, tens of ms, so
+/// a source edited inside that window is missed by the later call as it would be by a call started that much earlier. A variant
+/// (`rust`, `browser`, `embed`, `mode-a`, `hamlet`) runs another binary from other sources and is neither proof nor proved.
+#[must_use]
+pub fn ask_gate(dir: &Path, script: &Path, args: &[&str], stdin: &str) -> Said {
+    let plain = !matches!(
+        args.first().copied(),
+        Some("rust" | "browser" | "embed" | "mode-a" | "hamlet")
+    );
+    let mut bash = command("bash");
+    let exported = crate::env::opt("L7R_GATE_FRESH").is_some_and(|v| !v.is_empty());
+    let known = GATE_FRESH.with(|f| f.borrow().clone());
+    if let Some((_, bin)) = known.filter(|(s, _)| plain && !exported && s == script) {
+        bash.env("L7R_GATE_FRESH", bin);
+    }
+    let s = script.to_string_lossy();
+    let all: Vec<&str> = std::iter::once(s.as_ref())
+        .chain(args.iter().copied())
+        .collect();
+    let said = asked(bash, dir, &all, stdin).unwrap_or(Said {
+        code: -1,
+        ..Said::default()
+    });
+    if let Some(bin) = gate_binary(script).filter(|_| plain && said.ok()) {
+        GATE_FRESH.with(|f| *f.borrow_mut() = Some((script.to_path_buf(), bin)));
+    }
+    said
+}
+
+/// The binary `script`, a tree's `scripts/gates/l7r-gate.sh` named by its absolute path, runs for a plain subcommand, as the launcher
+/// names it: `${L7R_GATE_TARGET:-<the account's home in /etc/passwd>/.cache/l7r-cargo-target/<the tree's name>}/tool/l7r-gate`.
+fn gate_binary(script: &Path) -> Option<std::path::PathBuf> {
+    let tree = script
+        .parent()?
+        .parent()?
+        .parent()
+        .filter(|_| script.is_absolute())?;
+    let target = match crate::env::opt("L7R_GATE_TARGET").filter(|t| !t.is_empty()) {
+        Some(t) => std::path::PathBuf::from(t),
+        None => account_home()?
+            .join(".cache/l7r-cargo-target")
+            .join(tree.file_name()?),
+    };
+    Some(target.join("tool/l7r-gate"))
+}
+
+/// The account's home as `/etc/passwd` holds it for this process's user, which the launcher reads in place of `HOME` (a fixture may
+/// set that).
+fn account_home() -> Option<std::path::PathBuf> {
+    use std::os::unix::fs::MetadataExt;
+    let uid = std::fs::metadata("/proc/self").ok()?.uid().to_string();
+    let passwd = std::fs::read_to_string("/etc/passwd").ok()?;
+    let row = passwd
+        .lines()
+        .map(|l| l.split(':').collect::<Vec<_>>())
+        .find(|f| f.get(2) == Some(&uid.as_str()))?;
+    row.get(5).map(std::path::PathBuf::from)
+}
+
 /// [`ask_started`] for a command already made, its environment set.
 fn asked(mut program: Command, dir: &Path, args: &[&str], stdin: &str) -> std::io::Result<Said> {
     let mut child = program
@@ -294,10 +366,14 @@ pub fn stale(file: &Path) {
 
 #[cfg(test)]
 mod tests {
+    use std::fs::File;
     use std::path::Path;
+    use std::process::Command;
     use std::time::Duration;
 
-    use super::{ask, ask_git_private, ask_started, ask_within, stale, within};
+    use super::{
+        ask, ask_gate, ask_git_private, ask_started, ask_within, gate_binary, stale, within,
+    };
 
     #[test]
     fn a_git_read_on_a_private_index_leaves_the_index_and_meets_no_lock() {
@@ -439,5 +515,108 @@ mod tests {
         );
         let ran = ask_started(Path::new("/"), "sh", &["-c", "cat; exit 3"], "in").unwrap();
         assert_eq!((ran.code, ran.out.as_str()), (3, "in"));
+    }
+
+    /// A tree's gate launcher stub at `<d>/<tree>/scripts/gates/l7r-gate.sh` saying the `L7R_GATE_FRESH` it was given and its
+    /// first word, and failing on `fail`; not executable, as `bash` needs it not to be.
+    fn stub_gate(d: &Path, tree: &str) -> std::path::PathBuf {
+        let script = d.join(tree).join("scripts/gates/l7r-gate.sh");
+        std::fs::create_dir_all(script.parent().unwrap()).unwrap();
+        std::fs::write(
+            &script,
+            "echo \"fresh=${L7R_GATE_FRESH:-} $1\"; [ \"$1\" != fail ]\n",
+        )
+        .unwrap();
+        script
+    }
+
+    /// 451 T494: the launcher is run by bash, and after a plain call through it exits 0 the later calls in this process are told
+    /// its binary is fresh; a variant, another launcher, a failed call and an exported `L7R_GATE_FRESH` are not.
+    #[test]
+    fn a_gate_call_after_one_that_exited_0_skips_the_launcher_s_walk() {
+        let d = crate::tempdir::TempDir::new("ask-gate");
+        let (a, b) = (stub_gate(d.path(), "a"), stub_gate(d.path(), "b"));
+        crate::env::set("L7R_GATE_TARGET", "/t");
+        let base = std::env::var("L7R_GATE_FRESH").unwrap_or_default();
+        let said = |s: &Path, w: &str| ask_gate(d.path(), s, &[w, "x"], "").out;
+        assert_eq!(said(&b, "fail"), format!("fresh={base} fail"));
+        assert_eq!(said(&b, "plan"), format!("fresh={base} plan"));
+        assert_eq!(said(&b, "plan"), "fresh=/t/tool/l7r-gate plan");
+        assert_eq!(said(&b, "rust"), format!("fresh={base} rust"));
+        assert_eq!(said(&b, "fail"), "fresh=/t/tool/l7r-gate fail");
+        assert_eq!(said(&a, "plan"), format!("fresh={base} plan"));
+        assert_eq!(said(&a, "plan"), "fresh=/t/tool/l7r-gate plan");
+        assert_eq!(said(&b, "plan"), format!("fresh={base} plan"));
+        crate::env::set("L7R_GATE_FRESH", "/elsewhere");
+        assert_eq!(said(&b, "plan"), format!("fresh={base} plan"));
+        crate::env::unset("L7R_GATE_FRESH");
+        assert_eq!(
+            ask_gate(d.path(), Path::new("/no/such.sh"), &["plan"], "").code,
+            127
+        );
+    }
+
+    /// The binary named is the launcher's: its `L7R_GATE_PRINT_FRESH` answer under a target, its own text for the default target, and
+    /// none for a launcher named by a relative path (the launcher resolves that, and a name it would not give is never wrong, only
+    /// slower).
+    #[test]
+    fn the_gate_binary_named_is_the_one_the_launcher_runs() {
+        let d = crate::tempdir::TempDir::new("gate-binary");
+        let launcher = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../../scripts/gates/l7r-gate.sh")
+            .canonicalize()
+            .unwrap();
+        let bin = d.path().join("tool/l7r-gate");
+        std::fs::create_dir_all(bin.parent().unwrap()).unwrap();
+        std::fs::write(&bin, "").unwrap();
+        let later = std::time::SystemTime::now() + Duration::from_secs(86_400);
+        File::options()
+            .write(true)
+            .open(&bin)
+            .unwrap()
+            .set_modified(later)
+            .unwrap();
+        std::fs::set_permissions(&bin, std::os::unix::fs::PermissionsExt::from_mode(0o755))
+            .unwrap();
+        crate::env::set("L7R_GATE_TARGET", d.path());
+        let printed = Command::new("bash")
+            .arg(&launcher)
+            .env("L7R_GATE_TARGET", d.path())
+            .env("L7R_GATE_PRINT_FRESH", "1")
+            .env("L7R_GATE_CARGO", "/bin/false")
+            .env_remove("L7R_GATE_FRESH")
+            .output()
+            .unwrap();
+        let printed = String::from_utf8_lossy(&printed.stdout).trim().to_owned();
+        assert_eq!(
+            gate_binary(&launcher),
+            Some(std::path::PathBuf::from(printed))
+        );
+        crate::env::unset("L7R_GATE_TARGET");
+        let text = std::fs::read_to_string(&launcher).unwrap();
+        assert!(
+            text.contains("TARGET=${L7R_GATE_TARGET:-$real/.cache/l7r-cargo-target/${TREE##*/}}")
+                && text.contains("BIN=\"$TARGET/tool/l7r-gate\"")
+        );
+        let home = ask(
+            Path::new("/"),
+            "sh",
+            &["-c", "getent passwd \"$(id -u)\" | cut -d: -f6"],
+            "",
+        )
+        .out;
+        let tree = launcher
+            .parent()
+            .unwrap()
+            .parent()
+            .unwrap()
+            .parent()
+            .unwrap();
+        let default = Path::new(&home)
+            .join(".cache/l7r-cargo-target")
+            .join(tree.file_name().unwrap())
+            .join("tool/l7r-gate");
+        assert_eq!(gate_binary(&launcher), Some(default));
+        assert_eq!(gate_binary(Path::new("scripts/gates/l7r-gate.sh")), None);
     }
 }

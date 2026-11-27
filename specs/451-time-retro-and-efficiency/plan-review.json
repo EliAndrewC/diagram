@@ -4428,6 +4428,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))": {
+   "sha256": "618e12ff77ad787b242c0f553026b822620d509965e5e04c869af1c233c33513",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T494 Approach (checklist part A)": {
+   "sha256": "644c89bbecf319f9eb8aa517d7f232b37b3e57d98bb4e433a35a216f03037c5f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))": {
+   "sha256": "eb457dd21a561024f2bf2c3c2b89b5d1cc303ad164842a52b2b82aee36e62a02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T497 Approach (checklist part A)": {
+   "sha256": "fd6333cef4716dc483ddb34bcca4b89ba88c88a1e8acad5e10e558c37e1c0026",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41039,6 +41063,48 @@
      "summary": "Counted as performance work for scheduling",
      "class": "within",
      "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))",
+    "### T494 Approach (checklist part A)",
+    "### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))",
+    "### T497 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T494-D1",
+     "summary": "tool::ask_gate starts the gate launcher as `bash <script>` rather than by its shebang through /usr/bin/env; a script that cannot start answers 127 instead of -1",
+     "class": "within",
+     "why": "Performance work under FR-013 (the GM 2026-11-20: prioritize performance improvements). An implementation choice that removes an env start; the plan states every caller reads only exit 0, exit 1 with output, or the output, so 127 and -1 read the same and no verdict or message changes. Narrows nothing the GM asked for."
+    },
+    {
+     "id": "T494-D2",
+     "summary": "within one hook process, after a call through the same launcher to a plain subcommand exits 0, later calls pass L7R_GATE_FRESH=<binary> and skip the launcher's source walk; variants, failed calls, other launchers and an already exported variable get no proof",
+     "class": "within",
+     "why": "Serves FR-013. Its constraint - no stale gate runs where the launcher would not already run one - is the task's own safety rule, and the three conditions (same launcher, same process, plain subcommand) are drawn to keep it; the launcher still checks the named binary. The residual window (a source edited during one hook process) is no wider than a call started that much earlier, so this is no new behavior against the GM's words. Pinned by a test against the launcher's own L7R_GATE_PRINT_FRESH answer."
+    },
+    {
+     "id": "T494-D3",
+     "summary": "declined: reusing l7r-guard.sh's walk, an in-process walk, and a kept stamp; pair-hooks' first walk per Agent call stays (about 5 s a day)",
+     "class": "within",
+     "why": "Not a narrowing of a request: the GM asked that performance work come first, not that every walk be removed. The guard launcher's walk does not cover rust/gate so cannot stand for the gate's; the in-process walk was measured slower than the fork it would replace (111.6 vs 51.4 ms); the stamp stays declined on an earlier recorded reason (settled choices stay settled, GM 2026-11-23). The decline is recorded with its measurement and what would reopen it, which is what the GM asked for declined decisions (2026-11-25: record what NOT to implement). Leaving a slower path that works is not a defect."
+    },
+    {
+     "id": "T494-found-and-left",
+     "summary": "five more Bash-call guards (record_edit, measure, clone_sync, gate_write, ledger) still start the launcher by shebang outside the shared walk; filed as T500, lands before T498",
+     "class": "within",
+     "why": "A remaining performance cost (about 2.5 ms a call), not a defect - no wrong outcome. It is filed as performance work, so FR-013 schedules it first anyway, and the item carries the why, the filed id and the order that FR-009 requires. No part of what the GM asked is narrowed."
+    },
+    {
+     "id": "T497-D1",
+     "summary": "plan_cap_refusal reads plan-review.json once per dispatch and asks plan_cap_held lazily per task in dispatch order, with rounds_in(doc, task) counting exactly as before; plan_rounds kept as the tests' entry",
+     "class": "within",
+     "why": "Performance work under FR-013 that changes no count, cap, bundle rule (T141), stub rule (T462), first-tripping task or message, shown by the red test (4 reads to 1) and the unchanged differential. Not timing it on the sandbox is stated with its reason (the sandbox's bundle name names no task), and the read count is measured; nothing asked is narrowed."
     }
    ]
   }

@@ -14,7 +14,7 @@ use crate::shared::escape;
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, ask_gate};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -122,7 +122,7 @@ fn decide_first(
     let gate = tree.join("scripts/gates/l7r-gate.sh");
     // The gate's refusal, where it refuses: code 1 with something said.
     let refused = |args: &[&str]| {
-        let said = ask(here, &gate.to_string_lossy(), args, "");
+        let said = ask_gate(here, &gate, args, "");
         (said.code == 1 && !said.out.trim().is_empty()).then(|| said.out.trim().to_owned())
     };
     // A check NOTHING names a task for is held by the clone's mark and told to name the task it serves: FR-003(a) passes nothing

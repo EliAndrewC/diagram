@@ -8,7 +8,7 @@ use std::time::SystemTime;
 
 use fancy_regex::Regex;
 
-use super::{python, reviews, state, Ctx};
+use super::{gate, reviews, state, Ctx};
 use crate::protocol::Answer;
 use crate::shared::checks;
 use crate::shared::escape::enough;
@@ -218,15 +218,7 @@ fn decided(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
         cx.log("escaped", &why, "decide-ok");
         return None;
     }
-    let script = cx.tree.join("scripts/gates/l7r-gate.sh");
-    let why = python(
-        "bash",
-        &cx.clone,
-        &script,
-        &["plan", "decided", &cx.clone.to_string_lossy()],
-        "",
-    )
-    .out;
+    let why = gate(cx, &["plan", "decided", &cx.clone.to_string_lossy()]).out;
     if why.is_empty() {
         return None;
     }

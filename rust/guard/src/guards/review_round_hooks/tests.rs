@@ -654,6 +654,37 @@ fn a_section_dispatch_counts_the_section_it_names() {
     assert_eq!(spec(&delta("T03"), &d, &c).rule, "other-mode");
 }
 
+/// 451 T497: a block review naming N tasks reads `plan-review.json` once, not once a task; every task is still counted (the last is
+/// held), a missing file is read once and holds nothing, and a dispatch naming no task reads none.
+#[test]
+fn a_block_review_reads_the_review_file_once_for_all_its_tasks() {
+    let d = world("planonce");
+    let dir = d.join("specs/301-x");
+    let reads = || super::READS.with(std::cell::Cell::get);
+    let r = |b: &str| json!({"verdict": "BLOCKED", "blocks": [b]});
+    let reviews = json!({"block_reviews": [r("### T03 D"), r("### T14 D"), r("### T14 A")]});
+    std::fs::write(dir.join("plan-review.json"), reviews.to_string()).unwrap();
+    let delta = |tasks: &str| {
+        format!("MODE 4: PLAN REVIEW of 4 changed block(s) of feature 301-x's plan, on their bundle: read /tmp/l7r-check/plan-301-x-blocks-{tasks}-0123abcd/MANIFEST.md")
+    };
+    let c = plain(&d);
+    let before = reads();
+    let o = spec(&delta("T01-T02-T03-T14"), &d, &c);
+    assert!(o.rule == "plan-round-cap" && refused(&o, "plan:301-x#T14@3"));
+    assert_eq!(reads() - before, 1);
+    std::fs::remove_file(dir.join("plan-review.json")).unwrap();
+    let before = reads();
+    assert_eq!(spec(&delta("T01-T02-T03-T14"), &d, &c).rule, "other-mode");
+    assert_eq!(reads() - before, 1);
+    let before = reads();
+    let none = format!("echo '[\"{}\", \"\"]'", dir.display());
+    assert_eq!(
+        spec("MODE 4: PLAN REVIEW", &d, &ctx(&d, NO_STALE, &none)).rule,
+        "other-mode"
+    );
+    assert_eq!(reads(), before);
+}
+
 #[test]
 fn the_answers_and_the_command_line() {
     let d = world("answers");

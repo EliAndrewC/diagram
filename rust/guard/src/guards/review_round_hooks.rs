@@ -19,7 +19,7 @@ use crate::shared::escape::{enough, reason};
 use crate::shared::log::{self, civil};
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, ask_gate};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -425,11 +425,19 @@ fn spec_cap_refusal(root: &Path, feature: &str, round_no: u64, pass_no: u64) -> 
 /// of it). The whole file is still read and checked as JSON; a file of another shape than the writer's is parsed whole, so every count
 /// stays the whole parse's.
 fn block_reviews(path: &Path) -> Option<Value> {
+    #[cfg(test)]
+    READS.with(|n| n.set(n.get() + 1));
     let text = std::fs::read_to_string(path).ok()?;
     serde_json::from_str::<SlimDoc>(&text)
         .map(|s| json!({ "block_reviews": s.0 }))
         .or_else(|_| serde_json::from_str::<Value>(&text))
         .ok()
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The reads of `plan-review.json` on this thread, which a test counts (451 T497).
+    pub(crate) static READS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 /// The block reviews of [`block_reviews`], each `{blocks, verdict}` as the file has them.
@@ -491,8 +499,17 @@ impl<'de> serde::Deserialize<'de> for SlimReview {
 }
 
 /// The rounds `task`'s plan blocks have had since their last CLEAR.
+#[cfg(test)]
 pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
-    let Some(doc) = block_reviews(&feature_dir.join("plan-review.json")) else {
+    rounds_in(
+        block_reviews(&feature_dir.join("plan-review.json")).as_ref(),
+        task,
+    )
+}
+
+/// [`plan_rounds`] over the file [`block_reviews`] read, so a dispatch naming several tasks reads it once (451 T497).
+fn rounds_in(doc: Option<&Value>, task: &str) -> u64 {
+    let Some(doc) = doc else {
         return 0;
     };
     // the task's own heading, or a bundle's heading listing it (451 T141): one review of the bundle is one round of each of its tasks
@@ -551,10 +568,15 @@ fn plan_cap_refusal(root: &Path, prompt: &str, ctx: &Ctx) -> String {
         let (dir, task) = active_task(root, ctx);
         (dir, vec![task])
     });
-    tasks
-        .iter()
-        .filter(|t| !t.is_empty())
-        .map(|t| plan_cap_held(root, &dir, t))
+    // the file read once a dispatch, and only where a task is named (451 T497: once a task, about 18 ms each on the 4.7 MB file)
+    let named: Vec<&String> = tasks.iter().filter(|t| !t.is_empty()).collect();
+    if named.is_empty() {
+        return String::new();
+    }
+    let doc = block_reviews(&dir.join("plan-review.json"));
+    named
+        .into_iter()
+        .map(|t| plan_cap_held(root, &dir, t, doc.as_ref()))
         .find(|held| !held.is_empty())
         .unwrap_or_default()
 }
@@ -565,9 +587,9 @@ fn active_task(root: &Path, ctx: &Ctx) -> (PathBuf, String) {
     // inline python3 snippet only ran that command and read its JSON, starting Python on each spec-fidelity dispatch (feature 449 T141);
     // a failed run, unreadable JSON, a null directory or an empty task hold nothing, as the snippet's did
     let gate = ctx.tree.join("scripts/gates/l7r-gate.sh");
-    let said = ask(
+    let said = ask_gate(
         root,
-        &gate.to_string_lossy(),
+        &gate,
         &["plan", "door", "active-task", &root.to_string_lossy()],
         "",
     );
@@ -582,9 +604,9 @@ fn active_task(root: &Path, ctx: &Ctx) -> (PathBuf, String) {
     (PathBuf::from(dir), task.to_owned())
 }
 
-/// Why `task`'s next plan round in `d` waits for the round arbiter, or "".
-fn plan_cap_held(root: &Path, d: &Path, task: &str) -> String {
-    let round_no = plan_rounds(d, task) + 1;
+/// Why `task`'s next plan round in `d`, its review file read as `doc`, waits for the round arbiter, or "".
+fn plan_cap_held(root: &Path, d: &Path, task: &str, doc: Option<&Value>) -> String {
+    let round_no = rounds_in(doc, task) + 1;
     if round_no <= PLAN_ROUND_CAP {
         return String::new();
     }
@@ -697,9 +719,9 @@ fn later_round(
             "make stale-terms F={}",
             feature.split('-').next().unwrap_or(feature)
         );
-        let said = ask(
+        let said = ask_gate(
             root,
-            &gate.to_string_lossy(),
+            &gate,
             &[
                 "record",
                 "stale-dirs",
