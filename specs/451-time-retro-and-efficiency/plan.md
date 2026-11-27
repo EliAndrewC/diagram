@@ -3571,31 +3571,39 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T311 (<why: the finding or measurement that files it>)
+### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was "not ticked" rather than while its line was open)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two leftovers, each red first.
+  - **(1) The splitter, ported.** The script's `python3 -I - <<'PY'` block (112 lines, observed 2026-11-27, method: `git show HEAD:scripts/gates/closing-checks.sh` from its `python3` line to its `PY` line) is the split `make closing-checks T=` makes of the clone's uncommitted files: the task's feature from its four sources (451 T303), each file's claims from the event logs' edit and Bash-write lines (451 T86, T93), the files set apart as another task's, and the two refusals. It is now `l7r-gate closing-split` (`rust/gate/crates/task/src/closing_split.rs`, wired in `rust/gate/crates/task/src/lib.rs` and `rust/gate/src/lib.rs`), called from the script with the same seven arguments; its contract with the script is unchanged: stdout into `split.txt`, exit 0 split, 3 REFUSED, any other (git unreadable, the gate not built - the launcher's failures exit 1) the fallback that judges every file as the caller's; `caller-files`, `others`, `feature` and `judged` written as before, and every message's words the Python's. The core is a pure function over the arguments, the pool, the marks, the dirty set, the log's text and the event logs' texts, so the unit tests build section 6's clone in memory.
+  - **T311-D1, three deviations from the Python, on cases no run met.** Label: CONVENTION (tooling; no research claim). (a) An edit line naming an uncommitted file whose time does not parse claims nothing; the Python stopped with a traceback, which sent the run to the fallback that judges every file as the caller's. (b) A line whose `task` is not a string claims nothing; the hooks' writer writes a string. (c) The start marks are read through `marks::all`, the guard's one reader, which also reads the main worktree's one-mark file of before 451 T254; the Python's glob did not. The tie of two marks at one `utc` keeps the first, as Python's `max` did.
+  - **(2) A check pass is left only to a task with an open line.** `whose.rs` (`Clues::side`) left a pass to a started (or tree-holding) task while `ticked` said no `- [x]` line named it in `tasks.md` or `tasks-done.md`; it now asks `left.rs`'s `open`, T231's test for plan reviews: a `- [ ] T<n>` line in the feature's `tasks.md`. `ticked` and `ticked_in` lost their last caller and are deleted. This reverses T231's sentence "`whose.rs` ... keeps its own ticked test"; T231's section is left as written.
+  - **The task line's premise, corrected** (as T231's section corrected its own). A withdrawn box (`- [x] T<n> ... Withdrawn <date>: <why>`, `task_withdraw.rs`) and a box ticked ` built inside T<host>` (`tick.rs`) are ticked, so on HEAD their passes were already not left: owed here, by whichever landing or push asks, as a pass tied to no task. The pass left for ever was a started task's with NO line in `tasks.md` (renumbered, or never filed there): no landing of it comes, so its row was never asked for. Measured 2026-11-27, the new test on HEAD's `whose.rs`: of the Withdrawn T6, the built-inside T7, the lineless T8 and the open T2, the landing of T1 refused on T6 and T7 and left T8 (`left: (1, [true, true, false, false])`, want `[true, true, true, false]`). "Owes no row" in the brief is read as T231's rule (no landing is left to write it; it is owed where it is asked, never dropped): a pass dropped from the ledger altogether would be a new mechanism against 385 FR-019, not this task's.
+  - **Red first**, measured 2026-11-27 in the pool tree `diagram-backlog-t271`. (2): `make rust-test CRATE=rust/gate/crates/reviews` with `a_started_task_with_no_open_line_leaves_no_check_pass_to_a_landing` on HEAD's code: 209 passed, 1 failed; after the fix 210 passed, no other fixture moved. (1): the splitter's five unit tests against a `split` stubbed to return nothing: `make rust-test CRATE=rust/gate/crates/task` 134 passed, 4 failed (the status and truth test needs no split); after, 138 passed. `tests/hooks/test-closing-checks.sh`, its new case (a `python3` first on PATH that records its start and fails) on the old script: 74 passed, 1 failed (the stub started with `-I - <clone> ...`, the split fell back); on the new script 75 passed, 0 failed. The suite's own `python3 -c` (a timestamp half a minute ahead, CONVENTION: the fixture's) is now `date -u -d @<secs>`. `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/reviews rust/gate"`: test, lint and format clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the split made by `l7r-gate closing-split`, the script's contract unchanged | `closing_split::tests::the_caller_s_files_and_another_task_s_are_split_as_the_script_s_python_split_them`, `...the_feature_is_f_then_specify_feature_then_the_pool_s_holder_then_this_tree_s_newest_mark`, `...a_run_judging_none_of_the_task_s_own_files_is_refused_each_file_named_with_its_task_and_feature`, `...the_command_reads_the_clone_and_writes_the_run_s_files`, `...the_status_s_paths_and_python_s_truth`; the suite's section 6 unchanged and green | n/a: tooling | none | n/a |
+| no `python3` started | `tests/hooks/test-closing-checks.sh` "no python3 is started", red on the old script | n/a: tooling | none | n/a |
+| a check pass left only while its task's line is open | `left::tests::a_started_task_with_no_open_line_leaves_no_check_pass_to_a_landing`, red on HEAD | n/a: tooling | none | n/a |
 
 ### T311 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The closing checks start no Python, and a check pass is left to a task's landing only while that landing can still come.
+2. **The constraints.** Feature 449 (no Python in the repository); 451 T86, T93, T141, T303 (the split's rules, unchanged); 451 T157, T231, T305 (whose a pass is; T231's open-line rule); 385 FR-019 (every pass owes its row).
+3. **Where each comes from.** G: the task line and the coordinating session's brief of 2026-11-27. O: the red runs above.
+4. **Do they describe the world here?** Yes: the script and the suite as they stand at this tree's HEAD, and the box forms `task_withdraw.rs` and `tick.rs` write, read 2026-11-27.
+5. **The order.** No dependency.
+6. **The exits.** Green: the first tier green in the builder's tree (above) and the suite green; the full gate and coverage are the batch landing's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The three red runs above, green after, measured 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** (1) The finding: a closing run starts a `python3` the repository no longer carries; where it is missing or fails, every T= run falls back to judging the whole clone as the caller's. (2) A started task whose line is gone has its check passes never asked for. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: two leftovers; nothing was made faster or measured for speed.
 
 
 ### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)

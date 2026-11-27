@@ -69,22 +69,6 @@ pub struct Landing<'a> {
     pub tasks: Vec<&'a str>,
 }
 
-/// Is `task` ticked in `text` (a `- [x] T5 ...` line)?
-fn ticked_in(text: &str, task: &str) -> bool {
-    text.lines().any(|line| {
-        line.strip_prefix("- [x] ")
-            .or_else(|| line.strip_prefix("- [X] "))
-            .is_some_and(|rest| rest.split_whitespace().next() == Some(task))
-    })
-}
-
-/// Is `task` ticked in `feature`'s `tasks.md` or `tasks-done.md`?
-fn ticked(repo: &Path, feature: &str, task: &str) -> bool {
-    let dir = repo.join("specs").join(feature);
-    let read = |name: &str| std::fs::read_to_string(dir.join(name)).unwrap_or_default();
-    ticked_in(&read("tasks.md"), task) || ticked_in(&read("tasks-done.md"), task)
-}
-
 /// Has `feature`'s `tasks.md` an open line (`- [ ] T5 ...`) for `task`? Since 451 T231 a plan review is left to its task's landing
 /// only while it has one: read as "ticked in neither file", a withdrawn or renumbered task was open for ever, and once the push's write
 /// left it too (451 T231) its row would never be written.

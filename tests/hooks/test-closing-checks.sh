@@ -178,7 +178,7 @@ git -C "$C" init -q && git -C "$C" config user.email t@t && git -C "$C" config u
 for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md docs/reverted.md; do echo base > "$C/$f"; done
 git -C "$C" add -A && git -C "$C" commit -qm base
 GIT_COMMITTER_DATE="$(( $(date +%s) + 60 )) +0000" git -C "$C" commit -q --allow-empty -m '451-x: T77 T78 ticked (make land)'
-later=$(python3 -c 'import datetime, time; print(datetime.datetime.fromtimestamp(time.time() + 30, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"))')
+later=$(date -u -d "@$(( $(date +%s) + 30 ))" +%Y-%m-%dT%H:%M:%S.000Z)
 for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md rust/mine/src/new.rs rust/other/src/extra.rs docs/bash.md \
   docs/sed.md docs/failed.md docs/both.md docs/reverted.md; do echo edit >> "$C/$f"; done
 now=$(date -u +%Y-%m-%dT%H:%M:%S.000Z); mkdir -p "$E"
@@ -217,6 +217,12 @@ seen OUT -q "judged as T86's: 7 of the clone's 11 uncommitted files (3 its own e
 seen OUT -q "reported apart: 4; the task's feature: 451-x (from this tree's start mark)" \
   && seen OUT -q "closing-checks: GREEN.* - all three (7 files judged as T86's of 451-x, 3 of them its own edits name; 4 set apart as another task's);" \
   && ok "the split names the feature and where it came from, and the verdict line how many files were judged, its own and apart (451 T303)" || no "the feature or the verdict's count" "$OUT"
+# NO PYTHON (451 T311): the repository holds none since feature 449, and the split is the gate's `closing-split`; a python3 first on
+# PATH that records its start and fails is never started, and the split is the same (red before T311: the embedded block ran python3)
+mkdir -p "$T/nopy"; printf '#!/usr/bin/env bash\necho "$*" >> "%s/nopy/started"\nexit 1\n' "$T" > "$T/nopy/python3"; chmod +x "$T/nopy/python3"; : > "$T/nopy/started"
+c6 env CLOSING_TASK=T86 PATH="$T/nopy:$PATH"
+[ ! -s "$T/nopy/started" ] && [ "$(tr '\n' ' ' < "$(run_dir <(printf '%s' "$OUT"))/caller-files" 2>/dev/null)" = "$(tr '\n' ' ' < "$d6/caller-files")" ] \
+  && ok "no python3 is started: a failing python3 first on PATH, and the split is the same" || no "python3 started or the split moved (exit $RC)" "$(cat "$T/nopy/started"; printf '%s' "$OUT")"
 # the feature's sources, in order (451 T303): F=, SPECIFY_FEATURE, the pool registry's holder of this tree, this tree's start mark
 has() { grep -qx "$1" "$(run_dir <(printf '%s' "$OUT"))/caller-files" 2>/dev/null; }
 refused() { [ "$RC" -eq 2 ] && [ ! -s "$T/events" ] && ! seen OUT -q 'closing-checks: GREEN' && seen OUT -q "$1"; }

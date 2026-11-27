@@ -145,7 +145,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some(
             verb @ ("tick" | "task-start" | "task-unstart" | "task-withdraw" | "task-add"
             | "set-down" | "phase-read" | "builder-tree" | "builder-brief" | "builder-done"
-            | "queue" | "queue-add" | "builder-next"),
+            | "queue" | "queue-add" | "builder-next" | "closing-split"),
         ) => l7r_gate_task::cli(
             verb,
             &args[1..],

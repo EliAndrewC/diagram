@@ -2648,7 +2648,7 @@
    "declared": "spec-fidelity"
   },
   "### T311 Approach (checklist part A)": {
-   "sha256": "759e9c3f17a4ef0c2b37a388968b051bedfdaf050345678c57ba6a9c082de9c4",
+   "sha256": "fb9654daf3da467dbe2c631cfc54e035681d5f7e0fdc0f3afc0ec345e5ed6f47",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3873,6 +3873,12 @@
   },
   "### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))": {
    "sha256": "a652bd6f6925aedcc36e317c876e05c340b4810ca704b5ee62fb2462d793019f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was \"not ticked\" rather than while its line was open)": {
+   "sha256": "4c32b3554affb8df78deaa9f0af4516be72a5c90978fd7686837504369e25f08",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34926,6 +34932,52 @@
      "why": "Their earlier text was the bare template with no decision in it, so removing them withdraws nothing decided and narrows nothing asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was \"not ticked\" rather than while its line was open)",
+    "### T311 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T311 (1)",
+     "summary": "closing-checks.sh's embedded python3 splitter ported to `l7r-gate closing-split`, called with the same seven arguments; the script's contract (split.txt, exit 0/3/other-fallback, the four files, the messages) unchanged",
+     "class": "within",
+     "why": "Removes the last Python from a script in a repository that holds none (feature 449), keeping the split's rules (451 T86, T93, T303) as they were; a known defect fixed as we go, nothing the GM asked for narrowed."
+    },
+    {
+     "id": "T311-D1",
+     "summary": "three differences from the Python on cases no run met: an unparseable edit time claims nothing (the Python crashed into the fallback), a non-string task claims nothing, marks read through marks::all (also the pre-T254 one-mark file); tie keeps the first",
+     "class": "within",
+     "why": "Differences in a port where everything works are the rule, not an exception (no exactness standard, GM 2026-11-18); none is a wrong outcome, and (a) and (c) remove a crash-to-fallback and a missed mark."
+    },
+    {
+     "id": "T311 (2)",
+     "summary": "whose.rs leaves a check pass to a task's landing only while left.rs's `open` finds a `- [ ] T<n>` line, not while `ticked` finds no `- [x]` line; ticked/ticked_in deleted; T231's sentence reversed, its section left as written",
+     "class": "within",
+     "why": "Is the task line's own fix (a pass left only while the line is open); the defect is a pass never asked for, a check owed and lost."
+    },
+    {
+     "id": "T311 premise / 'owes no row'",
+     "summary": "the task line's premise corrected by measurement (Withdrawn and built-inside boxes were already ticked; the lost pass was a lineless started task's), and the brief's 'owes no row' read as T231's rule: not left to a landing, owed wherever a landing or push asks, never dropped",
+     "class": "within",
+     "why": "The brief is a session's, not the GM's; the reading keeps 385's rule that every pass owes its row rather than inventing a drop, so it narrows nothing in request.md or the spec. The premise correction is measured (left: (1, [true, true, false, false]) on HEAD, 2026-11-27)."
+    },
+    {
+     "id": "T311 fixture",
+     "summary": "the suite's own python3 -c timestamp replaced by date -u -d; a new case puts a failing python3 first on PATH and asserts none starts",
+     "class": "within",
+     "why": "Enforces the no-Python outcome the task exists for; enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T311 exits",
+     "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -53815,6 +53867,50 @@
      "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
      "class": "within",
      "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T311": {
+   "section_sha256": "36ad67ad2393df48327e452167168502108ed217d3dfcc17605563d55b7117d4",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T311 (1)",
+     "summary": "closing-checks.sh's embedded python3 splitter ported to `l7r-gate closing-split`, called with the same seven arguments; the script's contract (split.txt, exit 0/3/other-fallback, the four files, the messages) unchanged",
+     "class": "within",
+     "why": "Removes the last Python from a script in a repository that holds none (feature 449), keeping the split's rules (451 T86, T93, T303) as they were; a known defect fixed as we go, nothing the GM asked for narrowed."
+    },
+    {
+     "id": "T311-D1",
+     "summary": "three differences from the Python on cases no run met: an unparseable edit time claims nothing (the Python crashed into the fallback), a non-string task claims nothing, marks read through marks::all (also the pre-T254 one-mark file); tie keeps the first",
+     "class": "within",
+     "why": "Differences in a port where everything works are the rule, not an exception (no exactness standard, GM 2026-11-18); none is a wrong outcome, and (a) and (c) remove a crash-to-fallback and a missed mark."
+    },
+    {
+     "id": "T311 (2)",
+     "summary": "whose.rs leaves a check pass to a task's landing only while left.rs's `open` finds a `- [ ] T<n>` line, not while `ticked` finds no `- [x]` line; ticked/ticked_in deleted; T231's sentence reversed, its section left as written",
+     "class": "within",
+     "why": "Is the task line's own fix (a pass left only while the line is open); the defect is a pass never asked for, a check owed and lost."
+    },
+    {
+     "id": "T311 premise / 'owes no row'",
+     "summary": "the task line's premise corrected by measurement (Withdrawn and built-inside boxes were already ticked; the lost pass was a lineless started task's), and the brief's 'owes no row' read as T231's rule: not left to a landing, owed wherever a landing or push asks, never dropped",
+     "class": "within",
+     "why": "The brief is a session's, not the GM's; the reading keeps 385's rule that every pass owes its row rather than inventing a drop, so it narrows nothing in request.md or the spec. The premise correction is measured (left: (1, [true, true, false, false]) on HEAD, 2026-11-27)."
+    },
+    {
+     "id": "T311 fixture",
+     "summary": "the suite's own python3 -c timestamp replaced by date -u -d; a new case puts a failing python3 first on PATH and asserts none starts",
+     "class": "within",
+     "why": "Enforces the no-Python outcome the task exists for; enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T311 exits",
+     "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
     }
    ],
    "verdict": "CLEAR"

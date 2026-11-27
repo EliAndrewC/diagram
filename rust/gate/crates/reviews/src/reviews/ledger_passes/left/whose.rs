@@ -26,8 +26,10 @@
 //! task is started in the clone only as it lands.
 //!
 //! A task named without its feature takes the feature that started it (`event_log_hooks::started`). The pass is left only where that
-//! task is STARTED (`task-starts.jsonl`) and ticked in neither of its feature's task files, and none of the tasks named is one this
-//! landing lands; a pass naming nothing, a task never started, a ticked one, or one of the landing's own still refuses here.
+//! task is STARTED (`task-starts.jsonl`) and has an OPEN line (`- [ ] T<n>`) in its feature's `tasks.md` (451 T311, the rule T231 gave
+//! plan reviews: read as "ticked in neither file", a started task whose line is gone - renumbered, never filed there - had its passes
+//! left to a landing that never comes), and none of the tasks named is one this landing lands; a pass naming nothing, a task never
+//! started, one with no open line (ticked, withdrawn, built inside another, absent), or one of the landing's own still refuses here.
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -40,7 +42,7 @@ use serde_json::Value;
 use super::super::settle::Transcripts;
 use super::super::{text, Pass};
 use super::pool::{first_record, Holds};
-use super::{re, ticked, Landing, Side};
+use super::{open, re, Landing, Side};
 
 /// A task id, and the feature number before it where one stands there (`own.rs`'s `NAMED`).
 static NAMED: LazyLock<Regex> = LazyLock::new(|| re(r"(?:\b(\d{3})\s+)?\b(T\d+[a-z]?)\b"));
@@ -94,14 +96,16 @@ impl<'a> Clues<'a> {
         {
             return Side::Own;
         }
-        let open = |t: &&String| {
+        // started (or tree-holding) and its line open in tasks.md (451 T311, T231's rule): a task ticked Withdrawn, ticked built inside
+        // another, or with no line here has no landing left to write the row
+        let left_to = |t: &&String| {
             (named.held || self.starts.iter().any(|(f, s, _)| *f == feature && s == *t))
-                && !ticked(self.repo, &feature, t)
+                && open(self.repo, &feature, t)
         };
         named
             .tasks
             .iter()
-            .find(open)
+            .find(left_to)
             .map_or(Side::Unowned, |t| Side::Left(format!("{feature} {t}")))
     }
 

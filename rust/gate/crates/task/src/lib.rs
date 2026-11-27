@@ -8,12 +8,14 @@
 //! pool, and `l7r-gate builder-brief` ([`builder_brief`], 451 T334) the standing block of a builder's brief, sized, on a pool tree.
 //! `l7r-gate task-withdraw` ([`task_withdraw`]) and `l7r-gate task-unstart` ([`task_unstart`]) are the two ways back out of a task (451
 //! T359): a filed task closed as withdrawn, and a start undone. `l7r-gate queue`, `queue-add` and `builder-next` ([`builder_queue`], 451
-//! T313) list the builders' queue with each entry's state computed, append an entry and name the next task to hand out.
+//! T313) list the builders' queue with each entry's state computed, append an entry and name the next task to hand out. `l7r-gate closing-split`
+//! ([`closing_split`], 451 T311) splits the clone's uncommitted files between `make closing-checks T=`'s task and another's.
 
 pub mod builder_brief;
 pub mod builder_done;
 pub mod builder_queue;
 pub mod builder_tree;
+pub mod closing_split;
 pub mod phase_sources;
 mod plan_hold;
 #[cfg(test)]
@@ -32,13 +34,14 @@ use std::process::Command;
 use l7r_gate_core::Reply;
 use l7r_shared::py_text::strip;
 
-/// `l7r-gate tick|task-start|task-unstart|task-withdraw|task-add|set-down|phase-read|builder-tree|builder-brief|builder-done|queue|queue-add|builder-next <args>` from `cwd`, as the binary dispatches them.
+/// `l7r-gate tick|task-start|task-unstart|task-withdraw|task-add|set-down|phase-read|builder-tree|builder-brief|builder-done|queue|queue-add|builder-next|closing-split <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
 pub fn cli(verb: &str, args: &[String], cwd: &Path) -> Reply {
     match verb {
         "builder-brief" => builder_brief::cli(args, cwd),
         "builder-done" => builder_done::cli(args, cwd),
         "builder-tree" => builder_tree::cli(args, cwd),
+        "closing-split" => closing_split::cli(args),
         "queue" | "queue-add" | "builder-next" => builder_queue::cli(verb, args, cwd),
         "tick" => tick::cli(args, cwd),
         "task-start" => task_start::cli(args, cwd),

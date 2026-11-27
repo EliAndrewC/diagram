@@ -435,3 +435,51 @@ fn a_recorded_plan_review_no_landing_writes_is_listed_as_the_next_push_s() {
         (0, "ledger-owed: 1 recorded plan review row(s) the next push writes (--write-plan-reviews, 385 T72; 451 T231)\n")
     );
 }
+
+/// 451 T311, T231's rule for every check's pass: a started task's pass is left to its landing only while the task has an OPEN line
+/// (`- [ ] T<n>`) in its feature's `tasks.md`. A task ticked Withdrawn, one ticked built inside another (451 T307 part 2) and one whose
+/// line is gone (renumbered, or never filed here) have no landing left to write the row, so each pass is owed here, as an untied one.
+#[test]
+fn a_started_task_with_no_open_line_leaves_no_check_pass_to_a_landing() {
+    let log = [
+        pass(
+            "quote-check",
+            "w6",
+            "pass-w6 449 T6 quote-check",
+            &json!({}),
+        ),
+        pass(
+            "quote-check",
+            "w7",
+            "pass-w7 449 T7 quote-check",
+            &json!({}),
+        ),
+        pass(
+            "quote-check",
+            "w8",
+            "pass-w8 449 T8 quote-check",
+            &json!({}),
+        ),
+        pass(
+            "quote-check",
+            "w2",
+            "pass-w2 449 T2 quote-check",
+            &json!({}),
+        ),
+    ];
+    let (_d, env) = world("t311", &log);
+    let lines = "- [ ] T1 one\n- [ ] T2 two\n- [x] T6 six Withdrawn 2026-11-27: filed by mistake\n- [x] T7 seven built inside T1\n";
+    put(&env.cwd, "specs/449-x/tasks.md", lines);
+    let starts = ["T1", "T2", "T6", "T7", "T8"]
+        .map(|t| {
+            json!({"feature": "449-x", "task": t, "utc": "2026-11-27T09:00:00Z"}).to_string() + "\n"
+        })
+        .concat();
+    put(&env.cwd, ".git/task-starts.jsonl", &starts);
+    let landing = [&L[..], &["--refuse", "--landing", "449-x", "--tasks", "T1"]].concat();
+    let got = cli(&args(&landing), &env);
+    let owed = ["w6", "w7", "w8", "w2"].map(|q| got.stderr.contains(&format!("pass-{q} ")));
+    assert_eq!((got.code, owed), (1, [true, true, true, false]));
+    let said = got.stdout.contains("the passes of 1 open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: 449-x T2\n");
+    assert!(said, "{}", got.stdout);
+}
