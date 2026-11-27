@@ -30,9 +30,10 @@ Its state, the first that holds:
 
 1. `landed` - `origin/main` holds a commit of its author time and subject (`builder_done::uncarried`'s test, asked of
    `origin/main`);
-2. `superseded` - a later hand-in of the same task exists;
-3. `ejected` - the lane log's last line for it is `eject`; it names its repair entry;
-4. `in batch <b>` - an open batch names it;
+2. `in batch <b>` - an open batch's `batch` line names it and its last line is not an `eject` (before `superseded`, 461 T53: the
+   change a batch is landing stays its, a later hand-in of its task waiting until the batch ends);
+3. `superseded` - a later hand-in of the same task exists;
+4. `ejected` - the lane log's last line for it is `eject`; it names its repair entry;
 5. `waiting`.
 
 ## A batch
