@@ -151,9 +151,11 @@ fn each_check_is_asked_its_own_question() {
     assert!(root
         .join(".git/review-snapshot/odd-check--s/clone/s.svg")
         .is_file());
-    // a snapshot that cannot be cleared or written raises
+    // a snapshot that cannot be cleared or written raises: the git directory the `.git` file names is a file (451 T275: a linked
+    // worktree's own `.git` file is read through to its clone's common directory, so it no longer fails by itself)
     std::fs::remove_dir_all(root.join(".git")).unwrap();
-    std::fs::write(root.join(".git"), "gitdir: x\n").unwrap();
+    std::fs::write(root.join("blocker"), "").unwrap();
+    std::fs::write(root.join(".git"), "gitdir: blocker\n").unwrap();
     assert!(snapshot(&here(&root), None, &refs, "")
         .unwrap_err()
         .starts_with("OSError"));

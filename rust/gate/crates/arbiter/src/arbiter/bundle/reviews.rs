@@ -7,7 +7,6 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_shared::checks::reply;
-use l7r_shared::py_text::strip;
 use serde_json::{json, Map, Value};
 
 use super::marks::mark_rounds;
@@ -344,13 +343,10 @@ fn sheet_edits(root: &Path, out: &Path, rec: &Path, name: &str) -> Result<(), Fa
 }
 
 /// A review unit's earlier rounds from its verdict record and its ledger rows, where the check state holds none (feature 374 batch 4).
+/// The record and its dispositions are the clone's, in its common git directory, where the review wrote them (451 T275): a builder's
+/// tree's own directory holds none, and read there the unit's earlier rounds were passed over.
 pub fn review_verdicts(root: &Path, out: &Path, subject: &str) -> Result<Vec<String>, Fail> {
-    let git_dir = strip(&g(root, &["rev-parse", "--absolute-git-dir"])).to_owned();
-    let git_dir = if git_dir.is_empty() {
-        root.join(".git")
-    } else {
-        PathBuf::from(git_dir)
-    };
+    let git_dir = l7r_shared::guards::event_log_hooks::common_git_dir(root);
     let rec = git_dir
         .join("review-verdicts")
         .join(format!("{subject}.json"));

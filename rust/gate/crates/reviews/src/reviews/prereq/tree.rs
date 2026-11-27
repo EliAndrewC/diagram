@@ -15,6 +15,7 @@
 
 use std::path::{Path, PathBuf};
 
+use l7r_shared::guards::event_log_hooks::common_git_dir;
 use serde_json::Value;
 
 /// A unit's snapshot: the review tree's commit, engine key and directory, and the snapshot's own copy of the sheet.
@@ -46,7 +47,7 @@ pub fn of_unit(clone: &Path, unit: &str) -> Option<Snap> {
     if unit.is_empty() {
         return None;
     }
-    let dir = clone.join(".git/review-snapshot").join(unit);
+    let dir = common_git_dir(clone).join("review-snapshot").join(unit);
     let rec = read(&dir.join("tree.json"))?;
     let (commit, key) = (text(&rec, "commit"), text(&rec, "key"));
     (!commit.is_empty() && !key.is_empty()).then(|| Snap {
@@ -80,8 +81,8 @@ pub fn lacking(clone: &Path, unit: &str) -> Option<String> {
 /// The gate's record of the review tree at `commit`.
 #[must_use]
 pub fn gate_file(clone: &Path, commit: &str) -> PathBuf {
-    clone
-        .join(".git/review-trees")
+    common_git_dir(clone)
+        .join("review-trees")
         .join(format!("{commit}.json"))
 }
 

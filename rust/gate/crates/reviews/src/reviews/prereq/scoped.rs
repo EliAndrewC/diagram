@@ -45,7 +45,9 @@ pub fn kept_dir(clone: &Path, unit: &str) -> PathBuf {
 
 /// Where a declared change-scoped round's prompt and declaration live: `.git/review-scoped/<unit>/`.
 fn scoped_dir(clone: &Path, unit: &str) -> PathBuf {
-    clone.join(".git/review-scoped").join(unit)
+    l7r_shared::guards::event_log_hooks::common_git_dir(clone)
+        .join("review-scoped")
+        .join(unit)
 }
 
 /// Keep the unit's sheet, `on` in `folder`, as the review that is writing its verdict read it (the verdict record's last act).

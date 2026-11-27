@@ -7,7 +7,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_shared::env::Rooted;
-use l7r_shared::guards::event_log_hooks::log_path_in;
+use l7r_shared::guards::event_log_hooks::{common_git_dir, log_path_in};
 // the event log's one reader, the guard's since feature 449 T119 (`ask:449-T83-scope`): `make feature-report` reads through it too
 use l7r_shared::checks::rounds::ROUND_CAP;
 use l7r_shared::checks::state_path;
@@ -427,7 +427,7 @@ pub fn round_counter(root: &Path, unit: &str) -> Vec<String> {
     }
     let (Ok(feature), Ok(rounds)) = (
         json_file(&root.join(".specify").join("feature.json")),
-        json_file(&root.join(".git").join("review-rounds.json")),
+        json_file(&common_git_dir(root).join("review-rounds.json")),
     ) else {
         return Vec::new();
     };

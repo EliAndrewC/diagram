@@ -2413,14 +2413,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T275 (<why: the finding or measurement that files it>)": {
-   "sha256": "fd1a6e24a799e493443e1d88d9680bb92377de75bd7b11b8a3e844b1731e0dfd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T275 Approach (checklist part A)": {
-   "sha256": "afc2b3cb6e6f8f156f9a715e4267d3a611fec742fb22b48ddc19fbc34d94722e",
+   "sha256": "c20b362d57237a38ca16dabfe878b9daca7cfd2dd67fcb586ead49fbb0051504",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3843,6 +3837,36 @@
   },
   "### T440 Approach (checklist part A)": {
    "sha256": "ce11017b749416fc45c46c512b56177fb3adb85143b7b88a205c595f6e63ab99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T275 (T267's census: state paths joined onto `<root>/.git` break or are passed over in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t270)": {
+   "sha256": "f4b2250c3be269ded390298dc25265b2cb7a1ee0a5d9f95f2a26a4b75f1c9ec4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T441 (<why: the finding or measurement that files it>)": {
+   "sha256": "f1357c64c1e430424c8d5308db4a1c030f92cdfb34d005b5bac3a7e8315c7b7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T441 Approach (checklist part A)": {
+   "sha256": "045d2a57af96cd94a4c4ff3f9cab53bfce5bbb87d182f40630e581ad67587ec5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T442 (<why: the finding or measurement that files it>)": {
+   "sha256": "76b8087c71ba86bce08ff5ab2d3be4d5ccfecdf1927f19a5b199a823aa16b14e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T442 Approach (checklist part A)": {
+   "sha256": "bfe3b01c138fecf2470381ff3a8897c5c3265816254c182b1f44d9499fc8aa47",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34707,6 +34731,93 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T275 (T267's census: state paths joined onto `<root>/.git` break or are passed over in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t270)",
+    "### T275 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 resolver",
+     "summary": "The reviews and arbiter crates find their review state through the existing l7r_shared common_git_dir resolver. No second resolver is added and no git process is run.",
+     "class": "within",
+     "why": "This is a choice of mechanism for fixing a wrong outcome: in a pool tree, the arbiter bundle reported no rounds, no earlier verdict and no snapshot. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2 common not per tree",
+     "summary": "The state is read and written in the clone's common git directory from any tree. A plain clone's paths are unchanged because there the common directory is <root>/.git.",
+     "class": "within",
+     "why": "The block says every writer of this state already writes to the clone's directory (the pair guard's state, make verify's --state). So reading per tree is the defect and reading the common directory is its fix. This is not the 2026-11-25 'a review recording in its own tree' fix, which is the plan-verdict record that the MANIFEST says is run from the plan's own tree (451 T257). No block moves that record."
+    },
+    {
+     "id": "D3 fix list",
+     "summary": "The fix covers reviews (prereq verdict_dir, disposition_dir, stale_maps snapshots, write_verdict pairing-state, tree::of_unit and gate_file, scoped_dir, the snapshot destination) and arbiter (sections round_counter, reviews review_verdicts, which drops its rev-parse process). Red-first tests run on a real git worktree.",
+     "class": "within",
+     "why": "Each item is a site the census found that the arbiter bundle or the reviews crate reaches. The tests fail only when the requested behavior is missing, so they are enforcement and not added scope."
+    },
+    {
+     "id": "D4 snapshot test fixture",
+     "summary": "snapshot/tests.rs faked an unwritable snapshot with a .git file naming a missing directory. It now names a git directory that is a file, so the same error is still raised.",
+     "class": "within",
+     "why": "The fixture relied on the bug being fixed. Changing it keeps the test checking the same refusal."
+    },
+    {
+     "id": "D5 probes kept",
+     "summary": "clone_sync_hooks .join(.git).is_dir() probes stay on purpose: a pool tree must not claim to be the session's clone. archive/store.rs:161 probes $HOME/source-archive, which is always its own clone.",
+     "class": "within",
+     "why": "The block gives a reason for each that is correct behavior and not a wrong outcome, so neither is a defect and leaving them needs no ruling."
+    },
+    {
+     "id": "D6 T441 deferral (guard sites)",
+     "summary": "The guard's state joined onto the session cwd in a worktree has a visible effect (the finished-run reminder repeats at every Stop in a pool tree). It is not fixed here and is filed as T441, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known wrong outcome out of this task, so it is a narrowing. The ground for it is not cost ('guard files, outside this task's crates' legitimizes nothing). The ground is the GM's own rule on known defects: fix them before the next step of the port begins (2026-11-18; 'fix all of this as part of our tasking that we are doing before resuming our port', 2026-11-26). T441 is filed in this same feature, which is that pre-port tasking, so the defect is scheduled and not carried into the port. The item also has the form FR-009 asks for: why it is not fixed here, the filed id and an order. The bundle does not say what T22 is. The ruling rests on T441 being a task of 451 and so landing before the port resumes, whatever T22 turns out to be."
+    },
+    {
+     "id": "D7 T442 deferral (tree-own git-dir readers and the gate's other .git joins)",
+     "summary": "The review-verdict readers that take a tree's own git directory (a checkpoint or tick in a pool tree misses a recorded verdict) and the gate's other .git joins (stale_terms.rs, helpers.rs quote-verbatim, approach-owed) are not fixed here and are filed as T442, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This covers two unlike things, so each is judged on its own. (a) The readers of the tree's own git directory have the same defect as D3, reached through rev-parse rather than a .join. (b) The other .git joins are separate sites. For both, 'more sites than one builder's brief allows' is a cost reason and legitimizes nothing. What makes each legitimate is the same as for D6: they are filed in 451, the GM's pre-port tasking, with FR-009's why, id and order. They are also measured as not reached by builder commands, from the transcripts' count of make targets. A note for T442: the census method this block states searches .git join strings only, and its shell pattern is elided with '...'. It does not name rev-parse --git-dir / --absolute-git-dir or other ways of reaching a tree's own git directory, which is how review_verdicts reached it. T442's own census should search those forms and give its pattern in full. No instance is shown left unfiled, so this does not change the ruling."
+    },
+    {
+     "id": "D8 order and exits",
+     "summary": "The task comes after T267 and before T441 and T442. Green means the three new tests pass with the crates' suites. Red means the failure is recorded, the task is set down and the claim is ruled through make arbiter-ask. Engine step table: n/a.",
+     "class": "within",
+     "why": "This is ordering and exit procedure inside the task. It narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "### T441 (<why: the finding or measurement that files it>)",
+    "### T441 Approach (checklist part A)",
+    "### T442 (<why: the finding or measurement that files it>)",
+    "### T442 Approach (checklist part A)",
+    "(removed) ### T275 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "removal of T275/T427/T428 blocks",
+     "summary": "Five blocks removed by hand; their earlier text (each CLEAR) was the unfilled section template - placeholders only, no approach, no figure, no Found-and-left item.",
+     "class": "within",
+     "why": "Removing a block that held no decision removes no decision and narrows nothing the request or spec asked for; whether those tasks are done or dropped is tasks.md's record, not this plan text."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -53500,6 +53611,64 @@
      "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
      "class": "within",
      "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T275": {
+   "section_sha256": "9f413929f157711fa2810281d405a7b252df670a37e75a632bf0437749cbcc85",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 resolver",
+     "summary": "The reviews and arbiter crates find their review state through the existing l7r_shared common_git_dir resolver. No second resolver is added and no git process is run.",
+     "class": "within",
+     "why": "This is a choice of mechanism for fixing a wrong outcome: in a pool tree, the arbiter bundle reported no rounds, no earlier verdict and no snapshot. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2 common not per tree",
+     "summary": "The state is read and written in the clone's common git directory from any tree. A plain clone's paths are unchanged because there the common directory is <root>/.git.",
+     "class": "within",
+     "why": "The block says every writer of this state already writes to the clone's directory (the pair guard's state, make verify's --state). So reading per tree is the defect and reading the common directory is its fix. This is not the 2026-11-25 'a review recording in its own tree' fix, which is the plan-verdict record that the MANIFEST says is run from the plan's own tree (451 T257). No block moves that record."
+    },
+    {
+     "id": "D3 fix list",
+     "summary": "The fix covers reviews (prereq verdict_dir, disposition_dir, stale_maps snapshots, write_verdict pairing-state, tree::of_unit and gate_file, scoped_dir, the snapshot destination) and arbiter (sections round_counter, reviews review_verdicts, which drops its rev-parse process). Red-first tests run on a real git worktree.",
+     "class": "within",
+     "why": "Each item is a site the census found that the arbiter bundle or the reviews crate reaches. The tests fail only when the requested behavior is missing, so they are enforcement and not added scope."
+    },
+    {
+     "id": "D4 snapshot test fixture",
+     "summary": "snapshot/tests.rs faked an unwritable snapshot with a .git file naming a missing directory. It now names a git directory that is a file, so the same error is still raised.",
+     "class": "within",
+     "why": "The fixture relied on the bug being fixed. Changing it keeps the test checking the same refusal."
+    },
+    {
+     "id": "D5 probes kept",
+     "summary": "clone_sync_hooks .join(.git).is_dir() probes stay on purpose: a pool tree must not claim to be the session's clone. archive/store.rs:161 probes $HOME/source-archive, which is always its own clone.",
+     "class": "within",
+     "why": "The block gives a reason for each that is correct behavior and not a wrong outcome, so neither is a defect and leaving them needs no ruling."
+    },
+    {
+     "id": "D6 T441 deferral (guard sites)",
+     "summary": "The guard's state joined onto the session cwd in a worktree has a visible effect (the finished-run reminder repeats at every Stop in a pool tree). It is not fixed here and is filed as T441, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known wrong outcome out of this task, so it is a narrowing. The ground for it is not cost ('guard files, outside this task's crates' legitimizes nothing). The ground is the GM's own rule on known defects: fix them before the next step of the port begins (2026-11-18; 'fix all of this as part of our tasking that we are doing before resuming our port', 2026-11-26). T441 is filed in this same feature, which is that pre-port tasking, so the defect is scheduled and not carried into the port. The item also has the form FR-009 asks for: why it is not fixed here, the filed id and an order. The bundle does not say what T22 is. The ruling rests on T441 being a task of 451 and so landing before the port resumes, whatever T22 turns out to be."
+    },
+    {
+     "id": "D7 T442 deferral (tree-own git-dir readers and the gate's other .git joins)",
+     "summary": "The review-verdict readers that take a tree's own git directory (a checkpoint or tick in a pool tree misses a recorded verdict) and the gate's other .git joins (stale_terms.rs, helpers.rs quote-verbatim, approach-owed) are not fixed here and are filed as T442, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This covers two unlike things, so each is judged on its own. (a) The readers of the tree's own git directory have the same defect as D3, reached through rev-parse rather than a .join. (b) The other .git joins are separate sites. For both, 'more sites than one builder's brief allows' is a cost reason and legitimizes nothing. What makes each legitimate is the same as for D6: they are filed in 451, the GM's pre-port tasking, with FR-009's why, id and order. They are also measured as not reached by builder commands, from the transcripts' count of make targets. A note for T442: the census method this block states searches .git join strings only, and its shell pattern is elided with '...'. It does not name rev-parse --git-dir / --absolute-git-dir or other ways of reaching a tree's own git directory, which is how review_verdicts reached it. T442's own census should search those forms and give its pattern in full. No instance is shown left unfiled, so this does not change the ruling."
+    },
+    {
+     "id": "D8 order and exits",
+     "summary": "The task comes after T267 and before T441 and T442. Green means the three new tests pass with the crates' suites. Red means the failure is recorded, the task is set down and the claim is ruled through make arbiter-ask. Engine step table: n/a.",
+     "class": "within",
+     "why": "This is ordering and exit procedure inside the task. It narrows nothing."
     }
    ],
    "verdict": "CLEAR"

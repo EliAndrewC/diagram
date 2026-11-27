@@ -4,7 +4,7 @@ use serde_json::json;
 
 use super::*;
 use crate::record::bundle::tests::scratch;
-use crate::record::testkit::{commit, put};
+use crate::record::testkit::{commit, git, put};
 
 /// A fixture transcript's modified time, set: the spec rounds sort on it, and the kernel stamps back-to-back writes from one coarse
 /// clock tick - 300 of 300 triples tied here on 2026-11-26 - so a time left to the clock ties or not by the machine's load (451 T309).
@@ -207,6 +207,27 @@ fn a_verdict_record_outside_a_repository() {
     std::fs::create_dir_all(&out).unwrap();
     assert_eq!(
         review_verdicts(&plain, &out, "building-review--x")
+            .unwrap()
+            .len(),
+        4
+    );
+}
+
+/// RED FIRST (451 T275): in a linked worktree, a builder's pool tree, the verdict record the review wrote in the clone's common git
+/// directory is read; joined onto the tree's own `.git` it was passed over and the bundle said the unit had no earlier round.
+#[test]
+fn a_linked_worktree_reads_the_clones_verdict_record() {
+    let root = scratch("arbiter-review-linked");
+    let wt = root.join("linked");
+    git(
+        &root,
+        &["worktree", "add", "-q", "--detach", &wt.to_string_lossy()],
+    );
+    put(&root, ".git/review-verdicts/building-review--x.json", "{}");
+    let out = root.join("out");
+    std::fs::create_dir_all(&out).unwrap();
+    assert_eq!(
+        review_verdicts(&wt, &out, "building-review--x")
             .unwrap()
             .len(),
         4

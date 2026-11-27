@@ -371,3 +371,26 @@ fn the_sections_rare_paths() {
     let got = claims_section(&root, &["the ROUND_CAP of it".to_owned()]).unwrap();
     assert!(got[0].contains("ROUND_CAP"), "{got:?}");
 }
+
+/// RED FIRST (451 T275): the pair guard counts a unit's rounds in the clone's `review-rounds.json`, in its common git directory; a
+/// linked worktree's `.git` is a file, so joined onto it the counter was never read and the bundle carried no round count.
+#[test]
+fn a_linked_worktree_reads_the_clones_round_counter() {
+    let root = scratch("arbiter-counters-linked");
+    let wt = root.join("linked");
+    git(
+        &root,
+        &["worktree", "add", "-q", "--detach", &wt.to_string_lossy()],
+    );
+    put(
+        &wt,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/500-f\"}",
+    );
+    put(
+        &root,
+        ".git/review-rounds.json",
+        &json!({"specs/500-f": {"u": ["u@1"]}}).to_string(),
+    );
+    assert!(round_counter(&wt, "u")[0].contains("1 of the 1 kept"));
+}

@@ -132,3 +132,29 @@ fn a_snapshotted_unit_is_checked_on_its_snapshot_alone() {
     std::fs::remove_file(r.join(format!(".git/review-snapshot/{UNIT}/clone/c.svg"))).unwrap();
     assert!(lacking(&r, UNIT).unwrap().contains("lacks .json .svg .png"));
 }
+
+/// RED FIRST (451 T275): in a linked worktree `.git` is a file, so a snapshot, a gate record and a verdict joined onto `<tree>/.git/`
+/// were never found. They are the clone's, written in its common git directory (the review tree's `--state`, the guard's session
+/// clone), and read there from any tree of it.
+#[test]
+fn a_linked_worktree_reads_the_clones_review_state() {
+    let r = repo("tree-linked");
+    snapped(&r);
+    let wt = r.join("linked");
+    let added = std::process::Command::new("git")
+        .arg("-C")
+        .arg(&*r)
+        .args(["worktree", "add", "-q", "--detach"])
+        .arg(&wt)
+        .status()
+        .unwrap();
+    assert!(added.success());
+    let common = std::fs::canonicalize(r.join(".git")).unwrap();
+    assert_eq!(of_unit(&wt, UNIT).map(|s| s.key).as_deref(), Some("K1"));
+    assert_eq!(gate_file(&wt, "c1"), common.join("review-trees/c1.json"));
+    let kept = super::super::scoped::kept_dir(&wt, UNIT);
+    assert_eq!(
+        kept,
+        common.join(format!("review-verdicts/{UNIT}.reviewed"))
+    );
+}

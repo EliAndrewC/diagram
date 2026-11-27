@@ -2655,31 +2655,50 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T274 to T274 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 
-### T275 (<why: the finding or measurement that files it>)
+### T275 (T267's census: state paths joined onto `<root>/.git` break or are passed over in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t270)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The review state the gate's reviews and arbiter crates read or write is found in the clone's COMMON git directory, through the existing resolver `l7r_shared::guards::event_log_hooks::common_git_dir` (no git process; already used by `reviews::ledger_passes::left::whose`). No second resolver.
+  - **The census** (observed 2026-11-27, method: `grep -rnE 'join\("\.git"\)|"\.git/|/\.git"'` over `rust/` plus a grep for `/.git/` inside format strings, and `grep -rnE '\$\{?(ROOT|root|TREE|top|...)\}?/\.git/'` over `scripts/` and the Makefile; tests, fixtures and testkits left out, each hit read). That gave 127 Rust lines. Most are root-finders (`.join(".git").exists()`, which a `.git` file passes) or a fallback after `rev-parse`. About 40 state joins and 4 `.is_dir()` probes are left.
+  - **Which run in a linked worktree, measured.** strace is refused in this container (`PTRACE_TRACEME: Operation not permitted`), so the test was where each site's root comes from. That was checked against the make targets builders ran in pool trees over the last three days, counted from the subagent transcripts (`cd /diagram/.clones/diagram-backlog-t<n> && make <target>`): decide 52, rust-test 44, claims-triage 42, plan-verdict 38, guard-edit 37, ..., arbiter-bundle 3, arbiter-ruled 3.
+    - The guard's hooks find their clone from the session (`session.clone_dir()`) or from the session's cwd. A builder's tool calls carry the primary directory as their cwd, so the guard sites are reached in a worktree only when the coordinating session itself works in one: filed as T441.
+    - The plan, task and claims crates already resolve their paths (`codeid::common_git_dir`, `rev-parse`, T267's `kept_at`).
+    - `make arbiter-bundle` run in a pool tree is the one builder command that reads a `.git` join. It does so directly (`sections.rs:430`, the pair guard's `review-rounds.json`) and through the reviews crate (`prereq::unit_content_key` -> `tree::of_unit`, the review tree's snapshot). Its verdict record (`bundle/reviews.rs:348`) is read from the tree's OWN git directory, but the review writes it in the clone's common one. In a pool tree all three came back empty: the bundle said the unit had no round count, no earlier verdict and no snapshot.
+  - **Common, not per tree - the choice and its reason.** Every writer of this state is the clone's: the pair guard writes it into its session clone's `.git` (`pair_hooks/state.rs`), and `make verify` writes it with `--state "$ROOT"` (`review-tree.sh`). So the readers must look in the common directory, whichever tree asks. In a plain clone the common directory is `<root>/.git`, so nothing moves there. T267's searches were per tree for a reason this state does not have: each tree kept its own searches under shared keys.
+  - **The fix.**
+    - `reviews`: `prereq.rs` `verdict_dir`, `disposition_dir`, the snapshots of `stale_maps` and `write_verdict`'s `pairing-state.json`; `prereq/tree.rs` `of_unit` and `gate_file`; `prereq/scoped.rs` `scoped_dir`; `snapshot.rs`'s destination under `--state`.
+    - `arbiter`: `bundle/sections.rs` `round_counter`'s `review-rounds.json`; `bundle/reviews.rs` `review_verdicts`, which drops its `rev-parse --absolute-git-dir` process.
+  - **Red first** (2026-11-27, `scripts/gates/l7r-gate.sh rust test --crate rust/gate/crates/reviews --crate rust/gate/crates/arbiter` on the old code). Each new test runs on a real `git worktree add` of a scratch repository:
+    - `a_linked_worktree_reads_the_clones_review_state` (reviews: snapshot, gate record and verdict dir) failed, with reviews at 209 passed and 1 failed.
+    - `a_linked_worktree_reads_the_clones_round_counter` and `a_linked_worktree_reads_the_clones_verdict_record` (arbiter) failed, with arbiter at 43 passed and 2 failed.
+    - After the fix: reviews 210/210, arbiter 45/45, lint and format clean (`make builder-checks`).
+    - `snapshot/tests.rs` faked an unwritable snapshot with a `.git` file naming a missing directory, which is the very bug fixed here. It now names a git directory that is a file, so the error it checks is still raised.
+  - **Probes.** `clone_sync_hooks.rs:335,354,552` use `.join(".git").is_dir()` deliberately: a file edit in a pool tree must not claim that tree as the session's clone. They stay, and T441 notes it beside them. `archive/store.rs:161` probes `$HOME/source-archive`, which is always its own clone. Not defects.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a - tooling, no engine step | n/a | n/a | none | n/a |
 
 ### T275 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An arbiter bundle built in a builder's pool tree carries the unit's round count, earlier verdict and snapshot, as one built in the clone does; the reviews crate's state is the clone's from any tree of it.
+2. **The constraints.** Reuse the existing resolver (the brief); no guard message changes (no guard file is edited); a plain clone's paths unchanged.
+3. **Where each comes from.** O: the census and the transcripts' count above; the brief's words for the resolver.
+4. **Do they describe the world here?** Yes: this tree is a linked worktree (`.git` is `gitdir: /diagram/.clones/diagram-backlog/.git/worktrees/diagram-backlog-t270`), and the red tests build the same shape.
+5. **The order.** After T267 (its resolver choice); before T441 and T442, which take the guard's and the rest of the gate's sites.
+6. **The exits.** Green: the three new tests pass with the crates' suites. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/reviews rust/gate/crates/arbiter"` green, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** In a pool tree, `make arbiter-bundle` said a unit had no rounds counted and no earlier verdict when it had both, so the arbiter ruled without them. That is a wrong outcome, and this task fixes it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The guard's state joined onto the session's cwd in a worktree has a visible effect: in a pool tree the finished-run reminder is said again every Stop. Not fixed here: it is guard files, outside this task's crates, and builders never reach it. Filed as T441; lands before T22.
+- The review-verdicts readers that take a tree's own git directory have a visible effect: a checkpoint or tick in a pool tree misses a recorded verdict. The same goes for the gate's other `.git` joins (`stale_terms.rs`, `helpers.rs`' quote-verbatim, approach-owed). Not fixed here: builders do not run these commands in their trees, and the census holds more sites than one builder's brief allows. Filed as T442; lands before T22.
+  Both items: observed 2026-11-27, method: the census grep above, each hit read for where its root comes from, and the builders' make targets counted from the transcripts.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect class.
 
 
 ### T276 (<why: the finding or measurement that files it>)
@@ -6646,6 +6665,59 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T449 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T441 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T441 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T442 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T442 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

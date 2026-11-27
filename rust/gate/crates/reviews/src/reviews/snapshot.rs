@@ -235,7 +235,9 @@ fn snapshot(
     let pools = [walk(root), mirror.map(walk).unwrap_or_default()];
     for unit in units {
         let slug = unit.slug();
-        let dest = at.state.join(".git").join("review-snapshot").join(&slug);
+        let dest = l7r_shared::guards::event_log_hooks::common_git_dir(at.state)
+            .join("review-snapshot")
+            .join(&slug);
         if dest.exists() {
             std::fs::remove_dir_all(&dest).map_err(os_error(&dest))?;
         }

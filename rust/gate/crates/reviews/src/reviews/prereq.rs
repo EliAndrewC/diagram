@@ -24,6 +24,7 @@ use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::bundle::{head, py_repr, py_str};
 use crate::Reply;
 use l7r_gate_pool::{walk, Walk, LIVE};
+use l7r_shared::guards::event_log_hooks::common_git_dir;
 
 const VERDICTS: [&str; 3] = ["PASS", "NEEDS-WORK", "NOT-REVIEWABLE"];
 const ARTIFACTS: [&str; 4] = [".json", ".svg", ".png", ".html"];
@@ -64,12 +65,14 @@ fn is(v: &Value, k: &str) -> bool {
     get(v, k).is_some_and(truthy)
 }
 
+/// The review state is the clone's, in its COMMON git directory, whichever tree of it asks (451 T275): a linked worktree's `.git` is a
+/// file, and joined onto it every verdict, snapshot and pairing record was passed over.
 fn verdict_dir(clone: &Path) -> PathBuf {
-    clone.join(".git").join("review-verdicts")
+    common_git_dir(clone).join("review-verdicts")
 }
 
 fn disposition_dir(clone: &Path) -> PathBuf {
-    clone.join(".git").join("review-dispositions")
+    common_git_dir(clone).join("review-dispositions")
 }
 
 /// The map's most recent verdict record, or None when no review has recorded one.
@@ -224,7 +227,7 @@ fn stale_maps(
     snapshot_of: &BTreeMap<String, String>,
 ) -> Vec<String> {
     let mut out = Vec::new();
-    let snapshots = skill.join(".git").join("review-snapshot");
+    let snapshots = common_git_dir(skill).join("review-snapshot");
     let pool = walk(skill);
     for name in names {
         let Some(map) = live_of(&pool, name) else {
@@ -662,7 +665,8 @@ fn write_verdict(
     mut findings: Vec<Map<String, Value>>,
     state: &str,
 ) -> (String, Value) {
-    let pairing = read_json(&clone.join(".git").join("pairing-state.json")).unwrap_or(Value::Null);
+    let pairing =
+        read_json(&common_git_dir(clone).join("pairing-state.json")).unwrap_or(Value::Null);
     // a unit the review tree snapshotted is keyed to that tree's engine key, never the clone's last dispatch (451 T164)
     let key = if let Some(snap) = tree::of_unit(clone, name) {
         snap.key
