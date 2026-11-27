@@ -3937,14 +3937,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T452 (<why: the finding or measurement that files it>)": {
-   "sha256": "5785550da3d591ecb7682150551bdf062d6133b4ad2d6562435f5934a43e25e3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T452 Approach (checklist part A)": {
-   "sha256": "a7092f91bde2118e541df408f5174bcfb732ca70db9cdb6a41e56b72bca49578",
+   "sha256": "3af27de412112342816d43c7ced6fccf18eb7b5029d03e872539b072998415b6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4149,12 @@
   },
   "### T463 Approach (checklist part A)": {
    "sha256": "7456e04037d9e1dfdc4ac61981cdf834e5a29a883f15921bf812a299cab07f9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)": {
+   "sha256": "31fcaeb9a01f080268d71105d81077130aff533568d661789d4e024ece399785",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38185,6 +38185,85 @@
      "summary": "Deletes an unfilled plan-section template headed T464 (placeholder why, placeholder approach, empty step table).",
      "class": "within",
      "why": "Template placeholders only; its removal narrows nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)",
+    "### T452 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T452 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T452-detach",
+     "summary": "Past the call's limit the guard build is left to finish in its own session (setsid, inheriting guard.lock on fd 9) instead of being cut by timeout; the call waits on the lock for what is left of its limit, then runs the last good binary (or fails open where none was ever built) as before; a second call mid-build runs what is there, as before.",
+     "class": "within",
+     "why": "Fixes a known defect - a wrong outcome, not a difference: a cut build left a stale rlib that broke the next link (16 of 31 in T336's measurement; the night's 49-minute outage, observed 2026-11-27) and every next call rebuilt a cut build. Owed under the standing fix-as-we-go rule (the GM 2026-11-18, constitution XIV, not request.md) and FR-013's performance-first ordering (the GM 2026-11-20: 'can we in general priotitize performance improvements going forward?'). It keeps 449 T004's bound (the call returns within its limit and never waits on another call's build) and 449 D7 (only a linked, self-checked build replaces the good binary). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T452-FR-008",
+     "summary": "The detached build is started with setsid by the hook wrapper itself, a cargo build in the background that nobody waits on; FR-008 refuses a make target or cargo run put in the background (setsid among the forms) inside a Bash call.",
+     "class": "within",
+     "why": "Scope: FR-008 is a guard on an agent's Bash tool call; a hook wrapper's own child process is not a Bash call and nothing in FR-008's words reaches it. Purpose (request.md, improvement 3): a long run started where the session cannot track its end, so the session sits idle waiting on it. Here nothing waits: the call returns at its limit and runs the last good binary, a second call runs what is there, and the build's end and overrun are written to build.log and picked up by the next call. The detach does not create the untracked wait FR-008 exists to prevent, so it neither contradicts nor narrows FR-008."
+    },
+    {
+     "id": "T452-descriptors",
+     "summary": "The detached build closes every inherited descriptor but stdio, fd 9 and 255, and runs cargo, the heal's rm and the self-check with 9>&-.",
+     "class": "within",
+     "why": "Rendering of the detach, so a harness pipe or a caller's lock is not held to the build's end and a lingering grandchild cannot pin guard.lock; pinned by a red-first case (98/10 on a copy without the loop)."
+    },
+    {
+     "id": "T452-start-stamp",
+     "summary": "Each result (l7r-guard.good, guard.failed, guard.healed) is stamped with the build's start time (touch -r guard.started), so a source edited while a detached build ran is read as newer and rebuilt.",
+     "class": "within",
+     "why": "Keeps 449 D7's 'the binary built from its own tree' true under the new detach; without it edits during a build would be read as built - a defect the change would otherwise introduce. Pinned by case 6g (106/2 without the stamps)."
+    },
+    {
+     "id": "T452-ceiling",
+     "summary": "One cut is kept, for a hung build: L7R_GUARD_DETACHED_SECS, 600 s, a GUESS knob from case 7's figure, never under the call's own limit, so builder-tree's 1800 s and hooks-test's 600 s keep their bounds.",
+     "class": "within",
+     "why": "A bound on a hung detached process, not a carve-out from anything the GM asked: the GM's words do not ask that no build ever be bounded, and the defect being fixed is the 45 s cut of a live build, which the ceiling (13x the hook limit, and never below a caller's own limit) does not reproduce. Stated as a GUESS knob."
+    },
+    {
+     "id": "T452-slots-measurement",
+     "summary": "A guard build may now run up to the 600 s ceiling outside any call, where it was cut at 45 s and restarted by each next call.",
+     "class": "within",
+     "why": "Against T284's 'synchronization rather than pre-emptively limiting' and the GM's 'we want everything measured ... especially for compiling' (2026-11-22): the block does not change whether the guard build takes a build slot (the bundle says nothing either way, before or after), and it replaces repeated cut 45 s builds with one finished build, less total compile. It adds a record the wrapper lacked (the overrun's duration in build.log, T449 (1)'s missing record) and removes no existing measurement, so neither clause is narrowed."
+    },
+    {
+     "id": "T452-heal-window",
+     "summary": "T449's heal waits for cargo's tool/.cargo-lock and rebuilds within what is left of the detached ceiling rather than the hook's 45 s.",
+     "class": "within",
+     "why": "Follows from the detach; a gate build holding the profile is waited out instead of the heal being deferred to the next call - more of T449's fix done, nothing narrowed."
+    },
+    {
+     "id": "T452-print-fresh",
+     "summary": "Under L7R_GUARD_PRINT_FRESH=1 a call whose own build is still running past the limit prints its existing 'did not finish inside the <n> s limit; run again' line rather than waiting a second limit on its own build's lock.",
+     "class": "within",
+     "why": "Keeps the caller-visible behavior of print-fresh as it was and keeps the call within its limit; no request clause touched."
+    },
+    {
+     "id": "T452-flock-wait",
+     "summary": "The call waits with flock -w rather than wait $! or a polling loop, measured at +8 ms median (160.5 vs 152.5 ms, 10 runs, load 12 to 14, 2026-11-27) on a call whose build finishes inside its limit, which happens only on the first call after a guard source changes.",
+     "class": "within",
+     "why": "An implementation choice with its cost measured and dated; the added fork is dwarfed by the real build it accompanies and the overrun case's wall is unchanged (1.027 vs 1.034 s median), while the next call now runs the build 10 of 10 against 0 of 10 - a net speed-up, in line with FR-013. Not a narrowing of any request clause, and not a defect (no wrong outcome). Classed against request.md and the spec only: the brief's 'a hook never waits longer than today' is the coordinating session's text, not the GM's and not in the bundle, so the builder's acceptance of +8 ms against it was not verified and is not a fidelity question."
+    },
+    {
+     "id": "T452-order-perf",
+     "summary": "Lands after T449 (which heals the effect) and before T365; tagged [perf] under FR-013; found-and-left none; the effect on the night's broken link is stated as inferred from T336's measurement, not observed on a second night.",
+     "class": "within",
+     "why": "Ordering and classification follow FR-013 (it makes the builders' loop and the gate faster) and the GM's fix-known-defects-before-moving-on; the inferred-not-observed claim is labeled as such rather than overstated."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The unfilled template blocks headed T441, T442 and T452 ('<why: the finding or measurement that files it>') are removed; T452's is replaced by the filled block above.",
+     "class": "within",
+     "why": "Their earlier text was placeholder template only, carrying no decision; removing them drops no approach, constraint or ruling."
     }
    ]
   }

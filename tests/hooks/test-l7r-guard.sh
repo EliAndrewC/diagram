@@ -13,7 +13,10 @@ ok() { pass=$((pass+1)); }
 bad() { fail=$((fail+1)); printf 'FAIL: %s\n' "$1"; }
 check() { if [ "$2" = "$3" ]; then ok; else bad "$1: wanted [$3], got [$2]"; fi; }
 
-W=$(mktemp -d); trap 'rm -rf "$W"' EXIT
+W=$(mktemp -d); trap 'settle; rm -rf "$W"' EXIT
+# settle: wait (30 s at most) for a build left running detached past its call's limit (451 T452) - the wrapper's own process under
+# this tree's path, alive after the call that started it returned - to end
+settle() { local n=0; while pgrep -f -- "$W/tree/scripts/hooks/l7r-guard.sh" > /dev/null && [ "$n" -lt 600 ]; do sleep 0.05; n=$((n+1)); done; }
 T="$W/tree"; mkdir -p "$T/scripts/hooks/lib" "$T/rust/guard/src"
 cp "$ROOT/scripts/hooks/l7r-guard.sh" "$T/scripts/hooks/"
 cp "$ROOT/scripts/hooks/lib/guardlog.sh" "$ROOT/scripts/hooks/lib/lld-path.sh" "$T/scripts/hooks/lib/"
@@ -29,9 +32,11 @@ cat > "$W/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo build >> "$CALLS"
 pwd > "$CALLS.dir"
+ps -o sid= -p $$ | tr -d ' ' > "$CALLS.sid"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
-[ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
-[ "$BUILD" = slowok ] && sleep "${SLOW_SECS:-1}"
+[ "$BUILD" = slowbroken ] && { sleep "${SLOW_SECS:-1}"; echo "error[E0308]: mismatched types" >&2; exit 101; }
+# slowok: a build that outlasts a short limit, its last line written as it ends
+[ "$BUILD" = slowok ] && { sleep "${SLOW_SECS:-1}"; echo "Finished late" >&2; }
 # BUILD=link*: rust-lld's undefined hidden symbol while the stale rlib is there (linkalways: whatever is there); linkslow's rebuild sleeps
 case $BUILD in link*)
   if [ "$BUILD" = linkalways ] || [ -e "$CARGO_TARGET_DIR/tool/deps/libl7r_guard-0bad.rlib" ]; then
@@ -55,13 +60,23 @@ run() { BUILD=$1 VERSION=$2 "$T/scripts/hooks/l7r-guard.sh" PreToolUse < <(print
 calls() { wc -l < "$CALLS" 2>/dev/null | tr -d ' ' || echo 0; }
 touch_sources() { sleep 0.01; touch "$T/rust/guard/src/main.rs"; }
 
-# 0. none built yet and the build is slow or already running elsewhere: through at once, said and logged, nothing stamped failed
-out=$(L7R_GUARD_BUILD_SECS=0.3 run slow v0 2>/dev/null); rc=$?
+# 0. none built yet and the build is slow or already running elsewhere: through at once, said and logged, nothing stamped failed -
+# and the slow build is NOT CUT (451 T452): left running detached, it finishes, and the next call runs what it built
+t0=${EPOCHREALTIME/,/.}; out=$(SLOW_SECS=3 L7R_GUARD_BUILD_SECS=0.3 run slowok v0 2>/dev/null); rc=$?
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.5) ? "bounded" : "waited " b - a }')
+check "slow: the call returns at its limit, not the build's end" "$gone" bounded
 check "slow: exit" "$rc" 0
 case "$out" in *"went through unguarded"*) ok ;; *) bad "slow: notice [$out]" ;; esac
-grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "slow: the limit said in build.log [$(cat "$W/target/build.log")]"
-[ ! -e "$W/target/guard.failed" ] && ok || bad "slow: a build cut by its limit is not stamped failed"
+grep -q "passed this call's 0.3 s limit; it carries on detached" "$W/target/build.log" && ok || bad "slow: the limit said in build.log [$(cat "$W/target/build.log")]"
+[ ! -e "$W/target/guard.failed" ] && ok || bad "slow: a build past its limit is not stamped failed"
 check "slow: one build tried" "$(calls)" 1
+settle
+check "slow: not cut - it finished, and the next call runs what it built" "$(run broken vx 2>/dev/null)" "v0 PreToolUse"
+check "slow: ...with no second build" "$(calls)" 1
+grep -q "Finished late" "$W/target/build.log" && ok || bad "slow: the detached build's late output in build.log [$(cat "$W/target/build.log")]"
+grep -q "the build took [0-9.]* s, past the hook's 0.3 s limit; it finished detached (feature 451 T452)" "$W/target/build.log" && ok || bad "slow: the overrun recorded [$(cat "$W/target/build.log")]"
+sid=$(cat "$CALLS.sid" 2>/dev/null); [ -n "$sid" ] && [ "$sid" != "$(ps -o sid= -p $$ | tr -d ' ')" ] && ok || bad "slow: the build ran in a session of its own, not the hook's [$sid]"
+rm -rf "$W/target"; mkdir -p "$W/target"; : > "$CALLS"; echo "the running build's log" > "$W/target/build.log"
 # THE BOUND IS CALIBRATED (451 T172): the locked call's own work - its notice and the real gate's guard-log entry - timed on the same
 # path with no lock to meet (a failed build stamped, so nothing is built and the lock is never asked), the slowest of three, the bound
 # three times that and never under the 1 s it was. The hard-coded 1 s failed at load average about 22 (2026-11-23) where nothing waited
@@ -77,9 +92,9 @@ exec 8> "$W/target/guard.lock"; flock 8  # this shell holds the build lock, as a
 t0=${EPOCHREALTIME/,/.}; out=$(run ok v0 2>/dev/null)
 gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (b - a < n) ? "fast" : "waited" }')
 check "locked: no wait on another call's build (bound $bound s)" "$gone" fast
-check "locked: no second build" "$(calls)" 1
+check "locked: no build" "$(calls)" 0
 case "$out" in *"went through unguarded"*) ok ;; *) bad "locked: notice [$out]" ;; esac
-grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "locked: the running build's log left alone"
+check "locked: the running build's log left alone" "$(cat "$W/target/build.log")" "the running build's log"
 exec 8>&-; : > "$CALLS"; rm -f "$W"/log/*.json
 
 # 1. none ever built: the build fails, the call goes through with its notice and a guard-log line
@@ -167,16 +182,18 @@ check "another name: one more build" "$(calls)" 9
 CT="$W/cold"; cold() { L7R_GUARD_TARGET="$CT" BUILD=$1 VERSION=vc "$T/scripts/hooks/l7r-guard.sh" --scratch-sweep floor < /dev/null; }
 touch_sources; : > "$CALLS"
 L7R_GUARD_BUILD_SECS=0.3 cold slowok > /dev/null 2>&1; check "cold, no seam: the floor's call dies as before" "$?" 1
+settle; rm -rf "$CT"  # (its build finished detached: the seam's case starts from nothing again)
 out=$(L7R_GUARD_BUILD_SECS=0.3 L7R_GUARD_COLD_SECS=30 cold slowok 2>/dev/null); check "cold, the seam: built and run past the hook limit" "$out:$?" "vc --scratch-sweep floor:0"
 rm -rf "$CT"; mkdir -p "$CT"
 ( exec 7> "$CT/guard.lock"; flock 7; sleep 1 ) & held=$!; sleep 0.2
 out=$(L7R_GUARD_COLD_SECS=30 cold ok 2>/dev/null); check "cold, another call's build running: waited for, then built" "$out:$?" "vc --scratch-sweep floor:0"
 wait "$held"
 rm -rf "$CT"; mkdir -p "$CT"; t0=${EPOCHREALTIME/,/.}
-SLOW_SECS=5 L7R_GUARD_COLD_SECS=0.5 cold slowok > /dev/null 2>&1; rc=$?
-gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 4) ? "bounded" : "waited" }')
+SLOW_SECS=3 L7R_GUARD_COLD_SECS=0.5 cold slowok > /dev/null 2>&1; rc=$?
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.5) ? "bounded" : "waited" }')
 check "cold, the bound passed: exit 1, within the bound" "$rc:$gone" "1:bounded"
 [ ! -e "$CT/guard.failed" ] && ok || bad "cold, the bound passed: not stamped failed"
+settle
 cold ok > /dev/null 2>&1; touch_sources
 exec 8> "$CT/guard.lock"; flock 8; t0=${EPOCHREALTIME/,/.}
 out=$(L7R_GUARD_COLD_SECS=30 cold ok 2>/dev/null)
@@ -217,25 +234,40 @@ check "link failure, slow rebuild: inside the limit" "$took" bounded
 check "link failure, slow rebuild: the last good runs" "$out" "v10 PreToolUse"
 [ ! -e "$W/target/guard.failed" ] && ok || bad "link failure, slow rebuild: not stamped failed"
 check "link failure, slow rebuild: two builds" "$(calls)" 7
-err=$(L7R_GUARD_BUILD_SECS=1 L7R_GUARD_PRINT_FRESH=1 run linkslow v13 2>&1 >/dev/null)
+settle  # ...and not cut (451 T452): the healed rebuild finished detached, and the next call runs it
+check "link failure, slow rebuild: finished detached, the next call runs it" "$(run broken v14 2>/dev/null)" "v13 PreToolUse"
+touch_sources
+err=$(SLOW_SECS=3 L7R_GUARD_BUILD_SECS=1 L7R_GUARD_PRINT_FRESH=1 run slowok v13 2>&1 >/dev/null)
 check "print-fresh: a build at its limit said" "$err" "its build did not finish inside the 1 s limit; run again and it carries on"
+settle
 # ...ONCE A SOURCE CHANGE, not once a call: a heal whose rebuild is cut and leaves the link broken is not tried again until the sources
 # move - the second call's failed link is stamped, the third builds nothing (without the mark: two builds a call, the limit each time)
 rm -f "$W/target/guard.failed"; seed_bad; touch_sources; : > "$CALLS"
-for _ in 1 2 3; do L7R_GUARD_BUILD_SECS=1 run linkloop v15 >/dev/null 2>&1; done
+# (the rebuild cut at the detached build's ceiling, L7R_GUARD_DETACHED_SECS, the one cut left: 451 T452)
+for _ in 1 2 3; do L7R_GUARD_BUILD_SECS=1 L7R_GUARD_DETACHED_SECS=1 run linkloop v15 >/dev/null 2>&1; settle; done
 check "link failure, heal that never takes: three builds over three calls" "$(calls)" 3
 [ -e "$W/target/guard.failed" ] && ok || bad "link failure, heal that never takes: stamped failed"
 grep -q "its heal was tried since the sources last changed: stamped failed" "$W/target/build.log" && ok || bad "link failure, heal that never takes: said [$(cat "$W/target/build.log")]"
 # ...cargo's lock of tool/ held (a gate build in the profile) to the limit: nothing dropped, the call inside its bound, not stamped
 rm -f "$W/target/guard.failed" "$W/target/guard.healed"; seed_bad; touch_sources
 exec 7> "$TD/.cargo-lock"; flock 7; t0=${EPOCHREALTIME/,/.}
-L7R_GUARD_BUILD_SECS=1 run linkonce v16 >/dev/null 2>&1
+L7R_GUARD_BUILD_SECS=1 L7R_GUARD_DETACHED_SECS=1 run linkonce v16 >/dev/null 2>&1
 took=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.5) ? "bounded" : "waited " b - a }')
-exec 7>&-
+settle; exec 7>&-
 check "link failure, cargo's lock held: inside the limit" "$took" bounded
 [ -e "$TD/deps/libl7r_guard-0bad.rlib" ] && ok || bad "link failure, cargo's lock held: nothing dropped"
 [ ! -e "$W/target/guard.failed" ] && ok || bad "link failure, cargo's lock held: not stamped failed"
 grep -q "cargo's lock of tool/ stayed held to the limit: dropped nothing" "$W/target/build.log" && ok || bad "link failure, cargo's lock held: said [$(cat "$W/target/build.log")]"
+# ...held past the call's limit but let go before the detached build's ceiling (451 T452): the heal waits it out and links - the lock
+# the test holds on fd 7, which the detached build inherits, is closed there, or it would wait on itself to the ceiling
+rm -f "$W/target/guard.healed"; seed_bad; touch_sources
+exec 7> "$TD/.cargo-lock"; flock 7; t0=${EPOCHREALTIME/,/.}
+L7R_GUARD_BUILD_SECS=0.5 run linkonce v16b >/dev/null 2>&1
+took=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.5) ? "bounded" : "waited " b - a }')
+sleep 0.3; exec 7>&-; settle
+check "link failure, cargo's lock let go after the call: the call inside its limit" "$took" bounded
+check "link failure, cargo's lock let go after the call: healed detached, the next call runs it" "$(run broken v16c 2>/dev/null)" "v16b PreToolUse"
+[ ! -e "$TD/deps/libl7r_guard-0bad.rlib" ] && ok || bad "link failure, cargo's lock let go after the call: the bad rlib dropped"
 # PRINT-FRESH WAITS ON ANOTHER CALL'S BUILD: a lock held a moment is waited for and the binary then named; held past the limit, said so
 NT="$W/none"; mkdir -p "$NT"; ( exec 8> "$NT/guard.lock"; flock 8; sleep 1 ) & sleep 0.2
 check "print-fresh: a lock held a moment is waited for, then built and named" "$(L7R_GUARD_TARGET="$NT" L7R_GUARD_BUILD_SECS=10 L7R_GUARD_PRINT_FRESH=1 run ok v17 2>/dev/null)" "$NT/l7r-guard.good"
@@ -244,6 +276,30 @@ touch_sources; exec 8> "$NT/guard.lock"; flock 8
 err=$(L7R_GUARD_TARGET="$NT" L7R_GUARD_BUILD_SECS=0.3 L7R_GUARD_PRINT_FRESH=1 run ok v18 2>&1 >/dev/null)
 exec 8>&-
 check "print-fresh: a lock held past the limit said" "$err" "another call's build held the lock past the 0.3 s limit; run again"
+
+# 6g. A BUILD PAST THE LIMIT IS NOT CUT (451 T452): the wrapper's `timeout` cut its own build at the limit, and T336 measured a cut build
+# breaking the next link 16 of 31 times (dev/measurements/2026-11-26/prewarm-link/). A call whose build outlasts its limit runs the last
+# good binary at the limit, as before; the build finishes detached under guard.lock, and the next call runs what it built
+touch_sources; check "past the limit: a good binary first" "$(run ok v19)" "v19 PreToolUse"
+touch_sources; : > "$CALLS"; t0=${EPOCHREALTIME/,/.}
+out=$(SLOW_SECS=3 L7R_GUARD_BUILD_SECS=0.3 run slowok v20 2>/dev/null)
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (b - a < 0.3 + n) ? "bounded" : "waited " b - a }')
+check "past the limit: the call returns at its limit (bound 0.3 + $bound s)" "$gone" bounded
+check "past the limit: the last good runs" "$out" "v19 PreToolUse"
+t0=${EPOCHREALTIME/,/.}; out=$(run ok v21 2>/dev/null)
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (b - a < n) ? "fast" : "waited " b - a }')
+check "past the limit, a second call mid-build: no wait, no second build, the last good runs" "$out:$gone:$(calls)" "v19 PreToolUse:fast:1"
+settle
+check "past the limit: not cut - the next call runs what it built" "$(run ok v22)" "v20 PreToolUse"
+check "past the limit: one build in all" "$(calls)" 1
+# ...A SOURCE EDITED WHILE IT RAN is newer than what it built: the result is stamped at the build's start, so the next call builds again
+touch_sources; SLOW_SECS=1 L7R_GUARD_BUILD_SECS=0.2 run slowok v23 > /dev/null 2>&1; touch_sources; settle
+check "edited mid-build: the next call builds again" "$(run ok v24):$(calls)" "v24 PreToolUse:3"
+touch_sources; SLOW_SECS=1 L7R_GUARD_BUILD_SECS=0.2 run slowbroken v25 > /dev/null 2>&1; touch_sources; settle
+check "edited mid-build, the build failed: the next call builds again" "$(run ok v26):$(calls)" "v26 PreToolUse:5"
+# ...the ceiling is never under the call's own limit: a caller that waits longer (`make builder-tree`'s 1800 s) is not cut at it
+touch_sources
+check "a ceiling under the call's limit: the call's limit stands" "$(SLOW_SECS=1 L7R_GUARD_BUILD_SECS=5 L7R_GUARD_DETACHED_SECS=0.3 run slowok v27)" "v27 PreToolUse"
 
 # 8. THE SETTINGS' HOOK COMMANDS ARE SHORT (feature 451 T169, the GM 2026-11-23 "on hook output length"): the harness prints an
 # entry's command with every block or notice it emits, and the ~245-character commands were 1.66M characters of one session's

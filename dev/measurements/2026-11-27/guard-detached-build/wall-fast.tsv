@@ -1,0 +1,22 @@
+fast-old	run 1	wall 0.153 s	next call ran v1
+fast-old	run 2	wall 0.143 s	next call ran v2
+fast-old	run 3	wall 0.151 s	next call ran v3
+fast-old	run 4	wall 0.155 s	next call ran v4
+fast-old	run 5	wall 0.152 s	next call ran v5
+fast-old	run 6	wall 0.149 s	next call ran v6
+fast-old	run 7	wall 0.148 s	next call ran v7
+fast-old	run 8	wall 0.158 s	next call ran v8
+fast-old	run 9	wall 0.325 s	next call ran v9
+fast-old	run 10	wall 0.339 s	next call ran v10
+fast-old	the next call ran the slow build's binary 10 of 10	load 12.71 14.10 16.76
+fast-new	run 1	wall 0.162 s	next call ran v1
+fast-new	run 2	wall 0.159 s	next call ran v2
+fast-new	run 3	wall 0.158 s	next call ran v3
+fast-new	run 4	wall 0.156 s	next call ran v4
+fast-new	run 5	wall 0.161 s	next call ran v5
+fast-new	run 6	wall 0.160 s	next call ran v6
+fast-new	run 7	wall 0.161 s	next call ran v7
+fast-new	run 8	wall 0.159 s	next call ran v8
+fast-new	run 9	wall 0.239 s	next call ran v9
+fast-new	run 10	wall 0.386 s	next call ran v10
+fast-new	the next call ran the slow build's binary 10 of 10	load 12.01 13.93 16.70

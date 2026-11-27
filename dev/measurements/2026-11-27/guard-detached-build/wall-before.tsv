@@ -1,0 +1,11 @@
+before	run 1	wall 1.033 s	next call ran x1
+before	run 2	wall 1.034 s	next call ran x2
+before	run 3	wall 1.124 s	next call ran x3
+before	run 4	wall 1.031 s	next call ran x4
+before	run 5	wall 1.086 s	next call ran x5
+before	run 6	wall 1.034 s	next call ran x6
+before	run 7	wall 1.036 s	next call ran x7
+before	run 8	wall 1.032 s	next call ran x8
+before	run 9	wall 1.033 s	next call ran x9
+before	run 10	wall 1.036 s	next call ran x10
+before	the next call ran the slow build's binary 0 of 10	load 9.54 14.86 18.30

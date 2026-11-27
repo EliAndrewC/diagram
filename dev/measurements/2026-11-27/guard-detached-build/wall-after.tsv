@@ -1,0 +1,11 @@
+after	run 1	wall 1.027 s	next call ran v1
+after	run 2	wall 1.028 s	next call ran v2
+after	run 3	wall 1.026 s	next call ran v3
+after	run 4	wall 1.032 s	next call ran v4
+after	run 5	wall 1.029 s	next call ran v5
+after	run 6	wall 1.026 s	next call ran v6
+after	run 7	wall 1.026 s	next call ran v7
+after	run 8	wall 1.026 s	next call ran v8
+after	run 9	wall 1.028 s	next call ran v9
+after	run 10	wall 1.026 s	next call ran v10
+after	the next call ran the slow build's binary 10 of 10	load 10.37 14.26 16.97
