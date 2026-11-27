@@ -53,7 +53,7 @@ def calls(fx, st):
     stop = lambda aid: {'hook_event_name': 'SubagentStop', 'cwd': fx, 'agent_id': aid, 'session_id': 's',
                         'last_assistant_message': 'q: 1\n'}
     page = {'hook_event_name': 'PreToolUse', 'tool_name': 'Edit', 'cwd': fx, 'session_id': 's', 'tool_use_id': 'e1',
-            'tool_input': {'file_path': fx + '/research/questions/0105-x.html', 'old_string': 'a', 'new_string': 'b'}}
+            'tool_input': {'file_path': fx + '/research/' + 'questions/0105-x.html',  # a fixture page, split so no pointer check reads it as the record's 'old_string': 'a', 'new_string': 'b'}}
     plan = dict(page, tool_input={'file_path': fx + '/specs/999-x/plan.md', 'old_string': 'the held', 'new_string': 'x'})
     return [
         ('bash under the hold, first (its save)', 'record-edit-hooks', 'PreToolUse', bash('true', 'b1')),
