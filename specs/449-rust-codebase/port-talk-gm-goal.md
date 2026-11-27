@@ -257,3 +257,18 @@ builder-checks`, so the builder asked for about 19 builds; T417 was built in one
 (T514); and T522's split of a compile that did work from a no-op rests on a 1.0 s GUESS until T528 reads cargo's own answer. A
 scheduled re-measure of a change - right after, days after, weeks after - does not exist yet; the audit register's `cadence-days`
 and `last-audited` are its nearest piece.
+
+## His fifteenth message (2026-11-27, the afternoon after): TOKENS, never dollars - and a model switch must not read as a process change
+
+<!-- SOURCE: GM NOTES -->
+> Great. Quick question about tokens. First, we are storing token usage rather than dollar usage, right? Because I don't want to have to go back when prices change to grab historical token prices in order to do apples-to-apples comparisons over time. Second, I know that some models have different token costs in terms of like against your weekly usage. You know, like sometimes I use Fable and sometimes I use Opus, and I think Fable has like a 2 times or a 2.5 times token cost, but I wouldn't want that to throw off our numbers, you know? Like if I switch to Fable for a day and then switch back because I have a Fable reset, and so I want my usage to be all Fable so that I can reset it back down and reclaim that usage within my weekly window, then I really don't want that to make it look like everything was twice as expensive that day in terms of tokens in a way that throws off our metrics. Do you think this will be a problem that will require some adjustments to our tooling? Do you think it's something that we should add to our notes for the process reviewer? Or is this actually just fine and it always automatically works the way I would expect and I don't even need to worry about it?
+<!-- END SOURCE -->
+
+What the session found (2026-11-27): every token figure the tooling keeps is a raw count read from the transcripts' `usage` fields
+(output, fresh input, cache read, cache write), never dollars and never weighted by a model's cost against the weekly quota, so a
+day on another model does not multiply the counts. But the counts are not split by model either, and this session alone holds both
+(its own transcript: 16,248 calls on `claude-opus-5-5`, 2,583 on `claude-fable-5-2`, each call's `message.model`): a different model
+may do the same work in more or fewer tokens, or more or fewer turns, which is a real difference that would read as a process
+change if windows are compared without it. So the model in use is one more dimension of a like window (his seventh message), beside
+concurrency; any quota or dollar view is computed at read time from a rate table, never stored. Filed as 451 T531: the tokens split
+by model in `make task-time`.
