@@ -32,6 +32,15 @@ pwd > "$CALLS.dir"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
 [ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
 [ "$BUILD" = slowok ] && sleep "${SLOW_SECS:-1}"
+# BUILD=link*: rust-lld's undefined hidden symbol while the stale rlib is there (linkalways: whatever is there); linkslow's rebuild sleeps
+case $BUILD in link*)
+  if [ "$BUILD" = linkalways ] || [ -e "$CARGO_TARGET_DIR/tool/deps/libl7r_guard-0bad.rlib" ]; then
+    printf 'error: linking with `cc` failed: exit status: 1\n  = note: rust-lld: error: undefined hidden symbol: anon.0b.1.llvm.17\n' >&2; exit 101
+  fi
+  [ "$BUILD" = linkslow ] && sleep 3
+  # linkloop: the rebuild writes the bad rlib again and is cut at the limit - a heal that never takes
+  [ "$BUILD" = linkloop ] && { : > "$CARGO_TARGET_DIR/tool/deps/libl7r_guard-0bad.rlib"; sleep 3; } ;;
+esac
 [ "$2 $3" = "--profile tool" ] || { echo "fake cargo: built $2 $3, not --profile tool (T95)" >&2; exit 101; }
 mkdir -p "$CARGO_TARGET_DIR/tool"
 check=0; [ "$BUILD" = unchecked ] && check=1
@@ -139,7 +148,8 @@ check "lld back: built again" "$(run ok v7)" "v7 PreToolUse"
 GOOD="$W/target/l7r-guard.good"
 check "print-fresh: the fresh binary named" "$(L7R_GUARD_PRINT_FRESH=1 run ok v7)" "$GOOD"
 touch_sources
-L7R_GUARD_PRINT_FRESH=1 run broken v8 >/dev/null 2>&1; check "print-fresh: a stale binary whose build failed is not named" "$?" 1
+err=$(L7R_GUARD_PRINT_FRESH=1 run broken v8 2>&1 >/dev/null); check "print-fresh: a stale binary whose build failed is not named" "$?" 1
+check "print-fresh: ...and the build log's first error said (451 T449)" "$err" "error[E0308]: mismatched types"
 check "print-fresh: ...after one build tried" "$(calls)" 8
 touch_sources
 out=$(L7R_GUARD_FRESH="$GOOD" L7R_TEST_DEP_LOG="$W/dep.log" L7R_TEST_DEP_FILE=s.sh run ok v9)
@@ -174,6 +184,66 @@ gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" -v n="$bound" 'BEGIN { print (
 check "a good binary, stale, another build running: no wait, the good one runs" "$out:$gone" "vc --scratch-sweep floor:fast"
 exec 8>&-
 grep -Eq '^DISK_FLOOR = .*L7R_GUARD_COLD_SECS=' "$ROOT/Makefile" && ok || bad "the Makefile's DISK_FLOOR passes L7R_GUARD_COLD_SECS to the floor's call"
+
+# 6f. A LINK FAILURE (451 T449): rust-lld's undefined hidden symbol from a crate whose rlib is bad and whose fingerprint is fresh failed every
+# build until the two crates' deps and fingerprints were set aside; the build drops them (and their incremental sessions), keeps every other
+# crate's, and rebuilds once inside the same limit - stamping guard.failed only when the rebuild fails too
+TD="$W/target/tool"
+seed_bad() {
+  mkdir -p "$TD/deps" "$TD/.fingerprint/serde-0ok" "$TD/incremental/serde-0ok"
+  for c in l7r_guard l7r_shared; do mkdir -p "$TD/.fingerprint/$c-0bad" "$TD/incremental/$c-0bad"; : > "$TD/deps/lib$c-0bad.rlib"; : > "$TD/deps/$c-0bad.d"; done
+  : > "$TD/deps/libserde-0ok.rlib"
+}
+left() { ( cd "$TD" && ls -d deps/* .fingerprint/* incremental/* 2>/dev/null | grep -v '^deps/l7r-guard' | tr '\n' ' ' ); }
+seed_bad; touch_sources; : > "$CALLS"
+check "link failure: rebuilt once and the new build runs" "$(run linkonce v10)" "v10 PreToolUse"
+check "link failure: two builds" "$(calls)" 2
+check "link failure: the two crates' state dropped, the rest kept" "$(left)" ".fingerprint/serde-0ok deps/libserde-0ok.rlib incremental/serde-0ok "
+grep -q "the link failed (rust-lld: undefined hidden symbol.*rebuilding once (feature 451 T449)" "$W/target/build.log" && ok || bad "link failure: said in build.log [$(cat "$W/target/build.log")]"
+[ ! -e "$W/target/guard.failed" ] && ok || bad "link failure: a healed build is not stamped failed"
+# ...a rebuild that fails to link too stamps guard.failed, and the last good binary runs
+touch_sources
+check "link failure twice: the last good runs" "$(run linkalways v11 2>/dev/null)" "v10 PreToolUse"
+check "link failure twice: two builds, no third" "$(calls)" 4
+[ -e "$W/target/guard.failed" ] && ok || bad "link failure twice: stamped failed"
+# ...a compile error is not a link failure: one build, no rebuild
+touch_sources; run broken v12 >/dev/null 2>&1
+check "compile error: one build, no rebuild" "$(calls)" 5
+# ...the rebuild keeps to the build's limit: cut there, it is not stamped failed and the next call carries it on
+rm -f "$W/target/guard.failed"; seed_bad; touch_sources; t0=${EPOCHREALTIME/,/.}
+out=$(L7R_GUARD_BUILD_SECS=1 run linkslow v13 2>/dev/null)
+took=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.9) ? "bounded" : "waited " b - a }')
+check "link failure, slow rebuild: inside the limit" "$took" bounded
+check "link failure, slow rebuild: the last good runs" "$out" "v10 PreToolUse"
+[ ! -e "$W/target/guard.failed" ] && ok || bad "link failure, slow rebuild: not stamped failed"
+check "link failure, slow rebuild: two builds" "$(calls)" 7
+err=$(L7R_GUARD_BUILD_SECS=1 L7R_GUARD_PRINT_FRESH=1 run linkslow v13 2>&1 >/dev/null)
+check "print-fresh: a build at its limit said" "$err" "its build did not finish inside the 1 s limit; run again and it carries on"
+# ...ONCE A SOURCE CHANGE, not once a call: a heal whose rebuild is cut and leaves the link broken is not tried again until the sources
+# move - the second call's failed link is stamped, the third builds nothing (without the mark: two builds a call, the limit each time)
+rm -f "$W/target/guard.failed"; seed_bad; touch_sources; : > "$CALLS"
+for _ in 1 2 3; do L7R_GUARD_BUILD_SECS=1 run linkloop v15 >/dev/null 2>&1; done
+check "link failure, heal that never takes: three builds over three calls" "$(calls)" 3
+[ -e "$W/target/guard.failed" ] && ok || bad "link failure, heal that never takes: stamped failed"
+grep -q "its heal was tried since the sources last changed: stamped failed" "$W/target/build.log" && ok || bad "link failure, heal that never takes: said [$(cat "$W/target/build.log")]"
+# ...cargo's lock of tool/ held (a gate build in the profile) to the limit: nothing dropped, the call inside its bound, not stamped
+rm -f "$W/target/guard.failed" "$W/target/guard.healed"; seed_bad; touch_sources
+exec 7> "$TD/.cargo-lock"; flock 7; t0=${EPOCHREALTIME/,/.}
+L7R_GUARD_BUILD_SECS=1 run linkonce v16 >/dev/null 2>&1
+took=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 2.5) ? "bounded" : "waited " b - a }')
+exec 7>&-
+check "link failure, cargo's lock held: inside the limit" "$took" bounded
+[ -e "$TD/deps/libl7r_guard-0bad.rlib" ] && ok || bad "link failure, cargo's lock held: nothing dropped"
+[ ! -e "$W/target/guard.failed" ] && ok || bad "link failure, cargo's lock held: not stamped failed"
+grep -q "cargo's lock of tool/ stayed held to the limit: dropped nothing" "$W/target/build.log" && ok || bad "link failure, cargo's lock held: said [$(cat "$W/target/build.log")]"
+# PRINT-FRESH WAITS ON ANOTHER CALL'S BUILD: a lock held a moment is waited for and the binary then named; held past the limit, said so
+NT="$W/none"; mkdir -p "$NT"; ( exec 8> "$NT/guard.lock"; flock 8; sleep 1 ) & sleep 0.2
+check "print-fresh: a lock held a moment is waited for, then built and named" "$(L7R_GUARD_TARGET="$NT" L7R_GUARD_BUILD_SECS=10 L7R_GUARD_PRINT_FRESH=1 run ok v17 2>/dev/null)" "$NT/l7r-guard.good"
+wait
+touch_sources; exec 8> "$NT/guard.lock"; flock 8
+err=$(L7R_GUARD_TARGET="$NT" L7R_GUARD_BUILD_SECS=0.3 L7R_GUARD_PRINT_FRESH=1 run ok v18 2>&1 >/dev/null)
+exec 8>&-
+check "print-fresh: a lock held past the limit said" "$err" "another call's build held the lock past the 0.3 s limit; run again"
 
 # 8. THE SETTINGS' HOOK COMMANDS ARE SHORT (feature 451 T169, the GM 2026-11-23 "on hook output length"): the harness prints an
 # entry's command with every block or notice it emits, and the ~245-character commands were 1.66M characters of one session's

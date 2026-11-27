@@ -23,7 +23,9 @@ for g in $GATES; do stub "$A/scripts/gates/$g.sh"; done
 for g in $OTHERS; do stub "$A/scripts/$g.sh"; done
 stub "$A/tests/hooks/parts.sh"; stub "$A/scripts/hooks/fx-hooks.sh"
 # the guard's binary is the real one, asked in the FIXTURE's tree (a suite's key is its own files' there); the gate's launcher does nothing
-BIN=$(L7R_GUARD_PRINT_FRESH=1 "$ROOT/scripts/hooks/l7r-guard.sh" < /dev/null)
+BIN=$(L7R_GUARD_PRINT_FRESH=1 "$ROOT/scripts/hooks/l7r-guard.sh" < /dev/null 2> "$D/guard-fresh")
+# no fresh binary, no fixture (451 T449): a wrapper exec'ing an empty path failed 14 cases for a cause none named
+[ -n "$BIN" ] || { echo "hooks-test: the guard does not build - $(head -1 "$D/guard-fresh")" >&2; exit 1; }
 printf '#!/bin/sh\n[ -z "$L7R_GUARD_PRINT_FRESH" ] || exec "%s/scripts/hooks/l7r-guard.sh"\nL7R_GUARD_TREE=$(cd "$(dirname "$0")/../.." && pwd) exec "%s" "$@"\n' "$ROOT" "$BIN" > "$A/scripts/hooks/l7r-guard.sh"
 chmod +x "$A/scripts/hooks/l7r-guard.sh"
 cp "$HERE/hookrun.sh" "$A/tests/hooks/"
@@ -119,6 +121,14 @@ check "the FAIL line names the kept log, in the common git directory" 'case $kep
 check "the kept log holds the suite's whole log" '[ -f "$kept" ] && grep -q "case 7: the state-sync case FAILED" "$kept"'
 check "only the red suite's log is kept" '[ "$(ls "$A/.git/l7r-hooks-failed" | wc -l)" -eq 1 ]'
 check "the event line's span carries the kept log" 'grep -qx "suite:[0-9.]*:[0-9.]*:1:fx-hooks.sh:l7r-hooks-failed/${kept##*/}" <<<"$(grep "event-log phase" "$D/gate-calls" | tr " " "\n")"'
+
+# feature 451 T449: NO FRESH GUARD BINARY, NO FIXTURE RUN - the recipe stops on the build's reason, the line print-fresh writes, and
+# runs no suite (on 2026-11-27 they ran, and failed for a cause none named)
+printf '#!/bin/sh\n[ -z "$L7R_GUARD_PRINT_FRESH" ] || { echo "error: linking with \\`cc\\` failed: exit status: 1" >&2; exit 1; }\nexec "%s" "$@"\n' "$BIN" > "$B/scripts/hooks/l7r-guard.sh"
+s0=$(runs "$B" state-sync)
+out=$(mk "$B" hooks-test)
+check "no fresh guard: the run stops on the build's first error" 'case $out in *"hooks-test: the guard does not build - error: linking with \`cc\` failed: exit status: 1"*) true ;; *) echo "$out"; false ;; esac'
+check "... and runs no suite" '[ "$(runs "$B" state-sync)" = "$s0" ]'
 
 echo "parts.3: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

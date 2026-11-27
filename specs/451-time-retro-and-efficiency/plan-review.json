@@ -3920,7 +3920,7 @@
    "declared": "spec-fidelity"
   },
   "### T449 Approach (checklist part A)": {
-   "sha256": "4fec2a7be1ffc25b71b398b2878998fa8474ead13ad68c8f1159de23fb6fd028",
+   "sha256": "4b54bbd6864fe3a622c9660e051d69001e6ae82730686ca294b0830c78afe85b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4029,6 +4029,24 @@
   },
   "### T455 Approach (checklist part A)": {
    "sha256": "796be7e2f61d84b974ceef60e6d4a3a55716b65ad05650daef4fe21cca8087af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)": {
+   "sha256": "d24ffed31d9ee12867dae91ff148fe131ada72135b4fd6af7e924e265a4853ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T452 (<why: the finding or measurement that files it>)": {
+   "sha256": "5785550da3d591ecb7682150551bdf062d6133b4ad2d6562435f5934a43e25e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T452 Approach (checklist part A)": {
+   "sha256": "a7092f91bde2118e541df408f5174bcfb732ca70db9cdb6a41e56b72bca49578",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35989,6 +36007,122 @@
      "summary": "Removes the empty template blocks of T311 and T392 and T445's placeholder header block, the last replaced by T445's filled header.",
      "class": "within",
      "why": "The removed blocks were unfilled templates (earlier.md) holding no decision, so removing them drops nothing that was decided."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)",
+    "### T449 Approach (checklist part A)",
+    "### T452 (<why: the finding or measurement that files it>)",
+    "### T452 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T449-heal-scope",
+     "summary": "On a failed guard build whose log shows a link failure, drop tool/deps, tool/.fingerprint and tool/incremental of l7r_guard and l7r_shared only, under cargo's tool/.cargo-lock, keeping every other crate's, and log one line to build.log",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured on 2026-11-27: a stale rlib with a fresh fingerprint left every hook silently on the 05:03Z binary and failed a batch gate. Fixing known tooling defects as found is the standing rule, and the request asks for a faster gate and builders' loop (FR-013, the GM 2026-11-20). Dropping only the two crates whose rlib and fingerprint the evidence implicates widens nothing."
+    },
+    {
+     "id": "T449-one-rebuild-same-limit",
+     "summary": "The heal rebuilds once, within what is left of the same build limit, adding no second limit; a heal that links keeps the binary and stamps nothing",
+     "class": "within",
+     "why": "Keeps the existing hook-timeout bound and the dispatcher-timeout relation unchanged, and adds no new limit or default. It is the narrowest repair of the defect."
+    },
+    {
+     "id": "T449-cut-rebuild-not-stamped",
+     "summary": "A rebuild that fails to link again stamps guard.failed as before; one cut at the limit or with no time left is not stamped, and the next call carries it on; a compile error still takes one build",
+     "class": "within",
+     "why": "Keeps the wrapper's existing behavior for a build at its limit and for a compile error, and changes nothing the request settles."
+    },
+    {
+     "id": "T449-print-fresh-reason",
+     "summary": "A print-fresh call that names no binary writes one stderr line with the reason: the build log's first error line, the limit, or none built yet",
+     "class": "within",
+     "why": "Fixes the measured cause of the silent red: an empty name with no reason led test-parts.3.sh to exec an empty path and report 14 FAILs. A message is added and nothing is refused that was allowed before."
+    },
+    {
+     "id": "T449-hooks-test-stops",
+     "summary": "make hooks-test asks print-fresh first and, if it names no binary, stops on 'hooks-test: the guard does not build - <line>' and runs no suite; test-parts.3.sh refuses an empty BIN the same way",
+     "class": "within",
+     "why": "Suites run against no fresh guard test the old rules or an empty path, so their verdicts are false. Stopping on the named cause replaces a false red with a true one. No real coverage is lost: whenever the guard builds, the suites run as before."
+    },
+    {
+     "id": "T449-600s-first-call",
+     "summary": "hooks-test's first guard build gets 600 s (a GUESS knob, taken from the existing real-build case 7 figure), since that call is in no hook; no hook's limit moves",
+     "class": "within",
+     "why": "This is an existing figure reused for a call that runs in no hook. It moves no constant a requirement or a claim rests on, and it is labeled a GUESS knob."
+    },
+    {
+     "id": "T449-perf-class",
+     "summary": "T449 is classed [perf] under FR-013 (it makes the gate and the builders' loop faster)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the builders' loop faster as performance work. The block gives its grounds: a red gate whose cause no line named cost a batch gate's 8 minutes and a hand repair, and without the heal a session ran 49 minutes on the old binary. That fits FR-013's own definition."
+    },
+    {
+     "id": "T449-defer-timeout-cut-to-T452",
+     "summary": "The wrapper cutting its own build with timeout (the likely writer of the bad rlib) is not fixed here: Not fixed here (a change to T004's bounding wants its own measurement on a loaded machine), filed as T452, lands before T365",
+     "class": "within",
+     "why": "FR-009 and D15 settle the deferral form (a reason, a filed id, and 'lands before'), and the item carries all three. The defect stays inside this feature and is fixed before T365. T449 already heals its visible effect whatever the cause, so the wrong outcome does not persist meanwhile. Whether T452 and T365 are open tasks is make decide's test under D15 and cannot be seen from the bundle."
+    },
+    {
+     "id": "T443-T452-templates-and-T311-T392-removed",
+     "summary": "T443's and T452's blocks are the unfilled template; the removed T311 and T392 blocks were the unfilled template when judged CLEAR",
+     "class": "within",
+     "why": "These blocks decide nothing. Removing an empty template removes no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)",
+    "### T449 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T449-heal-remove",
+     "summary": "the heal removes l7r_guard's and l7r_shared's tool/deps, .fingerprint and incremental entries rather than setting them aside",
+     "class": "within",
+     "why": "a design detail of the fix; no GM word or cited requirement asks the set-aside evidence kept"
+    },
+    {
+     "id": "T449-heal-glob-reach",
+     "summary": "the glob also drops the gate's l7r_shared variant, which the gate's next tool build recompiles (35 s on the night, labeled)",
+     "class": "within",
+     "why": "wider, not narrower, than the drop the constraints name; its cost is stated and it removes nothing the fix needs"
+    },
+    {
+     "id": "T449-heal-cargo-lock",
+     "summary": "the heal waits for tool/.cargo-lock inside the same limit and takes the time left; lock held to the limit drops nothing, stamps nothing, the next call heals",
+     "class": "within",
+     "why": "keeps the heal inside the one build limit the plan states for T004 (judged on the plan's paraphrase of T004; T004's text is not in the bundle) and drops only under cargo's lock as T142/T336 ask"
+    },
+    {
+     "id": "T449-heal-once-per-source-change",
+     "summary": "the heal is tried once per source change (guard.healed, cleared by a good build); a link that fails again before the sources move is stamped guard.failed",
+     "class": "within",
+     "why": "a bound inside the fix so a real linker fault does not cost the limit on every hook call. Its residual - a heal rebuild (about 40 s) cut in a 45 s limit, carried on, then broken by the cut (T336's 16 of 31) is stamped and leaves hooks on the old binary - is the cut's effect, deferred in Found and left as T452 with why not here and its order (lands before T365), as FR-009 asks; and hooks-test now names the cause either way. No defect is left undeferred."
+    },
+    {
+     "id": "T449-print-fresh-wait-and-reasons",
+     "summary": "print-fresh (never a hook's) waits for guard.lock within its limit and asks again; its no-binary line names the first error line, the lock held past the limit, or the build not finished",
+     "class": "within",
+     "why": "print-fresh is in no hook, so the hook bound is untouched; the reason list covers every way it can name no binary, the dropped 'none built yet' case now falls under a build that errs or does not finish"
+    },
+    {
+     "id": "T449-unchanged",
+     "summary": "unchanged and judged CLEAR before on the same text: hooks-test asks print-fresh first with 600 s (a GUESS knob, an existing figure) and stops on the named line; test-parts.3.sh refuses an empty BIN; the T452 deferral; the [perf] tag under FR-013",
+     "class": "within",
+     "why": "same text as the CLEAR verdict in earlier.md; serves the defect's fix and FR-013's ordering"
     }
    ]
   }

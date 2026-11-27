@@ -27,6 +27,7 @@ TREE=${HERE%/scripts/hooks}
 TARGET=${L7R_GUARD_TARGET:-$HOME/.cache/l7r-cargo-target/${TREE##*/}}
 GOOD="$TARGET/l7r-guard.good"
 FAILED="$TARGET/guard.failed"
+HEALED="$TARGET/guard.healed"  # a link failure's heal tried (451 T449), cleared by a good build
 LOG="$TARGET/build.log"
 SOURCES=("$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml")
 
@@ -74,14 +75,44 @@ build() {
     . "$HERE/lib/lld-path.sh"
     if lld_missing "$TREE"; then touch "$FAILED"; exit 0; fi
     # the tool profile (T95): incremental release, shared with l7r-gate, so a guard edit rebuilds in about 1.5 s, not 15 s
+    local t0=${EPOCHREALTIME/,/.} left
     CARGO_TARGET_DIR="$TARGET" timeout "$secs" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_guard >&2
     rc=$?
+    # A LINK FAILURE IS HEALED ONCE (feature 451 T449): from 2026-11-27T05:47Z the clone's l7r_guard rlib held ten `.llvm.<n>` symbols no
+    # member defined (rust-lld: undefined hidden symbol) while its fingerprint was fresh, so every build relinked the binary against it,
+    # stamped guard.failed and left every hook on the 05:03Z binary for 49 minutes; moving the incremental directories aside did not
+    # help (cargo never recompiled the "fresh" crate), moving the two crates' deps and fingerprints aside made it link in 40 s. So a
+    # link failure drops those (and their incremental sessions; every other crate's kept), under cargo's own lock of the profile, and
+    # rebuilds once in what is left of the limit - cut there, it is not stamped failed, as any build at its limit. ONCE A SOURCE CHANGE,
+    # not once a call: `guard.healed` marks the heal tried, so a link that fails again before the sources move is stamped failed - a
+    # real linker fault, or a rebuild that a cut re-broke, costs one heal, never the limit on every call. The lock is waited on within
+    # the limit and the time left taken after it, so a gate build holding the profile never carries the call past its bound.
+    left() { awk -v s="$secs" -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { l = s - (b - a); print (l > 0.05) ? l : 0 }'; }
+    if [ "$rc" -ne 0 ] && [ "$rc" -ne 124 ] && grep -q -e 'undefined hidden symbol' -e 'linking with' "$LOG"; then
+      local tool="$TARGET/tool"
+      if [ -e "$HEALED" ] && ! newer "$HEALED"; then
+        echo "l7r-guard: the link failed again, and its heal was tried since the sources last changed: stamped failed (feature 451 T449)" >&2
+      elif mkdir -p "$tool" && flock -w "$(left)" "$tool/.cargo-lock" rm -rf "$tool"/deps/*l7r_guard* "$tool"/deps/*l7r_shared* \
+        "$tool"/.fingerprint/l7r_guard-* "$tool"/.fingerprint/l7r_shared-* "$tool"/incremental/l7r_guard-* "$tool"/incremental/l7r_shared-*; then
+        touch "$HEALED"
+        echo "l7r-guard: the link failed (rust-lld: undefined hidden symbol, or the link line); dropped tool/deps, tool/.fingerprint and tool/incremental of l7r_guard and l7r_shared, rebuilding once (feature 451 T449)" >&2
+        left=$(left); rc=124
+        if [ "$left" != 0 ]; then
+          CARGO_TARGET_DIR="$TARGET" timeout "$left" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_guard >&2
+          rc=$?
+        fi
+        [ "$rc" -eq 0 ] && echo "l7r-guard: rebuilt and linked" >&2
+      else
+        echo "l7r-guard: the link failed, and cargo's lock of tool/ stayed held to the limit: dropped nothing; the next call heals it (feature 451 T449)" >&2
+        rc=124
+      fi
+    fi
     if [ "$rc" -eq 124 ]; then
       echo "l7r-guard: the build passed its $secs s limit; the next call carries it on" >&2
     elif [ "$rc" -ne 0 ]; then
       touch "$FAILED"
     elif "$TARGET/tool/l7r-guard" --self-check > /dev/null; then
-      cp "$TARGET/tool/l7r-guard" "$GOOD.tmp" && mv -f "$GOOD.tmp" "$GOOD" && rm -f "$FAILED"
+      cp "$TARGET/tool/l7r-guard" "$GOOD.tmp" && mv -f "$GOOD.tmp" "$GOOD" && rm -f "$FAILED" "$HEALED"
     else
       echo "l7r-guard: the build compiled and failed its --self-check" >&2
       touch "$FAILED"
@@ -100,8 +131,28 @@ if [ -n "${L7R_GUARD_FRESH:-}" ] && [ "$L7R_GUARD_FRESH" = "$GOOD" ] && [ -x "$G
   fi
 elif stale; then mkdir -p "$TARGET" && build; fi
 # L7R_GUARD_PRINT_FRESH=1 (T205): the good binary, built above when stale, printed where no source is newer than it (exit 1 where
-# one is: a failed build, a build past its limit, none ever built)
-if [ -n "${L7R_GUARD_PRINT_FRESH:-}" ]; then { [ -x "$GOOD" ] && ! newer "$GOOD"; } || exit 1; printf '%s\n' "$GOOD"; exit 0; fi
+# one is: a failed build, a build past its limit, none ever built). With none named, its stderr is ONE line, the reason (feature 451 T449):
+# the build log's first error line where the build failed, so `make hooks-test` and test-parts.3.sh stop on it instead of running fixtures
+# that exec an empty path (14 FAIL, `exec: : Permission denied`, 2026-11-27); otherwise the limit, or that none is built yet
+# A print-fresh call is never a hook's, so where another call's build holds the lock it WAITS for it, within the limit, and asks again
+# (a hook's own build in the clone while `make hooks-test` starts must not read as a guard that does not build)
+if [ -n "${L7R_GUARD_PRINT_FRESH:-}" ]; then
+  fresh() { [ -x "$GOOD" ] && ! newer "$GOOD"; }
+  failed() { [ -e "$FAILED" ] && ! newer "$FAILED"; }
+  held=
+  if ! fresh && ! failed; then
+    if flock -w "${L7R_GUARD_BUILD_SECS:-45}" "$TARGET/guard.lock" true 2>/dev/null; then stale && build; else held=1; fi
+  fi
+  if fresh; then printf '%s\n' "$GOOD"; exit 0; fi
+  if failed; then
+    why=$(grep -m1 'error' "$LOG" 2>/dev/null); printf '%s\n' "${why:-the build failed and $LOG says no error}" >&2
+  elif [ -n "$held" ]; then
+    printf "another call's build held the lock past the %s s limit; run again\n" "${L7R_GUARD_BUILD_SECS:-45}" >&2
+  else
+    printf 'its build did not finish inside the %s s limit; run again and it carries on\n' "${L7R_GUARD_BUILD_SECS:-45}" >&2
+  fi
+  exit 1
+fi
 if [ -x "$GOOD" ]; then
   export L7R_GUARD_TREE="$TREE"  # the tree a decider asks its tools in (T006: the tools stay theirs until phase 3)
   exec "$GOOD" "$@"

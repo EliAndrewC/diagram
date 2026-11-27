@@ -7319,31 +7319,38 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T449 (<why: the finding or measurement that files it>)
+### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: three changes, after a reading of the set-aside evidence.
+  - **(1) What wrote the bad crate, measured 2026-11-27 (the set-aside files' mtimes and fingerprints in `~/.cache/l7r-cargo-target/diagram-backlog/tool/aside-20261127/` and `incremental.corrupt-20261127/`, `llvm-nm -A` over the rlibs, the clone's event log read for 05:12 to 05:52Z).** The bad file is `libl7r_guard-01946212dfc9ecd5.rlib`, compiled 05:47:42 to 05:47:54Z. It references ten `.llvm.<n>` symbols that none of its own members defines (for example `drop_in_place<l7r_shared::builder_pool::Tree>...llvm.7863477537244751542`). Both l7r_shared rlibs of the night define every such symbol they use. This is T142's signature: one codegen unit's post-ThinLTO object reused while the unit defining its import was renamed. The crate's fingerprint was written at 05:47:54Z and stayed fresh, so cargo never recompiled the crate and every later build relinked the binary against it. That is why moving the incremental directories aside did not help and moving the fingerprints did. Only `l7r-guard.sh` builds `l7r_guard` in the `tool` profile: the gate's binaries do not depend on it (`rust/gate/Cargo.toml`), and `make builder-checks`, `rust-test` and coverage write `debug/` and `cover-*/`. The tool profile does hold two `l7r_shared` variants, built 05:23:24Z (`4c412db841a5fa09`, by the guard's build after T369's guard commit at 05:23:13Z) and 05:26:04Z (`864e29d9609daf15`, by `make quick`'s gate build at 05:26:02Z, the gate crates' rlibs written 05:26:07 to 05:26:36Z). They differ only in `fancy_regex`'s fingerprint, so feature unification gives `-p l7r_guard` and the gate's package set different `fancy_regex` builds. RUSTFLAGS, profile and config are identical, and each variant has its own incremental directory, so this is ordinary cargo and not the cause. The 05:47:42Z build ran while a `make land` in the clone (05:35:43 to 05:47:42Z, its cheap step refused) loaded the machine. LIKELY CAUSE (inferred, not observed): an earlier guard build was cut by the wrapper's own `timeout` (SIGTERM at its 45 s limit, a GUESS knob, `L7R_GUARD_BUILD_SECS`) or by the hook's timeout. T336 measured that cut breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`). No record of the cut survives, because `build.log` is rewritten on every build. The mtimes support it: the guard's build after T369's commit could not finish inside 45 s, since `l7r_shared` alone took 35 s (05:23:24 to 05:23:59Z) and `l7r_guard`'s library took 12 s at 05:47 (05:47:42 to 05:47:54Z), measured 2026-11-27 (the set-aside files' mtimes). So that build was most likely cut while it compiled `l7r_guard`, and the good binary stayed at 05:03Z.
+  - **(2) A link failure is healed once** (`scripts/hooks/l7r-guard.sh`, `build`). On a failed build whose log says `undefined hidden symbol` or `linking with`, the wrapper does three things. It writes one line to `build.log`, `l7r-guard: the link failed ...; dropped tool/deps, tool/.fingerprint and tool/incremental of l7r_guard and l7r_shared, rebuilding once (feature 451 T449)`. It removes the entries of `l7r_guard` and `l7r_shared` alone (removed, not set aside: a set-aside copy is evidence nobody reads, and the glob also takes the gate's `l7r_shared` variant, which the gate's next tool build recompiles, 35 s on the night, measured 2026-11-27 (the set-aside files' mtimes)), and keeps every other crate's. It waits for cargo's own `tool/.cargo-lock` within the limit and takes the time left after the wait, then rebuilds once in it. If the lock stays held to the limit, it drops nothing, says so and is not stamped, and the next call heals. The heal is tried ONCE A SOURCE CHANGE, not once a call: `guard.healed` marks it and a good build clears it, so a link that fails again before the sources move is stamped failed. That covers a real linker fault, or a rebuild that a cut broke again, which would otherwise cost the limit on every call. A heal that links says `rebuilt and linked`, keeps the binary and stamps nothing. A rebuild that fails stamps `guard.failed` as before. A rebuild cut at the limit, or one with no time left, is not stamped and the next call carries it on, as for any build at its limit. A compile error is not a link failure: it takes one build, as before.
+  - **(3) No fresh guard, no fixture run.** A print-fresh call (`L7R_GUARD_PRINT_FRESH=1`) is never a hook's, so where another call's build holds `guard.lock` it waits for it within the limit and asks again (a hook's build in the clone as `make hooks-test` starts is not a guard that does not build). One that still names no binary writes one stderr line with the reason: the build log's first `error` line, or the lock held past the limit, or the build not finished inside it. `make hooks-test` asks it first, before `trace fresh` builds with a hook's limit (45 s, a GUESS knob), and gives it 600 s (a GUESS knob, the real-build case's figure), since that call is in no hook. With no name, the run stops on `hooks-test: the guard does not build - <that line>` and runs no suite. `test-parts.3.sh` refuses an empty `BIN` with the same line rather than writing a wrapper that execs an empty path.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a link failure healed once | `tests/hooks/test-l7r-guard.sh` 6e, with the fake cargo failing to link while a seeded `libl7r_guard-0bad.rlib` stands. Red on HEAD's wrapper, 63 passed and 19 failed (measured 2026-11-27, the suite run). Green with the fix, 82 passed and 0 failed (measured 2026-11-27, the suite run). The cases cover a heal that links, a second link failure stamped, a compile error left with one build, a slow rebuild cut inside the limit and not stamped, a heal that never takes stamped by the second of three calls (three builds, measured 2026-11-27, the suite run), and cargo's lock held to the limit (nothing dropped, inside the bound) | n/a: tooling | none | none |
+| print-fresh says why | the same suite: the first error line said after a failed build (red on the old code, where stderr was empty), the limit, a lock held a moment waited for and the binary named, a lock held past the limit said | n/a: tooling | none | none |
+| hooks-test stops | `tests/hooks/test-parts.3.sh`'s last case: the real recipe in the fixture, with a guard whose print-fresh fails, stops on `hooks-test: the guard does not build - error: linking with ...` and runs no suite. Red on HEAD's recipe, 23 passed and 1 failed (measured 2026-11-27, the suite run against HEAD's Makefile). Green, 24 passed and 0 failed (measured 2026-11-27, the suite run) | n/a: tooling | none | none |
 
 ### T449 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A guard build that fails to link recovers by itself once and says so in `build.log`, instead of leaving every hook silently on an old binary. A `make hooks-test` with no fresh guard binary stops on the build's first error instead of failing fixtures for a cause it does not name.
+2. **The constraints.** Feature 449's D7: a build that does not link and self-check never replaces the good binary. Feature 449's T004: the build is bounded inside a hook's timeout and never waited on. The heal takes the same limit, not a second one (`settings: every dispatcher entry's timeout above the wrapper's ... build limit` still holds). T142 and T336: drop exactly what the linker needs rebuilt, under cargo's lock.
+3. **Where each comes from.** O: the evidence read in (1). O: T449's own line, the 40 s link after the set-aside, observed 2026-11-27, method: the session's repair of the clone. R: `scripts/gates/l7r-gate.sh`'s T142 heal and `rustc/prewarm.rs`'s T336 record.
+4. **Do they describe the world here?** Yes: the bad rlib's dangling symbols were read with `llvm-nm` on the set-aside copy, and its fresh fingerprint is in the set-aside `.fingerprint` directory.
+5. **The order.** After T142 and T336. Before T452, which removes the likely cause; this task heals the effect whatever the cause.
+6. **The exits.** Green: both suites green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `test-l7r-guard.sh` went from 63 passed, 19 failed on HEAD's wrapper to 82 passed, 0 failed, and `test-parts.3.sh` from 23 passed, 1 failed on HEAD's recipe to 24 passed, 0 failed, measured 2026-11-27 (the suites run in the builder tree). The incident it answers cost a red batch gate's 8 minutes and a hand repair, observed 2026-11-27, method: the session's repair of the clone.
+10. **Before moving a constant.** n/a. The 600 s of hooks-test's first guard build (a GUESS knob) is the real-build case's existing figure (`test-l7r-guard.sh` case 7), and no hook's limit moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session whose guard build hits a stale-rlib link failure gets new guards on the next hook call instead of 49 minutes on the old binary (observed 2026-11-27, method: the session's repair of the clone). A red hooks-test names the guard build, not 14 fixture failures.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The wrapper cuts its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`). This is the likely writer of the night's bad rlib, and the cut T336 measured breaking the next link 16 of 31 times; observed 2026-11-27, method: the evidence of (1) and `l7r-guard.sh`'s build read. Not fixed here: letting the build run detached past the limit is a change to the wrapper's bounding (T004) that wants its own measurement on a loaded machine. Filed as T452; lands before T365.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the gate and the builders' loop faster). A red gate whose cause no line named cost a batch gate's 8 minutes and a hand repair, observed 2026-11-27, method: the session's repair of the clone. The heal costs one from-nothing build of two crates, 40 s on the night, measured 2026-11-27 (the session's set-aside build), and only where the link has already failed. Not an engine-speed task: no checklist answers owed.
 
 ### T441 (<why: the finding or measurement that files it>)
 
@@ -7686,6 +7693,32 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T455 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T452 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T452 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
