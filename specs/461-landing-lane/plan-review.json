@@ -432,6 +432,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T17 (D6 step 4: the red-gate tripwire stands down for the lane's own runs, and only for them; FR-008)": {
+   "sha256": "0ae431e39cb3f9c744becf627c977efa0f993be698c1627109598dab03dbc2f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "9ac6a0a488cfb4bae4ab48a02c19a13af8de9037a5570e2bf86b8da1f0abe71b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2380,6 +2392,92 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T17 (D6 step 4: the red-gate tripwire stands down for the lane's own runs, and only for them; FR-008)",
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17-standdown",
+     "summary": "The second-red tripwire (second_red_gate in make done) stands down for the lane's own runs only (D6 step 4); every other run meets it as before.",
+     "class": "within",
+     "why": "The lane's red handling is the request's own item 1 and FR-004 (attribute, bisect, eject, land the rest, file a repair); the gate and push checks still run on every lane attempt and a red still lands nothing, so FR-008 (a change lands only through the same gate and push checks) is untouched. The tripwire governs what a session must do after a second red, not whether a change passes the gate."
+    },
+    {
+     "id": "T17-grouping",
+     "summary": "The lane's tree is required on the runner branch too, not only on the open-batch branch: (variable AND lane tree) AND (batch open OR runner-started).",
+     "class": "within",
+     "why": "Stricter than D6's literal grouping: it narrows the stand-down (a carve-out from the tripwire), keeping more runs under the tripwire; it narrows nothing the GM asked for, and costs the lane nothing since every attempt runs in its tree (D1)."
+    },
+    {
+     "id": "T17-variable-necessary",
+     "summary": "L7R_LANE_BATCH is required on every branch and is never sufficient alone.",
+     "class": "within",
+     "why": "Keeps the variable from being an unrecorded escape (a by-hand make land with it exported still owes the arbiter); serves FR-008."
+    },
+    {
+     "id": "T17-log-read-locally",
+     "summary": "batch_open re-reads l7r-lane/lane.jsonl in the tree crate (mirroring the lane's Batch::open, torn lines skipped) rather than depending on the lane crate, to avoid a crate cycle; runner_started probes lane.lock with flock -n and walks /proc ancestry.",
+     "class": "within",
+     "why": "Implementation choice of how to test D6's conditions; changes no requested behavior."
+    },
+    {
+     "id": "T17-red-first",
+     "summary": "Ten state tests, red first against a stub lane_run (3 failed, 7 passed as the unchanged cases must), then 10 of 10 green and builder-checks clean.",
+     "class": "within",
+     "why": "Tests that enforce the requested stand-down and that every other run is still stopped; enforcement of what was asked, not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T17 (D6 step 4: the red-gate tripwire stands down for the lane's own runs, and only for them; FR-008)",
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17-standdown",
+     "summary": "make done's second-red branch skips second_red_gate when lane_run holds; state::write reads the run's identity (L7R_LANE_BATCH, pid) and hands it to record",
+     "class": "within",
+     "why": "Implements the sketch the GM called very sensible: the lane bisects and ejects on red with no coordinator turn between hand-ins and push (SC-001), which a per-red arbiter ask would defeat. The gate itself still runs and still refuses; only the post-red tripwire is handed to the lane's own rule (T18), so FR-008's same gate and push checks are untouched."
+    },
+    {
+     "id": "T17-grouping",
+     "summary": "Labeled grouping: the lane's-tree condition is required on the runner branch too, and L7R_LANE_BATCH is required on every branch (necessary, not sufficient)",
+     "class": "within",
+     "why": "Stricter than D6's literal grouping: it shrinks the stand-down, never the request. Every lane attempt runs in the lane's tree (D1), so the lane's own runs still stand down; the only runs it puts back under the tripwire are by-hand runs elsewhere, which FR-008 wants checked. Nothing the GM or the spec asked for is narrowed."
+    },
+    {
+     "id": "T17-batch-open-local",
+     "summary": "batch_open re-reads l7r-lane/lane.jsonl in the tree crate (batch line, no later landed/stop, torn line skipped) rather than depending on the lane crate's Batch::open, to avoid a crate cycle",
+     "class": "within",
+     "why": "Implementation placement forced by the crate graph; same semantics as the lane's reader; no scope change."
+    },
+    {
+     "id": "T17-runner-started",
+     "summary": "runner_started: lane.lock held (flock -n probe, as runner::held), its pid recorded, and this process that pid or a descendant via /proc/<pid>/stat",
+     "class": "within",
+     "why": "Mechanism for D6's 'started by the runner' condition; no requirement narrowed."
+    },
+    {
+     "id": "T17-tree-identity",
+     "summary": "The lane's tree is the pool registry's builder_pool::LANE tree (<clone>-land or the L7R_LANE_TREE adopted at T13), compared canonicalized, read from the git common directory without a git call",
+     "class": "within",
+     "why": "Identifies D1's lane tree from the existing registry; mechanism only."
+    },
+    {
+     "id": "T17-exits-order",
+     "summary": "Ordered after T11/T13 and before T18; red exit records the failure and asks the arbiter through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and exits within the plan; nothing the request asked is deferred or dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2604,6 +2702,44 @@
      "summary": "Two tests pin the behavior (closing half READY with T1 uncarried while a waits=T1 entry still waits; a real-clone idle test); exits are builder-checks for shared and guard plus the pool-idle hook suite.",
      "class": "within",
      "why": "Enforcement of the decided behavior, carrying one-shot labels on every figure (17/2 red, 19 after, 603/629/33 passed). Verification of what was asked, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T17": {
+   "section_sha256": "37b12db806fc6d973757f00203a87d3794fc0352ff2d86cd40b7a6a4dae59363",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T17-standdown",
+     "summary": "The second-red tripwire (second_red_gate in make done) stands down for the lane's own runs only (D6 step 4); every other run meets it as before.",
+     "class": "within",
+     "why": "The lane's red handling is the request's own item 1 and FR-004 (attribute, bisect, eject, land the rest, file a repair); the gate and push checks still run on every lane attempt and a red still lands nothing, so FR-008 (a change lands only through the same gate and push checks) is untouched. The tripwire governs what a session must do after a second red, not whether a change passes the gate."
+    },
+    {
+     "id": "T17-grouping",
+     "summary": "The lane's tree is required on the runner branch too, not only on the open-batch branch: (variable AND lane tree) AND (batch open OR runner-started).",
+     "class": "within",
+     "why": "Stricter than D6's literal grouping: it narrows the stand-down (a carve-out from the tripwire), keeping more runs under the tripwire; it narrows nothing the GM asked for, and costs the lane nothing since every attempt runs in its tree (D1)."
+    },
+    {
+     "id": "T17-variable-necessary",
+     "summary": "L7R_LANE_BATCH is required on every branch and is never sufficient alone.",
+     "class": "within",
+     "why": "Keeps the variable from being an unrecorded escape (a by-hand make land with it exported still owes the arbiter); serves FR-008."
+    },
+    {
+     "id": "T17-log-read-locally",
+     "summary": "batch_open re-reads l7r-lane/lane.jsonl in the tree crate (mirroring the lane's Batch::open, torn lines skipped) rather than depending on the lane crate, to avoid a crate cycle; runner_started probes lane.lock with flock -n and walks /proc ancestry.",
+     "class": "within",
+     "why": "Implementation choice of how to test D6's conditions; changes no requested behavior."
+    },
+    {
+     "id": "T17-red-first",
+     "summary": "Ten state tests, red first against a stub lane_run (3 failed, 7 passed as the unchanged cases must), then 10 of 10 green and builder-checks clean.",
+     "class": "within",
+     "why": "Tests that enforce the requested stand-down and that every other run is still stopped; enforcement of what was asked, not added scope."
     }
    ],
    "verdict": "CLEAR"

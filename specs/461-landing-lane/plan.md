@@ -986,31 +986,55 @@ phase 5, not by this task.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T17 (<why: the finding or measurement that files it>)
+### T17 (D6 step 4: the red-gate tripwire stands down for the lane's own runs, and only for them; FR-008)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `tree/src/state.rs`'s `write` now reads who runs the gate (`Run`: `L7R_LANE_BATCH` and the process id) and hands it
+  to `record`, the old body; the second-red branch of `make done` calls `second_red_gate` unless `lane_run` holds. `lane_run` is
+  true only when the variable is set AND the run's tree is the lane's tree - the pool registry's tree held by `builder_pool::LANE`
+  (`<clone>-land`, or the one `L7R_LANE_TREE` named at its adoption, 461 T13), compared canonicalized, read from the git common
+  directory by `checks::common_dir` (no git call) - AND either its batch is open in `l7r-lane/lane.jsonl` (`batch_open`: a `batch`
+  line naming it with no `landed` or `stop` of it after, a torn line skipped - the lane's `Batch::open`, read here because the lane
+  crate builds on this one through `task` and `claims`, so a dependency on it would be a cycle) or the runner holding
+  `l7r-lane/lane.lock` started it (`runner_started`: the lock held - probed by `flock -n`, as the lane's `runner::held` - its pid
+  the file's, and this process that pid or a descendant, walked up `/proc/<pid>/stat`). Every other run meets `second_red_gate`
+  exactly as before, the variable set or not. THE GROUPING, labeled (the easier and stricter route where the plan is silent): D6
+  reads "in the lane's tree AND its batch open, or started by the runner"; the tree is asked of the runner's branch too, which costs
+  the lane nothing (its every attempt runs in its tree, D1) and keeps a by-hand run elsewhere that happens to descend from a runner
+  (none can today) under the tripwire. The variable is required on every branch ("the variable alone stands nothing down" read as
+  necessary, not sufficient).
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/tree ONLY="state::tests"`, the new tests against a stub `lane_run`
+  returning false, today's behavior): 7 passed, 3 failed - the open-batch stand-down, the reopened batch, and the runner's run. The
+  two fixtures the task names passed on the old code, as they must: a by-hand run outside the lane's tree carrying the variable
+  (its batch open, and an id no log names) is stopped on its second red; a run in the lane's tree whose batch is not open (no such
+  id, `landed`, `stop`, the variable unset) is stopped too; the runner's case is stopped with the lock free, held by a sibling's
+  pid, or naming no pid, and when the runner's run is in another tree. Green: 10 of 10, the crate 64 of 64; `make builder-checks
+  CRATE="rust/gate/crates/tree"` clean.
 
 ### T17 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A lane attempt's red `make done` in the lane's tree is left to the lane's tripwire by task (T18);
+   every other second red - a by-hand `make land` in the clone with `L7R_LANE_BATCH` exported, or one in the lane's tree outside an
+   open batch - still owes the round arbiter, so the variable is no unrecorded escape.
+2. **The constraints.** D6 step 4 (the stand-down's three conditions), FR-008 (nothing escapes the gate unrecorded),
+   `contracts/lane-cli.md`'s `L7R_LANE_BATCH` line, D1 (the lane's tree), T11's log and T12's lock.
+3. **Where each comes from.** R: plan.md D6 step 4 and tasks.md T17's line; O: `lane/src/log.rs`'s `Batch::open` and
+   `lane/src/runner.rs`'s `held`/`holder`, read 2026-11-27; the crate graph (`claims`, `plan`, `trials` depend on `tree`; `task`
+   on them; `lane` on `task`), read the same day from the `Cargo.toml`s.
+4. **Do they describe the world here?** Yes: the lane's log and lock live in the git common directory (`l7r-lane/`), and the
+   registry holds the lane's tree under `lane` since T13.
+5. **The order.** After T11 (the log) and T13 (the registry's holder); before T18, which builds the lane's own rule.
+6. **The exits.** Green: the state tests and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one reader of the tripwire (`second_red_gate`, called from `write` alone), found by grep.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The ten state tests green; in use, T14's runner sets `L7R_LANE_BATCH` and its attempts' second reds owe
+   nothing here.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new behavior, no defect fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T18 (<why: the finding or measurement that files it>)

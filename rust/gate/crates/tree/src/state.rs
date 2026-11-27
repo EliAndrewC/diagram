@@ -100,7 +100,8 @@ fn commit(root: &Path) -> String {
     String::from_utf8_lossy(&out).trim().to_owned()
 }
 
-/// A second red `make done` in a row owes the round arbiter a ruling before the next gate (feature 375 FR-010).
+/// A second red `make done` in a row owes the round arbiter a ruling before the next gate (feature 375 FR-010), unless the run is
+/// the landing lane's own ([`lane_run`], 461 T17).
 fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
     let trigger = format!("red-gate@{}", utc(now));
     l7r_shared::checks::with_owed(&dir_of(root), &mut |owed| {
@@ -122,6 +123,92 @@ pub fn current_hash(root: &Path) -> Result<String, String> {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn write(root: &Path, event: &str, target: &str) -> Result<State, String> {
+    let run = Run {
+        batch: std::env::var("L7R_LANE_BATCH").unwrap_or_default(),
+        me: std::process::id(),
+    };
+    record(root, event, target, &run)
+}
+
+/// Who runs the gate, as the red-gate tripwire asks (feature 461 T17): the batch `L7R_LANE_BATCH` names, and this process.
+struct Run {
+    batch: String,
+    me: u32,
+}
+
+/// THE TRIPWIRE'S STAND-DOWN (feature 461 T17, plan D6 step 4; FR-008): a second red is left to the lane's own rule, which keys the
+/// tripwire by task, only for a run that IS the lane's - `L7R_LANE_BATCH` set, the run in the lane's tree (the tree the pool's
+/// registry holds under [`LANE`](l7r_shared::builder_pool::LANE), `<clone>-land` or the one `L7R_LANE_TREE` named at adoption, 461
+/// T13), and either its batch open in `l7r-lane/lane.jsonl` or the run started by the runner holding `l7r-lane/lane.lock`. Anything
+/// else - a by-hand `make land` with the variable exported, in the clone or in the lane's tree with no open batch - meets
+/// [`second_red_gate`] as before, so the variable is no unrecorded escape. The tree is asked of every run, the runner too: the
+/// stricter of the plan's two readings ("in the lane's tree AND its batch open, or started by the runner"), which costs the lane
+/// nothing, since its every attempt runs there (D1).
+fn lane_run(root: &Path, run: &Run) -> bool {
+    if run.batch.is_empty() {
+        return false;
+    }
+    let common = l7r_shared::checks::common_dir(root);
+    let here = std::fs::canonicalize(root).unwrap_or_default();
+    let in_tree = l7r_shared::builder_pool::read_all(&common)
+        .iter()
+        .any(|t| t.lane() && std::fs::canonicalize(&t.tree).is_ok_and(|p| p == here));
+    in_tree && (batch_open(&common, &run.batch) || runner_started(&common, run.me))
+}
+
+/// A `batch` line naming `batch` with no `landed` or `stop` of it after (the lane's `log::Batch::open`, read here because the lane
+/// crate builds on this one); a line that does not parse is skipped, as the lane skips it.
+fn batch_open(common: &Path, batch: &str) -> bool {
+    let text = std::fs::read_to_string(common.join("l7r-lane/lane.jsonl")).unwrap_or_default();
+    let mut open = false;
+    for line in text
+        .lines()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+    {
+        if line["batch"] == batch {
+            match line["event"].as_str().unwrap_or_default() {
+                "batch" => open = true,
+                "landed" | "stop" => open = false,
+                _ => {}
+            }
+        }
+    }
+    open
+}
+
+/// The lane's runner holds its lock (the pid in the file read only while it is held, the lane's `runner::holder`) and `me` is
+/// that pid or a descendant of it, walked up `/proc/<pid>/stat`.
+fn runner_started(common: &Path, me: u32) -> bool {
+    let lock = common.join("l7r-lane/lane.lock");
+    let held = std::fs::File::open(&lock).is_ok_and(|f| !l7r_shared::tool::flock(&f, "-n"));
+    let holder = std::fs::read_to_string(&lock)
+        .ok()
+        .and_then(|t| t.trim().parse::<u32>().ok());
+    let Some(holder) = holder.filter(|_| held) else {
+        return false;
+    };
+    let mut pid = me;
+    while pid > 0 {
+        if pid == holder {
+            return true;
+        }
+        pid = parent(pid);
+    }
+    false
+}
+
+/// A process's parent, 0 where `/proc` does not say: the field after the state, past the command's closing parenthesis.
+fn parent(pid: u32) -> u32 {
+    let stat = std::fs::read_to_string(format!("/proc/{pid}/stat")).unwrap_or_default();
+    let after = stat.rsplit_once(')').map_or("", |(_, rest)| rest);
+    after
+        .split_whitespace()
+        .nth(1)
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(0)
+}
+
+fn record(root: &Path, event: &str, target: &str, run: &Run) -> Result<State, String> {
     if event != GREEN && event != FAILED {
         return Err(format!(
             "unknown verification event '{event}' (want {GREEN} or {FAILED})"
@@ -130,7 +217,10 @@ pub fn write(root: &Path, event: &str, target: &str) -> Result<State, String> {
     let prior = read(root)?;
     if target == "done" {
         let last = dir_of(root).join("last-gate");
-        if event == FAILED && std::fs::read_to_string(&last).unwrap_or_default().trim() == FAILED {
+        if event == FAILED
+            && std::fs::read_to_string(&last).unwrap_or_default().trim() == FAILED
+            && !lane_run(root, run)
+        {
             second_red_gate(root, clock())?;
         }
         stated(std::fs::write(&last, format!("{event}\n")), "last-gate")?;

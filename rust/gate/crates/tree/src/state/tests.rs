@@ -3,7 +3,10 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use super::{already_verified, cli, read, second_red_gate, state_file, utc, write, FAILED, GREEN};
+use super::{
+    already_verified, cli, read, record, second_red_gate, state_file, utc, write, Run, FAILED,
+    GREEN,
+};
 
 fn git(dir: &Path, args: &[&str]) {
     assert!(Command::new("git")
@@ -164,4 +167,129 @@ fn the_command_line_answers_and_refuses() {
     std::fs::write(state_file(&dir), "not json").unwrap();
     assert!(read(&dir).is_err());
     assert_eq!(utc(0.0), "1970-01-01T00:00:00Z");
+}
+
+/// THE STAND-DOWN'S REACH (feature 461 T17, plan D6 step 4): the lane's own rule takes a second red only for a run in the lane's
+/// tree whose batch is open in `lane.jsonl`, or one the runner holding `lane.lock` started; every other run is stopped as before.
+mod lane {
+    use std::path::Path;
+
+    use l7r_shared::builder_pool::{self, Tree, LANE};
+
+    use super::{record, repo, Run, FAILED};
+
+    /// Two red `make done`s in a row as `run`, and whether the second owed the arbiter.
+    fn owed_after_two_reds(dir: &Path, batch: &str, me: u32) -> bool {
+        let run = Run {
+            batch: batch.to_owned(),
+            me,
+        };
+        let owed = dir.join(".git/arbiter-owed.json");
+        let _ = std::fs::remove_file(&owed);
+        let _ = std::fs::remove_file(dir.join(".git/last-gate"));
+        record(dir, FAILED, "done", &run).unwrap();
+        record(dir, FAILED, "done", &run).unwrap();
+        owed.exists()
+    }
+
+    /// The pool's registry naming `lane` the lane's tree.
+    fn lane_tree(dir: &Path, lane: &Path) {
+        let tree = Tree {
+            tree: lane.to_path_buf(),
+            feature: String::new(),
+            tasks: vec![LANE.to_owned()],
+            since: "2026-11-27T00:00:00Z".to_owned(),
+        };
+        builder_pool::write(&dir.join(".git"), &[tree]).unwrap();
+    }
+
+    fn log(dir: &Path, lines: &[&str]) {
+        std::fs::create_dir_all(dir.join(".git/l7r-lane")).unwrap();
+        std::fs::write(dir.join(".git/l7r-lane/lane.jsonl"), lines.join("\n")).unwrap();
+    }
+
+    const OPEN: &str = r#"{"event":"batch","batch":"b1","changes":["c1"]}"#;
+
+    #[test]
+    fn a_run_in_the_lanes_tree_with_its_batch_open_is_left_to_the_lane() {
+        let (_d, dir) = repo("lane-open");
+        lane_tree(&dir, &dir);
+        log(
+            &dir,
+            &["not json", OPEN, r#"{"event":"run","batch":"b1","code":1}"#],
+        );
+        assert!(!owed_after_two_reds(&dir, "b1", 0));
+    }
+
+    #[test]
+    fn a_by_hand_run_outside_the_lanes_tree_is_stopped_its_batch_open_or_not() {
+        let (_d, dir) = repo("lane-by-hand");
+        let (_o, other) = repo("lane-other");
+        lane_tree(&dir, &other);
+        log(&dir, &[OPEN]);
+        assert!(owed_after_two_reds(&dir, "b1", std::process::id()));
+        let (_d2, none) = repo("lane-unnamed");
+        lane_tree(&none, &other);
+        assert!(owed_after_two_reds(&none, "b9", 0));
+    }
+
+    #[test]
+    fn a_run_in_the_lanes_tree_whose_batch_is_not_open_is_stopped() {
+        for (tag, batch, lines) in [
+            ("none", "b2", vec![OPEN]),
+            (
+                "landed",
+                "b1",
+                vec![OPEN, r#"{"event":"landed","batch":"b1"}"#],
+            ),
+            (
+                "stopped",
+                "b1",
+                vec![OPEN, r#"{"event":"stop","batch":"b1"}"#],
+            ),
+            ("unset", "", vec![OPEN]),
+        ] {
+            let (_d, dir) = repo(&format!("lane-shut-{tag}"));
+            lane_tree(&dir, &dir);
+            log(&dir, &lines);
+            assert!(owed_after_two_reds(&dir, batch, 0), "{tag}");
+        }
+        let (_d, dir) = repo("lane-again");
+        lane_tree(&dir, &dir);
+        log(&dir, &[OPEN, r#"{"event":"stop","batch":"b1"}"#, OPEN]);
+        assert!(!owed_after_two_reds(&dir, "b1", 0));
+    }
+
+    #[test]
+    fn a_run_the_lanes_runner_started_is_left_to_the_lane_and_no_other() {
+        let (_d, dir) = repo("lane-runner");
+        lane_tree(&dir, &dir);
+        let lock = dir.join(".git/l7r-lane/lane.lock");
+        std::fs::create_dir_all(lock.parent().unwrap()).unwrap();
+        let me = std::process::id();
+        // the lock free: no runner lives, whatever pid the file holds
+        std::fs::write(&lock, format!("{me}\n")).unwrap();
+        assert!(owed_after_two_reds(&dir, "b2", me));
+        let _held = l7r_shared::tool::flock_within(&lock, 1.0).unwrap().unwrap();
+        // held by a pid that is no ancestor of this run, and by none the file can name
+        let mut other = std::process::Command::new("sleep")
+            .arg("5")
+            .spawn()
+            .unwrap();
+        std::fs::write(&lock, format!("{}\n", other.id())).unwrap();
+        assert!(owed_after_two_reds(&dir, "b2", me));
+        other.kill().unwrap();
+        other.wait().unwrap();
+        std::fs::write(&lock, "nobody\n").unwrap();
+        assert!(owed_after_two_reds(&dir, "b2", me));
+        // held by this run's parent, or by this run itself: the runner started it
+        std::fs::write(&lock, format!("{}\n", std::os::unix::process::parent_id())).unwrap();
+        assert!(!owed_after_two_reds(&dir, "b2", me));
+        std::fs::write(&lock, format!("{me}\n")).unwrap();
+        assert!(!owed_after_two_reds(&dir, "b2", me));
+        // started by the runner but in another tree: today's rule
+        let (_o, other_tree) = repo("lane-runner-other");
+        lane_tree(&dir, &other_tree);
+        assert!(owed_after_two_reds(&dir, "b2", me));
+    }
 }
