@@ -55,10 +55,7 @@ fn a_free_tree_counts_only_while_a_place_is_open() {
     ];
     // one place open (c and d held): of a and b free, one counts, 20 to 40
     let one = measure(&holds, &[landing(20.0, 40.0)], &[], (0.0, 100.0), 3);
-    assert!(
-        (one.idle - 20.0).abs() < 1e-9 && (one.both - 20.0).abs() < 1e-9,
-        "{one:?}"
-    );
+    assert!((one.idle - 20.0).abs() < 1e-9 && (one.both - 20.0).abs() < 1e-9);
     // no place open: nothing
     let none = measure(&holds, &[landing(20.0, 40.0)], &[], (0.0, 100.0), 2);
     assert!(none.idle.abs() < 1e-9, "{none:?}");
@@ -71,10 +68,7 @@ fn a_free_tree_counts_only_while_a_place_is_open() {
         4,
     );
     assert_eq!(both.n_refused, 1);
-    assert!(
-        (both.idle - 40.0).abs() < 1e-9 && (both.refused - 20.0).abs() < 1e-9,
-        "{both:?}"
-    );
+    assert!((both.idle - 40.0).abs() < 1e-9 && (both.refused - 20.0).abs() < 1e-9);
     assert!((both.both - 50.0).abs() < 1e-9, "{both:?}");
 }
 
