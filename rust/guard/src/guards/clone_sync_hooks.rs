@@ -596,6 +596,10 @@ sessions')",
             c = clone.display()
         ));
     }
+    // GUARD_EDIT_OK: feature 461 T20 - adding an operation: the lane's unread owed lines (plan D9), taken once and the read mark
+    // moved (`shared::lane_wake`, which `make lane-wait` reads too), before the only-session return: a coordinator whose builders
+    // are subagents is the only session
+    lines.extend(crate::shared::lane_wake::take_unread(&clone.join(".git")));
     if solo::alone(
         cx.solo_forced.as_deref(),
         Path::new("/proc"),

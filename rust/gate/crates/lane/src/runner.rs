@@ -424,7 +424,11 @@ pub fn work(run: &mut Run) -> Result<String, String> {
 }
 
 /// A knob's seconds from `env`, else its default; a value that is no number is refused naming it.
-fn knob(env: &dyn Fn(&str) -> Option<String>, name: &str, default: f64) -> Result<f64, String> {
+pub(crate) fn knob(
+    env: &dyn Fn(&str) -> Option<String>,
+    name: &str,
+    default: f64,
+) -> Result<f64, String> {
     env(name).map_or(Ok(default), |v| {
         v.trim()
             .parse()

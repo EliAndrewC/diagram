@@ -308,6 +308,20 @@ check "the only session -> prompt exits 0" 0 "$RC"
 case $OUT in *"clone-sync:"*) printf 'FAIL  the only session was synced\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) [ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && printf 'ok    the only session syncs nothing and says nothing (444 T36)\n' || { printf 'FAIL  HEAD moved for the only session\n'; FAILED=1; } ;; esac
 
+# 461 T20 (D9): a line the landing lane owes the coordinator past its read mark is printed on the next prompt - the only session's
+# too - once, and the mark moved, so a killed `make lane-wait` loses nothing and a re-armed one does not print it again
+mkdir -p "$RUNC/.git/l7r-lane"
+printf '%s\n' '{"event": "owed", "batch": "461-1", "line": "lane: batch 461-1 landed - 461 T01 (1 change(s), 1 run(s), 4.2 minutes)"}' > "$RUNC/.git/l7r-lane/lane.jsonl"
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | L7R_SOLO=1 CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+case $OUT in "lane: batch 461-1 landed - 461 T01 (1 change(s), 1 run(s), 4.2 minutes)") printf 'ok    an unread lane line is printed on the prompt (461 T20)\n' ;;
+             *) printf 'FAIL  the unread lane line was not printed\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | L7R_SOLO=1 CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+case $OUT in *"lane:"*) printf 'FAIL  the lane line was printed twice\n      out: %s\n' "$OUT"; FAILED=1 ;;
+             *) printf 'ok    ...once: the read mark moved past it\n' ;; esac
+rm -rf "$RUNC/.git/l7r-lane"
+
 # 451 T170: an unchanged mid-task notice is said in full once, then in one line - rendered here so the message budget check holds
 # both wordings (the guard's own test pins the rule). The clone's sync script is a stub that succeeds, so the mirror refresh is
 # reported done, not FAILED as in the cases above; the stub, untracked, makes the clone mid-task.

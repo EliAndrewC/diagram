@@ -2,8 +2,8 @@
 //! each hand-in on the lane and its state, each open batch and its state, the last landed batch's line and the repairs open, all
 //! COMPUTED (`log.rs`) from the pool's log, the done refs, `origin/main` and the lane's log. It only reads: no fetch (the
 //! `origin/main` the clone last fetched), nothing created, and an empty lane ends 0. T12 adds the runner's verbs (`runner.rs`):
-//! `start` (`make lane-start`), `stop [--now]` (`make lane-stop`, `NOW=1`) and the runner's own `--work <common>`; `wait` comes with
-//! the wake-up (T20) and is refused with the usage until then.
+//! `start` (`make lane-start`), `stop [--now]` (`make lane-stop`, `NOW=1`) and the runner's own `--work <common>`; T20 `wait`
+//! (`make lane-wait`, `wake.rs`), the coordinator's wake-up.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -15,8 +15,9 @@ use l7r_gate_task::builder_done::{held_by, REFS};
 
 use crate::log::{self, HandInState, World};
 use crate::runner;
+use crate::wake;
 
-const USAGE: &str = "usage: l7r-gate lane status|start|stop [--now] (make lane, make lane-start, make lane-stop [NOW=1]); wait comes with the wake-up (461 T20)\n";
+const USAGE: &str = "usage: l7r-gate lane status|start|stop [--now]|wait (make lane, make lane-start, make lane-stop [NOW=1], make lane-wait)\n";
 
 /// `l7r-gate lane <args>` from `cwd`, any tree of the clone; `exe` is this binary, which `start` runs again as the runner, and `env`
 /// the process's environment (the runner's knobs).
@@ -38,6 +39,7 @@ pub fn cli(args: &[String], cwd: &Path, exe: &Path, env: &dyn Fn(&str) -> Option
         }),
         ["stop"] => in_clone(&|c| runner::stop(c, false, runner::STOP_WAIT_S)),
         ["stop", "--now"] => in_clone(&|c| runner::stop(c, true, runner::STOP_WAIT_S)),
+        ["wait"] => in_clone(&|c| wake::wait_cli(c, env)),
         ["--work", common] => runner::work_cli(Path::new(common), env),
         _ => reply(String::new(), USAGE.to_owned(), 2),
     }

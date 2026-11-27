@@ -29,7 +29,7 @@ fn ask(args: &[&str], cwd: &std::path::Path) -> l7r_gate_core::Reply {
 fn a_verb_the_lane_lacks_is_refused_with_its_usage() {
     for args in [
         vec![],
-        words(&["wait"]),
+        words(&["wait", "--now"]),
         words(&["start", "x"]),
         words(&["stop", "--later"]),
         words(&["--work"]),
@@ -66,6 +66,16 @@ fn the_runner_s_verbs_are_asked_of_the_clone_s_common_directory() {
         ask(&["stop", "--now"], dir.path()).stdout,
         "lane: no runner\n"
     );
+    // `wait` (461 T20) reads the lane of the clone it is run in: an owed line past the mark printed, the mark moved
+    crate::log::append(
+        &common,
+        "2026-11-28T03:00:00Z",
+        "owed",
+        &serde_json::json!({"line": "lane: woken"}),
+    )
+    .unwrap();
+    assert_eq!(ask(&["wait"], dir.path()).stdout, "lane: woken\n");
+    assert!(common.join("l7r-lane/read-mark").is_file());
     let env = |k: &str| (k == "LANE_IDLE_S").then(|| "0".to_owned());
     let worked = cli(
         &words(&["--work", &common.to_string_lossy()]),

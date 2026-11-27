@@ -740,6 +740,9 @@ lane-start:     ## [project] start the landing lane's runner, detached (l7r-gate
 lane-stop:      ## [project] stop the landing lane's runner: after the batch in flight (waited for up to 10 s, then left asked), or with NOW=1 at once - its process group ended and its stop line written, its open batch resumed at the next make lane-start (feature 461 T12)   [NOW=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lane stop $(if $(NOW),--now,)
 
+lane-wait:      ## [project] the coordinator's wake-up, run with run_in_background: true: blocks until the lane owes a line past l7r-lane/read-mark (a landed batch's status, a repair entry naming the agent to dispatch, an arbiter owed, the runner dead over an open batch - said once a death, after LANE_DEAD_GRACE_S, 30, a GUESS knob), prints those lines, moves the mark and exits 0; no ceiling of its own; the prompt hook prints and marks any unread line too (feature 461 T20, D9)   [LANE_WAIT_POLL_S=<seconds>] [LANE_DEAD_GRACE_S=<seconds>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lane wait
+
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 

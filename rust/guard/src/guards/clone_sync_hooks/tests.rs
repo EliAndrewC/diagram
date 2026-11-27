@@ -881,3 +881,26 @@ fn own_make_is_asked_by_bash_and_once_a_prompt() {
         "but a make runs in it"
     ));
 }
+
+/// 461 T20 (plan D9): the prompt prints each line the lane owes the coordinator past the read mark, once, and moves the mark, so a
+/// `make lane-wait` killed early loses nothing and a re-armed one does not print it again; before the only-session return, so a
+/// coordinator whose builders are subagents is told too; a clone with no lane prints nothing and is left with no `l7r-lane/`.
+#[test]
+fn an_unread_lane_line_is_printed_once_and_marked() {
+    let w = World::new("lane-line");
+    w.claim("s", &w.clone);
+    std::fs::create_dir_all(w.tree.join("scripts/hooks/lib")).unwrap();
+    std::fs::write(w.tree.join("scripts/hooks/lib/solo"), "").unwrap();
+    assert!(w.prompt("s", "").is_empty());
+    assert!(!w.clone.join(".git/l7r-lane").exists());
+    let lane = w.clone.join(".git/l7r-lane");
+    std::fs::create_dir_all(&lane).unwrap();
+    std::fs::write(
+        lane.join("lane.jsonl"),
+        "{\"event\": \"batch\", \"batch\": \"461-1\"}\n{\"event\": \"owed\", \"batch\": \"461-1\", \"line\": \"lane: batch 461-1 landed\"}\n",
+    )
+    .unwrap();
+    assert_eq!(w.prompt("s", ""), "lane: batch 461-1 landed");
+    assert!(w.prompt("s", "").is_empty());
+    assert!(lane.join("read-mark").is_file());
+}

@@ -28,10 +28,11 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{Map, Value};
 
-/// The lane's directory, in the git common directory.
-pub const DIR: &str = "l7r-lane";
+/// The lane's directory, in the git common directory: the read mark's (`l7r_shared::lane_wake`, 461 T20), so the prompt hook and
+/// `make lane-wait` read the log this writes.
+pub const DIR: &str = l7r_shared::lane_wake::DIR;
 /// The log's file, in [`DIR`].
-pub const FILE: &str = "lane.jsonl";
+pub const FILE: &str = l7r_shared::lane_wake::FILE;
 /// The events of data-model.md's table, the only ones [`append`] writes.
 pub const EVENTS: [&str; 10] = [
     "start",
