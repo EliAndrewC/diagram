@@ -2611,12 +2611,6 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T311 (<why: the finding or measurement that files it>)": {
-   "sha256": "870f1fb494497a5cf8a962a9d19961c1232219f321a44491eb0232bd5274cf73",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T311 Approach (checklist part A)": {
    "sha256": "fb9654daf3da467dbe2c631cfc54e035681d5f7e0fdc0f3afc0ec345e5ed6f47",
    "verdict": "CLEAR",
@@ -3189,12 +3183,6 @@
   },
   "### T390 Approach (checklist part A)": {
    "sha256": "8fe4060fac414ea0864a988a777aaca2f495b8d2847cbb3d30950b0c9e40fb92",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
-  "### T392 (<why: the finding or measurement that files it>)": {
-   "sha256": "c0128fd465fde4e2751387bec79b5555d2b4c7e873a52e924d8c9741faae4773",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3945,6 +3933,30 @@
   },
   "### T408 (left by 451 T313's build half, its first DEVIATION and its Found and left: a handout made by hand names no overlap, which is T297's literal first half, \"at dispatch, name the overlap - make builder-tree compares the task's expected files\")": {
    "sha256": "0617665934b607eef72dd0d87abad5fa1d5d34d2af2b64251c95bc6a2a010716",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T449 (<why: the finding or measurement that files it>)": {
+   "sha256": "7286fa16a9d9acc855fa70451322a8235ea83a7afd3d92fa7c5040515c8930c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T449 Approach (checklist part A)": {
+   "sha256": "4fec2a7be1ffc25b71b398b2878998fa8474ead13ad68c8f1159de23fb6fd028",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T443 (<why: the finding or measurement that files it>)": {
+   "sha256": "668cf0bbd07e0e391fa0acc144b33a9314aaca0ff790c846c47eff23f2137860",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T443 Approach (checklist part A)": {
+   "sha256": "1e43e143c130b5bfae07d1d0a792891faf24324eb8b6d89c1accf7d569230dcf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35431,6 +35443,19 @@
      "why": "The removed block held only template placeholders and no decision. Its content is now in the filled block, so removing it drops nothing that was asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
   }
  ],
  "tasks": {

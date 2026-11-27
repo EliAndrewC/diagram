@@ -3721,6 +3721,29 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** no - test isolation, a defect.
 
 
+### T312 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T312 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T312's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T312's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T312 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: "what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))
 
 - **Approach**: the builders' queue becomes a file code reads, three commands list it, write it and name its next entry, and a Stop guard refuses a turn's end over a free pool tree and a READY entry. T395 (the queue in a form code reads, so `make builder-done` names the next task) and the first half of T297 (the overlap of two tasks' files named at dispatch) are BUILT HERE, in the same files. The idle figures are the measurement's, measured 2026-11-27 (`tree-idle.py`, read-only over the session's transcript and the 451 event log): 170 of the 336 idle tree-minutes with the session in its own turn, 105 with a landing running, 46 with the session stopped - 321 of the 336, the minutes in idle gaps of 3 minutes or more, which is what the table classes ("gaps of 3 minutes or more, 321 of the 336"); the other 15 fell in shorter gaps and are not classed. The mechanism's effect on them is NOT measured here: the after-measurement over a like window is 451 T401's, not this task's.
@@ -3783,6 +3806,29 @@ Built here: T421 - an open performance task the queue has no line for
 
 **Performance work?** yes: the builders' loop. It answers the measurement of 2026-11-27 (`dev/measurements/2026-11-27/tree-idle/results.md`): the three warm trees idle 336 of 1,440 tree-minutes (23%) over eight hours with the queue never short, measured 2026-11-27 (`tree-idle.py`). There is no after yet: the same table over a like window is T401's, read against the audit entry's 15% (a GUESS knob). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 <!-- plan-archive: T314 to T314 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
+### T313 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T313 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T313's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T313's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T313 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T315 (the GM, 2026-11-26, on 451 T305's repeated slow test runs: why more of a builder's test run could not be cached, T301 part 1 having answered the compile side and T316 having timed one run of `rust/gate/crates/land` on a heavily loaded machine)
 
@@ -4931,6 +4977,29 @@ Built here: T421 - an open performance task the queue has no line for
 
 **Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
+### T365 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T365 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T365's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T365's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T365 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))
 
 - **Approach**: each of the two listings runs once where it ran once a call, and removes exactly what it removed.
@@ -5062,6 +5131,29 @@ Built here: T421 - an open performance task the queue has no line for
 
 **Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
+
+### T373 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T373 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T373's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T373's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T373 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T374 (<why: the finding or measurement that files it>)
 
@@ -5363,6 +5455,29 @@ Built here: T421 - an open performance task the queue has no line for
 - A mark whose tree no longer exists (a pool tree dropped, a worktree removed) stays until its task lands: `make task-unstart` refuses it with a `make -C <tree>` that cannot run, and `make task-withdraw` refuses the task as started. Before T369, a start in the clone took such a mark over. Found by reading, no case observed. Not fixed here: which marks are stale (no tree, a tree the pool has released) is a rule of its own across the unstart, the withdrawal and the hold, outside this defect. Filed as T437; lands before T302.
 
 **Performance work?** no - a defect.
+
+### T369 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T369 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T369's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T369's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T369 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)
 
@@ -5689,6 +5804,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T395 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T395 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T395's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T395's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T395 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T396 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -5835,6 +5973,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
+### T403 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T403 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T403's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T403's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T403 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T410 (five plan reviews of 2026-11-26/27 blocked a round on a section answering no to performance work of a measurement - T315, T274, T301 and two the session headed off by brief - against FR-013's measurement clause; built with T308's part 2 as its T308-D10)
 
 - **Approach**: built in T308's part 2, in the same code and the same landing: `### T308 part 2`, T308-D10, holds the template's new wording, the refusal at `make decide` (`rust/gate/crates/plan/src/plan/lint/perf_line.rs`), why the old stubs are still matched, and the replay over the committed plans.
@@ -5955,6 +6116,52 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** no - two gaps in a guard, a defect.
 
+### T409 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T409 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T409's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T409's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T409 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T406 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T406 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T406's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T406's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T406 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)
 
 - **Approach**: the questions T307 part 2's parity table left "not asked", built; the ledger and batch cases of 2026-11-26/27 given fixtures, the first built, the second pinned. The tests are `rust/gate/crates/land/src/land/cheap/tests/push_parity.rs`; the code `rust/gate/crates/land/src/land/parity.rs` (new), `cheap.rs` and `land.rs`; the test fake (`land/tests.rs`) answers `--holding` per directory and the ledger's listings in turn.
@@ -5999,6 +6206,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 - A landing ruled ready beside the mark's task exempts every feature's hold at the push, not only the landed one's (`holding_with` returns nothing for any directory under `L7R_LAND_READY`). Visible effect: another feature's started task whose edits the delta carries reaches main beside a ready landing. Not fixed here: a change to the push's own rule, past this task's two jobs, and D3 mirrors it until then. Filed as T432; lands before T307.
 
 **Performance work?** yes (a `[perf]` task: a landing refused after its gate costs the gate's minutes, dev/measurements/2026-11-27/tree-idle/results.md); not an engine-speed task, so the performance checklist's questions do not apply.
+
+### T413 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T413 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T413's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T413's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T413 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))
 
@@ -6046,6 +6276,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
+### T420 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T420 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T420's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T420's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T420 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: "assertion failed: builds(&world).is_empty() && spare(&world.slots)", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)
 
 - **Approach**: a flaky check, not a defect: `prewarm.rs` is unchanged. Which half failed, measured 2026-11-27 (a scratch test, since removed, whose slots' `flock` program was a wrapper that, after taking each lock, left the open file on fd 3 of a `sleep 0.3` child - the "child another thread is starting holds a copy of the open file until its exec" of `slot.rs` lines 12-13, held for 0.3 s instead of the microseconds of a fork-to-exec window): the old form went red 3 of 3 run alone, plus once in the crate's run, each time on the `spare` half - `builds()` empty, cargo's calls `["--version"]` only. The fix is in the test: the slot is read let go by `let_go`, a taker that waits (10 ms polls and a 60 s ceiling, GUESS: a bound no load reaches, as `until_calls`'s; the slot tests' own `quick`), where the bare `spare` read it once. On the same slowed form the fixed check went green 3 of 3, beside an `assert!(!spare(..))` showing the slot still read held; a hold never let go still fails it (`let_go` false after 60.96 s, measured 2026-11-27 (a scratch test holding the slot, since removed)). Then the real test, 30 times in a row, one run at a time (`t424-thirty.sh` in the scratchpad): 30 passed, 0 failed.
@@ -6074,6 +6327,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Found and left?** none.
 
 **Performance work?** no - a flaky check.
+
+### T424 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T424 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T424's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T424's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T424 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T419, T404 (bundle)
 
@@ -6109,6 +6385,52 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 - `specs/452-building-plan-followups/plan.md` holds 16 heading lines twice (the stubs of T001 to T008 with their Approach headings), so a carry whose plan conflicts there stops; observed 2026-11-27, method: the merge of every plan against itself above. Not fixed here: another feature's plan, which of each pair is kept is that feature's reading. Filed as T423; lands before T400.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a stopped carry is the session's turns while trees stand idle, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
+
+### T419 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T419 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T419's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T419's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T419 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T404 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T404 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T404's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T404's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T404 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T423 (<why: the finding or measurement that files it>)
 
@@ -6163,6 +6485,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster). Of 87.4 s of real lane waits in 3.61 h, 85.7 s had a wide slot free, measured 2026-11-27 (the event logs, `dev/measurements/2026-11-27/slot-waits/waits.py`), about 570 s a day at that rate (a GUESS scaling, x 6.65); those waits now end at once where a wide slot is free. No engine speed, so no checklist.
 
+
+### T425 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T425 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T425's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T425's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T425 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))
 
@@ -6236,6 +6581,52 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Found and left?** none.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a builder at the cap with only its stop point's steps left finishes them where they cost a few turns, instead of a fresh builder's re-read, a median 3.7 min and 326k tokens before its first edit, or the coordinating session's own turns, measured 2026-11-25, `dev/audits/builders-context-cap.md`). Not an engine-speed task: no checklist answers owed. Its measure is the band's turns per builder (the guard log's `wrap-up` passes by agent) against the re-read it saves.
+
+### T417 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T417 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T417's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T417's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T417 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T352 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T352 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T352's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T352's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T352 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T431 (<why: the finding or measurement that files it>)
 
@@ -6399,6 +6790,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T416 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T416 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T416's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T416's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T416 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
 ### T418 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6452,6 +6866,29 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T421 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T421 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T421's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T421's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T421 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T432 (<why: the finding or measurement that files it>)
 
@@ -6516,6 +6953,52 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** no - a guard's gap and a message, defects.
 
+
+### T428 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T428 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T428's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T428's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T428 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T427 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T427 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T427's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T427's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T427 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T433 (<why: the finding or measurement that files it>)
 
@@ -6680,6 +7163,52 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 - A green `cover` run does not show the `HELD` line: `cover_ran` rebuilds its result from the lines missed, so the tests' stderr is dropped (`rustc/cover.rs`, `run_one`); the cut still saves the time; observed 2026-11-27, method: `run_in`'s callers read (`side.rs`, `cover.rs`, `times.rs`, `cargo_in`), the other three keeping stderr into `answer`. Not fixed here: T363's failing half makes a held pipe a red crate through `leak_checked`, which the cover run also takes, and a red cover run shows its stderr. Filed as T363; lands before T365.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the checks faster). T364: a leaked process's hold on the pipe, 3.1 s in T340's case (measured 2026-11-26 (T340, the binary by hand into a pipe)), is cut to at most 250 ms (`DRAIN`, a GUESS knob). T341: the pre-build window of an edited guard crate went from 6.95 / 7.66 / 7.50 s (load 44.8 / 45.4 / 44.6) to 0.30 / 0.30 / 0.33 s (load 9.3 / 9.9 / 10.5), measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`), and the work removed, the 1,504-file views recompute, is 1.93 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`). No engine speed, so no checklist.
+
+### T364 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T364 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T364's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T364's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T364 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T341 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T341 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T341's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T341's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T341 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
 
 ### T434 (<why: the finding or measurement that files it>)
 
