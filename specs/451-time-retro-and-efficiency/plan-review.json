@@ -3595,14 +3595,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T412 (<why: the finding or measurement that files it>)": {
-   "sha256": "a79b9adb603baf1b3f1dab7198ab8851543b3d7c4f9e22f9e3303ae4343f52a0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T412 Approach (checklist part A)": {
-   "sha256": "631bb611f844cada07624b424c9f483c3052e1923247a47f1f710722b8677e53",
+   "sha256": "63a662640a19d8174194679e82489d065296666f5361b395307be1282d6b7417",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3619,14 +3613,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T418 (<why: the finding or measurement that files it>)": {
-   "sha256": "8b5dc650efbe284d42126ba6cad5053fa7fcaa8f90a8898fa3af8ebc58e35bfe",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T418 Approach (checklist part A)": {
-   "sha256": "b5f0db9878a1a52071c3881936d097dad020a40a3cbd6007499a69cc580250cd",
+   "sha256": "2822caa19950393b6504a8c8f76ed36b12385e7e3c1a7f90ebe120ac220b5d6d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4143,18 @@
   },
   "### T456 Approach (checklist part A)": {
    "sha256": "5c39a192ab9c2b64ac7dd208c463923e3fadd19e3e287533e24cb169cfee8f3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T412 (left by 451 T313's build half: `make builder-brief` refuses `KIND=fix` for a task whose line names a new command or guard, and the queue's commands named such an entry READY with that refused command - found by hand for 2 of 17 fix entries (T302, T296) in the conversion of `queue.md`)": {
+   "sha256": "2e9f2c2b3be91c9e8cf89b83a63525604b41852bdbeb4025fd88c39730b09f9a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T418 (left by 451 T313's closing half: with `SPECIFY_FEATURE` unset in a pool tree, `make queue` and `make builder-next` ended on line 1 of `specs/269-research-backfill/queue.txt`, a page session's queue, and listed nothing - observed 2026-11-27)": {
+   "sha256": "3c100548faac201b65394fbcb08bf744143ff068cf579b100c251024d87af9a4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38728,6 +38728,56 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T412 (left by 451 T313's build half: `make builder-brief` refuses `KIND=fix` for a task whose line names a new command or guard, and the queue's commands named such an entry READY with that refused command - found by hand for 2 of 17 fix entries (T302, T296) in the conversion of `queue.md`)",
+    "### T412 Approach (checklist part A)",
+    "### T418 (left by 451 T313's closing half: with `SPECIFY_FEATURE` unset in a pool tree, `make queue` and `make builder-next` ended on line 1 of `specs/269-research-backfill/queue.txt`, a page session's queue, and listed nothing - observed 2026-11-27)",
+    "### T418 Approach (checklist part A)",
+    "(removed) ### T412 (<why: the finding or measurement that files it>)",
+    "(removed) ### T418 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T412-D1",
+     "summary": "The fix-typed queue entry whose task line names a new mechanism is flagged as a notice (make queue, builder-next, builder-done step 1, queue-add), quoting what the test read and naming both routes (KIND=build-half, or the fix command with SIZING_OK=); never skipped, hidden, retyped or given a state.",
+     "class": "within",
+     "why": "Mends a wrong outcome of T313's queue (it named READY a command make builder-brief refuses), which fix-as-we-go and constitution XIV require; the GM's T313 words ask the tooling to keep tasks in flight, and a notice that names the command that runs serves that, whereas a skip would hold back work the brief takes under SIZING_OK=. Asking the same mechanism test as the refusal, pinned by a test that the flagged entry is refused by builder_brief::run, keeps flag and refusal from drifting."
+    },
+    {
+     "id": "T412-D2",
+     "summary": "l7r_shared and the guards are untouched; the pool-idle Stop block (pool_idle_hooks.rs via shared::builder_queue::idle) still names a flagged entry's fix command unflagged, deferred to T481 (lands before T22, after T431).",
+     "class": "within",
+     "why": "A found-and-left defect deferred in FR-009's own form: why it is not fixed here, a filed task, and its order, inside this feature and so before the port resumes (the GM 2026-11-26: fix all of this as part of our tasking before resuming our port). Its visible effect is stated. It narrows no clause of the request: the defect is sequenced, not excepted, and nothing in the request or spec requires one task to fix every message of a class at once."
+    },
+    {
+     "id": "T412-D3",
+     "summary": "Misreads of the mechanism test (quoted refusal phrase, make -C) are not fixed here; 451 T431 mends them and the flag quiets with no edit here.",
+     "class": "within",
+     "why": "The defect is owned by an existing open task of the same feature with its order stated (beside T431); the flag quotes what the test read so a misread costs one reading. No requested behavior is left out."
+    },
+    {
+     "id": "T418-D1",
+     "summary": "With no feature named, boards() passes over a queue.txt that does not parse as a builders' queue, with one stderr line per file giving path and refused-line count, not the parse error whole.",
+     "class": "within",
+     "why": "Mends the observed wrong outcome (make queue and builder-next listed nothing in a pool tree because of a page session's queue.txt), which T313's purpose - tooling that keeps tasks in flight - requires; the walk matches what idle and dispatch already do. Shortening the message to a path and count serves the GM's 2026-11-23 concern for hook output length and loses nothing (make queue F=269 names each line)."
+    },
+    {
+     "id": "T418-D2",
+     "summary": "With a feature named, a malformed queue stays code 2 naming each line; with none named and no queue parsing, the first error stands (code 2); dispatch's own-feature line unchanged.",
+     "class": "within",
+     "why": "Keeps T313's existing error behavior and its test (a_queue_that_is_missing_or_malformed_is_an_error_naming_the_line) and prevents an empty success on a clone with only a broken builders' queue; it removes nothing the request or spec asks for."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "The two template headings '### T412 (<why...>)' and '### T418 (<why...>)' removed, replaced by the filled sections under their real headings.",
+     "class": "within",
+     "why": "The removed text was the unfilled template only (no decision, no content); its replacement carries the full section, so nothing judged is lost."
+    }
+   ]
   }
  ],
  "tasks": {

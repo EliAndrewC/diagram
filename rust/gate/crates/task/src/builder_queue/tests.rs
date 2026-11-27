@@ -372,3 +372,118 @@ fn a_handout_by_hand_names_the_tasks_in_flight_its_entry_overlaps() {
     }
     drop(dir);
 }
+
+/// The fixture's clone with a queue whose fix entries' task lines name a new mechanism (451 T412): T10 by a phrase, T12 by a
+/// `make -C` the mechanism test misreads (451 T431's half), T11 typed a measurement, T02 named by no line, and a bundle behind T10.
+fn mechanisms(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
+    let (dir, root) = world(tag);
+    let tasks = std::fs::read_to_string(root.join("specs/9001-x/tasks.md")).unwrap();
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        &format!("{tasks}- [ ] T10 a new guard on rm\n- [ ] T11 a new command, measured first\n- [ ] T12 the lint: make -C rust lint\n"),
+    );
+    put(
+        &root,
+        "specs/9001-x/queue.txt",
+        "T02 fix files=docs/e.md\nT10 fix files=docs/c.md\nT11 measurement measures=1 files=-\nT02,T10 fix files=docs/f.md\nT12 fix files=docs/d.md\nT09 fix files=-\n",
+    );
+    (dir, root)
+}
+
+const FLAG10: &str = "FLAG: T10 (line 2) is typed fix, but T10's line names a new mechanism (\"a new guard\"), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then";
+const HALF10: &str = "make builder-brief T=T10 F=9001 KIND=build-half ENTRY=1";
+const MISREAD: &str = "or, where the test misreads the line (a quoted refusal phrase, `make -C`: 451 T431), the fix command as printed with SIZING_OK=\"<reason>\"";
+
+/// 451 T412: `make queue` and `make builder-next` flag a fix entry `make builder-brief` would refuse, by the brief's own mechanism
+/// test, naming what it read, the build-half command and the escape a misread line takes; the entry stays READY and is still named.
+#[test]
+fn a_fix_entry_whose_task_line_names_a_mechanism_is_flagged_with_the_build_half_command() {
+    let (dir, root) = mechanisms("queue-flag");
+    let listed = ask("queue", &["9001"], &root);
+    assert_eq!(listed.code, 0);
+    let pad = "              ";
+    let want = format!("  line   2  T10            fix           READY\n{pad}{FLAG10}\n{pad}  {HALF10}\n{pad}  {MISREAD}\n  line   3  T11");
+    assert!(listed.stdout.contains(&want), "{}", listed.stdout);
+    // the bundle behind T10, waiting, and the misread `make -C`, flagged; the plain fix, the measurement and the landed T09 not
+    assert!(listed
+        .stdout
+        .contains("FLAG: T02,T10 (line 4) is typed fix, but T10's line names"));
+    assert!(listed.stdout.contains("FLAG: T12 (line 5) is typed fix, but T12's line names a new mechanism (`make -`, no target of the Makefile yet)"));
+    assert_eq!(listed.stdout.matches("FLAG: ").count(), 3);
+    // builder-next names T02 first, unflagged; with T02 landed, T10 with its flag under its command
+    let first = ask("builder-next", &["9001"], &root).stdout;
+    assert!(first.contains("KIND=fix ENTRY=1\n") && !first.contains("FLAG"));
+    let tasks = std::fs::read_to_string(root.join("specs/9001-x/tasks.md")).unwrap();
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        &tasks.replace("- [ ] T02 ", "- [x] T02 "),
+    );
+    let next = ask("builder-next", &["9001"], &root).stdout;
+    let want = format!("  make builder-brief T=T10 F=9001 KIND=fix ENTRY=1\n  {FLAG10}\n    {HALF10}\n    {MISREAD}\n");
+    assert!(next.contains(&want), "{next}");
+    // the flag is the brief's refusal: the fix command printed is refused for the mechanism, the build-half command taken
+    let mut e = env(&dir);
+    e.prewarm = false;
+    let brief = |kind: &str, ok: &str| {
+        let args = words(&["T10", "9001", kind, "", "", "", "", "", "1"]);
+        crate::builder_brief::run(&args, &root, &e, ok)
+    };
+    let fix = brief("fix", "");
+    assert_eq!(fix.code, 2);
+    let refusal = "T10's line names a new mechanism (\"a new guard\")";
+    assert!(fix.stderr.contains(refusal), "{}", fix.stderr);
+    assert_eq!(brief("build-half", "").code, 0);
+    drop(dir);
+}
+
+/// 451 T412: `make queue-add` says the same flag when the entry it writes is a fix its brief would refuse, and writes it.
+#[test]
+fn queue_add_flags_a_fix_entry_whose_task_line_names_a_mechanism() {
+    let (_dir, root) = mechanisms("queue-add-flag");
+    let said = ask(
+        "queue-add",
+        &["T10", "9001", "fix", "", "", "", "docs/g.md"],
+        &root,
+    );
+    assert_eq!(said.code, 0);
+    let want = "queue-add: specs/9001-x/queue.txt line 7: T10 fix crates=- files=docs/g.md\n  FLAG: T10 (line 7) is typed fix, but T10's line names a new mechanism (\"a new guard\"), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then\n    make builder-brief T=T10 F=9001 KIND=build-half ENTRY=3\n";
+    assert!(said.stdout.starts_with(want), "{}", said.stdout);
+    let plain = ask(
+        "queue-add",
+        &["T02", "9001", "fix", "", "", "", "docs/h.md"],
+        &root,
+    );
+    assert!(!plain.stdout.contains("FLAG"), "{}", plain.stdout);
+}
+
+/// 451 T418: with no feature named, `make queue` and `make builder-next` pass over another feature's `queue.txt` of another form
+/// (a page session's, features 269 and 280), saying so once on stderr, and list the builders' queues; named, it is still an error,
+/// and where no queue parses the first one's error stands.
+#[test]
+fn with_no_feature_named_a_queue_of_another_form_is_passed_over_once() {
+    let (_dir, root, _e, _tree) = queued("queue-foreign");
+    put(
+        &root,
+        "specs/269-research-backfill/queue.txt",
+        "/c/briefs/h1-write.md then:/c/briefs/h1-checks.sh /c/briefs/v1-write.md then:/c/briefs/v1-checks.sh\n/c/x.md then:/c/y.sh\n",
+    );
+    let passed = "passed over specs/269-research-backfill/queue.txt: it does not parse as a builders' queue (2 line(s) refused; make queue F=269 names each)\n";
+    for verb in ["queue", "builder-next"] {
+        let said = ask(verb, &[], &root);
+        assert_eq!(said.code, 0, "{}", said.stderr);
+        assert_eq!(said.stderr, format!("{verb}: {passed}"));
+        assert!(said.stdout.contains("specs/9001-x/queue.txt"));
+        let named = ask(verb, &["269"], &root);
+        assert_eq!(named.code, 2);
+        assert!(named
+            .stderr
+            .contains("specs/269-research-backfill/queue.txt line 1: "));
+    }
+    std::fs::remove_file(root.join("specs/9001-x/queue.txt")).unwrap();
+    let none = ask("queue", &[], &root);
+    assert_eq!(none.code, 2);
+    let first = "queue: specs/269-research-backfill/queue.txt line 1: ";
+    assert!(none.stderr.starts_with(first), "{}", none.stderr);
+}

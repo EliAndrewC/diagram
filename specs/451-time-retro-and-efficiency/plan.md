@@ -6664,31 +6664,36 @@ that batch; the red was not in its change.
 <!-- plan-archive: T408 to T297 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T408 to T408 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T412 (<why: the finding or measurement that files it>)
+### T412 (left by 451 T313's build half: `make builder-brief` refuses `KIND=fix` for a task whose line names a new command or guard, and the queue's commands named such an entry READY with that refused command - found by hand for 2 of 17 fix entries (T302, T296) in the conversion of `queue.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the FLAG, in `rust/gate/crates/task/src/builder_queue.rs` alone (`flag`, `flagged`, `known`): a `fix` entry one of whose tasks' open lines `l7r_shared::builder_brief::mechanism` reads a new mechanism in - the SAME test, with the same Makefile targets (`targets` of the clone's `Makefile`), that `make builder-brief` refuses `KIND=fix` by - is flagged, under its line, by `make queue` (an entry READY or waiting), `make builder-next` (under the pick's command), `make builder-done`'s step 1 (`dispatch`, under the same command) and `make queue-add` (under the line it wrote): `FLAG: <entry> (line <n>) is typed fix, but <task>'s line names a new mechanism (<what the test read>), which make builder-brief refuses KIND=fix for: retype the line build-half and add its closing-half line after it, then`, the entry's command with `KIND=build-half`, and the route a misread line takes - the fix command as printed with `SIZING_OK="<reason>"`, the escape `builder_brief.rs` already honors.
+  - **DECISION, a notice, never a skip or a state** (label: tooling convention). HOW THE FLAG STAYS USEFUL WHILE THE TEST MISFIRES: the brief names the test's misreads of 2026-11-27 (T437, T412 and T431 refused falsely, for a quoted refusal phrase and a `make -C`; 451 T431 mends the `make -` half in another tree). A flag that hid the entry, skipped it in `next` or retyped it would hold back work the brief takes with `SIZING_OK=`, so the entry's state, the pick and the pool-idle walk are untouched; the flag QUOTES what the test read (`"a new guard"`, `` `make -`, no target of the Makefile yet ``), so a misread is told at a glance and costs one reading, and it names both routes, so either way the next command runs. It asks the one test, so T431's fix quiets the misread flags with no edit here. Pinned: `a_fix_entry_whose_task_line_names_a_mechanism_is_flagged_with_the_build_half_command` (a phrase, a bundle waiting behind it, a `make -C` misread flagged; a plain fix, a measurement typed for a mechanism and a landed entry not; and the flagged entry's own fix command refused by `builder_brief::run` for the same mechanism while its build-half command is taken, so flag and refusal cannot drift), `queue_add_flags_a_fix_entry_whose_task_line_names_a_mechanism`.
+  - **DECISION, the shared crate and the guard are untouched** (label: tooling convention): the brief keeps every guard message unchanged, so the flag is the gate's, built on `l7r_shared::builder_brief::mechanism` as it stands (no `make guard-edit`), and the Stop block (`pool_idle_hooks.rs`, through `shared::builder_queue::idle`) does not carry it - Found and left, below.
+  - Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/task ONLY="builder_queue"` on the old code with the new tests): 3 failed of 10 - this task's two above and T418's one; green after, 10 of 10, and `make builder-checks CRATE="rust/gate/crates/task"` clean. Live, `make queue` over the clone's 451 queue flags none (observed 2026-11-27, method: the command's output, `grep -c FLAG`: 0 of 61 entries - T302's and T296's lines were retyped by hand at the conversion).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a fix entry flagged | n/a | n/a | n/a | n/a: a notice, never a refusal |
 
 ### T412 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No queue command names a fix brief that `make builder-brief` refuses without saying so, and the command that runs instead.
+2. **The constraints.** 451 T313's queue (`shared::builder_queue`) and its state rules; 451 T334's sizing refusal and its `SIZING_OK=` escape; the brief: no guard message changed.
+3. **Where each comes from.** O: the conversion of `queue.md` (T302, T296); the brief's misfires of 2026-11-27. R: T313's section.
+4. **Do they describe the world here?** Yes: the fixture's flagged entry is refused by `builder_brief::run` itself (the test above).
+5. **The order.** After 451 T313 (landed); beside 451 T431, which changes the test this flag asks; before T481.
+6. **The exits.** Green: the tests above, red then green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 3 of 10 red on the old code, 10 of 10 green; `make builder-checks CRATE="rust/gate/crates/task"` clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session's next dispatch: the queue named a command the brief refused, a wrong outcome (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** 
+- The pool-idle Stop block still names a flagged entry's fix command unflagged (`rust/guard/src/guards/pool_idle_hooks.rs` from `shared::builder_queue::idle`). Its visible effect: a free tree's Stop block can name a `make builder-brief ... KIND=fix` that is refused. Not fixed here: the brief keeps the guard messages as they are, and the flag is a message change for `message-check`. Filed as T481; lands before T22, after T431.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a notice in the queue's commands.
 
 
 ### T415 (<why: the finding or measurement that files it>)
@@ -6719,32 +6724,33 @@ that batch; the red was not in its change.
 
 
 
-### T418 (<why: the finding or measurement that files it>)
+### T418 (left by 451 T313's closing half: with `SPECIFY_FEATURE` unset in a pool tree, `make queue` and `make builder-next` ended on line 1 of `specs/269-research-backfill/queue.txt`, a page session's queue, and listed nothing - observed 2026-11-27)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `boards()` of `rust/gate/crates/task/src/builder_queue.rs`, with NO feature named, passes over a `queue.txt` that does not read or parse as a builders' queue and says so once a file on stderr: `<verb>: passed over specs/269-research-backfill/queue.txt: it does not parse as a builders' queue (<n> line(s) refused; make queue F=269 names each)` - the path and a count, never `parse`'s error whole, which quotes the line (269's line 1 is one line of every brief path, several kilobytes). With a feature named (`F=`, or `SPECIFY_FEATURE`), a malformed queue is the error it was, code 2 naming each line; and with none named where NO queue parses, the first one's error stands (code 2), so a clone with only a broken builders' queue is never an empty success. This is the walk `shared::builder_queue::idle` and `dispatch` already take (T313), now in the listing too. `dispatch`'s own-feature line reads `boards(p, feature).err()` with the feature named, so it is unchanged.
+  - Pinned: `with_no_feature_named_a_queue_of_another_form_is_passed_over_once` (both verbs: code 0, one stderr line, the builders' queue listed; `F=269` still code 2 naming line 1; the builders' queue removed, the page session's error stands). Red first, measured 2026-11-27: it failed on the old code (code 2, the parse error) with T412's two (3 failed of 10, `ONLY="builder_queue"`); green after. Live, observed 2026-11-27, method: `env -u SPECIFY_FEATURE -u SPECIFY_FEATURE_DIRECTORY make queue` in this pool tree: exit 0, the 451 queue's 61 entries listed, and one line each for 269's and 280's files passed over.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a foreign queue.txt passed over | n/a | n/a | n/a | n/a |
 
 ### T418 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make queue` and `make builder-next` with no feature named list every builders' queue of the clone, whatever other tool's `queue.txt` sits beside it.
+2. **The constraints.** 451 T313's walk past an unreadable queue (`idle`, `dispatch`); a named feature's malformed queue stays an error (T313's test `a_queue_that_is_missing_or_malformed_is_an_error_naming_the_line`).
+3. **Where each comes from.** O: the run of 2026-11-27 in a pool tree with `SPECIFY_FEATURE` unset; the live rerun above. R: T313's section.
+4. **Do they describe the world here?** Yes: the live rerun lists the builders' queue and names both page sessions' files, observed 2026-11-27, method: `env -u SPECIFY_FEATURE -u SPECIFY_FEATURE_DIRECTORY make queue` in this pool tree.
+5. **The order.** After 451 T313 (landed); with T412 in one tree.
+6. **The exits.** Green: the test above red then green, and the live rerun. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red then green on the test; the live rerun's exit 0 with both files named, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session reading the queue with no feature set saw an error and no entry: a wrong outcome (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no - a listing's walk.
 
 
 ### T432 (<why: the finding or measurement that files it>)
@@ -7445,6 +7451,32 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T456 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T481 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T481 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
