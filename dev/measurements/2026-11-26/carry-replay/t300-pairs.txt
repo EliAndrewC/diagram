@@ -1,0 +1,68 @@
+8f4c1f505f <- 4d153c22f30453fea924d44887c88c6b72541612  :: 451 T383 T385: an Edit's hook parses only the even
+e8e9ab809a <- c488f4639299bb18b02e21a7101cb115708213c9  :: 451 T332 T344: an event line a tool writes from a 
+c186dc1450 <- de405fca4788d2c62f7c2a229726204b6611da69  :: 451 T325: one feature set a library in every test 
+1b687e3c1f <- b3c375c74152a572814f0e6eb53348fd6fd8b205  :: 451 T324 T345: the event-log reader keeps every st
+1ceb830054 <- 781644768b239a7cf4e35ddcdf366bb73425eff7  :: 451 T373: measurement record, no source changed - 
+2207da07bc <- b06ae8104c027dd3b845953af74205f6d1c1f4b6  :: 451 T359: make task-withdraw (a filed task found a
+97a1365805 <-  :: 451 T274: a sampler test's wait for its process to
+649ef2659d <- 566f4f51f8f3654f552ffcfd4a59345582de2407  :: 451 T370 T372: the temp directory is listed once a
+c1b36d9f01 <- f967f6a3c5c64e201ef9fa12156ad92ad11d0a47  :: 451 T347: a test build told to compile its crate a
+0a0acdfc4f <-  :: 451 T365: measurement record, no source changed - 
+2a0fbb401b <-  :: 451 T340: the guard crate's test run ends when its
+390a2914fa <-  :: 451 T336: a pre-warm test that failed under load h
+f5007f94d3 <- 7037420458a57ef0dab753c601c23e85ead75a1a  :: 451 T336: the pool tree's pre-warm never cuts a bu
+1220d6d077 <- 6f9843a1450744ad90ddee2460df0e791bcaa6ec  :: 451 T339: the idle check's waits go through a cloc
+41cd1a8ef7 <-  :: 451 T334: two repairs the batch gate named - the b
+b1d4a453fe <- 022170716b8da1f44f61c3c538e819574c91167a  :: 451 T334: a builder is dispatched through the tool
+d217a39fad <- 42444a98993112f4f00783a50005a6cea7ec2484  :: 451 T347: a measurement, no code changed - a test 
+f40606920e <- 4fd43cb9ceaab7cde587090955e2f0c201bbc8ac  :: 451 T274: the clone's memory and load sampler as t
+fd4f9c9c30 <- f0f7d0a0394e43bfb744e41f094391f5444d4c07  :: 451 T293: tests for the five lines of the live vie
+ca16aed82a <- 4e198492c0cfb085c2ede8ec9794e183856df835  :: 451 T315: a measurement, no code changed - where a
+83326f83a3 <- 0d61f38c1831be283ebae0b7f86934ee3b80b884  :: 451 T293: make task-progress, a live view of the t
+fd9d1fb19b <-  :: 451 T308: two assertion message lines of the order
+148fa78bdf <- 9bba26edebbcd643d2d2c76b3b118ad4ab495a46  :: 451 T299 and T282: the Stop hook's question detect
+4f1244b06c <-  :: 451 T308, its plan-review PART (the task is not ti
+1783cf6eed <- e00df6489408d86b4ba40e53090aeda73d879b9e  :: 451 T316: a pool tree is pre-warmed at its handout
+9411d31b2a <- 6809bde8be26bafad199b64082a8f06398bd4083  :: 451 T298: the Makefile's task-time help line and t
+b80521bc2b <-  :: 451 T298: three lines the batch gate's coverage na
+240c7d89f9 <- a480ff88483af02790dc2c9d63de9c3f2d836d51  :: 451 T298: make task-time opens with one window-wid
+5ad9df51a6 <- 3bb51bb21648ee33bda6adb20768cfb3cb1f621f  :: 451 T301 part 1 of 4, the task stays open: why one
+5ef7801838 <-  :: 451 T304: its line says what is done and what rema
+0237c1a3aa <- f75c858e9c04cc50ba38046b05dbac3ce1cfe8f7  :: 451 T304 (two parts; the task stays open for its r
+86d49b8844 <-  :: 451 T159: its claims round, 4 IN-STEP
+24fe2cc770 <- 8d5356f5d28d5c5abc6bbff25b6ae3f05e308661  :: 451 T159: rust/mode_a's tests read no gitignored g
+8c1d4c69bb <- 7500146fb306fc4da0324061844f95bc22ab766b  :: 451 T104: the idle-tests suite no longer fails goo
+8a26a24781 <-  :: 451 T289: its carry test's assertion carries no me
+7bc6f40770 <- c126b6d7bed89bdd2018fa1944a1fac9875c9611  :: 451 T289: a builder files what it finds - make tas
+e04d4629db <- 5a9e44503a77f27380cc8d365f19df9b88088df4  :: 451 T309: the arbiter crate's coverage no longer t
+13c88486f8 <- 955ed25183a8e6f3bbc1415adfbe520200a20a86  :: 451 T305: a check pass is owed by the landing of t
+30c20faba7 <- 295eef126cc36ef525d8af0f90875ef0829e6bdb  :: 451 T303: make closing-checks T= with no F= takes 
+53a0714c9f <-  :: 451 T298: the second tier is booked as its own cat
+fad80877be <- e144f77798d6d894867cd8aff9975aad577e9335  :: 451 T295: the tree guards read a program however i
+e152e60749 <- d7645534d379b826afd752912b20ff5a45ea8de4  :: 451 T284: heavy build phases take a machine-wide s
+67a2981cfb <- d4c12e2823fcd530ae0eeb370ec02e1d2aab0fe7  :: 451 T281: each tree keeps its own store of rendere
+c70cdae99c <-  :: 451 T285: its hook suite greps a here-string, not 
+7af8a39d52 <- 5fb3341cc565aee40b1b43c1e3ff38c415fc272d  :: 451 T285: builder worktrees come from a standing w
+944349fad3 <- aec14c70182d5001f69ab29c3c7a47eceacf5352  :: 451 T292: a landing refuses over an unfinished car
+be3f3a248b <- 20347702fc335d5432423f86bc92c72e44073346  :: 451 T269: l7r-gate check audit-register reads a sc
+83f65718d7 <-  :: 451 T270: its CODE, left out of its landing - make
+4fa9aae310 <- 638258d9488ab5b02f3b7ed610f0817c80967b90  :: 451 T271: the changed-blocks plan bundle is keyed 
+c7bfe5d0cf <- 098b1625e8a90b0f7b37b577f2831b72140b250e  :: 451 T268: the clone-sync notices say why - a sync 
+8b4946a797 <- 735695bad3cc66590326e474820b1c5a734f8cb7  :: 451 T272: the Stop hook's question detector no lon
+6927081081 <- 4e10528ba5432e6d1ce416a4a36abd6d0ea6c236  :: 451 T265: the shrine-dedication knob named a GM ru
+9d18531886 <- dcd666833f9d33878d68059736cb258cacd9ea0b  :: 451 T267: make claims-checked holds a silent findi
+60cda0353a <-  :: 451 T250: the plan's burakumin item is fixed by pa
+f746b1b0bc <- d30d9f08505619de575cdcbf74278d1b012ab0a2  :: 451 T250 batch 10: the last five research-page com
+5d83b76d03 <-  :: 451 T250: 0069's comment names the retired water p
+72fdac1313 <-  :: 451 T250: the baseline pruned after batches 4-9 me
+e3922827ac <- 1bd5b1721dbbf53ec9c9da032b5e183120828a86  :: 451 T250 batch 8: the 37 research-page comments at
+9c2bee9a47 <- 6356eb631e504016ddbbe3b930996e034dd5eebe  :: 451 T250 batch 7: 45 research-page comments on pag
+f44be76648 <- a8ca09f9605296f43ec09a661aa0bb19dac7d0dd  :: 451 T250 batch 5: 45 research-page comments on pag
+38d9ed9918 <- 7d76f19678d75dc3c5f5f2432510f4cc0b379a59  :: 451 T250 batch 9: the 43 research-page comments le
+ff75cd55d7 <- 91621af75bedf9a06570c517db877574c08f84b3  :: 451 T250 batch 6: 45 research-page comments on pag
+020cad73a8 <- e343a14292eeee0cdeb24c246f2e641d4325d888  :: 451 T250 batch 4: 45 research-page comments on pag
+0c7f801f01 <- 1599515ed91848573cd5cc8e028d269615964d50  :: 451 T251: the 10 CANON claims that named a GM ruli
+e1a0c18f99 <- d208be70101af86c835bc5d156bc07b19686fac3  :: 451 T263: the clone-sync guard test's flake was it
+79a263e39f <- 6f8fa8484d1fcddf640de256d9465dea978069fe c0d32427fec682916924bd3fb61b55c47c79955b  :: 451 T250 batch 3: the last 25 of the audit's 74 un
+5c96625af1 <- 053294a41c39226b823580646df1f4875b5466af  :: 451 T250 batch 2: 25 more research-page comments (
+a90b9ecb01 <- 5dfc5fb68d70ed86d769a07f599b886350742b5f  :: 451 T250 batch 1: 25 research-page comments that c

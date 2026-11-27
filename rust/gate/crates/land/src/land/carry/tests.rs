@@ -150,7 +150,7 @@ fn lines_kept_from_both_sides_that_equal_ours_end_as_an_empty_pick_skipped() {
     );
     has(
         &out,
-        "its 0 non-spec file(s) in HEAD; both sides kept in specs/451-x/tasks.md\n",
+        "its 0 non-spec file(s) in HEAD; resolved specs/451-x/tasks.md (both sides' list lines)\n",
     );
     assert_eq!(refusals(&root), Ok(Vec::new()));
     assert_eq!(git(&root, &["rev-parse", "HEAD"]), head);
@@ -182,7 +182,7 @@ fn an_occasions_conflict_and_a_record_conflict_keep_both_sides_and_continue() {
     );
     let (code, out, err) = carried(&root, &builder);
     assert_eq!((code, err.as_str()), (0, ""), "{out}");
-    has(&out, "its 1 non-spec file(s) in HEAD; both sides kept in specs/451-x/plan-review.json, specs/451-x/tasks.md\n");
+    has(&out, "its 1 non-spec file(s) in HEAD; resolved specs/451-x/plan-review.json (the record's merge), specs/451-x/tasks.md (both sides' list lines)\n");
     let tasks = std::fs::read_to_string(root.join(TASKS_MD)).unwrap();
     assert_eq!(
         tasks,
@@ -224,7 +224,7 @@ fn a_code_conflict_stops_with_the_pick_standing_and_nothing_resolved() {
     let (code, out, err) = carried(&root, &builder);
     assert_eq!((code, out.as_str()), (2, ""));
     has(&err, "carry: STOPPED - ");
-    has(&err, "a conflict this command does not resolve, in rust/lib.rs (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved\n");
+    has(&err, "a conflict this command does not resolve, in rust/lib.rs (not a tasks.md, plan.md, request.md or plan-review.json of a feature) - nothing was resolved\n");
     has(&err, "  a cherry-pick is in progress in ");
     has(
         &err,
@@ -330,42 +330,6 @@ fn keep_both_takes_only_list_lines_both_sides_added() {
     assert_eq!(tasks("no conflict\n"), Ok("no conflict\n".to_owned()));
 }
 
-#[test]
-fn keep_both_takes_whole_plan_sections_both_sides_added() {
-    let hunk = |ours: &str, theirs: &str| {
-        format!("top\n<<<<<<< a\n{ours}||||||| o\n=======\n{theirs}>>>>>>> b\nend\n")
-    };
-    let plan = |text: &str| keep_both(text, Kind::Plan);
-    // each side's stub whole, the lines they share kept in both; a section both hold whole is not doubled
-    assert_eq!(
-        plan(&hunk(
-            "\n### T10 (a)\n\nsame words\n\n### T10 Approach\n\n1. same\n\n",
-            "\n### T10 (a)\n\nsame words\n\n### T11 (b)\n\nsame words\n\n### T11 Approach\n\n1. same\n\n"
-        )),
-        Ok("top\n\n### T10 (a)\n\nsame words\n\n### T10 Approach\n\n1. same\n\n### T11 (b)\n\nsame words\n\n### T11 Approach\n\n1. same\n\nend\n".to_owned())
-    );
-    // one task's section written by both, differently: a choice, left to a hand
-    assert_eq!(
-        plan(&hunk("### T10 (a)\n\nours\n", "### T10 (a)\n\ntheirs\n")),
-        Err("both sides wrote T10's section, differently".to_owned())
-    );
-    // prose that is no section, and a heading that names no task
-    for theirs in ["A paragraph.\n", "### Notes\n", "### Tx\n"] {
-        assert_eq!(
-            plan(&hunk("### T10 (a)\n", theirs)),
-            Err(format!(
-                "an added block that is no `### T<n>` section: {}",
-                theirs.trim_end()
-            ))
-        );
-    }
-    // a heading that ends at its id, and a side of blank lines only
-    assert_eq!(
-        plan(&hunk("### T10\n", "\n")),
-        Ok("top\n### T10\n\nend\n".to_owned())
-    );
-}
-
 /// A task filed in `tree` by the real `make task-add` and committed: what it printed.
 fn filed(tree: &Path, title: &str) -> String {
     let said = l7r_gate_task::task_add::cli(&["451".to_owned()], tree, title);
@@ -413,7 +377,7 @@ fn two_trees_filed_tasks_are_carried_with_both_boxes_and_both_stubs() {
     assert_eq!((code, err.as_str()), (0, ""), "{out}");
     has(
         &out,
-        "both sides kept in specs/451-x/plan.md, specs/451-x/tasks.md\n",
+        "resolved specs/451-x/plan.md (by section), specs/451-x/tasks.md (both sides' list lines)\n",
     );
     let tasks = std::fs::read_to_string(root.join(TASKS_MD)).unwrap();
     assert!(tasks.ends_with(
@@ -552,3 +516,5 @@ fn the_arguments_are_checked() {
     has(&said.stderr, "is no git tree");
     let _ = unfinished::git(&root, &["status"]);
 }
+
+mod spec;

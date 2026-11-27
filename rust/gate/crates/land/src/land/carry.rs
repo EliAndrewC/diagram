@@ -12,17 +12,20 @@
 //!   against be3f3a248b's parent).
 //!   A task `make task-add` filed in each tree is the same conflict, each box with its research line: theirs is kept by BLOCK - a
 //!   list line with its continuation lines - never line by line (451 T289: the second box's research line, the same words as the
-//!   first's, was dropped).
-//! - `specs/*/plan.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
-//!   `### T<n>` heading - the section stub `make task-add` appends, one filed in each tree (451 T289: a builder files what it
-//!   found): ours, then theirs' sections ours lacks; one task's section written differently on both sides stops.
+//!   first's, was dropped), and a bare open box is given back the lines a side holds under it ([`boxes`], 451 T300).
+//! - `specs/*/plan.md`, by SECTION from its three whole sides ([`sections`], 451 T300): the builder's filled stub taken, the stub
+//!   it removed dropped, the clone's sections kept, the builder's new ones appended; one section both sides changed stops.
+//! - `specs/*/request.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
+//!   `## ` heading - a dated section of the GM's words, one written in each tree: ours, a blank line, then theirs' sections ours
+//!   lacks; one heading over different words on the two sides stops (451 T300).
 //! - `specs/*/plan-review.json`, merged three-way by the record's own merge (`plan merge-record`, 451 T256), asked in process where
 //!   the tree's git config defines no driver.
 //!
 //! Any other conflict - another file, or a hunk both sides changed - stops: nothing is resolved, the files and the next command are
 //! printed, the pick is left standing, and `make land` refuses until it is finished. The carry ENDS by verifying: nothing in
 //! progress, nothing unmerged, nothing staged, and each non-spec file of the carried commit in HEAD - changed by the carry (HEAD
-//! against the commit before it names the path) or already holding the carried commit's content. Its last line says so.
+//! against the commit before it names the path) or already holding the carried commit's content. Its last line says so, and names
+//! each file it resolved with the rule that resolved it.
 //!
 //! A commit whose changes HEAD already holds - carried before under another sha, or its lines kept from both sides equal to ours -
 //! makes an EMPTY pick: it is skipped, verified the same way, and said to change nothing (exit 0, nothing left in progress; T304).
@@ -35,6 +38,9 @@ use std::path::Path;
 use l7r_gate_core::Reply;
 
 use super::unfinished::{git, git_dir, lines, refusals};
+
+mod boxes;
+mod sections;
 
 const USAGE: &str =
     "usage: l7r-gate land --carry <tree> [<commit>]   (make carry FROM=<builder's worktree> [COMMIT=<sha>])";
@@ -84,27 +90,18 @@ fn listed(line: &str) -> bool {
 enum Kind {
     /// `specs/*/tasks.md`: list lines, each with its continuation lines - an Occasions line, a task's box with its research line.
     Tasks,
-    /// `specs/*/plan.md`: whole `### T<n>` sections - the stub `make task-add` appends (451 T289).
-    Plan,
+    /// `specs/*/request.md`: whole `## ` sections - a dated section of the GM's words (451 T300).
+    Request,
 }
 
-/// The digits of the task a plan heading `### T<n> ...` names.
-fn section_id(line: &str) -> Option<&str> {
-    let rest = line.strip_prefix("### T")?;
-    let digits = rest
-        .find(|c: char| !c.is_ascii_digit())
-        .unwrap_or(rest.len());
-    (digits > 0).then(|| &rest[..digits])
-}
-
-/// One side's added lines as its blocks: in a tasks.md a list line with its continuation lines (a blank its own block), in a plan.md
-/// a `### ` heading with the lines under it.
+/// One side's added lines as its blocks: in a tasks.md a list line with its continuation lines (a blank its own block), in a
+/// request.md a `## ` heading with the lines under it.
 fn blocks(lines: &[&str], kind: Kind) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     for line in lines {
         let opens = match kind {
             Kind::Tasks => line.starts_with("- ") || line.trim().is_empty(),
-            Kind::Plan => line.starts_with("### "),
+            Kind::Request => line.starts_with("## "),
         };
         match out.last_mut() {
             Some(last) if !opens => last.push_str(line),
@@ -125,7 +122,8 @@ fn head(block: &str) -> &str {
 /// where ours held the same line, so the second of two filed boxes lost its `      research: rendering` line - the first box has the
 /// same one. A block of theirs is dropped where ours has it whole - in a tasks.md also where theirs is the bare list
 /// line of a block ours has (ours' continuation kept) - and one list line with different lines under it on each side stops, as one
-/// task's plan section written differently by both does: either is a choice between the sides, not an addition.
+/// heading of a request over different words does: either is a choice between the sides, not an addition. A request's sections
+/// stand a blank line apart.
 fn both(ours: &[&str], theirs: &[&str], kind: Kind) -> Result<String, String> {
     for side in [ours, theirs] {
         let odd = match kind {
@@ -134,11 +132,11 @@ fn both(ours: &[&str], theirs: &[&str], kind: Kind) -> Result<String, String> {
                 .find(|l| !listed(l))
                 .map(|l| ("line", "list line", l)),
             // a side opens with a section's heading, so what it added is whole sections and nothing of another's
-            Kind::Plan => side
+            Kind::Request => side
                 .iter()
                 .find(|l| !l.trim().is_empty())
-                .filter(|l| section_id(l).is_none())
-                .map(|l| ("block", "`### T<n>` section", l)),
+                .filter(|l| !l.starts_with("## "))
+                .map(|l| ("block", "`## ` section", l)),
         };
         if let Some((what, wanted, line)) = odd {
             return Err(format!(
@@ -150,23 +148,26 @@ fn both(ours: &[&str], theirs: &[&str], kind: Kind) -> Result<String, String> {
     let held = blocks(ours, kind);
     let mut out: String = ours.concat();
     for block in blocks(theirs, kind) {
+        let same_line = held.iter().any(|h| head(h) == head(&block));
         // ours has it whole, or has the list line theirs adds bare
-        let same_line = kind == Kind::Tasks && held.iter().any(|h| head(h) == head(&block));
-        if held.contains(&block) || (same_line && block == head(&block)) {
+        if held.contains(&block) || (kind == Kind::Tasks && same_line && block == head(&block)) {
             continue;
         }
-        // one list line with different lines under it on each side is a choice between them, as one task's section is below
+        // one list line with different lines under it on each side, or one heading over different words, is a choice between them
         if same_line && !head(&block).trim().is_empty() {
-            return Err(format!(
-                "both sides added one list line with different lines under it: {}",
-                head(&block).trim_end()
-            ));
+            return Err(match kind {
+                Kind::Tasks => format!(
+                    "both sides added one list line with different lines under it: {}",
+                    head(&block).trim_end()
+                ),
+                Kind::Request => format!(
+                    "both sides added one section, differently: {}",
+                    head(&block).trim_end()
+                ),
+            });
         }
-        // two trees each writing one task's section is a choice between them, not an addition
-        if let Some(id) = section_id(&block)
-            .filter(|id| kind == Kind::Plan && held.iter().any(|h| section_id(h) == Some(id)))
-        {
-            return Err(format!("both sides wrote T{id}'s section, differently"));
+        if kind == Kind::Request && !block.trim().is_empty() && !out.ends_with("\n\n") {
+            out.push('\n');
         }
         out += &block;
     }
@@ -200,42 +201,62 @@ fn keep_both(merged: &str, kind: Kind) -> Result<String, String> {
     Ok(out)
 }
 
-/// One unmerged path resolved by keeping both sides: its merged text, or why it is left to a hand. Its three stages are written under
-/// `scratch` and merged there.
-fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<String, String> {
-    let kind = if spec_file(path, "tasks.md") {
-        Some(Kind::Tasks)
-    } else if spec_file(path, "plan.md") {
-        Some(Kind::Plan)
-    } else {
-        None
-    };
-    if kind.is_none() && !spec_file(path, "plan-review.json") {
-        return Err("not a tasks.md, plan.md or plan-review.json of a feature".to_owned());
+/// `git merge-file -p --diff3` of three files, ours first: the merge with its conflicts marked.
+fn merge_file(root: &Path, files: &[String]) -> Result<String, String> {
+    let args = [
+        "merge-file",
+        "-p",
+        "--diff3",
+        &files[1],
+        &files[0],
+        &files[2],
+    ];
+    Ok(git(root, &args)?.1)
+}
+
+/// One unmerged path resolved by its file's rule: its merged text and the rule's name, or why it is left to a hand. Its three
+/// stages are written under `scratch` and merged there.
+fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<(String, &'static str), String> {
+    let spec = |name: &str| spec_file(path, name);
+    if !["tasks.md", "plan.md", "request.md", "plan-review.json"]
+        .iter()
+        .any(|name| spec(name))
+    {
+        return Err(
+            "not a tasks.md, plan.md, request.md or plan-review.json of a feature".to_owned(),
+        );
     }
     let mut files = Vec::new();
+    let mut sides = Vec::new();
     for stage in ["1", "2", "3"] {
         let (rc, text) = git(root, &["show", &format!(":{stage}:{path}")])?;
         if rc != 0 {
             return Err("added or deleted by one side".to_owned());
         }
         let file = scratch.join(stage);
-        std::fs::write(&file, text).map_err(super::io)?;
+        std::fs::write(&file, &text).map_err(super::io)?;
         files.push(file.to_string_lossy().into_owned());
+        sides.push(text);
     }
-    if let Some(kind) = kind {
-        let (_, merged) = git(
-            root,
-            &[
-                "merge-file",
-                "-p",
-                "--diff3",
-                &files[1],
-                &files[0],
-                &files[2],
-            ],
-        )?;
-        return keep_both(&merged, kind);
+    if spec("plan.md") {
+        return Ok((
+            sections::merged(&sides[0], &sides[1], &sides[2])?,
+            "by section",
+        ));
+    }
+    if spec("request.md") {
+        let merged = merge_file(root, &files)?;
+        return Ok((
+            keep_both(&merged, Kind::Request)?,
+            "both sides' dated sections",
+        ));
+    }
+    if spec("tasks.md") {
+        let kept = keep_both(&merge_file(root, &files)?, Kind::Tasks)?;
+        return Ok((
+            boxes::restored(&kept, [&sides[1], &sides[2]]),
+            "both sides' list lines",
+        ));
     }
     let said = l7r_gate_plan::plan::merge_files(
         Path::new(&files[0]),
@@ -245,18 +266,19 @@ fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<String, String> {
     if said.code != 0 {
         return Err("a side is not JSON".to_owned());
     }
-    std::fs::read_to_string(&files[1]).map_err(super::io)
+    let text = std::fs::read_to_string(&files[1]).map_err(super::io)?;
+    Ok((text, "the record's merge"))
 }
 
-/// The stopped pick's conflicts resolved where each can be kept both - all of them, or none: the paths resolved, or each path with
-/// why it stops.
+/// The stopped pick's conflicts resolved where each has a rule that resolves it - all of them, or none: each path resolved with its
+/// rule's name, or each path with why it stops.
 fn resolve_all(
     root: &Path,
     unmerged: &[String],
 ) -> Result<Result<Vec<String>, Vec<String>>, String> {
     let scratch = git_dir(root)?.join("l7r-carry");
     std::fs::create_dir_all(&scratch).map_err(super::io)?;
-    let texts: Vec<Result<String, String>> = unmerged
+    let texts: Vec<Result<(String, &'static str), String>> = unmerged
         .iter()
         .map(|p| resolved(root, &scratch, p))
         .collect();
@@ -269,11 +291,28 @@ fn resolve_all(
     if !stops.is_empty() {
         return Ok(Err(stops));
     }
+    let mut done = Vec::new();
     for (path, text) in unmerged.iter().zip(texts) {
-        std::fs::write(root.join(path), text.unwrap_or_default()).map_err(super::io)?;
+        let (text, rule) = text.unwrap_or_default();
+        std::fs::write(root.join(path), text).map_err(super::io)?;
         git(root, &["add", "--", path])?;
+        done.push(format!("{path} ({rule})"));
     }
-    Ok(Ok(unmerged.to_vec()))
+    // a tasks.md git merged cleanly keeps its boxes' lines too
+    for path in lines(&git(root, &["diff", "--cached", "--name-only"])?.1) {
+        let side = |rev: &str| git(root, &["show", &format!("{rev}:{path}")]).map(|said| said.1);
+        if !spec_file(&path, "tasks.md") || unmerged.contains(&path) {
+            continue;
+        }
+        let text = std::fs::read_to_string(root.join(&path)).map_err(super::io)?;
+        let whole = boxes::restored(&text, [&side("HEAD")?, &side("CHERRY_PICK_HEAD")?]);
+        if whole != text {
+            std::fs::write(root.join(&path), whole).map_err(super::io)?;
+            git(root, &["add", "--", &path])?;
+            done.push(format!("{path} (a bare box's lines restored)"));
+        }
+    }
+    Ok(Ok(done))
 }
 
 /// The carried commit's files outside `specs/` that HEAD does not hold: neither changed since `before` nor at the commit's content.
@@ -436,7 +475,7 @@ fn end(
     let both = if kept.is_empty() {
         String::new()
     } else {
-        format!("; both sides kept in {}", kept.join(", "))
+        format!("; resolved {}", kept.join(", "))
     };
     // HEAD where the carry found it: the pick came out empty and was skipped
     let how = if before.starts_with(&head) {

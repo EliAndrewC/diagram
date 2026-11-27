@@ -3070,31 +3070,42 @@ engine speed, so no checklist.
 <!-- plan-archive: T298 to T298 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T299 to T272 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 <!-- plan-archive: T299 to T282 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
-### T300 (<why: the finding or measurement that files it>)
+### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make carry` resolves by rule the three spec-file conflicts the session resolved by script that day (`resolve3.py`, kept at `/home/agent/.claude/jobs/c6fd72d1/tmp/`, read as the specification by example). Measured 2026-11-26 by REPLAY (`dev/measurements/2026-11-26/carry-replay/`: `t300-replay.sh` redoes each builder commit's pick onto the parent of the clone's commit of it in a scratch clone and compares the carry's tree with the session's commit; `t300-pin.py` is the box check): of the clone's 68 commits since 2026-11-26 opening `451 T`, 54 pair with a builder's commit (same author time and subject), 30 of those conflict under a plain `git cherry-pick`; the carry before this task carried 16 of the 30 (`t300-before.txt`) and now carries 24 (`t300-job1.txt`), 16 identical to the session's commit and 8 differing only where the hand resolution was wrong (below). The 6 still stopping are this task's second job (4: `docs/make-targets.html`, the one-line and adjacent-block conflicts of T274, T285, T334 and T336's carries) and T399's (2: a `.jsonl`).
+  - **(a) `plan.md` by section** (`rust/gate/crates/land/src/land/carry/sections.rs`): merged from its three whole sides, never from hunks - the clone's order kept, a section only one side changed taken from that side, one the builder removed dropped, one the clone removed left out, the builder's new ones appended; it stops where both sides changed one section, where a side removed what the other changed, where both changed the text before the first section, or where a side holds one task's sections in two places. `resolve3.py` was silent on two of those (a section the builder changed that the clone no longer has was never emitted; one the builder removed that the clone changed was dropped): both are stops here. This replaces the hunk rule of T289 for a plan (its test, two trees' filed stubs, passes unchanged).
+  - **(b) `tasks.md`** (`carry/boxes.rs`): the carry's own merge already kept a box with its line (T289's by-block rule; its diff3 hunks held whole blocks in all 30 replays). The seven lost research lines were the HAND's: git's conflict block ended between a box and the line under it and the script kept both sides of the block. What the hand lost then persisted - git merges the clone's bare box cleanly - so the rule added is the pin itself: after the merge a bare open box that either side holds with lines under it takes them back, the clone's first, in the tasks.md the carry resolved and in one git merged cleanly beside a conflict. In the replay, measured 2026-11-26 (`t300-pin.py` over each carried tree), no carried tasks.md ends with a bare box either side had lines under (`pin-lost=[]` on all 24), where 11 of the session's 30 commits did.
+  - **Tried and dropped**: merging a tasks.md with a box and its lines joined as one line, so no hunk could split them. It stopped three carries the line merge resolves (T251, T293, T334: "a hunk both sides changed"); recorded in `boxes.rs`'s header so it is not tried again.
+  - **(c) `request.md`**: a hunk both sides only added `## ` sections to keeps both, the clone's first, one blank line between; one heading over different words stops.
+  - **The last line** names each file resolved with its rule (`; resolved <path> (by section), <path> (both sides' list lines)`, also `both sides' dated sections`, `the record's merge`, `a bare box's lines restored`), where it said `both sides kept in <paths>`.
+  - **The 8 differences from the session's commits, each the hand's fault**, measured 2026-11-26 (`git diff --stat` of the carry's tree against the session's commit, `t300-job1.txt`): `tasks.md` one line more in 7 (1b687e3c1f, 1ceb830054, d217a39fad, ca16aed82a, 83326f83a3, 148fa78bdf, 1783cf6eed: the research line the hand lost, restored by hand later in 39801a6844); `request.md` one blank line more in 2 (83326f83a3, 1783cf6eed: the hand left a `## ` heading on the line after the section before it); `plan.md` one blank line fewer in 2 (e8e9ab809a, d217a39fad: two blank lines before a section where the plan has one everywhere else).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a plan merged by section | `a_plan_is_merged_by_section_the_builders_filled_stub_taken_and_the_clones_withdrawn_stub_left_out`, `a_plan_section_both_sides_changed_stops`, red on the old code; `sections_merged_takes_each_side_s_change_and_stops_on_a_choice` | n/a: tooling | none | none |
+| a bare box's lines restored | `every_open_box_keeps_the_line_under_it_that_either_side_had`, red on the old code; `a_tasks_git_merged_cleanly_beside_a_conflict_keeps_its_boxes_lines_too`, `a_bare_open_box_takes_back_the_lines_a_side_holds_under_it` | n/a: tooling | none | none |
+| a request's dated sections kept both | `a_request_both_sides_added_a_dated_section_to_keeps_both`, `a_request_section_both_sides_wrote_differently_stops_and_one_both_hold_is_not_doubled`, red on the old code; `keep_both_takes_whole_request_sections_both_sides_added` | n/a: tooling | none | none |
 
 ### T300 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's commit reaches the clone by `make carry` without the session's hand: the spec files every parallel carry conflicts in are resolved by rule, and what the rule cannot decide stops with the files named, as before.
+2. **The constraints.** The carry resolves all of a pick's conflicts or none; it ends verified (nothing in progress, unmerged or staged, the non-spec files in HEAD); a choice between the sides is never made for the session; an open box keeps the line under it.
+3. **Where each comes from.** O: the replay of 2026-11-26's carries (30 conflicted, 14 stopping before); O: `resolve3.py`, what a correct resolution was; G: the brief's words for T300's carry part, the session's.
+4. **Do they describe the world here?** Yes: measured by replaying every paired carry of the day, not by reading the scripts alone - the replay is what showed the lost lines were the hand's and not the carry's.
+5. **The order.** Before the second job (the generated and one-line files), which adds rules beside these; before T399 and T400.
+6. **The exits.** Green: the land crate's tests and the replay's count. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One probe dropped (the joined merge, above); the red fixtures took three shapes before git itself conflicted on them - the real conflict's shape (the clone withdrawing the plan's last stub) is the one kept.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 24 of the 30 conflicted carries of 2026-11-26 carried untouched where 16 were, none ending with a bare box.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session at a stopped carry resolves nothing by hand for a plan.md, a tasks.md or a request.md; a builder waits that much less for its tree's release.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A carry still stops on a line-per-record file both sides appended to or pruned (`dev/claims-triage-skips.jsonl`, `dev/gm-attribution-baseline.jsonl`; 2 of the 30 replayed carries), resolved by hand. Not fixed here: a third file class with its own rule, outside the brief's cases. Filed as T399; lands before T400.
+- A pick git merges wholly cleanly is committed before the box check runs, so a bare box the builder's tree has lines for stays bare there (0 of the 30 replays; the step beside a conflict caught the 1 that would have). Not fixed here: it needs the pick made without committing, a change to the carry's whole flow. Filed as T400; lands before T392.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's turns at a stopped carry are builder-idle time, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
 
 
 ### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)
@@ -5434,6 +5445,59 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T394 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T399 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T399 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T400 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T400 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

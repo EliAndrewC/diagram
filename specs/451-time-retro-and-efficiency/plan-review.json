@@ -2358,6 +2358,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)": {
+   "sha256": "35ca7bb5fce70daf0fcfbf9b5593a88568e91d1008dcfcc4ad06b0216ad6d086",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 Approach (checklist part A)": {
+   "sha256": "95102fa6ab794164da55b1e15addffabec2cdc4f27d5937243ef34202ffb25a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -29902,6 +29914,82 @@
      "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)",
+    "### T300 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-plan-by-section",
+     "summary": "make carry merges a conflicted plan.md from its three whole sides by section (clone order kept, one-side changes taken, removals honored, builder's new sections appended), stopping where both sides changed one section, a side removed what the other changed, both changed the preamble, or one task's sections stand in two places; replaces T289's hunk rule for a plan",
+     "class": "within",
+     "why": "The carry's job is to land a builder's commit without the session's hand; every case it resolves has one side unchanged, and every case that would need a choice between sides stops with the files named, so no choice is made for the session. Replacing T289's rule for a plan is a mechanism choice inside the task, with T289's test kept."
+    },
+    {
+     "id": "a-resolve3-silent-cases-stop",
+     "summary": "the two cases the session's resolve3.py got wrong silently (a builder-changed section the clone no longer has; a builder-removed section the clone changed) become stops rather than being copied from the script",
+     "class": "within",
+     "why": "Taking the script as a specification by example but refusing its two silent losses keeps the rule from deciding between sides; stopping is the existing behavior for an undecidable carry, not a reduction of what the carry was asked to do."
+    },
+    {
+     "id": "b-bare-box-pin",
+     "summary": "after the merge, a bare open box that either side holds with lines under it takes them back (the clone's first), in a tasks.md the carry resolved and in one git merged cleanly beside a conflict",
+     "class": "within",
+     "why": "Serves the plan's constraint that an open box keeps the line under it; a bare box takes back the lines a side holds under it, the clone's first. Measured by replay (pin-lost=[] on all 24 carried trees, where 11 of the session's 30 hand commits had a bare box a side had lines under)."
+    },
+    {
+     "id": "b-joined-merge-dropped",
+     "summary": "joining a box and its lines into one line before merging was tried and dropped because it stopped three carries the line merge resolves; recorded in boxes.rs's header",
+     "class": "within",
+     "why": "A rejected probe, recorded so it is not retried; it removes nothing from what was asked."
+    },
+    {
+     "id": "c-request-dated-sections",
+     "summary": "a request.md hunk where both sides only added '## ' sections keeps both, the clone's first, one blank line between; one heading over different words stops",
+     "class": "within",
+     "why": "Both sides' added sections are the GM's recorded words and keeping both loses none of them; a heading both sides wrote differently is a choice and stops. Inside the carry's purpose."
+    },
+    {
+     "id": "last-line-names-rules",
+     "summary": "the carry's last line names each file resolved with its rule, where it said 'both sides kept in <paths>'",
+     "class": "within",
+     "why": "Reporting detail of the same mechanism; says what was done without changing it."
+    },
+    {
+     "id": "eight-differences-accepted",
+     "summary": "the 8 carried trees that differ from the session's hand commits (a research line restored in 7 tasks.md, a blank line in 2 request.md and 2 plan.md) are taken as the carry being right and the hand wrong",
+     "class": "within",
+     "why": "No exactness standard applies (the GM 2026-11-18): the carry need not reproduce the hand's bytes, and each difference is named and measured (git diff --stat against the session's commit, t300-job1.txt); the tasks.md ones are the lines the hand lost and later restored by hand in 39801a6844."
+    },
+    {
+     "id": "part-1-split",
+     "summary": "this section is part 1 of T300's carry part (the spec files); the task stays open for the generated and one-line files (4 of the 6 still-stopping replays) and its registry tables",
+     "class": "within",
+     "why": "Staging within one open task, not a cut: the remaining job stays in T300 and is ordered next ('Before the second job')."
+    },
+    {
+     "id": "left-T399-jsonl",
+     "summary": "a carry still stops on a line-per-record .jsonl both sides appended to or pruned (2 of 30 replays); left to T399, which lands before T400",
+     "class": "within",
+     "why": "A carry that stops with the files named is the carry's designed behavior, not a wrong outcome, so nothing defective is left; the item states why it is not fixed here, its filed task and its order, as FR-009 asks of a found-and-left item."
+    },
+    {
+     "id": "left-T400-clean-pick",
+     "summary": "a pick git merges wholly cleanly is committed before the box check runs, so a bare box (an earlier hand loss) that the builder's tree holds lines for stays bare there (0 of 30 replays); left to T400, which lands before T392",
+     "class": "within",
+     "why": "request.md and the spec are silent on the carry, so 'an open box keeps the line under it' is the plan's own constraint. The block states the lost lines were the hand's and persisted through git's clean merge: on a clean pick the carry fails to repair an earlier hand loss, it does not produce one, so it is not a defect this task leaves. Incidence 0 of 30 replays (the step beside a conflict caught the 1 that would have). The item carries FR-009's three parts: why not here (the pick made without committing changes the carry's whole flow), filed as T400, lands before T392."
+    },
+    {
+     "id": "perf-tag-and-order",
+     "summary": "the task is [perf] under FR-013 (a session's turns at a stopped carry are builder-idle time), with no engine checklist; ordered before its second job, T399 and T400",
+     "class": "within",
+     "why": "FR-013 names work that makes the landings or the builders' loop faster as performance work; the ordering is scheduling inside the feature."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -47397,6 +47485,80 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T300": {
+   "section_sha256": "400b07ea2b4da5e9ed20328077d9b1b8fdd0f27c655a0546c95f267d4706558f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-plan-by-section",
+     "summary": "make carry merges a conflicted plan.md from its three whole sides by section (clone order kept, one-side changes taken, removals honored, builder's new sections appended), stopping where both sides changed one section, a side removed what the other changed, both changed the preamble, or one task's sections stand in two places; replaces T289's hunk rule for a plan",
+     "class": "within",
+     "why": "The carry's job is to land a builder's commit without the session's hand; every case it resolves has one side unchanged, and every case that would need a choice between sides stops with the files named, so no choice is made for the session. Replacing T289's rule for a plan is a mechanism choice inside the task, with T289's test kept."
+    },
+    {
+     "id": "a-resolve3-silent-cases-stop",
+     "summary": "the two cases the session's resolve3.py got wrong silently (a builder-changed section the clone no longer has; a builder-removed section the clone changed) become stops rather than being copied from the script",
+     "class": "within",
+     "why": "Taking the script as a specification by example but refusing its two silent losses keeps the rule from deciding between sides; stopping is the existing behavior for an undecidable carry, not a reduction of what the carry was asked to do."
+    },
+    {
+     "id": "b-bare-box-pin",
+     "summary": "after the merge, a bare open box that either side holds with lines under it takes them back (the clone's first), in a tasks.md the carry resolved and in one git merged cleanly beside a conflict",
+     "class": "within",
+     "why": "Serves the plan's constraint that an open box keeps the line under it; a bare box takes back the lines a side holds under it, the clone's first. Measured by replay (pin-lost=[] on all 24 carried trees, where 11 of the session's 30 hand commits had a bare box a side had lines under)."
+    },
+    {
+     "id": "b-joined-merge-dropped",
+     "summary": "joining a box and its lines into one line before merging was tried and dropped because it stopped three carries the line merge resolves; recorded in boxes.rs's header",
+     "class": "within",
+     "why": "A rejected probe, recorded so it is not retried; it removes nothing from what was asked."
+    },
+    {
+     "id": "c-request-dated-sections",
+     "summary": "a request.md hunk where both sides only added '## ' sections keeps both, the clone's first, one blank line between; one heading over different words stops",
+     "class": "within",
+     "why": "Both sides' added sections are the GM's recorded words and keeping both loses none of them; a heading both sides wrote differently is a choice and stops. Inside the carry's purpose."
+    },
+    {
+     "id": "last-line-names-rules",
+     "summary": "the carry's last line names each file resolved with its rule, where it said 'both sides kept in <paths>'",
+     "class": "within",
+     "why": "Reporting detail of the same mechanism; says what was done without changing it."
+    },
+    {
+     "id": "eight-differences-accepted",
+     "summary": "the 8 carried trees that differ from the session's hand commits (a research line restored in 7 tasks.md, a blank line in 2 request.md and 2 plan.md) are taken as the carry being right and the hand wrong",
+     "class": "within",
+     "why": "No exactness standard applies (the GM 2026-11-18): the carry need not reproduce the hand's bytes, and each difference is named and measured (git diff --stat against the session's commit, t300-job1.txt); the tasks.md ones are the lines the hand lost and later restored by hand in 39801a6844."
+    },
+    {
+     "id": "part-1-split",
+     "summary": "this section is part 1 of T300's carry part (the spec files); the task stays open for the generated and one-line files (4 of the 6 still-stopping replays) and its registry tables",
+     "class": "within",
+     "why": "Staging within one open task, not a cut: the remaining job stays in T300 and is ordered next ('Before the second job')."
+    },
+    {
+     "id": "left-T399-jsonl",
+     "summary": "a carry still stops on a line-per-record .jsonl both sides appended to or pruned (2 of 30 replays); left to T399, which lands before T400",
+     "class": "within",
+     "why": "A carry that stops with the files named is the carry's designed behavior, not a wrong outcome, so nothing defective is left; the item states why it is not fixed here, its filed task and its order, as FR-009 asks of a found-and-left item."
+    },
+    {
+     "id": "left-T400-clean-pick",
+     "summary": "a pick git merges wholly cleanly is committed before the box check runs, so a bare box (an earlier hand loss) that the builder's tree holds lines for stays bare there (0 of 30 replays); left to T400, which lands before T392",
+     "class": "within",
+     "why": "request.md and the spec are silent on the carry, so 'an open box keeps the line under it' is the plan's own constraint. The block states the lost lines were the hand's and persisted through git's clean merge: on a clean pick the carry fails to repair an earlier hand loss, it does not produce one, so it is not a defect this task leaves. Incidence 0 of 30 replays (the step beside a conflict caught the 1 that would have). The item carries FR-009's three parts: why not here (the pick made without committing changes the carry's whole flow), filed as T400, lands before T392."
+    },
+    {
+     "id": "perf-tag-and-order",
+     "summary": "the task is [perf] under FR-013 (a session's turns at a stopped carry are builder-idle time), with no engine checklist; ordered before its second job, T399 and T400",
+     "class": "within",
+     "why": "FR-013 names work that makes the landings or the builders' loop faster as performance work; the ordering is scheduling inside the feature."
     }
    ],
    "verdict": "CLEAR"

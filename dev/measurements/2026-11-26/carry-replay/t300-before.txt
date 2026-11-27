@@ -1,0 +1,60 @@
+8f4c1f505f 451 T383 T385: an => C code=2 
+   carry: STOPPED - 4d153c22f3 is NOT carried into REPLAY: a conflict this command does not resolve, in plan.md (a hunk both sides changed, not only added to) - nothing was resolved
+e8e9ab809a 451 T332 T344: an => C code=0 identical
+   carry: c488f46392 carried into REPLAY as 333da95eb4 - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; both sides kept in plan-review.json, plan.md, tasks.md
+c186dc1450 451 T325: one fea => C code=0 identical
+   carry: de405fca47 carried into REPLAY as 33316f6966 - verified: nothing in progress, nothing unmerged, nothing staged, its 37 non-spec file(s) in HEAD; both sides kept in plan-review.json
+1b687e3c1f 451 T324 T345: th => C code=2 
+   carry: STOPPED - b3c375c741 is NOT carried into REPLAY: a conflict this command does not resolve, in plan.md (a hunk both sides changed, not only added to) - nothing was resolved
+1ceb830054 451 T373: measure => C code=2 
+   carry: STOPPED - 781644768b is NOT carried into REPLAY: a conflict this command does not resolve, in plan.md (a hunk both sides changed, not only added to) - nothing was resolved
+2207da07bc 451 T359: make ta => C code=2 
+   carry: STOPPED - b06ae8104c is NOT carried into REPLAY: a conflict this command does not resolve, in plan.md (a hunk both sides changed, not only added to) - nothing was resolved
+649ef2659d 451 T370 T372: th => C code=0 identical
+   carry: 566f4f51f8 carried into REPLAY as f0a1f7a547 - verified: nothing in progress, nothing unmerged, nothing staged, its 6 non-spec file(s) in HEAD; both sides kept in plan-review.json
+c1b36d9f01 451 T347: a test => CO code=0 identical
+   carry: f967f6a3c5 carried into REPLAY as e6a41ef143 - verified: nothing in progress, nothing unmerged, nothing staged, its 18 non-spec file(s) in HEAD; both sides kept in plan-review.json, plan.md, tasks.md
+f5007f94d3 451 T336: the poo => C code=2 
+   carry: STOPPED - 7037420458 is NOT carried into REPLAY: a conflict this command does not resolve, in Makefile (not a tasks.md, plan.md or plan-review.json of a feature), docs/make-targets.html (not a tasks.md, plan.md or plan-review.json of a feature), rust/gate/crates/task/src/builder_tree.rs (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+1220d6d077 451 T339: the idl => C code=0 identical
+   carry: 6f9843a145 carried into REPLAY as 5c4135f7eb - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+b1d4a453fe 451 T334: a build => C code=2 
+   carry: STOPPED - 022170716b is NOT carried into REPLAY: a conflict this command does not resolve, in Makefile (not a tasks.md, plan.md or plan-review.json of a feature), docs/make-targets.html (not a tasks.md, plan.md or plan-review.json of a feature), rust/gate/CLAUDE.md (not a tasks.md, plan.md or plan-review.json of a feature), scripts/container/builder-brief.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+d217a39fad 451 T347: a measu => C code=0 identical
+   carry: 42444a9899 carried into REPLAY as acd44f6e91 - verified: nothing in progress, nothing unmerged, nothing staged, its 8 non-spec file(s) in HEAD; both sides kept in plan.md
+f40606920e 451 T274: the clo => C code=2 
+   carry: STOPPED - 4fd43cb9ce is NOT carried into REPLAY: a conflict this command does not resolve, in docs/make-targets.html (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+ca16aed82a 451 T315: a measu => C code=2 
+   carry: STOPPED - 4e198492c0 is NOT carried into REPLAY: a conflict this command does not resolve, in request.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+83326f83a3 451 T293: make ta => C code=2 
+   carry: STOPPED - 0d61f38c18 is NOT carried into REPLAY: a conflict this command does not resolve, in request.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+148fa78bdf 451 T299 and T282 => C code=2 
+   carry: STOPPED - 9bba26edeb is NOT carried into REPLAY: a conflict this command does not resolve, in plan.md (a hunk both sides changed, not only added to), request.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+1783cf6eed 451 T316: a pool => CO code=2 
+   carry: STOPPED - e00df64894 is NOT carried into REPLAY: a conflict this command does not resolve, in request.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+240c7d89f9 451 T298: make ta => C code=2 
+   carry: STOPPED - a480ff8848 is NOT carried into REPLAY: a conflict this command does not resolve, in dev/claims-triage-skips.jsonl (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+0237c1a3aa 451 T304 (two par => C code=0 identical
+   carry: f75c858e9c carried into REPLAY as 9e10437e1a - verified: nothing in progress, nothing unmerged, nothing staged, its 3 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+24fe2cc770 451 T159: rust/mo => C code=0 identical
+   carry: 8d5356f5d2 carried into REPLAY as 2976621fd0 - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; both sides kept in plan-review.json
+8c1d4c69bb 451 T104: the idl => C code=0 identical
+   carry: 7500146fb3 carried into REPLAY as 0bb18554ed - verified: nothing in progress, nothing unmerged, nothing staged, its 3 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+13c88486f8 451 T305: a check => C code=0 identical
+   carry: 955ed25183 carried into REPLAY as d716cd2dd8 - verified: nothing in progress, nothing unmerged, nothing staged, its 8 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+fad80877be 451 T295: the tre => C code=0 identical
+   carry: e144f77798 carried into REPLAY as 723f73ec07 - verified: nothing in progress, nothing unmerged, nothing staged, its 29 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+e152e60749 451 T284: heavy b => C code=0 identical
+   carry: d7645534d3 carried into REPLAY as 56be7fe0b9 - verified: nothing in progress, nothing unmerged, nothing staged, its 17 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+7af8a39d52 451 T285: builder => C code=2 
+   carry: STOPPED - 5fb3341cc5 is NOT carried into REPLAY: a conflict this command does not resolve, in docs/make-targets.html (not a tasks.md, plan.md or plan-review.json of a feature), rust/gate/CLAUDE.md (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+be3f3a248b 451 T269: l7r-gat => C code=0 identical
+   carry: 20347702fc carried into REPLAY as d2594c90e8 - verified: nothing in progress, nothing unmerged, nothing staged, its 7 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
+c7bfe5d0cf 451 T268: the clo => C code=0 identical
+   carry: 098b1625e8 carried into REPLAY as 9e3f165442 - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; both sides kept in plan-review.json
+6927081081 451 T265: the shr => C code=0 identical
+   carry: 4e10528ba5 carried into REPLAY as 0a44f82ce7 - verified: nothing in progress, nothing unmerged, nothing staged, its 10 non-spec file(s) in HEAD; both sides kept in plan-review.json
+e3922827ac 451 T250 batch 8: => C code=2 
+   carry: STOPPED - 1bd5b1721d is NOT carried into REPLAY: a conflict this command does not resolve, in dev/gm-attribution-baseline.jsonl (not a tasks.md, plan.md or plan-review.json of a feature) - nothing was resolved
+0c7f801f01 451 T251: the 10 => CO code=0 identical
+   carry: 1599515ed9 carried into REPLAY as ece8b04119 - verified: nothing in progress, nothing unmerged, nothing staged, its 12 non-spec file(s) in HEAD; both sides kept in plan-review.json, tasks.md
