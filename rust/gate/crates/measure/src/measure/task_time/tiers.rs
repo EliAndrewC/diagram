@@ -39,7 +39,7 @@ pub(super) fn dir_name(path: &str) -> String {
         .to_owned()
 }
 
-/// Every `take` of every tree's pool log, in time order.
+/// Every handout of every tree's pool log ([`super::held::opens`]), in time order.
 #[must_use]
 pub fn takes(bases: &[std::path::PathBuf]) -> Vec<Take> {
     let mut out: Vec<Take> = Vec::new();
@@ -56,7 +56,9 @@ pub fn takes(bases: &[std::path::PathBuf]) -> Vec<Take> {
                 dir_name(&field("tree")),
                 field("detail"),
             );
-            if field("event") == "take" && !out.contains(&take) {
+            // every row that hands the tree to a holder, a tree's `make` for a task among them (451 T391: T274's carry)
+            let handed = super::held::opens(&field("event"), &super::held::holder(&take.2).1);
+            if handed && !out.contains(&take) {
                 out.push(take);
             }
         }
@@ -209,12 +211,12 @@ pub fn batches(
         let end = b.attempts.last().map_or(0.0, |a| a.t1);
         for task in &b.tasks {
             // the task's FIRST carry before the landing: a second (a repair's) is the batch's own
+            // a bundle's carry is each of its tasks' (451 T393): the holder's detail is read by `held::holder`
             let first = carried.iter().find(|(_, at, detail)| {
-                let mut words = detail.split_whitespace();
-                let f = words.next().unwrap_or("");
+                let (f, held) = super::held::holder(detail);
                 *at <= end
                     && (b.feature == f || b.feature.starts_with(&format!("{f}-")))
-                    && words.any(|w| w == task)
+                    && held.contains(task)
             });
             if let Some((_, at, _)) = first {
                 b.carried.push((task.clone(), *at));

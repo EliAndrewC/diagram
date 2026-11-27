@@ -164,7 +164,8 @@ impl Ix<'_> {
             .w
             .carried
             .get(&r.id)
-            .and_then(|c| self.resolve(c, None, &key.0))
+            // a bundle's carry is keyed to its first task, never to a task named `T324,T345` (451 T393)
+            .and_then(|c| self.resolve(&super::super::held::first(c), None, &key.0))
         {
             return (k.clone(), None, Blocks::Task(k));
         }

@@ -753,3 +753,53 @@ fn a_start_undone_opens_no_window() {
         ["T04"]
     );
 }
+
+/// Feature 451 T391: `make where-time` (and `make feature-report` through it) reads a pool tree's `Phase` line by the task the pool's
+/// log says held the tree. Two builders are each inside a `make builder-checks`; the build line of T05's tree carries T07, a stale
+/// start's task, and tied to the run begun last, T06's, until it was re-tasked.
+#[test]
+fn a_pool_tree_s_phase_is_tied_to_its_holder_s_run() {
+    let d = crate::checks::scratch("measure-where-pool");
+    let ok = std::process::Command::new("git")
+        .args(["init", "-q"])
+        .current_dir(&d)
+        .status()
+        .unwrap();
+    assert!(ok.success());
+    put(&d, "specs/901-s/tasks.md", "- [ ] T05\n- [ ] T06\n");
+    put(
+        &d,
+        ".git/builder-pool.log",
+        &format!(
+            "{}\n",
+            json!({"utc": at("07:59:00"), "event": "take", "tree": "/c/pool-a", "detail": "901 T05"})
+        ),
+    );
+    let call = |ev: &str, t: &str, id: &str, by: &str, task: &str| json!({"t": at(t), "sid": "s", "ev": ev, "tool": "Bash", "id": id, "make": "builder-checks", "by": by, "task": task});
+    let lines = [
+        json!({"t": at("07:59:10"), "sid": "s", "ev": "UserPromptSubmit"}),
+        call("PreToolUse", "08:00:00", "toolu_c1", "a1", "T05"),
+        call("PreToolUse", "08:00:30", "toolu_c2", "a2", "T06"),
+        json!({"t": at("08:02:00"), "sid": "s", "ev": "Phase", "src": "rust", "step": "build", "t0": at("08:01:00"), "t1": at("08:02:00"), "code": 0, "make": "builder-checks", "clone": "/c/pool-a", "task": "T07"}),
+        call("PostToolUse", "08:03:00", "toolu_c1", "a1", "T05"),
+        call("PostToolUse", "08:03:00", "toolu_c2", "a2", "T06"),
+        json!({"t": at("08:04:00"), "sid": "s", "ev": "UserPromptSubmit", "gm": false}),
+    ];
+    let log: String = lines.iter().map(|l| l.to_string() + "\n").collect();
+    put(&d, ".git/l7r-events/901-s.jsonl", &log);
+    let root = d.display().to_string();
+    let r = cli(
+        &args(&["901", "--root", &root]),
+        &d.join("home"),
+        Path::new("/nonexistent"),
+    );
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    let out = &r.stdout;
+    for want in [
+        "| T05 | 1 | 3.0 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.0 | 0.0 |",
+        "| T06 | 1 | 2.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2.5 | 0.0 |",
+        "| all | 2 | 5.5 | 0.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4.5 | 0.0 |",
+    ] {
+        assert!(out.contains(want), "{want}\n{out}");
+    }
+}

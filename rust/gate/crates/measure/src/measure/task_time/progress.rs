@@ -30,7 +30,7 @@
 //!   span, the time it was stopped between them a wait and no turn. (Before, the reader kept one start and one stop an agent, and
 //!   such a builder's minutes were headed "at least".)
 //! - A pool tree's `Phase` lines written before 451 T332 can name another task (the writer now reads the pool's registry, `event_log_hooks/filed.rs`): each is booked here to the task the pool's log
-//!   (`builder-pool.log`) says held its tree at that time ([`retask`]), and a builder's family reads only its own tree's lines.
+//!   (`builder-pool.log`) says held its tree at that time ([`held::retask`], which the landed report shares since 451 T391), and a builder's family reads only its own tree's lines.
 //!
 //! THE READ-BACK. Lines are read from the earliest held tree's take, or [`BACK_H`] hours, whichever is earlier (`--back <N>h`
 //! reads further): a task staged for a landing keeps its tree until it lands, so its carry is inside that span.
@@ -42,13 +42,12 @@ use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_shared::builder_pool::{self, Tree};
 use l7r_shared::context::context;
 use l7r_shared::guards::event_log_hooks::common_git_dir;
-use serde_json::Value;
 
 use super::super::events::{is, names, or_s, t_of, ts, Event, Raised};
 use super::super::reply;
 use super::super::where_time::columns::{self, spent, Run, Runs, Subagents};
 use super::book::{self, actor, ran, review_cat, run_cat};
-use super::{all_logs, bases, iso_of, load, sums, tiers};
+use super::{all_logs, bases, held, iso_of, load, sums, tiers};
 use crate::Reply;
 
 mod render;
@@ -128,23 +127,6 @@ pub struct View {
     pub free: Vec<(String, String)>,
     /// One line a task carried into the clone that no landing has placed or landed.
     pub staged: Vec<String>,
-}
-
-/// A `Phase` line of a pool tree given the task the pool's log says held the tree when the phase began (451 T332): its own `task`
-/// is the mark's, which on 2026-11-26 named T285 on every line of a tree T316 held.
-fn retask(aside: &mut [Event], takes: &[tiers::Take]) {
-    for e in aside.iter_mut().filter(|e| is(e, "ev", "Phase")) {
-        let (tree, t0) = (
-            tiers::dir_name(&or_s(e, "clone")),
-            ts(&or_s(e, "t0")).unwrap_or(0.0),
-        );
-        let held = takes
-            .iter()
-            .rfind(|(at, name, _)| *name == tree && *at <= t0);
-        if let Some(task) = held.and_then(|(_, _, detail)| detail.split([' ', ',']).nth(1)) {
-            e.insert("task".to_owned(), Value::String(task.to_owned()));
-        }
-    }
 }
 
 /// The lines read, the transcripts' ends and commands, and the moment.
@@ -426,9 +408,9 @@ fn landings(
     let mut told: HashSet<String> = HashSet::new();
     // a task's LATEST carry is the one a landing waits on
     for (_, at, detail) in carried.iter().rev() {
-        let mut words = detail.split([' ', ',']).filter(|w| !w.is_empty());
-        let number = words.next().unwrap_or("");
-        for task in words {
+        let (number, tasks) = held::holder(detail);
+        let number = number.as_str();
+        for task in &tasks {
             let mine = |b: &&book::Batch| {
                 scene::number(&b.feature) == number && b.tasks.iter().any(|t| t == task)
             };
@@ -550,7 +532,7 @@ pub fn view(
     let takes = tiers::takes(&bases(root, clones));
     // the set-aside lines are not cut at the window's end by the reader: a view as of a past moment reads none after it
     got.aside.retain(|e| t_of(e).is_ok_and(|t| t <= now));
-    retask(&mut got.aside, &takes);
+    held::retask(&mut got.aside, &held::of(root, clones), "");
     let mut sids: Vec<String> = got.stream.iter().map(|e| or_s(e, "sid")).collect();
     sids.sort();
     sids.dedup();

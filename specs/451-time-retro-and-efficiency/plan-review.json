@@ -2382,6 +2382,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)": {
+   "sha256": "20cef837c8687e74b3b63689700c5f538fedb9f90c21d142ba657226f48dc0b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T391 Approach (checklist part A)": {
+   "sha256": "07067c0d5aaa808ebd0782fbc708899bb29fe97ead8c43811d4a1264ef3650c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -30334,6 +30346,153 @@
      "why": "Documents the new command."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)",
+    "### T391 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "read-time-retask",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the log is left as written.",
+     "class": "within",
+     "why": "The task line itself says the log is not rewritten, and T293 already re-tasks at read time. This is the fix T332's review asked for, serving the task time breakdown's compile and tests rows (2026-11-25 request)."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "held::retask is called by task-time, task-progress (its own retask deleted), where-time, and through columns_text by feature-report.",
+     "class": "within",
+     "why": "One shared reader for every report that books these lines. Nothing is dropped and no reader is left on the old code."
+    },
+    {
+     "id": "DECISION-hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release keeps its own task, task-progress included.",
+     "class": "within",
+     "why": "This fixes a wrong outcome in the old task-progress reading, where a line after a release went to the last holder. No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION-make-and-adopt-rows-open-a-hold",
+     "summary": "A tree's make row and an adopt row open a hold, as a take does.",
+     "class": "within",
+     "why": "Reading take rows alone would leave the stale task on a tree made for a task (diagram-backlog-b1, T274). The decision widens the fix to that case and narrows nothing."
+    },
+    {
+     "id": "DECISION-line-naming-a-holder-task-keeps-it",
+     "summary": "A line already naming one of the holder's tasks keeps that task. Only a task that is none of the holder's is replaced by the first.",
+     "class": "within",
+     "why": "This preserves T332's writer-side rule (a builder's later start stands) instead of undoing it at read time. The replaced lines are exactly the wrong ones, so nothing asked is narrowed."
+    },
+    {
+     "id": "DECISION-holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's.",
+     "class": "within",
+     "why": "This matches T332's writer rule and stops a line in another feature's log from being given this feature's task. It is a correctness guard, not a narrowing."
+    },
+    {
+     "id": "T393-built-here",
+     "summary": "T393 is built in this section: held::holder splits a bundle detail on spaces and commas, and run_booking keys the carry's run to the first task.",
+     "class": "within",
+     "why": "Small tasks in one file family are bundled, as the GM asked (2026-11-22, T141). It fixes bundle members' tables running past their carries, which serves the ask that a task's own table ends at its carry (T298)."
+    },
+    {
+     "id": "T282-no-carry-left",
+     "summary": "T282 still shows 'no carry found' because the pool log has no row naming it (its bundle's take reads 451 T299). It is not in 'Found and left?' and no task is filed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This rests on the plan's own reading of the log: no row names T282, so no read-time reader of that log can find its carry. On that observation the fix is impossible from this data, not merely awkward. Bundle takes are now written with every member (the 451 T324,T345 form held::holder parses), so the gap is in a historic row, not live code."
+    },
+    {
+     "id": "T274-no-carry-deferred-to-T402",
+     "summary": "Found and left: tiers::takes keeps take rows only, so T274 (made with a make row) still reads 'no carry found' and its own table runs on to its landing. It is deferred to T402, to land before T394, because the brief limits this task's edit of tiers.rs to the splitting while T346/T382's commit changes tiers::carries beside it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect, not a difference: by the plan's own account T274's table books time after its carry, against the T298 rule that a task's own table ends at its carry. None of the three grounds holds. (1) It is not impossible: this task already edits tiers.rs (tiers::batches), the defect is in tiers::takes and the other commit changed tiers::carries, and held::holds in this same task already reads make rows as opening a hold. (2) No GM words license it: checklist item 3 says no task line quotes the GM, rulings.md cites no arbiter ruling, and the approved improvement 4 asks for briefs that default to fixing in the task. (3) The plan does not claim that fixing it here would defeat any purpose. The stated reason, a parallel commit beside the edit, is coordination convenience. FR-009 requires a why, an id and an order, but meeting that form does not make the why sufficient. 'Lands before T394' is an order, not a reason, and the bundle does not show that T394 is the next step. To clear: read make rows in tiers::takes in this task (pinned by a test that is red on the old code), or cite the GM's words or an arbiter ruling that licenses the deferral."
+    }
+   ],
+   "tasks": [
+    "T391"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)",
+    "### T391 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "read-time",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the event log is left as written.",
+     "class": "within",
+     "why": "Serves the task time breakdown the GM asked for (2026-11-19, 2026-11-25 T243: per-task compile and tests minutes). The breakdown is fixed in every reader; nothing the GM asked for depends on the log's bytes being rewritten."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "One held::retask is called by task-time, task-progress (its own copy deleted) and where-time; feature-report gets it through where-time's columns.",
+     "class": "within",
+     "why": "Makes all the breakdown's readers agree. T293's constraint (one function, not a copy) is carried, and no reader is left out."
+    },
+    {
+     "id": "hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release no longer takes the last holder; task-progress takes this too.",
+     "class": "within",
+     "why": "Fixes a defect. Giving a released tree's later lines to its last holder books minutes to the wrong task, which is a wrong outcome in the breakdown. Fixing it is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "make-and-adopt-open-a-hold",
+     "summary": "make and adopt rows open a hold, for retask and for tiers::takes (held::opens shared), so T274's carry is found here and T402 is withdrawn.",
+     "class": "within",
+     "why": "Fixes a known defect inside the same breakdown: T274's tests were misbooked and its table ran past its carry (T298's rule). Pulling the deferred fix in follows the GM's fix-known-bugs-before-moving-on. It widens the work rather than narrowing it, and the plan review's first round asked for it."
+    },
+    {
+     "id": "holder-task-kept",
+     "summary": "A line that already names one of the holder's tasks keeps it; only a task that is none of the holder's is replaced by the first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally (every line becomes the holder's first task), the rule would defeat its own purpose. T332's writer deliberately books a bundle's line to the member whose builder started it, and overwriting that at read time would misbook correctly attributed work, the very defect T391 exists to remove. The request's purpose is per-task minutes that are right. A line naming a member of the current holder's bundle is not stale, so excepting it guts nothing."
+    },
+    {
+     "id": "holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's (number, or number plus hyphen); where-time uses the feature it reads for untagged logs.",
+     "class": "within",
+     "why": "The rule's own scope is the holder for the line's feature, as T332's writer rule has it. A line in another feature's log is that feature's work, and giving it a task of this feature would itself misbook. This does not cut down what was asked."
+    },
+    {
+     "id": "T393-bundled",
+     "summary": "T393 (a bundle's carry is each member's) is built in this task: held::holder splits a detail on spaces and commas, used by tiers::batches, task-progress, retask and run_booking.",
+     "class": "within",
+     "why": "A filed defect in the same breakdown (eight bundle members showing no carry found, their tables running past their carries), fixed in the same file family. The GM approved bundling small tasks (2026-11-22, T141)."
+    },
+    {
+     "id": "T282-left",
+     "summary": "T282 stays at no carry found: the pool log holds no row naming it (its bundle's take reads 451 T299), and the log is not rewritten.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No reader of that log can recover the fact for this one past record, because the data is not there. The same window shows bundle takes written with every member (451 T324,T345), so the record is historical and not a live writer defect. One past task in a 24-hour window does not defeat the GM's stated purpose ('it doesn't have to be 100% exact ... a broad understanding', 2026-11-25). If a take writer still drops bundle members, that is a separate defect and must be filed."
+    },
+    {
+     "id": "T336-not-moved",
+     "summary": "T336's 163.3 minutes do not move, against the brief's expectation: they are its builders' own runs, booked by their own lines.",
+     "class": "within",
+     "why": "This is a measured correction of the brief's expectation, not a defect left. The minutes are booked to the right task and category. Under the 2026-11-19 definition of a defect, a wrong expectation is fixed by restating the claim, which the section does."
+    },
+    {
+     "id": "order-before-T317",
+     "summary": "Lands after T332 and before T317 starts; T393 lands with it.",
+     "class": "within",
+     "why": "This is sequencing that T332's review made a condition, so that T317 reads correctly tasked pre-warm lines. It decides nothing the request left open."
+    },
+    {
+     "id": "tests-and-exits",
+     "summary": "Red-first report tests and held_tests unit tests; crate-scoped builder checks, then the full gate at the landing.",
+     "class": "within",
+     "why": "These tests enforce the requested breakdown's per-task attribution and do not add scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -47996,6 +48155,82 @@
      "summary": "builder-brief.md, efficiency-tooling.md, rust/gate/CLAUDE.md and make-targets.html updated",
      "class": "within",
      "why": "Documents the new command."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T391": {
+   "section_sha256": "e1d779de2da17533ffb6dec7f17eefb4c1ed9850a00eb061077fb122d654fe50",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "read-time",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the event log is left as written.",
+     "class": "within",
+     "why": "Serves the task time breakdown the GM asked for (2026-11-19, 2026-11-25 T243: per-task compile and tests minutes). The breakdown is fixed in every reader; nothing the GM asked for depends on the log's bytes being rewritten."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "One held::retask is called by task-time, task-progress (its own copy deleted) and where-time; feature-report gets it through where-time's columns.",
+     "class": "within",
+     "why": "Makes all the breakdown's readers agree. T293's constraint (one function, not a copy) is carried, and no reader is left out."
+    },
+    {
+     "id": "hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release no longer takes the last holder; task-progress takes this too.",
+     "class": "within",
+     "why": "Fixes a defect. Giving a released tree's later lines to its last holder books minutes to the wrong task, which is a wrong outcome in the breakdown. Fixing it is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "make-and-adopt-open-a-hold",
+     "summary": "make and adopt rows open a hold, for retask and for tiers::takes (held::opens shared), so T274's carry is found here and T402 is withdrawn.",
+     "class": "within",
+     "why": "Fixes a known defect inside the same breakdown: T274's tests were misbooked and its table ran past its carry (T298's rule). Pulling the deferred fix in follows the GM's fix-known-bugs-before-moving-on. It widens the work rather than narrowing it, and the plan review's first round asked for it."
+    },
+    {
+     "id": "holder-task-kept",
+     "summary": "A line that already names one of the holder's tasks keeps it; only a task that is none of the holder's is replaced by the first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally (every line becomes the holder's first task), the rule would defeat its own purpose. T332's writer deliberately books a bundle's line to the member whose builder started it, and overwriting that at read time would misbook correctly attributed work, the very defect T391 exists to remove. The request's purpose is per-task minutes that are right. A line naming a member of the current holder's bundle is not stale, so excepting it guts nothing."
+    },
+    {
+     "id": "holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's (number, or number plus hyphen); where-time uses the feature it reads for untagged logs.",
+     "class": "within",
+     "why": "The rule's own scope is the holder for the line's feature, as T332's writer rule has it. A line in another feature's log is that feature's work, and giving it a task of this feature would itself misbook. This does not cut down what was asked."
+    },
+    {
+     "id": "T393-bundled",
+     "summary": "T393 (a bundle's carry is each member's) is built in this task: held::holder splits a detail on spaces and commas, used by tiers::batches, task-progress, retask and run_booking.",
+     "class": "within",
+     "why": "A filed defect in the same breakdown (eight bundle members showing no carry found, their tables running past their carries), fixed in the same file family. The GM approved bundling small tasks (2026-11-22, T141)."
+    },
+    {
+     "id": "T282-left",
+     "summary": "T282 stays at no carry found: the pool log holds no row naming it (its bundle's take reads 451 T299), and the log is not rewritten.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No reader of that log can recover the fact for this one past record, because the data is not there. The same window shows bundle takes written with every member (451 T324,T345), so the record is historical and not a live writer defect. One past task in a 24-hour window does not defeat the GM's stated purpose ('it doesn't have to be 100% exact ... a broad understanding', 2026-11-25). If a take writer still drops bundle members, that is a separate defect and must be filed."
+    },
+    {
+     "id": "T336-not-moved",
+     "summary": "T336's 163.3 minutes do not move, against the brief's expectation: they are its builders' own runs, booked by their own lines.",
+     "class": "within",
+     "why": "This is a measured correction of the brief's expectation, not a defect left. The minutes are booked to the right task and category. Under the 2026-11-19 definition of a defect, a wrong expectation is fixed by restating the claim, which the section does."
+    },
+    {
+     "id": "order-before-T317",
+     "summary": "Lands after T332 and before T317 starts; T393 lands with it.",
+     "class": "within",
+     "why": "This is sequencing that T332's review made a condition, so that T317 reads correctly tasked pre-warm lines. It decides nothing the request left open."
+    },
+    {
+     "id": "tests-and-exits",
+     "summary": "Red-first report tests and held_tests unit tests; crate-scoped builder checks, then the full gate at the landing.",
+     "class": "within",
+     "why": "These tests enforce the requested breakdown's per-task attribution and do not add scope."
     }
    ],
    "verdict": "CLEAR"

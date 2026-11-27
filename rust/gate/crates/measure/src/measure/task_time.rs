@@ -32,6 +32,7 @@ use crate::Reply;
 
 pub mod asked;
 pub mod book;
+pub mod held;
 pub mod program;
 pub mod progress;
 pub mod tiers;
@@ -594,7 +595,9 @@ pub fn run(
     let logs = all_logs(root, clones);
     // read `back_h` hours before the window, so a landed task's tables carry its time before it (a knob: `BACK=`)
     let lo = ts(since)?;
-    let got = load(&logs, &iso_of(lo - back_h * 3600.0), until)?;
+    let mut got = load(&logs, &iso_of(lo - back_h * 3600.0), until)?;
+    // a pool tree's phases by the task that held the tree, before the runs are tied to them (451 T391)
+    held::retask(&mut got.aside, &held::of(root, clones), "");
     let window = (lo, got.window.1);
     let mut sids: Vec<String> = got.stream.iter().map(|e| s(e, "sid")).collect();
     sids.sort();
@@ -716,6 +719,8 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path, now: f64) -> Reply {
     }
 }
 
+#[cfg(test)]
+mod pool_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]

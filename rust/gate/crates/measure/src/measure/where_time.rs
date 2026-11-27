@@ -31,6 +31,7 @@ use super::events::{
 use super::feature_report::tables::tool_cat;
 use super::reply;
 use super::task_phases::{foreground_spans, in_span};
+use super::task_time::held;
 use crate::Reply;
 
 const WAIT_WORK: &str = "waiting on work";
@@ -676,7 +677,9 @@ fn booked(
     clones: &Path,
 ) -> Result<Booked, Raised> {
     let logs = event_logs(root, name, clones);
-    let loaded = load_all(&logs, &[], since, "")?;
+    let mut loaded = load_all(&logs, &[], since, "")?;
+    // a pool tree's phases by the task that held the tree, as `make task-time` reads them (451 T391)
+    held::retask(&mut loaded.aside, &held::of(root, clones), name);
     let mut sids: Vec<String> = loaded
         .stream
         .iter()
