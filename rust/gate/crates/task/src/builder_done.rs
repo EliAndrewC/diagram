@@ -306,6 +306,28 @@ fn waits(p: &Pool, dones: &[Done], tasks: &[String], feature: &str) -> Option<St
     ))
 }
 
+/// The done commits of `feature`'s `tasks` that `tree`'s HEAD does not hold ([`uncarried`]'s test), each ONCE - two tasks built in
+/// one bundle share a commit - and OLDEST FIRST by its author's time, the sha breaking a tie: what `make land` carries before anything
+/// else (451 T397 part (c)). Each is the commit's sha with the refs it is kept under.
+#[must_use]
+pub fn to_carry(tree: &Path, feature: &str, tasks: &[String]) -> Vec<(String, Vec<String>)> {
+    let key = feature_key(feature);
+    let names: Vec<String> = tasks.iter().map(|t| format!("{key}-{t}")).collect();
+    let dones = dones(tree);
+    let mut open: BTreeMap<(u64, String), Vec<String>> = BTreeMap::new();
+    for d in uncarried(tree, &dones) {
+        let at = d.key.split('\t').next().and_then(|t| t.parse().ok());
+        if names.contains(&d.name) {
+            open.entry((at.unwrap_or_default(), d.sha.clone()))
+                .or_default()
+                .push(format!("{REFS}{}", d.name));
+        }
+    }
+    open.into_iter()
+        .map(|((_, sha), refs)| (sha, refs))
+        .collect()
+}
+
 /// Why `tasks` are handed no tree yet (`make builder-tree`, 451 T398): one of them has a done commit the clone's HEAD does not hold,
 /// and a handout brings its tree to that HEAD - so the task's next builder (a closing half) would start without the work it closes.
 /// None where nothing of theirs waits. The carry it names always ends the wait: it deletes the ref at its verified end, also where

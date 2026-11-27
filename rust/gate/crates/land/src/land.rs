@@ -8,6 +8,7 @@
 //! done` and `make cohort-landing` each started by hand only after a refusal named it - while the checks themselves take seconds
 //! (`specs/405-engine-findings-from-385/landing-analysis.md`).
 //!
+//! First the done commits of the tasks it lands that HEAD lacks are carried ([`carry_done`], 451 T397), before the land-alone choice.
 //! Pass 1 runs nothing long and prints EVERY refusal together ([`cheap`]): each task's tick refusals but "not landed yet", uncommitted
 //! work, owed ledger rows, the claims gate, what holds the landing (with the tasks named, `L7R_LAND_TICKS`), the review gate and the plan
 //! gate. Pass 2 ([`long_runs`]): `make done` when the green-gate stamp does not cover this content; `make cohort-landing` when the delta
@@ -28,6 +29,7 @@
 
 mod alone;
 mod carry;
+mod carry_done;
 mod cheap;
 mod claims_wait;
 mod inproc;
@@ -335,6 +337,12 @@ impl Land {
                 unfinished.join("\n  ")
             ));
             return Ok(2);
+        }
+        // THE TASKS' DONE COMMITS CARRIED FIRST (451 T397, [`carry_done`]): before the land-alone choice, the first pass and the gate,
+        // so each reads the carried HEAD and no write to the clone lands inside the gate's run
+        let rc = self.carry_done(d, tasks)?;
+        if rc != 0 {
+            return Ok(rc);
         }
         if self.alone_owed()? {
             return self.alone(d, tasks);

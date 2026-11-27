@@ -3235,14 +3235,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T397 (<why: the finding or measurement that files it>)": {
-   "sha256": "7b8218fdcb1ba8e72afb2fd55d8de5f5fe3e8d17690af6c24c415656a41e8e78",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T397 Approach (checklist part A)": {
-   "sha256": "d3bd00f729887bc7c517df5ecaa149a776f0199fb4a8c39fa913da32311e5531",
+   "sha256": "f0cba5ef872d15e63027825a591cf4fa19a5195959a62dcb35b316f8d967c883",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3957,6 +3951,24 @@
   },
   "### T443 Approach (checklist part A)": {
    "sha256": "1e43e143c130b5bfae07d1d0a792891faf24324eb8b6d89c1accf7d569230dcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T397 (part (c): make land carries the done commits of the tasks it lands)": {
+   "sha256": "cee6def8793b8aa5c03d0d0e510cfc28f6075e18e62b7fb9a69799a535d3c5a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T450 (<why: the finding or measurement that files it>)": {
+   "sha256": "529052fdbe780d36e1252b3485600c41c86c191729fe307f911051552cba785b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T450 Approach (checklist part A)": {
+   "sha256": "66b27e8d4b8534c22ee5d55c4ecb263400865f42a867df58b5265b053552e02e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35456,6 +35468,68 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T397 (part (c): make land carries the done commits of the tasks it lands)",
+    "### T397 Approach (checklist part A)",
+    "### T450 (<why: the finding or measurement that files it>)",
+    "### T450 Approach (checklist part A)",
+    "(removed) ### T397 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T397c-carry-code",
+     "summary": "make land carries the landed tasks' uncarried done commits through carry::cli, the same call make carry COMMIT= makes, each once and oldest first, a commit HEAD already holds skipped",
+     "class": "within",
+     "why": "Implements the T394 line's 'make land carrying by commit' (request.md, 2026-11-27 T394 section) and reuses the existing carry's rules and verified end rather than a second carry."
+    },
+    {
+     "id": "T397c-stop-on-failed-carry",
+     "summary": "A carry that exits non-zero stops the landing with exit 2, nothing landed or ticked, naming the commit and the hand command; earlier verified carries in the run stay in HEAD",
+     "class": "within",
+     "why": "A design choice for a failure case. Nothing the request asks for is dropped, and a carried commit left in HEAD is verified and its ref spent, so the next make land finds it held."
+    },
+    {
+     "id": "T397c-order",
+     "summary": "The carry runs after the unfinished-pick refusals and before the land-alone choice, the first pass and the gate, so the gate's tree does not move and every refusal reads the carried HEAD",
+     "class": "within",
+     "why": "Where the step sits inside make land. It holds the gate's existing 'tree moved' rule and does not narrow what was asked."
+    },
+    {
+     "id": "T397c-T447-superseded",
+     "summary": "T447's refusal (a landing task whose done commit HEAD lacks) becomes unreachable; T447 is to close as superseded by T397, not ticked in this tree",
+     "class": "within",
+     "why": "Bookkeeping that follows from the carry. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T397-deferral-to-T450",
+     "summary": "The words that still send the session to carry by hand (make builder-done's last printed step, builder-brief.md's TWO TIERS bullet, the Makefile's land help line) are left for T450, which lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The carry the GM's T394 line asks for is built in full here. The stale wording does not produce a wrong outcome (constitution XIV): a hand carry still works, and make land skips a commit HEAD already holds. Its only cost is a redundant round trip. The item is filed as an open task with an order, the form FR-009 and D15 lay down. One of the three edits is a guard file (the Makefile), which needs its own pathway. The request's purpose survives because T450 carries the cleanup before T400."
+    },
+    {
+     "id": "T397-perf",
+     "summary": "T397 is tagged as performance work under FR-013",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster. Removing 34 hand carries a day, a session round trip each, is that kind of work."
+    },
+    {
+     "id": "T450-template",
+     "summary": "T450's two blocks are task-add's unfilled template",
+     "class": "within",
+     "why": "They make no decision. T450 is filed here as the target of T397's deferral."
+    },
+    {
+     "id": "removed-T397-template",
+     "summary": "The unfilled T397 template block is removed, replaced by the filled part (c) section",
+     "class": "within",
+     "why": "The removal replaces a placeholder with its content. Nothing it held is lost."
+    }
+   ]
   }
  ],
  "tasks": {

@@ -8,6 +8,7 @@
 //! raised - the readers count a refused landing (rework, FR-005) and a landing of a task (D10, D11) from that one line.
 //!
 //! The steps tile the landing, every part of it booked to one:
+//! - `carry`: the landed tasks' done commits HEAD lacks, carried first ([`super::carry_done`], 451 T397) - written only where one waits;
 //! - `cheap`: the first pass (every cheap refusal, [`super::cheap`]);
 //! - `gate`: the second pass whole ([`super::long_runs`]) - the delta's engine reads, the green-gate stamp, the gates it names or the
 //!   machinery's guard suites, a landing cohort run alone, the records and maps they regenerated committed, the work-budget review;

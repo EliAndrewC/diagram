@@ -534,3 +534,52 @@ fn the_next_dispatch_prefers_performance_work_of_any_queue() {
     assert!(first, "{next}");
     assert!(next.ends_with("\n     no next dispatch named: specs/9001-x/queue.txt: No such file or directory (os error 2) - make queue-add T=<task(s)> KIND=<kind> F=9001 starts the queue\n"), "{next}");
 }
+
+/// What `make land` carries (451 T397 part (c)): the landed tasks' done commits HEAD lacks, each once - two tasks of one bundle
+/// share a commit - oldest first by its author's time, whatever order they were made in; a commit HEAD holds and a task not landed
+/// are left.
+#[test]
+fn the_commits_a_landing_carries_are_its_tasks_uncarried_ones_once_and_oldest_first() {
+    let (_dir, root) = world("done-to-carry");
+    git(&root, &["checkout", "-q", "-b", "side"]);
+    let at = |rel: &str, when: u64| {
+        put(&root, rel, "x\n");
+        git(&root, &["add", "-A"]);
+        git(&root, &["commit", "-qm", rel, &format!("--date=@{when}")]);
+        git(&root, &["rev-parse", "HEAD"])
+    };
+    let newer = at("n.txt", 1_700_000_000);
+    let older = at("o.txt", 1_600_000_000);
+    git(&root, &["checkout", "-q", "-"]);
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    for (task, sha) in [
+        ("T01", &newer),
+        ("T02", &older),
+        ("T03", &older),
+        ("T04", &head),
+        ("T05", &newer),
+    ] {
+        git(
+            &root,
+            &["update-ref", &format!("refs/l7r/done/9001-{task}"), sha],
+        );
+    }
+    let tasks: Vec<String> = ["T01", "T02", "T03", "T04"]
+        .iter()
+        .map(|t| (*t).to_owned())
+        .collect();
+    assert_eq!(
+        super::to_carry(&root, "specs/9001-x", &tasks),
+        vec![
+            (
+                older,
+                vec![
+                    "refs/l7r/done/9001-T02".to_owned(),
+                    "refs/l7r/done/9001-T03".to_owned()
+                ]
+            ),
+            (newer, vec!["refs/l7r/done/9001-T01".to_owned()]),
+        ]
+    );
+    assert!(super::to_carry(&root, "9001", &["T09".to_owned()]).is_empty());
+}

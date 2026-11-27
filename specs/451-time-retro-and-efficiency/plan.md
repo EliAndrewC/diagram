@@ -5854,31 +5854,36 @@ batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T397 (<why: the finding or measurement that files it>)
+### T397 (part (c): make land carries the done commits of the tasks it lands)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: parts (a) and (b) were built with T394 (its closing half, 2026-11-27: the carry deletes the done ref at its verified end, `carry.rs`'s `spent`; `make carry COMMIT=` alone). Part (c), built here: since T394 each builder's work is one commit kept at `refs/l7r/done/<feature>-<task>`, and the session ran `make carry COMMIT=` for each before `make land` - 34 `done` lines in the clone's `builder-pool.log` from 01:59 to 06:38 UTC, measured 2026-11-27 (`grep -c '"event":"done"'` of that log), each a hand carry, one session round trip apiece before its batch could land.
+  - **The carry** (`rust/gate/crates/land/src/land/carry_done.rs`, new): `Land::carry_done` asks `l7r_gate_task::builder_done::to_carry` (new, `pub`) for the done commits of the landed tasks the landing tree's HEAD does not hold - `uncarried`'s own test, the author's time and subject a cherry-pick keeps, so a commit finished by hand is not picked again - each ONCE (a bundle's tasks share one commit: T296/T297, T143/T342 in the clone's refs today) and OLDEST FIRST by author time, the sha breaking a tie. Each goes through `carry::cli(["", sha])`, the very call `make carry COMMIT=<sha>` makes, its lines passed through: the conflict rules, T419's merge by heading and the verified end that spends the ref all come with it. A carry that exits non-zero (2 stopped, 1 not verified) stops the landing with exit 2, nothing landed, nothing ticked: `the done commit <short> (<refs>) did not carry (the carry's lines above); carried before it, in HEAD and verified: <shorts>. Finish it by hand - what the carry names above, then make carry COMMIT=<sha>, which verifies it and ends its wait - then make land again`. Earlier carries of the run stand (each verified in HEAD; nothing is rolled back). No done ref, or all held: nothing said and no phase line; else a `carry` Phase line (`phase.rs`'s doc lists it).
+  - **The order, and how it holds** (`land.rs`, `Land::land`): the call stands after `unfinished::refusals` (a pick left standing is the hand's to finish; the carry would refuse it anyway) and BEFORE `alone_owed`, the first pass and the gate. Before the gate: a write to the clone while its gate runs voids the gate ("tree moved"). Before the land-alone choice: a dirty clone lands in the landing worktree checked out at the clone's HEAD, which must already hold the commits - a carry in that linked worktree would keep the ref (T404); the inner run there finds no ref to carry. Before the first pass: every refusal of `cheap.rs` - each task's tick check and, once T294 is carried, `named.rs`'s files read through `held()` - asks git afresh in the pass itself; nothing derived from HEAD is read or cached in `main` or `land` before this step (read 2026-11-27: `main` reads the arguments, the note and the spec directory; `land` only the unfinished refusals), so each sees the carried HEAD. A carry in a dirty clone picks over uncommitted work as `git cherry-pick` does: a pick touching a dirty or untracked path refuses to start and the landing stops naming it.
+  - **T447 becomes moot**: its refusal (a landing task whose done commit HEAD lacks) can no longer fire after this step - every such commit is carried first or the landing stops before the first pass, on every route into it (the land-alone run included, its worktree at the carried HEAD). T447 can be closed with this one (`Superseded by T397`); its box is in T294's done commit, not yet in this tree, so it is not ticked here.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| carry the done commits first | `land/carry_done/tests.rs`: `a_landing_carries_its_tasks_done_commit_before_its_first_pass` (its ref made by `make builder-done`'s own `cli_with`), `done_commits_are_carried_oldest_first_and_a_held_one_is_left`, `a_carry_that_stops_lands_nothing_and_names_its_hand_command`, `a_dirty_clone_carries_before_it_lands_alone` - 4 of 166 land tests red with the call switched off (162 passed), all 166 green with it; `task`'s `the_commits_a_landing_carries_are_its_tasks_uncarried_ones_once_and_oldest_first` | n/a: tooling | none | none |
 
 ### T397 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make land F= T="<tasks>"` is the session's one command for a batch: the tasks' done commits reach HEAD inside it, and no hand carry stands between a builder's `make builder-done` and the batch's landing.
+2. **The constraints.** The SAME carry code as `make carry` (its rules, its verified end, its ref spent in the clone); no write to the clone during the gate; the first pass reads the carried HEAD; a carry that cannot complete stops with nothing landed, naming the commit and the hand command; a task with no done ref carries nothing.
+3. **Where each comes from.** O: the brief's words for part (c), the session's; O: `builder-pool.log`'s 34 done lines of 2026-11-27; R: `carry.rs`, `builder_done.rs`, `land.rs`, `alone.rs`, `unfinished.rs`, read.
+4. **Do they describe the world here?** Yes: the fixture clones carry a commit `make builder-done` itself kept, through the landing's real first pass.
+5. **The order.** After T394 and T419 (both in HEAD); beside T294 (its `named.rs` and `cheap.rs` hunks untouched here, so its carry does not conflict with this one); T447 closes with it; before T450.
+6. **The exits.** Green: the land and task crates' first-tier checks. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The landing's first step carries an uncarried done commit (4 tests red to green, 162 unchanged, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/land` with the call switched off, then on)), a stopped carry runs no first pass and no gate (the stub log holds no `stamp --check`, nothing asked in process).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session runs no `make carry` before a batch's `make land`, and a forgotten carry no longer lands a tick without its code (T270's landing, T447's modify-only case).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The words that still send the session to carry by hand: `make builder-done`'s last printed step, `scripts/container/builder-brief.md`'s TWO TIERS bullet, and the Makefile's `land` help line (a guard file). Its visible effect: a hand carry the landing now does. Not fixed here: the brief's one job is the landing's carry, and the help line is a guard-file edit. Filed as T450; lands before T400.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's hand carries, 34 on 2026-11-27 by `builder-pool.log`, were its waiting before a batch); no engine speed, so no checklist.
 
 
 ### T398 (<why: the finding or measurement that files it>)
@@ -6954,29 +6959,6 @@ batch; the red was not in its change.
 **Performance work?** no - a guard's gap and a message, defects.
 
 
-### T428 part B (2026-11-27T07:20Z)
-
-Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
-staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T428 is a task of that
-batch; the red was not in its change.
-
-1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
-   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
-   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
-2. **A3 again.** The goal and the options stand as T428's section has them; the red is in a stale build and one test's bound,
-   not in a decision of this task.
-3. **A4 again.** The section's figures are unchanged by it.
-4. **Moving something earlier for something later?** No.
-5. **Tuning or changing?** Neither: T428's change is untouched; the repair is the guard's rebuild and the drain test's bound
-   (45792d53b7), with the link failure filed as T449.
-6. **The one-sentence test.** "Why is T428 owed this?" - it is a task of the batch whose gate was red twice.
-7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
-   arbiter's ruling).
-8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
-   the clone); the rest is the gate's to say.
-9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
-   anywhere else a new finding for its own task.
-
 ### T427 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -6993,6 +6975,29 @@ batch; the red was not in its change.
 5. **Tuning or changing?** Neither: T427's change is untouched; the repair is the guard's rebuild and the drain test's bound
    (45792d53b7), with the link failure filed as T449.
 6. **The one-sentence test.** "Why is T427 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
+   arbiter's ruling).
+8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
+   the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a repeat of these three failures is this finding again, a red
+   anywhere else a new finding for its own task.
+
+### T428 part B (2026-11-27T07:20Z)
+
+Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
+staged tasks was red twice in a row, at 06:26Z-06:33Z the second time (2026-11-27, the landing's log). T428 is a task of that
+batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's hook suites and coverage: `parts.sh.3` (14 FAILs, an empty exec path) and
+   `context-cap-hooks.sh` (the T427 redirect cases) because the clone's guard binary had failed to link since about 05:47Z, and
+   rustc's drain test's 2 s bound under a coverage build (observed 2026-11-27, method: the landing's log and the kept suite logs).
+2. **A3 again.** The goal and the options stand as T428's section has them; the red is in a stale build and one test's bound,
+   not in a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T428's change is untouched; the repair is the guard's rebuild and the drain test's bound
+   (45792d53b7), with the link failure filed as T449.
+6. **The one-sentence test.** "Why is T428 owed this?" - it is a task of the batch whose gate was red twice.
 7. **The next step is a measurement.** The batch gate run once more with the guard freshly linked and T449 in the batch (the
    arbiter's ruling).
 8. **Every route measured?** The guard rebuilt and `context-cap-hooks.sh` passed alone against it (2026-11-27, run by hand in
@@ -7493,6 +7498,32 @@ batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T447 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T450 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T450 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
