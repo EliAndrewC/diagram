@@ -7462,59 +7462,70 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 <!-- plan-archive: T466 to T464 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T466 to T466 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T467 (<why: the finding or measurement that files it>)
+### T467 (left by 451 T438: its `OWN_NAMES` rule reads the owner's own `T369's D1` as the section's but another task's `T295's D3` still as the spec's D3; seen once, 451 T306's section, observed 2026-11-27, method: every `specs/*/plan.md` bare D<n> classed by `t438-measure.py`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in a labeled task section, the plan review's bundle (`rust/gate/crates/plan/src/plan/bundle/section.rs`, `section_ids_out`, `is_task`) takes out a decision any task's possessive names, as it took out the owner's.
+  - **T467-D1, built: `T<m>'s D<k>` in a labeled section is T<m>'s own decision, T<m>-D<k>, and is left out, not looked up** (`section_ids_out`: a possessive's span is kept for every name but the section's own words and a task's name, `is_task`, which `t295` and `t12a` are). Label: CONVENTION (a form of the tooling; no research claim). Reason: the task's line ("looked up in T<m>'s section, or left out"); left out because T295's section is in `plan-done.md`, which the bundle's `task_sections` does not read, and the bundle's `spec-cited.md` is the spec's text, not another task's; the reviewer still reads the block's own words of it. An unlabeled section's `T31's D3` is read as before, the spec's.
+  - **T467-D2, built: one task-name test** (`is_task`, shared by `named`'s possessive rule, which tested `t` and digits only): `named` now reads `T12a's` as the feature's own as it read `T12's`, where it was a NOT FOUND source line. No plan, plan-done or spec writes a lettered task's possessive id, observed 2026-11-27, method: a grep of every `specs/*/plan.md`, `plan-done.md` and `spec.md` for `T<n><letter>'s D`, `FR-` or `SC-` (0), so nothing a bundle carries changes by it. Label: CONVENTION.
+  - **T467-D3, built: the feature-number form too, `451 T183's D10`** (`section_ids_out`, `TASK_POSSESSIVE`): a run `QUALIFIED` reads is kept only where no task's possessive stands inside it, so in a labeled section `<number> T<m>'s D<k>` is T<m>'s own and left out, as the bare form is; `451 D5` is still the spec's. Found by this task's own first bundle: its section quoted T313's `451 T183's D10`, and `spec-cited.md` carried the spec's D10 (plan.md's "A builder resumed"), observed 2026-11-27, method: the `make decide` bundle's `spec-cited.md` read. The form's other two uses (T313's section and its Approach) stand in an unlabeled section and are read as before, observed 2026-11-27, method: a grep of every `specs/*/plan.md` for `<3 digits> T<n>'s D<k>` (2, both T313's). Label: CONVENTION.
+  - **Red first**: `another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s` (`bundle/section/tests.rs`), T306's form ("T295's D3 limit", `T12a's D4`, `T7's D1, D2`, `451 T183's D2`) in a section labeled T306-D2, and an unlabeled section's `T31's D3` still carried; and T438's `a_labeled_section_s_own_possessives_are_taken_out`, whose expectation of `T295's D6` as the spec's (`["D5", "D6"]`) was the defect itself, changed to `["D5"]`. On the old code: 34 passed, 2 failed (`make rust-test CRATE=rust/gate/crates/plan ONLY="plan::bundle"`, 2026-11-27); with T467-D1 and D2 built and D3's filter off: 35 passed, 1 failed; after: 36 ran, clean, and `make builder-checks` on the crate 215 passed, lint and format clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| another task's possessive decision in a labeled section left out, with a feature's number too; an unlabeled section's still the spec's (T467-D1 to D3) | `plan::bundle::section::tests::another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s` | n/a: tooling | none | n/a |
 
 ### T467 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A labeled task section's plan review reads, in `spec-cited.md`, no spec decision that the section named as another task's.
+2. **The constraints.** The task's line; 451 T438's reading of a labeled section (T438-D1 to D3) and of an unlabeled one, both kept; FR-043's bundle form unchanged.
+3. **Where each comes from.** O: T438's builder's measurement (the task's line); O: T306's section read (plan.md, T306-D2's "T295's D3 limit"; T295-D3 in `plan-done.md`). G: none of the GM's words name this task.
+4. **Do they describe the world here?** Yes: the fixture is T306's own form in a section labeled as T306's is, reproduced red on the old code (item 9).
+5. **The order.** After T438 (whose rule it extends). No task waits on it.
+6. **The exits.** Green: the first tier's checks on `rust/gate/crates/plan`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the rule is `section_ids_out`'s possessive and qualified filters, read in T438's section.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/plan ONLY="plan::bundle"` with the new test and T438's corrected assertion on the old code: 34 passed, 2 failed (the spec's text carried under each of T306's possessive ids; `T295's D6` read as the spec's). After the change: 36 ran, clean; the crate whole, 215 passed.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the reviewer sees differently: a labeled section's bundle no longer carries the spec's decision under another task's decision's number, which T306's bundle carried as the spec's D3.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect.
 
+### T468 (left by 451 T444: `make audit`'s `sync-with-main` escape rate, 8% (87 escaped of 1,104), rests on 1,017 `closing-owes` rows that mix the cohort push tests' fixture rows with real refusals, and no field or content tells them apart, measured 2026-11-27 over a copy of `~/.claude/guard-log`)
 
-### T468 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the signal is the cohort crate's test runs in the event logs (`rust/gate/crates/measure/src/measure/audit/runs.rs`, new: `Runs::read`, `holds`; `audit/fixtures.rs`, `LeftOut::closing` and `untold`; `audit.rs`, `rate_of`). Every test or coverage run of a crate writes a `Phase` line with its span (451 T05), and the tests that wrote the rows (`rust/gate/crates/cohort/src/push/tests.rs`) are the cohort crate's. The live log was never written: every figure is over a copy (`t468-log`, 127,510 files, copied 2026-11-27 09:38Z, measured 2026-11-27 (`ls | wc -l` of the copy)), whose `sync-with-main` rows are the 1,104 T444 read.
+  - **The signal holds where the logs reach**, measured 2026-11-27 (`t468-sig.py` over the copy and every clone's `.git/l7r-events/`, each row's `utc` to the whole second, as the code reads it): of the 361 `closing-owes` rows from the logs' first `Phase` line (2026-11-20T11:57:18Z) on, 359 stand inside a cohort `test` or `cover-run` span; those spans cover 0.25% of the wall time from then to T143's landing (23 min 57 s of 6 days 18 h 44 min, a 1 s margin each side), measured 2026-11-27 (`t468-sig.py` over the copy), so a real refusal falls in one by chance about once in 400; and 348 of the 354 such spans before T143 hold a row (the six without, five `test` runs and one red one, read as ONLY-filtered runs, INFERRED, not read). The same at 2 s and 5 s margins: 359, measured 2026-11-27 (`t468-sig.py` over the copy). Four of the 359 stand only in another clone's log, so every clone's is read, as `events::lines_of` reads them.
+  - **The two rows left**, read one by one, observed 2026-11-27, method: every event line of every clone within 2 s of each: 2026-11-22T14:57:28Z ends a landing's refused push (`Phase` `land` `push`, code 1, `t1` 14:57:28.797Z), a real refusal; 2026-11-20T17:30:28Z stands in no span of any kind (a guard build began 0.4 s after, observed 2026-11-27, method: the same read), which nothing tells. Both stay counted.
+  - **T468-D1, built: a `closing-owes` row inside a cohort crate's test or coverage run is left out**, tallied on T444's left-out line (`sync-with-main closing-owes inside a cohort crate's test run N`). Label: CONVENTION (a signal over a closed set of rows; no research claim). Reason: the task's line ("find a signal that separates them ... and leave the fixtures out"); the measurement above.
+  - **T468-D2, built: the rule is closed at `FIXTURES_END`, 2026-11-27T06:41:00Z**, 451 T143's landing, after which no test writes the live log (the copy's last row 06:32:57Z, observed 2026-11-27, method: the copy's rows by time against `git log --grep T143`): a later row is a real refusal's wherever it stands, so the rule never drops one. Label: CONVENTION.
+  - **T468-D3, built: a row before the event logs' first `Phase` line cannot be told, stays counted, and makes the guard's escape rate `unknown`**, with a `cannot tell` line giving the count, the first line's time and why; with no event log, every row before `FIXTURES_END` is untold. Label: CONVENTION. Reason: the task's line ("or state the rate as unknown"), for the 656 rows of 2026-10-25 to 11-20 that no span can hold, measured 2026-11-27 (`t468-sig.py` over the copy). A rate over the told window alone was priced and not taken: 2 blocked and 3 escaped since 11-20 (observed 2026-11-27, method: the copy's `sync-with-main` rows by date), too few to read. The make-target and run-log spans of the earlier era (`PostToolUse` lines with `ms`, `dev/run-log/`) were tried: 198 of the 656 fall in one, the other 458 in none, because a backgrounded run writes no such span (observed 2026-11-27, method: `t468-pre.py` over the same logs), so a row in none is not shown to be real. Not taken.
+  - **Before and after**, measured 2026-11-27 (`scripts/gates/l7r-gate.sh measure audit guards`, `GUARD_LOG_DIR` the copy): before (T444's code, its section's figures over its own copy with the same 1,104 rows) `sync-with-main blocked=1017, escaped=87   escape rate 8%`; after `sync-with-main blocked=658, escaped=87   escape rate unknown`, the left-out line 3,236 to 3,595 with `sync-with-main closing-owes inside a cohort crate's test run 359`, and `cannot tell (451 T468): sync-with-main closing-owes 656 before the event logs' first Phase line, 2026-11-20T11:57:18Z, ...`. The event logs' read (116 MB) costs at most 0.4 s: an empty guard log runs 0.39 to 0.40 s, the copy 3.15 to 3.23 s, measured 2026-11-27 (`/usr/bin/time`, load 10 to 12).
+  - **Red first**: `the_cohort_tests_closing_rows_are_told_by_the_event_logs_test_runs` (`audit/tests.rs`) over a repository whose event log and another clone's hold cohort `test` and `cover-run` spans and their look-alikes (a cohort `build`, a guard `test`, a cohort run after `FIXTURES_END`, a `.jsonl.pre-t168` file, a `Phase` line with no `t1`, a line that is no JSON, a link to the same repository, a file among the clones), first with an early row, then without, then with no event log; and T444's `the_test_fixtures_rows_are_left_out_and_counted`, its `closing-owes` row now untold (`escape rate unknown`). On HEAD's code, the call adapted to its three-argument `cli`: 6 passed, 2 failed of the module's 8 (`make rust-test CRATE=rust/gate/crates/measure ONLY="measure::audit"`, 2026-11-27); with the change, the crate's 285 pass, lint and format clean.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the closing-owes rows told by the cohort test runs (T468-D1 to D3) | n/a: a report's count, no map | the T468 section | none: no engine code | the `cannot tell` line names the count and why |
 
 ### T468 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make audit`'s `sync-with-main` line prints no rate it cannot stand behind: the fixture rows a test run holds are left out and said, and the rate is `unknown` while rows no signal tells stay counted, with how many and why.
+2. **The constraints.** The live guard log is never written (the brief); T444's classes and lines kept; constitution XIV, a defect is a wrong outcome: the printed 8%, measured 2026-11-27 (T444's section, over its copy), was a rate of an unknown mix.
+3. **Where each comes from.** G: the task's line (the event log's or run log's runs by time, or the rate as unknown). O: the copy of the live log and every clone's event log read by time (2026-11-27); O: the writer's tests read in `cohort/src/push/tests.rs`.
+4. **Do they describe the world here?** Yes: 359 of the 361 rows the logs reach stand in a cohort test run, and nearly every such run holds one, measured 2026-11-27 (`t468-sig.py` over the copy).
+5. **The order.** After 451 T444 (whose filter it extends) and T143 (which stopped the writer); before T22, as T444's section files it.
+6. **The exits.** Green: the after figures above and the crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none: one closed set of rows, one signal measured.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make audit`'s guard section over the copy prints `sync-with-main blocked=658, escaped=87   escape rate unknown`, 359 rows left out and 656 untold, measured 2026-11-27 (`make audit`'s guard section over the copy).
+10. **Before moving a constant.** `FIXTURES_END` is new, a fact (T143's landing), not a knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make audit` sees the `sync-with-main` rate as unknown, not 8% (measured 2026-11-27, T444's section, over its copy), and why; nothing on a map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none: the one untold row after the logs' first `Phase` line (2026-11-20T17:30:28Z) is counted as real, which it may be; a single row moves no rate the line prints, now `unknown`.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T472 (<why: the finding or measurement that files it>)
 
@@ -7725,6 +7736,32 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T478 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T480 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T480 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

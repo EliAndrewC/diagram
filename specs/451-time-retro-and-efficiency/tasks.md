@@ -383,3 +383,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T478 [perf] plan.md's digest index keeps every answered text under the clone's .git/plan-index/texts/ and never prunes it (451 T465, rust/gate/crates/plan/src/plan/history/index.rs keep_text): 60 files, 728 KB after one 35-task tick --land-check and plan push, measured 2026-11-27 over T457's scratch clone, growing with each distinct (commit, key) a question returns; prune the texts no index commit's answer has read in a window, or cap the directory
       research: rendering
+- [ ] T480 make audit's sync-with-main escape rate prints unknown for as long as the 656 closing-owes rows before the event logs' first Phase line (2026-11-20T11:57:18Z) stay on ~/.claude/guard-log (451 T468-D3, rust/gate/crates/measure/src/measure/audit/fixtures.rs untold, measured 2026-11-27 over a copy): print beside it a rate over the told rows since that line (2 blocked, 3 escaped on the copy, too few today) once they pass a GUESS count, or say when it returns
+      research: rendering

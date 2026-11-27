@@ -11,11 +11,15 @@
 //! What a real firing could match: a session closing checks with the reason "nothing to close here" word for word, and a plan-gate
 //! or task-add row of a feature whose `specs/` directory the reading tree lacks (a clone behind main) - so the left-out line names
 //! each slug with its count, and a tree with no `specs/` directory at all leaves out none of those. The `sync-with-main`
-//! `closing-owes` rows (1,017 on the same copy) are a real refusal's byte for byte: they stay counted, and the line says so.
+//! `closing-owes` rows (1,017 on the same copy) are a real refusal's byte for byte, so a signal from outside the row tells them (451
+//! T468, `runs.rs`): one inside a cohort crate's test run is left out; one before the event logs' first `Phase` line cannot be told,
+//! stays counted and makes the guard's escape rate unknown; any other, and any after `FIXTURES_END`, is a real refusal's.
 
 use std::path::Path;
 
 use serde_json::Value;
+
+use super::runs::{Runs, FIXTURES_END};
 
 /// The detail the tests close their checks with.
 const CLOSED: &str = "nothing to close here";
@@ -26,8 +30,16 @@ pub(super) struct LeftOut {
     closed: usize,
     plan: Vec<(String, usize)>,
     task: Vec<(String, usize)>,
-    closing_owes: usize,
+    /// The cohort crate's test runs, the signal for the `closing-owes` rows (451 T468).
+    runs: Runs,
+    /// `closing-owes` rows inside one of those runs, left out.
+    in_run: usize,
+    /// `closing-owes` rows before the event logs' first `Phase` line, counted, which no signal tells apart.
+    untold: usize,
 }
+
+/// The guard whose `closing-owes` rows only a signal from outside the row tells apart.
+pub(super) const SYNC: &str = "sync-with-main";
 
 /// `<digits>-<slug>`, a feature directory's name.
 fn feature_like(name: &str) -> bool {
@@ -65,6 +77,34 @@ fn tally(slugs: &mut Vec<(String, usize)>, slug: String) {
 }
 
 impl LeftOut {
+    /// Nothing left out yet; `runs` the cohort crate's test runs the event logs hold.
+    pub(super) fn new(runs: Runs) -> Self {
+        Self {
+            runs,
+            ..Self::default()
+        }
+    }
+
+    /// Whether `guard`'s escape rate rests on rows no signal tells apart (451 T468).
+    pub(super) fn untold(&self, guard: &str) -> bool {
+        guard == SYNC && self.untold > 0
+    }
+
+    /// Whether a `closing-owes` row written at `utc` is a fixture's (a cohort test run holds it), tallying one no signal tells.
+    fn closing(&mut self, utc: &str) -> bool {
+        if utc >= FIXTURES_END {
+            return false;
+        }
+        if self.runs.holds(utc) {
+            self.in_run += 1;
+            return true;
+        }
+        if self.runs.first.as_deref().is_none_or(|f| utc < f) {
+            self.untold += 1;
+        }
+        false
+    }
+
     /// Whether `row` is a fixture's (and so tallied here); `specs` the reading tree's `specs/` directory.
     pub(super) fn take(&mut self, row: &Value, specs: &Path) -> bool {
         let text = |k: &str| row.get(k).and_then(Value::as_str).unwrap_or_default();
@@ -73,8 +113,8 @@ impl LeftOut {
             self.closed += 1;
             return true;
         }
-        if guard == "sync-with-main" && text("rule") == "closing-owes" {
-            self.closing_owes += 1;
+        if guard == SYNC && text("rule") == "closing-owes" {
+            return self.closing(text("utc"));
         }
         let Some(slug) = named(guard, detail) else {
             return false;
@@ -96,10 +136,8 @@ impl LeftOut {
     /// The lines that say what was left out, none where nothing was.
     pub(super) fn lines(&self) -> Vec<String> {
         let sum = |slugs: &[(String, usize)]| slugs.iter().map(|(_, n)| n).sum::<usize>();
-        let total = self.closed + sum(&self.plan) + sum(&self.task);
-        if total == 0 {
-            return Vec::new();
-        }
+        let total = self.closed + sum(&self.plan) + sum(&self.task) + self.in_run;
+        let mut out = Vec::new();
         let mut parts = Vec::new();
         if self.closed > 0 {
             parts.push(format!("checks check-closed \"{CLOSED}\" {}", self.closed));
@@ -117,14 +155,26 @@ impl LeftOut {
                 each.join(", ")
             ));
         }
-        let mut out = vec![format!(
-            "  left out, as test fixtures' rows (451 T444): {total} - {}",
-            parts.join("; ")
-        )];
-        if self.closing_owes > 0 {
+        if self.in_run > 0 {
+            parts.push(format!(
+                "{SYNC} closing-owes inside a cohort crate's test run {}",
+                self.in_run
+            ));
+        }
+        if total > 0 {
             out.push(format!(
-                "  still counted: sync-with-main closing-owes {} - a fixture's row is a real refusal's byte for byte",
-                self.closing_owes
+                "  left out, as test fixtures' rows (451 T444, T468): {total} - {}",
+                parts.join("; ")
+            ));
+        }
+        if self.untold > 0 {
+            out.push(format!(
+                "  cannot tell (451 T468): {SYNC} closing-owes {} {} - a fixture's row is a real refusal's byte for byte, so its escape rate is unknown",
+                self.untold,
+                self.runs.first.as_ref().map_or_else(
+                    || "with no event log's Phase line to read".to_owned(),
+                    |f| format!("before the event logs' first Phase line, {f}Z, with no test run to stand in")
+                )
             ));
         }
         out

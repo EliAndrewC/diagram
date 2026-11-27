@@ -95,5 +95,50 @@ fn a_labeled_section_s_own_possessives_are_taken_out() {
         "451",
         &owners,
     );
-    assert_eq!(ids_in(&n.bare), ["D5", "D6"]);
+    assert_eq!(ids_in(&n.bare), ["D5"]);
+}
+
+/// Another task's possessive decision in a labeled section is that task's own, `T295-D3`, not the spec's D3 (451 T467: 451 T306's
+/// section, labeled T306-D1 to D3, wrote "T295's D3 limit", and its bundle carried the spec's D3). An unlabeled section's `T31's D3`
+/// is read as before, the spec's.
+#[test]
+fn another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s() {
+    let root = repo();
+    let dir = root.join("specs/451-x");
+    std::fs::create_dir_all(&dir).unwrap();
+    let section = "### T306 (found by 451 T295)\n\n- **Decisions**:\n  - **T306-D2, the plan hold places a Bash call where its command lands.** T295's D3 limit ends here; T12a's D4 and T7's D1, D2 too, and 451 T183's D2. Bound by spec D5 and 451 D5.\n";
+    let plan = format!("# Plan\n\n**D1 - SPEC ONE.** x\n\n**D2 - SPEC TWO.** x\n\n**D3 - SPEC THREE.** x\n\n**D4 - SPEC FOUR.** x\n\n**D5 - SPEC FIVE.** x\n\n## Tasks\n\n{section}\n### T05 - an unlabeled section\n\nAs T31's D3 says.\n");
+    std::fs::write(dir.join("plan.md"), &plan).unwrap();
+    std::fs::write(
+        dir.join("spec.md"),
+        "## Requirements\n\n- **FR-002**: Ours.\n",
+    )
+    .unwrap();
+    std::fs::write(dir.join("request.md"), "> words\n").unwrap();
+    let out = scratch("out");
+    let m = build(
+        &dir,
+        &out,
+        "T306",
+        &under(&[("the section of T306", section)]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    for spec_only in ["SPEC ONE", "SPEC TWO", "SPEC THREE", "SPEC FOUR"] {
+        assert!(!cited.contains(spec_only), "{spec_only}: {cited}");
+    }
+    assert!(cited.contains("SPEC FIVE"), "{cited}");
+    let tail = "### T05 - an unlabeled section\n\nAs T31's D3 says.\n";
+    let m = build(
+        &dir,
+        &out,
+        "T05",
+        &under(&[("### T05 - an unlabeled section", tail)]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    assert!(read(m.parent().unwrap(), "spec-cited.md").contains("SPEC THREE"));
 }

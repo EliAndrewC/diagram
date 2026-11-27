@@ -397,8 +397,12 @@ fn guard_files(dir: &Path) -> Vec<PathBuf> {
 
 /// The guard log's rows less the test fixtures' rows content tells apart, which are tallied (451 T444): left out first, so every
 /// count, rate and list of the section is of the rest.
-fn guard_rows(dir: &Path, cwd: &Path) -> Result<(Vec<Value>, fixtures::LeftOut), String> {
-    let mut left = fixtures::LeftOut::default();
+fn guard_rows(
+    dir: &Path,
+    cwd: &Path,
+    clones: &Path,
+) -> Result<(Vec<Value>, fixtures::LeftOut), String> {
+    let mut left = fixtures::LeftOut::new(runs::Runs::read(cwd, clones));
     let specs = cwd.join("specs");
     let rows = load(&guard_files(dir))?
         .into_iter()
@@ -407,9 +411,27 @@ fn guard_rows(dir: &Path, cwd: &Path) -> Result<(Vec<Value>, fixtures::LeftOut),
     Ok((rows, left))
 }
 
+/// A guard's escape rate as its line prints it: unknown where its rows rest on rows no signal tells apart (451 T468), none where it
+/// neither blocked nor escaped.
+fn rate_of(left: &fixtures::LeftOut, g: &Value, c: &Counter) -> String {
+    let (blocked, escaped) = (c.get("blocked"), c.get("escaped"));
+    if left.untold(&s(g)) {
+        "   escape rate unknown".to_owned()
+    } else if blocked > 0 || escaped > 0 {
+        #[expect(
+            clippy::cast_precision_loss,
+            reason = "Python's true division of two counts"
+        )]
+        let r = escaped as f64 / (escaped + blocked).max(1) as f64;
+        format!("   escape rate {}", percent(r))
+    } else {
+        String::new()
+    }
+}
+
 /// The guard firings.
-fn guards(dir: &Path, cwd: &Path, out: &mut Out) -> Result<(), String> {
-    let (rows, left) = guard_rows(dir, cwd)?;
+fn guards(dir: &Path, cwd: &Path, clones: &Path, out: &mut Out) -> Result<(), String> {
+    let (rows, left) = guard_rows(dir, cwd, clones)?;
     out.line(&format!("{BOLD}Guard firings{PLAIN} (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped"));
     // `defaultdict(Counter)` by guard, in the order first met; `sorted(by.items())` compares the guards
     let mut by: Vec<(Value, Counter)> = Vec::new();
@@ -437,17 +459,7 @@ fn guards(dir: &Path, cwd: &Path, out: &mut Out) -> Result<(), String> {
             .iter()
             .map(|(k, v)| format!("{}={v}", s(k)))
             .collect();
-        let (blocked, escaped) = (c.get("blocked"), c.get("escaped"));
-        let rate = if blocked > 0 || escaped > 0 {
-            #[expect(
-                clippy::cast_precision_loss,
-                reason = "Python's true division of two counts"
-            )]
-            let r = escaped as f64 / (escaped + blocked).max(1) as f64;
-            format!("   escape rate {}", percent(r))
-        } else {
-            String::new()
-        };
+        let rate = rate_of(&left, g, c);
         out.line(&format!(
             "  {} {}{rate}",
             pad(g, true, 12)?,
@@ -570,15 +582,15 @@ fn claims(cwd: &Path, out: &mut Out) -> Result<(), String> {
 }
 
 /// `l7r-gate measure audit runs|guards|claims`, from the working directory `cwd`; `guard_dir` the guard log
-/// (`$GUARD_LOG_DIR`, else `~/.claude/guard-log`).
+/// (`$GUARD_LOG_DIR`, else `~/.claude/guard-log`); `clones` the clones whose event logs the guard section reads beside `cwd`'s (451 T468).
 #[must_use]
-pub fn cli(args: &[String], cwd: &Path, guard_dir: &Path) -> Reply {
+pub fn cli(args: &[String], cwd: &Path, guard_dir: &Path, clones: &Path) -> Reply {
     let mut out = Out {
         text: String::new(),
     };
     let done = match args {
         [one] if one == "runs" => runs(cwd, &mut out),
-        [one] if one == "guards" => guards(guard_dir, cwd, &mut out),
+        [one] if one == "guards" => guards(guard_dir, cwd, clones, &mut out),
         [one] if one == "claims" => claims(cwd, &mut out),
         _ => {
             return Reply {
@@ -619,6 +631,7 @@ pub fn guard_dir(value: Option<&str>, home: &Path) -> PathBuf {
 
 mod fixtures;
 mod held;
+mod runs;
 
 #[cfg(test)]
 mod tests;

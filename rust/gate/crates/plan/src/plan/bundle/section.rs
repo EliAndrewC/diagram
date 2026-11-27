@@ -22,6 +22,8 @@ static SPEC_RUN: LazyLock<Regex> = LazyLock::new(|| {
         r"(?<![\w.-])(?:spec|plan)(?:\.md)?\s+{ID}\b{RUN_ON}"
     ))
 });
+/// A task's possessive, `T183's `, inside a run `QUALIFIED` reads (`451 T183's D10`): that task's own decision (451 T467).
+static TASK_POSSESSIVE: LazyLock<Regex> = LazyLock::new(|| re(r"\bT\d+[a-z]?'s\s"));
 /// The possessives that name a task section's own decisions, not the spec's (451 T438): "the section's D4" in a labeled section.
 const SECTION_NAMES: [&str; 3] = ["section", "task", "block"];
 
@@ -75,12 +77,24 @@ pub(super) fn ours(
         .collect()
 }
 
-/// `text` (its ranges written out) with each bare decision id taken out, for a block of a task section in `owners` that writes its
-/// own decisions `T369-D1` (451 T438: T369's "(D1)" and "(D3)" were its own T369-D1 and T369-D3, and the bundle carried the spec's).
+/// A task's name, `t295` or `t12a` lowercased (`named`'s possessive rule reads it too): its possessive decision in a labeled section
+/// is that task's own, `T295's D3` its `T295-D3`, never the spec's (451 T467: 451 T306's section wrote "T295's D3 limit", and its
+/// bundle carried the spec's D3).
+pub(super) fn is_task(word: &str) -> bool {
+    let digits = word.strip_prefix('t').unwrap_or("");
+    let digits = digits
+        .strip_suffix(|c: char| c.is_ascii_lowercase())
+        .unwrap_or(digits);
+    !digits.is_empty() && digits.bytes().all(|b| b.is_ascii_digit())
+}
+
+/// `text` (its ranges written out) with each bare decision id taken out, for a block of a labeled task section (`labeled_owners`
+/// names it) that writes its own decisions `T369-D1` (451 T438: T369's "(D1)" and "(D3)" were its own T369-D1 and T369-D3, and the bundle carried the spec's).
 /// Kept, to be read as before: a run named as the spec's (`spec D5`, `plan D5, D6`), one a feature number names (`451 D7`, which
 /// `QUALIFIED` reads), and one a possessive names (`the plan's D6`, `house style's D11`) - except the section's own possessives,
-/// `the section's D4` and the owner's `T369's D1`. A requirement (`FR-`, `SC-`) is always the spec's and never taken out.
-pub(super) fn section_ids_out(text: &str, owners: &[String]) -> String {
+/// `the section's D4` and the owner's `T369's D1`, and another task's, `T295's D3`, that task's own decision (451 T467), left out
+/// as the section's are: its text is that task's section's, not the spec's. A requirement (`FR-`, `SC-`) is always the spec's and never taken out.
+pub(super) fn section_ids_out(text: &str) -> String {
     let spans = |pattern: &Regex| -> Vec<(usize, usize)> {
         pattern
             .find_iter(text)
@@ -89,15 +103,19 @@ pub(super) fn section_ids_out(text: &str, owners: &[String]) -> String {
             .collect()
     };
     let mut kept = spans(&SPEC_RUN);
-    kept.extend(spans(&QUALIFIED));
+    // a feature's number before a task's possessive, `451 T183's D10`, names that task's own decision too (451 T467)
+    kept.extend(
+        spans(&QUALIFIED)
+            .into_iter()
+            .filter(|&(a, b)| !TASK_POSSESSIVE.is_match(&text[a..b]).unwrap_or(false)),
+    );
     kept.extend(
         NAMED
             .captures_iter(text)
             .map_while(Result::ok)
             .filter(|c| {
                 let word = c[2].to_lowercase();
-                !SECTION_NAMES.contains(&word.as_str())
-                    && !owners.iter().any(|o| o.to_lowercase() == word)
+                !SECTION_NAMES.contains(&word.as_str()) && !is_task(&word)
             })
             .filter_map(|c| c.get(0).map(|m| (m.start(), m.end()))),
     );

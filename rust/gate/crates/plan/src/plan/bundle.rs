@@ -499,7 +499,7 @@ fn named(body: &str, own_no: &str, owners: &[String]) -> Named {
     let expanded = if owners.is_empty() {
         expanded
     } else {
-        section_ids_out(&expanded, owners)
+        section_ids_out(&expanded)
     };
     let numbered = QUALIFIED.replace_all(&expanded, |c: &Captures<'_>| {
         let after = &expanded[c.get(0).map_or(0, |g| g.end())..];
@@ -518,9 +518,7 @@ fn named(body: &str, own_no: &str, owners: &[String]) -> Named {
             let word = c[2].to_lowercase();
             let is_own = OWN_NAMES.contains(&word.as_str())
                 || IDS.is_match(&c[2]).unwrap_or(false)
-                || (word.len() > 1
-                    && word.starts_with('t')
-                    && word[1..].bytes().all(|b| b.is_ascii_digit()));
+                || is_task(&word);
             let ids = ids_in(&c[3]);
             if is_own {
                 n.own.extend(ids);
@@ -960,7 +958,7 @@ pub(super) fn delta_prompt(
 mod rulings;
 mod section;
 
-use section::{ours, owners_of, section_ids_out};
+use section::{is_task, ours, owners_of, section_ids_out};
 
 #[cfg(test)]
 mod tests;

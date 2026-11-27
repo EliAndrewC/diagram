@@ -4170,6 +4170,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T467 (left by 451 T438: its `OWN_NAMES` rule reads the owner's own `T369's D1` as the section's but another task's `T295's D3` still as the spec's D3; seen once, 451 T306's section, observed 2026-11-27, method: every `specs/*/plan.md` bare D<n> classed by `t438-measure.py`)": {
+   "sha256": "a7fc59b28a876e2d0027a63f7c08068cec45897c7a79bd34ad603751d01f7d71",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T467 Approach (checklist part A)": {
+   "sha256": "cbea3adb65c8ef04df167a85221d5c398ef9fb87d56cb63e3718031174888739",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T468 (left by 451 T444: `make audit`'s `sync-with-main` escape rate, 8% (87 escaped of 1,104), rests on 1,017 `closing-owes` rows that mix the cohort push tests' fixture rows with real refusals, and no field or content tells them apart, measured 2026-11-27 over a copy of `~/.claude/guard-log`)": {
+   "sha256": "133a9109e9beb1a51b04e53cc256eecad9b97c33ca9b479f72c2763e9b2344f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T468 Approach (checklist part A)": {
+   "sha256": "17267099183f0238806f30ce8e9771c97ab241f00e0ad5f0508b37500c7e3a9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -38536,6 +38560,66 @@
      "summary": "Four template-only placeholder blocks removed (T465's replaced by the real block).",
      "class": "within",
      "why": "Their earlier text held only template placeholders and no decision; removing them narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T467 (left by 451 T438: its `OWN_NAMES` rule reads the owner's own `T369's D1` as the section's but another task's `T295's D3` still as the spec's D3; seen once, 451 T306's section, observed 2026-11-27, method: every `specs/*/plan.md` bare D<n> classed by `t438-measure.py`)",
+    "### T467 Approach (checklist part A)",
+    "### T468 (left by 451 T444: `make audit`'s `sync-with-main` escape rate, 8% (87 escaped of 1,104), rests on 1,017 `closing-owes` rows that mix the cohort push tests' fixture rows with real refusals, and no field or content tells them apart, measured 2026-11-27 over a copy of `~/.claude/guard-log`)",
+    "### T468 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T467-D1",
+     "summary": "In a labeled task section, another task's possessive decision `T<m>'s D<k>` is that task's own and is left out of spec-cited.md, not looked up; an unlabeled section's possessive is still read as the spec's.",
+     "class": "within",
+     "why": "Fixes a known defect: T306's labeled section named T295's D3, and its bundle carried the spec's D3 text under that reference, so the reviewer was fed text that section did not mean. The block quotes its task line as giving two options, look it up or leave it out, and this takes the second. No words of the GM's request are narrowed: grepping request.md for T438, T467, possessive and spec-cited gives no hit. The reviewer still reads the block's own words. An unlabeled section's possessive keeps T438's reading, which is a rule about meaning, not a limit on scope: under the old convention a task's D<n> in an unlabeled section is a plan-level decision, and the test pins that case."
+    },
+    {
+     "id": "T467-D2",
+     "summary": "One task-name test (`is_task`) shared by `named`'s possessive rule, so a lettered task (`T12a's`) is read as a bare one is.",
+     "class": "within",
+     "why": "Same defect class, another form of the task name; grep shows no current use, so nothing a bundle carries changes. Serves the same fix; no behavior beyond it."
+    },
+    {
+     "id": "T467-D3",
+     "summary": "The feature-number form `451 T183's D10` in a labeled section is also the task's own and left out; `451 D5` stays the spec's.",
+     "class": "within",
+     "why": "The same defect in a third form, found by the task's own bundle and fixed in this step rather than carried forward. The form's two other uses are in T313's unlabeled section. There T438's kept rule about meaning applies: under the unlabeled convention the D-numbers are the spec's, and the spec's D10, 'A builder resumed', is what a pool-of-builders section citing T183's D10 refers to. So no wrong text is knowingly left in T313's bundle, and the block's 'Found and left? none' stands."
+    },
+    {
+     "id": "T467-approach",
+     "summary": "Order after T438, one landing, red-first fixture of T306's form, T438's assertion that pinned the defect corrected.",
+     "class": "within",
+     "why": "Enforcement of the fix (a test that fails when the defect is present); correcting a test that asserted the defect is fixing it, not a narrowing."
+    },
+    {
+     "id": "T468-D1",
+     "summary": "A `closing-owes` row of `sync-with-main` standing inside a cohort crate's `test` or `cover-run` span (read from every clone's event log) is left out of the escape rate and tallied on the left-out line.",
+     "class": "within",
+     "why": "Fixes a known defect: make audit printed an 8% rate over an unknown mix of fixture rows and real refusals, a measure that misreports a guard the audit register exists to re-audit. The signal is measured (359 of 361 rows in spans covering 0.25% of the wall time) and the left-out rows are counted and said, not hidden."
+    },
+    {
+     "id": "T468-D2",
+     "summary": "The rule closes at FIXTURES_END (451 T143's landing, 2026-11-27T06:41:00Z); any later row counts as a real refusal wherever it stands.",
+     "class": "within",
+     "why": "Bounds the filter to the window in which tests wrote the live log, so it can never drop a real refusal later; a fact, not a knob."
+    },
+    {
+     "id": "T468-D3",
+     "summary": "Rows before the event logs' first Phase line cannot be told, stay counted, and make the guard's escape rate print `unknown` with a `cannot tell` line giving count, time and why; a rate over the told window alone and the earlier-era make-target spans were priced and not taken.",
+     "class": "within",
+     "why": "The block quotes its task line as offering 'state the rate as unknown', and this takes that option. It meets the defect standard: an 8% printed over an unknown mix of fixture rows and real refusals was a wrong answer, and 'unknown' with a count and a reason is not. Every untold row stays counted, so no real refusal is dropped. The alternatives were priced and the block records why they were not taken. No words of the GM's request are narrowed: grepping request.md for sync-with-main, T444, T468, cohort, guard log and escape rate gives no hit, and the audit register asks for honest re-audit, which this serves."
+    },
+    {
+     "id": "T468-approach",
+     "summary": "Live guard log never written (figures over a copy); T444's classes and lines kept; order after T444 and T143, before T22; one landing; red-first test with look-alike spans; found-and-left none (the one untold post-Phase row counted as real).",
+     "class": "within",
+     "why": "Constraints and order that keep earlier accepted behavior; the single untold row counted as real is a row kept, not a defect left, and moves no printed rate."
     }
    ]
   }

@@ -86,6 +86,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             rest,
             &std::env::current_dir().unwrap_or_default(),
             &audit::guard_dir(std::env::var("GUARD_LOG_DIR").ok().as_deref(), &home()),
+            Path::new(events::CLONES),
         ),
         _ => reply(
             String::new(),

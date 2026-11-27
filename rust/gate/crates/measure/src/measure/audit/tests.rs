@@ -11,6 +11,7 @@ fn run(args: &[&str], cwd: &Path, guards: &Path) -> crate::Reply {
         &args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(),
         cwd,
         guards,
+        &cwd.join("no-clones"),
     )
 }
 
@@ -461,7 +462,7 @@ fn the_test_fixtures_rows_are_left_out_and_counted() {
     assert!(bare
         .stdout
         .contains("  plan-gate    blocked=5, escaped=4   escape rate 44%\n"));
-    assert!(bare.stdout.contains("  left out, as test fixtures' rows (451 T444): 2 - checks check-closed \"nothing to close here\" 2\n"));
+    assert!(bare.stdout.contains("  left out, as test fixtures' rows (451 T444, T468): 2 - checks check-closed \"nothing to close here\" 2\n"));
     put(&dir, "specs/451-real/spec.md", "");
     let said = run(&["guards"], &dir, &log);
     assert_eq!(said.code, 0);
@@ -476,12 +477,178 @@ fn the_test_fixtures_rows_are_left_out_and_counted() {
         .contains("  task-add     blocked=1   escape rate 0%\n"));
     assert!(said
         .stdout
-        .contains("  sync-with-main blocked=1   escape rate 0%\n"));
+        .contains("  sync-with-main blocked=1   escape rate unknown\n"));
     assert!(said.stdout.contains("  9 entries, "));
     assert!(said.stdout.contains(concat!(
-        "  left out, as test fixtures' rows (451 T444): 6 - checks check-closed \"nothing to close here\" 2; ",
+        "  left out, as test fixtures' rows (451 T444, T468): 6 - checks check-closed \"nothing to close here\" 2; ",
         "plan-gate naming a feature with no specs/ directory 3 (449-x 2, 600-x 1); ",
         "task-add naming a feature with no specs/ directory 1 (9001-x 1)\n",
-        "  still counted: sync-with-main closing-owes 1 - a fixture's row is a real refusal's byte for byte\n",
+        "  cannot tell (451 T468): sync-with-main closing-owes 1 with no event log's Phase line to read - ",
     )));
+}
+
+/// T468's event logs: the repository's at `dir`, and a clone's under `<dir>/clones`, which holds `dir` again by a link and a file.
+fn closing_events(dir: &Path) -> std::path::PathBuf {
+    let phase = |step: &str, krate: &str, t0: &str, t1: &str| {
+        format!(
+            r#"{{"ev":"Phase","src":"rust","step":"{step}","crates":["rust/gate/crates/{krate}"],"t0":"{t0}","t1":"{t1}","code":0}}"#
+        )
+    };
+    let events = [
+        phase(
+            "build",
+            "guard",
+            "2026-11-20T11:57:18.961Z",
+            "2026-11-20T11:57:19.000Z",
+        ),
+        phase(
+            "test",
+            "cohort",
+            "2026-11-22T09:59:59.500Z",
+            "2026-11-22T10:00:01.900Z",
+        ),
+        phase(
+            "cover-run",
+            "cohort",
+            "2026-11-23T08:59:50.000Z",
+            "2026-11-23T09:00:00.400Z",
+        ),
+        phase(
+            "build",
+            "cohort",
+            "2026-11-22T10:59:59.000Z",
+            "2026-11-22T11:00:01.000Z",
+        ),
+        phase(
+            "test",
+            "guard",
+            "2026-11-25T08:59:00.000Z",
+            "2026-11-25T09:01:00.000Z",
+        ),
+        phase(
+            "test",
+            "cohort",
+            "2026-11-27T06:59:00.000Z",
+            "2026-11-27T07:01:00.000Z",
+        ),
+        r#"{"ev":"Phase","step":"test","t0":"2026-11-01T00:00:00.000Z"}"#.to_owned(),
+        r#"{"ev":"Phase", not json"#.to_owned(),
+        r#"{"t":"2026-11-02T00:00:00.000Z","ev":"Stop"}"#.to_owned(),
+    ];
+    put(
+        dir,
+        ".git/l7r-events/451-x.jsonl",
+        &(events.join("\n") + "\n"),
+    );
+    put(
+        dir,
+        ".git/l7r-events/451-x.jsonl.pre-t168",
+        &phase(
+            "test",
+            "cohort",
+            "2026-11-19T07:59:00.000Z",
+            "2026-11-19T08:01:00.000Z",
+        ),
+    );
+    let clones = dir.join("clones");
+    let other = clones.join("other");
+    std::fs::create_dir_all(&other).unwrap();
+    git(&other, &["init", "-q"]);
+    put(
+        &other,
+        ".git/l7r-events/452-y.jsonl",
+        &phase(
+            "test",
+            "cohort",
+            "2026-11-24T09:00:00.000Z",
+            "2026-11-24T09:00:06.000Z",
+        ),
+    );
+    std::os::unix::fs::symlink(dir, clones.join("same")).unwrap();
+    put(&clones, "a-file", "");
+    clones
+}
+
+/// T468's world: a repository whose event log and a clone's hold cohort test runs, and a guard log of `closing-owes` rows.
+fn closing_world() -> (
+    l7r_shared::tempdir::TempDir,
+    std::path::PathBuf,
+    std::path::PathBuf,
+) {
+    let dir = scratch("audit-closing");
+    git(&dir, &["init", "-q"]);
+    let log = dir.join("guard-log");
+    let row = |name: &str, utc: &str, event: &str, rule: &str| {
+        put(
+            &log,
+            &format!("{name}.json"),
+            &format!(
+                r#"{{"utc": "{utc}", "guard": "sync-with-main", "event": "{event}", "rule": "{rule}", "detail": "closing"}}"#
+            ),
+        );
+    };
+    row("a-early", "2026-11-19T08:00:00Z", "blocked", "closing-owes");
+    row(
+        "b-in-test",
+        "2026-11-22T10:00:01Z",
+        "blocked",
+        "closing-owes",
+    );
+    row(
+        "c-in-cover",
+        "2026-11-23T09:00:00Z",
+        "blocked",
+        "closing-owes",
+    );
+    row(
+        "d-in-clone",
+        "2026-11-24T09:00:05Z",
+        "blocked",
+        "closing-owes",
+    );
+    row("e-real", "2026-11-22T11:00:00Z", "blocked", "closing-owes");
+    row(
+        "f-other-crate",
+        "2026-11-25T09:00:00Z",
+        "blocked",
+        "closing-owes",
+    );
+    row(
+        "g-after-t143",
+        "2026-11-27T07:00:00Z",
+        "blocked",
+        "closing-owes",
+    );
+    row("h-escape", "2026-11-22T12:00:00Z", "escaped", "close-ok");
+    let clones = closing_events(&dir);
+    (dir, log, clones)
+}
+
+/// The cohort push tests' `closing-owes` rows, byte for byte a real refusal's, are told by the event logs' cohort test runs (451
+/// T468): a row inside one is left out, a row after 451 T143's landing is counted wherever it stands, a row before the logs' first
+/// `Phase` line cannot be told and makes the guard's escape rate unknown, and with no event log at all every such row is untold.
+#[test]
+fn the_cohort_tests_closing_rows_are_told_by_the_event_logs_test_runs() {
+    let (dir, log, clones) = closing_world();
+    let said = cli(&["guards".to_owned()], &dir, &log, &clones);
+    assert_eq!(said.code, 0);
+    assert!(said
+        .stdout
+        .contains("  sync-with-main blocked=4, escaped=1   escape rate unknown\n"));
+    assert!(said.stdout.contains("  left out, as test fixtures' rows (451 T444, T468): 3 - sync-with-main closing-owes inside a cohort crate's test run 3\n"));
+    assert!(said.stdout.contains("  cannot tell (451 T468): sync-with-main closing-owes 1 before the event logs' first Phase line, 2026-11-20T11:57:18Z, with no test run to stand in - a fixture's row is a real refusal's byte for byte, so its escape rate is unknown\n"));
+    std::fs::remove_file(log.join("a-early.json")).unwrap();
+    let told = cli(&["guards".to_owned()], &dir, &log, &clones);
+    assert!(told
+        .stdout
+        .contains("  sync-with-main blocked=3, escaped=1   escape rate 25%\n"));
+    assert!(!told.stdout.contains("cannot tell"));
+    // no event log: every closing-owes row before T143's landing is untold, none left out
+    let bare = scratch("audit-closing-bare");
+    let none = cli(&["guards".to_owned()], &bare, &log, &bare.join("none"));
+    assert!(none
+        .stdout
+        .contains("  sync-with-main blocked=6, escaped=1   escape rate unknown\n"));
+    assert!(none.stdout.contains("  cannot tell (451 T468): sync-with-main closing-owes 5 with no event log's Phase line to read - "));
+    assert!(!none.stdout.contains("left out"));
 }
