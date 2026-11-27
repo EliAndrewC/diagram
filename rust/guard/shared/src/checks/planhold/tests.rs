@@ -30,6 +30,13 @@ fn a_dispatch_takes_a_hold() {
         state["plan_holds"]["t1"],
         json!({"feature": "900-a", "task": "T01", "blocks": [], "t": 1.5, "state": "pending"})
     );
+    // a task's bundle keyed by its tree (451 T288): `plan-<feature>-<task>-<8 hex>` takes the same hold
+    let keyed = format!("Read {}/plan-900-a-T01-0123abcd/MANIFEST.md", d.display());
+    hold(&mut state, "t5", &keyed, 1.5, None);
+    assert_eq!(
+        state["plan_holds"]["t5"],
+        json!({"feature": "900-a", "task": "T01", "blocks": [], "t": 1.5, "state": "pending"})
+    );
     // the tree its call ran in, the one its write-back runs in (451 T123)
     hold(&mut state, "t4", &prompt, 1.5, Some(&d));
     let root = state["plan_holds"]["t4"]["root"].clone();

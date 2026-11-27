@@ -20,8 +20,12 @@ fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
+/// A task's bundle is `plan-<feature>-<task>-<8 hex>`, the hex its tree's (451 T288); the bare `plan-<feature>-<task>` of a bundle
+/// built before it still matches.
 static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(\S*/plan-(\d{3}-[a-z0-9-]+?)-(?:(T\d+[a-z]?)|blocks-[\w-]+))/MANIFEST\.md")
+    re(
+        r"(\S*/plan-(\d{3}-[a-z0-9-]+?)-(?:(T\d+[a-z]?)(?:-[0-9a-f]{8})?|blocks-[\w-]+))/MANIFEST\.md",
+    )
 });
 static WRITE: LazyLock<Regex> = LazyLock::new(|| {
     re(r#"open\([^)]*['"][wa]['"]|write_text|\bsed\s+(?:-\S+\s+)*-i|>\s*['"]?\S*plan\.md|\btee\b"#)

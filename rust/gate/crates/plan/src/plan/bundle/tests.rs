@@ -435,7 +435,7 @@ fn a_task_prompt_shows_the_section_s_earlier_text() {
     std::fs::write(dir.join("plan.md"), PLAN.replace("the lane", "the road")).unwrap();
     let prompt = task_prompt(&dir, &out, "T02").unwrap();
     assert!(prompt.contains("feature 999-x, task T02"));
-    let b = out.join("plan-999-x-T02");
+    let b = bundle_of(&prompt);
     assert!(
         read(&b, "earlier.md").contains("verdict BLOCKED")
             && read(&b, "MANIFEST.md").contains("TASK=T02")
@@ -924,7 +924,7 @@ fn bundle_of(prompt: &str) -> std::path::PathBuf {
 
 /// TWO TREES, ONE BUNDLES DIRECTORY (451 T271): two worktrees of one feature owe the same changed blocks whenever their plans
 /// agree, and the second `make plan-delta` rewrote the first's bundle - its tree line and recording command the other tree's - under
-/// the first's reviewer. The changed-blocks bundle is the tree's; a task's own bundle is its task's, one builder a task.
+/// the first's reviewer. The changed-blocks bundle is the tree's, and so is a task's own bundle (451 T288).
 #[test]
 fn two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own() {
     let ((one, dir_one), (two, dir_two)) = (feature(), feature());
@@ -947,11 +947,24 @@ fn two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own(
     let hex = name.strip_prefix("plan-999-x-blocks-plan-").unwrap();
     let shaped = hex.len() == 8 && hex.chars().all(|c| c.is_ascii_hexdigit());
     assert!(shaped, "{name}");
-    // a task's own bundle is named by its task in either tree: only the same task decided in two trees shares it
+    // ONE TASK DECIDED IN TWO TREES (451 T288): since 451 T369 a task is started in a pool tree and the clone both, and the second
+    // `make decide` rewrote the first's bundle under the first's reviewer - so a task's bundle is its tree's too, two bundles here
     let task_one = bundle_of(&task_prompt(&dir_one, &out, "T02").unwrap());
+    let task_two = bundle_of(&task_prompt(&dir_two, &out, "T02").unwrap());
+    assert_ne!(task_one, task_two);
+    for (root, bundle) in [(&one, &task_one), (&two, &task_two)] {
+        let tree = std::fs::canonicalize(root).unwrap().display().to_string();
+        assert!(read(bundle, "MANIFEST.md").contains(&format!("Built from the tree `{tree}`")));
+    }
+    // one tree's re-decide is the same directory, named `plan-<feature>-<task>-<8 hex>` - the shape the plan hold matches
     assert_eq!(
-        task_one,
-        bundle_of(&task_prompt(&dir_two, &out, "T02").unwrap())
+        bundle_of(&task_prompt(&dir_one, &out, "T02").unwrap()),
+        task_one
     );
-    assert!(task_one.ends_with("plan-999-x-T02"));
+    let name = task_one.file_name().unwrap().to_string_lossy().into_owned();
+    let hex = name.strip_prefix("plan-999-x-T02-").unwrap();
+    assert!(
+        hex.len() == 8 && hex.chars().all(|c| c.is_ascii_hexdigit()),
+        "{name}"
+    );
 }

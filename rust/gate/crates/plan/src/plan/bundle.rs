@@ -861,10 +861,14 @@ pub(super) fn task_prompt(spec_dir: &Path, out_root: &Path, task: &str) -> Resul
             )
         })
         .collect();
+    // THE TREE'S OWN DIRECTORY (451 T288): since 451 T369 a task is started in a pool tree and the clone both, and the second
+    // `make decide` rewrote the first's bundle under the first's reviewer. The tree is hashed into the name as `make plan-delta`'s
+    // bundles are (T271), `plan-<feature>-<task>-<8 hex>`, the shape the plan hold (`checks::planhold`'s BUNDLE) matches.
+    let name = format!("{task}-{}", &digest(tree_of(spec_dir).as_bytes())[..8]);
     let manifest = build(
         spec_dir,
         out_root,
-        task,
+        &name,
         &[(format!("the section of {task}"), section)],
         &earlier,
         &how,

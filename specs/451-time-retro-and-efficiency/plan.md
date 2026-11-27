@@ -2932,32 +2932,39 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T288 (<why: the finding or measurement that files it>)
+### T288 (451 T271's own section, which left a task's own plan bundle keyed by its task alone because "a task has one builder, so two builders never do"; since 451 T369 a task is routinely started in a pool tree and in the coordinating clone both, so both run `make decide` on one task and share its bundle)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a task's own plan review bundle (`make decide`) is keyed by its tree, as the changed-blocks bundle was by T271; and the scratch-file prefix rule is measured and left an instruction.
+  - **Where the path is made.** `task_prompt` in `rust/gate/crates/plan/src/plan/bundle.rs` passed the bare task id to `build`, which writes `<bundles root>/plan-<feature>-<name>` (the root `/tmp/l7r-check`, `BUNDLES` in `plan.rs`), removing the directory first. Two trees deciding one task wrote one directory, the second's MANIFEST (its `Built from the tree` line and its `make -C <tree> plan-verdict` command) over the first's while the first's reviewer read it.
+  - **The fix.** `task_prompt` names the bundle `<task>-<8 hex>`, the hex the first 8 of the SHA-256 of `tree_of(spec_dir)` - the same tree string the MANIFEST prints, and the same digest `make plan-delta`'s `blocks-<tasks>-<8 hex>` hashes the tree into (T271). The directory is `plan-<feature>-<task>-<8 hex>`; one tree's re-decide keeps its directory, as before. The MANIFEST and the printed prompt name the new path because both are made from `build`'s output directory. A tree spelled two ways (a symlink and its target) gets a key for each spelling, since `tree_of` is `std::path::absolute`, not a canonical path: a bundle for each spelling of one tree, each correct for its own `make -C`, so it is left so.
+  - **Every reader of the path, found 2026-11-27** by `grep -rn "l7r-check/plan\|plan-{\|MANIFEST\|PLAN REVIEW of" rust scripts Makefile .claude` (tests aside). One reconstructs or matches the directory's name: the plan hold's `BUNDLE` pattern (`rust/guard/shared/src/checks/planhold.rs`), which read the task only where `T<n>` was followed directly by `/MANIFEST.md` - on the new name it would match nothing and a task's review would take no hold. It now takes an optional `-<8 hex>` after the task (a guard edit, recorded by `make guard-edit`); a bundle built before the change still matches. The rest read the prompt's words, not the path: the plan-round cap's `SECTION` ("feature <f>, task <T>", `rust/guard/src/guards/review_round_hooks.rs`), the ledger passes' `TASK` (`ledger_passes/left.rs`, `rows.rs`), the event log's `manifest` field (`event_log_hooks/fields.rs`, the path recorded as given) and the MANIFEST matcher of `checks/handle.rs` (any path). No script, Makefile line or agent file builds the path; the agents quote it from `make decide`'s output.
+  - **The scratch-file prefix, measured 2026-11-27.** Method: `t288-scratch-prefix.py` in the session scratchpad over every subagent transcript under `/home/agent/.claude/projects/-diagram/` that started 2026-11-26 or 27 and whose brief carries the `BUILDER-BRIEF` marker (56 builders), counting each Write call's `file_path` and each Bash redirect, `tee` or `-o` target (a pattern, so a heuristic) under the session scratchpad or `/tmp` outside `/tmp/l7r-check`, the task outputs and `/dev`. Measured 2026-11-27 (that script): 260 writes (12 Write, 248 Bash), 6 lacking the builder's `t<task>-` prefix (2.3%), and all 6 were text, not writes: a redirect quoted inside a Rust test literal (`>> /tmp/l`, 3, one builder) and in plan prose (`> /tmp/x`, 2, one builder; one `..` from the same quotation). Real unprefixed writes, measured 2026-11-27 (the same script, its 6 hits read by hand): 0 of 254, so no collision or confusion is shown, and the guard is declined with that number. What would reopen it: an unprefixed scratch write by a builder, or two builders' files colliding, found in a later sweep by the same script.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| two trees deciding one task get a bundle each, each naming its own tree | `two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own` (`rust/gate/crates/plan/src/plan/bundle/tests.rs`), red on HEAD's code (2026-11-27) | n/a: tooling | none | n/a |
+| one tree's re-decide keeps its directory, named `plan-<feature>-<task>-<8 hex>` | the same test | n/a: tooling | none | n/a |
+| the plan hold reads the task from the keyed name | `a_dispatch_takes_a_hold` (`rust/guard/shared/src/checks/planhold/tests.rs`), its `plan-900-a-T01-0123abcd` case | n/a: tooling | none | n/a |
+| the scratch prefix measured, its guard declined | the count above, by `t288-scratch-prefix.py`; no source changed | n/a: tooling | none | n/a |
 
 ### T288 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** When the clone and a builder's pool tree both decide one task, each reviewer reads the bundle its own tree built and records its verdict in that tree; and a scratch-file guard exists only if the prefix rule is shown to fail.
+2. **The constraints.** The T288 task line. 451 T257: a bundle names the tree it was built from and the verdict records there. 451 T271: the changed-blocks bundle keyed by tree, its name's shape kept for its readers. Feature 375 FR-003(a): the decision preflight on one task's bundle. The plan hold must still take a task review's hold.
+3. **Where each comes from.** O: 451 T271's measurement (a task's bundle collides only when two trees decide one task) and 451 T369 (a task started in a pool tree and the clone both); the transcript count above. G: none of the GM's words name this task.
+4. **Do they describe the world here?** Yes: the collision reproduced with two fixture trees on HEAD's code (the red test), and the readers found by grep, both 2026-11-27.
+5. **The order.** No dependency.
+6. **The exits.** Green: the batch gate over the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/plan"`): on HEAD's code the changed test failed at its `assert_ne!`, both trees' task bundles one directory (203 passed, 1 failed); after the fix `make builder-checks CRATE="rust/gate/crates/plan rust/guard/shared"`: plan 204 passed, 0 failed; shared 543 passed, 0 failed; lint and format clean. The plan hold's new case was written before its pattern changed but not run red on its own: under the old pattern the `-0123abcd` suffix leaves `T01` followed by `-`, so nothing matches and no hold is taken, which the case's equality assertion would fail on.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcome: a reviewer reads a task's section from the other tree's rewrite of its bundle and records its verdict by the other tree's command. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no: a correctness gap - two trees' bundles collided; nothing runs faster.
 
 <!-- plan-archive: T289 to T285 moved to plan-done.md, 2026-11-26 (feature 375 FR-044) -->
 

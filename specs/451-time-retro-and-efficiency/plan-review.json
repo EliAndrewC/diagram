@@ -2509,14 +2509,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T288 (<why: the finding or measurement that files it>)": {
-   "sha256": "af0ca0d1b3bab4e194d7a4d1feba145dc7b1b8b23c197125451fdaf952af1642",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T288 Approach (checklist part A)": {
-   "sha256": "8286b665b028c0bae934c182f36b4bf2393eda2a7364fcc7630e45ef05b8fa46",
+   "sha256": "e78c6f8972b21ca3a9e150abc476023f60f52ee2ee71df1f82fb3e3f0332d4a7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3909,6 +3903,12 @@
   },
   "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "e32dad641e72571188c9a51de6fbfae905756d9496048624bfc6c2ce6b662917",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T288 (451 T271's own section, which left a task's own plan bundle keyed by its task alone because \"a task has one builder, so two builders never do\"; since 451 T369 a task is routinely started in a pool tree and in the coordinating clone both, so both run `make decide` on one task and share its bundle)": {
+   "sha256": "8073dbdcc5e985d3db5e0dda1f5ef93ce957aa240359e493af842643265eb989",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -35080,6 +35080,59 @@
      "summary": "New template sections for T444 and T445; the old T143/T342 template headings removed as their sections were filled",
      "class": "within",
      "why": "Placeholders decide nothing; the removals are the headings replaced by real sections."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T288 (451 T271's own section, which left a task's own plan bundle keyed by its task alone because \"a task has one builder, so two builders never do\"; since 451 T369 a task is routinely started in a pool tree and in the coordinating clone both, so both run `make decide` on one task and share its bundle)",
+    "### T288 Approach (checklist part A)",
+    "(removed) ### T288 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T288-D1",
+     "summary": "A task's own plan bundle (make decide) is named <task>-<first 8 hex of SHA-256 of tree_of(spec_dir)>, as T271 keyed the changed-blocks bundle; one tree's re-decide keeps its directory.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (one tree's MANIFEST overwriting another's while its reviewer reads it, so a verdict is recorded by the other tree's command); keeps 451 T257 (a bundle names its tree, the verdict records there) and FR-003(a)'s decision preflight working. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T288-D2",
+     "summary": "A tree spelled two ways (symlink and target) gets a bundle per spelling, since tree_of is std::path::absolute, not canonical; left so.",
+     "class": "within",
+     "why": "Each bundle is correct for its own make -C; no wrong outcome results, so under constitution XIV it is a difference, not a defect, and leaving it narrows nothing."
+    },
+    {
+     "id": "T288-D3",
+     "summary": "The plan hold's BUNDLE pattern (planhold.rs) takes an optional -<8 hex> after the task, a guard edit recorded by make guard-edit; old-shape bundles still match.",
+     "class": "within",
+     "why": "Required so the plan hold still takes a task review's hold (a stated constraint); it widens a matcher to the new name and refuses nothing new."
+    },
+    {
+     "id": "T288-D4",
+     "summary": "The other readers (round cap SECTION, ledger TASK, event log manifest field, handle.rs MANIFEST matcher) left unchanged because they read the prompt's words or any path; enumeration from a stated grep over rust, scripts, Makefile, .claude, 2026-11-27.",
+     "class": "within",
+     "why": "The enumeration carries its search space and starts from the waist (task_prompt/build's output directory); leaving readers that do not depend on the name's shape unchanged narrows nothing."
+    },
+    {
+     "id": "T288-D5",
+     "summary": "The scratch-file prefix rule is measured (56 builders, 260 writes, 0 of 254 real unprefixed writes, dated 2026-11-27 with its script) and left an instruction; the guard is declined, with a stated reopen condition.",
+     "class": "within",
+     "why": "No words of the GM ask for a scratch-file guard (the block's G: none, and request.md has none); the task's own condition was a guard only if the rule is shown to fail, and the measurement shows no failure. Not adding an unrequested guard is not a narrowing."
+    },
+    {
+     "id": "T288-D6",
+     "summary": "The plan hold's new test case was written before its pattern changed but not run red on its own; its redness is argued from the old pattern instead.",
+     "class": "within",
+     "why": "A verification-practice choice, not a narrowing of what was asked; FR-012's red-first rule covers FR-006 to FR-009, FR-011 and FR-013's refusals, not the plan hold, and the plan crate's test was run red first."
+    },
+    {
+     "id": "T288-D7",
+     "summary": "The template placeholder section heading '### T288 (<why: ...>)' is removed, replaced by the filled section under its real heading.",
+     "class": "within",
+     "why": "The placeholder carried no decision; its content is superseded by the filled section, so removing it drops nothing that was approved."
     }
    ]
   }
