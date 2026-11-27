@@ -1,0 +1,24 @@
+# The landing lane (feature 461 phase 2, plan D2, D8, D15): `l7r-gate lane` - its command line (`lane.rs`) and its log with the
+# computed states of a hand-in and a batch (`log.rs`), T11; the runner, the batch, the attribution and the wake-up build on it
+# (T12-T22). It reads the carried rule from `task` (`builder_done::held_by`); `land` joins when the runner runs `make land` (T12).
+[package]
+name = "l7r_gate_lane"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+l7r_gate_core = { path = "../core" }
+l7r_gate_task = { path = "../task" }
+l7r_shared = { path = "../../../guard/shared" }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+l7r_gate_core = { path = "../core", features = ["testkit"] }
+# one feature set a library in every test build (feature 451 T325, `checks`' `guard_deps/feature_sets.rs`): named for `testkit` alone
+l7r_gate_owed = { path = "../owed", features = ["testkit"] }
+l7r_gate_registry = { path = "../registry", features = ["testkit"] }
+l7r_gate_research = { path = "../research", features = ["testkit"] }
+
+[lints]
+workspace = true

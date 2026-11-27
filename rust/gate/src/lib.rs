@@ -110,6 +110,12 @@ fn gate_tree() -> PathBuf {
 }
 
 /// `L7R_CACHE_OFF` set to anything but empty or `0` turns the content cache off.
+/// The working directory, where the landing, the lane (feature 461 T11: `make lane`, from any tree of the clone), `claim` and
+/// `make-docs` start.
+fn here() -> PathBuf {
+    std::env::current_dir().unwrap_or_default()
+}
+
 fn cache_off(value: Option<&str>) -> bool {
     value.is_some_and(|v| !v.is_empty() && v != "0")
 }
@@ -196,15 +202,14 @@ pub fn cli(args: &[String]) -> Reply {
             &args[1..],
             &std::env::current_dir().unwrap_or_default(),
         ),
-        Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
+        Some("land") => land::cli(&args[1..], &here()),
+        Some("lane") => l7r_gate_lane::cli(&args[1..], &here()),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("research-backlog") => claims::backlog::backlog_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
         Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
         // the authoring tools (feature 449 T135): the trials read the tree the wrapper names, as the Python read its own file's tree
-        Some("claim") => {
-            author::claim::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
-        }
+        Some("claim") => author::claim::cli(&args[1..], &here()),
         Some("trial-start") => author::trial::start_cli(
             &args[1..],
             &gate_tree(),
@@ -233,9 +238,7 @@ pub fn cli(args: &[String]) -> Reply {
                 code,
             }
         }
-        Some("make-docs") => {
-            make_docs::cli(&args[1..], &std::env::current_dir().unwrap_or_default())
-        }
+        Some("make-docs") => make_docs::cli(&args[1..], &here()),
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),
@@ -350,6 +353,16 @@ mod tests {
         assert!(cli(&["diff-run".to_owned()])
             .stderr
             .contains("the cases file is required"));
+    }
+
+    /// The lane (feature 461 T11): `lane status` reads the clone's lane from the working directory and ends 0; a verb it lacks is
+    /// refused with its usage.
+    #[test]
+    fn the_lane_is_a_subcommand() {
+        let status = cli(&["lane".to_owned(), "status".to_owned()]);
+        assert_eq!(status.code, 0, "{}", status.stderr);
+        assert!(status.stdout.starts_with("lane: "));
+        assert_eq!(cli(&["lane".to_owned()]).code, 2);
     }
 
     #[test]

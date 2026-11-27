@@ -372,6 +372,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T11 (D2, D8, D15: phase 2's first task, the lane crate and its log, which T12-T22 build on)": {
+   "sha256": "d543c969ce4971d999dd108941b8ce2be904787d86b9d2abb4f644198925ec94",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "8376896acfe49d0a977b4ea2e2727dbfadc3d60b0b4856e70c6befa6f85fb6fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2100,6 +2112,64 @@
      "summary": "After T43, before T10; green is the task and land crates' tests and make builder-checks, coverage left to the gate at the landing; one landing.",
      "class": "within",
      "why": "Coverage at the landing only is FR-002 and the 2026-11-26 reversal the request records; order and budget settle nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T11 (D2, D8, D15: phase 2's first task, the lane crate and its log, which T12-T22 build on)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T11-a",
+     "summary": "A new crate l7r_gate_lane; T11 builds only the read-only `status` (make lane), with start/wait/stop/--work refused with the usage until T12 and the wake-up build them",
+     "class": "within",
+     "why": "Sequencing of FR-003/FR-005's lane across phase-2 tasks; nothing the GM asked for is dropped, only built in a later task of the same feature."
+    },
+    {
+     "id": "T11-b",
+     "summary": "The lane log: one JSON line per transition in l7r-lane/lane.jsonl of the git common directory, data-model.md's ten events, single write_all per line, torn/foreign lines skipped; states computed, never stored",
+     "class": "within",
+     "why": "Implements D8 as settled; a mechanism choice inside FR-003/FR-004, no scope narrowed."
+    },
+    {
+     "id": "T11-c",
+     "summary": "Hand-ins enumerated from the pool log's done lines with handed_in:true (a bundle's tasks one commit), not from the done refs, because refs cannot show landed or superseded",
+     "class": "within",
+     "why": "Implementation choice for reading FR-003's hand-ins; widens what is visible rather than narrowing it."
+    },
+    {
+     "id": "T11-d",
+     "summary": "`landed` decided by task's existing carried rule asked of origin/main through a new public builder_done::held_by sharing keys_since, or by a `landed` line",
+     "class": "within",
+     "why": "Reuses an existing rule rather than writing it twice (in the spirit of FR-009); no requested behavior changed."
+    },
+    {
+     "id": "T11-e",
+     "summary": "Batch state from its own lines through one function state_of",
+     "class": "within",
+     "why": "Internal structure for D8's computed states."
+    },
+    {
+     "id": "T11-f",
+     "summary": "Data-model silences read the easier way: no `forming` event (a batch is carrying from its batch line, T14 adding the event if it adds a wait); stopped = a stop line, a killed runner resumed by Recovery; scratch refs add no state; every batch line carries batch; commits named whole or by 7+ prefix",
+     "class": "within",
+     "why": "Deviation is from the plan's own data-model.md, not from the GM's request or the spec; at LANE_WAIT_S=0 a forming state takes no time so nothing a reader of the status needs is lost, and the deviation is labeled and assigned to T14. No FR is narrowed."
+    },
+    {
+     "id": "T11-g",
+     "summary": "repairs.jsonl's reader left to D7's writer's task; 'repairs open' computed from eject lines' repair ids no hand-in's repair_of answers",
+     "class": "within",
+     "why": "Sequencing within the feature; FR-004's repair-as-queue-entry is still owed by D7's task, not dropped."
+    },
+    {
+     "id": "T11-h",
+     "summary": "A here() helper shared with land, claim and make-docs to keep the binary's cli under clippy's too_many_lines; Makefile lane target, make-targets.html regenerated, crate row in rust/gate/CLAUDE.md",
+     "class": "within",
+     "why": "Wiring and a small refactor to satisfy the existing lint; changes no behavior the GM asked about and drops no check (FR-008)."
     }
    ]
   }

@@ -772,32 +772,63 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T11 (<why: the finding or measurement that files it>)
+### T11 (D2, D8, D15: phase 2's first task, the lane crate and its log, which T12-T22 build on)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: a new crate `rust/gate/crates/lane/` (`l7r_gate_lane`, on `core`, `task` and the guard's `shared`; `land` joins
+  with the runner, T12, which runs `make land`): `lane.rs` the command line of `contracts/lane-cli.md`, of which T11 builds
+  `status` (`make lane`, `l7r-gate lane status`), read only - no fetch, nothing created, an empty lane exit 0; `start`, `wait`,
+  `stop` and `--work` are refused with the usage until T12 and the wake-up build them. `log.rs`: one JSON line a transition in
+  `l7r-lane/lane.jsonl` of the git common directory, only data-model.md's ten events, each line one `write_all` with its newline,
+  a torn or foreign line skipped on reading; and the COMPUTED states. A HAND-IN is a pool-log `done` line with `"handed_in": true`,
+  one a commit (a bundle's tasks share one; the live log's `451 T528,T529` is one), enumerated from the pool log rather than the
+  refs, because the refs alone cannot show `landed` (the lane deletes the ref after its push) or `superseded` (one ref a task),
+  and kept while still the lane's: a done ref names its commit, or a lane-log line does. Its state is the first of data-model.md's
+  order that holds; `landed` is `task`'s carried rule asked of `origin/main` - `builder_done::held_by(clone, rev, commits)`, a new
+  public door over the same author's-time-and-subject reading `uncarried` asks of HEAD (one rule, `keys_since`, shared), so the
+  rule is not written twice - or a `landed` line listing it, which still holds once the object is pruned. A BATCH's state comes
+  from its own lines through one function, `state_of`, so T12 and T14 can move the mapping in one place. The binary's dispatch
+  (`src/lib.rs`, a `here()` helper shared with `land`, `claim` and `make-docs` to keep `cli` under clippy's `too_many_lines` lint), the
+  Makefile's `lane` target, `docs/make-targets.html` regenerated, and the crate's row in `rust/gate/CLAUDE.md`.
+- **The data model's silences, each read the easier way** (labeled in `log.rs`'s doc beside the mapping): (1) `forming` has no
+  event before the `batch` line (D5's cut takes no time at `LANE_WAIT_S` = 0), so a batch in the log is `carrying` from its
+  `batch` line - a deliberate deviation from data-model.md's list, T14 adding the event if it adds a wait; (2) `stopped` is a
+  `stop` line naming the batch (the arbiter owed, D6 step 4), and a killed runner writes no line, so its batch is resumed as
+  Recovery says, not stopped; (3) the hand-in scratch refs mark a hand-in not yet made and add no state; (4) every batch line
+  carries `batch` (data-model.md's `run` example does); (5) a commit is named whole or by a prefix of seven or more (a run's `set`
+  holds short shas). "Repairs open" are the `eject` lines' `repair` ids no hand-in's `repair_of` answers; `repairs.jsonl`'s reader
+  is D7's writer's task, not this one.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate ONLY=tests::the_lane_is_a_subcommand` on the old dispatch): 0 passed, 1
+  failed - `l7r-gate: no subcommand lane`, exit 2 against 0. Green: the lane crate 11 of 11, task 151 of 151 (the new
+  `held_by_asks_the_carried_rule_of_any_rev`), the binary 10 of 10, `checks`' `guard_deps` 8 of 8; `make builder-checks
+  CRATE="rust/gate/crates/lane rust/gate/crates/task rust/gate"` clean. Live (2026-11-27, `make lane` in this tree over the
+  clone's real pool log): `0 hand-in(s) on the lane` - every phase-1 hand-in's ref was deleted by its carry, so none is listed as
+  waiting - and no `l7r-lane/` created.
 
 ### T11 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make lane` tells the coordinator, from any tree of the clone, what waits on the lane, the open
+   batch and its state, the last landed batch and the repairs open, from records a crash cannot leave stale; the later phase-2
+   tasks write the log this reads.
+2. **The constraints.** D2 (the crate and its commands), D8 (states computed, never typed, a JSON line for each transition), D15 (where
+   the code lives), data-model.md (the events, the hand-in's and the batch's states and their order), contracts/lane-cli.md
+   (`make lane` prints, exit 0), rust/gate/CLAUDE.md (a crate's wiring, its testkit dev-dependencies, every line covered by its own tests).
+3. **Where each comes from.** R: plan.md D2, D8, D15; data-model.md; contracts/lane-cli.md. O: the live pool log's `done` lines
+   (`"handed_in": true`, `detail` `<feature> <tasks>`, a bundle one commit), read 2026-11-27.
+4. **Do they describe the world here?** Yes: the done refs are `refs/l7r/done/<feature key>-<task>` and the pool log is
+   `builder-pool.log` in the common directory (read from `builder_done.rs` and the live log, 2026-11-27); the live `make lane`
+   lists none of the carried phase-1 hand-ins.
+5. **The order.** After T08 (the hand-in writes `"handed_in": true`); before T12-T22, which build on this crate.
+6. **The exits.** Green: the lane crate's tests over each state of data-model.md and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one pass over the data model's states, the gaps above labeled.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, `make lane` run live with no hand-in misread.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new code, no defect fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T12 (<why: the finding or measurement that files it>)
 

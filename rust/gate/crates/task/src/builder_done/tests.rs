@@ -680,3 +680,27 @@ fn the_kind_is_the_tree_s_last_brief_since_its_take() {
     );
     assert_eq!(kind(), None);
 }
+
+/// 461 T11: the carried rule asked of another rev - a commit cherry-picked onto `origin/main` is held by its author's time and
+/// subject, one only on a side branch is not, a missing object is in none, and no commits ask nothing.
+#[test]
+fn held_by_asks_the_carried_rule_of_any_rev() {
+    let dir = l7r_gate_core::ci::fixtures::repo("done-held-by");
+    let root = dir.path();
+    git(root, &["checkout", "-qb", "side"]);
+    commit(root, "a.txt", "a\n");
+    let picked = git(root, &["rev-parse", "HEAD"]);
+    put(root, "b.txt", "b\n");
+    git(root, &["add", "-A"]);
+    git(root, &["commit", "-qm", "only on the side"]);
+    let side = git(root, &["rev-parse", "HEAD"]);
+    git(root, &["checkout", "-q", "main"]);
+    git(root, &["cherry-pick", &picked]);
+    git(root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
+    let missing = "0123456789abcdef0123456789abcdef01234567".to_owned();
+    let short = picked.get(..10).unwrap().to_owned();
+    let held = super::held_by(root, "origin/main", &[short.clone(), side, missing.clone()]);
+    assert_eq!(held.into_iter().collect::<Vec<_>>(), vec![short]);
+    assert!(super::held_by(root, "origin/main", &[missing]).is_empty());
+    assert!(super::held_by(root, "origin/main", &[]).is_empty());
+}

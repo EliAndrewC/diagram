@@ -685,6 +685,7 @@ dependencies = [
  "l7r_gate_diffrun",
  "l7r_gate_downloads",
  "l7r_gate_land",
+ "l7r_gate_lane",
  "l7r_gate_measure",
  "l7r_gate_owed",
  "l7r_gate_pages",
@@ -874,6 +875,19 @@ dependencies = [
  "l7r_gate_task",
  "l7r_shared",
  "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "l7r_gate_lane"
+version = "0.1.0"
+dependencies = [
+ "l7r_gate_core",
+ "l7r_gate_owed",
+ "l7r_gate_registry",
+ "l7r_gate_research",
+ "l7r_gate_task",
+ "l7r_shared",
  "serde_json",
 ]
 

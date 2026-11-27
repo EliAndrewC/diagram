@@ -156,12 +156,53 @@ fn uncarried<'a>(clone: &Path, dones: &'a [Done]) -> Vec<&'a Done> {
     let Some(oldest) = dones.iter().filter_map(time).min() else {
         return Vec::new();
     };
-    let since = format!("--since=@{}", oldest.saturating_sub(1));
-    let (_, held, _) = git(clone, &["log", "--format=%at%x09%s", &since, "HEAD"]);
-    let held: BTreeSet<&str> = held.lines().collect();
+    let held = keys_since(clone, "HEAD", oldest);
     dones
         .iter()
         .filter(|d| !held.contains(d.key.as_str()))
+        .collect()
+}
+
+/// The author's-time-and-subject keys of `rev`'s history since `oldest` (a unix time): what a carry keeps of a commit.
+fn keys_since(clone: &Path, rev: &str, oldest: u64) -> BTreeSet<String> {
+    let since = format!("--since=@{}", oldest.saturating_sub(1));
+    let (_, held, _) = git(clone, &["log", "--format=%at%x09%s", &since, rev]);
+    held.lines().map(str::to_owned).collect()
+}
+
+/// THE ONE RULE OF "CARRIED" (the module's doc) asked of any `rev`: of `commits`, those whose author's time and subject `rev`'s
+/// history holds. The lane asks it of `origin/main` for a hand-in's `landed` (461 T11, plan D8); a commit the object store no
+/// longer holds is in none.
+#[must_use]
+pub fn held_by(clone: &Path, rev: &str, commits: &[String]) -> BTreeSet<String> {
+    let mut args = vec![
+        "log",
+        "--no-walk",
+        "--ignore-missing",
+        "--format=%H%x09%at%x09%s",
+    ];
+    args.extend(commits.iter().map(String::as_str));
+    let (_, out, _) = git(clone, &args);
+    let keyed: Vec<(&str, u64, &str)> = out
+        .lines()
+        .filter_map(|l| {
+            let mut parts = l.splitn(3, '\t');
+            Some((parts.next()?, parts.next()?.parse().ok()?, parts.next()?))
+        })
+        .collect();
+    let Some(oldest) = keyed.iter().map(|k| k.1).min() else {
+        return BTreeSet::new();
+    };
+    let held = keys_since(clone, rev, oldest);
+    keyed
+        .iter()
+        .filter(|(_, at, subject)| held.contains(&format!("{at}\t{subject}")))
+        .filter_map(|(sha, ..)| {
+            commits
+                .iter()
+                .find(|c| sha.starts_with(c.as_str()))
+                .cloned()
+        })
         .collect()
 }
 
