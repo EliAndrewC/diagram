@@ -26,6 +26,7 @@ pub(crate) fn env(dir: &Path) -> Env {
         guard_secs: "5".to_owned(),
         prewarm: true,
         sampler: Vec::new(),
+        lane_tree: String::new(),
     }
 }
 
@@ -248,7 +249,7 @@ fn a_tree_made_before_the_pool_is_adopted_under_its_own_name() {
     let e = env(&dir);
     let old = dir.join("repo-t269");
     let old_text = old.to_string_lossy().into_owned();
-    for name in ["repo-t269", "repo-land", "repo-t270", "repo-t271"] {
+    for name in ["repo-t269", "repo-review", "repo-t270", "repo-t271"] {
         git(
             &root,
             &[
@@ -263,7 +264,7 @@ fn a_tree_made_before_the_pool_is_adopted_under_its_own_name() {
     }
     for not in [
         root.to_string_lossy().into_owned(),
-        dir.join("repo-land").to_string_lossy().into_owned(),
+        dir.join("repo-review").to_string_lossy().into_owned(),
         "/nowhere".to_owned(),
     ] {
         let said = run(&words(&["adopt", &not]), &root, &e);
@@ -594,3 +595,5 @@ fn a_warm_handout_empties_the_tree_s_store_of_rendered_messages() {
     assert_eq!(run(&words(&["take", "T02", "9001-x"]), &root, &e).code, 0);
     assert!(!store.join("escalation-hooks.sh.jsonl").exists());
 }
+
+mod lane;

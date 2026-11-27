@@ -26,6 +26,14 @@ pub const FILE: &str = "builder-pool.json";
 /// was ever run (four, 2026-11-26's comment batches), each tree's cache about 9 GB; the count worth running is 451 T284's to measure.
 pub const CAP: usize = 4;
 
+/// THE LANE'S RESERVED HOLDER (feature 461 T13, plan D1): the landing lane's tree, `<clone>-land`, is in the registry held by this one
+/// word as its task, no feature - so it is never free, no handout takes it, no landing frees it (a hold naming no feature), and the
+/// cache sweep keeps it (`scratch_sweep_hooks/sweep/evict.rs`, 451 T526). It is no builder's: [`read`] leaves it out, so every count
+/// of builders' trees - the queue's `alone` and idle rules, the sampler's - is a count of builders; [`read_all`] is the registry
+/// whole, for its one writer and the sweep.
+// GUARD_EDIT_OK: feature 461 T13 - a new operation, the lane's tree in the pool's registry under a reserved holder
+pub const LANE: &str = "lane";
+
 /// One pool tree: where it is, and the feature and tasks holding it since `since` (free since then where `tasks` is empty).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tree {
@@ -42,7 +50,13 @@ impl Tree {
         self.tasks.is_empty()
     }
 
-    /// Who holds it, as a reader names it: `451 T285`, `T285` with no feature, `free`.
+    /// It is the landing lane's tree: held by [`LANE`] alone.
+    #[must_use]
+    pub fn lane(&self) -> bool {
+        self.tasks.len() == 1 && self.tasks[0] == LANE
+    }
+
+    /// Who holds it, as a reader names it: `451 T285`, `T285` with no feature, `lane`, `free`.
     #[must_use]
     pub fn holder(&self) -> String {
         if self.free() {
@@ -55,9 +69,18 @@ impl Tree {
     }
 }
 
-/// The pool of the clone whose git common directory is `common`; empty where none was ever made or the file cannot be read.
+/// The builders' trees of the clone whose git common directory is `common`, the lane's left out ([`LANE`]); empty where none was ever
+/// made or the file cannot be read.
 #[must_use]
 pub fn read(common: &Path) -> Vec<Tree> {
+    let mut trees = read_all(common);
+    trees.retain(|t| !t.lane());
+    trees
+}
+
+/// The registry whole, the lane's tree in its place: what its writer reads before it writes, and the sweep's kept trees.
+#[must_use]
+pub fn read_all(common: &Path) -> Vec<Tree> {
     let text = std::fs::read_to_string(common.join(FILE)).unwrap_or_default();
     let value: Value = serde_json::from_str(&text).unwrap_or(Value::Null);
     let text_of = |v: &Value| v.as_str().unwrap_or_default().to_owned();
@@ -157,6 +180,18 @@ mod tests {
             cache(Path::new("/c"), &held.tree),
             PathBuf::from("/c/c1-b1")
         );
+        // the lane's tree: in the registry whole, out of the builders' reading, named by its holder
+        let lane = Tree {
+            tree: dir.join("c1-land"),
+            feature: String::new(),
+            tasks: vec![LANE.to_owned()],
+            since: String::new(),
+        };
+        write(&common, &[lane.clone(), held.clone()]).unwrap();
+        assert_eq!(read_all(&common), vec![lane.clone(), held.clone()]);
+        assert_eq!(read(&common), vec![held.clone()]);
+        assert_eq!(pools(&dir), vec![held.clone()]);
+        assert!(lane.lane() && !held.lane() && !free.lane() && lane.holder() == "lane");
         // a registry that cannot be written says where
         let err = write(&dir.join("gone"), &[]).unwrap_err();
         assert!(err.contains("builder-pool.json"), "{err}");

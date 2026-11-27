@@ -29,6 +29,7 @@ fn env(dir: &Path) -> Env {
         guard_secs: "5".to_owned(),
         prewarm: false,
         sampler: Vec::new(),
+        lane_tree: String::new(),
     }
 }
 

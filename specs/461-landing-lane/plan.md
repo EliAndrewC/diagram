@@ -857,32 +857,63 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T13 (<why: the finding or measurement that files it>)
+### T13 (D1: the lane's tree, the worktree kept and its warm cache the lane's)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: the registry's lane holder is one word, `builder_pool::LANE` (`lane`), written as the tree's only task with no feature
+  (`Tree::lane()`, `holder()` printing `lane`): never free, so no handout takes it; naming no feature, so no landing's freeing step
+  (`landed`) reads it; and it is what the cache sweep already keeps (`evict.rs`, 451 T526: `-land` name, or `lane` as feature or
+  task). THE BUILDERS' READING LEAVES IT OUT: `builder_pool::read` is now the builders' trees and `read_all` the registry whole, read
+  by its one writer (`builder_tree.rs`, every read there) and by the sweep's kept trees (one word in `evict.rs`). Why not a lane
+  tree every reader sees, as the advisor first put it: every count of builders' trees would count it - an `alone` queue entry waits
+  while any tree is held (`builder_queue.rs`, `f.held`), the pool-idle rule's `held >= L7R_BUILDERS`, the sampler's and
+  `task-time`'s held counts, the brief guard's pool - so each reader would need its own fix; left out by `read`, all of them are
+  right by construction, and the one writer is the one place that must not drop it (`builder_pool::write` has no other caller,
+  read 2026-11-27 by grep). In `builder_tree.rs`: the cap counts `builders(&trees)`, the lane's not (take, adopt, the cold tree's
+  `N of cap`, `list`'s header, which adds `, and the lane's tree`); the word is reserved - a take, release, landing (exit 0, said)
+  or adoption naming task `lane` is refused, and `holds` never matches a lane tree; `adopt` of the lane's path (`L7R_LANE_TREE`, a
+  path or a name beside the clone, else `<clone>-land`) passes the `-land` filter, writes the lane holder, ignores the cap, and is
+  refused with a `T=` or a second lane; `builder-tree lane` - the runner's call at a batch's start through `cli` (T14), no make
+  target (T12 holds the Makefile) - fetches `origin main` and brings the registry's lane tree to `origin/main` by land-alone.sh step
+  4's literal rule (`reset -q --hard`, `clean -fdq`, `checkout -q --detach`), logging a `lane` line; none adopted is refused with
+  the `make builder-tree-adopt TREE=` to run, never made (D1 priced a new tree cold and declined it), and a tree gone from disk with
+  the drop and the adoption.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY=builder_tree::tests::lane` on the old code): 0 passed, 2
+  failed - the `-land` adoption refused as "not a builder's worktree", and `lane` the usage. Green: 3 of 3 lane tests (a third,
+  the knob's, needs the new `Env` field), task 154 of 154 (the old adoption test now refuses `repo-review` where it refused
+  `repo-land`, which is the lane's), guard shared 602 of 602 (the registry test's lane case), guard 628 of 628 (the sweep's lane
+  case, red under `read`, green under `read_all`); `make builder-checks CRATE="rust/gate/crates/task rust/guard/shared rust/guard"`
+  clean; the builder-pool, pool-idle and builder-brief suites 17, 33 and 32 passed. The stopped carry case: a cherry-pick left
+  conflicted in the lane's tree is gone after `lane` (`CHERRY_PICK_HEAD` cleared by `reset --hard`), tested.
 
 ### T13 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `<clone>-land` is in the pool as the lane's tree: no builder is handed it, the pool's four builder
+   slots are all builders', its 39 GB cache (measured 2026-11-27 (du), D1's table) is kept warm for the lane's gates, and each batch starts it at `origin/main`.
+2. **The constraints.** D1 (the tree, the holder, the cap, the knob, step 4's rule kept), 451 T526's note on T13's line (write the
+   `lane` holder at adoption), the pool's rules in `builder_tree.rs`'s header (membership is the registry; a rename chills a cache).
+3. **Where each comes from.** R: plan.md D1, tasks.md T13's line; O: the registry's readers and its one writer, read 2026-11-27
+   by grep; `evict.rs`'s lane rule, read the same day.
+4. **Do they describe the world here?** Yes: `land-alone.sh` makes and resets `<clone>-land` (its `WT`, lines 550-554), and the
+   sweep's kept-tree rule already names both marks.
+5. **The order.** After T11; beside T12 (the runner's files and the Makefile untouched); before T14, whose runner calls `lane`.
+6. **The exits.** Green: the lane tests and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every registry reader found by one grep, each judged left-out-is-right.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green; after the landing the session adopts the real tree once
+   (`make builder-tree-adopt TREE=/diagram/.clones/diagram-backlog-land`) and `make builder-trees` lists it held by `lane`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new behavior, no defect fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A hand `git worktree remove` of the lane's tree or an `rm` of its cache is not refused: `builder_pool_hooks` reads `pools`,
+  which leaves the lane out (it was outside the pool before this task too); its visible effect, a cold rebuild of its 39 GB cache (measured
+   2026-11-27 (du), D1's table) at the lane's next gate. Not fixed here: a guard's case and suite are a job of their own past this brief's one. Filed as T45; lands before T22.
+- The root Makefile's `builder-tree-adopt` help line and `docs/make-targets.html` name neither the lane's adoption nor `builder-tree
+  lane`; a reader of `make help` adopting `-land` is not told it becomes the lane. Not fixed here: T12 holds the Makefile. Filed as
+  T46; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T14 (<why: the finding or measurement that files it>)
 
@@ -1666,4 +1697,58 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Found and left?** none.
 
 **Performance work?** no - it lets two kinds of builder hand in themselves, and measures no time.
+
+
+### T45 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T45 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T46 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

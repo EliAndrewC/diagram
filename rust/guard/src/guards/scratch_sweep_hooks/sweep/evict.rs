@@ -122,7 +122,8 @@ fn kept(c: &Config) -> Vec<String> {
     let mut out = Vec::new();
     for clone in clones {
         let mut handed = 0;
-        for t in crate::shared::builder_pool::read(&clone.join(".git")) {
+        // the registry whole: `read` leaves the lane's tree out (GUARD_EDIT_OK: feature 461 T13 - the lane's holder kept by the sweep)
+        for t in crate::shared::builder_pool::read_all(&clone.join(".git")) {
             let Some(name) = t.tree.file_name().map(|n| n.to_string_lossy().into_owned()) else {
                 continue;
             };

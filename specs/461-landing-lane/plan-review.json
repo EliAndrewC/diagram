@@ -384,6 +384,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T13 (D1: the lane's tree, the worktree kept and its warm cache the lane's)": {
+   "sha256": "f48ed29a568839858bf96c4cf9ffe9de4e8e306d5bfd9fc939abe21793118cc0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "65781fe4ad87f8cd5e8cb4251f77610da3d339c86a6bad7584bdab2f71fdc6cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2170,6 +2182,58 @@
      "summary": "A here() helper shared with land, claim and make-docs to keep the binary's cli under clippy's too_many_lines; Makefile lane target, make-targets.html regenerated, crate row in rust/gate/CLAUDE.md",
      "class": "within",
      "why": "Wiring and a small refactor to satisfy the existing lint; changes no behavior the GM asked about and drops no check (FR-008)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T13 (D1: the lane's tree, the worktree kept and its warm cache the lane's)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-holder",
+     "summary": "The lane's tree is held in the pool registry by a reserved holder word `lane` (no feature, never free), so no handout takes it and no landing's freeing step reads it.",
+     "class": "within",
+     "why": "Carries FR-003 (the lane runs in its own worktree) and the sketch's item 1 the GM called very sensible (the Refinery-like lane in its own worktree). Narrows nothing asked."
+    },
+    {
+     "id": "T13-read-split",
+     "summary": "`builder_pool::read` returns builders' trees only; `read_all` (the registry whole) is used by its one writer and the cache sweep; the builder cap counts builders, not the lane.",
+     "class": "within",
+     "why": "Keeps the lane from taking a builder slot or blocking `alone` entries and the pool-idle rule, which serves the GM's first message (the second tier must not block anything) and FR-006/FR-010's held-tree counts staying comparable. No requested behavior is removed; FR-008's checks are untouched."
+    },
+    {
+     "id": "T13-reserved-word",
+     "summary": "A take, release, landing or adoption naming task `lane` is refused (landing exit 0, said); `holds` never matches the lane tree.",
+     "class": "within",
+     "why": "Guards the holder's meaning; enforcement of FR-003's own-worktree lane, not new scope against the request."
+    },
+    {
+     "id": "T13-adopt",
+     "summary": "Adopting the lane's path (`L7R_LANE_TREE`, else `<clone>-land`) passes the -land filter, writes the lane holder, ignores the cap; refused with T= or a second lane. None adopted: `builder-tree lane` refuses and names the adopt command rather than making a tree.",
+     "class": "within",
+     "why": "Reuses the existing land-alone.sh tree and its warm cache, consistent with FR-009's take-what-exists and FR-006's token/time cost; declining a cold new tree is D1's already-planned choice, not a narrowing of the request."
+    },
+    {
+     "id": "T13-reset",
+     "summary": "`builder-tree lane`, called by T14's runner at a batch's start via cli, fetches origin main and resets the lane tree by land-alone.sh step 4's literal rule; no make target here (T12 holds the Makefile).",
+     "class": "within",
+     "why": "Each batch starting at current main is FR-003's lane taking hand-ins on main; keeping step 4's rule keeps FR-008's checks unchanged. The make-target omission is task sequencing, not scope removed."
+    },
+    {
+     "id": "T13-left-T45",
+     "summary": "A hand `git worktree remove` or `rm` of the lane tree's cache is not refused by builder_pool_hooks; filed as T45, to land before T22.",
+     "class": "within",
+     "why": "The request asks for no such guard and the lane tree was unguarded before this task, so nothing asked is dropped and FR-008's existing checks are unchanged. Its consequence is a cold cache rebuild, not a wrong outcome; it is filed and scheduled, not carried away."
+    },
+    {
+     "id": "T13-left-T46",
+     "summary": "The Makefile's builder-tree-adopt help line and docs/make-targets.html do not yet name the lane's adoption or `builder-tree lane`; filed as T46, to land before T22.",
+     "class": "within",
+     "why": "Documentation sequenced to the task that holds the Makefile (T12); no requested behavior is narrowed."
     }
    ]
   }

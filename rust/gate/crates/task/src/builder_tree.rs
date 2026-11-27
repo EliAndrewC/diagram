@@ -32,6 +32,14 @@
 //! - `drop <tree>` with `REASON` (`make builder-tree-drop`): the ONE way a pool tree and its cache are removed.
 //! - `adopt <tree> [tasks] [feature]` (`make builder-tree-adopt`): a worktree of this clone made before the pool joins it under its
 //!   own name, its cache as warm as it was.
+//! - THE LANE'S TREE (feature 461 T13, plan D1): `<clone>-land`, the worktree `land-alone.sh` lands in (`L7R_LANE_TREE` names
+//!   another: a path, or a name beside the clone), is adopted by the same command, with no task, under the reserved holder `lane`
+//!   (`builder_pool::LANE`): never free, so no handout takes it; holding no feature, so no landing frees it; and outside the cap,
+//!   which counts builders' trees. The word is reserved: a take, release, landing or adoption naming it is refused. `lane` (the
+//!   runner's call at each batch's start, through [`cli`]) brings it to `origin/main` by `land-alone.sh` step 4's rule - `reset
+//!   --hard`, `clean -fd`, `checkout --detach`, after a fetch: the tree is the tool's, nobody's work lives there, so whatever it
+//!   holds (a stopped carry's conflict among it) goes. With none adopted it is refused with the adoption to run, never made: a new
+//!   tree is cold, the price D1 declined.
 //!
 //! The pool's log is `<git common dir>/builder-pool.log`, a JSON line an event. Two commands at once take turns on
 //! `builder-pool.lock`, held only while the registry is read and written - never over the guard's build.
@@ -49,7 +57,8 @@ use serde_json::json;
 
 use crate::{git, reply};
 
-const USAGE: &str = "usage: l7r-gate builder-tree take <tasks> <feature> | release <tasks> [feature] | landed <feature> <tasks...> | list | drop <tree> | adopt <tree> [<tasks> <feature>]\n";
+const USAGE: &str = "usage: l7r-gate builder-tree take <tasks> <feature> | release <tasks> [feature] | landed <feature> <tasks...> | list | drop <tree> | adopt <tree> [<tasks> <feature>] | lane\n";
+const RESERVED: &str = "builder-tree: refused - `lane` is the landing lane's reserved holder (feature 461 D1): no task takes, frees or adopts a tree by it; the lane's tree joins by make builder-tree-adopt TREE=<its path> with no T=\n";
 const NO_FEATURE: &str = "builder-tree: refused - a hold names its feature (F=<feature>, or SPECIFY_FEATURE): a tree is freed when that feature's tasks.md shows its tasks ticked, and a hold naming none would never be\n";
 const LOG: &str = l7r_shared::builder_queue::LOG;
 const LOCK: &str = "builder-pool.lock";
@@ -74,6 +83,8 @@ pub(crate) struct Env {
     pub prewarm: bool,
     /// The program and arguments that start the clone's memory sampler where none runs; empty for none (`L7R_SAMPLER=0`).
     pub sampler: Vec<String>,
+    /// `L7R_LANE_TREE`: the lane's tree, a path or a name beside the clone; empty for `<clone>-land` (feature 461 D1).
+    pub lane_tree: String,
 }
 
 impl Env {
@@ -98,6 +109,7 @@ impl Env {
             guard_secs: or("L7R_BUILDER_GUARD_SECS", "1800"),
             prewarm: var("L7R_PREWARM") != "0",
             sampler: sampler_words(std::env::current_exe().ok(), &var("L7R_SAMPLER")),
+            lane_tree: var("L7R_LANE_TREE"),
         }
     }
 }
@@ -218,9 +230,10 @@ pub(crate) fn task_list(t: &str) -> Vec<String> {
         .collect()
 }
 
-/// `tree` is held by one of `tasks` (of `feature`, where both name one).
+/// `tree` is held by one of `tasks` (of `feature`, where both name one); the lane's tree by none.
 pub(crate) fn holds(tree: &Tree, tasks: &[String], feature: &str) -> bool {
-    tree.tasks.iter().any(|t| tasks.contains(t))
+    !tree.lane()
+        && tree.tasks.iter().any(|t| tasks.contains(t))
         && (feature.is_empty() || tree.feature.is_empty() || tree.feature == feature)
 }
 
@@ -405,12 +418,35 @@ pub(crate) fn refused(why: String) -> Reply {
     reply(String::new(), why, 2)
 }
 
+/// The builders' trees of `trees`, the lane's not counted: what the cap holds to.
+fn builders(trees: &[Tree]) -> usize {
+    trees.iter().filter(|t| !t.lane()).count()
+}
+
+/// `tasks` names the lane's reserved holder.
+fn reserved(tasks: &[String]) -> bool {
+    tasks.iter().any(|t| t == builder_pool::LANE)
+}
+
+/// Where the lane's tree is: `L7R_LANE_TREE` - a path, or a name beside the clone - else `<clone>-land`.
+fn lane_path(p: &Pool, env: &Env) -> PathBuf {
+    let clones = p.clone.parent().unwrap_or(&p.clone);
+    if env.lane_tree.is_empty() {
+        let name = p.clone.file_name().unwrap_or_default().to_string_lossy();
+        return clones.join(format!("{name}-land"));
+    }
+    clones.join(&env.lane_tree)
+}
+
 fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
+    if reserved(tasks) {
+        return refused(RESERVED.to_owned());
+    }
     if !env.discard.is_empty() && !l7r_shared::escape::enough(&env.discard) {
         return refused("builder-tree: DISCARD needs a reason of two words or more: it throws away a free tree's uncommitted work\n".to_owned());
     }
     let turn = lock(&p.common, env.lock_tries);
-    let mut trees = builder_pool::read(&p.common);
+    let mut trees = builder_pool::read_all(&p.common);
     if let Some(t) = trees.iter().find(|t| holds(t, tasks, feature)) {
         return reply(
             format!("{}\n", t.tree.display()),
@@ -485,9 +521,9 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
         notes.push_str("builder-tree: refused - no tree handed out. Carry that work to the clone, or take the tree over it: make builder-tree T=<task> DISCARD=\"<why it may go>\" (a new cold tree is not made while a warm one waits)\n");
         return refused(notes);
     }
-    if trees.len() >= env.cap {
+    if builders(&trees) >= env.cap {
         let _ = writeln!(notes, "builder-tree: refused - the pool is at its cap of {} (L7R_BUILDER_POOL) and none is free:", env.cap);
-        for t in &trees {
+        for t in trees.iter().filter(|t| !t.lane()) {
             let _ = writeln!(
                 notes,
                 "  {}  held by {} since {}",
@@ -540,7 +576,7 @@ fn make_cold(
     drop(turn);
     // a new tree's cache is warm for nothing: its first handout is what the next one's pre-warm is measured from
     last_handout(&tree, &p.head, &p.head);
-    let _ = writeln!(notes, "builder-tree: {tree_text} is NEW and held by {}: COLD - its build cache is empty, so its first closing checks compile everything (14-30 minutes measured 2026-11-26); no pool tree was free ({} of {} now)", trees[trees.len() - 1].holder(), trees.len(), env.cap);
+    let _ = writeln!(notes, "builder-tree: {tree_text} is NEW and held by {}: COLD - its build cache is empty, so its first closing checks compile everything (14-30 minutes measured 2026-11-26); no pool tree was free ({} of {} now)", trees[trees.len() - 1].holder(), builders(&trees), env.cap);
     if build_guard(&tree, &env.guard_secs) {
         notes.push_str("builder-tree: its guard binary is built\n");
     } else {
@@ -550,8 +586,11 @@ fn make_cold(
 }
 
 pub(crate) fn release(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
+    if reserved(tasks) {
+        return refused(RESERVED.to_owned());
+    }
     let _turn = lock(&p.common, env.lock_tries);
-    let mut trees = builder_pool::read(&p.common);
+    let mut trees = builder_pool::read_all(&p.common);
     let mut said = String::new();
     for t in trees.iter_mut().filter(|t| holds(t, tasks, feature)) {
         let was = t.holder();
@@ -604,10 +643,15 @@ fn size_word(line: &str) -> String {
 }
 
 fn list(p: &Pool, env: &Env) -> Reply {
-    let trees = builder_pool::read(&p.common);
+    let trees = builder_pool::read_all(&p.common);
+    let lane = if trees.iter().any(Tree::lane) {
+        ", and the lane's tree"
+    } else {
+        ""
+    };
     let mut out = format!(
-        "builder-trees: {} of {} (the cap, L7R_BUILDER_POOL), of {}\n",
-        trees.len(),
+        "builder-trees: {} of {} (the cap, L7R_BUILDER_POOL){lane}, of {}\n",
+        builders(&trees),
         env.cap,
         p.clone.display()
     );
@@ -642,7 +686,7 @@ fn drop_tree(p: &Pool, arg: &str, env: &Env) -> Reply {
         return refused("builder-tree-drop: REASON needs two words or more: the tree's build cache goes with it, and the next tree made is cold\n".to_owned());
     }
     let _turn = lock(&p.common, env.lock_tries);
-    let mut trees = builder_pool::read(&p.common);
+    let mut trees = builder_pool::read_all(&p.common);
     let Some(i) = find(&trees, arg) else {
         return refused(format!(
             "builder-tree-drop: {arg} is not a pool tree (make builder-trees lists them)\n"
@@ -685,15 +729,20 @@ fn drop_tree(p: &Pool, arg: &str, env: &Env) -> Reply {
 }
 
 fn adopt(p: &Pool, arg: &str, tasks: &[String], feature: &str, env: &Env) -> Reply {
+    if reserved(tasks) {
+        return refused(RESERVED.to_owned());
+    }
     let _turn = lock(&p.common, env.lock_tries);
-    let mut trees = builder_pool::read(&p.common);
+    let mut trees = builder_pool::read_all(&p.common);
+    let lane = marks::same_tree(Path::new(arg), &lane_path(p, env));
     let listed = text(&git(&p.clone, &["worktree", "list", "--porcelain"]).1);
     let known = listed
         .lines()
         .filter_map(|l| l.strip_prefix("worktree "))
-        // the landings' and the review's trees are their tools' (`land-alone.sh`, `land-tooling.sh`, `review-tree.sh`)
+        // the landings' and the review's trees are their tools' (`land-alone.sh`, `land-tooling.sh`, `review-tree.sh`), but the
+        // lane's, which joins as its own (feature 461 D1)
         .filter(|w| {
-            !["-land", "-tooling", "-review"]
+            lane || !["-land", "-tooling", "-review"]
                 .iter()
                 .any(|s| w.ends_with(s))
         })
@@ -704,19 +753,85 @@ fn adopt(p: &Pool, arg: &str, tasks: &[String], feature: &str, env: &Env) -> Rep
     let Some(tree) = known.map(PathBuf::from) else {
         return refused(format!("builder-tree-adopt: {arg} is not a builder's worktree of {} (a worktree beside its main tree, not the landing's or the review's)\n", p.clone.display()));
     };
-    if find(&trees, arg).is_some() || trees.len() >= env.cap {
+    if find(&trees, arg).is_some() || (!lane && builders(&trees) >= env.cap) {
         return refused(format!("builder-tree-adopt: {arg} is already in the pool, or the pool is at its cap of {} (L7R_BUILDER_POOL)\n", env.cap));
     }
+    if lane && !tasks.is_empty() {
+        return refused(format!("builder-tree-adopt: {arg} is the lane's tree, held by lane alone: adopt it with no T= (L7R_LANE_TREE names another)\n"));
+    }
+    if let Some(t) = trees.iter().find(|t| lane && t.lane()) {
+        return refused(format!(
+            "builder-tree-adopt: the pool holds the lane's tree already ({}): one lane, one tree\n",
+            t.tree.display()
+        ));
+    }
+    let (feature, tasks) = if lane {
+        (String::new(), vec![builder_pool::LANE.to_owned()])
+    } else {
+        (feature.to_owned(), tasks.to_vec())
+    };
     trees.push(Tree {
         tree: tree.clone(),
-        feature: feature.to_owned(),
-        tasks: tasks.to_vec(),
+        feature,
+        tasks,
         since: env.now.clone(),
     });
-    note(p, env, "adopt", &tree, &trees[trees.len() - 1].holder());
+    let holder = trees[trees.len() - 1].holder();
+    note(p, env, "adopt", &tree, &holder);
     let failed = save(p, &trees);
     let code = i32::from(!failed.is_empty());
-    reply(format!("builder-tree-adopt: {} joins the pool under its own name ({}), its build cache as it is\n", tree.display(), trees[trees.len() - 1].holder()), failed, code)
+    let how = if lane {
+        "as the lane's tree, held by lane: no handout takes it and the cap (L7R_BUILDER_POOL) does not count it".to_owned()
+    } else {
+        format!("under its own name ({holder})")
+    };
+    reply(
+        format!(
+            "builder-tree-adopt: {} joins the pool {how}, its build cache as it is\n",
+            tree.display()
+        ),
+        failed,
+        code,
+    )
+}
+
+/// THE LANE'S TREE AT A BATCH'S START (feature 461 T13, D1): the registry's lane tree brought to `origin/main`, fetched first, by
+/// `land-alone.sh` step 4's rule (`reset --hard`, `clean -fdq`, `checkout --detach`), its path on stdout.
+fn lane_start(p: &Pool, env: &Env) -> Reply {
+    let trees = builder_pool::read_all(&p.common);
+    let Some(t) = trees.iter().find(|t| t.lane()) else {
+        return refused(format!("builder-tree lane: no lane's tree is in the pool - make builder-tree-adopt TREE={} (land-alone's worktree, its cache warm; a new tree would start cold, plan D1)\n", lane_path(p, env).display()));
+    };
+    let tree = &t.tree;
+    if !tree.is_dir() {
+        return refused(format!("builder-tree lane: the lane's tree {} is gone from disk - make builder-tree-drop TREE={} REASON=\"<why>\", then make builder-tree-adopt TREE=<the tree the lane runs in>\n", tree.display(), tree.display()));
+    }
+    let fetched = git(tree, &["fetch", "-q", "origin", "main"]).0 == Some(0);
+    let target = text(
+        &git(
+            tree,
+            &["rev-parse", "-q", "--verify", "refs/remotes/origin/main"],
+        )
+        .1,
+    );
+    let moved = fetched
+        && !target.is_empty()
+        && [
+            &["reset", "-q", "--hard"][..],
+            &["clean", "-fdq"],
+            &["checkout", "-q", "--detach", &target],
+        ]
+        .iter()
+        .all(|a| git(tree, a).0 == Some(0));
+    if !moved {
+        return refused(format!("builder-tree lane: the lane's tree {} could not be brought to origin/main (the fetch, the reset, the clean or the checkout failed: git -C {} status says where it stands)\n", tree.display(), tree.display()));
+    }
+    note(p, env, "lane", tree, &target);
+    reply(
+        format!("{}\n", tree.display()),
+        format!("builder-tree lane: {} is at origin/main ({}), whatever it held gone - it is the lane's, nobody's work lives there\n", tree.display(), target.get(..10).unwrap_or(&target)),
+        0,
+    )
 }
 
 /// `l7r-gate builder-tree <args>` from `cwd`.
@@ -776,6 +891,7 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env) -> Reply {
         ("adopt", t) if !t.is_empty() => {
             adopt(&p, t, &task_list(arg(2)), &feature_key(arg(3)), env)
         }
+        ("lane", _) => lane_start(&p, env),
         _ => refused(USAGE.to_owned()),
     }
 }
