@@ -20,7 +20,7 @@ sides) and T512 (a task's size, counts, turns, tokens and own path); the 451 par
 
 ## Why
 
-Over the night of 2026-11-27 the builders were not the bottleneck: their pool trees were busy 93%, 98% and 83% of 02:00Z to 14:29Z
+Over the night of 2026-11-27 the builders were not the bottleneck: their pool trees were busy 93%, 98% and 83% of 02:00Z to 14:29Z (one-shot, measured 2026-11-27)
 (t269, t270, t271; the session's run of `tree-idle.py` with its window start edited to 02:00Z, 2026-11-27 about 14:40Z, reported in
 `port-talk-orchestrator-update.md`; the script as committed reads only its own 17:00Z window). Integration was. The coordinating session carried every builder's
 commit into its own clone, ran each batch's gate there, and repaired every red gate and refusal in its own turns, one at a time.
