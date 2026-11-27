@@ -100,3 +100,21 @@ fn the_route_rewrites_or_refuses() {
     gate(&root, "echo not json");
     assert!(call(&e, &root, &root).is_empty());
 }
+
+/// 451 T500: the route is asked of the launcher by `bash`, not by its `#!/usr/bin/env bash` (2.5 ms a call), so a launcher with
+/// no shebang and no exec bit still answers.
+#[test]
+fn the_route_is_asked_of_the_launcher_by_bash_not_its_shebang() {
+    crate::shared::log::quiet();
+    let root = dir("route-bash");
+    std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
+    std::fs::write(
+        root.join("scripts/gates/l7r-gate.sh"),
+        "cat >/dev/null\necho '{\"verdict\": \"refuse\", \"message\": \"by bash\"}'\n",
+    )
+    .unwrap();
+    let page =
+        json!({"file_path": "/r/research/site/q/x.html", "old_string": "o", "new_string": "n"});
+    let e = event(Some(&root), "Edit", &page);
+    assert!(matches!(&call(&e, &root, &root)[..], [Answer::Refuse(t)] if t.contains("by bash")));
+}

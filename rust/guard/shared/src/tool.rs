@@ -130,6 +130,24 @@ thread_local! {
 /// (`rust`, `browser`, `embed`, `mode-a`, `hamlet`) runs another binary from other sources and is neither proof nor proved.
 #[must_use]
 pub fn ask_gate(dir: &Path, script: &Path, args: &[&str], stdin: &str) -> Said {
+    gate_asked(script, args, |bash, all| {
+        asked(bash, dir, all, stdin).unwrap_or(Said {
+            code: -1,
+            ..Said::default()
+        })
+    })
+}
+
+/// [`ask_gate`] with no stdin and a limit, as [`ask_within`] asks a program (451 T500: the gate-write guard's tree check). A call
+/// killed at its limit answers -1 and proves nothing.
+#[must_use]
+pub fn ask_gate_within(dir: &Path, script: &Path, args: &[&str], limit: Duration) -> Said {
+    gate_asked(script, args, |bash, all| said_within(bash, dir, all, limit))
+}
+
+/// The gate launcher's call made by `run` (the `bash` command and its arguments), its freshness proof passed and kept as
+/// [`ask_gate`] says.
+fn gate_asked(script: &Path, args: &[&str], run: impl FnOnce(Command, &[&str]) -> Said) -> Said {
     let plain = !matches!(
         args.first().copied(),
         Some("rust" | "browser" | "embed" | "mode-a" | "hamlet")
@@ -144,10 +162,7 @@ pub fn ask_gate(dir: &Path, script: &Path, args: &[&str], stdin: &str) -> Said {
     let all: Vec<&str> = std::iter::once(s.as_ref())
         .chain(args.iter().copied())
         .collect();
-    let said = asked(bash, dir, &all, stdin).unwrap_or(Said {
-        code: -1,
-        ..Said::default()
-    });
+    let said = run(bash, &all);
     if let Some(bin) = gate_binary(script).filter(|_| plain && said.ok()) {
         GATE_FRESH.with(|f| *f.borrow_mut() = Some((script.to_path_buf(), bin)));
     }
@@ -249,7 +264,12 @@ pub fn within(dir: &Path, program: &str, args: &[&str], limit: Duration) -> bool
 /// (`subprocess.run(timeout=)`'s use here, without coreutils `timeout`'s 100 ms a call, measured in T013).
 #[must_use]
 pub fn ask_within(dir: &Path, program: &str, args: &[&str], limit: Duration) -> Said {
-    let Ok(mut child) = command(program)
+    said_within(command(program), dir, args, limit)
+}
+
+/// [`ask_within`] for a command already made, its environment set.
+fn said_within(mut program: Command, dir: &Path, args: &[&str], limit: Duration) -> Said {
+    let Ok(mut child) = program
         .args(args)
         .current_dir(dir)
         .stdin(Stdio::null())
@@ -372,7 +392,8 @@ mod tests {
     use std::time::Duration;
 
     use super::{
-        ask, ask_gate, ask_git_private, ask_started, ask_within, gate_binary, stale, within,
+        ask, ask_gate, ask_gate_within, ask_git_private, ask_started, ask_within, gate_binary,
+        stale, within,
     };
 
     #[test]
@@ -552,6 +573,35 @@ mod tests {
         crate::env::unset("L7R_GATE_FRESH");
         assert_eq!(
             ask_gate(d.path(), Path::new("/no/such.sh"), &["plan"], "").code,
+            127
+        );
+    }
+
+    /// 451 T500: the bounded asker runs the launcher by bash and shares the same proof both ways; a call killed at its limit
+    /// answers -1, a script that cannot start 127.
+    #[test]
+    fn a_bounded_gate_call_shares_the_walk_and_stops_at_its_limit() {
+        let d = crate::tempdir::TempDir::new("ask-gate-within");
+        let a = stub_gate(d.path(), "a");
+        std::fs::write(
+            &a,
+            "[ \"$1\" = sleep ] && exec sleep 5; echo \"fresh=${L7R_GATE_FRESH:-} $1\"\n",
+        )
+        .unwrap();
+        crate::env::set("L7R_GATE_TARGET", "/t");
+        let base = std::env::var("L7R_GATE_FRESH").unwrap_or_default();
+        let limit = Duration::from_secs(5);
+        let within = |w: &str, l: Duration| ask_gate_within(d.path(), &a, &[w], l);
+        let slept = within("sleep", Duration::from_millis(100));
+        assert_eq!((slept.code, slept.out.as_str()), (-1, ""));
+        assert_eq!(within("plan", limit).out, format!("fresh={base} plan"));
+        assert_eq!(within("plan", limit).out, "fresh=/t/tool/l7r-gate plan");
+        assert_eq!(
+            ask_gate(d.path(), &a, &["plan"], "").out,
+            "fresh=/t/tool/l7r-gate plan"
+        );
+        assert_eq!(
+            ask_gate_within(d.path(), Path::new("/no/such.sh"), &["plan"], limit).code,
             127
         );
     }

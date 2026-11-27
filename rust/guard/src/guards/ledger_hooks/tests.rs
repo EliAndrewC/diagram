@@ -196,6 +196,19 @@ fn a_pass_with_no_row_is_reported_never_refused() {
     assert!(matches!(&got[..], [Answer::Notice(t)] if t.contains("ledger-owed")));
 }
 
+/// 451 T500: the owed report is asked through the shared gate asker, so a call after an earlier one through the same launcher that
+/// exited 0 in this process is handed the fresh binary (`L7R_GATE_FRESH`) and skips the launcher's source walk.
+#[test]
+fn the_owed_report_rides_an_earlier_fresh_gate_call() {
+    let (_dir, at, tree) = world("fresh");
+    crate::shared::env::set("L7R_GATE_TARGET", "/t500-target");
+    let launcher = tree.join("scripts/gates/l7r-gate.sh");
+    std::fs::write(&launcher, "echo \"fresh=${L7R_GATE_FRESH:-}\"\n").unwrap();
+    assert!(crate::shared::tool::ask_gate(&tree, &launcher, &["x"], "").ok());
+    let got = run("git commit -m other", &at, &tree);
+    assert!(matches!(&got[..], [Answer::Notice(t)] if t == "fresh=/t500-target/tool/l7r-gate"));
+}
+
 #[test]
 fn the_repositorys_own_tools_come_first_and_nothing_else_is_read() {
     let (_dir, at, tree) = world("own");

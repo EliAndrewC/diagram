@@ -19,7 +19,7 @@ use crate::shared::log::fire;
 use crate::shared::session::Session;
 use crate::shared::shape::{strip_heredocs, strip_quotes};
 use crate::shared::state::{field, session_file};
-use crate::shared::tool::ask;
+use crate::shared::tool::ask_gate;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -304,9 +304,9 @@ fn streak(_event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Vec<Answer> {
         return Vec::new();
     }
     log("reminded", "");
-    let cost = ask(
+    let cost = ask_gate(
         &s.tree,
-        &s.tree.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
+        &s.tree.join("scripts/gates/l7r-gate.sh"),
         &["measure", "gatecost", "done", "full"],
         "",
     );

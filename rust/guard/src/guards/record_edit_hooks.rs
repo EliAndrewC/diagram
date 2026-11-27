@@ -12,7 +12,7 @@ use crate::shared::checks::handle;
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::ask_gate;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -100,9 +100,9 @@ pub(crate) fn judge(event: &Event, session: &Session, here: &Path, tree: &Path) 
         return Vec::new();
     }
     let gate = tree.join("scripts/gates/l7r-gate.sh");
-    let said = ask(
+    let said = ask_gate(
         here,
-        &gate.to_string_lossy(),
+        &gate,
         &["record", "edit-route"],
         &event.input.to_string(),
     );

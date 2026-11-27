@@ -855,3 +855,29 @@ fn every_test_target_named_is_a_target_of_the_makefile() {
         .collect();
     assert_eq!(missing, Vec::<&&str>::new());
 }
+
+/// 451 T500: `own-make` is asked of the launcher by `bash`, not by its `#!/usr/bin/env bash` (2.5 ms a call), so a launcher with no
+/// shebang and no exec bit still answers - the prompt's sync and an edit behind main both - and the prompt's sync asks it once,
+/// where it asked again inside `running` after a first "no".
+#[test]
+fn own_make_is_asked_by_bash_and_once_a_prompt() {
+    let w = World::new("own-make-bash");
+    w.claim("s", &w.clone);
+    let asked = w.clone.join(".git/own-make-asked");
+    std::fs::write(
+        w.tree.join("scripts/gates/l7r-gate.sh"),
+        format!("echo x >> {}\n[ -f .making ]\n", asked.display()),
+    )
+    .unwrap();
+    let _ = w.prompt("s", "");
+    assert_eq!(std::fs::read_to_string(&asked).unwrap(), "x\n");
+    std::fs::write(w.clone.join(".making"), "").unwrap();
+    assert!(w
+        .prompt("s", "")
+        .contains("has a make run going (a gate or a roll)"));
+    w.advance("b.txt", false);
+    assert!(told(
+        &w.edit("s", "", &w.clone.join("a.txt")),
+        "but a make runs in it"
+    ));
+}

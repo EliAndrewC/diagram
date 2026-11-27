@@ -19,7 +19,7 @@ use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::spelled::names;
 use crate::shared::state::field;
-use crate::shared::tool::{ask, ask_git_private};
+use crate::shared::tool::{ask, ask_gate, ask_git_private};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -41,15 +41,14 @@ pub(crate) struct Ctx {
 
 impl Ctx {
     /// The gate's wrapper: the repository's own copy, else this tree's (as the Python tools it runs were found).
-    fn gate(&self, root: &str) -> String {
+    fn gate(&self, root: &str) -> PathBuf {
         let name = "scripts/gates/l7r-gate.sh";
         let own = Path::new(root).join(name);
-        let path = if own.is_file() {
+        if own.is_file() {
             own
         } else {
             self.tree.join(name)
-        };
-        path.to_string_lossy().into_owned()
+        }
     }
 
     fn git(&self, root: &str, args: &[&str]) -> String {
@@ -224,18 +223,11 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
         scratch.clone()
     });
     let path = ledger.to_string_lossy().into_owned();
-    let owed = ask(
+    let owed = ask_gate(
         Path::new(&root),
-        "bash",
+        &c.gate(&root),
         // a commit's notice: the count, the first row and the command for the rest (451 T170)
-        &[
-            &c.gate(&root),
-            "reviews",
-            "ledger-owed",
-            "--ledger",
-            &path,
-            "--brief",
-        ],
+        &["reviews", "ledger-owed", "--ledger", &path, "--brief"],
         "",
     )
     .out;

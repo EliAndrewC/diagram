@@ -20,7 +20,7 @@ use crate::shared::log;
 use crate::shared::make::targets;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::{ask, ask_started, within, Said};
+use crate::shared::tool::{ask, ask_gate, ask_started, within, Said};
 
 /// The guard.
 /// The tools it takes: an edit, for the routing and the stale base, and a Bash call, for the behind-main notice. The shell was wired
@@ -107,30 +107,22 @@ impl Ctx<'_> {
 
     /// A make run, or a running gate's lock, in `clone` (`l7r-gate own-make` and `lock held`).
     fn running(&self, clone: &Path) -> bool {
-        if ask(
-            clone,
-            &self
-                .tree
-                .join("scripts/gates/l7r-gate.sh")
-                .to_string_lossy(),
-            &["own-make", ""],
-            "",
-        )
-        .ok()
-        {
-            return true;
-        }
-        let lock = clone.join("scripts/gates/l7r-gate.sh");
-        lock.is_file() && {
-            let gitdir = git(clone, &["rev-parse", "--absolute-git-dir"]).out;
-            ask(
-                Path::new("/"),
-                "bash",
-                &[&lock.to_string_lossy(), "lock", "held", &gitdir],
-                "",
-            )
-            .ok()
-        }
+        self.making(clone) || locked(clone)
+    }
+
+    /// A make run in `clone` (`l7r-gate own-make`), asked of this tree's launcher through the shared gate asker (451 T500).
+    fn making(&self, clone: &Path) -> bool {
+        let gate = self.tree.join("scripts/gates/l7r-gate.sh");
+        ask_gate(clone, &gate, &["own-make", ""], "").ok()
+    }
+}
+
+/// A running gate's lock in `clone` (`l7r-gate lock held`), asked of the clone's own launcher.
+fn locked(clone: &Path) -> bool {
+    let lock = clone.join("scripts/gates/l7r-gate.sh");
+    lock.is_file() && {
+        let gitdir = git(clone, &["rev-parse", "--absolute-git-dir"]).out;
+        ask_gate(Path::new("/"), &lock, &["lock", "held", &gitdir], "").ok()
     }
 }
 
@@ -648,16 +640,9 @@ fn sync(cx: &Ctx, clone: &Path) -> Vec<String> {
     let c = clone.display();
     let midtask = if dirty(clone) {
         "has uncommitted work (mid-task)"
-    } else if ask(
-        clone,
-        &cx.tree.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
-        &["own-make", ""],
-        "",
-    )
-    .ok()
-    {
+    } else if cx.making(clone) {
         "has a make run going (a gate or a roll)"
-    } else if cx.running(clone) {
+    } else if locked(clone) {
         "holds a running gate's lock"
     } else {
         ""

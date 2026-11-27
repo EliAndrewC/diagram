@@ -364,6 +364,21 @@ fn what_the_gate_does_not_see_passes() {
     ));
 }
 
+/// 451 T500: the tree check is asked of the launcher by `bash`, not by its `#!/usr/bin/env bash` (2.5 ms a call), so a launcher
+/// with no shebang and no exec bit still answers.
+#[test]
+fn the_tree_check_is_asked_of_the_launcher_by_bash_not_its_shebang() {
+    let w = world("unseen-bash");
+    let launcher = w.top.join("scripts/gates/l7r-gate.sh");
+    std::fs::remove_file(&launcher).unwrap();
+    std::fs::write(&launcher, format!("[ -f {}/unseen ]\n", w.top.display())).unwrap();
+    w.make(60, "gmake", "--no-print-directory done", &w.top);
+    std::fs::write(w.top.join("l7r/x/m.py"), "a a\n").unwrap();
+    std::fs::write(w.top.join("unseen"), "").unwrap();
+    let edit = json!({"file_path": w.file("l7r/x/m.py"), "old_string": "a", "new_string": "b"});
+    assert!(w.run("Edit", &edit).is_empty());
+}
+
 #[test]
 fn the_escape_needs_a_reason() {
     let g = world("escape-gate");

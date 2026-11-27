@@ -6945,14 +6945,52 @@ that batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T500 (<why: the finding or measurement that files it>)
+### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)
+
+- **Approach**: the five guards' launcher calls go through `tool::ask_gate` (`rust/guard/shared/src/tool.rs`, 451 T494), and the gate-write guard's bounded call through a new `tool::ask_gate_within`. Measured 2026-11-27.
+  - **T500-D1, the five callers moved, each answer unchanged.** `record_edit_hooks.rs` (`record edit-route`), `measure_hooks.rs` (`measure gatecost done full`), `clone_sync_hooks.rs` (`own-make`, in both `running` and `sync`, and the clone's own `lock held`), `gate_write_hooks.rs` `unseen` (`preflight`, bounded) and `ledger_hooks.rs` (`reviews ledger-owed`, its `Ctx::gate` the one caller, now a path) call the asker, the gate-write call keeping its limit of 20 seconds, measured 2026-11-27 (`gate_write_hooks.rs` read). Each reads only `.ok()` or `.out`, with the same working directory as before, so bash's 127 for a launcher that cannot start holds nothing, as the exec's -1 did (T494-D1's reasoning). `ledger` and `lock held` already ran by `bash`; they gain only the shared proof. Every subcommand reaches the binary: the launcher handles none itself before its `exec` (`scripts/gates/l7r-gate.sh` read whole, 2026-11-27), so T494-D2's "exit 0 means the binary ran" holds for these too.
+  - **T500-D2, `ask_gate_within`.** `ask_gate`'s body became `gate_asked`, which takes the run as a closure: `ask_gate` runs it with stdin, `ask_gate_within` through `said_within`, the body `ask_within` already had, now taking a made `Command`. So the limit, the kill, the null stdin and the -1 at the limit are `ask_within`'s, unchanged. A call killed at its limit answers -1, which proves nothing.
+  - **T500-D3, clone-sync's prompt asks `own-make` once.** `sync` asked `own-make` for its "has a make run going" line and then `running`, which asked it again before the lock. A first "no" exits 1, which gives the second call no proof to ride, so it was a whole second gate call on every prompt in a clean clone. `running` is now `making || locked`, and `sync` asks `making`, then `locked`. Its lines and their order are unchanged. Fixed here.
+  - **Red first.** Five new tests, each failing on the old code: 0 passed, 5 failed, measured 2026-11-27 (`make rust-test CRATE=rust/guard ONLY=...`). In four of them the launcher is written with no shebang and no exec bit, so only a `bash` start can answer: `the_route_is_asked_of_the_launcher_by_bash_not_its_shebang`, `the_median_is_asked_of_the_launcher_by_bash_not_its_shebang`, `the_tree_check_is_asked_of_the_launcher_by_bash_not_its_shebang` and `own_make_is_asked_by_bash_and_once_a_prompt`. The last also counts the prompt's `own-make` calls, 1. The ledger already ran by `bash`, so its red test is the shared walk: `the_owed_report_rides_an_earlier_fresh_gate_call` is handed `L7R_GATE_FRESH` after an earlier call through the same launcher exited 0. `a_bounded_gate_call_shares_the_walk_and_stops_at_its_limit` (shared) pins the new asker: -1 at its limit, 127 for no script, the proof shared both ways. `make builder-checks CRATE="rust/guard rust/guard/shared"` is green, measured 2026-11-27 (guard 603 passed, shared 589). The five suites passed, measured 2026-11-27 (`bash tests/hooks/test-<guard>.sh`): record-edit 14, measure 49, clone-sync all, gate-write 35, ledger 25, none failed. No guard message changed.
+  - **Before and after, on T388's sandbox.** The method is `t500-time.py`: T494's environment, with `MEASURE_CADENCE_S=1` so that measure-hooks reaches its gate call. Arms are interleaved round-robin after one uncounted warm-up, and the streak file is removed before every run. The binaries are this tree's own, copied before and after the change, and the gate is T388's copy. Each arm ran 20 times, every run exiting as expected, measured 2026-11-27 (`t500-run1.tsv`, `t500-run2.tsv`). Medians, run 1 at load 8.3 to 8.8, run 2 at load 8.0 to 8.3:
+    - measure-hooks' whole call on `make done FULL=1` (the streak's first, which asks `measure gatecost`): 121.4 -> 115.3 ms, and 116.0 -> 107.2, measured 2026-11-27 (`t500-time.py`, 20 runs);
+    - one launcher call, `own-make ""` (exit 1), started by its shebang against by `bash`: 27.4 -> 22.3 ms, and 27.3 -> 21.6, measured 2026-11-27 (`t500-time.py`, 20 runs). That is about 5 ms of `env` a call at this load, against T388's 2.5 ms, measured 2026-11-27 (`t500-time.py`, 20 runs; T388's record).
+  - **The prompt's saving.** D3 takes a whole `own-make` call off each prompt sync in a clean clone: 22 ms, measured 2026-11-27 (the bash arm's median above). The shebang's 5 ms also comes off the call that remains, measured 2026-11-27 (`t500-time.py`, 20 runs).
+  - **Not measured: a walk ridden.** Each of these calls is the first gate call of its hook process on the paths measured. A later call rides a proof only after an earlier exit-0 call through the same launcher (an Edit's `preflight` then `edit-route`, or a held lock then nothing), so this task claims no walk saved.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| five guards' gate calls run by bash through the shared asker; clone-sync's second own-make dropped | n/a: guard tooling, no map | n/a: tooling | none | none |
+
+### T500 Approach (checklist part A)
+
+1. **The goal, in the world.** No guard starts the gate launcher by its shebang. Each guard's call shares the hook process's freshness proof. A prompt's sync asks `own-make` once.
+2. **The constraints.** No guard message or verdict changes (the brief). A stale gate binary is never run where the launcher would not run it already (T494-D2). A caller's reading of a failed start does not change (T494-D1).
+3. **Where each comes from.** O: 451 T494's found-and-left item and T388's record (2.5 ms a shebang start, measured 2026-11-27 (T388's record)). R: `scripts/gates/l7r-gate.sh` (every subcommand `exec`s its binary). O: the timings above.
+4. **Do they describe the world here?** Yes. Each guard reached its gate call in the sandbox: the measure arm's notice is the reminder, and `own-make` exited 1 in every run, measured 2026-11-27 (`t500-time.py`'s rc and said columns).
+5. **The order.** After T494 (its asker). Before T504 (the bash-started callers outside the asker).
+6. **The exits.** Green: the five red tests pass, the suites pass, and the timings drop. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** measure-hooks' call went from 121.4 and 116.0 ms to 115.3 and 107.2 ms, measured 2026-11-27 (`t500-time.py`, 20 runs). One launcher start went from 27.4 and 27.3 ms to 22.3 and 21.6 ms, measured 2026-11-27 (`t500-time.py`, 20 runs). A prompt sync makes one gate call fewer. All are medians of 20 interleaved runs, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader sees: every verdict and message is unchanged.
+
+**Found and left?**
+- Three more guards start the launcher by `bash` but outside the shared asker, so a later call cannot ride an earlier fresh call's proof: `engine_freeze_hooks.rs` (`plan engine-edit`, in an Edit's hook process beside `preflight` and `edit-route`), `pair_hooks/state.rs` `stamp_fresh` and `builder_stop_hooks.rs` (`ask_within` with bash, which `ask_gate_within` now fits). The visible effect is up to a 17.5 ms walk a call where an earlier call exited 0, measured 2026-11-27 (T494's walk on T388's sandbox). Not fixed here: they are outside the five this brief names, and the brief has one job. Filed as T504; lands before T501.
+
+**Performance work?** yes: it takes about 5 ms of `env` off each of these guards' gate calls and one whole `own-make` gate call, 22 ms, off every prompt sync in a clean clone, measured 2026-11-27 (`t500-time.py`, 20 runs, interleaved).
+
+
+### T504 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T500 Approach (checklist part A)
+### T504 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

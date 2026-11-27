@@ -4488,6 +4488,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)": {
+   "sha256": "0faab3adc5a64367ed6b588e1e6d111f59ed90b6be71e32a798128a99d8df981",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T500 Approach (checklist part A)": {
+   "sha256": "3c88772526daea805e2db4e1acd17f3c17155873684deba626c2b6d625a91eaa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -41197,6 +41209,46 @@
      "summary": "No message-check dispatched: the live refusal's words are unchanged, the removed tail was never rendered by any suite (message store read, observed 2026-11-27), and make guard-messages read 23 wordings within budget.",
      "class": "within",
      "why": "The brief's condition is a changed guard message; no message any call renders changed, and the claim carries its observation and method. This is not a carve-out from the brief but its plain scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)",
+    "### T500 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T500-D1",
+     "summary": "The five guards' launcher calls (record-edit, measure, clone-sync, gate-write's bounded preflight, ledger) go through tool::ask_gate, started by bash and sharing the hook process's freshness proof; each caller's reading (.ok()/.out, working directory, failed-start meaning) unchanged.",
+     "class": "within",
+     "why": "Performance work, which FR-013 and the GM's 2026-11-20 words put first; it takes measured time off gate calls and changes no guard message or verdict, so it serves the request and narrows nothing."
+    },
+    {
+     "id": "T500-D2",
+     "summary": "ask_gate's body becomes gate_asked taking the run as a closure; new ask_gate_within reuses ask_within's limit, kill, null stdin and -1-at-limit, and a killed call proves nothing.",
+     "class": "within",
+     "why": "An implementation choice serving D1's move of the bounded gate-write call; it keeps the existing limit behavior and decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T500-D3",
+     "summary": "clone-sync's prompt sync asks own-make once (running = making || locked; sync asks making then locked), lines and order unchanged.",
+     "class": "within",
+     "why": "Removes a whole redundant gate call per prompt in a clean clone, measured; performance work fixed in the task, with no visible output change."
+    },
+    {
+     "id": "T500-scope-claim",
+     "summary": "The task claims no walk saved (each measured call is the first of its hook process) and claims only the measured env and own-make savings.",
+     "class": "within",
+     "why": "States the limit of what was measured rather than narrowing any work; consistent with the project's measured-figures rule."
+    },
+    {
+     "id": "T500-found-and-left",
+     "summary": "Three more guards (engine_freeze_hooks plan engine-edit, pair_hooks/state stamp_fresh, builder_stop_hooks ask_within) start the launcher by bash outside the shared asker; left, filed as T504, landing before T501, with T500 ordered before T504.",
+     "class": "within",
+     "why": "Not a defect in the constitution's sense (no wrong outcome: every verdict and message is right; the cost is a missed walk saving of up to 17.5 ms where an earlier call exited 0). It is filed as its own performance task, which FR-013 puts first in the queue, with the why, task id and order FR-009 asks for; nothing the GM asked is dropped or deferred behind non-performance work."
     }
    ]
   }

@@ -23,7 +23,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::{ask, ask_within};
+use crate::shared::tool::{ask, ask_gate_within};
 use crate::shared::tree::program::writes_computed;
 
 /// The guard.
@@ -237,13 +237,7 @@ fn unseen(c: &Gate, extra: &[&str]) -> bool {
         snap.as_str(),
     ];
     args.extend_from_slice(extra);
-    ask_within(
-        &c.top,
-        &tool.to_string_lossy(),
-        &args,
-        Duration::from_secs(20),
-    )
-    .ok()
+    ask_gate_within(&c.top, &tool, &args, Duration::from_secs(20)).ok()
 }
 
 /// The file's text as this edit would leave it, or None.

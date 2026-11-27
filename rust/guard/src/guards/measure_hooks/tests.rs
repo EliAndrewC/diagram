@@ -246,3 +246,15 @@ fn the_command_reads_as_the_shells_sed_and_the_tree_as_git_does() {
             == 1
     );
 }
+
+/// 451 T500: the median is asked of the launcher by `bash`, not by its `#!/usr/bin/env bash` (2.5 ms a call), so a launcher with
+/// no shebang and no exec bit still answers.
+#[test]
+fn the_median_is_asked_of_the_launcher_by_bash_not_its_shebang() {
+    let (root, s) = tree("bash");
+    std::fs::remove_file(root.join("scripts/gates/l7r-gate.sh")).unwrap();
+    std::fs::write(root.join("scripts/gates/l7r-gate.sh"), "echo 71\n").unwrap();
+    assert!(
+        matches!(&run(&bash("make done FULL=1", &root), &s)[..], [Answer::Notice(n)] if n.contains("median of 71 s"))
+    );
+}
