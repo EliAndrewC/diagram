@@ -104,13 +104,15 @@ impl Part {
     pub(super) fn whole(&mut self) -> &mut Value {
         if !self.whole {
             self.whole = true;
-            if let (Value::Object(mut all), Some(part)) =
-                (parsed(&self.text), self.value.as_object_mut())
-            {
-                for key in ROWS {
-                    if let Some(v) = all.remove(key) {
-                        part.insert(key.to_owned(), v);
-                    }
+            // a partial read's value is an object, and its text parsed as one (`parse` keeps it partial only then)
+            let mut all = parsed(&self.text);
+            let part = self
+                .value
+                .as_object_mut()
+                .expect("a partial read's value is an object");
+            for key in ROWS {
+                if let Some(v) = all.get_mut(key).map(Value::take) {
+                    part.insert(key.to_owned(), v);
                 }
             }
         }
