@@ -204,10 +204,7 @@ fn a_red_run_stops_the_step_with_its_owed_line_and_its_resume_is_attempt_two() {
     std::fs::write(w.common.join("red"), "").unwrap();
     let l = lane_of(&w);
     let red = step(&l).unwrap_err();
-    assert!(
-        red.starts_with("lane: batch 461-1 red at attempt 1 (make land exit 2)"),
-        "{red}"
-    );
+    assert!(red.starts_with("lane: batch 461-1 red at attempt 1 (make land exit 2)"));
     assert!(red.ends_with("l7r-lane/attempts/461-1-1.log"));
     assert_eq!(w.events(), ["batch", "carry", "run", "owed"]);
     assert_eq!(w.lane()[3]["line"], red);
@@ -275,10 +272,7 @@ fn a_batch_with_no_lane_s_tree_no_spec_directory_or_an_unknown_change_is_an_erro
     let b = open(&w);
     // a change no hand-in names
     let unknown = resume(&l, &b, &["ffffffffff".to_owned()]).unwrap_err();
-    assert!(
-        unknown.contains("change ffffffffff is no hand-in"),
-        "{unknown}"
-    );
+    assert!(unknown.contains("change ffffffffff is no hand-in"));
     // no lane's tree in the pool: builder-tree lane's refusal
     builder_pool::write(&w.common, &[]).unwrap();
     let gone = resume(&l, &b, &b.changes).unwrap_err();
