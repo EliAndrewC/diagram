@@ -70,3 +70,5 @@ T379 fix crates=- files=- waits=GM
 T373 fix crates=- files=- waits=GM
 T420 fix crates=- files=- waits=GM
 T417 fix crates=- files=- waits=GM
+T449 fix crates=- files=scripts/hooks/l7r-guard.sh,scripts/gates/l7r-gate.sh note=the guard's link failure, silent
+T445 measurement measures=3 crates=rust/gate/crates/rustc files=- note=which test hung in each of three rustc runs
