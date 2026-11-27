@@ -30,6 +30,8 @@ Enforced (451 T237, `rust/guard/src/guards/context_cap_hooks/split.rs`): a build
 context-cap handoff says it stops there; the command's block carries that line for every kind. A claims-round dispatch's prompt
 opens `Run the claims round for feature ...` and is never held. The coordinating session runs the claims round (the claims-triage
 agent, make claims-bundle, impl-drift, make claims-checked) as its own dispatch; a DRIFTED fix: claim comes back to a small builder.
+Past the 300k cap a builder has a WRAP-UP BAND to 340k (451 T417) in which it may still run its stop point's own steps and write
+the handoff file its brief names (451 T352), never new code - so a brief names its handoff file by its full path.
 
 THE FOUR KINDS: `fix` - red-first, then its own plan section and review; `measurement` - changes no source, writes the record,
 files the levers it priced, and its report is the next builder's brief; `build-half` - builds and tests a new mechanism and ends at

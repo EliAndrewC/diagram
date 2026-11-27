@@ -400,6 +400,21 @@ figures). **Falsifier:** over a week of builders briefed under the rule, measure
 falling below about one in five (it was 28%) - then sizing the brief is not the lever, and the task's own size or the cap is
 looked at again.
 
+**Amended 2026-11-27: a wrap-up band** (451 T417, T352). The GM: *"Does it make sense to enforce such an abrupt cutoff?  Like I
+understand wanting to hand off to a new builder, but if our builders are prevented from even finishing their handoff, then is
+that really the most efficient thing to do?"* The cap's figures above priced NEW work against a fresh builder; none looked at a
+builder with a few mechanical commands left. The night's three cases, of about 35 builders: T315's (308k) could not dispatch its
+plan review's second round and T325's (310k) could not run `make plan-delta`, `make claims-triage` or file the task it had found -
+in both the coordinating session ran those steps - while T359's closing half (311k) had two code fixes owed, which a fresh builder
+rightly took. So from the cap to a ceiling, `WRAP_UP_CEILING_TOKENS` (340k, a GUESS knob), a builder may run only its stop point's
+own steps - `make decide`, `plan-delta`, `plan-verdict`, `claims-triage`, `claims-owed`, `task-add`, `task-withdraw`,
+`builder-checks`, `git status` and `git diff`, a read, the one plan review's dispatch, and its handoff's Write - each recorded as
+the guard's `wrap-up` rule; code and any other dispatch stay refused, the refusal saying what is left; past the ceiling the guard
+is as before. The handoff's exit also takes the file the builder's brief names (`<task>-build.md`, `done-pending-<task>.md`), which
+it refused before (T352). Still the cap at 300k: the band is for finishing, never for new work. **What would reopen it:** a builder
+in the band spending more than a few turns there (the guard log's `wrap-up` passes, counted by agent), or a fresh builder
+measured cheaper than the band for the same remaining steps; either is `dev/audits/builders-context-cap.md`'s second falsifier.
+
 ### Two code builders at once, in reused worktrees; three or four only for work that compiles nothing (decided 2026-11-26)
 
 **Question.** How many builders run at once, each in its own worktree, landings still one at a time through main (the talk's

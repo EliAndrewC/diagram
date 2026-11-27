@@ -16,8 +16,13 @@
 //! call's result carries that child's `usage` (the same capture: 2 such rows), and a row of zero (a synthetic message) is no model call.
 //! Any failure to read - no file, no such row within [`TAIL_BYTES`] - passes: a guard that cannot see the context does not guess it.
 //!
+//! THE WRAP-UP BAND (451 T417, [`band`]): from the cap to [`WRAP_UP_CEILING_TOKENS`] (340k, a GUESS knob) a builder may still run its
+//! stop point's own steps - the stop point's make targets, git status and diff, a read, the one plan review's dispatch - each recorded,
+//! rule `wrap-up`; anything else is refused naming what is still allowed. Past the ceiling, the one exit below alone.
+//!
 //! THE ONE EXIT: a Write, Edit or Read of `<git common dir>/l7r-handoffs/<task>-<agent_id>.md` (`<agent_id>.md` where the call's line
-//! carries no task) - any file there whose name ends `<agent_id>.md`, so the refusal and the Write agree even where the task the event
+//! carries no task) - any file there whose name ends `<agent_id>.md`, or that the builder's brief names there (451 T352, [`named`]:
+//! `<task>-build.md`, `done-pending-<task>.md`), the refusal then naming the brief's file - so the refusal and the Write agree even where the task the event
 //! log's chain reads moves between them, and no two builders share a file. The Read is let through so a handoff once written can be
 //! overwritten (the Write tool refuses a file it has not read). A Write there passed the live guard chain from a background builder
 //! (observed 2026-11-20, method: this task's builder writing `.git/l7r-handoffs/probe-<its id>.md` in its clone, then removing it).
@@ -93,6 +98,15 @@ enum Said {
     },
     /// A code builder's dispatch of a claims agent (451 T237, [`split`]).
     Split(Split),
+    /// In the wrap-up band (451 T417, [`band`]): a stop point's step, let through, what it is recorded.
+    Band(String),
+    /// In the wrap-up band: anything else, refused, naming what and the handoff.
+    BandRefused {
+        agent: String,
+        tokens: u64,
+        handoff: PathBuf,
+        what: String,
+    },
     /// Past the cap, let through by the session's `make context-ok` permit for this agent, its reason.
     Permitted(String),
     /// A resume of a builder whose task none of D2's rungs finds: passed, recorded.
@@ -176,6 +190,23 @@ fn answer(
             log("blocked", &format!("{agent}: {tokens} tokens"), "past-cap");
             vec![Answer::Refuse(refusal(tokens, &handoff, code))]
         }
+        Some(Said::Band(what)) => {
+            log("passed", &what, "wrap-up");
+            Vec::new()
+        }
+        Some(Said::BandRefused {
+            agent,
+            tokens,
+            handoff,
+            what,
+        }) => {
+            log(
+                "blocked",
+                &format!("{agent}: {tokens} tokens: {what}"),
+                "wrap-up-refused",
+            );
+            vec![Answer::Refuse(band_refusal(tokens, &handoff, &what))]
+        }
         Some(Said::Split(Split::Refused(kind))) => {
             log("blocked", &kind, "builder-split");
             vec![Answer::Refuse(split::refusal(&kind))]
@@ -235,7 +266,10 @@ fn judge(
     clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
     let own = own_cap(input, here, env, cap, clone);
-    if matches!(own, Some(Said::Refused { .. } | Said::NoReason(_))) {
+    if matches!(
+        own,
+        Some(Said::Refused { .. } | Said::BandRefused { .. } | Said::NoReason(_))
+    ) {
         return own;
     }
     // THE SPLIT (451 T237): a claims agent's dispatch, named before anything is read, from a code builder
@@ -292,13 +326,19 @@ fn own_cap(
     let home = seat(clone(), &tree);
     let (root, _, _, task) = filed_at(&with_cwd(input, &home), here, env)?;
     let dir = common_git_dir(&root).join(HANDOFFS);
-    let handoff =
-        dir.join(task.map_or_else(|| format!("{agent}.md"), |t| format!("{t}-{agent}.md")));
+    // THE FILES ITS BRIEF NAMES there (451 T352, [`named`]): the exit takes them, and the refusal names the first
+    let brief = split::brief(&own);
+    let briefed = named::named(&brief, &dir);
+    let handoff = briefed.first().cloned().unwrap_or_else(|| {
+        dir.join(task.map_or_else(|| format!("{agent}.md"), |t| format!("{t}-{agent}.md")))
+    });
     let tool = field(input, "tool_name");
     let ti = input.get("tool_input").unwrap_or(&Value::Null);
-    if ["Write", "Edit", "Read"].contains(&tool) && is_handoff(field(ti, "file_path"), &dir, agent)
+    let file = field(ti, "file_path");
+    if ["Write", "Edit", "Read"].contains(&tool)
+        && (is_handoff(file, &dir, agent) || in_dir_named(file, &briefed))
     {
-        return Some(Said::Handoff(field(ti, "file_path").to_owned()));
+        return Some(Said::Handoff(file.to_owned()));
     }
     // D9'S PERMIT: `make context-ok AID= WHY=`, the session's grant for this one agent, an hour (the guard-edit permit's store)
     let granted = permit_reason(&permit_key(&home, agent), now(env));
@@ -312,11 +352,23 @@ fn own_cap(
             Escape::None => {}
         }
     }
+    // THE WRAP-UP BAND (451 T417, [`band`]): from the cap to the ceiling, the stop point's own steps
+    if tokens <= cap + (band::CEILING_TOKENS - CONTEXT_CAP_TOKENS) {
+        return Some(match band::judge(tool, ti) {
+            band::Band::Allowed(what) => Said::Band(what),
+            band::Band::Refused(what) => Said::BandRefused {
+                agent: agent.to_owned(),
+                tokens,
+                handoff,
+                what,
+            },
+        });
+    }
     Some(Said::Refused {
         agent: agent.to_owned(),
         tokens,
         handoff,
-        code: split::code_builder(&own),
+        code: split::is_code(&brief),
     })
 }
 
@@ -375,7 +427,7 @@ fn resume(
         Escape::None => Some(Said::Resume {
             agent: to.to_owned(),
             stale,
-            handoff: handoff_of(&home, task.as_deref(), to),
+            handoff: handoff_of(&home, task.as_deref(), to, &split::brief(&own)),
         }),
     }
 }
@@ -493,21 +545,28 @@ fn task_named(description: &str) -> Option<String> {
         .map(str::to_owned)
 }
 
-/// The handoff a resumed builder's refusal names: a file it wrote (any there ending `<agent>.md`), else the one it would write.
-fn handoff_of(tree: &Path, task: Option<&str>, agent: &str) -> PathBuf {
+/// The handoff a resumed builder's refusal names: a file its brief names there that is written (451 T352, [`named`]), else one it
+/// wrote ending `<agent>.md`, else the brief's first, else the one the cap would name.
+fn handoff_of(tree: &Path, task: Option<&str>, agent: &str, brief: &str) -> PathBuf {
     let dir = common_git_dir(tree).join(HANDOFFS);
+    let briefed = named::named(brief, &dir);
     let mine = format!("{agent}.md");
-    std::fs::read_dir(&dir)
-        .ok()
-        .and_then(|es| {
-            es.filter_map(Result::ok)
-                .map(|e| e.path())
-                .filter(|p| {
-                    p.file_name()
-                        .is_some_and(|n| n.to_string_lossy().ends_with(&mine))
-                })
-                .max()
+    briefed
+        .iter()
+        .find(|p| p.is_file())
+        .cloned()
+        .or_else(|| {
+            std::fs::read_dir(&dir).ok().and_then(|es| {
+                es.filter_map(Result::ok)
+                    .map(|e| e.path())
+                    .filter(|p| {
+                        p.file_name()
+                            .is_some_and(|n| n.to_string_lossy().ends_with(&mine))
+                    })
+                    .max()
+            })
         })
+        .or_else(|| briefed.first().cloned())
         .unwrap_or_else(|| dir.join(task.map_or_else(|| mine.clone(), |t| format!("{t}-{mine}"))))
 }
 
@@ -551,10 +610,24 @@ fn with_cwd(input: &Value, home: &Path) -> Value {
 /// Whether `file` is this agent's handoff: in `dir`, its name ending `<agent>.md`.
 fn is_handoff(file: &str, dir: &Path, agent: &str) -> bool {
     let p = Path::new(file);
-    let real = |d: &Path| std::fs::canonicalize(d).unwrap_or_else(|_| d.to_path_buf());
     p.file_name()
         .is_some_and(|n| n.to_string_lossy().ends_with(&format!("{agent}.md")))
         && p.parent().is_some_and(|d| real(d) == real(dir))
+}
+
+/// Whether `file` is one of `briefed` (451 T352): its name one of theirs, in their directory, compared by its real path.
+fn in_dir_named(file: &str, briefed: &[PathBuf]) -> bool {
+    let p = Path::new(file);
+    briefed.iter().any(|b| {
+        p.file_name() == b.file_name()
+            && p.parent()
+                .zip(b.parent())
+                .is_some_and(|(d, e)| real(d) == real(e))
+    })
+}
+
+fn real(d: &Path) -> PathBuf {
+    std::fs::canonicalize(d).unwrap_or_else(|_| d.to_path_buf())
 }
 
 /// The refusal: the context against the cap, the handoff file, the next step, the escape. 451 T177 (message-check): the why is one
@@ -573,6 +646,22 @@ Long contexts slow model calls, so the task goes on in a fresh builder:\n\n\
   1. Write the handoff file - what is done, what is left, the files touched and the next command - with the Write tool,\n\
      the one call this guard lets through:\n\n       {path}{split}\n\n\
   2. Stop, and reply with that path; the main session dispatches a fresh builder from it.\n\n\
+Escape: {TOKEN}=\"<reason>\" (two words or more) in a Bash command, recorded in the guard log.\n"
+    )
+}
+
+/// The wrap-up band's refusal (451 T417, [`band`]): where the builder stands, what was refused, what it may still run, the handoff.
+fn band_refusal(tokens: u64, handoff: &Path, what: &str) -> String {
+    let path = handoff.display();
+    let ceiling = band::CEILING_TOKENS;
+    let make = band::MAKE.join(", ");
+    format!(
+        "\n\u{1b}[1mBLOCKED: this builder's context is {tokens} tokens, past the cap of {CONTEXT_CAP_TOKENS}: in its wrap-up band, up to {ceiling}, it only finishes its stop point.\u{1b}[0m\n\n\
+Refused: {what}.\n\
+Still allowed: make {make}; git status or git diff; a Read or Grep (head, tail, grep in Bash); cd and export;\n\
+the one plan review `make decide` or `make plan-delta` prints (spec-fidelity, its prompt opening MODE 4: PLAN REVIEW);\n\
+and the handoff's Write:\n\n       {path}\n\n\
+Code or a fix still owed goes in the handoff, for a fresh builder. Past {ceiling} only the handoff's Write is let through.\n\n\
 Escape: {TOKEN}=\"<reason>\" (two words or more) in a Bash command, recorded in the guard log.\n"
     )
 }
@@ -608,7 +697,12 @@ still refused every call but its handoff's until the session grants it an hour: 
     )
 }
 
+mod band;
+mod named;
 mod split;
+
+/// The wrap-up band's ceiling (451 T417, [`band::CEILING_TOKENS`], a GUESS knob).
+pub const WRAP_UP_CEILING_TOKENS: u64 = band::CEILING_TOKENS;
 
 use split::Split;
 

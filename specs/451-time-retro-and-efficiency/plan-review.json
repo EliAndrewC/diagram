@@ -3678,6 +3678,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T417, T352 (bundle) (the GM 2026-11-27 on the cap's abrupt cutoff: on 2026-11-26/27 three of about 35 builders reached the 300k cap, T315's at 308k and T325's at 310k refused only the mechanical end of their stop points; and the cap's one exit refused the handoff names the briefs give, found by T334 2026-11-26)": {
+   "sha256": "a7ed8af4d9c668807d59ac6a430f22ae85ac08156898013f2178ce107474a69e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T417, T352 Approach (checklist part A)": {
+   "sha256": "8b15adef78f5b95fb8815bea0141eb9a7a27cadeb2dbfb904094b5162655e32a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -33160,6 +33172,94 @@
      "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T417, T352 (bundle) (the GM 2026-11-27 on the cap's abrupt cutoff: on 2026-11-26/27 three of about 35 builders reached the 300k cap, T315's at 308k and T325's at 310k refused only the mechanical end of their stop points; and the cap's one exit refused the handoff names the briefs give, found by T334 2026-11-26)",
+    "### T417, T352 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -51501,6 +51601,178 @@
      "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
      "class": "within",
      "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T417": {
+   "section_sha256": "4604f671aeac3443876d5f125b6f34e33aa7d26704232cfb9df39992163f6b2f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T352": {
+   "section_sha256": "4604f671aeac3443876d5f125b6f34e33aa7d26704232cfb9df39992163f6b2f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
     }
    ],
    "verdict": "CLEAR"

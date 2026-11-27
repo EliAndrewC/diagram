@@ -1,0 +1,99 @@
+//! The band's verdict on each kind of call (451 T417): each stop-point step let through, each other kind refused.
+
+use serde_json::json;
+
+use super::{judge, Band, MAKE};
+
+fn bash(cmd: &str) -> Band {
+    judge("Bash", &json!({"command": cmd}))
+}
+
+fn allowed(b: &Band) -> bool {
+    matches!(b, Band::Allowed(_))
+}
+
+fn no(what: &str) -> Band {
+    Band::Refused(what.to_owned())
+}
+
+#[test]
+fn each_stop_point_step_is_let_through() {
+    for goal in MAKE {
+        let cmd = format!("cd /t && export SPECIFY_FEATURE=451-x SPECIFY_FEATURE_DIRECTORY=specs/451-x && make {goal} F=451 T=T1");
+        assert!(allowed(&bash(&cmd)), "{goal}");
+    }
+    for cmd in [
+        "git status --short",
+        "git -C /t diff --stat",
+        "git --no-pager -c core.pager=cat diff",
+        "cd /t && L7R_BLOCKS=none make claims-triage > /tmp/t1-triage.log 2>&1; tail -5 /tmp/t1-triage.log",
+        "make builder-checks CRATE=\"rust/guard\" 2>&1 | grep -E 'FAILED|result' | head -20",
+        "make task-add F=451 TITLE=\"the band; found by T1, see `make decide`\"",
+        "make decide F=451 T=T1 # then the review",
+        "T=T1",
+    ] {
+        assert!(allowed(&bash(cmd)), "{cmd}");
+    }
+    // what is let through is recorded as its command wrote it
+    assert_eq!(
+        bash("cd /t && make task-add F=451 TITLE=\"a b\""),
+        Band::Allowed("cd /t; make task-add F=451 TITLE=\"a b\"".to_owned())
+    );
+    for tool in ["Read", "Grep"] {
+        assert_eq!(judge(tool, &json!({})), Band::Allowed(tool.to_owned()));
+    }
+    let review = json!({"subagent_type": "spec-fidelity", "prompt": "  MODE 4: PLAN REVIEW of 3 changed block(s) of feature 451's plan"});
+    assert!(allowed(&judge("Agent", &review)));
+    assert!(allowed(&judge("Task", &review)));
+}
+
+#[test]
+fn every_other_kind_is_refused_naming_it() {
+    for (cmd, what) in [
+        ("make quick", "make quick"),
+        ("cd /t && make decide F=1 T=T1 && make land", "make land"),
+        ("make", "make .DEFAULT_GOAL"),
+        ("cargo build", "`cargo build`"),
+        ("make decide && rm -rf x", "`rm -rf x`"),
+        ("make task-add TITLE=\"$(rm -rf z)\"", "`rm -rf z`"),
+        ("bash -c \"make decide\"", "`bash -c \"make decide\"`"),
+        // a quoted make target is no invocation: echo is what runs
+        ("echo 'make decide'", "`echo 'make decide'`"),
+        ("git commit -m x", "`git commit -m x`"),
+        ("git -C /t", "`git -C /t`"),
+        ("git diff --output=/t/x.rs", "`git diff --output=/t/x.rs`"),
+        ("", "an empty command"),
+    ] {
+        assert_eq!(bash(cmd), no(what), "{cmd}");
+    }
+    for (tool, ti, what) in [
+        (
+            "Edit",
+            json!({"file_path": "/t/x.rs"}),
+            "an Edit of /t/x.rs",
+        ),
+        (
+            "Write",
+            json!({"file_path": "/t/y.md"}),
+            "a Write of /t/y.md",
+        ),
+        ("SendMessage", json!({"to": "a1"}), "a SendMessage call"),
+        (
+            "Agent",
+            json!({"subagent_type": "claims-triage", "prompt": "MODE 4: PLAN REVIEW"}),
+            "a dispatch of `claims-triage`",
+        ),
+        (
+            "Agent",
+            json!({"subagent_type": "spec-fidelity", "prompt": "MODE 1: an exception"}),
+            "a dispatch of `spec-fidelity`",
+        ),
+        (
+            "Agent",
+            json!({"subagent_type": "general-purpose", "prompt": "build T2"}),
+            "a dispatch of `general-purpose`",
+        ),
+    ] {
+        assert_eq!(judge(tool, &ti), no(what));
+    }
+}

@@ -7,8 +7,9 @@ use std::path::{Path, PathBuf};
 use serde_json::{json, Value};
 
 use super::{
-    answer, context, is_handoff, judge, now, own_transcript, permit_key, plain, refusal, tree_of,
-    usage_of, Said, Stale, CONTEXT_CAP_TOKENS, TAIL_BYTES,
+    answer, band_refusal, context, is_handoff, judge, now, own_transcript, permit_key, plain,
+    refusal, tree_of, usage_of, Said, Stale, CONTEXT_CAP_TOKENS, TAIL_BYTES,
+    WRAP_UP_CEILING_TOKENS,
 };
 use crate::guards::guard_file_hooks::cli;
 use crate::protocol::{run, Answer, Event};
@@ -180,7 +181,7 @@ fn the_context_is_the_last_assistant_rows_usage() {
 /// cap passing; the main session passing; the escape passing, a bare one refused. And a defined agent past the cap passing.
 #[test]
 fn a_builder_past_the_cap_is_refused_but_for_its_handoff() {
-    let f = Fixture::new("cap", &[call(310_000)], None);
+    let f = Fixture::new("cap", &[call(350_000)], None);
     let handoff = f.handoffs().join(format!("{AID}.md"));
     // refused, every tool, naming the file
     for input in [
@@ -196,7 +197,7 @@ fn a_builder_past_the_cap_is_refused_but_for_its_handoff() {
             verdict(&input),
             Some(Said::Refused {
                 agent: AID.to_owned(),
-                tokens: 310_000,
+                tokens: 350_000,
                 handoff: handoff.clone(),
                 code: false
             })
@@ -268,12 +269,12 @@ fn a_builder_just_past_an_advisor_call_is_judged_on_its_own_context() {
         None,
     );
     assert_eq!(verdict(&f.bash("builder", "make quick")), None);
-    f.transcript(AID, &[advisor_call(290_000, 310_000)]);
+    f.transcript(AID, &[advisor_call(290_000, 350_000)]);
     assert_eq!(
         verdict(&f.bash("builder", "make quick")),
         Some(Said::Refused {
             agent: AID.to_owned(),
-            tokens: 310_000,
+            tokens: 350_000,
             handoff: f.handoffs().join(format!("{AID}.md")),
             code: false
         })
@@ -302,6 +303,157 @@ fn the_handoff_is_named_for_the_task_the_calls_line_carries() {
         json!({"file_path": f.handoffs().join(format!("{AID}.md"))}),
     );
     assert!(matches!(verdict(&bare), Some(Said::Handoff(_))));
+}
+
+/// A builder's brief: its transcript's first row, the prompt naming `names` as handoff files under `dir`.
+fn brief_row(dir: &Path, files: &[&str]) -> Value {
+    let ends = files.iter().fold(String::new(), |mut out, n| {
+        let _ = writeln!(out, "END at a handoff, `{}`.", dir.join(n).display());
+        out
+    });
+    json!({"type": "user", "message": {"role": "user", "content": format!("BUILDER-BRIEF 451 T12 KIND=fix\nSTOP POINT (fix): ...\n{ends}If your context passes 200k, stop with a handoff at {}.", dir.join("done-pending-T12.md").display())}})
+}
+
+/// RED FIRST (451 T352): past the cap the exit takes any `.md` of the handoffs directory the builder's own brief names - a build
+/// half's `<task>-build.md`, a bundle's, a `done-pending-<task>.md` - and the refusal names the brief's first such file; a file there
+/// the brief does not name, or the brief's name in another directory, stays refused. The `<agent>.md` rule stands beside it.
+#[test]
+fn the_exit_takes_the_handoff_the_brief_names() {
+    let f = Fixture::new("briefed", &[], None);
+    let dir = f.handoffs();
+    f.transcript(
+        AID,
+        &[brief_row(&dir, &["T12-T13-build.md"]), call(350_000)],
+    );
+    for name in [
+        "T12-T13-build.md",
+        "done-pending-T12.md",
+        &format!("{AID}.md"),
+    ] {
+        let input = f.input(
+            "builder",
+            "Write",
+            json!({"file_path": dir.join(name), "content": "x"}),
+        );
+        assert!(matches!(verdict(&input), Some(Said::Handoff(_))), "{name}");
+    }
+    for file in [
+        dir.join("T12-other.md"),
+        f.clone().join("done-pending-T12.md"),
+    ] {
+        let input = f.input(
+            "builder",
+            "Write",
+            json!({"file_path": file, "content": "x"}),
+        );
+        assert!(matches!(verdict(&input), Some(Said::Refused { .. })));
+    }
+    assert!(matches!(
+        verdict(&f.bash("builder", "ls")),
+        Some(Said::Refused { handoff, .. }) if handoff == dir.join("T12-T13-build.md")
+    ));
+}
+
+/// 451 T417, THE WRAP-UP BAND: from the cap to the ceiling (both edges: 300,001 and 340,000 in it, 340,001 past it) a stop point's
+/// steps pass and every other kind is refused naming what and the handoff; past the ceiling the cap's own refusal; the handoff, the
+/// escape and the permit judged before the band as before.
+#[test]
+fn a_builder_in_its_wrap_up_band_finishes_its_stop_point() {
+    let f = Fixture::new("band", &[], None);
+    let handoff = f.handoffs().join(format!("{AID}.md"));
+    let review = json!({"subagent_type": "spec-fidelity", "prompt": "MODE 4: PLAN REVIEW of one task's section"});
+    for tokens in [CONTEXT_CAP_TOKENS + 1, WRAP_UP_CEILING_TOKENS] {
+        f.transcript(AID, &[call(tokens)]);
+        for input in [
+            f.bash(
+                "builder",
+                "cd /t && export SPECIFY_FEATURE=451-x && make decide F=451 T=T1",
+            ),
+            f.bash("builder", "git status --short"),
+            f.input("builder", "Read", json!({"file_path": "/t/x.rs"})),
+            f.input("builder", "Grep", json!({"pattern": "x"})),
+            f.input("builder", "Agent", review.clone()),
+        ] {
+            assert!(matches!(verdict(&input), Some(Said::Band(_))), "{input}");
+        }
+        for (input, what) in [
+            (f.bash("builder", "make quick"), "make quick"),
+            (
+                f.input("builder", "Edit", json!({"file_path": "/t/x.rs"})),
+                "an Edit of /t/x.rs",
+            ),
+            (
+                f.input(
+                    "builder",
+                    "Agent",
+                    json!({"subagent_type": "general-purpose", "prompt": "go"}),
+                ),
+                "a dispatch of `general-purpose`",
+            ),
+        ] {
+            assert_eq!(
+                verdict(&input),
+                Some(Said::BandRefused {
+                    agent: AID.to_owned(),
+                    tokens,
+                    handoff: handoff.clone(),
+                    what: what.to_owned()
+                })
+            );
+        }
+        let write = f.input(
+            "builder",
+            "Write",
+            json!({"file_path": handoff, "content": "x"}),
+        );
+        assert!(matches!(verdict(&write), Some(Said::Handoff(_))));
+        assert!(matches!(
+            verdict(&f.bash("builder", "CONTEXT_OK=\"the landing needs it\" make land")),
+            Some(Said::Escaped(_))
+        ));
+    }
+    f.transcript(AID, &[call(WRAP_UP_CEILING_TOKENS + 1)]);
+    for input in [
+        f.bash("builder", "make decide F=451 T=T1"),
+        f.input("builder", "Agent", review),
+        f.input("builder", "Read", json!({"file_path": "/t/x.rs"})),
+    ] {
+        assert!(matches!(verdict(&input), Some(Said::Refused { .. })));
+    }
+}
+
+/// The band's answers and records: a step passes recorded `wrap-up`, a refusal's text says the band, what was refused, what is
+/// still allowed and the handoff (451 T417).
+#[test]
+fn the_bands_answers_and_records() {
+    crate::shared::log::quiet();
+    let f = Fixture::new("band-answer", &[call(320_000)], None);
+    let ask = |input: Value| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input,
+        };
+        answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
+    };
+    assert!(ask(f.bash("builder", "make claims-owed")).is_empty());
+    let handoff = f.handoffs().join(format!("{AID}.md"));
+    let text = band_refusal(320_000, &handoff, "make quick");
+    assert_eq!(
+        ask(f.bash("builder", "make quick")),
+        vec![Answer::Refuse(text.clone())]
+    );
+    let kept = [
+        "BLOCKED: this builder's context is 320000 tokens, past the cap of 300000: in its wrap-up band, up to 340000",
+        "Refused: make quick.\nStill allowed:",
+        "make decide, plan-delta, plan-verdict, claims-triage, claims-owed, task-add, task-withdraw, builder-checks",
+        "git status or git diff",
+        "MODE 4: PLAN REVIEW",
+        &handoff.display().to_string(),
+        "for a fresh builder",
+        "CONTEXT_OK=\"<reason>\"",
+    ];
+    let missing: Vec<&str> = kept.into_iter().filter(|k| !text.contains(k)).collect();
+    assert_eq!(missing, Vec::<&str>::new(), "{text}");
 }
 
 #[test]
@@ -363,7 +515,7 @@ fn the_hook_entry_passes_the_main_session() {
 #[test]
 fn the_answers_and_their_records() {
     crate::shared::log::quiet();
-    let f = Fixture::new("answer", &[call(310_000)], None);
+    let f = Fixture::new("answer", &[call(350_000)], None);
     let ask = |input: Value| {
         let e = Event {
             name: "PreToolUse".to_owned(),
@@ -372,13 +524,13 @@ fn the_answers_and_their_records() {
         answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
     };
     let handoff = f.handoffs().join(format!("{AID}.md"));
-    let text = refusal(310_000, &handoff, false);
+    let text = refusal(350_000, &handoff, false);
     assert_eq!(
         ask(f.bash("builder", "make quick")),
         vec![Answer::Refuse(text.clone())]
     );
     assert!(text.contains(&handoff.display().to_string()));
-    assert!(text.contains("310000 tokens, past the cap of 300000"));
+    assert!(text.contains("350000 tokens, past the cap of 300000"));
     assert!(
         text.contains("Stop, and reply with that path") && text.contains("CONTEXT_OK=\"<reason>\"")
     );
@@ -644,6 +796,12 @@ fn context_ok_in_the_summary_escapes_a_resume() {
         json!({"to": "a0000000000000000", "summary": "x", "message": "x"}),
     );
     own["agent_type"] = json!("general-purpose");
+    // in its wrap-up band (451 T417) a resume is no stop point's step; past the ceiling the cap's own refusal
+    assert!(matches!(
+        verdict(&own),
+        Some(Said::BandRefused { what, .. }) if what == "a SendMessage call"
+    ));
+    f.transcript(AID, &[call(350_000)]);
     assert!(matches!(verdict(&own), Some(Said::Refused { .. })));
 }
 
@@ -682,6 +840,21 @@ fn a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff() {
     let text = refused(&ask(f.send(AID, "go on")));
     assert!(text.contains(&written.display().to_string()) && !text.contains("not written yet"));
     assert!(text.contains("Dispatch a fresh builder"), "{text}");
+    // 451 T352: a builder whose brief names its handoff: the brief's file, unwritten then written, before the agent-named one
+    f.transcript(
+        AID,
+        &[brief_row(&f.handoffs(), &["T05-build.md"]), call(310_000)],
+    );
+    let briefed = f.handoffs().join("T05-build.md");
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains(&written.display().to_string()), "{text}");
+    std::fs::write(&briefed, "built").unwrap();
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains(&briefed.display().to_string()) && !text.contains("not written yet"));
+    std::fs::remove_file(&written).unwrap();
+    std::fs::remove_file(&briefed).unwrap();
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains(&briefed.display().to_string()) && text.contains("not written yet"));
     // landed: the next task's brief
     f.transcript(AID, &[call(120_000)]);
     f.tasks("- [x] T05 a\n");
@@ -703,7 +876,7 @@ fn a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff() {
 #[test]
 fn a_resume_escaped_then_permitted_lets_the_builders_next_call_through() {
     crate::shared::log::quiet();
-    let f = resumed("r-permit", 310_000, "451 T05: build it");
+    let f = resumed("r-permit", 350_000, "451 T05: build it");
     assert!(crate::shared::tool::ask(
         Path::new("/"),
         "git",
@@ -815,7 +988,7 @@ impl Fixture {
 #[test]
 fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
     crate::shared::log::quiet();
-    let f = Fixture::new("mirror", &[call(310_000)], Some("T60"));
+    let f = Fixture::new("mirror", &[call(350_000)], Some("T60"));
     f.briefed("T60");
     let mirror = f.mirror(Some(&f.clone()));
     let from = |mut input: Value| {
@@ -842,7 +1015,7 @@ fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
         .join(format!("T60-{AID}.md"));
     assert_eq!(
         ask(f.bash("builder", "make quick")),
-        vec![Answer::Refuse(refusal(310_000, &handoff, false))]
+        vec![Answer::Refuse(refusal(350_000, &handoff, false))]
     );
     assert!(ask(write(&handoff)).is_empty());
     assert!(matches!(ask(write(&stray)).as_slice(), [Answer::Refuse(_)]));

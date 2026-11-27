@@ -13,6 +13,9 @@ cadence-days: 14
 covers: CAP_TOKENS
 covers: CONTEXT_CAP_TOKENS
 covers: rust/guard/src/guards/context_cap_hooks.rs
+covers: WRAP_UP_CEILING_TOKENS
+covers: CEILING_TOKENS
+covers: rust/guard/src/guards/context_cap_hooks/band.rs
 ---
 
 451 T12's guard stops a builder at `CAP_TOKENS` (300,000, a GUESS knob in spec FR-006) and has it write a handoff under
@@ -27,6 +30,14 @@ The second audit of 2026-11-25 closed the talk's item 12 (`docs/process-decision
 builders stay, and briefs are sized"): the cap stays at 300k on the figures above, and the handoffs are met at the brief instead -
 what predicts one is the brief's jobs and files, not the cap (`builder-brief-sizing.md`, the SIZING rule of
 `scripts/container/builder-brief.md`).
+
+THE WRAP-UP BAND (451 T417, 2026-11-27; `docs/process-decisions.md`, the cap's entry, "Amended 2026-11-27"): from the cap to
+`WRAP_UP_CEILING_TOKENS` (340,000, a GUESS knob, `context_cap_hooks/band.rs`) a builder may still run its stop point's own steps -
+the stop point's make targets, git status and diff, a read, the one plan review's dispatch and its handoff's Write (which since
+451 T352 takes the file its brief names) - each pass logged under the guard's `wrap-up` rule, all else refused; past the ceiling
+the guard is as before. Its own falsifier: a builder in the band for more than a few turns (the `wrap-up` passes of one agent in
+`make guard-log GUARD=context-cap`), or a fresh builder measured cheaper than the band for the same remaining steps - then the
+band narrows or goes. Of the night it answers, 2 of 3 capped builders (T315's, T325's) had only such steps left.
 
 The next audit re-measures from `make task-time` once its per-turn data covers a week of builders, and adds the three-way
 comparison's arm (b) (builders let grow), whose first figures are those above.

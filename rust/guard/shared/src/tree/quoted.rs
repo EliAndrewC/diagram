@@ -122,6 +122,11 @@ pub(super) fn held(quote: char, body: &str) -> String {
     word
 }
 
+/// A segment as its command wrote it, for a message (451 T417): every stand-in shown as the character it holds, quotes too.
+pub(super) fn shown(seg: &str) -> String {
+    seg.chars().map(|c| stood_for(c).unwrap_or(c)).collect()
+}
+
 /// A word as the shell reads it where the walk reads a place (451 T83): a held body's characters back and its quotes off.
 pub(super) fn unheld(word: &str) -> std::borrow::Cow<'_, str> {
     if !word.chars().any(|c| stood_for(c).is_some()) {

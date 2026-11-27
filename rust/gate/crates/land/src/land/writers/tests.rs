@@ -177,6 +177,14 @@ fn the_first_pass_names_the_changes_and_an_open_handoff_naming_the_clone() {
     put(&handoffs, "T7-a4.md", &format!("work in {root}\n"));
     put(&handoffs, "notes.md", &format!("work in {root}\n"));
     put(&handoffs, "T2-a5.txt", &format!("work in {root}\n"));
+    // ...nor a finished handoff under a name a brief gives (451 T352): a build half's, a bundle's build half's, a done one's
+    put(&handoffs, "T2-build.md", &format!("work in {root}\n"));
+    put(&handoffs, "T2-T7-build.md", &format!("work in {root}\n"));
+    put(
+        &handoffs,
+        "done-pending-T2.md",
+        &format!("work in {root}\n"),
+    );
     // ...nor one two days old
     put(&handoffs, "T2-a6.md", &format!("work in {root}\n"));
     let old = std::time::SystemTime::now() - std::time::Duration::from_secs(2 * 24 * 3600);
@@ -203,6 +211,9 @@ fn the_first_pass_names_the_changes_and_an_open_handoff_naming_the_clone() {
         "notes.md",
         "T2-a5.txt",
         "T2-a6.md",
+        "T2-build.md",
+        "T2-T7-build.md",
+        "done-pending-T2.md",
     ] {
         assert!(!err.contains(not), "{not} in:\n{err}");
     }
@@ -251,6 +262,9 @@ fn the_helpers_read_paths_tasks_and_git_s_words() {
         "/h/T12.md",
         "/h/p3-x.md",
         "/h/T1-x",
+        "/h/T12-build.md",
+        "/h/T12-T13-build.md",
+        "/h/done-pending-T12.md",
     ] {
         assert_eq!(super::handoff_task(Path::new(not)), None, "{not}");
     }

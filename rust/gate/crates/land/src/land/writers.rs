@@ -190,12 +190,18 @@ fn first_line(out: &str, what: &str, rc: i32) -> String {
     }
 }
 
-/// A handoff's task: its file name's `T<n>` before the first `-`.
+/// A handoff's task: its file name's `T<n>` before the first `-`. A FINISHED handoff is none (451 T352): a build half's
+/// `<task>-build.md` (a bundle's `<a>-<b>-build.md`), which `make builder-brief` names for a builder that ended as briefed and its
+/// closing half reads - its writer has stopped, so it names no writer in the clone; `done-pending-<task>.md`, which a brief names for
+/// a builder that stops early, opens with no `T<n>` and is none already. Open is the context cap's own `T<n>-<agent id>.md`.
 fn handoff_task(p: &Path) -> Option<String> {
     if p.extension().is_none_or(|e| e != "md") {
         return None;
     }
     let name = p.file_name()?.to_string_lossy().into_owned();
+    if name.ends_with("-build.md") {
+        return None;
+    }
     let task = name.split('-').next()?;
     let digits = task.strip_prefix('T')?;
     let body = digits.trim_end_matches(|c: char| c.is_ascii_lowercase());

@@ -40,10 +40,10 @@ run() {  # run <who> <tool> <tool_input json>: OUT and RC
 }
 bash_in() { jq -nc --arg c "$1" '{command: $c}'; }
 
-echo "1. a builder past the cap is refused, every tool, naming its handoff and the next step"
-context 310000
+echo "1. a builder past the wrap-up band's ceiling is refused, every tool, naming its handoff and the next step"
+context 350000
 run builder Bash "$(bash_in 'make quick')"
-[ "$RC" -eq 2 ] && seen OUT -q '310000 tokens, past the cap of 300000' && ok "a Bash call past the cap is refused" || no "the call passed" "(rc=$RC: $OUT)"
+[ "$RC" -eq 2 ] && seen OUT -q '350000 tokens, past the cap of 300000' && ok "a Bash call past the cap is refused" || no "the call passed" "(rc=$RC: $OUT)"
 seen OUT -qF "$H" && seen OUT -q 'Stop, and reply with that path' && ok "...naming the handoff file and the next step" || no "the refusal names no handoff" "($OUT)"
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && grep -lq 'past-cap' "$GUARD_LOG_DIR"/* && ok "...and the firing is logged" || no "no guard-log record"
 run builder Edit "$(jq -nc --arg f "$C/x.rs" '{file_path: $f, old_string: "a", new_string: "b"}')"
@@ -161,12 +161,58 @@ run main Agent "$(agent_in impl-drift)"
 [ "$RC" -eq 0 ] && ok "the main session's dispatch passes" || no "the main session refused" "(rc=$RC: $OUT)"
 echo "9. the cap's handoff names the split for a code builder, and only for one"
 rm -f "$C/.git/l7r-guard-permits.jsonl"  # case 7's permit would let the call through
-brief "$CODE" 310000
+brief "$CODE" 350000
 run builder Bash "$(bash_in 'make quick')"
 [ "$RC" -eq 2 ] && seen OUT -q 'does not run the claims round' && ok "a code builder past the cap is told it hands off at its stop point" || no "the handoff names no split" "(rc=$RC: $OUT)"
-brief 'Run the claims round for feature 449 task T431' 310000
+brief 'Run the claims round for feature 449 task T431' 350000
 run builder Bash "$(bash_in 'make quick')"
 [ "$RC" -eq 2 ] && ! seen OUT -q 'claims round' && ok "...and a claims-round dispatch past it is not" || no "the claims round's handoff" "(rc=$RC: $OUT)"
+
+echo "10. the wrap-up band (451 T417): from the cap to 340000 the stop point's steps pass, recorded; all else refused, saying what is left"
+HB="$C/.git/l7r-handoffs/T05-build.md"
+BRIEFED="$CODE"$'\nEND at a handoff, '"$HB"$', by about 200k.'
+for tokens in 300001 340000; do
+  brief "$BRIEFED" "$tokens"
+  for cmd in "cd $C && export SPECIFY_FEATURE=451-x && make decide F=451 T=T05" 'make plan-delta F=451' 'make claims-triage' \
+      'make claims-owed' 'make task-add F=451 TITLE="found: a gap; see T05"' 'make task-withdraw F=451 T=T9 WHY="a duplicate"' \
+      'make plan-verdict F=451 FILE=/tmp/v.json' 'make builder-checks CRATE="rust/guard" 2>&1 | tail -20' 'git -C /t status --short' 'git diff'; do
+    run builder Bash "$(bash_in "$cmd")"
+    [ "$RC" -eq 0 ] && ok "at $tokens: $cmd passes" || no "at $tokens: $cmd refused" "(rc=$RC: $OUT)"
+  done
+  for tool in Read Grep; do
+    run builder "$tool" '{"file_path": "/t/x.rs", "pattern": "x"}'
+    [ "$RC" -eq 0 ] && ok "at $tokens: a $tool passes" || no "at $tokens: a $tool refused" "(rc=$RC: $OUT)"
+  done
+  run builder Agent "$(agent_in spec-fidelity 'MODE 4: PLAN REVIEW of 2 changed block(s) of feature 451')"
+  [ "$RC" -eq 0 ] && ok "at $tokens: the plan review's dispatch passes" || no "at $tokens: the plan review refused" "(rc=$RC: $OUT)"
+  for cmd in 'make quick' 'make land F=451 T=T05' 'cargo build' 'make decide F=451 T=T05 && rm -rf x' 'echo "make decide"' 'git commit -m x'; do
+    run builder Bash "$(bash_in "$cmd")"
+    [ "$RC" -eq 2 ] && seen OUT -q "in its wrap-up band, up to 340000" && seen OUT -q 'Still allowed: make decide, plan-delta' && seen OUT -qF "$HB" \
+      && ok "at $tokens: $cmd refused, naming the band, what is left and the handoff" || no "at $tokens: $cmd" "(rc=$RC: $OUT)"
+  done
+  for call in "Edit|$(jq -nc --arg f "$C/x.rs" '{file_path: $f, old_string: "a", new_string: "b"}')" \
+      "Write|$(jq -nc --arg f "$C/x.rs" '{file_path: $f, content: "b"}')" \
+      "Agent|$(agent_in general-purpose 'build T06')" "Agent|$(agent_in claims-triage)" "SendMessage|$(send 'go on')"; do
+    run builder "${call%%|*}" "${call#*|}"
+    [ "$RC" -eq 2 ] && seen OUT -q 'wrap-up band' && ok "at $tokens: a ${call%%|*} ($(cut -c1-40 <<<"${call#*|}")) refused" || no "at $tokens: ${call%%|*} passed" "(rc=$RC: $OUT)"
+  done
+done
+grep -lq '"wrap-up"' "$GUARD_LOG_DIR"/* && grep -lq 'wrap-up-refused' "$GUARD_LOG_DIR"/* && ok "the band's passes and refusals are recorded" || no "the band left no record"
+brief "$BRIEFED" 340001
+run builder Bash "$(bash_in 'make decide F=451 T=T05')"
+[ "$RC" -eq 2 ] && seen OUT -q 'Stop, and reply with that path' && ! seen OUT -q 'wrap-up band' && ok "past the ceiling (340001) make decide is refused as before" || no "past the ceiling" "(rc=$RC: $OUT)"
+
+echo "11. the handoff the brief names (451 T352): its Write passes past the ceiling, through the whole chain"
+brief "$BRIEFED" 350000
+run builder Bash "$(bash_in 'make quick')"
+[ "$RC" -eq 2 ] && seen OUT -qF "$HB" && ok "the refusal names the brief's handoff" || no "the refusal's handoff" "(rc=$RC: $OUT)"
+for f in "$HB" "$C/.git/l7r-handoffs/done-pending-T05.md"; do
+  [ "$f" = "$HB" ] || brief "$BRIEFED"$'\nIf your context passes 200k, stop with a handoff at '"$f." 350000
+  OUT=$(payload builder Write "$(jq -nc --arg f "$f" '{file_path: $f, content: "built; left: the closing half"}')" | "$REPO/scripts/hooks/l7r-guard.sh" PreToolUse 2>&1); RC=$?
+  [ "$RC" -eq 0 ] && ok "the Write of $(basename "$f") passes every guard of the chain" || no "the briefed handoff refused" "(rc=$RC: $OUT)"
+done
+run builder Write "$(jq -nc --arg f "$C/.git/l7r-handoffs/T05-other.md" '{file_path: $f, content: "x"}')"
+[ "$RC" -eq 2 ] && ok "a handoff-directory file the brief does not name stays refused" || no "an unnamed file passed" "(rc=$RC)"
 
 echo
 echo "context-cap-hooks: $PASS passed, $FAIL failed"

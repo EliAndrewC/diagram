@@ -219,15 +219,21 @@ fn the_guard_holds_a_code_builder_alone() {
     // an unmarked builder passes
     f.brief(&user(&json!("Build feature 449 task T427")), 120_000);
     assert_eq!(verdict(&claims), None);
-    // past the cap: the cap's refusal, naming the split for a code builder only
+    // in the wrap-up band (451 T417): a claims dispatch is no stop point's step, refused naming it
     f.brief(&user(&json!(CODE)), 310_000);
+    assert!(matches!(
+        verdict(&claims),
+        Some(Said::BandRefused { what, .. }) if what == "a dispatch of `claims-triage`"
+    ));
+    // past the ceiling: the cap's refusal, naming the split for a code builder only
+    f.brief(&user(&json!(CODE)), 350_000);
     assert!(matches!(
         verdict(&claims),
         Some(Said::Refused { code: true, .. })
     ));
     f.brief(
         &user(&json!("Run the claims round for feature 449 task T431")),
-        310_000,
+        350_000,
     );
     assert!(matches!(
         verdict(&claims),

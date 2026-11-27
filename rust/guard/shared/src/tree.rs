@@ -764,6 +764,23 @@ fn moved(env: &mut Env, pwd: Option<String>, oldpwd: Option<String>) {
     }
 }
 
+/// Every simple command `cmd` runs, as the walk splits it (451 T417, the context cap's wrap-up band): heredoc bodies carried out and
+/// quoted strings stood in for, so neither a body's lines nor a quoted `make decide` is a command; a subshell's and a `$(...)`'s
+/// commands among them. Each is its segment's text, its words as the walk reads them.
+#[must_use]
+pub fn commands(cmd: &str) -> Vec<String> {
+    let mut programs = Vec::new();
+    let carried = carry_heredocs(cmd, &mut programs);
+    let (text, _) = sanitize(&carried, programs);
+    seg_texts(&segments(&text, &mut Vec::new()))
+}
+
+/// One of [`commands`] as its command wrote it, for a message: the quoted text its stand-ins hold shown again (451 T417).
+#[must_use]
+pub fn shown(command: &str) -> String {
+    quoted::shown(command)
+}
+
 fn seg_texts(pieces: &[Piece]) -> Vec<String> {
     pieces
         .iter()

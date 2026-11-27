@@ -978,3 +978,5 @@ pub(super) fn answers_in_time(name: &str, var: &str, secs: u64) -> (bool, String
 }
 
 mod quotes;
+
+mod commands;

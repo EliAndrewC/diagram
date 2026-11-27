@@ -442,3 +442,10 @@ checking" (copied here from that record by the builder of T308's remainder, who 
 And, when the trial was adopted, on whether round two runs under it and at what count (the same record):
 
 > Yes, I agree that round two should run under two-tier checking as described. And yes, I agree that we should start it at 3 builders with a batch of 4 if the first goes well.
+
+## 2026-11-27: a builder at the context cap may finish its stop point (451 T417)
+
+The GM, 2026-11-27, on the context cap refusing a builder everything but its handoff (copied here from T417's task line by its
+builder, who did not hear them):
+
+> Does it make sense to enforce such an abrupt cutoff?  Like I understand wanting to hand off to a new builder, but if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?

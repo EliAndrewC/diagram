@@ -82,22 +82,32 @@ fn typed(v: &Value) -> Option<String> {
 /// Whether the builder whose own transcript is `own` is a code builder: its brief holds a line opening `STOP POINT`, and is no
 /// claims round's. False where the transcript or its first row will not read.
 pub(super) fn code_builder(own: &Path) -> bool {
+    is_code(&brief(own))
+}
+
+/// The brief of the builder whose own transcript is `own`: its first row's text, the prompt it was dispatched with; empty where it
+/// will not read. The cap's exit reads the handoff files it names from it too (451 T352, [`super::named`]).
+pub(super) fn brief(own: &Path) -> String {
     let Ok(file) = File::open(own) else {
-        return false;
+        return String::new();
     };
     let mut first = String::new();
     let _ = BufReader::new(file).read_line(&mut first);
     let row: Value = serde_json::from_str(&first).unwrap_or(Value::Null);
     let content = &row["message"]["content"];
-    let brief = content.as_str().map_or_else(
-        || {
+    content
+        .as_str()
+        .or_else(|| {
             content
                 .as_array()
                 .and_then(|bs| bs.iter().find_map(|b| b["text"].as_str()))
-                .unwrap_or_default()
-        },
-        |t| t,
-    );
+        })
+        .unwrap_or_default()
+        .to_owned()
+}
+
+/// Whether `brief` is a code builder's: a line opening `STOP POINT`, and no claims round's.
+pub(super) fn is_code(brief: &str) -> bool {
     !brief.trim_start().starts_with("Run the claims round")
         && brief
             .lines()

@@ -398,3 +398,9 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T426 [perf] a slot-wait taken on a SCRATCH slot directory (L7R_BUILD_SLOT_DIR set away from ~/.cache/l7r-build-slots, as T347's lane-wait.sh and T355's lint-wait.sh set it) is written to the event log like a real one and booked by make task-time as waiting on a build slot: from 2026-11-27 00:20Z to 03:30Z 221.9 of T367's 283.5 s of slot-wait were T355's four scripted 60 s holds, which T367's record and T420's brief read as builds waiting after a dependency's edit; mark the line (its slot directory not the default) and leave it out of the readers' waiting (rust/gate/crates/rustc/src/rustc/slot.rs around_of, the task-time and where-time readers) (451 T420's record, dev/measurements/2026-11-27/slot-waits/results.md)
       research: rendering
+- [ ] T427 the context cap's wrap-up band lets a redirect write any file (found by T417's plan review, 2026-11-26): rust/guard/src/guards/context_cap_hooks/band.rs judges a Bash command's programs and make targets but not its redirects, so in the band `tail -n 0 x > rust/guard/src/a.rs` or `grep '' a > b.rs` writes a source file the band refuses as an Edit or Write - refuse in the band a redirect whose target is outside /tmp and the scratchpad (the walk's write targets, shared::tree::walk, already place them), a suite case each
+      research: rendering
+- [ ] T428 the resume refusal's last line is stale inside the wrap-up band (found by T417, 2026-11-26): rust/guard/src/guards/context_cap_hooks.rs resume_refusal says a builder resumed past the cap is 'still refused every call but its handoff's until the session grants it an hour', but since 451 T417 a builder between CONTEXT_CAP_TOKENS and WRAP_UP_CEILING_TOKENS may run its stop point's steps - reword it (one message-check owed)
+      research: rendering
+- [x] T429 x Withdrawn 2026-11-27: filed by mistake, a probe of task-add with no content
+      research: rendering
