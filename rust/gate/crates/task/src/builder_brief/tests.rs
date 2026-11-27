@@ -143,8 +143,14 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     let ask = |a: &[&str]| {
         let r = run(&words(a), &root, &e, "");
         assert_eq!(r.code, 0, "{}", r.stderr);
-        // shorter than the block `agent-prefix-hooks` refuses a repeat of (its `SHARED`, 2,000 characters)
-        let n = r.stdout.chars().count();
+        // shorter than the block `agent-prefix-hooks` refuses a repeat of (its `SHARED`, 2,000 characters), counted with the
+        // fixture's temp directory read as the clones directory a real brief names: the fixture's paths under `TempDir`'s own
+        // subdirectory (462 T371) are longer than a real tree's, which is not what the cap is about
+        let n = r
+            .stdout
+            .replace(&*dir.to_string_lossy(), "/diagram/.clones")
+            .chars()
+            .count();
         assert!(n < 2000, "{n}");
         // `context_cap_hooks/split.rs` knows a code builder by this line
         assert!(r.stdout.lines().any(|l| l.starts_with("STOP POINT (")),);

@@ -201,7 +201,8 @@ pub fn shell_hits(cmd: &str, start: &str, home: &str) -> Vec<Hit> {
         let Some(at) = target.path.as_deref() else {
             continue;
         };
-        let seg = target.segment.as_str();
+        // the segment from its command on, whole: `segment` is cut at 120 characters, which lost a long `git mv`'s destination (462 T371)
+        let seg = target.head.as_str();
         // the walk lands a `git mv` where git runs; its destination is its last word, from there
         let path = if GIT_MV.is_match(seg).unwrap_or(false) {
             let last = seg.split_whitespace().last().unwrap_or_default();

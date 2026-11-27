@@ -258,3 +258,44 @@ fn a_directory_beside_the_binary_is_emptied_for_each_process() {
     );
     std::fs::remove_dir_all(&again).unwrap();
 }
+
+/// THE HELPER'S OWN SUBDIRECTORY (feature 462 T371, lever B of 451 T365): a process's directories go under `<temp dir>/l7r-tmp`, and its
+/// sweep lists that alone - so a dead process's leftover there goes and one at the temp directory's top level is never read. Measured
+/// 2026-11-26: a listing of a `/tmp` of 5,443 entries was 14 to 16 ms, of a directory that never grew 0.06 ms
+/// (`dev/measurements/2026-11-26/tmp-clutter/t365-results.md`). The sweep runs once a process (T370), so a child process shows it.
+#[test]
+fn its_directories_and_its_sweep_stay_in_one_subdirectory() {
+    if let Some(note) = std::env::var_os("L7R_TEMPDIR_SUBDIR") {
+        let made = TempDir::new("tempdir-subdir").keep();
+        std::fs::write(note, made.display().to_string()).unwrap();
+        return;
+    }
+    let fixture = TempDir::new("tempdir-subdir-fixture");
+    let hours_ago = SystemTime::now() - Duration::from_secs(4 * 3600);
+    for gone in ["l7r-t-p99999991-0", "l7r-tmp/l7r-t-p99999991-0"] {
+        std::fs::create_dir_all(fixture.join(gone)).unwrap();
+        File::open(fixture.join(gone))
+            .unwrap()
+            .set_modified(hours_ago)
+            .unwrap();
+    }
+    let note = fixture.join("note");
+    let ran = Command::new(std::env::current_exe().unwrap())
+        .args([
+            "--exact",
+            "tempdir::tests::its_directories_and_its_sweep_stay_in_one_subdirectory",
+        ])
+        .env("TMPDIR", &*fixture)
+        .env("L7R_TEMPDIR_SUBDIR", &note)
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status()
+        .unwrap();
+    assert!(ran.success());
+    let made = PathBuf::from(std::fs::read_to_string(&note).unwrap());
+    assert_eq!(made.parent(), Some(fixture.join("l7r-tmp").as_path()));
+    assert!(made.is_dir());
+    // the top level is not listed: its leftover waits for the scratch sweep's /tmp rule (451 T374), not this one
+    assert!(fixture.join("l7r-t-p99999991-0").is_dir());
+    assert!(!fixture.join("l7r-tmp/l7r-t-p99999991-0").exists());
+}

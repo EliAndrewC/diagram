@@ -501,6 +501,9 @@ fn the_walk_judges_a_python_program_run_from_stdin() {
     assert!(!w.targets[0].segment.contains("make"));
     assert_eq!(w.targets[0].head, "env timeout 60 make x > out.log");
     assert_eq!(super::command_head("A=1 B=2"), "");
+    // 462 T371: the head is not cut - a `git -C <long path> worktree remove` keeps its verb past 120 characters
+    let deep = format!("git -C /{} worktree remove --force /x", "d/".repeat(70));
+    assert!(super::command_head(&deep).ends_with("worktree remove --force /x"));
     // the readers of a walk's paths (house style, make-only, the bench) see no stdin program, as before: house style's D11
     assert!(walk(writer, Some(&m), &m, h).targets.is_empty());
     assert!(hows(reader).is_empty());

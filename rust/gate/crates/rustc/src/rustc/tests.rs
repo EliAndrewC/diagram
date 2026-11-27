@@ -281,24 +281,25 @@ fn what_a_crate_s_tests_leave_in_their_tmpdir_fails_it_by_name_and_goes() {
     let (root, a, _) = two_crates();
     let world = world_with(
         &root,
-        "echo \"$TMPDIR\" > \"$(dirname \"$0\")/tmpdir\"\nexit 0",
+        // an empty `TempDir` subdirectory is not a leak (462 T371): every test process that makes a `TempDir` leaves one
+        "echo \"$TMPDIR\" > \"$(dirname \"$0\")/tmpdir\"; mkdir \"$TMPDIR/l7r-tmp\"\nexit 0",
     );
     let clean = check(&world, "test", &a, false);
     assert_eq!(clean.code, 0, "{}", clean.stderr);
     let used = std::fs::read_to_string(world.target.join("tmpdir")).unwrap();
-    let under = std::env::temp_dir().join("l7r-rust-tests-a-");
+    let under = std::env::temp_dir().join("l7r-tmp/l7r-rust-tests-a-");
     assert!(used.trim().starts_with(&under.display().to_string()));
     assert!(!Path::new(used.trim()).exists());
     let leaky = world_with(
         &root,
         // the process's shared directory is not a leak: the runner removes it with the run's directory
-        "mkdir \"$TMPDIR/l7r-leak-1\" \"$TMPDIR/l7r-test-scratch\"; touch \"$TMPDIR/l7r-leak-2\"\nexit 0",
+        "mkdir -p \"$TMPDIR/l7r-leak-1\" \"$TMPDIR/l7r-test-scratch\" \"$TMPDIR/l7r-tmp/l7r-leak-3\"; touch \"$TMPDIR/l7r-leak-2\"\nexit 0",
     );
     for cmd in ["test", "test-counters", "test-no-counters"] {
         let done = check(&leaky, cmd, &a, false);
         assert_eq!(done.code, 1, "{cmd}");
         assert!(done.stderr.contains(
-            "the tests left 2 entries in their TMPDIR, which they must remove: l7r-leak-1, l7r-leak-2"
+            "the tests left 3 entries in their TMPDIR, which they must remove: l7r-leak-1, l7r-leak-2, l7r-tmp/l7r-leak-3"
         ));
         assert!(done.stderr.contains("TempDir::new(tag)"));
     }

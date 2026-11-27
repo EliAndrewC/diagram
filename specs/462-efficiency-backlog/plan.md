@@ -2428,42 +2428,92 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T371 (<why: the finding or measurement that files it>)
+### T371 (lever B of 451 T365, `dev/measurements/2026-11-26/tmp-clutter/t365-results.md`: TempDir's sweep lists the whole temp directory)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `l7r_shared::tempdir::TempDir::new` makes its directory under `<temp dir>/l7r-tmp/` (the new `SUBDIR`) and its
+  once-a-process sweep (`sweep_dead`, T370) lists that subdirectory alone (`rust/guard/shared/src/tempdir.rs`). The two runners'
+  leak checks, which fail on anything a run leaves in its own `TMPDIR`, pass over an empty `l7r-tmp` and name what is inside one
+  as `l7r-tmp/<name>` (`rust/gate/crates/rustc/src/rustc/run.rs`'s `leak_checked`, `tests/hooks/hookrun.sh`'s LEAK line). By T365:
+  one listing of `/tmp` 14 to 16 ms (5,443 entries, 21.9 MB directory file), of a directory that never grew 0.06 ms + 0.41 ms each
+  1,000 entries, measured 2026-11-26 (a 300-call loop of the real helper, T365's `t365-loop-new.txt`), and the leak pin listed `/tmp`
+  once a crate run, 21.6 ms, measured 2026-11-26 (an `LD_PRELOAD` shim counting `opendir` of the temp directory,
+  `t365-shim-rust-test.txt`). After: see the performance checklist's item 5.
+- **Built here, found beside it**: `tree::command_head` no longer cuts a walk target's `head` at 120 characters. The cut hid a long
+  command's end from two guards: `builder_pool_hooks` read no `worktree remove` behind a `git -C <path> ` of 106 characters,
+  observed 2026-11-27, method: the failing test's message, its prefix counted with `wc -c`; and `parked::shell_hits` read a
+  `git mv`'s destination from `segment`, also cut at 120. Both tests failed once the fixtures' paths grew by `l7r-tmp/`; the parked
+  reader now reads `head`, and the context-cap band's message cuts its own copy at 120 as before. A guard now refuses a long command
+  it already refused short - no new rule, the same rule at any length.
+  One test only measured its fixture's path: `builder_brief::tests::each_kind_s_block_opens_with_its_marker_and_stays_short` counted
+  a block naming the fixture's tree, 2,024 characters against its 2,000 cap, observed 2026-11-27, method: the test's failing
+  message (`{n}`) in a `FRESH=1` run of `rust/gate/crates/task`; it now counts the block with the fixture's directory read as
+  `/diagram/.clones`. Not a defect: the block's length moved only with the fixture's path, which is about 91 characters to a pool
+  tree's 37 (`/diagram/.clones/diagram-backlog-t269`), observed 2026-11-27, method: both counted with `wc -c`; the command's code that
+  writes a real brief is unchanged.
+- **The leak checks pass over an empty `l7r-tmp` only**: every test process that makes a `TempDir` now leaves that one empty
+  directory in its run's `TMPDIR`, by design (it is never removed, `SUBDIR`'s comment says why); a run that leaves anything inside
+  it still fails, named `l7r-tmp/<name>` (pinned by the leak pin test's `l7r-tmp/l7r-leak-3`). It goes with the run's directory.
+- **How it leaves T377, T378 and T379** (their lines in tasks.md): T377's says "the alternative to T371, build one of the two", so
+  with this landed it is for the session to withdraw; T378's says "withdraw it when T371 or T377 lands"; T379's says "withdraw it
+  when T371 and T372 land", so it stays open while T372 (the hook suites' glob, untouched here) is. This task withdraws none.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the subdirectory and its sweep | `tempdir::tests::its_directories_and_its_sweep_stay_in_one_subdirectory` | n/a (no engine) | none | none |
+| the leak pin over it | `rustc::tests::what_a_crate_s_tests_leave_in_their_tmpdir_fails_it_by_name_and_goes` | n/a | none | none |
+| the head uncut | `tree::tests::the_walk_judges_a_python_program_run_from_stdin` | n/a | none | none |
 
 ### T371 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No `TempDir` listing reads `/tmp`'s top level: a process's one sweep reads only the helper's own
+   subdirectory, which holds only live and dead helper directories.
+2. **The constraints.** The coordinating session's brief for this task: measure before and after on a copy or a fixture, never
+   deleting outside one - this deletes nothing anywhere new; the leak pins (449 T101) keep failing a run that leaves anything but
+   the two known directories (the shared one, and `l7r-tmp` while empty), by name; the sweep's three-hour and dead-pid rule (the GM
+   2026-11-11) unchanged.
+3. **Where each comes from.** O: T365's measurement (above). G: 462's request.md (the disk tasks first); the before-and-after on a fixture is the brief's.
+   R: none - tooling, no research page.
+4. **Do they describe the world here?** Yes: `/tmp` held 5,434 top-level entries, measured 2026-11-27 (`ls -A /tmp | wc -l` at 17:43 EST).
+5. **The order.** After T370 (once a process, landed); before T377/T378 (withdrawn by it) and independent of T372.
+6. **The exits.** Green: the subdirectory test, the leak pin test and the head pin green, and the shim's count of `/tmp` listings
+   by the leak pin at 0. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The shim over `make rust-test CRATE=rust/gate/crates/task FRESH=1`: `l7r-rust`'s listings of `/tmp` 1 before
+   (T365) and 0 after.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The `head` cut is a defect by its outcome: a pool tree removable by hand, and a parked stage
+   movable into the phases unrefused, by any command longer than 120 characters.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `tree::command_head` cut every walk target's `head` at 120 characters, so `builder_pool_hooks` and `parked::shell_hits` passed a
+  long command they refuse at a short length: fixed here, pinned by the tree test above. observed 2026-11-27, method: `grep -rn
+  "\.head\b\|\.segment\b"` over `rust/` for every reader of a target's cut text - `gm_tree_hooks`, `gate_write_hooks` and
+  `make_only_hooks` read the program at its start, which no cut reached; `verdict.rs`, `gate_write_hooks` and `make_only_hooks`
+  show or key by `segment`, unchanged; `readme_hooks` handles the cut on purpose (its `SEGMENT_KEPT`); `builder_pool_hooks` (the
+  verb after `git -C <path>`) and `parked` (the last word) were the two that read past it.
+- The helper-form leftovers already at `/tmp`'s top level are no longer swept by any `TempDir`: one, an empty directory
+  (`l7r-guard-sweep-sweep-p2301309-0`), observed 2026-11-27, method: `ls -A /tmp` filtered to the helper's `l7r-<tag>-p<pid>-<seq>`
+  form. Not a defect: nothing a reader sees and no finding broken, so not filed; T374's wider `/tmp` rule takes it if the GM rules for it.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes (a `[perf]` task, 451 FR-013: the checks' and the builders' loop). Not an engine-speed task.
 
 ### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** The one `read_dir` of the temp directory a process's first `TempDir::new` makes (T365, section 1).
+2. **Removes work, or only moves it?** Removes it: the listing reads a small directory in place of `/tmp`'s 21.9 MB directory
+   file, measured 2026-11-26 (T365, `ls -ld /tmp`).
+3. **What do you expect it to save, and why?** By T365's estimate about 40 s a day at the leak pin (2,483 crate runs, one listing
+   each) and at most 7 s at `make static`'s self-tests, 14 to 16 ms a listing down to about 0.1 ms, measured 2026-11-26 (T365's
+   event-log count and timing loop, `t365-events-totals.txt`, `t365-loop-new.txt`).
+4. **How does the work grow with the settlement?** n/a; the listing grows with the subdirectory's live entries, not with `/tmp`'s.
+5. **What did the before and after show, and under what conditions?** BEFORE: `l7r-rust` listed `/tmp` once, 5,445 entries read, 21.6
+   ms, measured 2026-11-26 (T365's shim over `make rust-test CRATE=rust/gate/crates/task`). AFTER: `l7r-rust` listed `/tmp` 0 times,
+   and `/tmp/l7r-tmp` once, 3 entries read, 0.015 ms, with `/tmp` at 5,425 top-level entries and load 4.6 to 5.0, measured 2026-11-27
+   (T365's `t365-shim.c` built to the scratchpad, two `FRESH=1` runs of the same crate, the shim watching `/tmp`, then `/tmp/l7r-tmp`).
+   Counted listings of `/tmp` a crate run: 1 to 0, measured 2026-11-27 (the same two runs). Nothing was deleted outside a fixture.
+6. **Did any map move, and does it still keep the research?** No map is drawn by this code.
 
 
 ### T374 (<why: the finding or measurement that files it>)

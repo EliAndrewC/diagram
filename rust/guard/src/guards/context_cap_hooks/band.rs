@@ -122,7 +122,9 @@ fn bash(cmd: &str, at: &At) -> Band {
     if let Some(what) = redirect(cmd, at) {
         return Band::Refused(what);
     }
-    Band::Allowed(shown(&command_head(&cmds.join("; "))))
+    // the message's copy cut at 120 characters, as `command_head` cut every reader's before 462 T371
+    let head: String = command_head(&cmds.join("; ")).chars().take(120).collect();
+    Band::Allowed(shown(&head))
 }
 
 /// The first redirect of `cmd` landing neither under `/tmp` nor in the handoff, named for the refusal (451 T427); `2>&1` and

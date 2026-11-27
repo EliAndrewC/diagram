@@ -939,9 +939,11 @@ fn place(
 /// duration (451 T79).
 pub const HEAD_WRAPPERS: [&str; 11] = crate::spelled::WRAPPERS;
 
-/// A segment from its command on, cut at 120 characters: its leading `VAR=value` words dropped, among the wrappers too, which are
-/// kept (451 T90: T79's `L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... make rust-test` lost its `make` to the segment's cut and
-/// was refused as a shell write of `.` under a running gate, measured 2026-11-21).
+/// A segment from its command on, whole: its leading `VAR=value` words dropped, among the wrappers too, which are kept (451 T90:
+/// T79's `L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... make rust-test` lost its `make` to the segment's cut and was refused as a
+/// shell write of `.` under a running gate, measured 2026-11-21). NOT CUT (462 T371): at 120 characters, as it was, the builder-pool
+/// guard read no `worktree remove` behind a `git -C <path>` of 105 characters and the parked guard no `git mv` destination past the
+/// cut - found when `TempDir`'s fixture paths grew by its `l7r-tmp/` subdirectory; a message cuts its own copy.
 #[must_use]
 pub fn command_head(segment: &str) -> String {
     let mut kept: Vec<&str> = Vec::new();
@@ -957,7 +959,7 @@ pub fn command_head(segment: &str) -> String {
         rest = rest[w.len()..].trim_start();
     }
     kept.push(rest);
-    kept.join(" ").trim().chars().take(120).collect()
+    kept.join(" ").trim().to_owned()
 }
 
 /// `os.path.realpath`: a path that need not exist, its existing part's symlinks resolved.

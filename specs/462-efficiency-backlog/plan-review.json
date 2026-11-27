@@ -102,6 +102,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T371 (lever B of 451 T365, `dev/measurements/2026-11-26/tmp-clutter/t365-results.md`: TempDir's sweep lists the whole temp directory)": {
+   "sha256": "7542c731c048596dcbb087d984e478f638c8b0a24433fac91c88aa658f94a73c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Approach (checklist part A)": {
+   "sha256": "0fb4583e4f3c7c8f8bb0c1c5fa13fd295b5d3f29bf0c5d2c0dda0fffdc436022",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "ff082ee49644dc1afc657a545d8b98698c06a07f6252d1b365a6f91b14213e41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -263,6 +281,111 @@
      "why": "Byte-identical to the text round 1 judged (diff of earlier.md against blocks.md, block markers aside: the only change is the Summary paragraph); round 1 required nothing of these blocks, and they move unchanged under FR-002."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T371 (lever B of 451 T365, `dev/measurements/2026-11-26/tmp-clutter/t365-results.md`: TempDir's sweep lists the whole temp directory)",
+    "### T371 Approach (checklist part A)",
+    "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T371-subdir",
+     "summary": "TempDir::new makes its directories under <temp dir>/l7r-tmp/ (SUBDIR) and its once-a-process sweep_dead lists that subdirectory alone, not /tmp's top level.",
+     "class": "within",
+     "why": "This is the task's own lever (451 T365 lever B), moved to 462 as a disk/tmp-clutter task, which the GM asked to rank ahead of most of 462 (request.md, 2026-11-27, on the order of 462's work). The three-hour and dead-pid sweep rule stays as it was."
+    },
+    {
+     "id": "T371-leak-pin",
+     "summary": "The two runners' leak checks (rustc run.rs leak_checked, hookrun.sh LEAK line) let one empty l7r-tmp through and name anything inside it as l7r-tmp/<name>. The empty directory is left in each run's TMPDIR on purpose and goes when that directory goes.",
+     "class": "within",
+     "why": "The leak pins keep their job: a run that leaves anything still fails, by name (pinned by l7r-tmp/l7r-leak-3). The only new pass is the empty container this task creates by design, so nothing the leak checks were meant to catch is excused."
+    },
+    {
+     "id": "T371-head-uncut",
+     "summary": "Found beside the task: tree::command_head no longer cuts a walk target's head at 120 characters, so builder_pool_hooks and parked::shell_hits refuse a long command they already refuse when it is short. The context-cap band's message still cuts its own copy at 120.",
+     "class": "within",
+     "why": "This fixes a defect found during the task: a guard passed bad work (a pool tree could be removed by hand, or a parked stage moved, by any command over 120 characters). The standing fix-as-we-go rule (constitution XIV) covers it. It adds no new rule, only the same rule at any length. The search space for the other readers of the cut text is stated (grep over rust/ for .head and .segment), and each hit is accounted for."
+    },
+    {
+     "id": "T371-brief-fixture",
+     "summary": "builder_brief's block-length test now counts the block with the fixture's directory read as /diagram/.clones, because the fixture path (about 91 characters) pushed the block to 2,024 against its 2,000 cap, while a real pool tree's path is about 37 characters. The code that writes a real brief is unchanged.",
+     "class": "within",
+     "why": "The test still enforces the 2,000 cap on a block as a real pool tree would render it. Only the fixture's artificial path length is taken out, so this is not a check loosened on real work. Lengths are observed, with the method stated."
+    },
+    {
+     "id": "T371-leftover-toplevel",
+     "summary": "Helper-form directories already at /tmp's top level are no longer swept by any TempDir. One empty directory was measured. It is left, not filed, for T374's wider /tmp rule.",
+     "class": "within",
+     "why": "The measured residue is one empty directory (observed 2026-11-27, ls -A /tmp filtered to the helper form). New code makes no more of them, so the residue cannot grow, and no reader sees it and no finding breaks. That makes it a difference, not a defect (XIV, GM 2026-11-19), and leaving a non-defect as it is stays within what was asked. The disk-cleanup purpose is not gutted, because the task removes the top-level listing and leaves nothing that grows."
+    },
+    {
+     "id": "T371-siblings",
+     "summary": "T377, T378 and T379 are left open. Withdrawing T377 and T378 is for the session once this lands, and T379 waits on T372.",
+     "class": "within",
+     "why": "The task withdraws nothing and changes no other task's scope. It only records how those tasks' own conditions read after it lands."
+    },
+    {
+     "id": "T371-order-perf",
+     "summary": "T371 runs after T370 and before T377/T378, independent of T372, as a [perf] task under 451 FR-013 (performance first).",
+     "class": "within",
+     "why": "Ordering inside the backlog, consistent with FR-013 and with the GM's ranking of disk work ahead of most of 462 (and behind orchestration where builders can be kept busy with it). No requested work is dropped."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T371": {
+   "section_sha256": "3f8c59165e591b359d026c0c48a308c1ca5b9c116ffbad2658dec4a8c8f71a8c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T371-subdir",
+     "summary": "TempDir::new makes its directories under <temp dir>/l7r-tmp/ (SUBDIR) and its once-a-process sweep_dead lists that subdirectory alone, not /tmp's top level.",
+     "class": "within",
+     "why": "This is the task's own lever (451 T365 lever B), moved to 462 as a disk/tmp-clutter task, which the GM asked to rank ahead of most of 462 (request.md, 2026-11-27, on the order of 462's work). The three-hour and dead-pid sweep rule stays as it was."
+    },
+    {
+     "id": "T371-leak-pin",
+     "summary": "The two runners' leak checks (rustc run.rs leak_checked, hookrun.sh LEAK line) let one empty l7r-tmp through and name anything inside it as l7r-tmp/<name>. The empty directory is left in each run's TMPDIR on purpose and goes when that directory goes.",
+     "class": "within",
+     "why": "The leak pins keep their job: a run that leaves anything still fails, by name (pinned by l7r-tmp/l7r-leak-3). The only new pass is the empty container this task creates by design, so nothing the leak checks were meant to catch is excused."
+    },
+    {
+     "id": "T371-head-uncut",
+     "summary": "Found beside the task: tree::command_head no longer cuts a walk target's head at 120 characters, so builder_pool_hooks and parked::shell_hits refuse a long command they already refuse when it is short. The context-cap band's message still cuts its own copy at 120.",
+     "class": "within",
+     "why": "This fixes a defect found during the task: a guard passed bad work (a pool tree could be removed by hand, or a parked stage moved, by any command over 120 characters). The standing fix-as-we-go rule (constitution XIV) covers it. It adds no new rule, only the same rule at any length. The search space for the other readers of the cut text is stated (grep over rust/ for .head and .segment), and each hit is accounted for."
+    },
+    {
+     "id": "T371-brief-fixture",
+     "summary": "builder_brief's block-length test now counts the block with the fixture's directory read as /diagram/.clones, because the fixture path (about 91 characters) pushed the block to 2,024 against its 2,000 cap, while a real pool tree's path is about 37 characters. The code that writes a real brief is unchanged.",
+     "class": "within",
+     "why": "The test still enforces the 2,000 cap on a block as a real pool tree would render it. Only the fixture's artificial path length is taken out, so this is not a check loosened on real work. Lengths are observed, with the method stated."
+    },
+    {
+     "id": "T371-leftover-toplevel",
+     "summary": "Helper-form directories already at /tmp's top level are no longer swept by any TempDir. One empty directory was measured. It is left, not filed, for T374's wider /tmp rule.",
+     "class": "within",
+     "why": "The measured residue is one empty directory (observed 2026-11-27, ls -A /tmp filtered to the helper form). New code makes no more of them, so the residue cannot grow, and no reader sees it and no finding breaks. That makes it a difference, not a defect (XIV, GM 2026-11-19), and leaving a non-defect as it is stays within what was asked. The disk-cleanup purpose is not gutted, because the task removes the top-level listing and leaves nothing that grows."
+    },
+    {
+     "id": "T371-siblings",
+     "summary": "T377, T378 and T379 are left open. Withdrawing T377 and T378 is for the session once this lands, and T379 waits on T372.",
+     "class": "within",
+     "why": "The task withdraws nothing and changes no other task's scope. It only records how those tasks' own conditions read after it lands."
+    },
+    {
+     "id": "T371-order-perf",
+     "summary": "T371 runs after T370 and before T377/T378, independent of T372, as a [perf] task under 451 FR-013 (performance first).",
+     "class": "within",
+     "why": "Ordering inside the backlog, consistent with FR-013 and with the GM's ranking of disk work ahead of most of 462 (and behind orchestration where builders can be kept busy with it). No requested work is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

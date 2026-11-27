@@ -173,8 +173,9 @@ pub(super) fn cargo_small(world: &World, args: &[&str], manifest: &Path, after: 
 /// leaves in it fails the crate, by name, with the fix. The checks and tests that never removed their scratch directories left about
 /// 329,000 of them, roughly 126 GB, in the GM's `/tmp` (2026-11-11).
 ///
-/// The directory is under the temp directory itself, so a fixture check that knows a test by its `/tmp/` path still does. A SIGKILL
-/// cannot be caught, so a killed test's `Drop` never runs: this runner holds the directory in a `TempDir` and removes it whole after
+/// The directory is under the temp directory (in `TempDir`'s own subdirectory since 462 T371), so a fixture check that knows a test by
+/// its `/tmp/` path still does. A SIGKILL cannot be caught, so a killed test's `Drop` never runs: this runner holds the directory in a
+/// `TempDir` and removes it whole after
 /// every run, so a killed test's leftovers go too (only a SIGKILL of the runner itself leaves its one directory). A process the tests
 /// left running, found by that `TMPDIR` in its environment, fails the crate too, named, and is ended (`left.rs`, 451 T363).
 pub(super) fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
@@ -184,14 +185,25 @@ pub(super) fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ra
         .unwrap_or_default();
     let tmp = TempDir::new(&format!("rust-tests-{}", name.to_string_lossy()));
     let mut done = go(&tmp);
-    let mut left: Vec<String> = std::fs::read_dir(&tmp)
+    let names = |dir: &Path| -> Vec<String> {
+        std::fs::read_dir(dir)
+            .into_iter()
+            .flatten()
+            .flatten()
+            .map(|e| e.file_name().to_string_lossy().into_owned())
+            .collect()
+    };
+    let subdir = l7r_shared::tempdir::SUBDIR;
+    let mut left: Vec<String> = names(&tmp)
         .into_iter()
-        .flatten()
-        .flatten()
-        .map(|e| e.file_name().to_string_lossy().into_owned())
-        // the one directory a whole test process shares (`beside_binary`), which nothing in the process outlives to remove: it goes
-        // with this run's directory on the next line
-        .filter(|n| n != l7r_shared::tempdir::SHARED)
+        // the one directory a whole test process shares (`beside_binary`), which nothing in the process outlives to remove, and the
+        // tests' `TempDir`s' own subdirectory (462 T371), each named by what is inside it: both go with this run's directory below
+        .filter(|n| n != l7r_shared::tempdir::SHARED && n != subdir)
+        .chain(
+            names(&tmp.join(subdir))
+                .into_iter()
+                .map(|n| format!("{subdir}/{n}")),
+        )
         .collect();
     // a process the tests left running, found by this run's TMPDIR in its environment, named and ended (`left.rs`, 451 T363)
     let procs = left::ended(&tmp);

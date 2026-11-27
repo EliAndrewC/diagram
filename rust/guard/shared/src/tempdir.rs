@@ -1,4 +1,5 @@
-//! A scratch directory removed when it goes out of scope (feature 449 T101): `l7r-{tag}-{pid}-{seq}` under the temp directory, gone on a
+//! A scratch directory removed when it goes out of scope (feature 449 T101): `l7r-{tag}-p{pid}-{seq}` under the temp directory's
+//! [`SUBDIR`] (462 T371), gone on a
 //! return, a `?`, a failed assertion or a panic, since its `Drop` runs on each. The checks and tests that made their own and never removed
 //! them left about 329,000 directories, roughly 126 GB, in the GM's `/tmp` (2026-11-11). `make rust-test` and `make hooks-test` run each
 //! crate or suite with its own `TMPDIR` and fail on anything left in it, so a site that keeps a bare path again goes red.
@@ -25,6 +26,13 @@ pub fn before_exit(then: fn(i32)) {
 /// How many times this process has listed its temp directory for dead processes' leftovers ([`sweep_dead`]): what a test counts.
 pub(crate) static SWEEPS: AtomicUsize = AtomicUsize::new(0);
 
+/// The one subdirectory of the temp directory every `TempDir` is made in and the sweep lists (feature 462 T371, lever B of 451 T365), so
+/// no sweep reads the rest of `/tmp`: a listing of a `/tmp` of 5,443 entries in a 21.9 MB directory file was 14 to 16 ms, of a
+/// directory that never grew 0.06 ms + 0.41 ms each 1,000 entries (2026-11-26, `dev/measurements/2026-11-26/tmp-clutter/`). Never
+/// removed by this module, even empty: another thread's `create_dir_all` beneath it would fail unseen. A runner's leak check passes
+/// over it while it is empty and names what is inside it otherwise (`rustc.rs`'s `leak_checked`, `tests/hooks/hookrun.sh`).
+pub const SUBDIR: &str = "l7r-tmp";
+
 /// A directory of this process, removed on drop.
 #[derive(Debug)]
 #[must_use = "the directory is removed as soon as this value is dropped"]
@@ -33,8 +41,8 @@ pub struct TempDir {
 }
 
 impl TempDir {
-    /// A new empty directory `l7r-{tag}-p{pid}-{seq}` under `std::env::temp_dir()` (which honors `TMPDIR`); the process's first removes
-    /// every `l7r-{any tag}-p{pid}-{seq}` there whose process is gone ([`sweep_dead`]).
+    /// A new empty directory `l7r-{tag}-p{pid}-{seq}` under `std::env::temp_dir()` (which honors `TMPDIR`) joined with [`SUBDIR`]; the
+    /// process's first removes every `l7r-{any tag}-p{pid}-{seq}` there whose process is gone ([`sweep_dead`]).
     ///
     /// ONCE A PROCESS, EVERY TAG (feature 451 T370): the sweep lists the whole temp directory, and ran at every call - 14 to 16 ms a
     /// listing of a `/tmp` of 5,443 entries (161 ms each with 22 test threads at once), 509 of them in one run of the guard crate's
@@ -43,7 +51,7 @@ impl TempDir {
     pub fn new(tag: &str) -> Self {
         static SEQ: AtomicUsize = AtomicUsize::new(0);
         static SWEPT: Once = Once::new();
-        let parent = std::env::temp_dir();
+        let parent = std::env::temp_dir().join(SUBDIR);
         SWEPT.call_once(|| {
             let hours_ago = SystemTime::now()
                 .checked_sub(Duration::from_secs(3 * 3600))

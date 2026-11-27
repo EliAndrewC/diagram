@@ -168,8 +168,9 @@ else
   TMPDIR="$SUITE_TMP" "$HERE/$SUITE" < /dev/null > "$WORK/$ID.log" 2>&1; rc=$?
 fi
 # l7r-test-scratch is what a whole Rust test process shares (`beside_binary`), which nothing in it outlives to remove: it goes with
-# SUITE_TMP on this runner's exit, as it goes with `make rust-test`'s own run directory
-left=$(ls -A "$SUITE_TMP" 2>/dev/null | grep -vx 'l7r-test-scratch' | tr '\n' ' ')
+# SUITE_TMP on this runner's exit, as it goes with `make rust-test`'s own run directory; l7r-tmp is the TempDirs' own subdirectory
+# (462 T371), which every guard process making one leaves: passed over, and what is inside it named
+left=$( { ls -A "$SUITE_TMP" 2>/dev/null | grep -vx -e 'l7r-test-scratch' -e 'l7r-tmp'; ls -A "$SUITE_TMP/l7r-tmp" 2>/dev/null | sed 's|^|l7r-tmp/|'; } | tr '\n' ' ')
 if [ -n "$left" ]; then
   printf '\nLEAK: the suite left %s in its TMPDIR, which it must remove\n  fix: make each mktemp with a trap that removes it on EXIT (`d=$(mktemp -d); trap '"'"'rm -rf "$d"'"'"' EXIT`), or remove it before the case returns; a Rust test holds an l7r_guard::shared::tempdir::TempDir\n' "$left" >> "$WORK/$ID.log"
   rc=1
