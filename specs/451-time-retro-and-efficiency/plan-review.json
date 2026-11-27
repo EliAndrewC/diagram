@@ -3582,6 +3582,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)": {
+   "sha256": "340c553e941e491638578be1b544aaf6c65d6e81fe49f5b406b300f4d33a5a1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T414 Approach (checklist part A)": {
+   "sha256": "aa4999e71d24a88548b15e016aa54c07ddbf788698b6ddbe966143ed49bafea4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -32907,6 +32919,52 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)",
+    "### T414 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T414-approach",
+     "summary": "A red hook job's whole log is kept in the common git directory, its name is left in <job>.kept, the hooks-test FAIL line names it (appended, head unchanged), and the event line carries it as a sixth span field written as the Phase line's log; a green job keeps none and removes a stale .kept.",
+     "class": "within",
+     "why": "This is the task's own goal: a red suite's failing case can be read after the run. It answers a wrong outcome (the evidence was printed once and deleted, so T314 could not tell which case failed), in line with the GM's 2026-11-22 'we want everything measured so we know where our time goes' and the fix-as-we-go rule. Keeping the FAIL line's head unchanged and adding a span field serves the same goal. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T414-self-test",
+     "summary": "The user-level self-test's FAIL line (missing-program-hook), which loses its log from the same work directory, keeps it through hookrun.sh --keep, fixed in this task.",
+     "class": "within",
+     "why": "It is the same defect in a second place, fixed in the task that found it, so nothing is deferred. That follows the fix-all-known-bugs rule (GM 2026-11-18) and is not added scope."
+    },
+    {
+     "id": "T414-D1",
+     "summary": "Name and place: <git common dir>/l7r-hooks-failed/<utc-ns>-<job>-p<pid>.log, beside l7r-events and l7r-handoffs and outside hooks-test/; no colon or space, so the name can ride as a span field.",
+     "class": "within",
+     "why": "This is a naming convention inside the constraint (under the common git directory) that the task line and brief both set. Of the two names offered it takes the brief's directory and gives a reason. The request is not narrowed."
+    },
+    {
+     "id": "T414-D2",
+     "summary": "Bound HOOKS_FAILED_KEEP, a GUESS knob defaulting to 50; a value that is not a number reads as 50; only files named as kept logs are removed, and nothing a later run reuses reads the directory.",
+     "class": "within",
+     "why": "The brief asks for the directory to be bounded, and this does it with a labeled GUESS knob. It does not break the GM's 2026-11-26 disk principle (do not clean what costs time later), because the plan states that no runner, stamp, key or check reads the directory, so removing an old log costs no rerun time. The kept logs are evidence for a reader, not a cache."
+    },
+    {
+     "id": "T414-D3",
+     "summary": "The bound runs once a run in hookrun.sh --sweep <gitdir> before the fan-out, so no job removes a log another job of the same run is about to name; a job run by hand bounds after keeping its own; T372's one sweep and --swept are unchanged.",
+     "class": "within",
+     "why": "This is a choice of mechanism. Doing the sweep before the fan-out keeps every log of the current run, which serves the goal. Keeping T372's behavior keeps existing work the GM did not ask to change and narrows nothing."
+    },
+    {
+     "id": "T414-order-and-performance",
+     "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
+     "class": "within",
+     "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -51090,6 +51148,50 @@
      "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
      "class": "within",
      "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T414": {
+   "section_sha256": "1111e9f0dd0e6c8fa18420cf353af2558c8b4f5840805b97ab4cb5fac47c2e43",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T414-approach",
+     "summary": "A red hook job's whole log is kept in the common git directory, its name is left in <job>.kept, the hooks-test FAIL line names it (appended, head unchanged), and the event line carries it as a sixth span field written as the Phase line's log; a green job keeps none and removes a stale .kept.",
+     "class": "within",
+     "why": "This is the task's own goal: a red suite's failing case can be read after the run. It answers a wrong outcome (the evidence was printed once and deleted, so T314 could not tell which case failed), in line with the GM's 2026-11-22 'we want everything measured so we know where our time goes' and the fix-as-we-go rule. Keeping the FAIL line's head unchanged and adding a span field serves the same goal. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T414-self-test",
+     "summary": "The user-level self-test's FAIL line (missing-program-hook), which loses its log from the same work directory, keeps it through hookrun.sh --keep, fixed in this task.",
+     "class": "within",
+     "why": "It is the same defect in a second place, fixed in the task that found it, so nothing is deferred. That follows the fix-all-known-bugs rule (GM 2026-11-18) and is not added scope."
+    },
+    {
+     "id": "T414-D1",
+     "summary": "Name and place: <git common dir>/l7r-hooks-failed/<utc-ns>-<job>-p<pid>.log, beside l7r-events and l7r-handoffs and outside hooks-test/; no colon or space, so the name can ride as a span field.",
+     "class": "within",
+     "why": "This is a naming convention inside the constraint (under the common git directory) that the task line and brief both set. Of the two names offered it takes the brief's directory and gives a reason. The request is not narrowed."
+    },
+    {
+     "id": "T414-D2",
+     "summary": "Bound HOOKS_FAILED_KEEP, a GUESS knob defaulting to 50; a value that is not a number reads as 50; only files named as kept logs are removed, and nothing a later run reuses reads the directory.",
+     "class": "within",
+     "why": "The brief asks for the directory to be bounded, and this does it with a labeled GUESS knob. It does not break the GM's 2026-11-26 disk principle (do not clean what costs time later), because the plan states that no runner, stamp, key or check reads the directory, so removing an old log costs no rerun time. The kept logs are evidence for a reader, not a cache."
+    },
+    {
+     "id": "T414-D3",
+     "summary": "The bound runs once a run in hookrun.sh --sweep <gitdir> before the fan-out, so no job removes a log another job of the same run is about to name; a job run by hand bounds after keeping its own; T372's one sweep and --swept are unchanged.",
+     "class": "within",
+     "why": "This is a choice of mechanism. Doing the sweep before the fan-out keeps every log of the current run, which serves the goal. Keeping T372's behavior keeps existing work the GM did not ask to change and narrows nothing."
+    },
+    {
+     "id": "T414-order-and-performance",
+     "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
+     "class": "within",
+     "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
     }
    ],
    "verdict": "CLEAR"

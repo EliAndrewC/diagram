@@ -374,22 +374,23 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  ns=$$(wc -l < "$$work/todo"); [ "$$ns" -gt $(HOOKS_JOBS) ] && ns=$(HOOKS_JOBS); pm=$$(( $(CPU_COUNT) / (ns > 0 ? ns : 1) )); \
 	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
 	  : "KILLED RUNNERS' LEFTOVERS SWEPT ONCE A RUN, BEFORE THE FAN-OUT (feature 451 T372): each job globbed the whole temp directory for them, 16.5 ms a suite under a /tmp of 5,443 entries, 4,051 suite runs on 2026-11-26; the jobs are told (--swept) and list nothing"; \
-	  "$$root/tests/hooks/hookrun.sh" --sweep; xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" --swept "$$work" "$$gitdir" || true; \
+	  : "A FAILED SUITE'S WHOLE LOG OUTLIVES THE RUN (feature 451 T414): this work directory goes on exit, and with it the only copy of the red state-sync run's log of 2026-11-26, so hookrun.sh keeps each red job's log under the common git directory (l7r-hooks-failed/), its name in the FAIL line below and in the suite's event line; the sweep bounds them to HOOKS_FAILED_KEEP, once, before any job keeps one"; \
+	  "$$root/tests/hooks/hookrun.sh" --sweep "$$gitdir"; xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" --swept "$$work" "$$gitdir" || true; \
 	  if [ -s "$$work/close" ]; then while read -r b sha js; do "$$root/tests/hooks/hookrun.sh" --close "$$work" "$$gitdir" "$$b" "$$sha" $$js; done < "$$work/close"; fi; \
 	  : "EACH SUITE'S PHASE LINE, ONE CALL FOR ALL (feature 451 T153; the GM 2026-11-22: \"make the hook suites measure their time so they won't be missing\"): hookrun.sh leaves each job's span, and the one Phase writer writes them all in one process (one a suite cost 6.9 s for 57, 2026-11-20); they feed the task time breakdown (make task-time, 451 T243)"; \
-	  spans=$$(for f in "$$work"/*.span; do [ -f "$$f" ] || continue; read -r a b c < "$$f"; printf 'suite:%s:%s:%s:%s ' "$$a" "$$b" "$$c" "$$(basename "$$f" .span)"; done); \
+	  spans=$$(for f in "$$work"/*.span; do [ -f "$$f" ] || continue; read -r a b c < "$$f"; id=$$(basename "$$f" .span); kl=$$(cat "$$work/$$id.kept" 2>/dev/null); printf 'suite:%s:%s:%s:%s%s ' "$$a" "$$b" "$$c" "$$id" "$${kl:+:$$kl}"; done); \
 	  [ -z "$$spans" ] || "$$root/scripts/gates/l7r-gate.sh" measure event-log phase --root "$$root" --src hooks $$spans >/dev/null 2>&1 || true; \
 	  for rc in "$$work"/*.rc; do \
 	    [ -f "$$rc" ] || continue; \
 	    b=$$(basename "$$rc" .rc); \
 	    if [ "$$(cat "$$rc")" != ok ]; then \
-	      printf '\n\033[1mHOOK TESTS FAILED: %s\033[0m\n' "$$b"; sed 's/^/  /' "$$work/$$b.log"; fail="$$fail $$b"; \
+	      kl=$$(cat "$$work/$$b.kept" 2>/dev/null); printf '\n\033[1mHOOK TESTS FAILED: %s%s\033[0m\n' "$$b" "$${kl:+ (whole log kept: $$gitdir/$$kl)}"; sed 's/^/  /' "$$work/$$b.log"; fail="$$fail $$b"; \
 	    fi; \
 	  done; \
 	fi; \
 	if [ -n "$$mph" ]; then wait "$$mph"; \
 	  if [ "$$(cat "$$work/missing-program-hook.exit" 2>/dev/null)" = 0 ]; then n=$$((n+1)); printf '%s' "$$uk" > "$$gitdir/hooks-test/missing-program-hook"; \
-	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
+	  else kl=$$("$$root/tests/hooks/hookrun.sh" --keep "$$gitdir" missing-program-hook "$$work/missing-program-hook.log" 2>/dev/null); printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)%s\033[0m\n' "$$uh" "$${kl:+ (whole log kept: $$gitdir/$$kl)}"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
 	fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check tool-signals; then fail="$$fail check-tool-signals"; fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check rust-tooling --root "$$root"; then fail="$$fail rust-tooling"; fi; \

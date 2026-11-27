@@ -21,7 +21,7 @@ use serde_json::Value;
 use super::reply;
 use crate::Reply;
 
-const USAGE: &str = "    l7r-gate measure event-log hook                        read one hook payload on stdin, append its line\n    l7r-gate measure event-log from-transcript <jsonl>     print the transcript's events as lines\n    l7r-gate measure event-log refile --root <tree>        re-file each line under the feature of the task it carries\n    l7r-gate measure event-log phase --root <tree> --src <tool> <step>:<t0>:<t1>:<code>[:<name>]...   write a timed step's Phase line\n\n";
+const USAGE: &str = "    l7r-gate measure event-log hook                        read one hook payload on stdin, append its line\n    l7r-gate measure event-log from-transcript <jsonl>     print the transcript's events as lines\n    l7r-gate measure event-log refile --root <tree>        re-file each line under the feature of the task it carries\n    l7r-gate measure event-log phase --root <tree> --src <tool> <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...   write a timed step's Phase line\n\n";
 
 /// The command line: `hook` never refuses and never prints (a hook on every tool call must not be able to stop one), `from-transcript`
 /// prints one JSON line an event, and anything else is the usage, exit 2.

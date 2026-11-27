@@ -5,7 +5,8 @@
 #        hookrun.sh --jobs <dir> <suite>...                              each suite's job files: `<suite> <job>...` a line
 #        hookrun.sh --orphans <dir> <suite>...                           every shard whose suite is none of these (exit 1 if any)
 #        hookrun.sh --close <work-dir> <gitdir> <guard> <sha> <shard>... stamp a split suite green when every shard's job is
-#        hookrun.sh --sweep                                              remove killed runners' leftover directories, once a run
+#        hookrun.sh --sweep [<gitdir>]                                   remove killed runners' leftover directories, and bound the kept failed logs, once a run
+#        hookrun.sh --keep <gitdir> <job> <log>                          keep a failed log no job wrote; print its name
 #        hookrun.sh --swept <work-dir> <gitdir> <guard> <suite> <sha>   a job of a run that has swept: it lists no temp directory
 #
 # WHY THIS EXISTS: `hooks-test` ran its 21 suites one after another - 94 s, against 17 s for the
@@ -39,6 +40,31 @@ sweep_gone() {
     case $p in '' | *[!0-9]*) continue ;; esac
     [ -d "$d" ] && [ ! -e "/proc/$p" ] && [ -n "$(find "$d" -maxdepth 0 -mmin +180)" ] && rm -rf "$d"
   done
+  return 0
+}
+# A FAILED SUITE'S WHOLE LOG IS KEPT (feature 451 T414): the job's log lives in the run's mktemp work directory, which `make hooks-test`
+# removes on exit, so the red state-sync run of 2026-11-26 18:27 UTC left one event line (its name, 94.7 s, exit 1) and nothing a later
+# reader (451 T314) could open; the land log that held the printed copy was overwritten by the next landing. A red job's log is copied
+# into the COMMON git directory - every worktree of a clone runs its suites there - as `l7r-hooks-failed/<utc>-<job>-p<pid>.log`: the
+# time first, to the nanosecond, so the names' order is their age; the job (`<guard>` or a shard's `<guard>.<k>`) and the runner's pid,
+# so two trees failing one suite in one instant never write one file; no colon or space, so the name rides in the event line's span.
+# Its name relative to that directory is printed (`--keep`) or left in `<job>.kept`, for the FAIL line and the event line. A green
+# suite's log is not kept, as before.
+keep_failed() { # <gitdir> <job> <log>: copy the log whole, moved into place, and print its name
+  local dir=$1/l7r-hooks-failed name
+  name=$(date -u +%Y%m%dT%H%M%S.%NZ)-$2-p$$.log
+  mkdir -p "$dir" && cp "$3" "$dir/.$name.part" && mv -f "$dir/.$name.part" "$dir/$name" && printf 'l7r-hooks-failed/%s\n' "$name"
+}
+# THE BOUND (HOOKS_FAILED_KEEP, a GUESS knob: 50, about one fully red run of the 70 suite files' worth of the latest failures): the
+# oldest kept logs past it are removed. Nothing a later run reuses is among them: no runner, stamp, key or check reads this directory
+# - a run's stamps, seconds and renderings live in `hooks-test/` - so a removed log is only a reader's. It runs ONCE a run, in
+# `--sweep <gitdir>` before the fan-out, so no job of the run removes a log another job's FAIL line is about to name (a run's logs
+# can outnumber the bound); a job run by hand, unswept, bounds them after keeping its own, the newest.
+bound_failed() { # <gitdir>
+  local dir=$1/l7r-hooks-failed keep=${HOOKS_FAILED_KEEP:-50} f
+  case $keep in '' | *[!0-9]*) keep=50 ;; esac
+  [ -d "$dir" ] || return 0
+  ls "$dir" | grep -E '^[0-9]{8}T[0-9.]+Z-.+\.log$' | sort | head -n "-$keep" | while IFS= read -r f; do rm -f "$dir/$f"; done
   return 0
 }
 shard_k() { SK=${1%.sh}; SK=${SK##*.}; case $SK in '' | *[!0-9]*) return 1 ;; esac; }
@@ -83,7 +109,8 @@ case ${1:-} in
     "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   fi
   exit 0 ;;
---sweep) sweep_gone; exit 0 ;;
+--sweep) sweep_gone; [ -z "${2:-}" ] || bound_failed "$2"; exit 0 ;;
+--keep) keep_failed "${2:?gitdir}" "${3:?job}" "${4:?log}"; exit $? ;;
 esac
 SWEPT=""; if [ "${1:-}" = --swept ]; then SWEPT=1; shift; fi
 
@@ -119,7 +146,7 @@ trap 'pkill -P $$ 2>/dev/null; exit 143' TERM
 # the fixture's cp does not
 # feature 451 T170: every message the suite's guards render is kept (`protocol::keep`), and a green suite's set replaces its last in
 # the tree's store (below, 451 T281), which `make hooks-test` holds to the budget and the review (`l7r-guard messages check`)
-rm -rf "$WORK/$ID.messages"
+rm -rf "$WORK/$ID.messages" "$WORK/$ID.kept"
 export L7R_MESSAGE_CORPUS="$WORK/$ID.messages"
 if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
   rm -f "$WORK/$ID.reads"
@@ -168,5 +195,8 @@ if [ "$rc" -eq 0 ]; then
   printf 'ok' > "$WORK/$ID.rc"
 else
   printf 'FAIL' > "$WORK/$ID.rc"
+  # feature 451 T414: the whole log kept, the LEAK line above in it, and its name left for the FAIL line and the event line
+  keep_failed "$GITDIR" "$ID" "$WORK/$ID.log" > "$WORK/$ID.kept" || rm -f "$WORK/$ID.kept"
+  [ -n "$SWEPT" ] || bound_failed "$GITDIR"
 fi
 exit 0   # never fail the fan-out; the collector reads the .rc files and reports every failure together

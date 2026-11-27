@@ -5975,31 +5975,39 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T414 (<why: the finding or measurement that files it>)
+### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `tests/hooks/hookrun.sh` keeps each RED job's whole log (after the LEAK line is appended) in the clone's COMMON git directory, `l7r-hooks-failed/<utc>-<job>-p<pid>.log` (T414-D1), and leaves its name, relative to that directory, in the work directory's `<job>.kept`; a green job keeps none and removes a stale `.kept`. The `hooks-test` recipe names the kept log in the suite's FAIL line (`HOOK TESTS FAILED: <suite> (whole log kept: <path>)`, appended, the line's head unchanged) and hands it to the event line's writer as a sixth span field, `suite:<t0>:<t1>:<rc>:<job>:<log>`, which `l7r-gate measure event-log phase` writes as the Phase line's `log` (`rust/gate/crates/measure/src/measure/event_log/phase.rs`). The user-level self-test's FAIL line, which lost its log the same way, keeps it through `hookrun.sh --keep` (fixed here). The kept logs are bounded to the last `HOOKS_FAILED_KEEP` (T414-D2), once a run, by `hookrun.sh --sweep <gitdir>` before the fan-out (T414-D3); T372's one sweep and the jobs' `--swept` stay as they were.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a red job's log kept, its name left; a green job's not | `test-parts.2.sh`: "a red suite's job names its kept log", "the kept log is the suite's whole log", "a green suite keeps no log and names none", "a red shard's log is kept under its own job", "--keep keeps a log no job wrote", each red on the old code | n/a: tooling | none | none |
+| the bound, once a run | `test-parts.2.sh`: "a job of a swept run removes no kept log", "the run's one sweep keeps the newest HOOKS_FAILED_KEEP logs", "the bound touches nothing but kept logs", "a job run by hand bounds them itself", red on the old code | n/a: tooling | none | none |
+| the FAIL line and the event line name it, in the common git directory | `test-parts.3.sh` (the real recipe in a fixture clone, the failure in its LINKED tree): "the FAIL line names the kept log, in the common git directory", "the kept log holds the suite's whole log", "only the red suite's log is kept", "the event line's span carries the kept log"; `phase::tests::a_span_carries_its_kept_log` - each red on the old code | n/a: tooling | none | none |
+
+- **T414-D1, the name** (CONVENTION): the brief offered `<git common dir>/l7r-hooks-failed/<utc>-<suite>.log`, the task line `.git/hooks-test/failed/<suite>@<utc>.log`. Taken: the brief's directory, beside `l7r-events` and `l7r-handoffs`, not inside `hooks-test/`, which holds what runs REUSE (stamps, seconds, renderings) - a reader's log kept apart from them is what makes the bound safe (D3). The name is `<utc to the nanosecond>-<job>-p<pid>.log`: the time first, so the names' order is their age (the bound sorts by name); the job, so a shard's log (`<guard>.<k>`) is its own; the runner's pid, because the common git directory is every worktree's and two trees can fail one suite in one second. It holds no colon or space, so it rides as a span field (the door splits on colons, and the recipe passes its spans unquoted - one unreadable span drops every Phase line of the run).
+- **T414-D2, the bound** (GUESS knob, `HOOKS_FAILED_KEEP`, 50): about one fully red run's worth of the 70 suite files; a value that is not a number reads as 50. Nothing a later run reuses is removed: no runner, stamp, key or check reads `l7r-hooks-failed/` (grep of `tests/`, `scripts/`, `rust/` and the Makefile, 2026-11-27), so a removed log is only a reader's - only files named as kept logs are removed.
+- **T414-D3, when the bound runs**: once a run, in `--sweep <gitdir>` before any job keeps a log, as T372 moved the temp sweep - a job bounding after keeping could remove a log another job of the same run is about to name, a run's red jobs can outnumber the bound. So after a run the directory holds at most the bound plus that run's failures, brought back to the bound by the next run's sweep. A job run by hand (no `--swept`) bounds after keeping its own, the newest, as it sweeps.
 
 ### T414 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A red hook suite inside a batch gate leaves its whole log where a later reader finds it, named by the run's FAIL line and its event line.
+2. **The constraints.** The task line and the brief: the log under the common git directory, named in the FAIL line and the event line, a passed suite's not kept, the directory bounded; T372's one sweep and `--swept` kept working; a FAIL line's head unchanged for any reader of it.
+3. **Where each comes from.** O: this task's line (the 2026-11-26 18:27 UTC run, 451 T314); G: the brief's directory and knob; O: the recipe and runner read (the log in `$work`, removed by the recipe's `trap`).
+4. **Do they describe the world here?** Yes, measured 2026-11-27 (the fixture run of `test-parts.3.sh`): it drives the real recipe in a clone with a linked worktree, and its red suite's log lands under the main tree's `.git`.
+5. **The order.** Independent of the queue; lands with any batch.
+6. **The exits.** Green: `test-parts.2.sh`, `test-parts.3.sh` and the measure crate's tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first on the old code, 2026-11-27: `test-parts.2.sh` 30 passed, 11 failed; `test-parts.3.sh` 15 passed, 4 failed; the measure crate 276 passed, 1 failed (`a_span_carries_its_kept_log`). On the new code: 41 passed, 0 failed; 19 passed, 0 failed; 277 passed, 0 failed (`make builder-checks CRATE=rust/gate/crates/measure`: test, lint, format clean); `tests/hooks/test-make-only-hooks.sh` 144 passed, 0 failed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A red suite's failing case can be read after the run: the FAIL line names a file that holds the suite's whole log, and the event line carries its name.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The user-level self-test's FAIL line (`missing-program-hook`) lost its log the same way, from the same work directory: fixed here, through `hookrun.sh --keep`.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect's evidence kept: it makes nothing faster and measures no time.
 
 ### T413 (<why: the finding or measurement that files it>)
 

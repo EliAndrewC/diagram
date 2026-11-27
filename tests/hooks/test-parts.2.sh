@@ -44,7 +44,45 @@ check "a job of a swept run sweeps nothing: a gone runner's directory stays, its
 TMPDIR="$H/tmp3" bash "$H/hookrun.sh" --sweep; swept=$?
 check "the run's one sweep removes a gone runner's directory" '[ "$swept" -eq 0 ] && [ ! -e "$H/tmp3/l7r-hooks-suite-x-p99999991.abc" ]'
 check "the run's one sweep keeps a recent one, a live runner's and the form before T101" '[ -d "$H/tmp3/l7r-hooks-suite-x-p99999992.abc" ] && [ -d "$H/tmp3/l7r-hooks-suite-x-p$$.abc" ] && [ -d "$H/tmp3/l7r-hooks-suite-x.abc" ] && [ "$(ls -A "$H/tmp3" | wc -l)" -eq 3 ]'
-check "make hooks-test sweeps once, before its fan-out, and tells its jobs" 'grep -q "hookrun.sh\" --sweep; .*xargs .*hookrun.sh\" --swept \"\$\$work\"" "$(dirname "$P")/../../Makefile"'
+check "make hooks-test sweeps once, before its fan-out, and tells its jobs" 'grep -q "hookrun.sh\" --sweep \"\$\$gitdir\"; .*xargs .*hookrun.sh\" --swept \"\$\$work\"" "$(dirname "$P")/../../Makefile"'
+
+# feature 451 T414: A FAILED SUITE'S WHOLE LOG IS KEPT under the common git directory, `l7r-hooks-failed/<utc>-<job>-p<pid>.log`, and
+# its name (relative to that directory) is left in `<job>.kept` for the FAIL line and the event line; a green suite keeps none. The red
+# state-sync run of 2026-11-26 18:27 UTC left an event line and nothing else: its log was in the run's mktemp directory, then removed.
+K="$D/keep"; mkdir -p "$K/w" "$K/g" "$K/tmp"
+cp "$(dirname "$P")/hookrun.sh" "$K/"
+printf '#!/bin/sh\necho "case 7: the state-sync case FAILED"\nexit 1\n' > "$K/red.sh"; printf '#!/bin/sh\nexit 0\n' > "$K/green.sh"
+printf '#!/bin/sh\necho "shard two FAILED"\nexit 1\n' > "$K/test-sx.2.sh"; chmod +x "$K/red.sh" "$K/green.sh" "$K/test-sx.2.sh"
+krun() { env -u HOOKS_SHIM TMPDIR="$K/tmp" bash "$K/hookrun.sh" "$@"; }
+krun --swept "$K/w" "$K/g" red red.sh sha
+kept=$(cat "$K/w/red.kept" 2>/dev/null)
+check "a red suite's job names its kept log" 'case $kept in l7r-hooks-failed/[0-9]*T[0-9]*Z-red-p[0-9]*.log) true ;; *) false ;; esac'
+check "the kept log is the suite's whole log" '[ -f "$K/g/$kept" ] && cmp -s "$K/g/$kept" "$K/w/red.log" && grep -q "case 7: the state-sync case FAILED" "$K/g/$kept"'
+krun --swept "$K/w" "$K/g" green green.sh sha
+check "a green suite keeps no log and names none" '[ ! -e "$K/w/green.kept" ] && [ "$(ls "$K/g/l7r-hooks-failed" | wc -l)" -eq 1 ]'
+krun --swept "$K/w" "$K/g" sx test-sx.2.sh sha
+check "a red shard's log is kept under its own job" 'case $(cat "$K/w/sx.2.kept" 2>/dev/null) in l7r-hooks-failed/*-sx.2-p[0-9]*.log) grep -q "shard two FAILED" "$K/g/$(cat "$K/w/sx.2.kept")" ;; *) false ;; esac'
+check "no part file is left beside the kept logs" '[ -z "$(ls -A "$K/g/l7r-hooks-failed" | grep -v "\.log$")" ]'
+# --keep: the same keeping for a log no job wrote (make hooks-test's user-level self-test); it prints the kept name
+out=$(krun --keep "$K/g" missing-program-hook "$K/w/red.log")
+check "--keep keeps a log no job wrote and prints its name" 'case $out in l7r-hooks-failed/*-missing-program-hook-p[0-9]*.log) cmp -s "$K/g/$out" "$K/w/red.log" ;; *) false ;; esac'
+# THE BOUND (HOOKS_FAILED_KEEP, a GUESS knob, 50): the oldest past it go, ONCE a run in `--sweep <gitdir>` before the fan-out, so no job
+# of the run removes a log another job's FAIL line names; a job run without `--swept` bounds them itself, as it sweeps
+B2="$K/g/l7r-hooks-failed"
+for s in 20200101T000001Z 20200101T000002Z 20200101T000003Z; do printf 'old\n' > "$B2/$s-old-p1.log"; done
+: > "$B2/not-a-log.txt"
+n_before=$(ls "$B2"/*.log | wc -l)
+HOOKS_FAILED_KEEP=2 krun --swept "$K/w" "$K/g" red red.sh sha
+check "a job of a swept run removes no kept log" '[ "$(ls "$B2"/*.log | wc -l)" -eq $((n_before + 1)) ]'
+HOOKS_FAILED_KEEP=2 TMPDIR="$K/tmp" bash "$K/hookrun.sh" --sweep "$K/g"
+check "the run's one sweep keeps the newest HOOKS_FAILED_KEEP logs" '[ "$(ls "$B2"/*.log | wc -l)" -eq 2 ] && [ ! -e "$B2/20200101T000003Z-old-p1.log" ] && [ -f "$K/g/$(cat "$K/w/red.kept")" ]'
+check "the bound touches nothing but kept logs" '[ -f "$B2/not-a-log.txt" ]'
+for s in 20200101T000001Z 20200101T000002Z; do printf 'old\n' > "$B2/$s-old-p1.log"; done
+HOOKS_FAILED_KEEP=3 krun "$K/w" "$K/g" red red.sh sha
+check "a job run by hand bounds them itself" '[ "$(ls "$B2"/*.log | wc -l)" -eq 3 ] && [ ! -e "$B2/20200101T000001Z-old-p1.log" ] && [ -f "$K/g/$(cat "$K/w/red.kept")" ]'
+TMPDIR="$K/tmp" bash "$K/hookrun.sh" --sweep "$K/nowhere"
+check "a sweep with no kept logs makes and removes nothing" '[ ! -e "$K/nowhere" ]'
+check "make hooks-test names the kept log in the FAIL line and the event line" 'grep -q "HOOK TESTS FAILED: %s%s.*whole log kept: " "$(dirname "$P")/../../Makefile" && grep -q "suite:%s:%s:%s:%s%s" "$(dirname "$P")/../../Makefile"'
 
 # GUARD_EDIT_OK: feature 449 T205 - hookrun.sh expands a launcher's `c-tree` lines (its sources' roots, written where the run's fresh
 # binary skipped the walk) into every path under them, as the walk's reads were recorded: a directory listed and stat'ed, a file

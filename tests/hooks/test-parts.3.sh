@@ -95,5 +95,17 @@ check "... and its rendering at that stamp's key is the one judged, not the tree
 check "(b) the run is not judged on another tree's guard" '[ "$(owed "$out" only-b-hooks)" = 0 ]'
 check "a rendering of a guard the tree does not hold is not judged, and goes" '[ "$(owed "$out" gone-hooks)" = 0 ] && [ ! -e "$A/.git/hooks-test/messages/gone-hooks.sh.jsonl" ]'
 
+# feature 451 T414: A RED SUITE'S LOG OUTLIVES THE RUN, in the COMMON git directory (a linked tree's failure under the main tree's .git),
+# named by the run's FAIL line and handed to the event line's writer; the run's green suites keep none. The gate's launcher here records
+# what it is asked, so the Phase call's spans are read as they left the recipe.
+printf '#!/bin/sh\nprintf "%%s\\n" "$*" >> "%s/gate-calls"\nexit 0\n' "$D" > "$B/scripts/gates/l7r-gate.sh"
+printf '#!/bin/sh\necho "case 7: the state-sync case FAILED"\nexit 1\n' > "$B/tests/hooks/test-fx-hooks.sh"
+out=$(mk "$B" hooks-test)
+kept=$(printf '%s\n' "$out" | sed 's/\x1b\[[0-9;]*m//g' | sed -n 's/^HOOK TESTS FAILED: fx-hooks\.sh (whole log kept: \(.*\))$/\1/p')
+check "the FAIL line names the kept log, in the common git directory" 'case $kept in "$A/.git/l7r-hooks-failed/"*-fx-hooks.sh-p*.log) true ;; *) echo "$out"; false ;; esac'
+check "the kept log holds the suite's whole log" '[ -f "$kept" ] && grep -q "case 7: the state-sync case FAILED" "$kept"'
+check "only the red suite's log is kept" '[ "$(ls "$A/.git/l7r-hooks-failed" | wc -l)" -eq 1 ]'
+check "the event line's span carries the kept log" 'grep "event-log phase" "$D/gate-calls" | tr " " "\n" | grep -qx "suite:[0-9.]*:[0-9.]*:1:fx-hooks.sh:l7r-hooks-failed/${kept##*/}"'
+
 echo "parts.3: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

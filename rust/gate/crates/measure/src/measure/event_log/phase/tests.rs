@@ -71,6 +71,37 @@ fn each_span_writes_its_phase_line() {
     assert_eq!(ends, want_ends);
 }
 
+/// 451 T414: a failed hook suite's span carries its kept log, relative to the common git directory, as the line's `log`.
+#[test]
+fn a_span_carries_its_kept_log() {
+    let d = crate::checks::scratch("measure-phase-door-log");
+    std::fs::create_dir_all(d.join(".git")).unwrap();
+    let root = d.display().to_string();
+    let env = Rooted::with(".", &[]);
+    let words = [
+        "--root",
+        &root,
+        "--src",
+        "hooks",
+        "--make",
+        "done",
+        "suite:10:12:1:state-sync.sh:l7r-hooks-failed/20261126T182700Z-state-sync.sh-p7.log",
+        "suite:11:13:0:test-a.sh",
+    ];
+    let r = super::cli(&args(&words), env.reader());
+    assert_eq!(r.code, 0);
+    let got: Vec<(String, Option<String>)> = lines(&d)
+        .iter()
+        .map(|l| (l["name"].to_string(), l.get("log").map(Value::to_string)))
+        .collect();
+    let log = "\"l7r-hooks-failed/20261126T182700Z-state-sync.sh-p7.log\"";
+    let want = [
+        ("\"state-sync.sh\"".to_owned(), Some(log.to_owned())),
+        ("\"test-a.sh\"".to_owned(), None),
+    ];
+    assert_eq!(got, want);
+}
+
 #[test]
 fn a_span_it_cannot_read_writes_nothing() {
     let d = crate::checks::scratch("measure-phase-door-bad");

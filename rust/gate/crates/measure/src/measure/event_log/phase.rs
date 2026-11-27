@@ -7,7 +7,7 @@
 //! (`make task-time`, 451 T243).
 //!
 //! ```text
-//! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>]...
+//! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...
 //! ```
 //!
 //! `t0` and `t1` are UTC seconds since the epoch (`date +%s.%N`, bash's `$EPOCHREALTIME`); `--make` defaults to the outermost make above
@@ -24,11 +24,15 @@ use super::super::reply;
 use crate::Reply;
 
 /// The usage.
-pub const USAGE: &str = "usage: l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>]...\n";
+pub const USAGE: &str = "usage: l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>[:<log>]]...\n";
 
-/// One span's `<step>:<t0>:<t1>:<code>[:<name>]`, the name the rest after the fourth colon.
-fn span(word: &str) -> Option<(String, SystemTime, SystemTime, i32, String)> {
-    let mut parts = word.splitn(5, ':');
+/// A span read: its step, start, end, exit code, name and kept log.
+type Span = (String, SystemTime, SystemTime, i32, String, String);
+
+/// One span's `<step>:<t0>:<t1>:<code>[:<name>[:<log>]]`, the log the rest after the fifth colon: a failed hook suite's kept log,
+/// relative to the common git directory (451 T414), which `hookrun.sh` names without a colon or a space.
+fn span(word: &str) -> Option<Span> {
+    let mut parts = word.splitn(6, ':');
     let step = parts.next().filter(|s| !s.is_empty())?.to_owned();
     let at = |t: Option<&str>| {
         let s: f64 = t?.parse().ok()?;
@@ -36,7 +40,9 @@ fn span(word: &str) -> Option<(String, SystemTime, SystemTime, i32, String)> {
     };
     let (t0, t1) = (at(parts.next())?, at(parts.next())?);
     let code = parts.next()?.parse().ok()?;
-    Some((step, t0, t1, code, parts.next().unwrap_or("").to_owned()))
+    let mut rest = || parts.next().unwrap_or("").to_owned();
+    let (name, log) = (rest(), rest());
+    Some((step, t0, t1, code, name, log))
 }
 
 /// The command: each span a line, exit 0; a span it cannot read, or no `--root` or `--src`, the usage and exit 2, nothing written.
@@ -71,10 +77,12 @@ pub fn cli(args: &[String], env: &Reader) -> Reply {
         l7r_shared::make::outermost_goal(Path::new("/proc"), std::process::id()).unwrap_or_default()
     });
     let root = Path::new(&root);
-    for (step, t0, t1, code, name) in spans {
+    for (step, t0, t1, code, name, log) in spans {
         let mut row = phase_row(&src, &step, (t0, t1), code, &make, root);
-        if !name.is_empty() {
-            row.insert("name".into(), Value::from(name));
+        for (key, value) in [("name", name), ("log", log)] {
+            if !value.is_empty() {
+                row.insert(key.into(), Value::from(value));
+            }
         }
         let _ = append_row_with(root, feature.as_deref(), row, env);
     }
