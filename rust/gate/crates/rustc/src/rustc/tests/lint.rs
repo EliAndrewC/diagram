@@ -1,6 +1,6 @@
 //! The lint's passes (feature 451 T325): a crate that names itself in its `[dev-dependencies]` is linted a third time with none read.
 //! And their lanes (feature 451 T355): a pass told to compile its crate alone - its own key standing in the target directory and no
-//! input newer than it - takes the small lane and never a wide build slot; anything else a wide slot.
+//! input newer than it - takes the small lane and never waits for a wide build slot; anything else a wide slot.
 
 use std::path::Path;
 

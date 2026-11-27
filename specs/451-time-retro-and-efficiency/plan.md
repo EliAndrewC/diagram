@@ -6009,31 +6009,32 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T425 (<why: the finding or measurement that files it>)
+### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one change in the checks' tool, `l7r-rust` (`rust/gate/crates/rustc`, `rustc/slot.rs`). A build or lint pass told alone (T347, T355: `cargo_small` in `rustc.rs`, the only caller of `around_small`, which the binary key's test build, a red build's second asking and each lint pass take) that finds the lane held now takes a wide slot FREE at that instant, never a place in the wide queue. `take` becomes `take_or(first, also, ...)`: one wait loop, which at each look asks the lane (`first_free` of `small-<i>`) and then, only if the lane is held, the wide slots (`slot-<i>`), and takes the first free file of either. With the lane and both wide slots held it waits on both at once without spinning: no thread and no blocking lock, a `flock -n` start a slot file a look (three a look at the default widths) and the lane's poll (500 ms, a GUESS knob) of sleep between looks, on the lane's ceiling, notice and clock, so it ends at whichever frees first. The wide side is only an extra: where it cannot be asked (no wide slots, a `flock` that cannot start) it gives no slot of its own and the wait goes on in the lane, while a lane that cannot be asked still runs without at once, as before. A wait is one `slot-wait` line as before, and the build's `slot-small` line says which it took: code 0 the lane, 2 a wide slot (`OVERFLOW`, new), 1 none. No new step name, so no task-time category: the readers book `slot-small` to no category (`phase.rs`), and its wait stays booked as `waiting on a build slot` through `slot-wait`. The waiter's minute and ceiling lines name the holders of both sets. Memory: a build of the lane's class is 1.42 GiB at the most, measured 2026-11-26 (`dev/measurements/2026-11-26/small-build-memory/results.md`), inside a wide slot's 2.0 GiB of T347's paper budget (1.4 sessions + 2 x 2.0 wide + 1.6 lane room, a 7 GiB margin, GUESS knobs); the lane two wide was priced by T420 and left (1.4 + 4.0 + 2 x 1.42 = 8.2 > 7). `take` (one set) stays for the tests only (`#[cfg(test)]`), every call of the checks taking through `take_or`. `run_in` (T364) is untouched.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a held lane takes a free wide slot | `a_build_told_alone_that_finds_the_lane_held_takes_a_free_wide_slot_at_once` and `with_the_lane_and_both_wide_slots_held_it_waits_and_takes_whichever_frees_first` (`rustc/tests/overflow.rs`) red on the old code, 131 passed, 2 failed, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`: the first waited out its 2 s lane ceiling and ran without, the second waited the lane's while a wide slot freed), then green; `a_wait_on_the_lane_and_the_wide_slots_names_every_holder_and_ends_at_the_lane_s_ceiling` (green on both, a pin) and `a_wait_on_both_names_every_holder_of_each_and_the_lane_s_knob` (the lines' words, and a wide set that cannot be asked waiting on to the lane's ceiling); 134 passed in `make builder-checks` and in three `FRESH=1` repeats | n/a: tooling | none | none |
 
 ### T425 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder's test build or lint pass of one crate alone never waits for the small lane while a wide slot is free; it waits only where the lane and every wide slot are held, and then for whichever frees first.
+2. **The constraints.** T347's memory budget (a lane-class build in a wide slot's room, never a second lane); T284's never a deadlock, never a refusal (one slot held, none waited for while held); the lane is still preferred, so a wide slot goes to a lane build only where the lane is held. T364's `run_in` untouched (the brief).
+3. **Where each comes from.** O: T420's record (`dev/measurements/2026-11-27/slot-waits/results.md`, lever table: 85.7 of 87.4 s, about 570 s a day at the window's rate, a GUESS scaling). O: T347's memory figures (`dev/measurements/2026-11-26/small-build-memory/results.md`).
+4. **Do they describe the world here?** Yes: the red tests reproduce the case on the old code - a held lane with a wide slot free waited the lane's whole ceiling, measured 2026-11-27 (`make rust-test`).
+5. **The order.** After T347, T355 and T420; beside T364, which changes `run_in` and not the slot.
+6. **The exits.** Green: the rustc crate's 134 tests and lint, measured 2026-11-27 (`make builder-checks CRATE=rust/gate/crates/rustc`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The two red fixtures green: a held lane with a wide slot free takes it with no wait (`slot-small 2`, no `slot-wait`), and with all three held a wide slot freed first is taken (`slot-wait 0`, `slot-small 2`), the lane freed first is taken (`slot-small 0`). In the world, `slot-small` lines of code 2 count the overflows; the saving expected is T420's 85.7 s of the window, about 570 s a day (a GUESS scaling), read again with `waits.py` over a later window.
+10. **Before moving a constant.** n/a: no knob moves; `OVERFLOW` is a line code, not a tunable.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's `slot-wait` seconds for the lane, where a wide slot was free, go to about none; `make task-time`'s `waiting on a build slot` shrinks by them.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster). Of 87.4 s of real lane waits in 3.61 h, 85.7 s had a wide slot free, measured 2026-11-27 (the event logs, `dev/measurements/2026-11-27/slot-waits/waits.py`), about 570 s a day at that rate (a GUESS scaling, x 6.65); those waits now end at once where a wide slot is free. No engine speed, so no checklist.
 
 
 ### T426 (<why: the finding or measurement that files it>)

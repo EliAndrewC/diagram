@@ -3554,7 +3554,7 @@
    "declared": "spec-fidelity"
   },
   "### T425 Approach (checklist part A)": {
-   "sha256": "44816069c066b8dd2aa575f8c1f2e32aaf4de580b8278d3cd907a9edb5805f31",
+   "sha256": "669453acb2a6289200ca1d1ca9ec645e4ee0fd6294e74ebf6150c608d0770b56",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3831,6 +3831,12 @@
   },
   "### T439 Approach (checklist part A)": {
    "sha256": "28c51bbdd797605e42619a0ebc075f446c74bb4d4b4d4602b1ecc001d125e8c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))": {
+   "sha256": "4fb24ecb254aceb33452d7346cba561fdec22a0b0bdf1563b55768a8ec8c1f57",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34554,6 +34560,64 @@
      "why": "A template stub decides nothing; removing an unfilled stub removes no decision."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))",
+    "### T425 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T425-1 overflow",
+     "summary": "A build or lint pass told alone (cargo_small / around_small) that finds the small lane held takes a wide build slot that is free at that instant, never a place in the wide queue.",
+     "class": "within",
+     "why": "Performance work on the builders' loop (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?', 2026-11-26 'Our goal is to maximize task throughput', T284 'some synchronization rather than pre-emptively limiting'). T420 measured 85.7 of 87.4 s of lane waits with a wide slot free; using idle capacity serves the request and narrows nothing."
+    },
+    {
+     "id": "T425-2 lane preferred",
+     "summary": "The lane is asked first at every look; a wide slot goes to a lane-class build only while the lane is held.",
+     "class": "within",
+     "why": "Keeps T347's lane as the class's home and the wide slots for wide builds; a design order inside the request, it withholds nothing the GM asked for."
+    },
+    {
+     "id": "T425-3 one wait loop over both",
+     "summary": "take becomes take_or(first, also): one non-blocking poll loop (flock -n per slot file, the lane's 500 ms GUESS poll, its ceiling, notice and clock) that ends at whichever of lane or wide slot frees first; no thread, no blocking lock.",
+     "class": "within",
+     "why": "Mechanism of the overflow; keeps T284's never-deadlock, never-refuse contract (one slot held, none waited for while held). Design, not scope."
+    },
+    {
+     "id": "T425-4 degraded sides",
+     "summary": "A wide side that cannot be asked gives no slot and the wait goes on in the lane; a lane that cannot be asked still runs without at once, as before.",
+     "class": "within",
+     "why": "Preserves T284/T347's existing non-refusal behavior; the overflow is purely additive and removes no case the request covers."
+    },
+    {
+     "id": "T425-5 event lines",
+     "summary": "The wait stays one slot-wait line booked 'waiting on a build slot'; slot-small gains code 2 (OVERFLOW); no new step name or task-time category; the waiter's minute and ceiling lines name holders of both sets.",
+     "class": "within",
+     "why": "Keeps the time breakdown's (FR-001..FR-005, T243) booking intact and makes the overflow countable for the measured 'done' - measurement in service of the request."
+    },
+    {
+     "id": "T425-6 memory and no wider lane",
+     "summary": "A lane-class build (1.42 GiB measured 2026-11-26) fits a wide slot's 2.0 GiB in T347's paper budget; widening the lane to two was priced by T420 (8.2 > 7) and not done.",
+     "class": "within",
+     "why": "Respects T347's memory budget; not widening the lane is an option the GM never asked for, not a defect left and not a narrowing of any requirement."
+    },
+    {
+     "id": "T425-7 take kept for tests, run_in untouched",
+     "summary": "Single-set take stays #[cfg(test)] only, every checks call takes through take_or; T364's run_in unchanged.",
+     "class": "within",
+     "why": "Code-organization and sequencing beside T364; no requested behavior is narrowed."
+    },
+    {
+     "id": "T425-8 [perf] classification",
+     "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -53291,6 +53355,62 @@
      "summary": "Both tasks classed as [perf] work (FR-013) with before and after figures; no engine speed is involved, so no engine-speed checklist",
      "class": "within",
      "why": "Both make the checks faster, which is FR-013's own example of performance work. The note is a factual one about which checklist applies, and it decides nothing the request asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T425": {
+   "section_sha256": "71d4ea1f5bd62ca09c9b3091a9a56f33c29bb616ca76c953dc02d6a8d4d7079f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T425-1 overflow",
+     "summary": "A build or lint pass told alone (cargo_small / around_small) that finds the small lane held takes a wide build slot that is free at that instant, never a place in the wide queue.",
+     "class": "within",
+     "why": "Performance work on the builders' loop (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?', 2026-11-26 'Our goal is to maximize task throughput', T284 'some synchronization rather than pre-emptively limiting'). T420 measured 85.7 of 87.4 s of lane waits with a wide slot free; using idle capacity serves the request and narrows nothing."
+    },
+    {
+     "id": "T425-2 lane preferred",
+     "summary": "The lane is asked first at every look; a wide slot goes to a lane-class build only while the lane is held.",
+     "class": "within",
+     "why": "Keeps T347's lane as the class's home and the wide slots for wide builds; a design order inside the request, it withholds nothing the GM asked for."
+    },
+    {
+     "id": "T425-3 one wait loop over both",
+     "summary": "take becomes take_or(first, also): one non-blocking poll loop (flock -n per slot file, the lane's 500 ms GUESS poll, its ceiling, notice and clock) that ends at whichever of lane or wide slot frees first; no thread, no blocking lock.",
+     "class": "within",
+     "why": "Mechanism of the overflow; keeps T284's never-deadlock, never-refuse contract (one slot held, none waited for while held). Design, not scope."
+    },
+    {
+     "id": "T425-4 degraded sides",
+     "summary": "A wide side that cannot be asked gives no slot and the wait goes on in the lane; a lane that cannot be asked still runs without at once, as before.",
+     "class": "within",
+     "why": "Preserves T284/T347's existing non-refusal behavior; the overflow is purely additive and removes no case the request covers."
+    },
+    {
+     "id": "T425-5 event lines",
+     "summary": "The wait stays one slot-wait line booked 'waiting on a build slot'; slot-small gains code 2 (OVERFLOW); no new step name or task-time category; the waiter's minute and ceiling lines name holders of both sets.",
+     "class": "within",
+     "why": "Keeps the time breakdown's (FR-001..FR-005, T243) booking intact and makes the overflow countable for the measured 'done' - measurement in service of the request."
+    },
+    {
+     "id": "T425-6 memory and no wider lane",
+     "summary": "A lane-class build (1.42 GiB measured 2026-11-26) fits a wide slot's 2.0 GiB in T347's paper budget; widening the lane to two was priced by T420 (8.2 > 7) and not done.",
+     "class": "within",
+     "why": "Respects T347's memory budget; not widening the lane is an option the GM never asked for, not a defect left and not a narrowing of any requirement."
+    },
+    {
+     "id": "T425-7 take kept for tests, run_in untouched",
+     "summary": "Single-set take stays #[cfg(test)] only, every checks call takes through take_or; T364's run_in unchanged.",
+     "class": "within",
+     "why": "Code-organization and sequencing beside T364; no requested behavior is narrowed."
+    },
+    {
+     "id": "T425-8 [perf] classification",
+     "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
     }
    ],
    "verdict": "CLEAR"

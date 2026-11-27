@@ -1,5 +1,6 @@
 //! The small lane (feature 451 T347): a test build told to compile its crate alone - its key standing in the target directory and
-//! no input newer than it - takes the lane and never a wide build slot, at both of a test run's builds; anything else a wide slot.
+//! no input newer than it - takes the lane and never waits for a wide build slot, at both of a test run's builds; anything else a
+//! wide slot.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;

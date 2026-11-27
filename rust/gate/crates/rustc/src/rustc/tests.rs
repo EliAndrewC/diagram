@@ -21,6 +21,7 @@ mod drain;
 mod fmtfile;
 mod kept;
 mod lint;
+mod overflow;
 mod phases;
 mod prewarm;
 mod runlock;

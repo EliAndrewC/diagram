@@ -216,7 +216,8 @@ fn cargo_in(
 }
 
 /// `cargo`, for a test build or a lint pass told to compile its crate alone (feature 451 T347 and T355, `kept/alone.rs`): the small
-/// lane, never a wide slot.
+/// lane, or a wide slot free at that instant where the lane is held (feature 451 T425, `slot.rs`'s `around_small`), never a place
+/// in the wide queue.
 fn cargo_small(world: &World, args: &[&str], manifest: &Path, after: &[&str]) -> Ran {
     let (all, mut env) = cargo_call(world, args, manifest, after, None);
     let _slot = slot::around_small(world, manifest, &all, &mut env);

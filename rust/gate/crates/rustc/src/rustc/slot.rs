@@ -27,7 +27,8 @@
 //! two rustc at once, where a slot's own kind of build is 2.0 GiB a tree and 12 rustc. The budget - 1.4 GiB of sessions and two
 //! wide builds at 2.0 against a 7 GiB margin (GUESS) - leaves 1.6: room for one such build, not two at the ceiling. So a build
 //! the tool can tell is of that class before it starts (`kept/alone.rs`) takes a lane of its own, `L7R_BUILD_SLOTS_SMALL` wide
-//! (files `small-<i>` beside the `slot-<i>`), and never a wide slot: it waits only behind another of its kind. A lane, not a skip:
+//! (files `small-<i>` beside the `slot-<i>`), and never a place in the wide queue: it waits only behind another of its kind (and,
+//! since T425, below, takes a wide slot only where one is free). A lane, not a skip:
 //! it bounds a wrong telling at one more large build, which no slot at all would not. A build the telling cannot vouch for takes a
 //! wide slot as before, and so does every build where the lane is `0`; with no wide slots (`L7R_BUILD_SLOTS=0`, a run under a
 //! holder) there is no lane either. A wait in the lane is a `slot-wait` line like any other; each build that took the lane writes a
@@ -37,6 +38,15 @@
 //! GiB anonymous after a body edit, 0.66 GiB at the most, one to three `clippy-driver` at once, no link, measured 2026-11-27
 //! (`dev/measurements/2026-11-27/lint-memory/results.md`) - so each pass told so by its own key takes the same lane, in a test
 //! build's place and never beside one: the lane's width and budget are as they were.
+//!
+//! THE LANE'S OVERFLOW (feature 451 T425). Of the 13 real lane waits from 2026-11-27 00:20Z to 03:56Z, 87.4 s, a wide slot stood
+//! free for 85.7 s (`dev/measurements/2026-11-27/slot-waits/results.md`). A build of the lane's class (1.42 GiB at the most) fits a
+//! wide slot's 2.0 GiB of the budget above, so a build or lint pass told alone that finds the lane held takes a wide slot FREE at
+//! that instant, and never a place in the wide queue: with the lane and every wide slot held it waits on both at once - one loop,
+//! the lane first and then the wide slots at each look (`take_or`), the lane's ceiling, notice and poll, no thread and no blocking
+//! lock - and takes whichever frees first. Its `slot-small` line says which: code 0 the lane, 2 a wide slot (`OVERFLOW`), 1 none;
+//! the readers book the line to no category, as before, and its wait is a `slot-wait` line like any other. A lane two wide was
+//! priced and left: 1.4 + 4.0 + 2 x 1.42 = 8.2 GiB of the 7 GiB margin.
 
 use std::collections::BTreeMap;
 use std::fs::File;
@@ -261,51 +271,79 @@ pub(super) fn free_now(slots: &Slots, who: &str) -> Option<Hold> {
 }
 
 /// Take a slot for `who`, waiting while every one is held (said through `say` each `notice`); without one where there are none to
-/// take or the wait passes the ceiling, said too.
+/// take or the wait passes the ceiling, said too. Every call of the checks takes through `take_or` (feature 451 T425); this is the
+/// one-set form the tests hold and fill slots with.
+#[cfg(test)]
 pub(super) fn take(slots: &Slots, who: &str, say: &mut dyn FnMut(&str)) -> Taken {
+    take_or(slots, None, who, say).0
+}
+
+/// `take` from `first`, or where `also` is given from it too (feature 451 T425, the lane's overflow into a free wide slot): at
+/// each look `first` is asked, then `also`, and the first free slot of either is taken - so a wait on both is the one loop of
+/// `first`'s own knobs (its ceiling, notice, poll and clock), a `flock -n` a file a look and a poll's sleep between looks, no
+/// thread and no blocking lock, and it ends at whichever frees first. `also` is only ever an extra: its error is no slot of its
+/// own, never a run without. The `bool` is true where the slot taken is `also`'s.
+pub(super) fn take_or(
+    first: &Slots,
+    also: Option<&Slots>,
+    who: &str,
+    say: &mut dyn FnMut(&str),
+) -> (Taken, bool) {
     let mut waited = None;
-    if slots.count == 0 {
-        return Taken { hold: None, waited };
+    if first.count == 0 {
+        return (Taken { hold: None, waited }, false);
     }
-    let began = slots.clock.now();
-    let mut next = slots.notice;
+    let began = first.clock.now();
+    let mut next = first.notice;
+    let sets: Vec<&Slots> = std::iter::once(first).chain(also).collect();
+    let named = || {
+        sets.iter()
+            .map(|s| holders(s))
+            .filter(|h| !h.is_empty())
+            .collect::<Vec<_>>()
+            .join("; ")
+    };
     loop {
-        let so_far = slots.clock.now().saturating_sub(began);
-        match first_free(slots, who) {
-            Ok(Some(file)) => {
-                return Taken {
-                    hold: Some(Hold { _file: file }),
-                    waited: waited.map(|_| so_far),
-                };
-            }
-            Ok(None) => {}
+        let so_far = first.clock.now().saturating_sub(began);
+        let got = match first_free(first, who) {
+            Ok(Some(file)) => Some((file, false)),
+            Ok(None) => also
+                .and_then(|wide| first_free(wide, who).ok().flatten())
+                .map(|file| (file, true)),
             Err(reason) => {
                 say(&format!(
                     "rust-checks: no build slot to take ({reason}) - this cargo call runs without one (feature 451 T284)\n"
                 ));
-                return Taken { hold: None, waited };
+                return (Taken { hold: None, waited }, false);
             }
+        };
+        if let Some((file, wide)) = got {
+            let taken = Taken {
+                hold: Some(Hold { _file: file }),
+                waited: waited.map(|_| so_far),
+            };
+            return (taken, wide);
         }
         waited = Some(so_far);
-        if so_far >= slots.ceiling {
+        if so_far >= first.ceiling {
             say(&format!(
                 "rust-checks: waited {} s on a build slot, the ceiling ({CEILING} seconds) - this cargo call runs without one; held by: {}\n",
                 so_far.as_secs(),
-                holders(slots)
+                named()
             ));
-            return Taken { hold: None, waited };
+            return (Taken { hold: None, waited }, false);
         }
         if so_far >= next {
             say(&format!(
                 "rust-checks: waiting on a build slot, {} s so far - {} compiling cargo call(s) run at once on this machine ({}, feature 451 T284); held by: {}\n",
                 so_far.as_secs(),
-                slots.count,
-                slots.knob,
-                holders(slots)
+                first.count,
+                first.knob,
+                named()
             ));
-            next += slots.notice;
+            next += first.notice;
         }
-        slots.clock.sleep(slots.poll);
+        first.clock.sleep(first.poll);
     }
 }
 
@@ -317,11 +355,17 @@ pub(super) fn around(
     args: &[String],
     env: &mut BTreeMap<String, String>,
 ) -> Option<Hold> {
-    around_of(world, &world.slots, args, env)
+    around_of(world, &world.slots, None, args, env).0
 }
 
-/// `around`, for a test build of `manifest`'s crate alone (feature 451 T347, `kept/alone.rs`): a place in the small lane, never a
-/// wide slot, and a `slot-small` line whose span is its wait for it. No lane (`L7R_BUILD_SLOTS_SMALL=0`, no wide slots) is `around`.
+/// The `slot-small` line's code where the build took a wide slot the lane overflowed into (feature 451 T425); 0 is the lane, 1 none.
+pub(super) const OVERFLOW: i32 = 2;
+
+/// `around`, for a test build or lint pass of `manifest`'s crate alone (feature 451 T347, T355, `kept/alone.rs`): a place in the
+/// small lane, or where the lane is held a wide slot free at that instant (feature 451 T425: of 87.4 s of lane waits on
+/// 2026-11-27, a wide slot stood free for 85.7 s), never a place in the wide queue; with both held it waits for whichever frees
+/// first, by the lane's knobs. A `slot-small` line's span is its wait, its code 0 the lane, `OVERFLOW` a wide slot, 1 none. No lane
+/// (`L7R_BUILD_SLOTS_SMALL=0`, no wide slots) is `around`.
 pub(super) fn around_small(
     world: &World,
     manifest: &Path,
@@ -332,17 +376,24 @@ pub(super) fn around_small(
         return around(world, args, env);
     }
     let began = SystemTime::now();
-    let hold = around_of(world, &world.small, args, env);
-    super::phase::wrote(world, USE, &[manifest], began, i32::from(hold.is_none()));
+    let wide = (world.slots.count > 0).then_some(&world.slots);
+    let (hold, overflowed) = around_of(world, &world.small, wide, args, env);
+    let code = match (&hold, overflowed) {
+        (None, _) => 1,
+        (Some(_), true) => OVERFLOW,
+        (Some(_), false) => 0,
+    };
+    super::phase::wrote(world, USE, &[manifest], began, code);
     hold
 }
 
 fn around_of(
     world: &World,
     slots: &Slots,
+    also: Option<&Slots>,
     args: &[String],
     env: &mut BTreeMap<String, String>,
-) -> Option<Hold> {
+) -> (Option<Hold>, bool) {
     let began = SystemTime::now();
     let tree = world.root.file_name().unwrap_or_default().to_string_lossy();
     let what: Vec<&str> = args.iter().take(2).map(String::as_str).collect();
@@ -352,7 +403,7 @@ fn around_of(
         world.make,
         what.join(" ")
     );
-    let taken = take(slots, &who, &mut |line| eprint!("{line}"));
+    let (taken, overflowed) = take_or(slots, also, &who, &mut |line| eprint!("{line}"));
     if taken.waited.is_some() {
         let none: [&Path; 0] = [];
         let code = i32::from(taken.hold.is_none());
@@ -361,5 +412,5 @@ fn around_of(
     if taken.hold.is_some() {
         env.insert(MARK.to_owned(), "1".to_owned());
     }
-    taken.hold
+    (taken.hold, overflowed)
 }
