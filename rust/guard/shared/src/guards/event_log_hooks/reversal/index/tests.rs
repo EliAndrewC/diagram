@@ -418,3 +418,44 @@ fn a_parsed_line_that_is_no_pre_tool_use_edit_makes_no_row() {
     assert!(super::indexed(line, &mut rows));
     assert!(rows.is_empty());
 }
+
+/// A hook killed between the temporary write and its rename leaves its temporary file, which the next write of an index in that
+/// directory sweeps once it is older than [`super::SWEEP_AGE`] (451 T459); a younger one may be a running writer's, and is kept, as is
+/// any file of another form, and nothing is swept by a hook that only reads.
+#[test]
+fn a_killed_hook_s_temporary_file_is_swept_at_the_next_write_once_it_is_old() {
+    let p = json!("/c/docs/usage.md");
+    let text = busy(3);
+    let (d, log) = world("sweep", &text);
+    ask(&log, &p);
+    let dir = d.path().join("reversal");
+    let aged = |name: &str, age: u64| {
+        let f = dir.join(name);
+        std::fs::write(&f, "x").unwrap();
+        let then = std::time::SystemTime::now() - std::time::Duration::from_secs(age);
+        File::options()
+            .write(true)
+            .open(&f)
+            .unwrap()
+            .set_modified(then)
+            .unwrap();
+        f
+    };
+    let old = super::SWEEP_AGE.as_secs() + 60;
+    let killed = aged(".f.idx.4242.0.tmp", old);
+    let other = aged(".g.idx.4243.7.tmp", old);
+    let young = aged(".f.idx.4244.1.tmp", 5);
+    let kept = [
+        aged("notes.tmp", old),
+        aged(".f.idx.tmp", old),
+        aged("f.idx.1.2.tmp", old),
+    ];
+    // a hook that only reads the index sweeps nothing
+    ask(&log, &p);
+    assert!(killed.exists());
+    std::fs::remove_file(index_path(&log).unwrap()).unwrap();
+    assert_eq!(ask(&log, &p), parse_all(&text, &p));
+    assert!(!killed.exists() && !other.exists());
+    assert!(young.exists() && kept.iter().all(|k| k.exists()));
+    assert_eq!(covered(&log), Some(text.len() as u64));
+}

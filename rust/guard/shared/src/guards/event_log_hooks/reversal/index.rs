@@ -57,6 +57,12 @@ const WINDOW: u64 = 4096;
 /// either way, about 0.5 ms a MB (`t392-results.md`), so this trades that scan against a write of the index.
 const STALE: u64 = 1024 * 1024;
 
+/// How old a temporary index file must be before a write sweeps it (a GUESS knob, 451 T459): a hook killed between [`store`]'s write
+/// and its rename leaves one that nothing else removes; a running writer's is milliseconds to seconds old (a rebuild scans the whole
+/// log between them: about 12 ms for the 451 log's 44.4 MB read a chunk at a time, measured 2026-11-27, `t392-results.md`), so an
+/// hour is far past any writer still alive.
+const SWEEP_AGE: std::time::Duration = std::time::Duration::from_secs(3600);
+
 /// The index of a log at `log`: `<its directory>/reversal/<its stem>.idx`; None for a path with no directory or name.
 pub(super) fn index_path(log: &Path) -> Option<PathBuf> {
     let stem = log.file_stem()?.to_string_lossy();
@@ -228,6 +234,41 @@ impl Read for From<'_> {
     }
 }
 
+/// Every index's temporary file in `dir`, `.<name>.idx.<pid>.<n>.tmp`, older than [`SWEEP_AGE`], removed (451 T459): the one a hook
+/// killed between [`store`]'s write and its rename leaves, which nothing else removes. Every feature's, not only the one being written:
+/// the directory holds the indexes alone, and a feature whose index is never written again would keep its own for good. A file of
+/// any other name, or one whose age cannot be read, is left.
+fn sweep(dir: &Path) {
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for e in entries.map_while(Result::ok) {
+        let name = e.file_name();
+        let name = name.to_string_lossy();
+        let temp = name
+            .strip_prefix('.')
+            .and_then(|n| n.strip_suffix(".tmp"))
+            .and_then(|n| n.rsplit_once(".idx."))
+            .is_some_and(|(stem, n)| {
+                !stem.is_empty()
+                    && n.split_once('.').is_some_and(|(pid, seq)| {
+                        [pid, seq]
+                            .iter()
+                            .all(|d| !d.is_empty() && d.bytes().all(|b| b.is_ascii_digit()))
+                    })
+            });
+        let old = e
+            .metadata()
+            .and_then(|m| m.modified())
+            .ok()
+            .and_then(|t| t.elapsed().ok())
+            .is_some_and(|age| age > SWEEP_AGE);
+        if temp && old {
+            let _ = std::fs::remove_file(e.path());
+        }
+    }
+}
+
 /// The index written over `idx` through a temporary file of this process's own and a rename; a failure leaves what was there.
 fn store(idx: &Path, tie: &Tie, rows: &[u8]) {
     static SEQ: AtomicU64 = AtomicU64::new(0);
@@ -240,6 +281,7 @@ fn store(idx: &Path, tie: &Tie, rows: &[u8]) {
         std::process::id(),
         SEQ.fetch_add(1, Ordering::Relaxed)
     ));
+    sweep(dir);
     let ok =
         std::fs::create_dir_all(dir).is_ok() && std::fs::write(&tmp, encode(tie, rows)).is_ok();
     if !(ok && std::fs::rename(&tmp, idx).is_ok()) {

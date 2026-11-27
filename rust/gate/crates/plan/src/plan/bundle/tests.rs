@@ -216,6 +216,7 @@ fn a_task_s_own_decision_label_is_not_the_spec_s_decision() {
     let n = super::named(
         "- T256-D1 THE ROUTE: as D3 says, and FR-002; T12a-D2b beside it.\n",
         "999",
+        &[],
     );
     assert_eq!(super::ids_in(&n.bare), ["D3", "FR-002"]);
     assert_eq!(expand_ranges("T256-D1 and D1-D2"), " and D1, D2");

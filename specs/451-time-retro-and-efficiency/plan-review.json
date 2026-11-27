@@ -3715,14 +3715,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T438 (<why: the finding or measurement that files it>)": {
-   "sha256": "72b3cccb2344202ac7182943a0c35bf1e0c447aea28c87cf766e7c6f6a5423fd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T438 Approach (checklist part A)": {
-   "sha256": "07bd77fb11b21c30bfec7125e381950611e6a772c530825f80802833cf63ea70",
+   "sha256": "9bd9eb693296ebc3ffba22c8fda2c27c00c70340713f56f9c1bb940ebf0ef4d8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4149,6 +4143,24 @@
   },
   "### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)": {
    "sha256": "54fd06c9845e8b06af455aefec6a62f57f111f345350c722053cf3f9c5272d00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)": {
+   "sha256": "feb199f30ad1262e48deb90ac62bdb555eeb3bb8910bae41108e10de32e04e55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T459 Approach (checklist part A)": {
+   "sha256": "5e5ab74d4835eb91d289da3b7772ce07984043588ee0b17b35c15d71a77a31c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)": {
+   "sha256": "c0c02dc751e2e655c5243d44083cf5e904e5ff7460662451c78a99e4bc8cc6ef",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -37693,6 +37705,118 @@
      "why": "A limit on the work that narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)",
+    "### T459 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of old temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "A defect fix (a killed hook's .tmp left in <events dir>/reversal/) under the feature's fix-as-we-go and the GM's 2026-11-22 'clean up after ourselves in terms of the file system'. Running it at the one writer is the mechanism, not a narrowing: a leftover of a few hundred KB lives at most until the next write in the directory, which reads no map, contradicts no finding and costs no time (the GM's 2026-11-26 principle: time saved over disk). No defect is left."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in the directory is swept, by its exact name form (.<stem>.idx.<pid>.<n>.tmp, digits), older than SWEEP_AGE; other names and unreadable ages are left.",
+     "class": "within",
+     "why": "Widens the fix to cover a feature whose index is never written again, so it serves the defect's purpose; the exact-form match keeps the sweep from touching anything that is not a leftover of this writer. Nothing the request asks for is excluded."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a knob (GUESS, make tunables).",
+     "class": "within",
+     "why": "A tunable bound on a value no research or GM word settles; the GM's 2026-10-25 words allow a knob where nothing indicates a value. It is set far past a live writer's life (about 12 ms, one-shot label 2026-11-27 with its results file), so it keeps T443's invariant that no running writer's file is removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)",
+    "### T438 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and is not carried into spec-cited.md; spec/plan-prefixed runs, feature-qualified ids, possessive-named ids and every FR-/SC- are still carried.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the bundle carried the spec's D1/D3 to a reviewer for ids that meant the section's own T369-D1/T369-D3). 'Left out' rather than 'resolved' is one of the two outcomes the task line itself names, and the section's own text is already in blocks.md, which the reviewer reads whole. Nothing the GM asked or the spec settles is narrowed."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's plan.md section) counts as labeled; unlabeled task sections are read as before, not the brief's wider every-task-section rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the brief, not the GM's request or the spec (no GM words name this task; the GM's standing ask is that known defects be fixed). The narrowing is measured and labeled (observed 2026-11-27, every specs/*/plan.md split by heading, each bare id classed): 429 bare ids in unlabeled sections cite the plan's own decisions, defined bare there, so carrying them is correct and leaves no defect; all 44 in labeled sections are the section's own or another section's and are fixed. The wider rule would drop those 429 correct citations, refusing good work, which would undo what the fix is for. Purpose-level test passes: every mis-carried id found is removed, and no defect is left."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/the task's/the block's D4, and the owner's T369's D1) are taken out too, where the possessive rule would read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in another written form: these name the section's own decisions, so carrying the spec's same-numbered text is the wrong outcome D1 fixes. It completes the fix and widens nothing beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)",
+    "### T438 Approach (checklist part A)",
+    "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)",
+    "### T459 Approach (checklist part A)",
+    "(removed) ### T438 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and its spec text is not carried; spec-named (spec/plan/plan.md), feature-qualified and possessive-named ids, and every FR-/SC-, are still carried.",
+     "class": "within",
+     "why": "Fixes the defect the task names: the bundle handed a reviewer spec decisions the section never cited. Leaving the id out instead of resolving it is one of the two options the task's line gives, and the section's own decision is already in blocks.md. Nothing the GM's request or FR-043's bundle form asks for is dropped."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's section of plan.md) counts as labeled; an unlabeled section's bare ids are read as before.",
+     "class": "within",
+     "why": "This does not narrow the GM's request or the spec. The wider rule (every task section) came from the coordinating brief, not the GM. The dated measurement shows it would drop 429 correct citations of plan decisions in older features' unlabeled sections, which would create a defect instead of fixing one. All 44 bare ids in labeled sections, the class the defect belongs to, are covered."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/task's/block's D4, the owner's T369's D1) are taken out, though the possessive rule would otherwise read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in its possessive form: these phrases name the section's decisions, so carrying the spec's same-numbered decision is the wrong outcome the task fixes."
+    },
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of leftover temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "The defect is a leftover nothing removes. After this change it is removed at the next index write in the directory, and the block says the task's line names the rebuild. Using the scratch sweep instead was weighed and turned down on cost. That is a design choice inside the fix, not a carve-out from it."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in reversal/ is swept, by its exact name form (digits for pid and sequence); files of any other name, or whose age cannot be read, are left.",
+     "class": "within",
+     "why": "It covers the whole class of leftover, including a feature whose index is never written again. The exact-form and unreadable-age exclusions keep files the defect does not cover. The directory holds only the indexes."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a GUESS knob listed in make tunables.",
+     "class": "within",
+     "why": "A tunable bound, labeled as a GUESS, with a dated measurement (about 12 ms for a rebuild of a 44.4 MB log) showing that an hour is far past any writer still alive. It keeps T443's invariant that no running writer's file is removed. The block says the task's line names the hour."
+    },
+    {
+     "id": "(removed) T438 placeholder",
+     "summary": "The template stub heading '### T438 (<why: ...>)' is removed, replaced by the filled T438 section above.",
+     "class": "within",
+     "why": "Its earlier text is only the task-add template's placeholders, with no decision in it. Removing it decides nothing, because the filled section carries the task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -57514,6 +57638,59 @@
      "summary": "Constraint: no guard file edited and no guard message changed.",
      "class": "within",
      "why": "A limit on the work that narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T459": {
+   "section_sha256": "355055fa5d21edc6647c3c4b20de368cf19d4a53880dc08782af7ca07d3e5ffc",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of old temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "A defect fix (a killed hook's .tmp left in <events dir>/reversal/) under the feature's fix-as-we-go and the GM's 2026-11-22 'clean up after ourselves in terms of the file system'. Running it at the one writer is the mechanism, not a narrowing: a leftover of a few hundred KB lives at most until the next write in the directory, which reads no map, contradicts no finding and costs no time (the GM's 2026-11-26 principle: time saved over disk). No defect is left."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in the directory is swept, by its exact name form (.<stem>.idx.<pid>.<n>.tmp, digits), older than SWEEP_AGE; other names and unreadable ages are left.",
+     "class": "within",
+     "why": "Widens the fix to cover a feature whose index is never written again, so it serves the defect's purpose; the exact-form match keeps the sweep from touching anything that is not a leftover of this writer. Nothing the request asks for is excluded."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a knob (GUESS, make tunables).",
+     "class": "within",
+     "why": "A tunable bound on a value no research or GM word settles; the GM's 2026-10-25 words allow a knob where nothing indicates a value. It is set far past a live writer's life (about 12 ms, one-shot label 2026-11-27 with its results file), so it keeps T443's invariant that no running writer's file is removed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T438": {
+   "section_sha256": "1bd1d480250e61cb66d979ec257d432ed42231a44fd84bd3d1b03a08491cda00",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and is not carried into spec-cited.md; spec/plan-prefixed runs, feature-qualified ids, possessive-named ids and every FR-/SC- are still carried.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the bundle carried the spec's D1/D3 to a reviewer for ids that meant the section's own T369-D1/T369-D3). 'Left out' rather than 'resolved' is one of the two outcomes the task line itself names, and the section's own text is already in blocks.md, which the reviewer reads whole. Nothing the GM asked or the spec settles is narrowed."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's plan.md section) counts as labeled; unlabeled task sections are read as before, not the brief's wider every-task-section rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the brief, not the GM's request or the spec (no GM words name this task; the GM's standing ask is that known defects be fixed). The narrowing is measured and labeled (observed 2026-11-27, every specs/*/plan.md split by heading, each bare id classed): 429 bare ids in unlabeled sections cite the plan's own decisions, defined bare there, so carrying them is correct and leaves no defect; all 44 in labeled sections are the section's own or another section's and are fixed. The wider rule would drop those 429 correct citations, refusing good work, which would undo what the fix is for. Purpose-level test passes: every mis-carried id found is removed, and no defect is left."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/the task's/the block's D4, and the owner's T369's D1) are taken out too, where the possessive rule would read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in another written form: these name the section's own decisions, so carrying the spec's same-numbered text is the wrong outcome D1 fixes. It completes the fix and widens nothing beyond it."
     }
    ],
    "verdict": "CLEAR"

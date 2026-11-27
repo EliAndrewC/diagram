@@ -7105,31 +7105,35 @@ batch; the red was not in its change.
 **Performance work?** no.
 
 
-### T438 (<why: the finding or measurement that files it>)
+### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's "(D1)" and "(D3)" meant its own T369-D1 and T369-D3)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the plan review's bundle (`rust/gate/crates/plan/src/plan/bundle.rs`, `named`, `cited_text`, `build`) reads a bare `D<n>` in a task section that labels its own decisions as that section's, so it carries no spec text for it. How the ids are written: a section's own decisions are `T369-D1` (the label, which `TASK_LABEL` already drops, 451 T257's review), and a bare `D1` inside such a section is also the section's. The spec's (the plan's top-level) decisions are cited, in such a section, in so many words: `spec D5`, `plan D5, D6`, `the spec's D5`, `the plan's D6`, `451 D7`; a requirement, `FR-` or `SC-`, is always the spec's and is never taken out.
+  - **T438-D1, built: in a labeled task section, a bare decision id is the section's own and is not carried** (`section_ids_out`). Kept, to be read as before: a run named as the spec's by a word before it (`SPEC_RUN`: `spec`, `plan`, `plan.md`), one a feature number names (`QUALIFIED`), one a possessive names (`NAMED`: `the plan's D6`, `house style's D11`). Label: CONVENTION (a form of the tooling; no research claim). Reason: the task's line ("should resolve to the section's, or be left out"); left out, not resolved, since the section's own decision is already in `blocks.md`, which the reviewer reads whole.
+  - **T438-D2, built: only a section that writes its own labels counts as labeled** (`labeled_owners`): the block's heading leads with a task (`leading_tasks`, so a bundle's heading names several), and the block or that task's section in plan.md holds a `T<n>-D<k>` label of that task. A block with no label of its own, `### T369 Approach`, is labeled through its section. A section labeling none is read as before. Label: CONVENTION. Reason: the older features' task sections define and cite the plan's own decisions bare (`**D1 - ...**` in 170's T11): 429 bare decision ids stand in unlabeled task sections and 44 in labeled ones, and all 44 are the section's own or another section's (one, 451 T433's `**D5, ...**`, an unlabeled own decision), observed 2026-11-27, method: every `specs/*/plan.md` split by `#{2,4}` heading, each heading's leading task its owner, each bare `D<n>` classed (`t438-measure.py` in the builders' scratchpad). The brief's wider rule, every task section, would drop those 429 citations of the plan's decisions; priced and not taken.
+  - **T438-D3, built: the section's own possessives are the section's too**: `the section's D4`, `the task's D4`, `the block's D4` and the owner's `T369's D1` are taken out, where the possessive rule (`OWN_NAMES`) reads them as the spec's. Label: CONVENTION.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a bare D<n> in a labeled section, its own; `spec D5`, `the plan's D6`, `451 D7`, FR-002 still carried; a label-free block of the section; an unlabeled section's bare D1 still the spec's (D1 to D3) | `plan::bundle::tests::a_bare_decision_in_a_labeled_task_section_is_the_section_s_own` | n/a: tooling | none | n/a |
 
 ### T438 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task section's plan review reads, in `spec-cited.md`, the spec's decisions the section names as the spec's and none of the spec's decisions that share a number with the section's own.
+2. **The constraints.** The task's line; the bundle's reading of another feature's and source's ids (451 T46, T48) and of a task's label (451 T257's review), both kept; FR-043's bundle form unchanged.
+3. **Where each comes from.** O: the round-2 plan reviewer of T369 (the task's line); the measurement in T438-D2. G: none of the GM's words name this task.
+4. **Do they describe the world here?** Yes: the fixture is T369's own forms ("(D1)", "(D2 to D4)", "(D3)") in a section labeled T369-D1 and T369-D3, reproduced red on the old code (item 9).
+5. **The order.** After T369 (its section the finding). No task waits on it.
+6. **The exits.** Green: the first tier's checks on `rust/gate/crates/plan`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the bundle's id reading is all in `bundle.rs` (`named`, `cited_text`, `answered`), found by one search for `spec-cited`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/plan ONLY="plan::bundle::tests"` with the new test on the old code: 30 passed, 1 failed (the spec's D1 to D4 carried for the section's bare ids). After the change: 31 ran, clean.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the reviewer sees differently: a labeled task section's bundle no longer carries the spec's decisions it never cited, which a round-2 reviewer of T369 read as the block's constraints.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect.
 
 ### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))
 
@@ -7884,31 +7888,35 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 **Performance work?** yes: the builders' loop and the session's own, the first Edit's hook on each new, refiled or rotated log. Before and after: `event-log-hooks` on a cold index 59.5 / 68.8 to 48.5 / 59.2 ms and 54.2 / 62.3 to 46.6 / 55.5 ms at load1 6.8 to 7.5, the warm call unchanged (median / 90th centile, 20 interleaved rounds each), measured 2026-11-27 (`t458-cold.py` in T373's sandbox). Once a log, so a few tens of milliseconds a day. Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 
-### T459 (<why: the finding or measurement that files it>)
+### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `store` (`rust/guard/shared/src/guards/event_log_hooks/reversal/index.rs`) sweeps the directory before it writes its own temporary file (`sweep`): every file named `.<stem>.idx.<pid>.<n>.tmp`, the pid and the sequence all digits, whose modification time is older than `SWEEP_AGE`, is removed. No guard message changes.
+  - **T459-D1, built: the sweep runs when an index is written, never on a read.** Label: CONVENTION. Reason: the task's line names the rebuild; a write (a rebuild, or a log grown `STALE` past its index) is rare, so a hook that only reads pays nothing, and the leftover is a few hundred kilobytes at most until the next write. The alternative priced: the day's scratch sweep (`scratch_sweep_hooks`), which would put a reader of the events directory's inner layout into a second guard.
+  - **T459-D2, built: every feature's temporary file in the directory, by its exact form.** Label: CONVENTION. Reason: the directory holds the indexes alone (the module's "WHERE IT LIVES"), and a feature whose index is never written again would otherwise keep its leftover for good; a file of any other name, or one whose age cannot be read, is left.
+  - **T459-D3, built: `SWEEP_AGE` is one hour.** Label: GUESS (a knob, `make tunables`). Reason: a running writer's temporary file lives from its write to its rename, a rebuild's scan of the whole log between them, about 12 ms for the 451 log's 44.4 MB read a chunk at a time, measured 2026-11-27 (`dev/measurements/2026-11-27/edit-hook/t392-results.md`), so an hour is far past any writer still alive, and the task's line names it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a killed hook's old temporary file swept at the next write, another feature's too; a young one, other names and a read-only hook's call left (D1 to D3) | `guards::event_log_hooks::reversal::index::tests::a_killed_hook_s_temporary_file_is_swept_at_the_next_write_once_it_is_old` | n/a: tooling | none | n/a |
 
 ### T459 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No temporary index file outlives its writer by more than `SWEEP_AGE` past the next write of an index in the same directory.
+2. **The constraints.** The task's line; T443's invariant (the index is the reader's alone, a temporary file and a rename, two racing writers losing at most one's work), kept: the sweep removes no file a running writer holds, since it is younger than the bound.
+3. **Where each comes from.** O: T443's reading (the task's line) and `t392-results.md`'s scan rate. G: none of the GM's words name this task.
+4. **Do they describe the world here?** Yes: the leftover was made in the test by writing a file of the temporary form and aging it; no real one has been seen (the task's line).
+5. **The order.** After T443 (the index). No task waits on it.
+6. **The exits.** Green: the first tier's checks on `rust/guard/shared` and the event-log guard's suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `store` is the index's one writer.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, observed 2026-11-27, method: `make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks::reversal::index"` with the new test and the knob alone on the old code: 13 passed, 1 failed (the aged temporary file still there after the rebuild). After the change: 14 ran, clean.
+10. **Before moving a constant.** n/a: a new knob, no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What the session sees differently: no `.tmp` files accumulate in `<events dir>/reversal/` after a killed hook.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a defect.
 
 ### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)
 
@@ -8067,6 +8075,32 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T466 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T467 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T467 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

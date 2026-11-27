@@ -487,7 +487,8 @@ fn own_run<'a>(run: &'a str, after: &str) -> (&'a str, &'a str) {
     cut.map_or((run, ""), |at| (&run[..at], &run[at..]))
 }
 
-fn named(body: &str, own_no: &str) -> Named {
+/// What `body` names; `owners` the labeled task sections it stands in (`labeled_owners`), where a bare decision is the section's own.
+fn named(body: &str, own_no: &str, owners: &[String]) -> Named {
     let mut n = Named {
         others: Vec::new(),
         sources: Vec::new(),
@@ -495,6 +496,11 @@ fn named(body: &str, own_no: &str) -> Named {
         bare: String::new(),
     };
     let expanded = expand_ranges(body);
+    let expanded = if owners.is_empty() {
+        expanded
+    } else {
+        section_ids_out(&expanded, owners)
+    };
     let numbered = QUALIFIED.replace_all(&expanded, |c: &Captures<'_>| {
         let after = &expanded[c.get(0).map_or(0, |g| g.end())..];
         let clause = clause_feature(after);
@@ -543,6 +549,7 @@ fn cited_text(
     spec_dir: &Path,
     feature: &str,
     under: &[(String, String)],
+    owners: &[Vec<String>],
     items: &Map<String, Value>,
     decisions: &Map<String, Value>,
 ) -> (Vec<String>, Vec<String>) {
@@ -552,8 +559,8 @@ fn cited_text(
     let mut said_own: BTreeSet<String> = BTreeSet::new();
     let mut cited: Vec<String> = Vec::new();
     let mut defined: BTreeSet<String> = BTreeSet::new();
-    for (_, body) in under {
-        let n = named(body, &own_no);
+    for ((_, body), owned) in under.iter().zip(owners) {
+        let n = named(body, &own_no, owned);
         for pair in n.others {
             if !others.contains(&pair) {
                 others.push(pair);
@@ -730,7 +737,8 @@ pub(super) fn build(
         requirements(&spec),
         paragraphs(&plans_of(spec_dir), &DECISION),
     );
-    let (parts, cited) = cited_text(spec_dir, &feature, under, &items, &decisions);
+    let owners = owners_of(spec_dir, under);
+    let (parts, cited) = cited_text(spec_dir, &feature, under, &owners, &items, &decisions);
     let bodies: Vec<&str> = under.iter().map(|(_, b)| b.as_str()).collect();
     let write = |file: &str, text: String| {
         let _ = std::fs::write(out.join(file), text);
@@ -754,12 +762,7 @@ pub(super) fn build(
         "spec-index.md",
         format!("# Every other requirement, its first sentence on one line (past {INDEX_CAP} characters cut at a word and marked [...])\n\n{index}"),
     );
-    // the amendment a block answers is read from this feature's ids alone: "449 FR-023" answers none of 451's (451 T46)
-    let own_no: String = feature.chars().take(3).collect();
-    let ours: Vec<(String, String)> = under
-        .iter()
-        .map(|(k, b)| (k.clone(), named(b, &own_no).bare))
-        .collect();
+    let ours = ours(&feature, under, &owners);
     let (req, left) = trimmed_request(&read(&spec_dir.join("request.md")), answered(&ours, &spec));
     write("request.md", req);
     let shown = if left.is_empty() {
@@ -955,6 +958,9 @@ pub(super) fn delta_prompt(
 }
 
 mod rulings;
+mod section;
+
+use section::{ours, owners_of, section_ids_out};
 
 #[cfg(test)]
 mod tests;
