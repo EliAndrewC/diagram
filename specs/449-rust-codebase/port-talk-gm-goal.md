@@ -59,3 +59,19 @@ T43). `dev/step-back.json` holds `"state": "off"`; `make step-back`, `make step-
 Makefile; the code is `rust/gate/crates/measure/src/measure/stepback_bundle.rs` (660 lines, builds the hour's bundle for the
 round arbiter) and `rust/gate/crates/reviews/src/reviews/checkpoint.rs` (554 lines, the hour coming due and the switch).
 Whether any of it is kept or removed is his to decide; nothing was changed.
+
+## His third message (2026-11-27, about 02:00 UTC), after the tree-idle measurement
+
+The session had answered his alarm at the second tier's 123 blocking minutes with a measurement (the pool trees idle 23% of
+the window, `dev/measurements/2026-11-27/tree-idle/results.md`), a fix (451 T394) and a re-measurement target of "under 10%
+idle, a guess".
+
+<!-- SOURCE: GM NOTES -->
+
+> Yeah, I feel like we can probably capture a lot of the work that we've done over the last few days as examples of things that our goal is that it should be able to know to look for these things and notice these things and suggest these kind of changes. I mean, really, I think at this point we have many dozens of tasks, and broadly speaking, probably at least 10 different, like, categories of interrogating our processes that I have directed over the last few days that might be good reference examples to include when we file the feature, because I think we probably, for each category of thing, want to make sure that it is something that we know to look for and know how to check for, and have a checklist-based procedure for ensuring that we are asking the right questions, and so on and so forth. I don't know if that's something that you can just what, but that probably is something that we will want to do relatively soon.
+>
+> As an example of the kind of judgment that I am talking about, then I am personally skeptical about something like a target of 10%. In the manner that you described in your recent message. because in fact my mode of thinking is basically that that might be okay, but it also might just be that we actually are strategy for how to do the second tier of checks. Should that simply happen in its own subtree with its own agent? as in the one that I am conversing with right now, be kept as idle as possible all the time so that it is doing basically nothing but coordinating subagents and relaying that to me? This is basically describing the purpose of the primary session as an orchestrator rather than a worker, you know? which is not exactly a distinction that we've had in the past, but which is something that we have been naturally evolving towards, and so it might be that we should be looking at the best practices that others have worked out for orchestration of this type. Relatedly, I know that we are using workflows for some things, I think, but then also not other things. But as we have made more changes, I have no idea whether there are things that we are not currently using workflows for that we should be, or vice versa, based on the many, many process changes that we have made just this week. So that is an example of the kind of thing that I would want this type of performance reviewer, or maybe it's more of a process reviewer, to be able to look at.
+>
+> I do have a few more high-level thoughts, but this was something that I wanted to make sure was captured. Now, while I work on formulating my additional thoughts on this matter.
+
+<!-- END SOURCE -->
