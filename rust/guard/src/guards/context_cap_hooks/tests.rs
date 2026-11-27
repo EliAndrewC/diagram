@@ -373,11 +373,15 @@ fn a_builder_in_its_wrap_up_band_finishes_its_stop_point() {
             f.input("builder", "Read", json!({"file_path": "/t/x.rs"})),
             f.input("builder", "Grep", json!({"pattern": "x"})),
             f.input("builder", "Agent", review.clone()),
+            // 451 T427: an append to the handoff is the exit's file
+            f.bash("builder", &format!("grep -c x a >> {}", handoff.display())),
         ] {
             assert!(matches!(verdict(&input), Some(Said::Band(_))), "{input}");
         }
+        let outside = "a redirect writing /t/a.rs (in the band a redirect lands only under /tmp or in the handoff)";
         for (input, what) in [
             (f.bash("builder", "make quick"), "make quick"),
+            (f.bash("builder", "grep x a > /t/a.rs"), outside),
             (
                 f.input("builder", "Edit", json!({"file_path": "/t/x.rs"})),
                 "an Edit of /t/x.rs",

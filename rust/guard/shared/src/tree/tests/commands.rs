@@ -38,3 +38,24 @@ fn a_command_is_shown_as_it_was_written() {
     assert_eq!(crate::tree::shown(&c[0]), "echo \"make decide\" 'a;b'");
     assert_eq!(crate::tree::shown("ls"), "ls");
 }
+
+#[test]
+fn a_redirect_is_marked_apart_from_its_programs_own_write() {
+    let marks = |cmd: &str| -> Vec<(Option<String>, bool)> {
+        crate::tree::walk(cmd, Some("/t"), "", "/h")
+            .targets
+            .into_iter()
+            .map(|t| (t.path, t.redirect))
+            .collect()
+    };
+    // 451 T427: `make`'s write where it stands is no redirect; its `> f` is
+    assert_eq!(
+        marks("make decide > a.rs 2>&1; git -C /t/y commit -m x >> /tmp/l"),
+        [
+            (Some("/t".to_owned()), false),
+            (Some("/t/a.rs".to_owned()), true),
+            (Some("/t/y".to_owned()), false),
+            (Some("/tmp/l".to_owned()), true),
+        ]
+    );
+}

@@ -684,6 +684,9 @@ pub struct Target {
     pub segment: String,
     pub program: Option<String>,
     pub head: String,
+    /// Whether a redirect (`> f`, `>> f`) is the write, not its program (451 T427: the context cap's wrap-up band judges where a
+    /// redirect lands, while `make`'s own write where it stands is the stop point's).
+    pub redirect: bool,
 }
 
 /// The walk's answer (`walk`).
@@ -904,6 +907,7 @@ fn walk_text(
             }
             Stdin::None | Stdin::Program(..) => {}
         }
+        let first_redirect = writes.len() - redirects(&seg).len(); // `writes_in` puts them last (451 T427)
         for (k, (path, how, known)) in writes.into_iter().enumerate() {
             let class = settled(path.as_deref(), &known, hint, main);
             let blank = blanked(&showing);
@@ -915,13 +919,12 @@ fn walk_text(
                 segment: shown.chars().take(120).collect(),
                 program: if k == 0 { program.take() } else { None },
                 head: command_head(&shown),
+                redirect: k >= first_redirect,
             });
         }
     }
-    if unread {
-        for t in targets.iter_mut().filter(|t| t.how == "read") {
-            t.how = "shell";
-        }
+    for t in targets.iter_mut().filter(|t| unread && t.how == "read") {
+        t.how = "shell";
     }
     Walk {
         targets,

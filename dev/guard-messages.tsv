@@ -119,6 +119,7 @@ key	verdict	chars	guard	kind	by	over	head
 47559d07daa05c57	BASELINE	329	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
 47792da72a670863	BASELINE	285	clone-sync-hooks	notice	unreviewed - stood before 451 T170		clone-sync: <path> is behind main, but a make runs in it -
 47a0eb4e06fc6945	BASELINE	661	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
+48fca3e12a239881	PASS	828	context-cap-hooks	refuse	ab68d9b26b82fb555		BLOCKED: resuming builder N: its task TN has landed or is ticked.
 499f388d45183dbe	PASS	409	context-cap-hooks	refuse	a92ea34b3fbbcb36f		BLOCKED: a code builder does not dispatch claims-triage; the claims round is
 4b1b7f2cb23ee16e	PASS	435	builder-pool-hooks	refuse	message-check a03efa643feb992b5		BLOCKED (builder-pool): don't remove or move a pool tree or its build
 4bd89a7e45c8662f	BASELINE	1036	context-cap-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: resuming builder N: its context is N tokens, past the cap
@@ -205,6 +206,7 @@ key	verdict	chars	guard	kind	by	over	head
 841aaf40600ada1c	BASELINE	586	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review would spend its round on work that has not
 843b85117e9bb145	PASS	434	no-poll-hooks	notice	ad-hoc sonnet message-check a47c24f9aada2922f (round 2), 2026-11-23		A PROOF-OF-LIFE check was added to the loop:
 84a572fa2e883c5d	BASELINE	508	clone-sync-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: <path> has a clean tree (a new work unit) but its
+8610b31a460c8a13	PASS	811	context-cap-hooks	refuse	ab68d9b26b82fb555		BLOCKED: resuming builder N: its context is N tokens, past the cap
 8651270283b39d9f	BASELINE	609	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `translation-check` dispatch points the agent at files IN the repository.
 86e790018bda63ed	BASELINE	268	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - `make switches` cannot
 87b4b16fac2e6518	BASELINE	124	blocked-fetch-hooks	notice	unreviewed - stood before 451 T170		archive: a copy of https:/<path> is archived - read it with
@@ -245,6 +247,7 @@ a0175bbdf73a33dc	BASELINE	419	house-style-hooks	notice	unreviewed - house-style'
 a06738e311e2e4cb	PASS	725	pair-hooks	block	ace1afc5bc6430da1		BLOCKED: N dispatch(es) a guard refused this turn were neither sent again
 a097cfe0889f2c0a	BASELINE	474	static-runs-hooks	notice	unreviewed - stood before 451 T170		TN order (feature N): your last code edit not landed (Makefile, N-N-NTN:N:N.NZ)
 a1b12c0f78c3ba0f	BASELINE	279	record-edit-hooks	notice	unreviewed - stood before 451 T170		<path> is assembled from <path> and is never hand-edited, so this edit
+a204de59391d5874	PASS	922	context-cap-hooks	refuse	a8de88bdad2883e2c		BLOCKED: this builder's context is N tokens, past the cap of N:
 a24202f86916d7e6	BASELINE	507	review-round-hooks	notice	unreviewed - stood before 451 T170		review-round: this dispatch was rewritten into MODE N round N of <path>
 a276644235e5563b	PASS	427	agent-model-hooks	refuse	a327b183d7f2b1341		BLOCKED: this `Explore` agent would not run on the session's model -
 a2a15416db3dcfab	BASELINE	617	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this settlement-review asks for N units in ONE agent - one

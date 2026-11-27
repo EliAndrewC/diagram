@@ -354,7 +354,13 @@ fn own_cap(
     }
     // THE WRAP-UP BAND (451 T417, [`band`]): from the cap to the ceiling, the stop point's own steps
     if tokens <= cap + (band::CEILING_TOKENS - CONTEXT_CAP_TOKENS) {
-        return Some(match band::judge(tool, ti) {
+        let home_dir = env("HOME").unwrap_or_default();
+        let at = band::At {
+            cwd: Some(field(input, "cwd")).filter(|c| !c.is_empty()),
+            home: &home_dir,
+            handoff: &|p: &str| is_handoff(p, &dir, agent) || in_dir_named(p, &briefed),
+        };
+        return Some(match band::judge(tool, ti, &at) {
             band::Band::Allowed(what) => Said::Band(what),
             band::Band::Refused(what) => Said::BandRefused {
                 agent: agent.to_owned(),
@@ -675,7 +681,7 @@ fn resume_refusal(agent: &str, stale: &Stale, handoff: &Path) -> String {
             "its handoff file as the brief",
         ),
         Stale::Landed(t) => (
-            format!("its task {t} has landed or is ticked since its dispatch"),
+            format!("its task {t} has landed or is ticked"),
             "the next task's brief (with its handoff file, if it wrote one)",
         ),
     };
@@ -684,16 +690,16 @@ fn resume_refusal(agent: &str, stale: &Stale, handoff: &Path) -> String {
     } else {
         format!(
             "\n     The file is not written yet: to have it written, resume {agent} once with {TOKEN}=\"<reason>\" in the\n     \
-SendMessage's summary, telling it to write that file and stop (that Write is the one call its cap lets through).\n"
+SendMessage's summary, telling it to write that file and stop (its cap lets that Write through at any size).\n"
         )
     };
     format!(
-        "\n\u{1b}[1mBLOCKED: resuming builder {agent}: {why} (feature 451 FR-006, D10).\u{1b}[0m\n\n\
-A resumed builder carries its whole context into every call, and its calls slow as that grows (10 s per 1,000 output tokens\n\
-under 200k, 23 s over 700k); a builder serves one task. The next step:\n\n  \
-1. Dispatch a fresh builder (the Agent tool) with {brief}:\n\n       {path}\n{written}\n\
-Escape: {TOKEN}=\"<reason>\" in the SendMessage's summary, recorded in the guard log. A builder resumed past the cap is\n\
-still refused every call but its handoff's until the session grants it an hour: make context-ok AID={agent} WHY=\"<reason>\"\n"
+        "\n\u{1b}[1mBLOCKED: resuming builder {agent}: {why}.\u{1b}[0m\n\n\
+Dispatch a fresh builder (the Agent tool) with {brief}:\n\n       {path}\n{written}\n\
+Escape: {TOKEN}=\"<reason>\" (two words or more) in the SendMessage's summary.\n\
+Even resumed, a builder past the cap may run only its stop point's steps and its handoff up to {ceiling} tokens,\n\
+and only its handoff past that, unless the session grants it an hour: make context-ok AID={agent} WHY=\"<reason>\"\n",
+        ceiling = band::CEILING_TOKENS
     )
 }
 

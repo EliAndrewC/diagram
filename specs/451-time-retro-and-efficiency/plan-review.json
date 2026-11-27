@@ -3714,6 +3714,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)": {
+   "sha256": "43813e0a906600cb5af49ac851f4e6c18bd4bb23bf76533e8579db66a68d41fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T427, T428 Approach (checklist part A)": {
+   "sha256": "c4e129b720f3f0b726df7409f089b422b3f412b4bd9054fba57c6b34f994a1ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T433 (<why: the finding or measurement that files it>)": {
+   "sha256": "7de2c754ca6876db3510570164d4ccc7287856a4d4c8d5d1bdc1d10284aaabf7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T433 Approach (checklist part A)": {
+   "sha256": "a20e48502943010c1fed88c6b387c0282d73ad575bcc749a91f4c7da357e4820",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T436 (<why: the finding or measurement that files it>)": {
+   "sha256": "195627187a7c5d2c03fa49872ae6f63ab44ceb82ddaff30afa94ec5eadee5178",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T436 Approach (checklist part A)": {
+   "sha256": "e89ce4deb20115251b0929c9ed6c379e1c5f3a97b5fedccf8cff84642c965467",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -33867,6 +33903,111 @@
      "summary": "T307 part 2's parity table updated for the four rows this task moves.",
      "class": "within",
      "why": "A record of what D1 to D5 do. It decides nothing new."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T423 (<why: the finding or measurement that files it>)",
+    "### T423 Approach (checklist part A)",
+    "### T425 (<why: the finding or measurement that files it>)",
+    "### T425 Approach (checklist part A)",
+    "### T426 (<why: the finding or measurement that files it>)",
+    "### T426 Approach (checklist part A)",
+    "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)",
+    "### T427, T428 Approach (checklist part A)",
+    "### T433 (<why: the finding or measurement that files it>)",
+    "### T433 Approach (checklist part A)",
+    "(removed) ### T352 (<why: the finding or measurement that files it>)",
+    "(removed) ### T352 Approach (checklist part A)",
+    "(removed) ### T404 (<why: the finding or measurement that files it>)",
+    "(removed) ### T404 Approach (checklist part A)",
+    "(removed) ### T417 (<why: the finding or measurement that files it>)",
+    "(removed) ### T417 Approach (checklist part A)",
+    "(removed) ### T419 (<why: the finding or measurement that files it>)",
+    "(removed) ### T419 Approach (checklist part A)",
+    "(removed) ### T424 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T427-redirects-judged",
+     "summary": "In the wrap-up band every Bash redirect must land under /tmp or in the cap's allowed handoff; this reverses T417's decision to leave redirects unjudged.",
+     "class": "within",
+     "why": "FR-006 refuses a builder past the threshold every write but its handoff, and T417's band (the GM 2026-11-27, 'may finish its stop point') already refuses an Edit or Write to a source file; a redirect writing that file was a bypass of the same rule. Closing it enforces what was asked and narrows nothing the GM granted: the stop point's programs and make targets still run, and their logs under /tmp still pass."
+    },
+    {
+     "id": "T427-unplaceable-refused",
+     "summary": "A redirect the walk cannot place (a command substitution) is refused; an unassigned name reads as empty, as bash does.",
+     "class": "within",
+     "why": "A fail-closed detail of the same guard; matches invocations not mentions (a quoted > passes), per the project's guard rule."
+    },
+    {
+     "id": "T427-target-redirect-flag",
+     "summary": "shared::tree::walk's Target gains redirect: bool so the band can tell a redirect from make's own write; no other reader changes; walk_text's unread block folded for clippy's 100-line limit.",
+     "class": "within",
+     "why": "Implementation choice (reuse the shared walk rather than re-parse); no behavior beyond the band changes."
+    },
+    {
+     "id": "T428-resume-message",
+     "summary": "resume_refusal's last line and its not-written-yet line are reworded to say truly what a resumed builder may run inside and past the band (340000 tokens = band::CEILING_TOKENS), after three message-check rounds.",
+     "class": "within",
+     "why": "Corrects a guard message made false by T417; FR-012 requires each refusal's message to name the compliant command, and a false one does not."
+    },
+    {
+     "id": "T427-defer-dup-redirect",
+     "summary": "The shared walk misses a '>& FILE' redirect (affecting the band, main-tree and house-style guards alike); not fixed here, filed as T433, lands before T420.",
+     "class": "within",
+     "why": "A known defect is not left: it is deferred in FR-009/D15's stated form (reason, an open filed task, an order) to its own task inside this feature, because the fix is to a pattern every walk reader shares, beyond this bundle's two jobs. The defect is fixed within the step, before T420, so it does not carry forward. Note: step 1's 'by any route' is not true until T433 lands."
+    },
+    {
+     "id": "templates-and-removals",
+     "summary": "T423, T425, T426 and T433 blocks are unfilled templates; T352, T404, T417, T419 and T424 blocks (each an unfilled template, CLEAR when last judged) are removed.",
+     "class": "within",
+     "why": "Placeholders decide nothing; the removals drop template text that carried no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)",
+    "### T427, T428 Approach (checklist part A)",
+    "### T436 (<why: the finding or measurement that files it>)",
+    "### T436 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T427-cd-whole",
+     "summary": "In the wrap-up band, a cd or pushd segment carrying a redirect is refused whole, naming the command, because the shared walk moves the shell and reads no write of that segment.",
+     "class": "within",
+     "why": "Closes a route by which a builder past the cap could truncate a source file the band refuses as an Edit or Write; it serves the bundle's goal (nothing but the handoff and /tmp, by any route) and T417's band as the GM's 2026-11-27 words shaped it (finish the stop point, not write anything). The redirect sits on the cd segment itself, so an ordinary `cd X && cmd > /tmp/log` is unaffected, and the refusal names the command. That a few harmless forms are also refused is the band's existing way of handling commands it cannot read, not a narrowing of anything the GM asked for."
+    },
+    {
+     "id": "T427-dup-whole",
+     "summary": "In the band, any `>&` left after sanitize strips 2>&1 and >&2 (a `>& FILE` or `>&FILE`) is refused whole, naming the command; the T433 found-and-left item now says the band's exposure is fixed here.",
+     "class": "within",
+     "why": "The same hole closed for the band by the same refused-whole pattern. The 2>&1 and >&2 forms builders use for logs still pass, so the GM's purpose of letting a capped builder finish its stop point efficiently is untouched."
+    },
+    {
+     "id": "T427-red-first-probes",
+     "summary": "Both whole-command shapes were added to band/tests.rs's refused table and probed red before their rules (each Allowed, 1 failed of 562; with the rules, 562 green, observed 2026-11-27).",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested band behavior hold enforces the request (GM 2026-09-20). Each figure is dated with its method."
+    },
+    {
+     "id": "T436-deferral",
+     "summary": "The shared walk's cd branch skipping a cd/pushd segment's writes, for every other guard that reads the walk, is left unfixed here: 'Not fixed here: a change to the shared walk's cd branch reaches every guard that reads it, past this bundle's two jobs and its first-tier checks. Filed as T436; lands before T420.'",
+     "class": "within",
+     "why": "FR-009/D15 is the approved form for leaving a found defect: a reason, a filed task id and an order. This item has all three, and T436's section now exists. The band, which is this task's job, is fixed here, so the defect still open is in other guards and is ordered to land before T420, which follows fix-as-we-go. It is the same structure as the T433 item judged CLEAR last round. Whether T436 and T420 are both open boxes is checked mechanically by `make decide` (D15), and this bundle cannot see tasks.md."
+    },
+    {
+     "id": "T436-template",
+     "summary": "T436's section and its checklist part A are the unfilled template.",
+     "class": "within",
+     "why": "A placeholder decides nothing; its approach is decided when T436 itself is started and goes through make decide."
     }
    ]
   }

@@ -11,7 +11,10 @@
 //! command every one of whose simple commands (`shared::tree::commands`, so a quoted `make decide` or a heredoc's line is none) is
 //! `cd` or `export` (every brief's own `cd <tree> && export ...` prefix), `make` of the stop point's targets only ([`MAKE`]), `git
 //! status` or `git diff` (`git -C <path>` read past, `--output` refused: it writes), or `head`, `tail` or `grep` (a read, as the
-//! Read and Grep tools are, and the pipe that keeps a long output out of the context); the one plan review - an Agent call of
+//! Read and Grep tools are, and the pipe that keeps a long output out of the context), its every redirect landing under `/tmp` (the
+//! session's scratchpad is `/tmp/claude-<uid>/...`) or in the handoff the cap's exit allows (451 T427: `tail -n 0 x > rust/a.rs`
+//! wrote a source file the band refuses as a Write; where it lands is the shared walk's, `shared::tree::walk`, a redirect it
+//! cannot place refused); the one plan review - an Agent call of
 //! `spec-fidelity` whose prompt opens `MODE 4: PLAN REVIEW`, as `make decide` and `make plan-delta` print it (a later round is
 //! another such dispatch: `review_round_hooks` passes a MODE 4 plan review untouched). The handoff's own Write is the cap's
 //! exit, judged before the band. Everything else - an Edit or Write of any other file, any other dispatch, any other make target or
@@ -23,7 +26,7 @@ use serde_json::Value;
 use crate::shared::make::invoked;
 use crate::shared::spelled::{command_at, name_of};
 use crate::shared::state::field;
-use crate::shared::tree::{command_head, commands, shown};
+use crate::shared::tree::{command_head, commands, shown, walk};
 
 /// The hard ceiling of the band, in tokens: past it every call but the handoff's is refused, as below the band's start it is not.
 /// A GUESS knob (451 T417: "a GUESS knob, say 340k"): 40k over the cap is about ten mechanical turns of a builder near 300k; what
@@ -49,6 +52,17 @@ const PLAIN: [&str; 5] = ["cd", "export", "head", "tail", "grep"];
 /// The plan review's agent and its prompt's opening.
 const REVIEW: (&str, &str) = ("spec-fidelity", "MODE 4: PLAN REVIEW");
 
+/// Where a call stands, for its redirects (451 T427): its cwd, the home `~` names, and whether a path is the handoff the cap's exit
+/// allows.
+pub(super) struct At<'a> {
+    pub cwd: Option<&'a str>,
+    pub home: &'a str,
+    pub handoff: &'a dyn Fn(&str) -> bool,
+}
+
+/// Where a redirect may land in the band but the handoff: `/tmp`, the scratchpad's parent.
+const SCRATCH: &str = "/tmp/";
+
 /// What the band says of one call.
 #[derive(Debug, PartialEq, Eq)]
 pub(super) enum Band {
@@ -59,7 +73,7 @@ pub(super) enum Band {
 }
 
 /// The band's verdict on a call of `tool` with `ti`.
-pub(super) fn judge(tool: &str, ti: &Value) -> Band {
+pub(super) fn judge(tool: &str, ti: &Value, at: &At) -> Band {
     match tool {
         "Read" | "Grep" => Band::Allowed(tool.to_owned()),
         "Agent" | "Task" => {
@@ -70,15 +84,16 @@ pub(super) fn judge(tool: &str, ti: &Value) -> Band {
                 Band::Refused(format!("a dispatch of `{kind}`"))
             }
         }
-        "Bash" => bash(field(ti, "command")),
+        "Bash" => bash(field(ti, "command"), at),
         "Write" => Band::Refused(format!("a Write of {}", field(ti, "file_path"))),
         "Edit" => Band::Refused(format!("an Edit of {}", field(ti, "file_path"))),
         _ => Band::Refused(format!("a {tool} call")),
     }
 }
 
-/// A Bash command: each simple command one the band runs, and every make target it invokes a stop point's.
-fn bash(cmd: &str) -> Band {
+/// A Bash command: each simple command one the band runs, every make target it invokes a stop point's, and every redirect landing
+/// under `/tmp` or in the handoff.
+fn bash(cmd: &str, at: &At) -> Band {
     let cmds = commands(cmd);
     if cmds.is_empty() {
         return Band::Refused("an empty command".to_owned());
@@ -88,12 +103,18 @@ fn bash(cmd: &str) -> Band {
         let words: Vec<&str> = head.split_whitespace().collect();
         let at = command_at(&words);
         let program = words.get(at).map_or("", |w| name_of(w));
-        let ok = match program {
-            // `make`, its targets judged below; none, a command of `VAR=value` words alone
-            "make" | "" => true,
-            "git" => git_reads(&words[at + 1..]),
-            p => PLAIN.contains(&p),
-        };
+        // a `>& FILE` the walk does not read as a write (451 T433), refused here whole; `2>&1` and `>&2` are out of its text
+        let ok = !c.contains(">&")
+            && match program {
+                // `make`, its targets judged below; none, a command of `VAR=value` words alone
+                "make" | "" => true,
+                "git" => git_reads(&words[at + 1..]),
+                // the walk moves the shell at a `cd` and reads no redirect of it, so a `cd` carrying one is refused whole (451 T427:
+                // `cd /t > /t/a.rs` truncated a file the band let through); its stand-ins hold no quoted `>`, and `2>&1` and
+                // `>/dev/null` are out of its text
+                "cd" | "pushd" => !c.contains('>'),
+                p => PLAIN.contains(&p),
+            };
         if !ok {
             return Band::Refused(format!("`{}`", shown(&head)));
         }
@@ -102,7 +123,27 @@ fn bash(cmd: &str) -> Band {
     if let Some(goal) = goals.iter().find(|g| !MAKE.contains(&g.as_str())) {
         return Band::Refused(format!("make {goal}"));
     }
+    if let Some(what) = redirect(cmd, at) {
+        return Band::Refused(what);
+    }
     Band::Allowed(shown(&command_head(&cmds.join("; "))))
+}
+
+/// The first redirect of `cmd` landing neither under `/tmp` nor in the handoff, named for the refusal (451 T427); `2>&1` and
+/// `> /dev/null` are no write the walk reports.
+fn redirect(cmd: &str, at: &At) -> Option<String> {
+    let found = walk(cmd, at.cwd, "", at.home).targets;
+    let t = found.into_iter().filter(|t| t.redirect).find(|t| {
+        !t.path
+            .as_deref()
+            .is_some_and(|p| p.starts_with(SCRATCH) || (at.handoff)(p))
+    })?;
+    let place = t
+        .path
+        .unwrap_or_else(|| "a place the guard cannot resolve".to_owned());
+    Some(format!(
+        "a redirect writing {place} (in the band a redirect lands only under /tmp or in the handoff)"
+    ))
 }
 
 /// `git`'s words after it: `-C <path>`, `-c <k=v>` and `--no-pager` read past, then `status` or `diff`, no `--output`.

@@ -6122,61 +6122,6 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a builder at the cap with only its stop point's steps left finishes them where they cost a few turns, instead of a fresh builder's re-read, a median 3.7 min and 326k tokens before its first edit, or the coordinating session's own turns, measured 2026-11-25, `dev/audits/builders-context-cap.md`). Not an engine-speed task: no checklist answers owed. Its measure is the band's turns per builder (the guard log's `wrap-up` passes by agent) against the re-read it saves.
 
-### T427 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T427 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T428 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T428 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-
 ### T431 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -6400,6 +6345,97 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T432 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)
+
+- **Approach**: the band judges where a Bash command's redirects land, and the resume refusal says what a resumed builder runs at each edge.
+  - **T427, the gap.** `context_cap_hooks/band.rs` judged a band command's programs and make targets but not its redirects (T417's section: "a redirect (`> /tmp/x 2>&1`) is not judged, a log the command writes being the command's"), so `tail -n 0 x > rust/guard/src/a.rs` or `grep '' a > b.rs` wrote a source file the band refuses as an Edit or Write. This reverses that one decision of T417: a redirect is judged now.
+  - **T427, the rule.** In the band every redirect must land under `/tmp/` (the session's scratchpad is `/tmp/claude-<uid>/...`) or in the handoff the cap's exit allows (`is_handoff` or the brief's named file, `in_dir_named`, handed to the band by `own_cap` as a predicate, so the band re-derives neither). A redirect the walk cannot place (`> $(head -1 p)/b.rs`) is refused; a name no command assigns is empty, as bash reads it (`> $NOWHERE/b.rs` is `/b.rs`, refused). `2>&1` and `>/dev/null` are no write the walk reports (`sanitize` strips them before `redirects`), and a quoted `>` is no redirect. Two shapes the walk does not read are refused whole, as the band's other refused commands are, naming the command: a `cd` or `pushd` carrying a redirect (the walk moves the shell there and reads no write of it; filed for the walk as T436), and any `>&` left after `sanitize` strips `2>&1` and `>&2`, a `>& FILE` or `>&FILE` (filed for the walk as T433). The redirect refusal names the place: `Refused: a redirect writing <path> (in the band a redirect lands only under /tmp or in the handoff).`
+  - **T427, reuse, not a re-parse.** The shared walk (`shared::tree::walk`) already places every redirect target, resolved against the call's cwd (`/tmp/../diagram/x.rs` normalized to `/diagram/x.rs`); but its `Target` could not tell a redirect from `make`'s own write where it stands (`(eff, "shell")`, the same `how` as a relative redirect), so filtering targets by path would have refused `make decide` itself. `Target` gains `redirect: bool`, set in `walk_text` from `writes_in`'s order (its redirects last). No other reader of the walk changes. `walk_text`'s `unread` block was folded into one filter to keep the function within clippy's 100 lines (observed 2026-11-27, method: `make builder-checks`'s clippy named it at 102, then 101, lines).
+  - **T428, the message.** `resume_refusal`'s last line said a resumed builder past the cap is "still refused every call but its handoff's until the session grants it an hour", false inside the band since T417. It now says: "Even resumed, a builder past the cap may run only its stop point's steps and its handoff up to 340000 tokens, and only its handoff past that, unless the session grants it an hour", the figure `band::CEILING_TOKENS`. Its "not written yet" line said the handoff's Write "is the one call its cap lets through", false in the band too: now "its cap lets that Write through at any size". The message-check of the first wording failed both renderings (PastCap and Landed) for brevity and fidelity: the feature tag, the slowdown figures (the module's doc keeps them) and the one-step numbering cut, and the escape's "(two words or more)" added; its second round cut the one-task rationale line, the escape's ", recorded in the guard log" and the Landed reason's "since its dispatch" (its fidelity PASS); the third wording passed.
+  - **Red first, measured 2026-11-27 in this tree.** T427, with the band's redirect check off (`.filter(|_| false)`) and `redirect` set false: the guard's unit tests 1 failed of 562 (`a_redirect_lands_only_under_tmp_or_in_the_handoff`), the shared crate's 1 of 522 (`a_redirect_is_marked_apart_from_its_programs_own_write`), the suite 2 failed of 102 (case 12's two source-file redirects); restored, 562, 522 and 102 green. The two whole-command refusals, probed after the plan review's first CLEAR (observed 2026-11-27, method: each shape added to `band/tests.rs`'s refused table before its rule): `cd /t > /t/rust/guard/src/a.rs` and `tail -n 0 x >& /t/rust/a.rs` each came back Allowed, the test 1 failed of 562 each time; with the rules, 562 green. T428: `a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff`'s new assertions failed on the old wording (1 of 562), green on the new.
+  - **The tests.** `band/tests.rs` `a_redirect_lands_only_under_tmp_or_in_the_handoff` (passed: `/tmp` logs, the scratchpad, `2>&1`, `>/dev/null`, an append to the handoff outside `/tmp`, a quoted `>`; refused: a source file absolute and relative, after a `cd`, `/tmp/..`, another handoff-directory file, an unassigned name, an unplaceable substitution; a quoted target passed; a `cd`, a `pushd` and two `>&` shapes refused whole); `tests.rs` `a_builder_in_its_wrap_up_band_finishes_its_stop_point` (through `own_cap`'s real handoff predicate: an append to the handoff let through, a redirect to `/t/a.rs` refused); `shared/src/tree/tests/commands.rs` `a_redirect_is_marked_apart_from_its_programs_own_write`; the suite's case 12 (two source-file redirects refused naming the place, at absolute paths outside `/tmp` since the fixture lives under it; four `/tmp`, `/dev/null` and `2>&1` forms passed); `tests/resume.rs` (the band's edges named, the old line gone, the escape's two-word rule).
+  - **The messages.** Rendered by the suite into the tree's store by T338's hand route (`L7R_MESSAGE_CORPUS=<dir> bash tests/hooks/test-context-cap-hooks.sh`, its `messages.jsonl` over the store's file); the band's redirect refusal `a204de59391d5874` FIDELITY PASS, BREVITY PASS (922 characters); the resume refusals `8610b31a460c8a13` (PastCap, 811 characters) and `48fca3e12a239881` (Landed, 828) FIDELITY PASS, BREVITY PASS in the third round, after two rounds of brevity cuts; `make guard-messages` reads 34 wordings, each reviewed and within its budget.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the band judges redirects | `a_redirect_lands_only_under_tmp_or_in_the_handoff`, `a_redirect_is_marked_apart_from_its_programs_own_write`, suite case 12, red with the check off | n/a: tooling | none | n/a |
+| the resume refusal's edges | `a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff`, red on the old wording | n/a: tooling | none | n/a |
+
+### T427, T428 Approach (checklist part A)
+
+1. **The goal, in the world.** A builder in its wrap-up band can write nothing but its handoff and scratch under `/tmp`, by any route; and a session reading a resume refusal is told truly what the resumed builder may run.
+2. **The constraints.** T427's and T428's lines; T417's band (`band.rs`, its section); the root `CLAUDE.md`'s guard rule (match invocations, not mentions: a quoted `>` passes); every changed guard message a message-check (451 T170, T338's hand route).
+3. **Where each comes from.** O: T417's plan review's probe (the redirect), T417's builder (the stale line), both on the task lines; the walk's behavior read from `shared/src/tree.rs` (`writes_in`, `redirects`, `sanitize`).
+4. **Do they describe the world here?** The unit tests and the suite's case 12 above, red with the check off, measured 2026-11-27.
+5. **The order.** T427, then T428 (the same file, the message last so its check judged the final text).
+6. **The exits.** Green: the tests above, `make builder-checks CRATE="rust/guard rust/guard/shared"` clean, the suite 102 of 102, `make guard-messages` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's 102 cases and the two crates' tests green, measured 2026-11-27 (this tree's suite run and `make builder-checks`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T427: a builder past the cap could write a source file through a redirect the band let through. T428: a session reading the resume refusal was told a resumed builder in its band could run nothing but its handoff.
+
+**Found and left?**
+- The shared walk misses a redirect spelled `>& FILE` or `>&FILE`: `REDIRECT`'s capture excludes `&` and `DUP_FD` strips only `>&<digit or ->`, so `tail -n 0 x >& rust/a.rs` writes a file no walk reader sees (main-tree, house style alike; the band now refuses any such `>&` whole, fixed here; observed 2026-11-27, method: reading `REDIRECT` and `DUP_FD` in `shared/src/tree.rs`, the one place every walk reader's redirects are found). Not fixed here: a change to the shared walk's redirect pattern reaches every guard that reads it, past this bundle's two jobs and its first-tier checks. Filed as T433; lands before T420.
+- The shared walk reads no redirect of a `cd` or `pushd` segment: `walk_text` moves the shell and continues before `writes_in`, so `cd /t > /diagram/x.rs` truncates a file no walk reader sees (observed 2026-11-27, method: the band's probe above, then reading `walk_text`'s `cd` branch, the one place a segment's writes are skipped). The band refuses such a `cd` whole, fixed here. Not fixed here: a change to the shared walk's `cd` branch reaches every guard that reads it, past this bundle's two jobs and its first-tier checks. Filed as T436; lands before T420.
+
+**Performance work?** no - a guard's gap and a message, defects.
+
+
+### T433 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T433 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T436 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T436 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

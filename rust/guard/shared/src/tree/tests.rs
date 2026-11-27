@@ -452,6 +452,7 @@ fn a_rewrite_moves_the_write_and_is_re_judged() {
                 segment: "seg".into(),
                 program: None,
                 head: "seg".into(),
+                redirect: false,
             }],
             ..named.walk.clone()
         },

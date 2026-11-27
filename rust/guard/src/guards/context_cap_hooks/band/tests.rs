@@ -2,10 +2,65 @@
 
 use serde_json::json;
 
-use super::{judge, Band, MAKE};
+use serde_json::Value;
+
+use super::{At, Band, MAKE};
+
+/// The handoff the cap's exit allows in these tests: outside /tmp, so a redirect to it passes as the handoff alone.
+const HANDOFF: &str = "/c/.git/l7r-handoffs/T1-build.md";
+
+fn judge(tool: &str, ti: &Value) -> Band {
+    let at = At {
+        cwd: Some("/t"),
+        home: "/home/b",
+        handoff: &|p: &str| p == HANDOFF,
+    };
+    super::judge(tool, ti, &at)
+}
 
 fn bash(cmd: &str) -> Band {
     judge("Bash", &json!({"command": cmd}))
+}
+
+#[test]
+fn a_redirect_lands_only_under_tmp_or_in_the_handoff() {
+    for cmd in [
+        "make decide F=451 T=T1 > /tmp/t1-decide.log 2>&1",
+        "make builder-checks >/dev/null 2>&1; tail -3 /tmp/claude-1000/-diagram/s/scratchpad/t1.log",
+        "grep -n x /t/a.rs > /tmp/claude-1000/-diagram/s/scratchpad/t1-hits.txt",
+        "make plan-delta F=451 2>/dev/null | tail -5",
+        &format!("grep -c x /t/a.rs >> {HANDOFF}"),
+        // a quoted `>` is no redirect
+        "grep 'a > b.rs' /t/f",
+        "make decide > \"/tmp/t1 decide.log\" 2>&1",
+        "D=/tmp/x; grep x a > \"$D/h.txt\"",
+        "make task-add F=451 TITLE=\"x -> y.rs, found by T1\"",
+    ] {
+        assert!(allowed(&bash(cmd)), "{cmd}");
+    }
+    let why = "(in the band a redirect lands only under /tmp or in the handoff)";
+    for (cmd, place) in [
+        (
+            "tail -n 0 x > /t/rust/guard/src/a.rs",
+            "/t/rust/guard/src/a.rs",
+        ),
+        ("grep '' a > b.rs", "/t/b.rs"),
+        ("cd /t && make decide > rust/x.rs", "/t/rust/x.rs"),
+        ("head -1 a >> /tmp/../diagram/x.rs", "/diagram/x.rs"),
+        (
+            "grep -c x a > /c/.git/l7r-handoffs/T2-other.md",
+            "/c/.git/l7r-handoffs/T2-other.md",
+        ),
+        // a name no one assigns is empty, as bash reads it
+        ("grep x a > $NOWHERE/b.rs", "/b.rs"),
+        (
+            "grep x a > $(head -1 p)/b.rs",
+            "a place the guard cannot resolve",
+        ),
+    ] {
+        let (got, want) = (bash(cmd), no(&format!("a redirect writing {place} {why}")));
+        assert_eq!(got, want, "{cmd}");
+    }
 }
 
 fn allowed(b: &Band) -> bool {
@@ -62,6 +117,18 @@ fn every_other_kind_is_refused_naming_it() {
         ("git commit -m x", "`git commit -m x`"),
         ("git -C /t", "`git -C /t`"),
         ("git diff --output=/t/x.rs", "`git diff --output=/t/x.rs`"),
+        // 451 T427: a `cd`'s redirect, which the walk does not read, refuses the `cd`
+        (
+            "cd /t > /t/rust/a.rs && make decide",
+            "`cd /t > /t/rust/a.rs`",
+        ),
+        ("pushd /t >> /t/a.rs", "`pushd /t >> /t/a.rs`"),
+        // 451 T433: a `>& FILE` the walk does not see, refused whole
+        (
+            "tail -n 0 x >& /t/rust/a.rs",
+            "`tail -n 0 x >& /t/rust/a.rs`",
+        ),
+        ("grep x a >&/t/b.rs", "`grep x a >&/t/b.rs`"),
         ("", "an empty command"),
     ] {
         assert_eq!(bash(cmd), no(what), "{cmd}");

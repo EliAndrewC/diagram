@@ -187,8 +187,15 @@ fn a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff() {
     assert!(text.contains("310000 tokens, past the cap of 300000"));
     assert!(text.contains(&named.display().to_string()), "{text}");
     assert!(text.contains("not written yet"), "{text}");
-    assert!(text.contains("CONTEXT_OK=\"<reason>\" in the SendMessage's summary"));
+    assert!(
+        text.contains("CONTEXT_OK=\"<reason>\" (two words or more) in the SendMessage's summary")
+    );
     assert!(text.contains(&format!("make context-ok AID={AID} WHY=")));
+    // 451 T428: what a resumed builder may still run, at each edge of its wrap-up band
+    let edges =
+        "its stop point's steps and its handoff up to 340000 tokens,\nand only its handoff past";
+    assert!(text.contains(edges), "{text}");
+    assert!(!text.contains("still refused every call"));
     // a handoff written under another task's name is the one named
     std::fs::create_dir_all(f.handoffs()).unwrap();
     let written = f.handoffs().join(format!("T04-{AID}.md"));
