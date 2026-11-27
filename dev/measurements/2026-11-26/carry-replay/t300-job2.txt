@@ -1,0 +1,60 @@
+8f4c1f505f 451 T383 T385: an => C code=0 identical pin-lost=[]
+   carry: 4d153c22f3 carried into REPLAY as 8475b49fbf - verified: nothing in progress, nothing unmerged, nothing staged, its 12 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+e8e9ab809a 451 T332 T344: an => C code=0  plan.md | 1 +; 1 file changed, 1 insertion(+); pin-lost=[]
+   carry: c488f46392 carried into REPLAY as a9a6bb5a69 - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+c186dc1450 451 T325: one fea => C code=0 identical pin-lost=[]
+   carry: de405fca47 carried into REPLAY as 0c8606bf6b - verified: nothing in progress, nothing unmerged, nothing staged, its 37 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge)
+1b687e3c1f 451 T324 T345: th => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: b3c375c741 carried into REPLAY as 65dcf11dd8 - verified: nothing in progress, nothing unmerged, nothing staged, its 13 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+1ceb830054 451 T373: measure => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: 781644768b carried into REPLAY as c0891be891 - verified: nothing in progress, nothing unmerged, nothing staged, its 29 non-spec file(s) in HEAD; resolved plan.md (by section), tasks.md (both sides' list lines)
+2207da07bc 451 T359: make ta => C code=0 identical pin-lost=[]
+   carry: b06ae8104c carried into REPLAY as 92cc307992 - verified: nothing in progress, nothing unmerged, nothing staged, its 50 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+649ef2659d 451 T370 T372: th => C code=0 identical pin-lost=[]
+   carry: 566f4f51f8 carried into REPLAY as 5da9bdb72b - verified: nothing in progress, nothing unmerged, nothing staged, its 6 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge)
+c1b36d9f01 451 T347: a test => CO code=0 identical pin-lost=[]
+   carry: f967f6a3c5 carried into REPLAY as bddb78973b - verified: nothing in progress, nothing unmerged, nothing staged, its 18 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+f5007f94d3 451 T336: the poo => C code=0  plan.md | 107 +++++++++++++--------------; tasks.md | 1 -; 2 files changed, 53 insertions(+), 55 deletions(-); pin-lost=[]
+   carry: 7037420458 carried into REPLAY as 5c6760a58a - verified: nothing in progress, nothing unmerged, nothing staged, its 31 non-spec file(s) in HEAD; resolved Makefile (by words), rust/gate/crates/task/src/builder_tree.rs (by words), plan-review.json (the record's merge), tasks.md (both sides' list lines), docs/make-targets.html (regenerated)
+1220d6d077 451 T339: the idl => C code=0 identical pin-lost=[]
+   carry: 6f9843a145 carried into REPLAY as 844bfa796d - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+b1d4a453fe 451 T334: a build => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: 022170716b carried into REPLAY as 9384f3d3f3 - verified: nothing in progress, nothing unmerged, nothing staged, its 28 non-spec file(s) in HEAD; resolved Makefile (both sides' added blocks), rust/gate/CLAUDE.md (by words), scripts/container/builder-brief.md (by words), plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines), docs/make-targets.html (regenerated)
+d217a39fad 451 T347: a measu => C code=0  plan.md | 1 +; tasks.md | 1 -; 2 files changed, 1 insertion(+), 1 deletion(-); pin-lost=[]
+   carry: 42444a9899 carried into REPLAY as f2ae27dbdf - verified: nothing in progress, nothing unmerged, nothing staged, its 8 non-spec file(s) in HEAD; resolved plan.md (by section), tasks.md (a bare box's lines restored)
+f40606920e 451 T274: the clo => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: 4fd43cb9ce carried into REPLAY as fcf3ad6ba2 - verified: nothing in progress, nothing unmerged, nothing staged, its 14 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines), docs/make-targets.html (regenerated)
+ca16aed82a 451 T315: a measu => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: 4e198492c0 carried into REPLAY as 7825ab55e9 - verified: nothing in progress, nothing unmerged, nothing staged, its 23 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), request.md (both sides' dated sections), tasks.md (both sides' list lines)
+83326f83a3 451 T293: make ta => C code=0  request.md | 1 -; tasks.md | 1 -; 2 files changed, 2 deletions(-); pin-lost=[]
+   carry: 0d61f38c18 carried into REPLAY as 2e814c3e06 - verified: nothing in progress, nothing unmerged, nothing staged, its 12 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), request.md (both sides' dated sections), tasks.md (both sides' list lines)
+148fa78bdf 451 T299 and T282 => C code=0  tasks.md | 1 -; 1 file changed, 1 deletion(-); pin-lost=[]
+   carry: 9bba26edeb carried into REPLAY as 7b6b32209e - verified: nothing in progress, nothing unmerged, nothing staged, its 6 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), plan.md (by section), request.md (both sides' dated sections), tasks.md (both sides' list lines)
+1783cf6eed 451 T316: a pool => CO code=0  request.md | 1 -; tasks.md | 1 -; 2 files changed, 2 deletions(-); pin-lost=[]
+   carry: e00df64894 carried into REPLAY as 2bf1f03f55 - verified: nothing in progress, nothing unmerged, nothing staged, its 16 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), request.md (both sides' dated sections), tasks.md (both sides' list lines)
+240c7d89f9 451 T298: make ta => C code=0  dev/claims-triage-skips.jsonl | 1 -; plan.md | 1 +; tasks.md | 1 -; 3 files changed, 1 insertion(+), 2 deletions(-); pin-lost=[]
+   carry: a480ff8848 carried into REPLAY as 8fe6b7b611 - verified: nothing in progress, nothing unmerged, nothing staged, its 15 non-spec file(s) in HEAD; resolved dev/claims-triage-skips.jsonl (both sides' records), plan-review.json (the record's merge), plan.md (by section), tasks.md (both sides' list lines)
+0237c1a3aa 451 T304 (two par => C code=0 identical pin-lost=[]
+   carry: f75c858e9c carried into REPLAY as 4c5ddaf7ea - verified: nothing in progress, nothing unmerged, nothing staged, its 3 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+24fe2cc770 451 T159: rust/mo => C code=0 identical pin-lost=[]
+   carry: 8d5356f5d2 carried into REPLAY as 408a2036db - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge)
+8c1d4c69bb 451 T104: the idl => C code=0 identical pin-lost=[]
+   carry: 7500146fb3 carried into REPLAY as 6535069397 - verified: nothing in progress, nothing unmerged, nothing staged, its 3 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+13c88486f8 451 T305: a check => C code=0 identical pin-lost=[]
+   carry: 955ed25183 carried into REPLAY as 074f23971e - verified: nothing in progress, nothing unmerged, nothing staged, its 8 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+fad80877be 451 T295: the tre => C code=0 identical pin-lost=[]
+   carry: e144f77798 carried into REPLAY as db2ce000a2 - verified: nothing in progress, nothing unmerged, nothing staged, its 29 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+e152e60749 451 T284: heavy b => C code=0 identical pin-lost=[]
+   carry: d7645534d3 carried into REPLAY as ed220e5467 - verified: nothing in progress, nothing unmerged, nothing staged, its 17 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+7af8a39d52 451 T285: builder => C code=0 identical pin-lost=[]
+   carry: 5fb3341cc5 carried into REPLAY as acdf6fbe65 - verified: nothing in progress, nothing unmerged, nothing staged, its 25 non-spec file(s) in HEAD; resolved rust/gate/CLAUDE.md (by words), plan-review.json (the record's merge), docs/make-targets.html (regenerated)
+be3f3a248b 451 T269: l7r-gat => C code=0 identical pin-lost=[]
+   carry: 20347702fc carried into REPLAY as 38a9de197b - verified: nothing in progress, nothing unmerged, nothing staged, its 7 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)
+c7bfe5d0cf 451 T268: the clo => C code=0 identical pin-lost=[]
+   carry: 098b1625e8 carried into REPLAY as 38576ffac9 - verified: nothing in progress, nothing unmerged, nothing staged, its 4 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge)
+6927081081 451 T265: the shr => C code=0 identical pin-lost=[]
+   carry: 4e10528ba5 carried into REPLAY as ecc853d3a5 - verified: nothing in progress, nothing unmerged, nothing staged, its 10 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge)
+e3922827ac 451 T250 batch 8: => C code=0  dev/gm-attribution-baseline.jsonl | 37 +++++++++++++++++++++++++++++++++++++; 1 file changed, 37 insertions(+); pin-lost=[]
+   carry: 1bd5b1721d carried into REPLAY as f25212915a - verified: nothing in progress, nothing unmerged, nothing staged, its 19 non-spec file(s) in HEAD; resolved dev/gm-attribution-baseline.jsonl (both sides' records)
+0c7f801f01 451 T251: the 10 => CO code=0 identical pin-lost=[]
+   carry: 1599515ed9 carried into REPLAY as 3ad55c06b6 - verified: nothing in progress, nothing unmerged, nothing staged, its 12 non-spec file(s) in HEAD; resolved plan-review.json (the record's merge), tasks.md (both sides' list lines)

@@ -225,7 +225,7 @@ fn a_code_conflict_stops_with_the_pick_standing_and_nothing_resolved() {
     let (code, out, err) = carried(&root, &builder);
     assert_eq!((code, out.as_str()), (2, ""));
     has(&err, "carry: STOPPED - ");
-    has(&err, "a conflict this command does not resolve, in rust/lib.rs (not a tasks.md, plan.md, request.md or plan-review.json of a feature) - nothing was resolved\n");
+    has(&err, "a conflict this command does not resolve, in rust/lib.rs (a line that is not prose: `fn a() {}`) - nothing was resolved\n");
     has(&err, "  a cherry-pick is in progress in ");
     has(
         &err,
@@ -471,7 +471,7 @@ fn the_end_refuses_a_carry_whose_files_head_does_not_hold() {
     let head = git(&root, &["rev-parse", "HEAD"]);
     // T270's landing: the commit's code not in HEAD, nothing moved since `before`
     assert_eq!(
-        missing(&root, &sha, &head),
+        missing(&root, &sha, &head, &[]),
         Ok((1, vec!["rust/held.rs".to_owned()]))
     );
     let mut said = Said {
@@ -487,7 +487,7 @@ fn the_end_refuses_a_carry_whose_files_head_does_not_hold() {
     // the same content already committed here under another commit: held, though the carry moved nothing
     commit(&root, "by hand", &[("rust/held.rs", "fn held() {}\n")]);
     let head = git(&root, &["rev-parse", "HEAD"]);
-    assert_eq!(missing(&root, &sha, &head), Ok((1, Vec::new())));
+    assert_eq!(missing(&root, &sha, &head, &[]), Ok((1, Vec::new())));
 }
 
 /// `tasks` hold `tree` in the clone's pool, as a handout writes it.
@@ -637,4 +637,5 @@ fn the_arguments_are_checked() {
     let _ = unfinished::git(&root, &["status"]);
 }
 
+mod files;
 mod spec;

@@ -23,7 +23,18 @@
 //! - `specs/*/plan-review.json`, merged three-way by the record's own merge (`plan merge-record`, 451 T256), asked in process where
 //!   the tree's git config defines no driver.
 //!
-//! Any other conflict - another file, or a hunk both sides changed - stops: nothing is resolved, the files and the next command are
+//! And outside a feature's spec files (451 T300, part 2 - the four carries of 2026-11-26 that still stopped after the rules above):
+//!
+//! - `docs/make-targets.html`, GENERATED from the Makefile: never merged - once every other conflict is resolved it is
+//!   regenerated (`make docs`' own code, `l7r_gate_cohort::make_docs::write`) and staged. Where that fails the carry stops with
+//!   the other files resolved and staged and says what to run.
+//! - a hunk of PROSE with base lines - a `.md` line, a Makefile comment or ` ## ` help line, a `.rs` comment line - merged by
+//!   words against the merge base ([`words`]): both sides' changes made where they do not overlap, stopped where they do.
+//! - a hunk with no base lines, both sides having added whole lines at one place ([`added`]): two Makefile target blocks or two
+//!   Markdown bullets, kept both, the clone's first.
+//! - a `.jsonl`, by record ([`records`], 451 T399): each side's appended records kept, what either pruned dropped.
+//!
+//! Any other conflict - another file, code, or words both sides changed - stops: nothing is resolved, the files and the next command are
 //! printed, the pick is left standing, and `make land` refuses until it is finished. The carry ENDS by verifying: nothing in
 //! progress, nothing unmerged, nothing staged, and each non-spec file of the carried commit in HEAD - changed by the carry (HEAD
 //! against the commit before it names the path) or already holding the carried commit's content. Its last line says so, and names
@@ -43,8 +54,11 @@ use l7r_gate_task::builder_done::REFS as DONE_REFS;
 
 use super::unfinished::{git, git_dir, lines, refusals};
 
+mod added;
 mod boxes;
+mod records;
 mod sections;
+mod words;
 
 const USAGE: &str =
     "usage: l7r-gate land --carry <tree> [<commit>]   (make carry FROM=<builder's worktree> [COMMIT=<sha>]; COMMIT=<sha> alone for a commit this clone's objects hold, as make builder-done keeps one)";
@@ -218,17 +232,22 @@ fn merge_file(root: &Path, files: &[String]) -> Result<String, String> {
     Ok(git(root, &args)?.1)
 }
 
+/// The page `make docs` generates from the Makefile: regenerated after a conflict, never merged.
+const PAGE: &str = "docs/make-targets.html";
+
 /// One unmerged path resolved by its file's rule: its merged text and the rule's name, or why it is left to a hand. Its three
 /// stages are written under `scratch` and merged there.
 fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<(String, &'static str), String> {
     let spec = |name: &str| spec_file(path, name);
-    if !["tasks.md", "plan.md", "request.md", "plan-review.json"]
+    let named = ["tasks.md", "plan.md", "request.md", "plan-review.json"]
         .iter()
-        .any(|name| spec(name))
-    {
-        return Err(
-            "not a tasks.md, plan.md, request.md or plan-review.json of a feature".to_owned(),
-        );
+        .any(|name| spec(name));
+    let prose = words::kind(path);
+    let records = Path::new(path)
+        .extension()
+        .is_some_and(|ext| ext == "jsonl");
+    if !named && !records && prose.is_none() {
+        return Err("a file the carry has no rule for".to_owned());
     }
     let mut files = Vec::new();
     let mut sides = Vec::new();
@@ -262,6 +281,13 @@ fn resolved(root: &Path, scratch: &Path, path: &str) -> Result<(String, &'static
             "both sides' list lines",
         ));
     }
+    if records {
+        let text = records::merged(&sides[0], &sides[1], &sides[2])?;
+        return Ok((text, "both sides' records"));
+    }
+    if let Some(kind) = prose {
+        return added::merged(&merge_file(root, &files)?, kind);
+    }
     let said = l7r_gate_plan::plan::merge_files(
         Path::new(&files[0]),
         Path::new(&files[1]),
@@ -282,12 +308,11 @@ fn resolve_all(
 ) -> Result<Result<Vec<String>, Vec<String>>, String> {
     let scratch = git_dir(root)?.join("l7r-carry");
     std::fs::create_dir_all(&scratch).map_err(super::io)?;
-    let texts: Vec<Result<(String, &'static str), String>> = unmerged
-        .iter()
-        .map(|p| resolved(root, &scratch, p))
-        .collect();
+    let merged: Vec<&String> = unmerged.iter().filter(|p| *p != PAGE).collect();
+    let texts: Vec<Result<(String, &'static str), String>> =
+        merged.iter().map(|p| resolved(root, &scratch, p)).collect();
     let _ = std::fs::remove_dir_all(&scratch);
-    let stops: Vec<String> = unmerged
+    let stops: Vec<String> = merged
         .iter()
         .zip(&texts)
         .filter_map(|(p, t)| t.as_ref().err().map(|why| format!("{p} ({why})")))
@@ -296,11 +321,20 @@ fn resolve_all(
         return Ok(Err(stops));
     }
     let mut done = Vec::new();
-    for (path, text) in unmerged.iter().zip(texts) {
+    for (path, text) in merged.iter().zip(texts) {
         let (text, rule) = text.unwrap_or_default();
         std::fs::write(root.join(path), text).map_err(super::io)?;
         git(root, &["add", "--", path])?;
         done.push(format!("{path} ({rule})"));
+    }
+    // the generated page last, from the Makefile as the pick and the rules above left it
+    if merged.len() < unmerged.len() {
+        let said = l7r_gate_cohort::make_docs::write(root);
+        if said.code != 0 {
+            return Err(format!("{PAGE} was not regenerated, the pick's other conflicts resolved and staged - {} - regenerate it (`make docs`), `git add` it and `git {CONTINUE}`", said.stderr.trim()));
+        }
+        git(root, &["add", "--", PAGE])?;
+        done.push(format!("{PAGE} (regenerated)"));
     }
     // a tasks.md git merged cleanly keeps its boxes' lines too
     for path in lines(&git(root, &["diff", "--cached", "--name-only"])?.1) {
@@ -320,7 +354,15 @@ fn resolve_all(
 }
 
 /// The carried commit's files outside `specs/` that HEAD does not hold: neither changed since `before` nor at the commit's content.
-fn missing(root: &Path, sha: &str, before: &str) -> Result<(usize, Vec<String>), String> {
+///
+/// A file a RULE resolved is held whatever its text: the rule's result can be the clone's own (a page regenerated to what the clone
+/// had, records the clone already held), which the pick's commit then does not touch.
+fn missing(
+    root: &Path,
+    sha: &str,
+    before: &str,
+    kept: &[String],
+) -> Result<(usize, Vec<String>), String> {
     let names = lines(
         &git(
             root,
@@ -341,7 +383,8 @@ fn missing(root: &Path, sha: &str, before: &str) -> Result<(usize, Vec<String>),
                 &["rev-parse", "-q", "--verify", &format!("{rev}:{path}")],
             )
         };
-        if !moved.contains(path) && blob("HEAD")? != blob(sha)? {
+        let ruled = kept.iter().any(|k| k.starts_with(&format!("{path} (")));
+        if !ruled && !moved.contains(path) && blob("HEAD")? != blob(sha)? {
             lacks.push(path.clone());
         }
     }
@@ -485,7 +528,7 @@ fn end(
     let tree = root.display();
     let short: String = sha.chars().take(10).collect();
     let mut every = refusals(root)?;
-    let (count, lacks) = missing(root, sha, before)?;
+    let (count, lacks) = missing(root, sha, before, kept)?;
     if !lacks.is_empty() {
         every.push(format!(
             "HEAD does not hold the carried commit's {}",

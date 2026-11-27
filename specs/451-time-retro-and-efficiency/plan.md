@@ -3107,6 +3107,45 @@ engine speed, so no checklist.
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's turns at a stopped carry are builder-idle time, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
 
+### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)
+
+- **Approach**: four rules of `make carry` for files outside a feature's spec directory, each announced in the carry's last line with its rule's name; part 1's rules are unchanged. Measured 2026-11-26 by the same REPLAY as part 1 (`dev/measurements/2026-11-26/carry-replay/t300-replay.sh`, the output `t300-job2.txt`): of the 30 conflicting carries, 30 now carry untouched where 24 did after part 1, 17 identical to the session's commit where 16 were. Anything the rules do not cover stops as before, nothing resolved, the files named; the carry still ends verified.
+  - **(d) `docs/make-targets.html` is regenerated, never merged** (`carry.rs`, `resolve_all`): it is left out of the merge, and once every other conflict is written and staged the page is written by `make docs`' own code in process (`l7r_gate_cohort::make_docs::write`; the land crate already depends on cohort) from the Makefile as the pick and the other rules left it, then staged; `(regenerated)`. A stop in another file leaves the page untouched (all or none, as before). The one case that is not all-or-none: the regeneration itself failing (no Makefile, an unreadable one) after the other files are staged - the carry then exits 2 with the pick standing and says so, with the three commands that finish it. In the replay the regenerated page is byte-identical to the session's in all four carries (T274, T285, T334, T336).
+  - **(e) a prose hunk is merged by words** (`carry/words.rs`; `(by words)`): for a diff3 hunk with base lines, each side is cut into words - **a word is a maximal run of non-whitespace characters, and each run of whitespace between two words, line ends included, is a token of its own** (the session's hand scripts' `\S+|\s+`) - and each side's changes against the base (`l7r_gate_core::difflib::opcodes`, Python's SequenceMatcher without junk, the hand scripts' measure) are applied together in base order. It never chooses: a change that reaches into the other side's stops (`both sides changed the same words: ...`); the same change made by both is made once (the hand scripts would have stopped or doubled it); two insertions at one point are both kept, the clone's first; changes that touch without overlapping are both made, which is diff3's own rule at the grain of a word. It never touches code: every line of the hunk, on all three sides, is a prose line of its file's kind - any line of a `.md`; a Makefile line opening `#` or a target's line holding ` ## `, whose text before the `##` (the target and its prerequisites) must be the same on every side; a `.rs` line that is wholly a comment - else it stops (`a line that is not prose: ...`), and the result is held to the same test. That last test is a guard no fixture reaches (I found no input where each side passes and the result does not); it is one line, executed on every merge.
+  - **The mixed hunk is the same rule, and it held**: one side adding whole lines BESIDE a line the other reworded (measured 2026-11-26 (the diff3 hunks of the replayed picks): `scripts/container/builder-brief.md` in T334's carry: ours 3 lines, base 1, theirs 1; a reflowed `//!` paragraph of `rust/gate/crates/task/src/builder_tree.rs` in T336's, 5 lines beside 4 added) is merged by the same words rule over the whole hunk, the added lines being an insertion of words. Tried as the handoff said - before any Rust, by the hand scripts' token merge over each whole hunk, then by the built rule in the replay - and both files came out byte-identical to the session's commits b1d4a453fe and f5007f94d3. T285's two-row hunk (`task` and `land` rows of `rust/gate/CLAUDE.md`) is the whole-hunk rule too, not line by line: identical to 7af8a39d52.
+  - **(f) two added blocks are kept both** (`carry/added.rs`; `(both sides' added blocks)`, or `(by words and both sides' added blocks)` where a file has a hunk of each kind): for a hunk with NO base lines. In a Makefile: each side holds a target's line, neither opens on a recipe's tab-indented line, and no target is added by both (that stops: `both sides added the target ...`) - ours, exactly one blank line, theirs, a trailing blank line kept where a side had one; identical to the session's Makefile in T334's carry. In a `.md`: list lines with their continuation lines, by part 1's own block rule for a tasks.md (`both`, unchanged) - a bullet both hold whole is not doubled, one bullet with different lines under it stops. In a `.rs`, two blocks added at one place stop: their order can matter and no replayed carry needed it.
+  - **(g) a `.jsonl` by record - T399, built here** (`carry/records.rs`; `(both sides' records)`): from its three whole sides, the base's records neither side removed, in the base's order, then the clone's appended records, then the builder's. A side that changed a record in place or added one anywhere but the end stops. EACH appended record is kept, an identical line too: I read the skip log's writer (`rust/gate/crates/claims/src/claims/commands.rs`, one appended line a skipped triage, dated by day) - two identical lines are two events, and the file held 49 such lines on 2026-11-26.
+  - **The end's check** (`missing`): a non-spec file a rule resolved is held whatever its text - a page regenerated to what the clone already had, or records the clone already held, is neither "moved by the carry" nor "at the commit's content", and exited 1 (the handoff's trap; `a_page_regenerated_to_the_clones_own_text_is_still_verified`, red first).
+  - **The six newly passing carries against the session's commits**, measured 2026-11-26 (`git diff --stat` of the carry's tree against the session's commit, `t300-job2.txt`): T285 (7af8a39d52) identical. T274 (f40606920e), T334 (b1d4a453fe), T336 (f5007f94d3): every non-spec file identical; `tasks.md` one line more in each (the research line the hand lost, part 1's rule (b)); T336's `plan.md` holds the same lines with the builder's two new stubs (T361, T362) after the clone's last section where the hand put them among them, and two blank lines fewer (part 1's rule (a)). T298 (240c7d89f9): `dev/claims-triage-skips.jsonl` one record more, measured 2026-11-26 (`wc -l` of the carry's file and the session's) at 108 lines where the session kept 107 - the clone had appended the record twice and the builder once, and the hand kept the clone's side and lost the builder's event; `plan.md` one blank line fewer, `tasks.md` one line more, as part 1. T250 batch 8 (e3922827ac): `dev/gm-attribution-baseline.jsonl` 5 records where the session kept 42 - the hand kept the clone's side and so kept the 37 records the builder had pruned; the session pruned them later by hand in 72fdac1313, and the carry's file is byte-identical to that commit's.
+  - **Still stopping**: none of the 30. What stops by rule, with no replayed case: a conflict in code or in a file with no rule (`a file the carry has no rule for`), words both sides changed, a help line whose target a side changed, two blocks added at one place of a `.rs`, a record changed in place.
+  - **How the section was added**: a second section for one task, `### T300 part 2`, directly under part 1's so the task's sections stay in one place (part 1's rule (a) stops a plan that holds one task's sections in two).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the generated page regenerated | `the_generated_page_is_regenerated_from_the_merged_makefile_never_merged`, `a_page_regenerated_to_the_clones_own_text_is_still_verified`, red on the old code; `a_page_that_cannot_be_regenerated_and_a_file_with_no_rule_stop_with_the_pick_standing` | n/a: tooling | none | none |
+| a prose hunk merged by words | `prose_lines_both_sides_added_words_to_are_merged_by_words`, `lines_one_side_added_beside_a_line_the_other_reworded_are_merged_by_words_and_a_list_takes_both_bullets`, `words_both_sides_changed_stop_and_nothing_is_resolved`, red on the old code; `words_are_merged_only_in_prose_and_never_by_choosing`, `a_files_kind_is_read_from_its_name` | n/a: tooling | none | none |
+| two added blocks kept both | the page's and the mixed hunk's tests above (a Makefile's blocks, a list's bullets), red on the old code; `added_blocks_are_kept_both_only_where_the_files_kind_says_what_a_block_is` | n/a: tooling | none | none |
+| a `.jsonl` by record (T399) | `a_line_per_record_file_keeps_both_sides_appended_records_and_drops_what_either_pruned`, red on the old code; `a_record_changed_in_place_or_added_inside_the_file_stops` | n/a: tooling | none | none |
+
+### T300 part 2 Approach (checklist part A)
+
+1. **The goal, in the world.** A builder's commit reaches the clone by `make carry` without the session's hand in the files every tooling task meets another in: the generated page, a registry row, a help line, a new target's block, a record log.
+2. **The constraints.** Part 1's: all of a pick's conflicts or none; the end verified; a choice between the sides never made for the session. Added: code is never merged by words; the generated page is never merged at all.
+3. **Where each comes from.** O: the replay of 2026-11-26's 30 conflicting carries; O: the session's hand scripts `resolve334.py` and `resolve336.py` and its commits, what a correct resolution was; G: the brief's words for T300's carry part, the session's; O: the skip log's writer, read for rule (g).
+4. **Do they describe the world here?** Yes: every rule was run on the real carries and compared byte for byte with what the session committed, and each difference traced to the hand (above).
+5. **The order.** After part 1 (in the tree); before the task's registry-table part, which makes rule (e) fire less often but not never; before T400.
+6. **The exits.** Green: the land crate's tests and the replay's count. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one design (a whole-hunk word merge) was prototyped on the five real hunks before it was built and held on all five; the two fixtures corrected while building were mine (an expected stop that is a clean merge by words, and a code file the base already held).
+8. **The budget.** One landing.
+9. **Done, measured.** 30 of the 30 conflicted carries of 2026-11-26 carried untouched where 24 were, each newly passing one's non-spec files identical to the session's commit or differing where the hand lost a record.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session at a stopped carry resolves nothing by hand in a generated page, a registry row, a help line, a new target's block or a record log; a builder waits that much less for its tree's release.
+
+**Found and left?** none - T399, which part 1 filed and left, is built here as rule (g); T400 stays open as part 1 left it.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's turns at a stopped carry are builder-idle time, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
+
 
 ### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)
 
@@ -5509,32 +5548,32 @@ engine speed, so no checklist.
 
 **Performance work?** yes: the builders' loop. It answers the measurement of 2026-11-27 (`dev/measurements/2026-11-27/tree-idle/results.md`): the three warm trees idle 336 of 1,440 tree-minutes (23%) over eight hours with the queue never short, measured 2026-11-27 (`tree-idle.py`), about nine tasks at the window's median of 37 builder minutes a task (the record's own arithmetic). There is no after yet: the command's first use is this task's own builder's end, and the re-measurement over a like window is T401, read against the audit entry's 10% (a GUESS knob). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
-### T399 (<why: the finding or measurement that files it>)
+### T399 (2 of the 30 conflicting carries of 2026-11-26 stopped on a line-per-record file both sides appended to or pruned, each resolved by hand and each hand resolution losing something; built with T300's part 2 as its rule (g))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: built in T300's part 2, in the same code and the same landing: `### T300 part 2`, rule (g), holds the rule, why an identical appended record is kept, and the two real carries compared with the session's commits (`rust/gate/crates/land/src/land/carry/records.rs`; measured 2026-11-26 by the replay, `dev/measurements/2026-11-26/carry-replay/t300-job2.txt`: both carry, T298's skip log with the builder's record the hand lost, T250 batch 8's baseline byte-identical to the session's later hand prune 72fdac1313). `merge=union`, the task line's other option, was not taken: it cannot drop a record one side pruned, which is the baseline's whole case.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a `.jsonl` by record | `a_line_per_record_file_keeps_both_sides_appended_records_and_drops_what_either_pruned`, red on the old code; `a_record_changed_in_place_or_added_inside_the_file_stops` | n/a: tooling | none | none |
 
 ### T399 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A carry whose only conflict is a record log both trees appended to or pruned is carried without a hand, and loses no record.
+2. **The constraints.** T300's: all of a pick's conflicts or none; the end verified; never a choice between the sides - a record changed in place stops.
+3. **Where each comes from.** O: the replay's two carries; O: the skip log's writer (`rust/gate/crates/claims/src/claims/commands.rs`); G: the brief's words for rule (g), the session's.
+4. **Do they describe the world here?** Yes: both real carries replayed and compared with the session's commits.
+5. **The order.** With T300's part 2; before T400.
+6. **The exits.** Green: the land crate's tests and the replay's count. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing, T300 part 2's.
+9. **Done, measured.** Both carries pass in the replay (30 of 30 with T300's part 2).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The session resolves no `.jsonl` conflict by hand at a carry, and the builder's appended or pruned records are not lost as both hand resolutions lost them.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the landings and the builders' loop faster - the session's turns at a stopped carry are builder-idle time, `dev/measurements/2026-11-27/tree-idle/results.md`); no engine speed, so no checklist.
 
 ### T400 (<why: the finding or measurement that files it>)
 
