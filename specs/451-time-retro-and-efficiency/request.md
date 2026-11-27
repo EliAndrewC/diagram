@@ -507,3 +507,11 @@ The GM on what T515 leaves, 2026-11-27:
 The GM on T512's percentages, 2026-11-27, after asking what "15 (55.6%)" test runs meant (test runs of test runs and compiles together):
 
 > Overall, I don't know that it's useful to see percentages for counts the way that it is to see percentages for time, if that makes sense.
+
+The GM on T512's figures, 2026-11-27, reading T417's row (+831 -445 (59.6%), +369 -29 (18.6%), 19 compiles, 28 test runs):
+
+> But looking at that, then this seems like it is a decently sized task because it is several hundred lines of code, not counting tests, which are several times larger than the feature itself, which I think is fairly typical for the ratio of tests to actual code in most code bases. But then I see that we ran our compiler 19 times, and our unit tests 28 times. Now, first of all, I'm actually a little curious about why we would run our unit tests so much more than running our compiler, because I actually would have expected that we would essentially run the compiler anytime we made a change that we needed to unit test. So I would have expected the number of compiler runs to actually be strictly higher than the number of test runs. Though perhaps these numbers are misleading in the sense that if running make test implicitly invokes the compiler, then does that mean that the compiler is actually being invoked many more times than what is reflected in these numbers? Or am I missing something? As far as the percentages that we see in terms of what was taking the most time, then these numbers make me a little concerned about whether they actually reflect what is really happening.
+
+And, on the same row's percentages:
+
+> which first of all probably should also not get percentages, because when I talked about percentages, I think I only really care about that for time and tokens. And I don't know that it makes sense to be tracking percentages for things like lines added versus lines removed or whatever.
