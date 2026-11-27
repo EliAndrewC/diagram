@@ -3236,13 +3236,13 @@
    "declared": "spec-fidelity"
   },
   "### T392 Approach (checklist part A)": {
-   "sha256": "4b7802c4b6d65dae45c378982dfee562dc241c96554edb154074910d7189ba66",
+   "sha256": "099916987285a8369c743e95cebc8e8158e4bffc96251569e1e55313f31db510",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "4401ab11ddcff95ab973ac5b4295cd2b5c06bb4b5ca978dea63c3f94b337b3e7",
+   "sha256": "446d2a7fc65c5ca04e7a3eac539ae312e0619e3634a54ade827c71e89b833b99",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3867,6 +3867,12 @@
   },
   "### T442 Approach (checklist part A)": {
    "sha256": "bfe3b01c138fecf2470381ff3a8897c5c3265816254c182b1f44d9499fc8aa47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)": {
+   "sha256": "de292de46e55c40ea05a9612c1c5cb4a79f35793d9d13e293f73a9c7c1c31e65",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -34818,6 +34824,47 @@
      "why": "Removing a block that held no decision removes no decision and narrows nothing the request or spec asked for; whether those tasks are done or dropped is tasks.md's record, not this plan text."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)",
+    "### T392 Approach (checklist part A)",
+    "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T392 Approach: chunked byte read with memmem pre-screen",
+     "summary": "The reversal tripwire streams the event log in CHUNK-sized reads, searches only whole lines, pre-screens with memmem on the rarer needle, and passes each hit to the unchanged candidate screen, parse and test; every line still read, nothing kept between hooks.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to prioritize (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013). It keeps the tripwire's catches: the differential against the full parse over all 34 real logs dropped 0 of 8,958 Edit lines and 0 of 1,878 paths' lists differed (measured 2026-11-27, t392-differential.tsv). No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION: the side file and the kept offset are not built here",
+     "summary": "The faster options (a writer-kept side file of Edit lines, a kept offset) are declined because a missing line in a second copy is a missed reversal; a reader-derived index is filed as T443, ordered to land before T302.",
+     "class": "within",
+     "why": "The request asks for performance to come first, not for a particular mechanism or a particular figure. The task delivers its improvement (event-log-hooks median 83.9 to 29.4 ms in a worktree, 72.0 to 28.3 ms in the clone, measured 2026-11-27), and the remaining read cost is not a defect (no wrong outcome, per constitution XIV as quoted). The further step is filed with its id and order (FR-009's form), and as performance work it is scheduled first under FR-013, so nothing the GM asked is withheld. It also records a decision about what NOT to build, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "DECISION: a line that is not UTF-8 costs only itself",
+     "summary": "A non-UTF-8 line is skipped alone rather than the whole log read as empty; a partial I/O failure keeps the whole lines read before it; Interrupted is retried.",
+     "class": "within",
+     "why": "Fixes a latent wrong outcome (a missed reversal for a whole feature on one bad byte) found in passing, which the fix-as-we-go rule asks for; it can only find more of the lines the full parse uses, never fewer. Pinned red-first by its fixture."
+    },
+    {
+     "id": "CHUNK = 256 KiB, a GUESS knob",
+     "summary": "New chunk-size constant; 64, 256 and 1,024 KiB within one another's noise, any size reads the same lines.",
+     "class": "within",
+     "why": "An implementation parameter no verdict depends on, labeled GUESS; the every-chunk-size test shows the output does not depend on it."
+    },
+    {
+     "id": "Order: after T383, before T443",
+     "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
+     "class": "within",
+     "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -53669,6 +53716,44 @@
      "summary": "The task comes after T267 and before T441 and T442. Green means the three new tests pass with the crates' suites. Red means the failure is recorded, the task is set down and the claim is ruled through make arbiter-ask. Engine step table: n/a.",
      "class": "within",
      "why": "This is ordering and exit procedure inside the task. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T392": {
+   "section_sha256": "4d3374378497a899264db496119b4a23527920856047072a8d16ff4fb10f3269",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T392 Approach: chunked byte read with memmem pre-screen",
+     "summary": "The reversal tripwire streams the event log in CHUNK-sized reads, searches only whole lines, pre-screens with memmem on the rarer needle, and passes each hit to the unchanged candidate screen, parse and test; every line still read, nothing kept between hooks.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to prioritize (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013). It keeps the tripwire's catches: the differential against the full parse over all 34 real logs dropped 0 of 8,958 Edit lines and 0 of 1,878 paths' lists differed (measured 2026-11-27, t392-differential.tsv). No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION: the side file and the kept offset are not built here",
+     "summary": "The faster options (a writer-kept side file of Edit lines, a kept offset) are declined because a missing line in a second copy is a missed reversal; a reader-derived index is filed as T443, ordered to land before T302.",
+     "class": "within",
+     "why": "The request asks for performance to come first, not for a particular mechanism or a particular figure. The task delivers its improvement (event-log-hooks median 83.9 to 29.4 ms in a worktree, 72.0 to 28.3 ms in the clone, measured 2026-11-27), and the remaining read cost is not a defect (no wrong outcome, per constitution XIV as quoted). The further step is filed with its id and order (FR-009's form), and as performance work it is scheduled first under FR-013, so nothing the GM asked is withheld. It also records a decision about what NOT to build, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "DECISION: a line that is not UTF-8 costs only itself",
+     "summary": "A non-UTF-8 line is skipped alone rather than the whole log read as empty; a partial I/O failure keeps the whole lines read before it; Interrupted is retried.",
+     "class": "within",
+     "why": "Fixes a latent wrong outcome (a missed reversal for a whole feature on one bad byte) found in passing, which the fix-as-we-go rule asks for; it can only find more of the lines the full parse uses, never fewer. Pinned red-first by its fixture."
+    },
+    {
+     "id": "CHUNK = 256 KiB, a GUESS knob",
+     "summary": "New chunk-size constant; 64, 256 and 1,024 KiB within one another's noise, any size reads the same lines.",
+     "class": "within",
+     "why": "An implementation parameter no verdict depends on, labeled GUESS; the every-chunk-size test shows the output does not depend on it."
+    },
+    {
+     "id": "Order: after T383, before T443",
+     "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
+     "class": "within",
+     "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
     }
    ],
    "verdict": "CLEAR"

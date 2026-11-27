@@ -1,0 +1,33 @@
+# load 24.67 26.01 24.70 8/1579 3755206
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	read_to_string alone	47.95	87.37	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	fs::read alone	59.46	121.75	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	fs::read + from_utf8	70.33	76.65	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	NOW: read_to_string + line screen + parse	206.45	258.90	1092
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	BYTES: read + memmem of the needle + parse	144.64	164.85	2176
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	SIDE FILE: read_to_string + line screen + parse	6.55	6.76	1092
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	SIDE FILE: bytes + memmem	4.35	4.61	1092
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 64 KiB: read alone	10.67	11.82	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 64 KiB: read + memmem + parse	28.88	29.59	2176
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 256 KiB: read alone	11.78	12.41	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 256 KiB: read + memmem + parse	27.43	28.14	2176
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 1024 KiB: read alone	11.90	13.00	44428316
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 1024 KiB: read + memmem + parse	28.40	29.04	2176
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	CHUNKED 256 KiB, STD ONLY: from_utf8 of the whole lines + the line screen + parse	51.08	52.88	2176
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	WRITER: one more open + append of an Edit line (the side file's cost)	0.00	0.01	1
+/diagram/.clones/diagram-backlog/specs/451-time-retro-and-efficiency/plan.md	KEPT OFFSET: open + seek + 64 KiB tail	0.01	0.01	65536
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	read_to_string alone	37.53	39.05	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	fs::read alone	33.43	34.19	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	fs::read + from_utf8	50.14	51.54	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	NOW: read_to_string + line screen + parse	99.54	108.95	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	BYTES: read + memmem of the needle + parse	77.82	82.64	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	SIDE FILE: read_to_string + line screen + parse	5.94	6.17	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	SIDE FILE: bytes + memmem	1.36	1.53	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 64 KiB: read alone	17.23	17.71	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 64 KiB: read + memmem + parse	42.49	44.03	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 256 KiB: read alone	16.82	17.51	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 256 KiB: read + memmem + parse	40.03	70.62	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 1024 KiB: read alone	13.66	15.12	44428316
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 1024 KiB: read + memmem + parse	41.53	46.57	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	CHUNKED 256 KiB, STD ONLY: from_utf8 of the whole lines + the line screen + parse	103.34	109.31	43
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	WRITER: one more open + append of an Edit line (the side file's cost)	0.01	0.01	1
+/diagram/.clones/diagram-backlog-t270/docs/usage.md	KEPT OFFSET: open + seek + 64 KiB tail	0.01	0.01	65536

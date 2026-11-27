@@ -1,8 +1,9 @@
-//! The screen against the full parse (feature 451 T383): what it keeps, what it never parses, and the paths JSON spells several ways.
+//! The screen against the full parse (feature 451 T383): what it keeps, what it never parses, and the paths JSON spells several ways;
+//! and the log read a chunk at a time as bytes (451 T392): every chunk size, a failed read, and a line that is not UTF-8.
 
 use serde_json::{json, Value};
 
-use super::{candidate, needle, replaced, reversal};
+use super::{candidate, needle, replaced, reversal, CHUNK};
 
 /// One log line as the hook's writer writes it (`write_line`: serde's compact text).
 fn row(ev: &str, tool: &str, path: &Value, old: &str) -> String {
@@ -57,7 +58,7 @@ fn only_the_lines_that_could_be_an_edit_of_the_path_are_parsed() {
     text.push_str("\n  ");
     text.push_str(&row("PreToolUse", "Edit", &p, "B"));
     text.push_str("  \n");
-    let (olds, parsed) = replaced(&text, &p);
+    let (olds, parsed) = replaced(text.as_bytes(), &p, CHUNK);
     assert_eq!(olds, [json!("A"), json!("B")]);
     assert_eq!(olds, parse_all(&text, &p));
     // the two Edits, the PostToolUse of one and the line that is no JSON; not the 80 lines of another tool or another path, nor the Write
@@ -82,7 +83,7 @@ fn a_path_json_spells_several_ways_is_screened_by_the_tool_alone_and_misses_no_l
     text.push_str("{\"ev\":\"PreToolUse\",\"tool\":\"Edit\",\"path\":\"/c/a \\u0022quoted\\u0022 name.md\",\"old\":\"u22\"}\n");
     text.push_str("{\"ev\": \"PreToolUse\", \"tool\": \"Edit\", \"path\": \"/c/docs/usage.md\", \"old\": \"spaced\"}\n");
     for p in odd_paths() {
-        let (olds, parsed) = replaced(&text, &p);
+        let (olds, parsed) = replaced(text.as_bytes(), &p, CHUNK);
         assert_eq!(olds, parse_all(&text, &p), "{p}");
         assert!(!olds.is_empty(), "{p}");
         assert!(parsed < text.lines().count(), "{p}: {parsed}");
@@ -138,4 +139,93 @@ fn a_put_back_is_a_reversal_whatever_the_path() {
         let none = d.join("none.jsonl");
         assert!(!reversal(&none, &p, &json!("B"), &json!("A")), "{p}");
     }
+}
+
+/// A reader that hands out its text a few bytes at a time, says `Interrupted` before every other read, and fails once `fail_at`
+/// bytes are out where that is set.
+struct Halting {
+    text: Vec<u8>,
+    at: usize,
+    calls: usize,
+    fail_at: Option<usize>,
+}
+
+impl std::io::Read for Halting {
+    fn read(&mut self, out: &mut [u8]) -> std::io::Result<usize> {
+        self.calls += 1;
+        if self.calls % 2 == 1 {
+            return Err(std::io::ErrorKind::Interrupted.into());
+        }
+        if self.fail_at.is_some_and(|f| self.at >= f) {
+            return Err(std::io::Error::other("the disk went away"));
+        }
+        let n = out.len().min(7).min(self.text.len() - self.at);
+        out[..n].copy_from_slice(&self.text[self.at..self.at + n]);
+        self.at += n;
+        Ok(n)
+    }
+}
+
+/// A log whose lines a chunk's edge can cut anywhere: a line longer than most chunks, a `\r\n` ending, spaces round a line, a blank
+/// line, and a last Edit with no newline after it.
+fn edged(p: &Value) -> String {
+    let long = "x".repeat(700);
+    [
+        row("PreToolUse", "Edit", p, "A"),
+        row("PreToolUse", "Bash", p, &long),
+        format!("{}\r", row("PreToolUse", "Edit", p, "B")),
+        String::new(),
+        format!("   {}  ", row("PreToolUse", "Edit", p, &long)),
+        row("PreToolUse", "Edit", &json!("/c/other.md"), "Z"),
+        row("PreToolUse", "Edit", p, "C"),
+    ]
+    .join("\n")
+}
+
+#[test]
+fn the_chunked_read_keeps_the_full_parses_lines_at_every_chunk_size() {
+    let mut cases = 0;
+    for p in odd_paths() {
+        let text = edged(&p);
+        let want = parse_all(&text, &p);
+        assert_eq!(want.len(), 4, "{p}");
+        for chunk in 1..=text.len() + 1 {
+            assert_eq!(replaced(text.as_bytes(), &p, chunk).0, want, "{p} {chunk}");
+            cases += 1;
+        }
+    }
+    assert!(cases > 9 * 2_000, "{cases}");
+}
+
+#[test]
+fn an_interrupted_read_is_retried_and_a_failed_one_keeps_the_whole_lines_before_it() {
+    let p = json!("/c/docs/usage.md");
+    let text = edged(&p);
+    let read = |fail_at| {
+        let log = Halting {
+            text: text.clone().into_bytes(),
+            at: 0,
+            calls: 0,
+            fail_at,
+        };
+        replaced(log, &p, 64).0
+    };
+    assert_eq!(read(None), parse_all(&text, &p));
+    // failed inside the third line: the first line's Edit is kept, the line the failure cut is not
+    let third = text.find("\"B\"").unwrap();
+    assert_eq!(read(Some(third)), [json!("A")]);
+}
+
+#[test]
+fn a_line_that_is_not_utf8_costs_only_itself() {
+    let p = json!("/c/docs/usage.md");
+    let d = crate::tempdir::TempDir::new("guard-events-not-utf8");
+    let log = d.join("log.jsonl");
+    let mut bytes = row("PreToolUse", "Edit", &p, "A").into_bytes();
+    bytes.extend_from_slice(b"\n{\"ev\":\"PreToolUse\",\"tool\":\"Edit\",\"path\":\"/c/docs/usage.md\",\"old\":\"\xff\"}\n");
+    std::fs::write(&log, bytes).unwrap();
+    // the earlier Edit's put-back is caught; the whole-string read found nothing in a log holding one bad byte
+    assert!(reversal(&log, &p, &json!("B"), &json!("A")));
+    let (olds, parsed) = replaced(std::fs::File::open(&log).unwrap(), &p, CHUNK);
+    assert_eq!((olds, parsed), (vec![json!("A")], 1));
 }

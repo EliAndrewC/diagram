@@ -1122,6 +1122,7 @@ version = "0.1.0"
 dependencies = [
  "fancy-regex",
  "l7r_shared",
+ "memchr",
  "serde",
  "serde_json",
  "unicode-normalization",

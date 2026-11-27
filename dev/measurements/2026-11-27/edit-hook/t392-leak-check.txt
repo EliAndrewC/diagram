@@ -1,0 +1,11 @@
+# t392: the leak check after the before/after timing (2 sessions x 21 rounds x 8 arms, T373's sandbox), T373's method: the REAL places searched for the measurement's own marks.
+real event logs, lines whose sid is a t373 session:
+  /diagram/.clones/diagram-backlog/.git/l7r-events: 0
+  /diagram/.git/l7r-events: 0
+real claim map entries named t373-* or t392-*: 0
+real guard-log entries naming the sandbox: 1, its file stamped 20261126T233400 (before this run) - T373's own session's Bash command naming the sandbox (a pkill of its timer), not a hook call from it
+real checks-open.json naming a t373 tool-use id: 0
+real arbiter-owed.json naming the sandbox: 0
+sandbox event log lines with a t373 sid: 3890 (3638 before this run)
+L7R_GATE_TARGET scratch directory after the run: 0 files
+sandbox clone after the run: 0 changed files

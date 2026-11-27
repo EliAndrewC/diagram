@@ -5447,42 +5447,47 @@ Built here: T421 - an open performance task the queue has no line for
 
 <!-- plan-archive: T139 to T393 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T392 (<why: the finding or measurement that files it>)
+### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the reversal tripwire's read streams the log as bytes (`rust/guard/shared/src/guards/event_log_hooks/reversal.rs`, `replaced` and `Kept`; `memchr` a direct dependency of `rust/guard/shared`, already built there as `serde_json`'s). The log is read `CHUNK` (256 KiB, a GUESS knob: item 10) at a time, only the whole lines held (up to the new bytes' last newline) are searched, the rest held for the next chunk, so no line is cut by a chunk's edge; the rarer of the screen's two texts (the path's needle where it has one spelling, else `"Edit"`) is found by `memmem` over the bytes, and each line holding it is decoded and passed to the SAME `candidate` screen and the same parse and test as before, word for word. Every line of the log is still read; nothing is kept between hooks. The options were priced first, measured 2026-11-27 (a temporary test inside the crate over a copy of the real 44.4 MB 451 log, `dev/measurements/2026-11-27/edit-hook/t392-pricing.tsv`, its source `t392-pricing.rs`, ranking only as the crate's other tests ran beside it, load1 21.9 to 26.3): the whole log's read alone 33 to 60 ms whether UTF-8 is checked or not, read 256 KiB at a time 11 to 17 ms - the cost is the one 44 MB buffer, not the decode the task line suspected - the whole buffer with `memmem` 43 to 145 ms, CHUNKED with `memmem` 22 to 40 ms, std's line-by-line `contains` on each decoded chunk 51 to 103 ms, a side file of the Edit lines 1.4 to 4.4 ms, and a kept offset's tail 0.01 ms, but a tail holds no earlier Edit, so a kept offset's price is a kept index's read (the side file's) plus that index's write on every hook.
+  - **DECISION, the side file and the kept offset are not built here.** Either is about 20 ms an Edit cheaper than the chunked read, measured 2026-11-27 (`t392-pricing.tsv`), but each is a second copy of the log's Edit lines, and a line missing from it is a missed reversal - the one thing the tripwire must not do. A side file kept by the WRITER must be kept in step by `write_line`, the `append_row*` family, `make events-refile`'s append to its target and its temporary-file-and-rename of the source (`--from` too), its retask, and a backfill of the 34 logs that exist; one second open and append on every Edit's line costs the writer 0.00 to 0.01 ms, measured 2026-11-27 (the same pricing test), so the writer's time is not the objection, the copies are. (`dispatches.rs`' side file is no precedent against this: a line missing there costs one booking, and refile never touches it.) The chunked read has no second copy and needs no writer, refile or backfill: missing a line is impossible by construction. A kept index DERIVED by the reader, rebuilt by a full scan whenever the log's inode or length disagrees, would need none of the writers either; it is a new mechanism, two builders by the sizing rule, filed (Found and left).
+  - **DECISION, a line that is not UTF-8 costs only itself.** `read_to_string(..).unwrap_or_default()` returned an empty log for a file holding one bad byte anywhere, so every reversal in that feature went unseen; now that line alone is passed over (it could never parse) and every other line is read. This can only find more of the lines the full parse would use, never fewer. No real log holds one (34 of 34 valid, observed 2026-11-27, method: `iconv -f utf-8 -t utf-8` over each copy), so it is the fixture's case. A read that fails partway (an I/O error) now keeps the whole lines read before it, where the string read kept no line; `Interrupted` is retried, as `read_to_string` retried it.
+  - **The proof on the real logs**, measured 2026-11-27 (a temporary test inside the crate, its source `t392-differential.rs`, over a copy of every log of the real clone's `.git/l7r-events/`, 34 logs and 479,705 lines; the oracle the FULL PARSE of every line, `parse_all`, not T383's screen): of the 8,958 PreToolUse Edit lines the full parse uses, the new read for each line's own path dropped 0; for each of the 1,878 distinct paths the new read's list equals the full parse's, in order, 0 differing (`t392-differential.tsv`). The 451 log alone: 169,220 lines, 5,019 Edit lines over 786 paths, measured 2026-11-27 (the same differential).
+  - **Before and after**, measured 2026-11-27 (T373's sandbox reused, its 451 log 42.0 MB; `t392-time.py`, T383's timer unchanged; the binary of this tree before the edit of `reversal.rs` and after it, interleaved arms, 20 counted runs after a warm-up round; median / 90th centile in ms; load1 10.1 to 12.6 on 22 cores, not LOADED): the PreToolUse hook on an Edit of a doc, a builder in a pool worktree 100.5 / 390.3 to 50.1 / 139.5, the session in its clone (dirty) 172.3 / 188.1 to 129.1 / 148.4; `event-log-hooks` alone 83.9 / 225.4 to 29.4 / 75.5 in the worktree and 72.0 / 85.1 to 28.3 / 32.1 in the clone. Every call exited 0 with no output, and the sandbox log gained its 252 lines, observed 2026-11-27, method: the sandbox log's `t373` lines counted before and after (3,638 to 3,890); no real state was touched (`t392-leak-check.txt`). The record: `dev/measurements/2026-11-27/edit-hook/t392-results.md`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a line that is not UTF-8 costs only itself | `a_line_that_is_not_utf8_costs_only_itself`, red on the old read behind the new seam (the put-back missed), measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared`) | n/a: tooling | none | n/a |
+| no line cut by a chunk's edge | `the_chunked_read_keeps_the_full_parses_lines_at_every_chunk_size` (nine paths, every chunk size from 1 byte to past the log's length, against the full parse) and `an_interrupted_read_is_retried_and_a_failed_one_keeps_the_whole_lines_before_it`, both red on a mutant that searches each chunk to its end, measured 2026-11-27 (the same command) | n/a: tooling | none | n/a |
 
 ### T392 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An Edit's hook does not make the session or a builder wait on the feature's whole log held in one buffer: the reversal tripwire streams the log and decodes only the lines that could be earlier Edits of the file in hand, and catches every reversal it caught before.
+2. **The constraints.** The reversal tripwire must not miss a put-back (feature 375's round arbiter; `checks::arbiter::trip_as`; T383's screen, which this keeps word for word). No guard message changes. File-scale: `reversal.rs` stays far under its bar. Constitution XIII: no known regression; the two outcomes that change (a non-UTF-8 line, a failed read) are said and only ever find more.
+3. **Where each comes from.** O: T383's after-figures and Found and left; O: this task's pricing, differential and before and after. The "must not miss" is the task line's and the brief's. No GM words are quoted by the task line.
+4. **Do they describe the world here?** Yes: the before arms give T383's after-figures back at a lower load (83.9 against its 78.3 for `event-log-hooks` in the worktree, 72.0 against 81.0 in the clone), measured 2026-11-27 (`t392-time.py`).
+5. **The order.** After T383 (its screen is kept); before T443, the derived index, which would read this file's `candidate` and `Kept` for its full scan.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared"` and `tests/hooks/test-event-log-hooks.sh` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared`): with the old read behind the new seam (the whole log read to a string, every line screened), 543 passed, 1 failed - `a_line_that_is_not_utf8_costs_only_itself` (the put-back missed); with a mutant that searches each chunk to its end instead of to its last newline, 542 passed, 2 failed (the every-chunk-size test and the interrupted-read test). After: 544 passed, 0 failed; `tests/hooks/test-event-log-hooks.sh` 25 passed, 0 failed; `make builder-checks CRATE="rust/guard/shared"` green. The hook's median fell from 100.5 to 50.1 ms in a worktree and from 172.3 to 129.1 ms in the clone, measured 2026-11-27 (the Approach's run).
+10. **Before moving a constant.** n/a: `CHUNK` (256 KiB) is new, a GUESS knob no verdict depends on - 64, 256 and 1,024 KiB read the log in 10.7 to 17.2 ms, within one another's noise (`t392-pricing.tsv`), and any size reads the same lines (the every-chunk-size test).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of outcome for the speed: no map, verdict or message changes. The one defect fixed in passing is a missed reversal - a log holding one non-UTF-8 byte read as empty - latent (0 of 34 real logs), pinned by its fixture.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The tripwire still reads every byte of the log on each Edit: `event-log-hooks` is 29.4 ms (worktree) and 28.3 ms (clone) at the median after this task, about 12 ms of it the read of the 42 MB log and about 10 the search, growing about 0.5 ms a MB, measured 2026-11-27 (the Approach's runs). Its visible effect is that wait on every Edit. Not fixed here: the way past it is a kept index, a new mechanism and two builders by the sizing rule. Filed as T443; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the builders' loop and the session's own, every Edit's hook. Before and after: the PreToolUse hook on an Edit of a doc 100.5 / 390.3 ms to 50.1 / 139.5 ms for a builder in a pool worktree and 172.3 / 188.1 ms to 129.1 / 148.4 ms for the session in its clone (median / 90th centile, 20 runs each, load1 10.1 to 12.6), measured 2026-11-27 (`t392-time.py` in T373's sandbox, the old binary and the new as interleaved arms). At T373's day's counts (185 Edits in a worktree or outside, 29 in the clone) that is 185 x 0.0504 + 29 x 0.0432 = 10.6 s a day, measured 2026-11-27 (this run's saved medians times T373's counts of 2026-11-26), and the saving grows with the log. Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 ### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** n/a for a stage: the hook's, measured at the hook - after T383, the whole log read into one string (about 33 ms of the 44 MB log) and the line screen over it, measured 2026-11-27 (`t392-pricing.tsv`).
+2. **Removes work, or only moves it?** Removes it: no 44 MB buffer and no decode of lines without the needle, a better read, not a kept result, measured 2026-11-27 (`t392-pricing.tsv`).
+3. **What do you expect it to save, and why?** About 40 to 55 ms of `event-log-hooks`' 72 to 84 ms, the whole-buffer read less a chunked one, and 43.7 and 54.5 ms were saved, measured 2026-11-27 (`t392-time.py`).
+4. **How does the work grow with the settlement?** n/a: it grows with the event log, still linearly - about 0.5 ms a MB (the chunked read and search, 22 ms of the 44 MB copy) against about 1.9 before (the whole hook guard's 80 ms over 42 MB), measured 2026-11-27 (derived from the figures above), and T443 would bend it.
+5. **What did the before and after show, and under what conditions?** The Approach's figures, load1 10.1 to 12.6 on 22 cores.
+6. **Did any map move, and does it still keep the research?** n/a: tooling; no map is drawn by it.
 
 
 <!-- plan-archive: T394 to T394 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -6718,6 +6723,32 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 |---|---|---|---|---|
 
 ### T442 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T443 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T443 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
