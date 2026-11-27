@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-27
 
-**Status**: Draft - specified, not started ("go ahead and write the spec for the feature now, but don't actually get started on it just yet")
+**Status**: In progress - started 2026-11-27 ("I think you can go ahead and get started on the orchestrator feature now")
 
 **Affects**: tooling
 

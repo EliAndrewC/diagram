@@ -45,3 +45,9 @@ there is not met.
 <!-- SOURCE: GM NOTES -->
 > we don't want to do anything silly like capture performance metrics when only one builder is running, and then capture performance metrics when four builders are running, and then compare them without noting how much was happening at the time, because that sort of thing could cause us to think that things are getting better or worse when actually all that's happening is that we are looking at the system when it is implementing different numbers of tasks.
 <!-- END SOURCE -->
+
+2026-11-27, starting the feature:
+
+<!-- SOURCE: GM NOTES -->
+> Okay, good stuff, thanks. And I think you can go ahead and get started on the orchestrator feature now, because I think that's something that we are going to want to do kind of just regardless, and also orthogonal to the process reviewer, which we can also talk about separately after I look more at these figures. Thank you.
+<!-- END SOURCE -->
