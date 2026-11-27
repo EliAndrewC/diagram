@@ -236,3 +236,5 @@ before the first edit. Every task writes prose or code: American spellings, hyph
       research: rendering
 - [ ] T541 the gate-write guard frees more held heredoc commits by expanding a variable assigned a literal earlier in the same command (S=/tmp/x; cat > $S/f <<EOF ... git commit ... EOF): 18 of the 149 commands still held, left by 451 T531; rust/guard/src/guards/gate_write_hooks/inert.rs
       research: rendering
+- [ ] T542 the hand-in's no-commit apply leaves plan-review.json unmerged with the base's side only, its merge=plan-review driver not run (found by 451 T531/T532's hand-in, 2026-11-27: the builder ran l7r-gate.sh plan merge-record on stages 1-3 by hand) - rust/gate/crates/land/src/land/carry/apply.rs and the carry's merge_files: run the review record's three-way rule in the no-commit form as the committing carry does, red-first on a fixture where both sides add verdicts
+      research: rendering
