@@ -1,0 +1,16 @@
+load1 22.9 to 24.7 (22 cores), 20 runs each, round-robin; the binary a stub (/bin/true), GOOD newer than every source
+| wrapper variant | wall median | wall p90 | wall min | CPU median |
+| A today (bash walk, [ -nt ]), by its shebang (env bash) | 14.86 | 20.80 | 13.62 | 14.57 |
+| B the walk skipped (L7R_GUARD_FRESH): the floor without a walk | 6.09 | 7.81 | 5.46 | 5.92 |
+| C no-fork walk ([[ -nt ]]) | 12.46 | 16.86 | 11.62 | 12.28 |
+| D find -newer -print -quit | 10.96 | 13.25 | 9.74 | 10.90 |
+| E today, by `bash` (no env hop) | 11.83 | 13.64 | 11.03 | 11.56 |
+| F find, by `bash` (both levers) | 7.93 | 10.41 | 7.16 | 7.83 |
+load1 22.9 to 22.9 (22 cores), 40 runs each, round-robin; the binary a stub (/bin/true), GOOD newer than every source
+| wrapper variant | wall median | wall p90 | wall min | CPU median |
+| A today (bash walk, [ -nt ]), by its shebang (env bash) | 14.85 | 16.45 | 13.62 | 14.51 |
+| B the walk skipped (L7R_GUARD_FRESH): the floor without a walk | 6.06 | 6.79 | 5.29 | 5.89 |
+| C no-fork walk ([[ -nt ]]) | 12.48 | 14.21 | 10.71 | 12.28 |
+| D find -newer -print -quit | 10.77 | 12.75 | 9.82 | 10.67 |
+| E today, by `bash` (no env hop) | 11.78 | 13.37 | 10.34 | 11.39 |
+| F find, by `bash` (both levers) | 8.00 | 8.95 | 6.94 | 7.74 |

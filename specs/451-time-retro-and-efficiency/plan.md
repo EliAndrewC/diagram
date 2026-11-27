@@ -7181,33 +7181,33 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T434 to T341 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T439 (<why: the finding or measurement that files it>)
+### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, "The floor"))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `newer` in `scripts/hooks/l7r-guard.sh` asks ONE `find <the sources that exist> -newer <stamp> -print -quit` in place of bash's globstar walk with an `-nt` per path; a `find` that fails (missing, killed, an error) falls back to the walk, never to "fresh". Measured 2026-11-27, hop by hop and lever by lever in a scratch tree linked to the real sources with a stub binary (40 runs round-robin, load 19.2 and 22.9, `dev/measurements/2026-11-27/hook-floor/results.md`): the chain with a stub is 14.0 ms; `dash` 1.0, `env bash` 4.8 (uutils' `env` about 3 of it), the wrapper with no walk 6.1, the walk 8.8 (449 paths: the glob about 4, the tests about 4.7); one `find` 3.7 alone, the wrapper with it 10.77 against 14.85, so 4.1 ms a call, measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`). A kept stamp is priced at most 8.8 ms, measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`), and not built: an edit moves only its file's time, so a stamp on directory times misses it, and one kept by the Edit hook or git's index misses an edit through Bash, a mirror fast-forward or another session - a stale guard. The comment the walk carried ("`find -newer` was a fork on every call") is rewritten with the figure that reverses it: a block an earlier version dropped coming back, for the coordinator's tripwire count.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `newer` by one `find` | the suite's case 6e: a fresh call asks `find` once and it succeeds; red on the old code (66 passed, 1 failed: "find: fresh, one find and it succeeded"), green after (67 passed) | n/a: no engine code | none: a hook wrapper | the walk, kept as the fallback |
 
 ### T439 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A hook call costs what its guards cost, not 8.8 ms of statting 449 paths first (measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`)), and never runs a guard older than its sources.
+2. **The constraints.** 449 T004's D7 (the last good binary, a build only when the sources are newer); T205's `L7R_GUARD_FRESH` path untouched; the brief's rule that no lever may run a stale guard.
+3. **Where each comes from.** O: `dev/measurements/2026-11-27/hook-floor/results.md` (this task); O: T373's floor; G: the brief's "never running a stale guard".
+4. **Do they describe the world here?** Measured in place on the real 449 paths, measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`). No dotfile or symlink under `rust/guard` (`find rust/guard -name '.*' -o -type l` printed nothing), so `find`'s and the glob's views of the tree are the same.
+5. **The order.** Before T302; T449 (the link heal) edits the build block and the print-fresh line of the same file, not `newer`.
+6. **The exits.** Green: the suite green with case 6e, and the wrapper with `find` under the old one in place. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The in-place table: A 14.85 against D 10.77 ms, load 22.9, and as built 16.24 against 13.44, load 13, a noisier run, both measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** nothing a map shows: a speed change to the hook wrapper; the safety pins (a nested edit with its directory's time unmoved, a file added, a file removed, `find` failing) hold on both versions.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Every hook call spends about 3 ms starting `/usr/bin/env`, uutils coreutils' multicall binary, on the wrapper's `#!/usr/bin/env bash` shebang (the wrapper by its shebang 14.85 against 11.78 ms by `bash`, load 22.9, measured 2026-11-27 (40 runs round-robin, `dev/measurements/2026-11-27/hook-floor/results.md`)), about 32 s a day of the agents' waiting on hooks. Not fixed here: a second guard file (`scripts/hooks/l7r-hook`) and the brief's one job. Filed as T456; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes every hook call, the builders' loop, faster): the wrapper with a stub binary 14.85 to 10.77 ms, measured 2026-11-27 (40 runs round-robin, load 22.9, `dev/measurements/2026-11-27/hook-floor/results.md`), about 43 s a day over T373's 10,400 calls. Not an engine-speed task: no checklist answers owed. The work removed is the globstar expansion and 449 pairs of stats in bash; one fork of `find` and 449 stats in C replace them.
 <!-- plan-archive: T440 to T312 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T441 to T275 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T441 to T441 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
@@ -7762,6 +7762,32 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T480 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T456 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T456 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

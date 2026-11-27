@@ -301,6 +301,28 @@ check "edited mid-build, the build failed: the next call builds again" "$(run ok
 touch_sources
 check "a ceiling under the call's limit: the call's limit stands" "$(SLOW_SECS=1 L7R_GUARD_BUILD_SECS=5 L7R_GUARD_DETACHED_SECS=0.3 run slowok v27)" "v27 PreToolUse"
 
+settle; rm -f "$W/target/guard.failed" "$W/target/guard.healed"  # (the sections above may leave a stamp or a build in flight)
+# 6g. THE STALENESS WALK IS ONE `find` (451 T439): the bash walk of rust/guard/** (449 paths, 8.8 ms a call in place, 2026-11-27) is
+# one `find -newer -print -quit` (4.1 ms less); a `find` on PATH that records each call and its exit stands in front of the real one.
+# A fresh call asks it once and it succeeds (no start path missing: `.cargo/config.toml` is absent here); an edit of a nested source,
+# a file added and a file removed each still rebuild; a `find` that fails falls back to the bash walk, never to "fresh"
+FB="$W/findbin"; mkdir -p "$FB"; REALFIND=$(command -v find)
+printf '#!/bin/sh\n[ -n "$FIND_FAIL" ] && { echo "find: broken" >&2; exit 1; }\n"%s" "$@"; rc=$?\necho "find $rc" >> "%s"\nexit $rc\n' "$REALFIND" "$W/find.calls" > "$FB/find"; chmod +x "$FB/find"
+frun() { : > "$W/find.calls"; PATH="$FB:$PATH" run "$@"; }
+mkdir -p "$T/rust/guard/shared/src/checks/deep"; printf 'x\n' > "$T/rust/guard/shared/src/checks/deep/a.rs"; sleep 0.01
+check "find: a nested source added, rebuilt" "$(frun ok v20)" "v20 PreToolUse"
+check "find: fresh, run without building" "$(frun ok v20)" "v20 PreToolUse"
+check "find: fresh, one find and it succeeded" "$(cat "$W/find.calls")" "find 0"
+b=$(calls); sleep 0.01; printf 'y\n' >> "$T/rust/guard/shared/src/checks/deep/a.rs"
+check "find: a nested source edited (its directory's time unmoved), rebuilt" "$(frun ok v21)" "v21 PreToolUse"
+sleep 0.01; rm "$T/rust/guard/shared/src/checks/deep/a.rs"
+check "find: a source removed, rebuilt" "$(frun ok v22)" "v22 PreToolUse"
+check "find: two builds, the edit and the removal" "$(( $(calls) - b ))" 2
+sleep 0.01; printf 'z\n' > "$T/rust/guard/shared/src/checks/deep/b.rs"
+check "find fails: the bash walk still sees the edit" "$(FIND_FAIL=1 frun ok v23 2>/dev/null)" "v23 PreToolUse"
+check "find fails: fresh after, no build" "$(FIND_FAIL=1 frun ok v24 2>/dev/null)" "v23 PreToolUse"
+check "find fails: nothing said on stderr" "$(FIND_FAIL=1 frun ok v24 2>&1 >/dev/null)" ""
+
 # 8. THE SETTINGS' HOOK COMMANDS ARE SHORT (feature 451 T169, the GM 2026-11-23 "on hook output length"): the harness prints an
 # entry's command with every block or notice it emits, and the ~245-character commands were 1.66M characters of one session's
 # transcript (6,665 stored occurrences, measured 2026-11-23). Each entry is the launcher `scripts/hooks/l7r-hook` and its event; what the

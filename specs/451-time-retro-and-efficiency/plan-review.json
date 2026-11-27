@@ -3679,14 +3679,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T439 (<why: the finding or measurement that files it>)": {
-   "sha256": "a0c1814383dd14e5ae77e50d42d1b3e0570e03e52fab578bfd3cdcb32a136e47",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T439 Approach (checklist part A)": {
-   "sha256": "28c51bbdd797605e42619a0ebc075f446c74bb4d4b4d4602b1ecc001d125e8c8",
+   "sha256": "20ac7c5c0cc706feb349bb6a14956d4817d5bd3af824a831579a0834c30efc14",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3848,13 +3842,13 @@
    "declared": "spec-fidelity"
   },
   "### T449 Approach (checklist part A)": {
-   "sha256": "4b54bbd6864fe3a622c9660e051d69001e6ae82730686ca294b0830c78afe85b",
+   "sha256": "4fec2a7be1ffc25b71b398b2878998fa8474ead13ad68c8f1159de23fb6fd028",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
   "### T443 Approach (checklist part A)": {
-   "sha256": "9d522070133cb6d69b51e44410ce333db978b0eb32482ef95b66e3d3ae87c505",
+   "sha256": "1e43e143c130b5bfae07d1d0a792891faf24324eb8b6d89c1accf7d569230dcf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4191,6 +4185,36 @@
   },
   "### T468 Approach (checklist part A)": {
    "sha256": "17267099183f0238806f30ce8e9771c97ab241f00e0ad5f0508b37500c7e3a9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))": {
+   "sha256": "6d73564f9042746b9b481bdd6e08124b73b3d4dea7fc2d708dd16c22adeed524",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T449 (<why: the finding or measurement that files it>)": {
+   "sha256": "7286fa16a9d9acc855fa70451322a8235ea83a7afd3d92fa7c5040515c8930c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T443 (<why: the finding or measurement that files it>)": {
+   "sha256": "668cf0bbd07e0e391fa0acc144b33a9314aaca0ff790c846c47eff23f2137860",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T456 (<why: the finding or measurement that files it>)": {
+   "sha256": "fd4deab002679b0583e18525fd199c6ca2d909bf6df78460da7a06ce294faae5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T456 Approach (checklist part A)": {
+   "sha256": "5c39a192ab9c2b64ac7dd208c463923e3fadd19e3e287533e24cb169cfee8f3f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38622,6 +38646,131 @@
      "why": "Constraints and order that keep earlier accepted behavior; the single untold row counted as real is a row kept, not a defect left, and moves no printed rate."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))",
+    "### T439 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T439-D1",
+     "summary": "`newer` in scripts/hooks/l7r-guard.sh asks one `find <existing sources> -newer <stamp> -print -quit` in place of the globstar walk with an -nt per path; a find that fails (missing, killed, error) falls back to the walk, never to fresh.",
+     "class": "within",
+     "why": "A speed change to every hook call, the builders' loop: performance work the GM asked to come first (2026-11-20 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps 449 D7 whole - the binary is still rebuilt when its sources are newer, and a failed find falls to the old walk rather than to 'fresh', so no stale guard runs. Nothing asked is narrowed."
+    },
+    {
+     "id": "T439-D2",
+     "summary": "A kept stamp (on directory times, or kept by the Edit hook or git's index) is priced at most 8.8 ms and declined: it misses an edit through Bash, a mirror fast-forward or another session, so it would run a stale guard.",
+     "class": "within",
+     "why": "Declining a lever nobody asked for, because it would break 449 D7 (build when the sources are newer), narrows nothing; the GM asked for performance work, not for this lever, and asked that decisions not to build be recorded (2026-11-25), which this does."
+    },
+    {
+     "id": "T439-D3",
+     "summary": "The walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it.",
+     "class": "within",
+     "why": "Keeps the code's own stated reason true after the change; adds no behavior."
+    },
+    {
+     "id": "T439-D4",
+     "summary": "The about 3 ms per call spent starting /usr/bin/env on the wrapper's shebang is found and left, filed as T456, lands before T302.",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook works and runs a current guard), so leaving it is no narrowing; it is filed as performance work with its order, so FR-013's ordering still puts it ahead of non-performance work."
+    },
+    {
+     "id": "T439-D5",
+     "summary": "Order: before T302; T449 edits other blocks of the same file (the build block and print-fresh line), not `newer`.",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013 (performance first) and the GM's queue order; decides nothing the request settles otherwise."
+    },
+    {
+     "id": "T439-D6",
+     "summary": "Tagged [perf] under FR-013: it makes every hook call faster (14.85 to 10.77 ms with a stub binary).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a hook-wrapper speedup on every tool call is that."
+    },
+    {
+     "id": "T439-D7",
+     "summary": "Suite case 6e pins that a fresh call asks find once and it succeeds (red on the old code, green after); safety pins (nested edit with directory time unmoved, file added, file removed, find failing) held on both versions.",
+     "class": "within",
+     "why": "Verification that the requested change happens and that D7's no-stale-guard behavior is kept; enforcement of what was asked, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))",
+    "### T439 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "### T456 (<why: the finding or measurement that files it>)",
+    "### T456 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T439 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T439-a find-newer",
+     "summary": "newer in scripts/hooks/l7r-guard.sh asks one find <sources> -newer <stamp> -print -quit in place of bash's globstar walk with an -nt per path",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?'): same freshness question, about 4.1 ms less per hook call, measured. Keeps 449 D7's rule (a build only when the sources are newer)."
+    },
+    {
+     "id": "T439-b fallback",
+     "summary": "a find that fails (missing, killed, an error) falls back to the walk, never to 'fresh'",
+     "class": "within",
+     "why": "Keeps 449 D7 whole: a failure of the faster lever can never run a guard older than its sources."
+    },
+    {
+     "id": "T439-c no kept stamp",
+     "summary": "a kept stamp (directory times, the Edit hook, or git's index) is priced and not built",
+     "class": "within",
+     "why": "A rejected alternative the GM never asked for; it is turned down because it would miss an edit through Bash, a mirror fast-forward or another session and run a stale guard, which would break D7. Building nothing extra leaves nothing that was asked undone."
+    },
+    {
+     "id": "T439-d comment",
+     "summary": "the walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it",
+     "class": "within",
+     "why": "Documentation of the change itself."
+    },
+    {
+     "id": "T439-e pins",
+     "summary": "the suite's case 6e (a fresh call asks find once and it succeeds), plus safety pins: a nested edit with its directory time unmoved, a file added, a file removed, find failing, on both versions",
+     "class": "within",
+     "why": "Tests that check the requested speedup really happens and that D7's freshness rule still holds. Checking what was asked is not unrequested scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T439-f env shebang deferred",
+     "summary": "about 3 ms per call starting /usr/bin/env on the #!/usr/bin/env bash shebang is not fixed here; filed as T456, lands before T302",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook answers correctly). It is filed as its own task and ordered before T302 rather than dropped, which matches FR-013's performance-first order and D15's deferral form; whether the T456/T302 ids are open is checked by make decide."
+    },
+    {
+     "id": "T439-g order",
+     "summary": "before T302; T449 (the link heal) edits the build block and print-fresh line of the same file, not newer",
+     "class": "within",
+     "why": "Scheduling inside the feature; does not narrow anything that was asked."
+    },
+    {
+     "id": "T443/T449/T456 templates",
+     "summary": "new task sections holding only the template placeholders",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed T311, T392, T439 placeholders",
+     "summary": "three blocks that held only template placeholders are removed (T439's replaced by its filled section)",
+     "class": "within",
+     "why": "Each removed block held only the unfilled template (earlier.md), so removing it takes away no decision. T439's content now sits under its filled heading."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -58552,6 +58701,56 @@
      "summary": "libtest per-test times (--report-time under RUSTC_BOOTSTRAP=1) asked by T463's line are not built here; filed T470, lands before T435, after measuring whether the flags rebuild the test build every run",
      "class": "within",
      "why": "The per-test times are on T463's line, which is the session's, not the GM's request or the accepted spec, and they are filed and ordered rather than dropped. Measuring the rebuild cost first is consistent with performance work going first. Nothing the GM asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T439": {
+   "section_sha256": "0799f055f4d49fc08192aa2b7cc873453944676165a6e54c013a98d36b04c1a3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T439-D1",
+     "summary": "`newer` in scripts/hooks/l7r-guard.sh asks one `find <existing sources> -newer <stamp> -print -quit` in place of the globstar walk with an -nt per path; a find that fails (missing, killed, error) falls back to the walk, never to fresh.",
+     "class": "within",
+     "why": "A speed change to every hook call, the builders' loop: performance work the GM asked to come first (2026-11-20 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps 449 D7 whole - the binary is still rebuilt when its sources are newer, and a failed find falls to the old walk rather than to 'fresh', so no stale guard runs. Nothing asked is narrowed."
+    },
+    {
+     "id": "T439-D2",
+     "summary": "A kept stamp (on directory times, or kept by the Edit hook or git's index) is priced at most 8.8 ms and declined: it misses an edit through Bash, a mirror fast-forward or another session, so it would run a stale guard.",
+     "class": "within",
+     "why": "Declining a lever nobody asked for, because it would break 449 D7 (build when the sources are newer), narrows nothing; the GM asked for performance work, not for this lever, and asked that decisions not to build be recorded (2026-11-25), which this does."
+    },
+    {
+     "id": "T439-D3",
+     "summary": "The walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it.",
+     "class": "within",
+     "why": "Keeps the code's own stated reason true after the change; adds no behavior."
+    },
+    {
+     "id": "T439-D4",
+     "summary": "The about 3 ms per call spent starting /usr/bin/env on the wrapper's shebang is found and left, filed as T456, lands before T302.",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook works and runs a current guard), so leaving it is no narrowing; it is filed as performance work with its order, so FR-013's ordering still puts it ahead of non-performance work."
+    },
+    {
+     "id": "T439-D5",
+     "summary": "Order: before T302; T449 edits other blocks of the same file (the build block and print-fresh line), not `newer`.",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013 (performance first) and the GM's queue order; decides nothing the request settles otherwise."
+    },
+    {
+     "id": "T439-D6",
+     "summary": "Tagged [perf] under FR-013: it makes every hook call faster (14.85 to 10.77 ms with a stub binary).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a hook-wrapper speedup on every tool call is that."
+    },
+    {
+     "id": "T439-D7",
+     "summary": "Suite case 6e pins that a fresh call asks find once and it succeeds (red on the old code, green after); safety pins (nested edit with directory time unmoved, file added, file removed, find failing) held on both versions.",
+     "class": "within",
+     "why": "Verification that the requested change happens and that D7's no-stale-guard behavior is kept; enforcement of what was asked, not unrequested scope."
     }
    ],
    "verdict": "CLEAR"

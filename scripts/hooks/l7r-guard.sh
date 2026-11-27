@@ -31,12 +31,19 @@ HEALED="$TARGET/guard.healed"  # a link failure's heal tried (451 T449), cleared
 LOG="$TARGET/build.log"
 SOURCES=("$TREE/rust/guard" "$TREE/rust/Cargo.toml" "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml")
 
-# newer <stamp>: true when a source is newer than <stamp>, or <stamp> is missing - by bash's own `-nt` over a globstar walk, no
-# process (`find -newer` was a fork on every call); a directory counts, so a file added or removed is a change too
+# newer <stamp>: true when a source is newer than <stamp>, or <stamp> is missing; a directory counts, so a file added or removed is a
+# change too. ONE `find -newer -print -quit` (451 T439): bash's `-nt` over a globstar walk was chosen to save find's fork when the walk
+# was small, but at 449 paths it cost 8.8 ms a call in place and find 4.7 (20 and 40 runs, load 23, 2026-11-27,
+# dev/measurements/2026-11-27/hook-floor/results.md) - every hook call pays it. Only the sources that exist are named (`.cargo/config.toml`
+# may be absent, and find fails on a missing start path). A find that fails falls back to the walk, never to "fresh". No kept stamp
+# replaces the walk: an edit moves only its file's time, so any stamp must still look at every file - or trust a signal that an edit
+# made through Bash, a git fast-forward or another session never gives.
 shopt -s globstar nullglob
 newer() {
   [ -e "$1" ] || return 0
-  local f
+  local f src=()
+  for f in "${SOURCES[@]}"; do [ -e "$f" ] && src+=("$f"); done
+  if f=$(find "${src[@]}" -newer "$1" -print -quit 2>/dev/null); then [ -n "$f" ]; return; fi
   for f in "${SOURCES[@]}" "$TREE"/rust/guard/**; do [ "$f" -nt "$1" ] && return 0; done
   return 1
 }
