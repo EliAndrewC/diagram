@@ -3812,6 +3812,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T312 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T312 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T312's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T312's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T312 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: "what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))
 
 - **Approach**: the builders' queue becomes a file code reads, three commands list it, write it and name its next entry, and a Stop guard refuses a turn's end over a free pool tree and a READY entry. T395 (the queue in a form code reads, so `make builder-done` names the next task) and the first half of T297 (the overlap of two tasks' files named at dispatch) are BUILT HERE, in the same files. The idle figures are the measurement's, measured 2026-11-27 (`tree-idle.py`, read-only over the session's transcript and the 451 event log): 170 of the 336 idle tree-minutes with the session in its own turn, 105 with a landing running, 46 with the session stopped - 321 of the 336, the minutes in idle gaps of 3 minutes or more, which is what the table classes ("gaps of 3 minutes or more, 321 of the 336"); the other 15 fell in shorter gaps and are not classed. The mechanism's effect on them is NOT measured here: the after-measurement over a like window is 451 T401's, not this task's.
@@ -3923,6 +3945,28 @@ that batch; the red was not in its change.
 ### T313 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T313 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T313's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T313's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T313 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T313 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T313 is a task of
 that batch; the red was not in its change.
 
@@ -5156,6 +5200,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T365 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T365 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T365's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T365's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T365 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))
 
 - **Approach**: each of the two listings runs once where it ran once a call, and removes exactly what it removed.
@@ -5336,6 +5402,28 @@ that batch; the red was not in its change.
 ### T373 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T373 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T373's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T373's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T373 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T373 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T373 is a task of
 that batch; the red was not in its change.
 
@@ -5704,6 +5792,28 @@ that batch; the red was not in its change.
 ### T369 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T369 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T369's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T369's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T369 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T369 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T369 is a task of
 that batch; the red was not in its change.
 
@@ -6266,6 +6376,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T403 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T403 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T403's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T403's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T403 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T410 (five plan reviews of 2026-11-26/27 blocked a round on a section answering no to performance work of a measurement - T315, T274, T301 and two the session headed off by brief - against FR-013's measurement clause; built with T308's part 2 as its T308-D10)
 
 - **Approach**: built in T308's part 2, in the same code and the same landing: `### T308 part 2`, T308-D10, holds the template's new wording, the refusal at `make decide` (`rust/gate/crates/plan/src/plan/lint/perf_line.rs`), why the old stubs are still matched, and the replay over the committed plans.
@@ -6453,6 +6585,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T409 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T409 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T409's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T409's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T409 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T406 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -6501,6 +6655,28 @@ that batch; the red was not in its change.
 ### T406 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T406 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T406's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T406's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T406 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T406 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T406 is a task of
 that batch; the red was not in its change.
 
@@ -6613,6 +6789,28 @@ that batch; the red was not in its change.
 ### T413 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T413 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T413's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T413's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T413 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T413 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T413 is a task of
 that batch; the red was not in its change.
 
@@ -6745,6 +6943,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T420 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T420 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T420's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T420's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T420 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: "assertion failed: builds(&world).is_empty() && spare(&world.slots)", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)
 
 - **Approach**: a flaky check, not a defect: `prewarm.rs` is unchanged. Which half failed, measured 2026-11-27 (a scratch test, since removed, whose slots' `flock` program was a wrapper that, after taking each lock, left the open file on fd 3 of a `sleep 0.3` child - the "child another thread is starting holds a copy of the open file until its exec" of `slot.rs` lines 12-13, held for 0.3 s instead of the microseconds of a fork-to-exec window): the old form went red 3 of 3 run alone, plus once in the crate's run, each time on the `spare` half - `builds()` empty, cargo's calls `["--version"]` only. The fix is in the test: the slot is read let go by `let_go`, a taker that waits (10 ms polls and a 60 s ceiling, GUESS: a bound no load reaches, as `until_calls`'s; the slot tests' own `quick`), where the bare `spare` read it once. On the same slowed form the fixed check went green 3 of 3, beside an `assert!(!spare(..))` showing the slot still read held; a hold never let go still fails it (`let_go` false after 60.96 s, measured 2026-11-27 (a scratch test holding the slot, since removed)). Then the real test, 30 times in a row, one run at a time (`t424-thirty.sh` in the scratchpad): 30 passed, 0 failed.
@@ -6822,6 +7042,28 @@ that batch; the red was not in its change.
 ### T424 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T424 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T424's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T424's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T424 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T424 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T424 is a task of
 that batch; the red was not in its change.
 
@@ -6943,6 +7185,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T419 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T419 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T419's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T419's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T419 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T404 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -6991,6 +7255,28 @@ that batch; the red was not in its change.
 ### T404 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T404 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T404's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T404's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T404 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T404 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T404 is a task of
 that batch; the red was not in its change.
 
@@ -7112,6 +7398,28 @@ that batch; the red was not in its change.
 ### T425 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T425 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T425's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T425's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T425 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T425 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T425 is a task of
 that batch; the red was not in its change.
 
@@ -7271,6 +7579,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T417 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T417 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T417's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T417's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T417 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T352 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -7319,6 +7649,28 @@ that batch; the red was not in its change.
 ### T352 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T352 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T352's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T352's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T352 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T352 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T352 is a task of
 that batch; the red was not in its change.
 
@@ -7685,6 +8037,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T427 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T427 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T427's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T427's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T427 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T428 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -7733,6 +8107,28 @@ that batch; the red was not in its change.
 ### T428 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T428 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T428's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T428's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T428 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T428 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T428 is a task of
 that batch; the red was not in its change.
 
@@ -8026,6 +8422,28 @@ that batch; the red was not in its change.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
    is a process fault; a red only in work carried since 09:39Z is new material.
 
+### T364 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T364 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T364's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T364's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T364 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
 ### T341 part B (2026-11-27T07:20Z)
 
 Owed by red-gate@2026-11-27T06:33:54Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T07:20Z): the batch gate of feature 451's
@@ -8074,6 +8492,28 @@ that batch; the red was not in its change.
 ### T341 part B (2026-11-27T09:45Z)
 
 Owed by red-gate@2026-11-27T09:39:16Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:45Z): the batch gate of feature 451's
+staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T341 is a task of
+that batch; the red was not in its change.
+
+1. **What exactly is refusing?** The batch gate's static step: coverage's lines no test reached - three in the session's 09:06Z
+   repair (a folded branch in `rustc/only.rs`, an environment closure in `task_add.rs`, a skip in `reversal.rs`), the rest in
+   tasks carried since - and land-alone's test asserting a copy T442 removed (observed 2026-11-27, method: the landing's log).
+2. **A3 again.** The goal and the options stand as T341's section has them; the red is in tests and two call shapes, not in
+   a decision of this task.
+3. **A4 again.** The section's figures are unchanged by it.
+4. **Moving something earlier for something later?** No.
+5. **Tuning or changing?** Neither: T341's change is untouched; the repair is the session's 7057dc718b (the red branch moved
+   to the caller, the environment read named and tested, the skip written as a condition, the land test made current).
+6. **The one-sentence test.** "Why is T341 owed this?" - it is a task of the batch whose gate was red twice.
+7. **The next step is a measurement.** The batch gate run once more on the batch as it stands (the arbiter's ruling).
+8. **Every route measured?** `make builder-checks` over the six crates is green after the repair, and the crates' coverage
+   was run before the gate (2026-11-27, in the clone); the rest is the gate's to say.
+9. **After a ruling:** continue, recorded in `arbiter.jsonl`; any of these three lines, or a line 7057dc718b wrote, failing again
+   is a process fault; a red only in work carried since 09:39Z is new material.
+
+### T341 part B (2026-11-27T09:53Z)
+
+Owed by red-gate@2026-11-27T09:39:13Z, ruled continue by the round arbiter (`arbiter.jsonl`, 2026-11-27T09:53Z, recorded again under the id the landing names; the 09:45Z sections answer the mis-keyed one): the batch gate of feature 451's
 staged tasks was red again at 09:39Z (2026-11-27, the landing's log), three of its lines in the 09:06Z repair's own. T341 is a task of
 that batch; the red was not in its change.
 
@@ -9063,6 +9503,33 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 |---|---|---|---|---|
 
 ### T472 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T477 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T477 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
