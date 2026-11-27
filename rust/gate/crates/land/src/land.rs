@@ -33,6 +33,7 @@ mod claims_wait;
 mod inproc;
 mod long_runs;
 mod memory;
+mod parity;
 mod phase;
 mod ready;
 mod stop;
@@ -374,7 +375,17 @@ impl Land {
                 self.warn(&claims_wait::claims_stop_line(&why));
                 return Ok(2);
             }
-            self.write_ledger(d, tasks)?; // the passes the claims round made beside the gate (405 T52, D27)
+            // the passes the claims round made beside the gate (405 T52, D27)
+            self.write_ledger(d, tasks)?;
+            // ...AND A PASS THAT WRITE COULD NOT TAKE IS REFUSED HERE, BEFORE THE TICKS (451 T413): the push's ledger row met it after
+            // the gate, on a check dispatched while the gate ran and traced to no task this landing lands
+            let owed = self.ledger_refusal(d, tasks);
+            if !owed.is_empty() {
+                self.warn(&format!(
+                    "land: refused before the ticks - nothing ticked, nothing pushed: {owed}"
+                ));
+                return Ok(2);
+            }
             Ok(0)
         })?;
         if rc != 0 {

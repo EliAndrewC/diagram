@@ -69,7 +69,11 @@ pub(super) struct Answers {
     pub claims: RefCell<HashMap<String, (i32, String)>>,
     /// `ledger-owed`: the reply of a listing (no `--write...`).
     pub ledger: RefCell<String>,
+    /// listings answered in turn before `ledger`, the first pass's first (451 T413)
+    pub ledger_seq: RefCell<Vec<String>>,
     pub holding: RefCell<String>,
+    /// `--holding <dir>` answered by the directory's name before `holding` (451 T413)
+    pub holding_by: RefCell<HashMap<String, String>>,
     pub flight: RefCell<Vec<String>>,
     pub flight_fails: RefCell<bool>,
     pub own: RefCell<Vec<String>>,
@@ -116,6 +120,10 @@ impl Inproc for Fake {
             }
             return reply(0, "");
         }
+        let mut seq = self.0.ledger_seq.borrow_mut();
+        if !seq.is_empty() {
+            return reply(0, &seq.remove(0));
+        }
         reply(0, &self.0.ledger.borrow())
     }
 
@@ -124,6 +132,10 @@ impl Inproc for Fake {
             .asked
             .borrow_mut()
             .push(format!("holding {dir} [{ticks}]"));
+        let name = dir.rsplit('/').next().unwrap_or_default();
+        if let Some(said) = self.0.holding_by.borrow().get(name) {
+            return reply(i32::from(said == "fails"), said);
+        }
         reply(0, &self.0.holding.borrow())
     }
 

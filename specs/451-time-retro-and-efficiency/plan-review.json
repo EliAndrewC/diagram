@@ -3560,7 +3560,7 @@
    "declared": "spec-fidelity"
   },
   "### T413 Approach (checklist part A)": {
-   "sha256": "9d2034d7354e3c4aa08e13cc696f32db01cd7bf7f1ddd01fa444210572b4d8d3",
+   "sha256": "0014f2dba876f2b541a64f4b39fe8e7616730629f42b2ac4ebfe558e66f93272",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3705,6 +3705,12 @@
   },
   "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))": {
    "sha256": "3680896620d3b8988335c110538c7172363d457d7f98114f83a222b84e64b824",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)": {
+   "sha256": "a90cd368fcb54a60c9fb7a810332a54e1a2eb0bab64369087501108bac08e0d0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -33811,6 +33817,58 @@
      "why": "Round 2 found these within, and round 3 does not reopen them (the arbiter's ruling)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)",
+    "### T413 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T413-D1",
+     "summary": "The first pass asks the push's unrelated-history hold (HEAD and origin/main resolve, no merge base) right after its fetch and says it alone before committing anything; a second copy of the shell's two git questions rather than a shared function, its words the shell's but naming the mirror by where it is.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes (feature 301 FR-019) ahead of the gate so a landing is not refused after the gate's minutes, which serves the request's throughput aim (2026-11-19 improvements, 2026-11-20 performance first, 2026-11-27 'maximize productivity'). Refuses nothing the push lets through. Copy versus shared function is design, not fidelity, and message wording that differs from the shell's is not an exactness finding."
+    },
+    {
+     "id": "T413-D2",
+     "summary": "After hold, others_in_progress asks every other specs/<dir> the delta touches and the .specify/feature.json pointer through the push's own readers (holding_with with the landing's ticks, closed_by_status, json-field's function), holding fail-closed on a reader error as the push does; any other directory held is a refusal, the push's one exception (a delta of that feature's specs/ alone) kept.",
+     "class": "within",
+     "why": "A mirror of the push's in-progress loop (feature 133) in the first pass, by the same readers and the same exception and fail-closed behavior; it widens what the first pass asks to exactly what the push asks, and narrows nothing."
+    },
+    {
+     "id": "T413-D3",
+     "summary": "Under L7R_LAND_READY the first pass skips D2 where it ruled the landing ready, because the push's holding_with answers nothing for any directory once every tick is ruled ready.",
+     "class": "within",
+     "why": "The task's ask is that the first pass say every refusal its push would make; the push makes none here, so skipping refuses nothing the push lets through and leaves nothing the push would refuse unasked. Asking more than the push would be new blocking behavior beyond this task. The push's exemption being too wide is a separate defect, recorded under Found-and-left (next item)."
+    },
+    {
+     "id": "T413-left-T432",
+     "summary": "Left: a landing ruled ready exempts every feature's in-progress hold at the push, not only the landed one's; filed as T432, lands before T307, D3 mirroring it until then.",
+     "class": "within",
+     "why": "This is a real defect (a wrong outcome: another feature's started task can reach main beside a ready landing, against feature 133). It is in the push's own rule, not in anything T413 was asked to build: T413 brings the push's existing holds into the first pass. It is filed as its own task with why it is not fixed here, its id and its order (lands before T307, the parent task), which is what FR-009 asks. Because it is fixed before T307 ticks, it is not carried into the next step. T432 has to change the push's rule and D3's mirror together, and D3's own wording ('mirrors it until then') commits to that. A defect outside the task's scope, filed and ordered, does not narrow what T413 was asked to do."
+    },
+    {
+     "id": "T413-D4",
+     "summary": "After the claims wait's ledger write, the landing asks the first pass's ledger refusal again (one function, ledger_refusal) and, where a row is still owed, stops before the ticks naming make ledger-owed WRITE=, having written what it can first; grounded on a measurement through the real ledger.",
+     "class": "within",
+     "why": "The push already refuses an owed ledger row. Asking it before the ticks turns a refusal after the gate into one with a named cure before the landing commits, and it refuses nothing the push lets through. It mirrors a push hold and is not new blocking reach."
+    },
+    {
+     "id": "T413-D5",
+     "summary": "A fixture pins that a batch of T1 and T2 whose T2 block changed since review is refused in the first pass for T2 alone, naming make plan-delta F=; no code change.",
+     "class": "within",
+     "why": "A test that only fails if the existing first-pass refusal goes missing. It enforces what was asked and adds no behavior."
+    },
+    {
+     "id": "T413-parity-table",
+     "summary": "T307 part 2's parity table updated for the four rows this task moves.",
+     "class": "within",
+     "why": "A record of what D1 to D5 do. It decides nothing new."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -52362,6 +52420,56 @@
      "summary": "The other DECISIONs and DEVIATIONs of the section: the Stop guard reversing T183's retirement, the thin rule, the format, computed states, built when a done line names its entry, the performance entry offered first, carried meaning the done ref is gone, the overlap rule, the builder-brief command, L7R_BUILDERS.",
      "class": "within",
      "why": "Round 2 found these within, and round 3 does not reopen them (the arbiter's ruling)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T413": {
+   "section_sha256": "0a94734a100d2c5ebc55b0de3bbaefc17a17e5f748a65175705632a63b1a2b26",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T413-D1",
+     "summary": "The first pass asks the push's unrelated-history hold (HEAD and origin/main resolve, no merge base) right after its fetch and says it alone before committing anything; a second copy of the shell's two git questions rather than a shared function, its words the shell's but naming the mirror by where it is.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes (feature 301 FR-019) ahead of the gate so a landing is not refused after the gate's minutes, which serves the request's throughput aim (2026-11-19 improvements, 2026-11-20 performance first, 2026-11-27 'maximize productivity'). Refuses nothing the push lets through. Copy versus shared function is design, not fidelity, and message wording that differs from the shell's is not an exactness finding."
+    },
+    {
+     "id": "T413-D2",
+     "summary": "After hold, others_in_progress asks every other specs/<dir> the delta touches and the .specify/feature.json pointer through the push's own readers (holding_with with the landing's ticks, closed_by_status, json-field's function), holding fail-closed on a reader error as the push does; any other directory held is a refusal, the push's one exception (a delta of that feature's specs/ alone) kept.",
+     "class": "within",
+     "why": "A mirror of the push's in-progress loop (feature 133) in the first pass, by the same readers and the same exception and fail-closed behavior; it widens what the first pass asks to exactly what the push asks, and narrows nothing."
+    },
+    {
+     "id": "T413-D3",
+     "summary": "Under L7R_LAND_READY the first pass skips D2 where it ruled the landing ready, because the push's holding_with answers nothing for any directory once every tick is ruled ready.",
+     "class": "within",
+     "why": "The task's ask is that the first pass say every refusal its push would make; the push makes none here, so skipping refuses nothing the push lets through and leaves nothing the push would refuse unasked. Asking more than the push would be new blocking behavior beyond this task. The push's exemption being too wide is a separate defect, recorded under Found-and-left (next item)."
+    },
+    {
+     "id": "T413-left-T432",
+     "summary": "Left: a landing ruled ready exempts every feature's in-progress hold at the push, not only the landed one's; filed as T432, lands before T307, D3 mirroring it until then.",
+     "class": "within",
+     "why": "This is a real defect (a wrong outcome: another feature's started task can reach main beside a ready landing, against feature 133). It is in the push's own rule, not in anything T413 was asked to build: T413 brings the push's existing holds into the first pass. It is filed as its own task with why it is not fixed here, its id and its order (lands before T307, the parent task), which is what FR-009 asks. Because it is fixed before T307 ticks, it is not carried into the next step. T432 has to change the push's rule and D3's mirror together, and D3's own wording ('mirrors it until then') commits to that. A defect outside the task's scope, filed and ordered, does not narrow what T413 was asked to do."
+    },
+    {
+     "id": "T413-D4",
+     "summary": "After the claims wait's ledger write, the landing asks the first pass's ledger refusal again (one function, ledger_refusal) and, where a row is still owed, stops before the ticks naming make ledger-owed WRITE=, having written what it can first; grounded on a measurement through the real ledger.",
+     "class": "within",
+     "why": "The push already refuses an owed ledger row. Asking it before the ticks turns a refusal after the gate into one with a named cure before the landing commits, and it refuses nothing the push lets through. It mirrors a push hold and is not new blocking reach."
+    },
+    {
+     "id": "T413-D5",
+     "summary": "A fixture pins that a batch of T1 and T2 whose T2 block changed since review is refused in the first pass for T2 alone, naming make plan-delta F=; no code change.",
+     "class": "within",
+     "why": "A test that only fails if the existing first-pass refusal goes missing. It enforces what was asked and adds no behavior."
+    },
+    {
+     "id": "T413-parity-table",
+     "summary": "T307 part 2's parity table updated for the four rows this task moves.",
+     "class": "within",
+     "why": "A record of what D1 to D5 do. It decides nothing new."
     }
    ],
    "verdict": "CLEAR"

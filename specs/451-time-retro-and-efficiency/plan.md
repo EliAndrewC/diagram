@@ -5864,33 +5864,50 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** no - two gaps in a guard, a defect.
 
-### T413 (<why: the finding or measurement that files it>)
+### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the questions T307 part 2's parity table left "not asked", built; the ledger and batch cases of 2026-11-26/27 given fixtures, the first built, the second pinned. The tests are `rust/gate/crates/land/src/land/cheap/tests/push_parity.rs`; the code `rust/gate/crates/land/src/land/parity.rs` (new), `cheap.rs` and `land.rs`; the test fake (`land/tests.rs`) answers `--holding` per directory and the ledger's listings in turn.
+  - **Red first.** With the seven tests written and the code unchanged, 4 failed and 3 passed (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/land`, 158 passed and 4 failed of 162): the unrelated history, the touched spec directory, the feature pointer and the ledger row after the claims wait each failed; the batch's changed block, the ready landing and the real ledger's measurement passed. With the code, 162 of 162 pass (observed 2026-11-27, method: `make builder-checks CRATE="rust/gate/crates/land"`).
+  - **T413-D1, built: the unrelated history.** The first pass opens with the push's `refuse_unrelated_history` after its fetch - HEAD and origin/main both resolve and `git merge-base` finds none - and is then said ALONE, before the pass commits anything: every other answer reads a delta with no merge base, and the cure is a re-clone. It is a second copy of the shell's two git questions, not one function both call: the shell function also serves `sync_in`, which runs no Rust before it, and a function the shell could call would be a new gate command. Its words are the shell's but for the mirror, named by where it is rather than by the shell's `$MAIN`.
+  - **T413-D2, built: the in-progress rule over every spec directory.** After `hold` (the landed feature, with its ready ruling), `others_in_progress` asks each other `specs/<dir>` the delta touches and the one `.specify/feature.json` names what the push asks it, through the same readers: `holding` (in process, `shared::speckit::holding_with`, the landing's tasks handed in as the push's `L7R_LAND_TICKS`; an error answer held, as the push's `|| echo fail-closed`), then `closed_by_status` (an error not closed), the pointer by `json-field`'s own function. Only the loop is a copy. Any other directory held is a refusal: the push's one exception is a delta of that feature's `specs/` directory alone, and a landing's tick commit touches the landed one.
+  - **T413-D3, built: a ready landing asks no other feature.** Under `L7R_LAND_READY` the push's `--holding` answers nothing for ANY directory (`holding_with` returns early once every tick is ruled ready), so the first pass skips D2 where it ruled the landing ready, refusing nothing the push lets through. The push's exemption is itself a hole, filed below.
+  - **T413-D4, built: the ledger asked again after the claims wait.** What the write does with each pass was measured through the real ledger first: a pass of the landing's own task is written whatever its reply (`see reply` where it has no transcript), and a pass traced to no task it lands is left owed, the one row `--refuse` then names (observed 2026-11-27, method: `the_landing_s_write_takes_its_own_pass_and_leaves_an_untraced_one_owed`, the real `reviews ledger-owed` on a scratch tree). So after the claims wait's write the landing asks the first pass's own refusal again (`ledger_refusal`, one function for both) and, where a row is still owed, stops before the ticks naming `make ledger-owed WRITE=`; it writes what it can first, as before.
+  - **T413-D5, pinned: the batch's changed block.** A batch of T1 and T2 whose T2 section changed since its review is refused in the first pass for T2 alone, naming the block and `make plan-delta F=`: each task's tick check asks its own section (`held_for`), the scope the push asks once it is ticked. It held on the code before this task; the fixture pins it.
+  - **The parity table, updated** (T307 part 2's, the rows this task moved; each other row as that table has it).
+
+    | push check | after T307 part 2 | now |
+    |---|---|---|
+    | unrelated history | not asked | asked first, said alone (D1) |
+    | the in-progress rule | the landed feature alone | every touched spec directory and the pointer, but under a ready ruling, as the push (D2, D3) |
+    | the plan reviews' ledger rows written | written, the second write never refused | written, and refused before the ticks where a row is still owed (D4) |
+    | `plan-gate.sh` in a batch | asked, unverified for a batch | pinned by a fixture (D5) |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| D1 | `a_clone_whose_history_shares_no_commit_with_main_s_is_refused_before_anything_is_written` | n/a: tooling | none: tooling | the push refuses after the gate, as before |
+| D2, D3 | `another_feature_in_progress_that_the_delta_touches_is_refused_unless_its_status_closes_it`, `the_feature_pointer_naming_a_feature_in_progress_is_refused`, `a_landing_ruled_ready_asks_no_other_feature_as_the_push_asks_none` | n/a: tooling | none: tooling | the push refuses after the gate, as before |
+| D4 | `a_pass_the_landing_s_last_write_does_not_take_refuses_before_the_ticks` | n/a: tooling | none: tooling | `make ledger-owed WRITE=`, then land again |
+| D5 | `a_batch_landing_whose_second_task_s_block_changed_since_its_review_is_refused_in_the_first_pass` | n/a: tooling | none: tooling | `make plan-delta F=`, as before |
 
 ### T413 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing is told before its gate every refusal its push would make, these two holds among them, and a pass made while the gate ran is named before the ticks.
+2. **The constraints.** Feature 405 D23 (the first pass prints every refusal together), feature 133 (no feature in progress lands), feature 301 FR-019 (a clone on an unrelated history is refused), 451 T307 part 2 (the first pass asks the push's own checks).
+3. **Where each comes from.** G: T307's line, talked through with the GM 2026-11-26, part (2): every check of the push also in the landing's first pass, proved by a fixture the first pass lets through today. O: the red-first run and the ledger measurement above.
+4. **Do they describe the world here?** Yes: the push's two holds were read from `scripts/sync-with-main.sh` (`refuse_unrelated_history`, `push_cmd`'s in-progress loop) on 2026-11-27, and the readers each calls were followed to the Rust functions the first pass now calls.
+5. **The order.** After T307 part 2; before T307's tick.
+6. **The exits.** Green: the four red tests pass and the first-tier checks are green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/land"` green, 162 of 162; red first as recorded in the Approach.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome, not a difference: a landing refused by its push after its whole gate for a hold its first pass could have asked.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A landing ruled ready beside the mark's task exempts every feature's hold at the push, not only the landed one's (`holding_with` returns nothing for any directory under `L7R_LAND_READY`). Visible effect: another feature's started task whose edits the delta carries reaches main beside a ready landing. Not fixed here: a change to the push's own rule, past this task's two jobs, and D3 mirrors it until then. Filed as T432; lands before T307.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
+**Performance work?** yes (a `[perf]` task: a landing refused after its gate costs the gate's minutes, dev/measurements/2026-11-27/tree-idle/results.md); not an engine-speed task, so the performance checklist's questions do not apply.
 
 ### T420 (<why: the finding or measurement that files it>)
 
@@ -6374,4 +6391,30 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T432 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T432 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

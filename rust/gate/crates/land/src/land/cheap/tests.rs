@@ -471,3 +471,5 @@ fn every_refusing_row_of_the_push_s_table_is_said_whole() {
         "sync-with-main: one"
     );
 }
+
+mod push_parity;

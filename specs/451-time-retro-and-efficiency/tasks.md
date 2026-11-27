@@ -423,3 +423,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [x] T422 x Withdrawn 2026-11-27: filed by mistake: a stray test invocation of make task-add with a placeholder title, no finding behind it
       research: rendering
+- [ ] T432 a landing ruled ready beside the mark's task (L7R_LAND_READY, 451 T101) exempts EVERY feature's hold at the push, not only the landed one's: rust/guard/shared/src/speckit.rs holding_with returns nothing for any directory once the ticks are all in L7R_LAND_READY, so another feature the delta touches (or .specify/feature.json names) with a started task whose edits the delta carries passes scripts/sync-with-main.sh push_cmd's in-progress rule; the first pass (rust/gate/crates/land/src/land/parity.rs others_in_progress) mirrors it, pinned by a_landing_ruled_ready_asks_no_other_feature_as_the_push_asks_none (451 T413) - scope the ready exemption to the landed feature's directory in holding_with and drop the mirror
+      research: rendering

@@ -107,6 +107,29 @@ impl Land {
         Ok(())
     }
 
+    /// The ledger rows the landing still owes after its write, as the push's ledger row asks: '' where none, else the refusal naming
+    /// `make ledger-owed WRITE=`. Asked in the first pass and again after the claims wait's write (451 T413). The landing owes the rows
+    /// of its own tasks' passes and every pass no other landing writes; another open task's plan review is left to that task's landing
+    /// (451 T147, `reviews`' `ledger_passes/left.rs`), as the push's `--refuse` leaves it once the landing's tasks are ticked.
+    pub(super) fn ledger_refusal(&self, d: &Path, tasks: &[String]) -> String {
+        let ledger = self.root.join("dev/review-ledger.md");
+        let (name, ticks, at) = (name_of(d), tasks.join(" "), ledger.to_string_lossy());
+        let asked = [
+            "--ledger",
+            &at,
+            "--refuse",
+            "--landing",
+            &name,
+            "--tasks",
+            &ticks,
+        ];
+        let (_rc, owed) = self.ledger(&asked);
+        if owed.contains("| ? |") {
+            return "review passes with no ledger row - make ledger-owed WRITE=\"<where you recorded what you did>\"".to_owned();
+        }
+        String::new()
+    }
+
     /// Every carried claims finding filed as an open task of the feature and committed (405 T36, D10) - asked in the first pass and
     /// again in the claims wait, where a round beside the gate meets new carries (405 T77).
     pub(super) fn file_carries(&self, d: &Path) -> Result<(), String> {
@@ -215,6 +238,12 @@ impl Land {
         note: &str,
         mut deferred: Option<&mut Vec<String>>,
     ) -> Result<Vec<String>, String> {
+        // A CLONE ON A HISTORY MAIN NO LONGER SHARES (the push's `refuse_unrelated_history`, 451 T413, [`super::parity`]): said alone,
+        // before the pass commits anything - every other answer reads a delta that has no merge base, and the cure is a re-clone
+        let unrelated = self.unrelated_history()?;
+        if !unrelated.is_empty() {
+            return Ok(vec![unrelated]);
+        }
         let text = py_read(&d.join("tasks.md"))?;
         // one refusal shared by several tasks (an hour's step-back) is printed once, naming them all
         let mut by_why: Vec<(String, Vec<String>)> = Vec::new();
@@ -262,28 +291,18 @@ impl Land {
         if !writer.is_empty() {
             stops.push(writer);
         }
-        let ledger = self.root.join("dev/review-ledger.md");
-        // the landing owes the rows of its own tasks' passes and every pass no other landing writes; another open task's plan review
-        // is left to that task's landing (451 T147, `reviews`' `ledger_passes/left.rs`), as the push's `--refuse` leaves it
-        let (name, ticks, at) = (name_of(d), tasks.join(" "), ledger.to_string_lossy());
-        let asked = [
-            "--ledger",
-            &at,
-            "--refuse",
-            "--landing",
-            &name,
-            "--tasks",
-            &ticks,
-        ];
-        let (_rc, owed) = self.ledger(&asked);
-        if owed.contains("| ? |") {
-            stops.push("review passes with no ledger row - make ledger-owed WRITE=\"<where you recorded what you did>\"".to_owned());
+        let owed = self.ledger_refusal(d, tasks);
+        if !owed.is_empty() {
+            stops.push(owed);
         }
         // the mark's task holds, unless each task landed is ready beside it (451 T101, `ready.rs`)
         let held = self.hold(d, tasks)?;
         if !held.is_empty() {
             stops.push(format!("held by {held}"));
         }
+        // ...and, as the push asks, every other spec directory the delta touches and the feature pointer (451 T413, `parity.rs`)
+        stops.extend(self.others_in_progress(d, tasks)?);
+        let ticks = tasks.join(" ");
         // A RED-GATE TRIPWIRE HOLDS THE LANDING'S GATE (feature 405 T44, D18): asked here with the others, on a landing that runs one
         if !self.arbiter_ok && self.engine_delta()? {
             let (rc, out) = self.run(&[&self.gate(), "arbiter", "gate-held"], &[])?;
