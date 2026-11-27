@@ -610,22 +610,6 @@ fn feature_of(root: &Path, env: &dyn Fn(&str) -> Option<String>) -> String {
         .unwrap_or_default()
 }
 
-/// Whether an Edit of `path` puts back text an earlier Edit of that file replaced (`hm_arbiter.reversal`).
-fn reversal(log: &Path, path: &Value, old: &Value, new: &Value) -> bool {
-    let text = std::fs::read_to_string(log).unwrap_or_default();
-    let replaced: Vec<Value> = text
-        .lines()
-        .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
-        .filter(|e| {
-            e.get("ev") == Some(&Value::from("PreToolUse"))
-                && e.get("tool") == Some(&Value::from("Edit"))
-                && e.get("path") == Some(path)
-        })
-        .map(|e| e.get("old").cloned().unwrap_or(Value::Null))
-        .collect();
-    truthy(new) && replaced.contains(new) && new != old
-}
-
 /// A feature's event log (`event_log.log_path`): under `L7R_EVENTS_DIR`, else the clone's common git dir; `_unassigned` for no feature.
 #[must_use]
 pub fn log_path(root: &Path, feature: &str) -> PathBuf {
@@ -750,7 +734,7 @@ pub fn append(
     if edit
         && path.is_file()
         && row.get("heading").is_none()
-        && reversal(&path, field("path"), field("old"), field("new"))
+        && reversal::reversal(&path, field("path"), field("old"), field("new"))
     {
         let p = text_of(Some(field("path")));
         // owed by the session and builder whose Edit put it back, and held against only their dispatches (449 arbiter fix,
@@ -992,6 +976,7 @@ mod dispatches;
 mod fields;
 mod filed;
 pub mod read;
+mod reversal;
 
 pub use fields::blocks_line;
 pub use filed::{brief_feature, every_start, in_force, started, starts, Start};

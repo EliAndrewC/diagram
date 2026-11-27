@@ -2,7 +2,7 @@ use std::path::Path;
 
 use serde_json::json;
 
-use super::Session;
+use super::{last_title, title_line, Found, Session, BLOCK};
 
 fn scratch(tag: &str) -> crate::tempdir::TempDir {
     let d = crate::tempdir::TempDir::new(&format!("guard-session-{tag}"));
@@ -287,4 +287,138 @@ fn a_cwd_that_is_no_directory_has_no_top() {
         s.main_seam = None;
         assert_ne!(s.main(), d.join("repo").as_path(), "{cwd}");
     }
+}
+
+/// Feature 451 T385: the transcript is read from its end, so a line that is no JSON object standing BEFORE the last good record no
+/// longer ends the lookup; one standing after it still does, as the forward read's did.
+#[test]
+fn a_line_that_is_no_object_ends_the_lookup_only_after_the_last_good_record() {
+    let d = scratch("no-object-before");
+    let tp = d.join("t.jsonl");
+    let good =
+        |name: &str| format!("{{\"type\": \"custom-title\", \"customTitle\": \"{name}\"}}\n");
+    let named = |text: &str| {
+        std::fs::write(&tp, text).unwrap();
+        session(&d, &d.join("none"), &tp.to_string_lossy(), "sid-n").name()
+    };
+    assert_eq!(
+        named(&format!("[\"custom-title\"]\n{}", good("after it"))),
+        "after-it"
+    );
+    assert_eq!(
+        named(&format!("{}\"custom-title\"\n{}", good("old"), good("new"))),
+        "new"
+    );
+    assert_eq!(
+        named(&format!("{}[\"custom-title\"]\n", good("before it"))),
+        ""
+    );
+    assert_eq!(named("[\"custom-title\"]\n"), "");
+}
+
+/// What a lookup found, as text a test can compare.
+fn said(f: &Found) -> String {
+    match f {
+        Found::Name((n, _)) => format!("name:{n}"),
+        Found::Nothing => "nothing".to_owned(),
+        Found::Ended => "ended".to_owned(),
+    }
+}
+
+/// The read before feature 451 T385, kept as the oracle: every line from the transcript's start, the last record winning and a
+/// line that is no object ending the lookup wherever it stands.
+fn forward(text: &[u8]) -> String {
+    let mut last = "nothing".to_owned();
+    for part in text.split(|b| matches!(*b, b'\n' | b'\r')) {
+        match title_line(part) {
+            Some(Found::Ended) => return "ended".to_owned(),
+            Some(f) => last = said(&f),
+            None => {}
+        }
+    }
+    last
+}
+
+/// Read backward at every block size from one byte to past the file's length, the name is the forward read's: a record split across
+/// a block's edge at each of its bytes, a character split, a transcript shorter than a block, one with no record, an empty one, and
+/// a last line with no newline - whole, or still being written.
+#[test]
+fn the_title_read_backward_is_the_forward_reads_at_every_block_size() {
+    let d = scratch("backward");
+    let tp = d.join("t.jsonl");
+    let rec = |name: &str| format!("{{\"type\": \"custom-title\", \"customTitle\": \"{name}\"}}");
+    let user = "{\"type\": \"user\", \"message\": {\"content\": \"caf\u{e9} \u{5c71} custom-title in a message\"}}";
+    let long = format!("{{\"type\": \"user\", \"text\": \"{}\"}}", "x".repeat(300));
+    let cases = [
+        (String::new(), "nothing"),
+        (format!("{user}\n{long}\n"), "nothing"),
+        (format!("{}\n", rec("only")), "name:only"),
+        (rec("no newline"), "name:no newline"),
+        (
+            format!(
+                "{}\n{user}\n{}\n{long}\n{user}\n",
+                rec("old"),
+                rec("n\u{e9}w")
+            ),
+            "name:n\u{e9}w",
+        ),
+        (format!("{}\r{}\r\n{long}", rec("a"), rec("b")), "name:b"),
+        (
+            format!(
+                "{}\n{long}\n{{\"type\": \"custom-title\", \"customTit",
+                rec("whole")
+            ),
+            "name:whole",
+        ),
+        (
+            format!("{}\n{}\n{long}\n", rec("named"), rec("  ")),
+            "name:named",
+        ),
+        (
+            format!("{}\n{long}\n[\"custom-title\"]\n{user}\n", rec("before")),
+            "ended",
+        ),
+        (format!("{long}\n\"custom-title\"\n{long}\n"), "ended"),
+        (
+            format!("not json custom-title\n{}\n\n\n", rec("after junk")),
+            "name:after junk",
+        ),
+    ];
+    for (text, want) in cases {
+        std::fs::write(&tp, &text).unwrap();
+        assert_eq!(forward(text.as_bytes()), want);
+        for block in 1..=u64::try_from(text.len()).unwrap() + 2 {
+            let got = last_title(&mut std::fs::File::open(&tp).unwrap(), block).unwrap();
+            assert_eq!(said(&got), want, "block {block} of {text:?}");
+        }
+    }
+    // the session's own read, at its own block: a transcript shorter than a block, and one of several blocks whose record is cut by an edge
+    let named = |text: &str| {
+        std::fs::write(&tp, text).unwrap();
+        let s = session(&d, &d.join("none"), &tp.to_string_lossy(), "sid-b");
+        (s.name(), s.reads.get())
+    };
+    assert_eq!(
+        named(&format!("{}\n", rec("Short One"))),
+        ("short-one".to_owned(), 1)
+    );
+    let pad = "y".repeat(usize::try_from(BLOCK).unwrap() - 20);
+    let big = format!(
+        "{}\n{pad}\n{}\n{pad}\n{}\n{pad}",
+        rec("first"),
+        rec("cut by the edge"),
+        rec("Last One")
+    );
+    assert_eq!(named(&big), ("last-one".to_owned(), 1));
+    assert_eq!(
+        named(&format!("{}\n{pad}{pad}\n{user}\n", rec("far back"))).0,
+        "far-back"
+    );
+}
+
+/// A transcript that stands and cannot be read gives no name, as one that cannot be opened: a directory opens and its read fails.
+#[test]
+fn a_transcript_that_cannot_be_read_ends_the_lookup() {
+    let d = scratch("unreadable");
+    assert!(last_title(&mut std::fs::File::open(&*d).unwrap(), 8).is_err());
 }

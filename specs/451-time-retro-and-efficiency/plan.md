@@ -5167,31 +5167,43 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T383 (<why: the finding or measurement that files it>)
+### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two reads made cheap, each deciding what it decided before; no guard message changes. Before and after, and the proof of the screen, are `dev/measurements/2026-11-26/edit-hook/t383-results.md`.
+  - **T383, the reversal read** (`rust/guard/shared/src/guards/event_log_hooks/reversal.rs`, new: `event_log_hooks.rs` stood at 1,000 lines, the file-scale bar, observed 2026-11-26, method: `wc -l`, so `reversal` moved out whole and `append` calls `reversal::reversal`). The read took the feature's whole log and JSON-parsed every line to keep the earlier `PreToolUse` Edits of this path. Now each line is tested as text first (`candidate`) and only a line that passes is parsed; the test a parsed line must pass (`ev`, `tool`, `path` equal as JSON values) is word for word the old one, so the screen can only lose a line by dropping it and can never add one.
+  - **DECISION, the screen is a superset by construction.** The task line's sketch is a search for the path's own JSON text, as `launch_line` searches for an id. That trusts every line to be spelled as serde spells it: JSON spells one string several ways (a quote as `\"` or `"`, `é` raw or as `é`), the parse reads them as equal and a text search does not. So `needle` gives the path's text (`"<path>"`) ONLY for a string path of printable ASCII with no quote and no backslash, the paths with one spelling in any writer that escapes no more than JSON requires or a non-ASCII character; any other path (a quote, a backslash, a control character, DEL, non-ASCII, or a path that is no string) is screened by the Edit tool's name alone (`"Edit"`) and its lines parsed as before. Both needles are the value's text without its key, so a writer that puts spaces at the colon is read too. What it trusts, said plainly: that no writer escapes a printable ASCII character it need not (`\/` for a solidus, `E` for a letter); serde, the hook's one writer, and `make events-refile` (serde again) do not, and every line of the clone's 34 logs opens `{"t":` in serde's compact form, observed 2026-11-26, method: `grep -c '^{"t": '` over each log, 0 in each. The cost of the wider screen where it applies: the Edit-marked lines parsed, 9,338 of the 451 log's 158,456, measured 2026-11-26 (the differential's counts).
+  - **The proof on the real logs**, measured 2026-11-26 (a temporary test inside the crate, calling its own `candidate`, `needle` and `replaced`, over a copy of every log of the real clone's `.git/l7r-events/`, its source kept as `t383-differential.rs`): 34 logs, 468,589 lines; of the 8,661 lines the old read used, the screen for each line's own path dropped 0; for each of the 1,806 distinct paths, screen-then-parse gave the old read's list, 0 differing. No real path holds a quote, a backslash or non-ASCII (0 of 1,806, measured 2026-11-26 (the same differential)), so that case is the constructed fixtures' (`odd_paths`: a quote, a backslash, `é` and `山`, a tab, DEL, the empty path, null, a number; and three lines as another writer would spell them, `é`, `"` and spaced colons).
+  - **T385, the session's name** (`rust/guard/shared/src/session.rs`, `titled`, now `last_title` and `title_line`). The transcript is read backward in 64 KiB blocks (`BLOCK`, a GUESS knob: the record recurred every 56 KB of the transcript T373 measured, and any size reads the same name) and the read stops at the first line, from the end, that answers. What one line says is the old loop's body moved to `title_line`, unchanged: only a line holding `custom-title` is parsed, a title that is no string is named by its `str()`, a blank title or another type is passed over. Lines end at `\n` and `\r` alike, as before; only whole lines are decoded - a block's unfinished head is held (`later`, a list joined once, so a line of many megabytes is not copied a block at a time) until the block before it supplies its start, so a record or a UTF-8 character cut by a block's edge is read whole; the last line counts without a newline, and one still being written fails its parse and is passed over, as the forward read's did. The LAST record wins as before.
+  - **What changes, exactly** (T385's line asks it said): (1) a line that holds `custom-title`, parses as JSON and is no object ended the forward lookup with no name wherever it stood; read from the end, such a line BEFORE the last good record is never reached, so the good record names the session; one AFTER the last good record, or in a transcript with no good record, ends the lookup as before. (2) DECISION: a transcript that opens and then fails a read (truncated under the read, an I/O error) now ends the lookup with no name, as one that cannot be opened always did; the forward read kept what it had found before the failure. A name from part of a file is the worse answer, and the Python this was ported from raised in both cases.
+  - **DECISION, the side file is not built here.** The option T383's line names second (the Edit lines kept beside the log, about 330 ms saved against the screen's 265 to 290, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox)) needs `make events-refile` and its retask to keep two files in step, and a line missing from it is a missed reversal; the screen has no second file to drift. What is left of the read is filed (Found and left).
+  - **Before and after**, measured 2026-11-26 (T373's sandbox reused; the binary built from `1ceb830054` and the binary of this tree as interleaved arms of one run, 20 counted runs after a warm-up round, `t383-time.py`; median / 90th centile in ms; load1 16.6 to 24.8 for the clone's run and 13.3 to 16.0 for the worktree's, both LOADED): the PreToolUse hook on an Edit of a doc, the session in its clone (dirty) 887.8 / 1113.1 to 204.2 / 686.1; a builder in a pool worktree 384.5 / 531.6 to 89.8 / 109.0. By guard: `event-log-hooks` alone 343.6 / 541.9 to 81.0 / 184.2 in the clone and 352.1 / 427.2 to 78.3 / 107.8 in the worktree; `clone-sync-hooks` alone 563.7 / 1230.9 to 96.7 / 366.0 in the clone (what is left is its `git status`), 2.7 / 3.0 and 2.7 / 3.4 in the worktree, where it has no opinion. Every call exited 0 with no output, and each binary wrote its log line (252 lines for 252 log-writing calls), observed 2026-11-26, method: the sandbox log's `t373-*` lines counted after the run, 3,638 against T373's 3,386. No real state was touched (`t383-leak-check.txt`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T383: only candidate lines are parsed | `only_the_lines_that_could_be_an_edit_of_the_path_are_parsed` (4 lines parsed of 85), red on the old read (85 of 85), measured 2026-11-26 (`make rust-test CRATE=rust/guard/shared`) | n/a: tooling | none | n/a |
+| T383: a path with several JSON spellings loses no line | `a_path_json_spells_several_ways_is_screened_by_the_tool_alone_and_misses_no_line`, `a_put_back_is_a_reversal_whatever_the_path`, `the_needle_is_the_path_only_where_it_has_one_spelling`, each red with the path searched for unescaped | n/a: tooling | none | n/a |
+| T385: the last record, read from the end | `the_title_read_backward_is_the_forward_reads_at_every_block_size` (eleven transcripts, every block size from 1 byte to past the file's length, against the forward read kept as the test's oracle), observed 2026-11-26, method: the test's `cases` counted | n/a: tooling | none | n/a |
+| T385: the one case that changes, and a failed read | `a_line_that_is_no_object_ends_the_lookup_only_after_the_last_good_record`, red on the forward read; `a_transcript_that_cannot_be_read_ends_the_lookup` | n/a: tooling | none | n/a |
 
-### T383 Approach (checklist part A)
+### T383, T385 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An Edit's hook does not make the session or a builder wait on a read of everything the feature has logged and everything the session has said: the reversal tripwire parses only the lines that could be earlier Edits of the file in hand, and the session's name comes from the end of its transcript. Every reversal the tripwire caught it still catches, and every session is named as it was, but for the one case said above.
+2. **The constraints.** The reversal tripwire (the round arbiter's, feature 375; `checks::arbiter::trip_as`, 449's arbiter fix and 451 T179 on whom and where it is filed) must not miss a put-back. The session's name is `clone-sync-hooks`' routing (T013) and the guard log's (449 T143): the last `/rename` wins. File-scale: a file stays under its bar (`rust/gate/crates/checks/src/checks/file_scale.rs`, `MAX_LINES`). Constitution XIII: no known regression; no port is held to its bytes, so the one changed case is said, not hidden.
+3. **Where each comes from.** O: T373's measurement (the two guards, their figures, levers A and C) and this task's own before and after. The tripwire's "must not miss" is the task line's and the brief's. No GM words are quoted by either task line.
+4. **Do they describe the world here?** Yes: the before arms of this run give T373's figures back (887.8 against its 823.6 in the clone and 384.5 against its 372 to 402 in the worktree, at a higher load), measured 2026-11-26 (`t383-time.py`, the binary of `1ceb830054`).
+5. **The order.** No dependency. T384 (clone-sync asking for the name only where it reads it) is left with little to save once T385 lands: the name's read is one block. T386 and T387 are untouched.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard rust/guard/shared"` and the two guards' suites in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-26 (`make rust-test CRATE=rust/guard/shared`). With the old read behind the new seam (every line parsed) and the forward `titled`, measured 2026-11-26 (the same command): 511 passed, 4 failed - the count test (85 lines parsed where 4 are wanted), the several-spellings test (every line parsed), the needle test, and the no-object test (`""` where `after-it` is wanted). With the path searched for UNESCAPED (the naive screen): 511 passed, 4 failed - `a_put_back_is_a_reversal_whatever_the_path` (the quoted path's reversal missed), the several-spellings test (the quoted path's lines lost: `[]` against two), the needle test, and the no-object test. After: 517 passed, 0 failed; `tests/hooks/test-event-log-hooks.sh` 25 passed, 0 failed, and `tests/hooks/test-clone-sync-hooks.sh` all passed, measured 2026-11-26 (each suite run once in the builder's tree on the new binary). The hook's median fell from 887.8 to 204.2 ms in the clone and from 384.5 to 89.8 ms in a worktree, measured 2026-11-26 (the Approach's run, `t383-time.py`).
+10. **Before moving a constant.** n/a: `BLOCK` (64 KiB) is new, a GUESS knob no verdict depends on.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of outcome: no map, verdict or message changes. The finding is T373's: every Edit waited 333 ms on a parse of lines that could not match and, in the clone, 383 ms on a transcript read from its start, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox). The one outcome that differs (a no-object `custom-title` line before the last good record) is said in the Approach and pinned.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- An Edit's hook still reads the feature's whole log: `event-log-hooks` alone is 78.3 / 107.8 ms of a worktree's 89.8 / 109.0 ms hook after this task, the read of 41.9 MB and a text search of every line, growing with the log, measured 2026-11-26 (the Approach's run). Its visible effect is that wait on every Edit. Not fixed here: the way past it is a second mechanism (a side file two writers keep in step, or a kept offset) to be priced on its own, a builder of its own by the sizing rule. Filed as T392; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the builders' loop and the session's own, every Edit's hook. Before and after: the PreToolUse hook on an Edit of a doc 887.8 / 1113.1 ms to 204.2 / 686.1 ms for the session in its clone and 384.5 / 531.6 ms to 89.8 / 109.0 ms for a builder in a pool worktree (median / 90th centile, 20 runs each, load1 13.3 to 24.8), measured 2026-11-26 (`t383-time.py` in T373's sandbox, the old binary and the new as interleaved arms). At the day's counts (T373: 185 Edits in a worktree or outside, 29 in the clone) that is 185 x 0.295 + 29 x 0.684 = 74 s a day, measured 2026-11-26 (T373's count of the day's event-log lines, times this run's saved medians). Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 
 ### T384 (<why: the finding or measurement that files it>)
@@ -5202,33 +5214,6 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T384 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-### T385 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T385 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -5408,4 +5393,41 @@ engine speed, so no checklist.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T392 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T392 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

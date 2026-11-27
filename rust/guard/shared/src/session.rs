@@ -5,10 +5,11 @@
 //! THE ONE RESOLVER (feature 449 T143, `ask:449-phase4-slices` Q12): `scripts/hooks/lib/clone-resolve.sh` and its inline Python are deleted, and
 //! the shell's guard log names its session through this module (`l7r-gate log guard`); each step reads its sources as the Python read
 //! them - `str.isspace` for the kebab case, `str()` of a name that is not a string, a dot file not globbed, and a record that is no dict
-//! ending the lookup with no name, as the Python's `AttributeError` did.
+//! ending the lookup with no name, as the Python's `AttributeError` did (in the transcript, read from its end since 451 T385, only one
+//! standing after the last good record: [`last_title`]).
 
 use std::cell::{Cell, OnceCell};
-use std::io::BufRead as _;
+use std::io::{Read as _, Seek as _, SeekFrom};
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
@@ -211,46 +212,17 @@ impl Session {
         (!kebab.is_empty()).then(|| self.main().join(".clones").join(kebab))
     }
 
-    /// The transcript's last `custom-title` record (the session's `/rename`).
-    /// A line at a time and only the matching lines parsed: a session's transcript reached 658 MB on 2026-11-08, and this was read at every turn's end.
-    /// Its lines split as Python's text mode splits them (`\r` too), and a title that is not a string named by its `str()`.
+    /// The transcript's last `custom-title` record (the session's `/rename`), read from the transcript's END ([`last_title`]).
     fn titled(&self) -> Found {
         self.reads.set(self.reads.get() + 1);
         let path = Path::new(&self.transcript);
         if self.transcript.is_empty() || !path.is_file() {
             return Found::Nothing;
         }
-        // a file that stands and cannot be opened raised in the Python, which printed nothing
-        let Ok(file) = std::fs::File::open(path) else {
-            return Found::Ended;
-        };
-        let mut last = None;
-        for raw in std::io::BufReader::new(file)
-            .split(b'\n')
-            .map_while(Result::ok)
-        {
-            for part in raw.split(|b| *b == b'\r') {
-                let line = String::from_utf8_lossy(part);
-                if !line.contains("custom-title") {
-                    continue;
-                }
-                let Ok(r) = serde_json::from_str::<Value>(&line) else {
-                    continue;
-                };
-                if !r.is_object() {
-                    return Found::Ended;
-                }
-                let title = r.get("customTitle").map(named).unwrap_or_default();
-                if r.get("type").and_then(Value::as_str) == Some("custom-title")
-                    && !py_text::strip(&title).is_empty()
-                {
-                    last = Some(title);
-                }
-            }
-        }
-        last.map_or(Found::Nothing, |t| {
-            Found::Name((t, "transcript".to_owned()))
-        })
+        // a file that stands and cannot be opened, or read, raised in the Python, which printed nothing
+        std::fs::File::open(path)
+            .and_then(|mut f| last_title(&mut f, BLOCK))
+            .unwrap_or(Found::Ended)
     }
 
     /// The sessions json naming this session: `glob("*.json")`'s files in the directory's order, a dot file not among them.
@@ -297,11 +269,77 @@ enum MapEntry {
 }
 
 /// What a lookup of the session's name found: a name and its source, nothing (the next source is asked), or a record that is no dict,
-/// which ended the Python's lookup with no name at all.
+/// which ended the Python's lookup with no name at all (a transcript's only where the read from its end reaches it, [`last_title`]).
 enum Found {
     Name((String, String)),
     Nothing,
     Ended,
+}
+
+/// The bytes of a transcript read at a time from its end: a `custom-title` record recurred every 56 KB of the session's transcript
+/// measured on 2026-11-26, so one block usually holds the last. A GUESS knob: any size reads the same name (the tests sweep it).
+const BLOCK: u64 = 64 * 1024;
+
+/// The LAST `custom-title` record of a transcript, read BACKWARD a block at a time and stopped at the first line that answers
+/// (feature 451 T385). WHY: the forward read took every line of the file for a record that stands near its end - 383 ms of every
+/// Edit and Write in the session's clone, the transcript 274 MB, 1.4 ms a MB (`dev/measurements/2026-11-26/edit-hook/t373-results.md`,
+/// lever C); a session's transcript reached 658 MB on 2026-11-08.
+///
+/// What a line says is the forward read's, a line at a time ([`title_line`]): lines end as Python's text mode ends them (`\r` too),
+/// only WHOLE lines are decoded - a block's unfinished head waits in `later` for the block before it, so a record or a character cut
+/// by a block's edge is read whole - and the last line counts with no newline after it (one still being written parses as no JSON
+/// and is passed over). The last record wins, as before. WHAT CHANGES, the one case: a line holding `custom-title` that is JSON and
+/// no object ended the forward lookup with no name wherever it stood; read from the end, such a line BEFORE the last good record is
+/// never reached, and one after it (or with no good record at all) ends the lookup as before.
+fn last_title(file: &mut std::fs::File, block: u64) -> std::io::Result<Found> {
+    let ends = |b: &u8| matches!(*b, b'\n' | b'\r');
+    let mut at = file.metadata()?.len();
+    // the blocks after the one in hand that hold the rest of its last line, the latest read (the earliest in the file) last
+    let mut later: Vec<Vec<u8>> = Vec::new();
+    while at > 0 {
+        let size = block.min(at);
+        at -= size;
+        let mut buf = vec![0; usize::try_from(size).unwrap_or(usize::MAX)];
+        file.seek(SeekFrom::Start(at))?;
+        file.read_exact(&mut buf)?;
+        let cut = buf.iter().rposition(ends);
+        if cut.is_none() && at > 0 {
+            // no line ends in this block: all of it is the middle of the line `later` holds the end of
+            later.push(buf);
+            continue;
+        }
+        let mut line = buf[cut.map_or(0, |c| c + 1)..].to_vec();
+        line.extend(later.drain(..).rev().flatten());
+        if let Some(found) = title_line(&line) {
+            return Ok(found);
+        }
+        // the whole lines before it, the last first; the first of them is unfinished unless the file starts here
+        let mut parts: Vec<&[u8]> = buf[..cut.unwrap_or(0)].split(ends).collect();
+        let head = (at > 0).then(|| parts.remove(0).to_vec());
+        if let Some(found) = parts.iter().rev().find_map(|p| title_line(p)) {
+            return Ok(found);
+        }
+        later.extend(head);
+    }
+    Ok(Found::Nothing)
+}
+
+/// What one whole line of a transcript says of the session's title: its name where it is a `custom-title` record with one, the
+/// lookup's end where it holds `custom-title` and is JSON but no object (the Python's `AttributeError`), None for any other line.
+/// Only a line holding `custom-title` is parsed; a title that is not a string is named by its `str()`.
+fn title_line(part: &[u8]) -> Option<Found> {
+    let line = String::from_utf8_lossy(part);
+    if !line.contains("custom-title") {
+        return None;
+    }
+    let r = serde_json::from_str::<Value>(&line).ok()?;
+    if !r.is_object() {
+        return Some(Found::Ended);
+    }
+    let title = r.get("customTitle").map(named).unwrap_or_default();
+    (r.get("type").and_then(Value::as_str) == Some("custom-title")
+        && !py_text::strip(&title).is_empty())
+    .then(|| Found::Name((title, "transcript".to_owned())))
 }
 
 /// A name as the Python's `str(name or "")` wrote it: "" for a false value, a string as it is, `str()` of anything else.

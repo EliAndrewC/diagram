@@ -2334,6 +2334,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)": {
+   "sha256": "66347dd7648e4dfcb09ba22d0487f2872fc0a4f6124cfde83284d9b31aae1b92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T383, T385 Approach (checklist part A)": {
+   "sha256": "fc35cf360760dad615650b2e45070e1d7f9ec705d7ca6719c9459e2686cea09f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -29743,6 +29755,64 @@
      "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)",
+    "### T383, T385 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -46976,6 +47046,118 @@
      "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
      "class": "within",
      "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T383": {
+   "section_sha256": "e654621f15f04cf5944c380b636b44eebbb8e50ed1b630196f783dceb7050930",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T385": {
+   "section_sha256": "e654621f15f04cf5944c380b636b44eebbb8e50ed1b630196f783dceb7050930",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
     }
    ],
    "verdict": "CLEAR"

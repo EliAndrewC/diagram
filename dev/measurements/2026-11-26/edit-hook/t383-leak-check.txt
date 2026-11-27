@@ -1,0 +1,12 @@
+# t383: the leak check after the before/after timing (336 hook calls, sessions t373-sess-0001 as T373's payloads name them, 19:28 to 19:30 local). T373's method: search the REAL places for the measurement's own marks.
+real event logs, lines whose sid is a t373 session (written by a hook, not naming one in a command):
+  /diagram/.clones/diagram-backlog/.git/l7r-events: 0
+  /diagram/.git/l7r-events: 0
+real claim map entries named t373-* or t383-*: 0
+real guard-log entries naming the sandbox: 0
+real checks-open.json naming a t373 tool-use id: 0
+real arbiter-owed.json naming the sandbox: 0
+sandbox event log lines with a t373 sid (T373's 3,386 plus this run's): 3638
+sandbox arbiter-owed.json (copied from the real clone by T373; the repeated identical Edit is no A -> B -> A): present, as before
+L7R_GATE_TARGET scratch directory after the run (the gate was never called): 0 files
+sandbox clone after the run: 0 changed files
