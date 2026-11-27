@@ -6857,14 +6857,56 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T505 to T490 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T506 to T490 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T507 (<why: the finding or measurement that files it>)
+
+### T507 (451 T506: after T490's partial read a Bash call under a plan hold still cost 17.0 to 18.6 ms of CPU in its PreToolUse against 10.9 for a state with no `dispatches`, and the exact scan was about 1 ms of it, measured 2026-11-27 (`t490-time.py`, 20 runs))
+
+- **Approach**: measured, nothing built. Most of the gap is not the partial read. It is record-edit-hooks' prefilter, which reads the whole state a first time before `handle` runs. Measured 2026-11-27 (`dev/measurements/2026-11-27/t507-part-cost/results.md`).
+  - **T507-D1, the method.** perf, gdb and strace are refused in the container (ptrace is not permitted). So the split is in-process stamps in a scratch build of HEAD (`t507-build.sh`, `t507-stamps.patch`), built outside the tree. Each stamp records the wall time, the process CPU (`clock_gettime(CLOCK_PROCESS_CPUTIME_ID)`, because `/proc/self/schedstat` moves only at ticks) and the faults (`/proc/self/stat`). The stamps sit around the prefilter's read, scan and drop, the lock, `Part::read`'s read, the partial parse, the hook's work, the drop and the exit. They cost under 0.8 ms a call: the stamps build against the clean one, 17.81 against 18.21 ms on the full state, measured 2026-11-27 (`t507-time.py`, 20 runs).
+  - **T507-D2, the split.** Bash `true` PreToolUse under a hold, full state minus no-`dispatches` state, CPU median ms of 20 interleaved runs on copies of the clone's state (2,618,222 bytes), measured 2026-11-27 (`t507-time.py`, load 16.2 to 18.5), run 1 then run 2:
+    - the whole gap: 7.54 and 7.38 (clean builds 8.71 and 8.48);
+    - the prefilter (`record_edit_gate::holding`): +4.09 and +4.02, 54%, measured 2026-11-27 (`t507-time.py`, 20 runs). That is its `read_to_string` (+1.98 and +2.01, 641 faults), then `holds_text`'s `split_once` (+1.98 and +1.85), then the drop (+0.13 and +0.16);
+    - `Part::read`'s read: +1.64 and +1.69, 22 to 23%, measured 2026-11-27 (`t507-time.py`, 20 runs);
+    - the partial parse: +2.26 and +2.24, 30%, measured 2026-11-27 (`t507-time.py`, 20 runs). The other keys' values are about 0.2 ms of it, measured 2026-11-27 (`t507-time.py`, 20 runs) (the `floor` arm's 0.21);
+    - the hook's own work: -0.61 and -0.50.
+
+    About 1.4 ms of each 2.6 MB read is page faults, measured 2026-11-27 (`t507-time.py`, 20 runs). A second read into the already-faulted buffer took 0.53 and 0.54 ms against the first's 1.97 and 1.92, measured 2026-11-27 (`t507-time.py`'s `full-reread` arm, 20 runs). The prefilter's `split_once` takes 1.9 to 2.0 ms where checks-hooks' `contains` on the same 2.0 MB takes 0.27, measured 2026-11-27 (`t507-time.py`, 20 runs, bash-post).
+  - **T507-D3, the same prefilter on every Bash call.** A Bash call outside a hold reaches no `handle`. It still pays both prefilters: 4.83 ms of the PreToolUse's 7.11, and 2.75 of the PostToolUse's 4.72, measured 2026-11-27 (`t507-time.py`'s `nohold` arms, 20 runs, load 12.7). There were 6,141 Bash calls on 2026-11-26, about 47 s of CPU a day, observed 2026-11-27, method: `Bash` tool_use blocks of that date counted with Python's `json` over the diagram sessions' transcripts.
+  - **T507-D4, the lever filed, one part being most of it.** The prefilter is 54% of the gap on both runs, measured 2026-11-27 (`t507-time.py`, 20 runs), so it is filed with its figures as T508 (below). The rest is under a third each, and is not filed, measured 2026-11-27 (`t507-time.py`, 20 runs): `Part::read`'s faults (about 1.4 ms) and the skip of `dispatches`' structure (2.0 ms, `full`'s 3.47 against `padded`'s 1.50). Under a hold on bash-post, the prefilter is 34% (`contains` is already cheap there), so no part is most of it, measured 2026-11-27 (`t507-time.py`, 20 runs). Chosen by the builder on the brief's "file the lever only if one part is most of it".
+  - **No red test.** Nothing was built. The tree's sources are unchanged: the stamps lived only in a scratch copy.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a hot hook's gap over the no-`dispatches` state split by in-process stamps (`dev/measurements/2026-11-27/t507-part-cost/`), measured 2026-11-27 | n/a: a measurement, no map | n/a: no source changed | none | none |
+
+### T507 Approach (checklist part A)
+
+1. **The goal, in the world.** Where a hot hook's CPU over the no-`dispatches` state goes is known part by part, and a lever is filed only where one part is most of it.
+2. **The constraints.** The brief: in-process timing (perf and gdb refused), a median over runs with the load stated, copies of the state only, no engine code. T490-D3 and T506 (the scan's exactness, about a millisecond, measured 2026-11-27 (`t490-time.py`, 20 runs)). The two tiers.
+3. **Where each comes from.** O: the stamps, the arms and the counts above. R: `checks/handle/part.rs`, `guards/record_edit_gate.rs` (`holding`, `holds_text`) and `guards/checks_hooks.rs` (`state_holds_snaps`).
+4. **Do they describe the world here?** Yes. A scratch build of the tree's HEAD ran on copies of the clone's own state with a running hold, measured 2026-11-27 (`t507-time.py`, 20 runs, two runs).
+5. **The order.** After T490, T505 and T506. Before T508, which it files.
+6. **The exits.** Green: the gap split part by part and a lever filed with its figures. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The prefilter is 4.0 to 4.1 ms of the 7.4 to 7.5 ms gap (54%), measured 2026-11-27 (`t507-time.py`, 20 runs). `Part::read` is 1.6 to 1.7, and the parse is 2.2 to 2.3, measured 2026-11-27 (`t507-time.py`, 20 runs, two runs).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code moved.
+
+**Found and left?**
+- The Bash hooks' prefilters read the whole 2.6 MB state to find one key on every Bash call, measured 2026-11-27 (`t507-time.py`, 20 runs). That is 4.83 ms of a PreToolUse and 2.75 ms of a PostToolUse, about 47 s of CPU a day over 2026-11-26's 6,141 Bash calls, and under a hold `handle` then reads the file again, measured 2026-11-27 (`t507-time.py`, 20 runs). The visible effect is that time on every Bash call. Not fixed here: a measurement task builds nothing, and choosing among the three routes priced in `results.md` is a build. Filed as T508; lands before T302.
+
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.
+
+
+### T508 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T507 Approach (checklist part A)
+### T508 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

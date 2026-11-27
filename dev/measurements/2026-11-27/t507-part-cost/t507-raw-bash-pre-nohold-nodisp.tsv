@@ -1,0 +1,8 @@
+label	wall_ns	cpu_ns	minflt	majflt
+main	136	1535194	206	0
+pre-read-start	176977	1666114	227	0
+pre-read-done	842999	2334588	383	0
+pre-scan-done	883269	2367621	384	0
+pre-dropped	945875	2433900	384	0
+cli-done	991475	2476920	390	0
+exit	1010299	2494349	390	0

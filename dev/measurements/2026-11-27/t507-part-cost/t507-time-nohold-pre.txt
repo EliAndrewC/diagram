@@ -1,0 +1,19 @@
+# case bash-pre (record-edit-hooks PreToolUse); load at start 12.7, state copy 2618222 bytes, 20 counted runs an arm
+# tree nohold: 2618222 bytes
+# tree nohold-nodisp: 631971 bytes
+# load at end 12.7
+nohold	stamps	cpu median 7.11	min 5.38	p90 7.78
+nohold-nodisp	stamps	cpu median 2.88	min 2.54	p90 3.26
+nohold	clean	cpu median 6.54	min 5.72	p90 7.65
+nohold-nodisp	clean	cpu median 2.63	min 2.29	p90 2.87
+
+interval	nohold cpu / wall / minflt	nohold-nodisp cpu / wall / minflt	full - nodisp cpu (or nohold - nohold-nodisp)
+start->main	1.56 / 0.00 / 205	1.64 / 0.00 / 205	-0.08 (nohold - nohold-nodisp)
+main->pre-read-start	0.14 / 0.20 / 20	0.13 / 0.18 / 20	+0.01 (nohold - nohold-nodisp)
+pre-read-start->pre-read-done	2.69 / 2.67 / 641	0.66 / 0.65 / 156	+2.03 (nohold - nohold-nodisp)
+pre-read-done->pre-scan-done	1.92 / 1.95 / 1	0.03 / 0.04 / 1	+1.89 (nohold - nohold-nodisp)
+pre-scan-done->pre-dropped	0.22 / 0.23 / 0	0.06 / 0.06 / 0	+0.16 (nohold - nohold-nodisp)
+pre-dropped->cli-done	0.05 / 0.06 / 5	0.04 / 0.04 / 5	+0.01 (nohold - nohold-nodisp)
+cli-done->exit	0.01 / 0.02 / 0	0.02 / 0.02 / 0	-0.00 (nohold - nohold-nodisp)
+exit->reaped (rusage - last stamp)	0.38 / 0.00 / 0	0.36 / 0.00 / 0	+0.03 (nohold - nohold-nodisp)
+TOTAL (rusage)	7.11 / 0.00 / 0	2.88 / 0.00 / 0	+4.24 (nohold - nohold-nodisp)

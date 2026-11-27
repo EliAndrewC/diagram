@@ -1,0 +1,206 @@
+diff -ruN rust-clean/guard/shared/src/checks/handle/part.rs rust/guard/shared/src/checks/handle/part.rs
+--- rust-clean/guard/shared/src/checks/handle/part.rs	2026-11-27 08:51:18.401613710 -0500
++++ rust/guard/shared/src/checks/handle/part.rs	2026-11-27 08:55:01.382720571 -0500
+@@ -64,7 +64,21 @@
+ impl Part {
+     /// The state file at `path`, with `dispatches`' rows as `concerns` reads them where `rows` asks.
+     pub(super) fn read(path: &Path, rows: bool) -> Self {
+-        Self::parse(std::fs::read_to_string(path).unwrap_or_default(), rows)
++        crate::t507::stamp("read-start");
++        let mut text = std::fs::read_to_string(path).unwrap_or_default();
++        crate::t507::stamp("read-done");
++        if std::env::var_os("T507_REREAD").is_some() {
++            // the same read again into the buffer the first one faulted in: its copy without its page faults
++            use std::io::Read as _;
++            text.clear();
++            if let Ok(mut f) = std::fs::File::open(path) {
++                let _ = f.read_to_string(&mut text);
++            }
++            crate::t507::stamp("reread-done");
++        }
++        let p = Self::parse(text, rows);
++        crate::t507::stamp("parse-done");
++        p
+     }
+ 
+     /// `text` read in part, or whole where the partial read cannot take it.
+@@ -111,6 +125,7 @@
+     /// the rows are the text's as they stand.
+     pub(super) fn whole(&mut self) -> &mut Value {
+         if !self.whole {
++            crate::t507::stamp("whole-start");
+             self.whole = true;
+             // a partial read's value is an object, and its text parsed as one (`parse` keeps it partial only then)
+             let mut all = parsed(&self.text);
+diff -ruN rust-clean/guard/shared/src/checks/handle.rs rust/guard/shared/src/checks/handle.rs
+--- rust-clean/guard/shared/src/checks/handle.rs	2026-11-27 08:51:18.401613710 -0500
++++ rust/guard/shared/src/checks/handle.rs	2026-11-27 08:51:40.791514635 -0500
+@@ -138,9 +138,13 @@
+     let Some(path) = state_path(&cwd_of(payload)) else {
+         return String::new();
+     };
++    crate::t507::stamp("handle");
+     let held = locked(&path);
++    crate::t507::stamp("locked");
+     let out = handle_locked(mode, payload, &path, at.unwrap_or_else(now));
++    crate::t507::stamp("handled");
+     drop(held);
++    crate::t507::stamp("unlocked");
+     out
+ }
+ 
+@@ -244,7 +248,9 @@
+         passes::log_pass(parent_of(path), mode, payload, t);
+     }
+     // the rows are parsed only where this call reads them or saves (451 T490: 36 to 43 ms of CPU a hook, the 3.0 MB parsed whole)
++    let _after_drop = crate::t507::OnDrop("st-dropped");
+     let mut st = Part::read(path, booking);
++    let _before_drop = crate::t507::OnDrop("work-done");
+     if mode == "edit" && !falsy(st.value().get("plan_holds")) {
+         let was = hold_part(st.value());
+         planhold::snapshot(st.value_mut(), call_root(payload).as_deref(), t);
+diff -ruN rust-clean/guard/shared/src/lib.rs rust/guard/shared/src/lib.rs
+--- rust-clean/guard/shared/src/lib.rs	2026-11-27 08:51:18.405613870 -0500
++++ rust/guard/shared/src/lib.rs	2026-11-27 08:51:40.789514554 -0500
+@@ -40,6 +40,7 @@
+ pub mod switches;
+ pub mod tempdir;
+ pub mod tool;
++pub mod t507;
+ pub mod transcript;
+ pub mod tree;
+ pub mod url_host;
+diff -ruN rust-clean/guard/shared/src/t507.rs rust/guard/shared/src/t507.rs
+--- rust-clean/guard/shared/src/t507.rs	1969-12-31 19:00:00.000000000 -0500
++++ rust/guard/shared/src/t507.rs	2026-11-27 08:54:50.891286159 -0500
+@@ -0,0 +1,61 @@
++//! 451 T507 SCRATCH: stamps of wall time, the process's CPU (`clock_gettime`, ns) and page faults (`/proc/self/stat`),
++//! kept in memory and appended to `$T507_STAMPS` at the end of main. Never in the tree.
++use std::sync::{Mutex, OnceLock};
++use std::time::Instant;
++
++static T0: OnceLock<Instant> = OnceLock::new();
++static LOG: Mutex<Vec<String>> = Mutex::new(Vec::new());
++
++#[repr(C)]
++struct Ts {
++    s: i64,
++    ns: i64,
++}
++extern "C" {
++    fn clock_gettime(id: i32, ts: *mut Ts) -> i32;
++}
++
++/// The process's CPU, ns: `CLOCK_PROCESS_CPUTIME_ID` (2), exact at the call, where `/proc/self/schedstat` moves only at ticks.
++fn cpu_ns() -> u64 {
++    let mut ts = Ts { s: 0, ns: 0 };
++    // SAFETY: glibc's clock_gettime writes one timespec into a valid pointer
++    unsafe { clock_gettime(2, &mut ts) };
++    (ts.s as u64) * 1_000_000_000 + ts.ns as u64
++}
++
++fn faults() -> (u64, u64) {
++    let s = std::fs::read_to_string("/proc/self/stat").unwrap_or_default();
++    let rest = s.rsplit_once(')').map_or("", |(_, r)| r);
++    let f: Vec<&str> = rest.split_whitespace().collect();
++    // after the name: state(3) ... minflt(10) cminflt(11) majflt(12)
++    let at = |i: usize| f.get(i).and_then(|v| v.parse().ok()).unwrap_or(0);
++    (at(7), at(9))
++}
++
++pub fn stamp(label: &str) {
++    let t = T0.get_or_init(Instant::now).elapsed().as_nanos();
++    let (mi, ma) = faults();
++    let c = cpu_ns();
++    if let Ok(mut l) = LOG.lock() {
++        l.push(format!("{label}\t{t}\t{c}\t{mi}\t{ma}"));
++    }
++}
++
++/// Stamps `label` when dropped.
++pub struct OnDrop(pub &'static str);
++impl Drop for OnDrop {
++    fn drop(&mut self) {
++        stamp(self.0);
++    }
++}
++
++pub fn flush() {
++    use std::io::Write as _;
++    let Ok(p) = std::env::var("T507_STAMPS") else {
++        return;
++    };
++    let Ok(l) = LOG.lock() else { return };
++    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(p) {
++        let _ = writeln!(f, "{}\n--", l.join("\n"));
++    }
++}
+diff -ruN rust-clean/guard/src/guards/checks_hooks.rs rust/guard/src/guards/checks_hooks.rs
+--- rust-clean/guard/src/guards/checks_hooks.rs	2026-11-27 08:51:18.412614151 -0500
++++ rust/guard/src/guards/checks_hooks.rs	2026-11-27 08:56:36.907697699 -0500
+@@ -24,9 +24,14 @@
+ /// Whether the call's check state holds a snapshot: read at the call's `cwd`, or where it names none at `handle`'s (451 T123: a test
+ /// build's no tree, so no test's call reads a live clone's state).
+ fn state_holds_snaps(input: &Value) -> bool {
+-    checks::state_path(&handle::cwd_of(input))
+-        .and_then(|p| std::fs::read_to_string(p).ok())
+-        .is_some_and(|s| s.contains("\"plan_snaps\""))
++    crate::shared::t507::stamp("pre-read-start");
++    let t = checks::state_path(&handle::cwd_of(input)).and_then(|p| std::fs::read_to_string(p).ok());
++    crate::shared::t507::stamp("pre-read-done");
++    let r = t.as_ref().is_some_and(|s| s.contains("\"plan_snaps\""));
++    crate::shared::t507::stamp("pre-scan-done");
++    drop(t);
++    crate::shared::t507::stamp("pre-dropped");
++    r
+ }
+ 
+ fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
+diff -ruN rust-clean/guard/src/guards/record_edit_gate.rs rust/guard/src/guards/record_edit_gate.rs
+--- rust-clean/guard/src/guards/record_edit_gate.rs	2026-11-27 08:51:18.417614352 -0500
++++ rust/guard/src/guards/record_edit_gate.rs	2026-11-27 08:56:36.906697657 -0500
+@@ -43,8 +43,17 @@
+ 
+ /// Whether a plan review holds text now (`checks-hooks.sh after` asks the same of the same file); with no repository there is no state, so no hold.
+ fn holding(from: &Path) -> bool {
+-    checks::state_path(&from.to_string_lossy())
+-        .is_some_and(|p| std::fs::read_to_string(p).is_ok_and(|s| holds_text(&s)))
++    crate::shared::t507::stamp("pre-read-start");
++    let r = checks::state_path(&from.to_string_lossy()).is_some_and(|p| {
++        let t = std::fs::read_to_string(p);
++        crate::shared::t507::stamp("pre-read-done");
++        let held = t.as_ref().is_ok_and(|s| holds_text(s));
++        crate::shared::t507::stamp("pre-scan-done");
++        drop(t);
++        held
++    });
++    crate::shared::t507::stamp("pre-dropped");
++    r
+ }
+ 
+ /// `pretool-bash` or `pretool`, or None for a call that cannot concern the guard.
+diff -ruN rust-clean/guard/src/main.rs rust/guard/src/main.rs
+--- rust-clean/guard/src/main.rs	2026-11-27 08:51:18.420614473 -0500
++++ rust/guard/src/main.rs	2026-11-27 08:51:40.790514595 -0500
+@@ -5,6 +5,7 @@
+ use l7r_guard::shared::tempdir::TempDir;
+ 
+ fn main() {
++    l7r_guard::shared::t507::stamp("main");
+     let args: Vec<String> = std::env::args().skip(1).collect();
+     let mut stdin = String::new();
+     if !matches!(
+@@ -31,10 +32,13 @@
+     }
+     let sandbox = (args.first().map(String::as_str) == Some("--self-check")).then(sandbox);
+     let reply = l7r_guard::cli(&args, &stdin, &l7r_guard::guards());
++    l7r_guard::shared::t507::stamp("cli-done");
+     print!("{}", reply.stdout);
+     eprint!("{}", reply.stderr);
+     // `exit` runs no destructor: the self-check's directory goes first (feature 449 T101)
+     drop(sandbox);
++    l7r_guard::shared::t507::stamp("exit");
++    l7r_guard::shared::t507::flush();
+     std::process::exit(reply.code);
+ }
+ 
