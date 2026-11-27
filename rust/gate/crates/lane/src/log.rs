@@ -9,8 +9,10 @@
 //! the lane's: a done ref names its commit, or a line of this log does (data-model.md, "A hand-in"; a done ref deleted by a hand
 //! carry in phase 1 takes it off the lane). Its state, the first that holds ([`state`]): `landed` (`origin/main` holds its author's
 //! time and subject - `task`'s `builder_done::held_by`, the carried rule - or a `landed` line lists it, which holds after the
-//! object is pruned), `superseded` (a later hand-in of its feature shares a task), `ejected -> repair <r>` (the last line of this
-//! log naming it is an `eject`), `in batch <b>` (an open batch names it), else `waiting`.
+//! object is pruned), `in batch <b>` (an open batch names it and has not ejected it), `superseded` (a later hand-in of its feature
+//! shares a task), `ejected -> repair <r>` (the last line of this log naming it is an `eject`), else `waiting`. `in batch` is asked
+//! before `superseded`, against data-model.md's list (a deliberate deviation, 461 T53): the open batch's `batch` line names this
+//! sha and lands it (D14, T52), so the batch carries it whatever later hand-in of its task exists, and that later one waits.
 //!
 //! A BATCH's state is read from its lines in order ([`state_of`]); every line of a batch carries `batch` (the data model's `run`
 //! example does). The data model is silent on three points, each read the easier way and labeled here, the mapping kept in that
@@ -298,7 +300,7 @@ pub struct World<'a> {
     pub batches: &'a [Batch],
 }
 
-/// A hand-in's state, the first of data-model.md's order that holds (the module's doc).
+/// A hand-in's state, the first of the module doc's order that holds (data-model.md's, `in batch` moved before `superseded`).
 #[must_use]
 pub fn state(h: &HandIn, w: &World) -> HandInState {
     let landed_line = w
@@ -307,6 +309,15 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
         .any(|l| l["event"] == "landed" && listed(l, "landed").any(|s| names(&h.commit, s)));
     if w.on_main.contains(&h.commit) || landed_line {
         return HandInState::Landed;
+    }
+    let last = w.log.iter().rev().find(|l| mentions(l, &h.commit));
+    let ejected = last.filter(|l| l["event"] == "eject");
+    let open = w
+        .batches
+        .iter()
+        .find(|b| b.open() && b.changes.iter().any(|c| names(&h.commit, c)));
+    if let (Some(b), None) = (open, ejected) {
+        return HandInState::InBatch(b.id.clone());
     }
     let later = w
         .hand_ins
@@ -317,14 +328,9 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     if later {
         return HandInState::Superseded;
     }
-    let last = w.log.iter().rev().find(|l| mentions(l, &h.commit));
-    if let Some(l) = last.filter(|l| l["event"] == "eject") {
-        return HandInState::Ejected(l["repair"].as_str().unwrap_or_default().to_owned());
-    }
-    w.batches
-        .iter()
-        .find(|b| b.open() && b.changes.iter().any(|c| names(&h.commit, c)))
-        .map_or(HandInState::Waiting, |b| HandInState::InBatch(b.id.clone()))
+    ejected.map_or(HandInState::Waiting, |l| {
+        HandInState::Ejected(l["repair"].as_str().unwrap_or_default().to_owned())
+    })
 }
 
 /// The repair entries the log's ejections filed that no hand-in answers by its `repair_of`, each once, in the order filed.

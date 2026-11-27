@@ -1883,31 +1883,50 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** no.
 
 
-### T53 (<why: the finding or measurement that files it>)
+### T53 (found by 461 T14's build half: `make lane` misstates an open batch's change as superseded)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/log.rs`, `log::state`: `in batch <b>` - an open batch's `batch` line names the sha and
+  no `eject` is the last log line naming it - is asked right after `landed` and before `superseded`; `superseded`, `ejected` and
+  `waiting` follow in their old order. The batch's commit is the one the lane lands (T52 carries only what the batch line names,
+  D14), so the batch's own change reads `in batch`, and the later hand-in of its task stays `waiting` (data-model.md's prose: "That
+  later hand-in is `waiting` until the batch ends"). An ejected change of an open batch, or a stopped batch's, is not in the batch,
+  so with a later hand-in it reads `superseded` as before (the data model's "superseding it if the batch ejected it"). Moving
+  `in batch` ahead of `superseded` departs from data-model.md's numbered list, which its own paragraph on a batch contradicts: a
+  deliberate deviation, labeled in the module doc. Callers: `make lane`'s listing (`lane.rs`, which now shows the batch's change)
+  and `batch::form`'s `waiting` filter (unchanged: an in-batch or superseded hand-in was never batched).
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY="log::tests"` on the old code): 7 passed, 1 failed -
+  `an_open_batch_s_change_is_in_batch_though_a_later_hand_in_of_its_task_exists`, `Superseded` against `InBatch("461-4")`. Green:
+  `make builder-checks CRATE="rust/gate/crates/lane"` clean, the crate 50 of 50; the test also pins the later hand-in `waiting`,
+  and the earlier `superseded` once its batch ejects it or stops.
+- **Test only, the coordinator's addition**: the session's pre-gate coverage named `runner.rs`'s `on_lane(common)` (its
+  `.map(|h| h.commit)`, line 504) reached by no test; a new module `runner/on_lane_tests.rs` writes a pool log `handed_in` line
+  and a done ref in a scratch git common directory and asserts `on_lane` returns that commit, and not a hand-in no ref or lane
+  line names (2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY=runner::on_lane_tests`: 1 of 1). Not red first: no
+  code changed, a coverage gap.
 
 ### T53 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make lane` shows the change an open batch is landing as `in batch <b>`, and a later hand-in of
+   its task as `waiting`, so the coordinator reads what the batch carries.
+2. **The constraints.** D8 (states computed), D14 (a batch takes its shas when it forms; a later hand-in moves no open batch),
+   data-model.md ("A hand-in"'s order, "A batch"'s paragraph on the later hand-in), T11's order, T52's carry; the brief: log.rs
+   and its tests only (T15 edits runner/run.rs elsewhere).
+3. **Where each comes from.** R: tasks.md T53's line, data-model.md, plan sections T11 and T52; O: the red test.
+4. **Do they describe the world here?** Yes: the red test reproduces the misstatement on the old code; `log::state`'s callers
+   read 2026-11-27 (`lane.rs`, `batch.rs`), none relying on a batch's change reading `superseded`.
+5. **The order.** After T11, T14's build half and T52; before T20.
+6. **The exits.** Green: the log tests and `make builder-checks CRATE="rust/gate/crates/lane"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `log::state` and its callers in `lane.rs` and `batch.rs`, read 2026-11-27 (`grep -n log::state`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red test green; in use, `make lane` over the first lane batch with a later hand-in of a batched task.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The coordinator reading `make lane` sees the batch's change as superseded and no change `in batch`,
+    against what the batch lands (D8's states misstated).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 ### T54 (T51's Decision 2: a hand-in's runner start waits in `make builder-done`'s foreground for the lane tree's rebuild; filed at T51)
 

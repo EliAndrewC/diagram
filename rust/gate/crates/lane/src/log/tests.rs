@@ -265,6 +265,37 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
     );
 }
 
+/// 461 T53: an earlier hand-in an open batch names stays `in batch` though a later hand-in of its task exists - the batch's line
+/// carries the earlier sha and lands it (D14) - and the later one waits; once the batch ejects or stops it, the later one supersedes it.
+#[test]
+fn an_open_batch_s_change_is_in_batch_though_a_later_hand_in_of_its_task_exists() {
+    let a = hand_in("461", &["T01"], A);
+    let later = hand_in("461", &["T01"], C);
+    let all = vec![a.clone(), later.clone()];
+    let formed = json!({"event": "batch", "batch": "461-4", "changes": [A]});
+    let ask = |h: &HandIn, log: &[Value]| {
+        let b = batches(log);
+        state(
+            h,
+            &World {
+                hand_ins: &all,
+                on_main: &BTreeSet::new(),
+                log,
+                batches: &b,
+            },
+        )
+    };
+    assert_eq!(
+        ask(&a, &[formed.clone()]),
+        HandInState::InBatch("461-4".into())
+    );
+    assert_eq!(ask(&later, &[formed.clone()]), HandInState::Waiting);
+    let eject = json!({"event": "eject", "batch": "461-4", "change": A, "repair": "r1"});
+    assert_eq!(ask(&a, &[formed.clone(), eject]), HandInState::Superseded);
+    let stop = json!({"event": "stop", "batch": "461-4"});
+    assert_eq!(ask(&a, &[formed, stop]), HandInState::Superseded);
+}
+
 #[test]
 fn a_repair_is_open_until_a_hand_in_names_it_and_is_listed_once() {
     let log = vec![

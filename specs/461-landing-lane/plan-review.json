@@ -582,6 +582,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T53 (found by 461 T14's build half: `make lane` misstates an open batch's change as superseded)": {
+   "sha256": "b19685f910f3912e7ac3158ba363658d28d2f049d7c16326936b1f7a46b8ec70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T53 Approach (checklist part A)": {
+   "sha256": "02b6cff435be3f7e22d23ad41e1eba0b051ddcc38cb9d4ec3316b6c2021bdcd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3475,6 +3487,40 @@
      "summary": "Checklist part A: goal, constraints, sources, order (after T51/T54, before T22, beside T15), exits, budget, done-measure; Found and left: none",
      "class": "within",
      "why": "Restates the approach above and decides nothing beyond it; the one item deferred is T25's planned work, judged above."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T53 (found by 461 T14's build half: `make lane` misstates an open batch's change as superseded)",
+    "### T53 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T53-order",
+     "summary": "log::state asks `in batch <b>` (open batch's batch line names the sha, no later eject) right after `landed` and before `superseded`; superseded, ejected, waiting keep their old order",
+     "class": "within",
+     "why": "Fixes a wrong outcome: `make lane` reported the change an open batch is landing as superseded, so the coordinator misread what the batch carries (FR-005's short status, D8's computed states). The reordering departs from data-model.md's numbered list only to honor that same document's own paragraph on a batch; the data model is a design artifact, not the GM's request, and nothing the GM asked for or the accepted spec requires is narrowed. Labeled as a deliberate deviation in the module doc."
+    },
+    {
+     "id": "T53-later-hand-in-waiting",
+     "summary": "A later hand-in of a batched task reads `waiting` until the batch ends; an ejected change of an open batch, or a stopped batch's, with a later hand-in reads `superseded` as before",
+     "class": "within",
+     "why": "Follows data-model.md's prose and D14 (a batch takes its shas when it forms; a later hand-in moves no open batch). batch::form's waiting filter is unchanged and nothing that lands is altered; FR-008's checks are untouched."
+    },
+    {
+     "id": "T53-on-lane-test",
+     "summary": "Test only: new runner/on_lane_tests.rs covers runner.rs on_lane's `.map(|h| h.commit)` that no test reached",
+     "class": "within",
+     "why": "A test whose only effect is to verify the lane's existing behavior (which commit it treats as on the lane); no behavior changed, no refusal or rewrite added. Enforcement of what was asked, not unrequested scope. It sits in a new module, not in runner/run.rs that T15 edits."
+    },
+    {
+     "id": "T53-done-measured",
+     "summary": "Done when the red test is green; in use, checked by `make lane` over the first lane batch with a later hand-in of a batched task",
+     "class": "within",
+     "why": "Exit and in-use check for the fix itself; nothing deferred is a known defect left (Found and left: none)."
     }
    ]
   }
