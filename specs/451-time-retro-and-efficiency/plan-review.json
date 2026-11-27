@@ -247,12 +247,6 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T104 (<why: the finding or measurement that files it>)": {
-   "sha256": "105bd5921a1d261eb005906d09fc89aea471b888f83873090c2bb1754702ba67",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T104 Approach (checklist part A)": {
    "sha256": "d29e2429d97bfdf9a13e81065b531de03f7c352b01f4cb189e2f177ed916cfa7",
    "verdict": "CLEAR",
@@ -633,12 +627,6 @@
   },
   "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "1f3ab3b44044e3f4cd022d0ba68b57f12ec5bb3ec7453c66f0f6427a5dc0f5ae",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T159 (<why: the finding or measurement that files it>)": {
-   "sha256": "58e6d0b4c8909e7f84a5ff34af32e663d4d0d1b192ac308b4cc005eb49b20997",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -1795,12 +1783,6 @@
    "reviewed": "2026-11-26",
    "declared": "round-arbiter"
   },
-  "### T251 (<why: the finding or measurement that files it>)": {
-   "sha256": "11134ab01e318241265b71ff64c8caf50813fba07f704af43c0272b2a6e30117",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-26",
-   "declared": "spec-fidelity"
-  },
   "### T251 Approach (checklist part A)": {
    "sha256": "677a1ae6d8a1f8af532c5e924b435708aef77205388749b93507c2789de4d7a9",
    "verdict": "CLEAR",
@@ -1827,12 +1809,6 @@
   },
   "### T261 Approach (checklist part A)": {
    "sha256": "816d4f32edae58fc33e96fdd7f924615097b07ea8320e95108f6ab72ba426d81",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-26",
-   "declared": "spec-fidelity"
-  },
-  "### T262 (<why: the finding or measurement that files it>)": {
-   "sha256": "6cf757eb0af2ae969d8cd37684b4e3ceea31fcae42a55c51cbd0cd1111e364cc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
@@ -2125,18 +2101,6 @@
    "reviewed": "2026-11-26",
    "declared": "spec-fidelity"
   },
-  "### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)": {
-   "sha256": "5dc76193ff75e357b3c28f7281de1646785e3797bc2fbecc50735b0c63d9965d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-26",
-   "declared": "spec-fidelity"
-  },
-  "### T299 Approach (checklist part A)": {
-   "sha256": "af22b2e4c16b9450aaed96dbe428555416225743449d652b551fdaed2bf1e984",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-26",
-   "declared": "spec-fidelity"
-  },
   "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)": {
    "sha256": "ce5f9e032c34eab1e4a5f756aa9a25dab92aba09ce41cdbd56ae2493673d7f6c",
    "verdict": "CLEAR",
@@ -2415,6 +2379,1140 @@
   },
   "### T300 part 2 Approach (checklist part A)": {
    "sha256": "4cdcfe31c46b3e4d1806cb2dd5f6510057f8d7da4619bac0b02949c379ab152b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T264 (<why: the finding or measurement that files it>)": {
+   "sha256": "ad439a6f71aae50117a6ce595e55b3f738c0799e9ee0cff0976c3d3495e1f1c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T264 Approach (checklist part A)": {
+   "sha256": "3ce975b51e7b82966b1419005e44810cdd665d60b38da25df359026d012640a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T266 (<why: the finding or measurement that files it>)": {
+   "sha256": "96ae884e63b12c1f1e1604867198529faf4b399697928a1ea917af044f0a1ce4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T266 Approach (checklist part A)": {
+   "sha256": "7c91ee93cf81e9429bc0b8430b311347a4c3db34576da3c3c4ec0c699fb94c0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T273 (<why: the finding or measurement that files it>)": {
+   "sha256": "deb528dbd2078abbbb85dbd1a6a4eecfcfdc1758c06b7518e1939cd844cf3357",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T273 Approach (checklist part A)": {
+   "sha256": "8f98485f4aa8a6206a579e0cd769ef30bff9b13a39356150706c6c39fe245e0b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T275 (<why: the finding or measurement that files it>)": {
+   "sha256": "fd1a6e24a799e493443e1d88d9680bb92377de75bd7b11b8a3e844b1731e0dfd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T275 Approach (checklist part A)": {
+   "sha256": "afc2b3cb6e6f8f156f9a715e4267d3a611fec742fb22b48ddc19fbc34d94722e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T276 (<why: the finding or measurement that files it>)": {
+   "sha256": "f4dbfa4123c56ba0e85a4de7baee5ae75ba9760edc66b6b4ff4e6977269ba6c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T276 Approach (checklist part A)": {
+   "sha256": "5e09a0051fed2ba05d42c3ca16ee9daa99995eb0e728a3920cfc82b1d6b40ef8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T277 (<why: the finding or measurement that files it>)": {
+   "sha256": "b2010ad7e223503a0c946b35c0b909444e1b09a8095ef68b0ad651400939cd42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T277 Approach (checklist part A)": {
+   "sha256": "052ba7e0ddd5213f7296fa3049a01e77f6b9d766c56ecbc9e3977016df56016d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T278 (<why: the finding or measurement that files it>)": {
+   "sha256": "4aa432d82d7035bbedb8aa4471972d8d733add6aa3ccb991adc7258f22d25069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T278 Approach (checklist part A)": {
+   "sha256": "9acf55913541bd96727823e5528174f1d7d92050b6ad862716b4d37935b728f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T279 (<why: the finding or measurement that files it>)": {
+   "sha256": "6046bed4a56ac51f7f4345a73454d73a75a5bbe31b7f193b0f3b02a003db2f45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T279 Approach (checklist part A)": {
+   "sha256": "83ef4ef9ad93299d7e107f293a9f2864236b6a930190a50a659361ce0a5c5e53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T280 (<why: the finding or measurement that files it>)": {
+   "sha256": "b9faba65e8c265334ca09ce18a79908639e07ac7b9d140c94b0daf6120375f38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T280 Approach (checklist part A)": {
+   "sha256": "677dda173ae0c3167ebb9a02991750acc85f7c218408c005000a31167c95ec38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T283 (<why: the finding or measurement that files it>)": {
+   "sha256": "640eee4c880b0cfc7c8f8eb3187c6a9e6ccc0d1ea3f5c7e3473235ebb3ecaea2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T283 Approach (checklist part A)": {
+   "sha256": "7cd1f3d210672d6f434f97ce9e35337ad8ccab8daae602426fb47d8200a1a297",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T286 (<why: the finding or measurement that files it>)": {
+   "sha256": "30b511c7e7516f224d03d5b9fcf31cbe307ec86109a75d21a4b9870df71415c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T286 Approach (checklist part A)": {
+   "sha256": "3b756d45dc9623b1a4b82dd4c1b922e3fe41aa13aff9a3f287c352f1dc9fe19b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T287 (<why: the finding or measurement that files it>)": {
+   "sha256": "1b982b029164cfb7d1ff29bffa40f00a0339600d50ba8b706f8c4d29ab248e67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T287 Approach (checklist part A)": {
+   "sha256": "d5f7f9e1fd4096dcf0c174c43bb50ece62a6572099f11e692f3a6cb60464ee3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T288 (<why: the finding or measurement that files it>)": {
+   "sha256": "af0ca0d1b3bab4e194d7a4d1feba145dc7b1b8b23c197125451fdaf952af1642",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T288 Approach (checklist part A)": {
+   "sha256": "8286b665b028c0bae934c182f36b4bf2393eda2a7364fcc7630e45ef05b8fa46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T290 (<why: the finding or measurement that files it>)": {
+   "sha256": "c9d0b1bdcb1b45c3644f3957173ee80995bb5b5e2d3f2afbf42d1d07866e3416",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T290 Approach (checklist part A)": {
+   "sha256": "00666f4678ce056cb86e51ae25e2fa3d27304c1e95d97d96645cfe43d987008c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T291 (<why: the finding or measurement that files it>)": {
+   "sha256": "2d95f5cc3b5b40f169b86475a4075abe37778d0b7f7e111634105f36dd56c07b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T291 Approach (checklist part A)": {
+   "sha256": "d3dfec794b029420c6e555e1040951bcb1cefd43e9a07d0f61a5832356cb2e16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T294 (<why: the finding or measurement that files it>)": {
+   "sha256": "20bb096dbe03a69ca6b2871e3a30181aad92743b62d683a0d9d37a2781f92a47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T294 Approach (checklist part A)": {
+   "sha256": "b2d0c49dfffb0aa2f83b071acd24a66c7cad600ec5e725dab7d74a830625b060",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T296 (<why: the finding or measurement that files it>)": {
+   "sha256": "7e5f41087c5a53e9a89170a6e4761f648205807a978c8e574a5cfafda404b531",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T296 Approach (checklist part A)": {
+   "sha256": "5357198c8244fcc9614410a06097ade99df3c514c215d8270a0f9e3fe304f62a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T297 (<why: the finding or measurement that files it>)": {
+   "sha256": "442be54d7aa1e2d57e7440a9131bafb2171678704257e16b41932e7ce90384dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T297 Approach (checklist part A)": {
+   "sha256": "eee90798a87fcd06efb8a2b5bc70e627a06f9bc8de4a71ebc445e02c3b710b84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)": {
+   "sha256": "5ff4032a01c410a2f8ad5263e410fa54739f92946b6ff3992e85a662d500b841",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T301 Approach (checklist part A)": {
+   "sha256": "a71d266ad24368d7dbb8a10da508b539202f22b0f833e4645171765978161bc1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T302 (<why: the finding or measurement that files it>)": {
+   "sha256": "caa58e561d82ca7d8192d375a3e3b1b33923c2eab5d7d4cdbdeeb35290d0b503",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T302 Approach (checklist part A)": {
+   "sha256": "52ea70f9374811ef623f56295e9b24fc8d23bf371d4e77aec2c6aff0779714d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T306 (<why: the finding or measurement that files it>)": {
+   "sha256": "942db1d9a6eed6a27108af86080db7ebfbe926a1c8568aac6cfc83f288b5415c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T306 Approach (checklist part A)": {
+   "sha256": "11385c468c09fb6ee9ef3b8557672d50c5c247fabcfd4d44fa5ea93d7107634f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 (<why: the finding or measurement that files it>)": {
+   "sha256": "2ca1dffc8840626bb24ea88b96e7109badfe1c30d4f4c9f77563372fcafd761a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 Approach (checklist part A)": {
+   "sha256": "272c4640623c4c240157bba112f4c5800f13aed532cb0c0bbcf83d7a3ec21eda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T310 (<why: the finding or measurement that files it>)": {
+   "sha256": "0b05524062409d70162023b7ccf5c23a7921476094ab918cd06811e584c3f5f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T310 Approach (checklist part A)": {
+   "sha256": "f63a00c97aab710e2bdd258c1d7aea7060d806891471adb104afcf414dc60e3c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T311 (<why: the finding or measurement that files it>)": {
+   "sha256": "870f1fb494497a5cf8a962a9d19961c1232219f321a44491eb0232bd5274cf73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T311 Approach (checklist part A)": {
+   "sha256": "759e9c3f17a4ef0c2b37a388968b051bedfdaf050345678c57ba6a9c082de9c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T312 (<why: the finding or measurement that files it>)": {
+   "sha256": "30b2710860ef2b3b7d64fec44d7bee0ac620b9ab7b5368b00267492af8c6ea46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T312 Approach (checklist part A)": {
+   "sha256": "9b0b0efe2de9a063c7a3fb443f677d9ad426efad2ab690ecd8dcb14ad962e71b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T313 (<why: the finding or measurement that files it>)": {
+   "sha256": "cde907b68cc84e12f20fa56ccbb5b9e5a79db68d4e9deca8695e699346ac3aec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T313 Approach (checklist part A)": {
+   "sha256": "33ca2f0d6a411eb6ce0d68c941f44d3f08961c618865c58a93441ef6ece0d03a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T314 (<why: the finding or measurement that files it>)": {
+   "sha256": "538311dad18702262304c31612d1f4274e210955d021c4207d23b3f4838c193e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T314 Approach (checklist part A)": {
+   "sha256": "c95c23b05aba3f8b6ac120144eaac356a8185fe4d0c8a5cd4fa93b23a2e99c5f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T317 (<why: the finding or measurement that files it>)": {
+   "sha256": "14b73a454d6c286d574438c49b3f1cd13be23b01d7a9fd3c9a4f9bc0f88ed380",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T317 Approach (checklist part A)": {
+   "sha256": "9103c4cd31d6804c53e58903441b9eae2dddacaba41c940960a9c2dbb55b9e84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T318 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb3e224c422f5a7da710a6e81d1b0149a6a3b63778c9312d3cf3af9a4e33871e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T318 Approach (checklist part A)": {
+   "sha256": "4c5fcb3191cb9c18b3d7d8e125af1f76d1290da361337dde09cfde08ac0376b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T326 (<why: the finding or measurement that files it>)": {
+   "sha256": "0ca6eecb8760b329f072dac7303a27a72fa688d0271c0d4b65c8492251c909a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T326 Approach (checklist part A)": {
+   "sha256": "09adb3e6808cd07584259a9f3c02eb6cc53289b7a5211ea77a7008e8def90abf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T327 (<why: the finding or measurement that files it>)": {
+   "sha256": "5bdd517cc0a8ca56e36187ff6390576fc4b5ff5e40900fa8266b21d65ae47786",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T327 Approach (checklist part A)": {
+   "sha256": "1f41a0529fe2138f9d0be6c9f9e9d52008a5e5c436eade41965c734d208eb9dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T329 (<why: the finding or measurement that files it>)": {
+   "sha256": "ea7b4de5e41c0fc811de23b23fea25acc59cf98423b2c18dadbf0037d6aab057",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T329 Approach (checklist part A)": {
+   "sha256": "597242db79321c61c31ba3f11caed53b972106591fb84cde9395f6b351ad08d6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T330 (<why: the finding or measurement that files it>)": {
+   "sha256": "6b73ccb4314bf1df693e69fa75322161889aa9154e695582cd903f1f9e86be95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T330 Approach (checklist part A)": {
+   "sha256": "b428ade9adeaec27704a5885af0dfd5fde0ffc5aaab2eeb9ee6c644b7bc92c0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T320 (<why: the finding or measurement that files it>)": {
+   "sha256": "fa783bc1a3fab8466c4052cea876fb8bf57b93b75f19cc96acc5a8041e46f6ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T320 Approach (checklist part A)": {
+   "sha256": "56aa78671d04ba7cd12574baf22a0362c41423f7314bc675b37d77a7f7c73076",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T321 (<why: the finding or measurement that files it>)": {
+   "sha256": "faee64d833936222e55282824f8f77d97b0a6927502861e0c76ff48ad6dddcf2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T321 Approach (checklist part A)": {
+   "sha256": "94bfca6ae131fb01241eb689dfd68386ddcf06afe24e51d7cb934c612507d8d5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T319 (<why: the finding or measurement that files it>)": {
+   "sha256": "50036ca692f627c49fd0ec7d6a86be8fc17be34fbb53611972f4c9fa5b76aa7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T319 Approach (checklist part A)": {
+   "sha256": "c60fec2f92583eabb30f922bc08fde3865935c19ff5c711ed06b79d7a54f6f2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T328 (<why: the finding or measurement that files it>)": {
+   "sha256": "41c66c3221672c4194185685617d659df0824d37ac57a3b55f71b84ede8e0895",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T328 Approach (checklist part A)": {
+   "sha256": "f29833c0f47e3a993e85a98eed567475a046ab7d7b6b0bdeaa9e8ac12da34a5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T331 (<why: the finding or measurement that files it>)": {
+   "sha256": "305cce6b3ed12fa592f30b125cf7ce11c099fe3bff071bcd91436f4d3b1e54f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T331 Approach (checklist part A)": {
+   "sha256": "a5b02a56ae366f0f26d122b48cd0e8f47504b2b83457900cd17493410a7d3469",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T333 (<why: the finding or measurement that files it>)": {
+   "sha256": "a60d3eac8aba3127a3b0709dd9a8fc5784cb3586d7dd3c30ded2400a000dfd9a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T333 Approach (checklist part A)": {
+   "sha256": "862000f83c6062d980274dc169327416d0b0d5af1bdf0cc8660daecca4560804",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T337 (<why: the finding or measurement that files it>)": {
+   "sha256": "3b06f8931b139acb8345e3298a938e662fb1ff3e429f1de69a2ee241ff579c89",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T337 Approach (checklist part A)": {
+   "sha256": "a3a03b8cca6cccd4f6902892ab2d0cf3e80a9ec164757f9af0eaa67be81222c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T338 (<why: the finding or measurement that files it>)": {
+   "sha256": "c8ba5c9ceb880c8090d0c0e54c502d38362c63a04868afc0da2b27540f3676b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T338 Approach (checklist part A)": {
+   "sha256": "3ea28cc6ab8ee078c4ba251ff9939ba5dda51aa7b45c5cb75c5bfba4a54b0c9e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T335 (<why: the finding or measurement that files it>)": {
+   "sha256": "374c10cc2d3c61467dae44f1cde82c3f6617c65bc1c6c99dba24fb478818b9bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T335 Approach (checklist part A)": {
+   "sha256": "26bff23cba576d682097dfb095e8cfd9ce7203246731eb6de6a8f7617262329d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T343 (<why: the finding or measurement that files it>)": {
+   "sha256": "a57fbefdaa6411993e9edf8a3848aa9c10336a540afc2772269a638526936dcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T343 Approach (checklist part A)": {
+   "sha256": "071837ad018dc73c7d0a2ef77482890d2b6c375458c1dda434e6455ab36eca60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T348 (<why: the finding or measurement that files it>)": {
+   "sha256": "bde7dadad84665b54d9f7328ab0d1a2ab38db0a3d34eccca56a387c08a5eaea8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T348 Approach (checklist part A)": {
+   "sha256": "adc743c4b37d5a6b93670943bd3ecdbc8b11a90c9e30094d14202d92a78180f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T349 (<why: the finding or measurement that files it>)": {
+   "sha256": "3178cf926a4154d08fba21fc27b408b23ea6cc07a94e6295abb1f331d54e9f5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T349 Approach (checklist part A)": {
+   "sha256": "67ab8be9e0799bc75a19e258d002be4b522b79e611fb0a959474c6ad401ebdab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T350 (<why: the finding or measurement that files it>)": {
+   "sha256": "44d2bbafd1b4406df0b074282f2f516d87d1bb6b048a9873adc0569c84a97892",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T350 Approach (checklist part A)": {
+   "sha256": "3a6a6e34b4c378e11355802198c7df99cbd6c3f1e2ec7e5643a146dfb1be6e78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T341 (<why: the finding or measurement that files it>)": {
+   "sha256": "f195eb56857d019b423167e1f49445910865c3cd5f48db6428f1216ad920936e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T341 Approach (checklist part A)": {
+   "sha256": "14c77faef0debe5bf1d528b69c20ca8b6544e2c04c9946aa68cfee231fa7dc10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "b4e48d03e607c71f42bb9e52093cbd665832481ed8c1e5e39731928175a1ba68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 (<why: the finding or measurement that files it>)": {
+   "sha256": "9029210bb5e1c5e6c682054c9cc3e4e11845c4fc54d58efd0ebf3b1cd7d08fbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 Approach (checklist part A)": {
+   "sha256": "056a3cdc114d9f460d639cb62c84629dd7a46cb4f51b0c995ecc30460802a805",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "e35499a72a8a628061b65a20e395663fc5bb3e9a4bfd9bdb88aa6521c09d903f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T351 (<why: the finding or measurement that files it>)": {
+   "sha256": "f41c9e8ce324604b7170249ff4c88073bd74af3ad48878be22d04c91d5049c3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T351 Approach (checklist part A)": {
+   "sha256": "2b2beaa2a651e7918aefedd6063dee7c36f2e62511db939db48d492593fb2b9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T355 (<why: the finding or measurement that files it>)": {
+   "sha256": "2002d3058e4823121c02b17120974fdda21269cf311c04a09270be1b980cb134",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T355 Approach (checklist part A)": {
+   "sha256": "65e1e823caa83a03a1c659946631919e5ce1e903c2f38209631dbd4c34e558d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T357 (<why: the finding or measurement that files it>)": {
+   "sha256": "593aaf1ff5285f7878ce042baf3de41ea1524af66b8f2fcfde35f5aff5e42d6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T357 Approach (checklist part A)": {
+   "sha256": "760d22eb30273eb20cb025f19cd0a9117cce6db7581f32ee30040d518f908ecf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T352 (<why: the finding or measurement that files it>)": {
+   "sha256": "5b3cfa122c48c8f4dbd9b75f04079690d7359b6cc87729c3d5fdef39bacf864d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T352 Approach (checklist part A)": {
+   "sha256": "eec34249ca483ae79e24703f32b4de33b5462f3ca7b7454f4d1e3871e81fa22a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T353 (<why: the finding or measurement that files it>)": {
+   "sha256": "b57e11b831695f9dd35aabda95472672c4dc2790088a4bcffadcc0bd92e19156",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T353 Approach (checklist part A)": {
+   "sha256": "e4150baad3d353f5a47e65cc78b2db6f9439256ac969a0c8f9a160e93679980e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T354 (<why: the finding or measurement that files it>)": {
+   "sha256": "55d92bd0aedd84fcdfb25d94e399a68ab9194dc9c53f1871b9a98fc7103a2ddb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T354 Approach (checklist part A)": {
+   "sha256": "ae78f8bb719c0070004d9485a0c34c887c876dcb18263e2ab9554abaf0913853",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T360 (<why: the finding or measurement that files it>)": {
+   "sha256": "2d5dbac4c4ac7688e972e1b69dcd2e61c4975b172e0fd0fcd27fbb01771a1d00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T360 Approach (checklist part A)": {
+   "sha256": "504972974b2b289cbc4de2e7ebd46d48d7334a3f7b55cedf3335f8e599e7f972",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T361 (<why: the finding or measurement that files it>)": {
+   "sha256": "6c10b4d99323dfde61ca8e5d1a723a309cdac32f57f2922ba083677cbe2c235c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T361 Approach (checklist part A)": {
+   "sha256": "d01fff52c476d4318950ee987e7cbfd42cb68acd39432280d00b1fc2e4374de7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T362 (<why: the finding or measurement that files it>)": {
+   "sha256": "584997e44d3ec1d404fae97c2c159ce5fa62ec0bac1af1892b0e5476db5d235b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T362 Approach (checklist part A)": {
+   "sha256": "f74921e37f78f045f5e38587a6aca7a4567bb176cd92bb2a70112ec280460366",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T363 (<why: the finding or measurement that files it>)": {
+   "sha256": "391107310c04b8aa2e4a6acc337c5f0c3fc9cdc90d1849ba52f7d288e8f3f987",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T363 Approach (checklist part A)": {
+   "sha256": "dd018a59e1eb7a269197cf445e32b04e92384d945c136d7f4001f3a4fa650db9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T364 (<why: the finding or measurement that files it>)": {
+   "sha256": "7ea16d02591fbd37906eb2d6ebbbb0f62468c60185dcf45ff22ad3fd2be641c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T364 Approach (checklist part A)": {
+   "sha256": "8defd7ac64b4c9b22c3961ef50f85918153f80727922279de88819a94de9cd72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T364 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "3ca4d8f62256edbede73e3dc050ba069fc3065314be07e44d2b8a0e9f9b6b3b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 (<why: the finding or measurement that files it>)": {
+   "sha256": "65e0eb7a1b92f8d1c5fd504918244ecd749906dd305d38190020b7609684c603",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 Approach (checklist part A)": {
+   "sha256": "a0c690f3433fc124e32d4e2cfe84956f60dee66f45b16bc3049c44d468a592da",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "7c2607a1205046304c2441005b85b832ce83edf22569682760cf43cb16632c8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 (<why: the finding or measurement that files it>)": {
+   "sha256": "58726481d0b3bf05655aad9c863d1668b3e06108678c635a143d291f7a9f0b16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Approach (checklist part A)": {
+   "sha256": "e154c631b4d51e086fc11ca4ade9c7628d8951d88cd385d4e9ed0b8db6946221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "162baa13716f74487cb45bb8bff99ea4d4a13014c47c4c1ebe87c0d4242b15d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 (<why: the finding or measurement that files it>)": {
+   "sha256": "7f903c2f9ec645e115ef11a3f2f420eb97af3e4cec2dd42a9d8edf718815d403",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 Approach (checklist part A)": {
+   "sha256": "3e458e26494cb2e5698e39ebf33c301c858dc7466f8be72e72cb3e8cde206800",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "461bfb1270faa8e5c5651891ebdcfa79d3600494a7e02b306597947a78afa44a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T374 (<why: the finding or measurement that files it>)": {
+   "sha256": "01d20608cec9d2f266dfe2e22174646a8528d77d79825fa3c56ff30a5ba13aeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T374 Approach (checklist part A)": {
+   "sha256": "fc909fc039f9fed36629c1107bdf6176f0e50ed8753e8b903f35f879995e4105",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T375 (<why: the finding or measurement that files it>)": {
+   "sha256": "3416dcee9676218c551c76bbe75e4824d80d24cb6ba891227099827d155757b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T375 Approach (checklist part A)": {
+   "sha256": "2a6eae704a1761a2a95be9e502a71a2313c3d4ec099bd06a5fe2c0a03d021c7d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T376 (<why: the finding or measurement that files it>)": {
+   "sha256": "b348533682aa4978e1a7c21e29fefbfed07ef5a48b5839aebd756bb19b473d2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T376 Approach (checklist part A)": {
+   "sha256": "7fa597aa329b08e06524e8c738a5f9afe558b4a306a1c276a56a1d5bd4fcb091",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 (<why: the finding or measurement that files it>)": {
+   "sha256": "9dfa16f1190935a00f17c29eb3f238159912b51706c150c74ef8b1f6f2e8e619",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 Approach (checklist part A)": {
+   "sha256": "98a737f610dc1b0f1ecc796e448d5c3fb7035f32147f6d2b2d7330d86d90695b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "7d281b80229e7cc55f9150404b15310719cc7d6c92fad201c62b296e7fff7c00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 (<why: the finding or measurement that files it>)": {
+   "sha256": "c65e0caea942a9c51dc60cf0e2180fb87443f4770069eaed0ab97ab7ef017dd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 Approach (checklist part A)": {
+   "sha256": "a8362fb90c17c8d2f357ba0e6e94d87e5e92ce15159651ab0c25f9881d275265",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "b12d34e5d808ca081222fde9f6751158873c54b811fbc8557faaae5f9ab72941",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 (<why: the finding or measurement that files it>)": {
+   "sha256": "8dc025669b7b55fd25912191adaa31f4c30978d4b50711eb6e31a399a4003f8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 Approach (checklist part A)": {
+   "sha256": "b204dde8d8549176631c84b70c92b977c6c45797937e28392adaee14496e8883",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "8e0036abb9204b32c7ceaafb5a0781c10a9985b045cc3b1555e2fe0ef84b2969",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367 (<why: the finding or measurement that files it>)": {
+   "sha256": "36a2321a78b6730d0a6e010426d4e088948583a8b2d4f726ac7c873f414f3cd2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367 Approach (checklist part A)": {
+   "sha256": "b205562e5336558c0c591ff74e5fd4498fdd708c75cb4cc6bd35e978026379b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T368 (<why: the finding or measurement that files it>)": {
+   "sha256": "e28fb3242556fd7d0b4a0da1cf0a4e391ddf554aa60e0a7284920608b49aaa0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T368 Approach (checklist part A)": {
+   "sha256": "122aa37830f20d0d330d3d765d7d2b4eb358dd0519c652d6feb2d891d078bc3b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T380 (<why: the finding or measurement that files it>)": {
+   "sha256": "755aaaa3773165da13812970b3c9968de178a59a4343359b11b919e1ec1dc11f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T380 Approach (checklist part A)": {
+   "sha256": "339b30586abd6ff37d7ebc2f22f1fb994ed403aab9508c56ed9455b5b6a86d87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T369 (<why: the finding or measurement that files it>)": {
+   "sha256": "4fba0169136184107191d09a4732be3fc46f9dadfc2df0707ca1a6151c827ce9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T369 Approach (checklist part A)": {
+   "sha256": "a045203911ae55e16982b7639305a7df9abe48f102493974d26a805f09c4c09d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T384 (<why: the finding or measurement that files it>)": {
+   "sha256": "0c8bc1fdd2979ef1a488f006a65ee5cb71ee58c63e9c06cfa3a336e772129e05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T384 Approach (checklist part A)": {
+   "sha256": "3fe6fc5d32860eb0f383d94d076781a05a513d8b7aa4d801f72ad13dc4107c20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T386 (<why: the finding or measurement that files it>)": {
+   "sha256": "a9df19c4d1a66618d98c097caee31c7da29bd56b31404b703227bd4475e86f9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T386 Approach (checklist part A)": {
+   "sha256": "4b8f8d00ee59a884206af1bf0c7036d9f7707d0213d553f271cf1004b7a77179",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T387 (<why: the finding or measurement that files it>)": {
+   "sha256": "67eddbe6f2434230eba64c6dcc03da5f601033c6690217a42e63865ea2bf4943",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T387 Approach (checklist part A)": {
+   "sha256": "79fad0337f3e8cd4d6fc02a00384aa36756cb48083e06740f52e0e467e2750a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T388 (<why: the finding or measurement that files it>)": {
+   "sha256": "2575b943ac372edfaa1835455f79ce44bd7bde6489fd1ebead1b4fcb29886fe2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T388 Approach (checklist part A)": {
+   "sha256": "c32a8dc46edc5bf2d083a0afddba897e84a37c9f7b0b234ae5992611f2ba3695",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T393 (<why: the finding or measurement that files it>)": {
+   "sha256": "80ba6d9479bae72d6d736c7f0e3985b49056721b897a3a83aa5cc4fc61b3fc6a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T393 Approach (checklist part A)": {
+   "sha256": "36d46f7df4201ee7768043de3cebd047e3ac65dd4b79a8f908633da31b1b976e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T390 (<why: the finding or measurement that files it>)": {
+   "sha256": "cbbd962c02d9ba544b747332392d99907aa4324ce9302afeda7569073f8be3f2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T390 Approach (checklist part A)": {
+   "sha256": "8fe4060fac414ea0864a988a777aaca2f495b8d2847cbb3d30950b0c9e40fb92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 (<why: the finding or measurement that files it>)": {
+   "sha256": "c0128fd465fde4e2751387bec79b5555d2b4c7e873a52e924d8c9741faae4773",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 Approach (checklist part A)": {
+   "sha256": "4b7802c4b6d65dae45c378982dfee562dc241c96554edb154074910d7189ba66",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "4401ab11ddcff95ab973ac5b4295cd2b5c06bb4b5ca978dea63c3f94b337b3e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T400 (<why: the finding or measurement that files it>)": {
+   "sha256": "da6a7d400b9b617bac68cde34ce42847df9c122ba7c417896cc8582eaaf6b7cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T400 Approach (checklist part A)": {
+   "sha256": "68495d701dbd4fe5f96b8a6b86917404ca68a35e4ccbc0f6f1aadd4880b72143",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T395 (<why: the finding or measurement that files it>)": {
+   "sha256": "d561080af9ab2267af72c28cdba18e5fd5ea81bddeee54c97c3ae9320be14313",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T395 Approach (checklist part A)": {
+   "sha256": "109295ae9ecfc61e0f738555e8b421a0726aa8c042f0532499475b7e6c75922a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T396 (<why: the finding or measurement that files it>)": {
+   "sha256": "869b725d549b922cd3163961afb9ae6ab101ddf881b9ff528549a97f4e0b9c06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T396 Approach (checklist part A)": {
+   "sha256": "badef8c9b2fe0c1f6173c9220f60e20c2bc72f653a4a41a286b62e7fabc49c60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T397 (<why: the finding or measurement that files it>)": {
+   "sha256": "7b8218fdcb1ba8e72afb2fd55d8de5f5fe3e8d17690af6c24c415656a41e8e78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T397 Approach (checklist part A)": {
+   "sha256": "d3bd00f729887bc7c517df5ecaa149a776f0199fb4a8c39fa913da32311e5531",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T398 (<why: the finding or measurement that files it>)": {
+   "sha256": "a7937e99f6f62070d28fa4019f8f253aebacc7a7697f5b41e6d86b5df250b74d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T398 Approach (checklist part A)": {
+   "sha256": "f739d027731d294aa507ab3afea902bac1013c6abf6a287a779c8844cdeb9e69",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T401 (<why: the finding or measurement that files it>)": {
+   "sha256": "7c243ae56e3977dc4b1d70a7693e27b23ea8e233a6fee1d4dd3273e952cceffa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T401 Approach (checklist part A)": {
+   "sha256": "969359d29d7a3e04829f3dc68fd2052c41dcb07bb596da64a0ae07bae099928b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T403 (<why: the finding or measurement that files it>)": {
+   "sha256": "83e3e0057682b4483bb83022331464ce090feda530f38d996ea94b3edfd797af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T403 Approach (checklist part A)": {
+   "sha256": "dc2e176f0183c1ebcf3d129f2e287f4ed624341299fa97e8c4de4b54f4de34a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T404 (<why: the finding or measurement that files it>)": {
+   "sha256": "dc833e2365dfea5e2865b7e92f4d0b517a8b54cc7aecb1538b1e4ed8148b6a8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T404 Approach (checklist part A)": {
+   "sha256": "fa580fffb22115bc893520796c781d385aaa923b4b1e0b345e968adfd9ff8e23",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T394 part B (2026-11-27T01:51Z)": {
+   "sha256": "a0bcab4d1276b0c3c4e3673dfd3191eb3b90f6c1fa98d90fd3277797b73daa87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T391 part B (2026-11-27T01:51Z)": {
+   "sha256": "06b68c12c5200f0fbebb6a9c37a18355a7cc38e6a845720e0ac3200008ca1c14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T399 part B (2026-11-27T01:51Z)": {
+   "sha256": "e9f1890a1420a6df01b71aa84a9a07729cb17e283038c7ef9a9fbc8f5f2dc586",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T410 (<why: the finding or measurement that files it>)": {
+   "sha256": "8f5d687fa2310e4c59ec49e792f1dec33ccfd3f9551ed72866f0b53d77a67b98",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T410 Approach (checklist part A)": {
+   "sha256": "3ce0b5bbaa003b074e133c3315981cb8a6338a90826b985a0e11958e2dfb39d1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -30615,6 +31713,525 @@
      "summary": "After part 1, before the registry-table part and before T400; nothing new found and left; T400 stays open as part 1 filed it (reason and 'lands before T392' stated there).",
      "class": "within",
      "why": "Ordering inside the task; no deferred defect added, and the one carried forward already carries its why, task id and order per FR-009."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T264 (<why: the finding or measurement that files it>)",
+    "### T264 Approach (checklist part A)",
+    "### T266 (<why: the finding or measurement that files it>)",
+    "### T266 Approach (checklist part A)",
+    "### T273 (<why: the finding or measurement that files it>)",
+    "### T273 Approach (checklist part A)",
+    "### T275 (<why: the finding or measurement that files it>)",
+    "### T275 Approach (checklist part A)",
+    "### T276 (<why: the finding or measurement that files it>)",
+    "### T276 Approach (checklist part A)",
+    "### T277 (<why: the finding or measurement that files it>)",
+    "### T277 Approach (checklist part A)",
+    "### T278 (<why: the finding or measurement that files it>)",
+    "### T278 Approach (checklist part A)",
+    "### T279 (<why: the finding or measurement that files it>)",
+    "### T279 Approach (checklist part A)",
+    "### T280 (<why: the finding or measurement that files it>)",
+    "### T280 Approach (checklist part A)",
+    "### T283 (<why: the finding or measurement that files it>)",
+    "### T283 Approach (checklist part A)",
+    "### T286 (<why: the finding or measurement that files it>)",
+    "### T286 Approach (checklist part A)",
+    "### T287 (<why: the finding or measurement that files it>)",
+    "### T287 Approach (checklist part A)",
+    "### T288 (<why: the finding or measurement that files it>)",
+    "### T288 Approach (checklist part A)",
+    "### T290 (<why: the finding or measurement that files it>)",
+    "### T290 Approach (checklist part A)",
+    "### T291 (<why: the finding or measurement that files it>)",
+    "### T291 Approach (checklist part A)",
+    "### T294 (<why: the finding or measurement that files it>)",
+    "### T294 Approach (checklist part A)",
+    "### T296 (<why: the finding or measurement that files it>)",
+    "### T296 Approach (checklist part A)",
+    "### T297 (<why: the finding or measurement that files it>)",
+    "### T297 Approach (checklist part A)",
+    "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "### T301 Approach (checklist part A)",
+    "### T302 (<why: the finding or measurement that files it>)",
+    "### T302 Approach (checklist part A)",
+    "### T306 (<why: the finding or measurement that files it>)",
+    "### T306 Approach (checklist part A)",
+    "### T307 (<why: the finding or measurement that files it>)",
+    "### T307 Approach (checklist part A)",
+    "### T310 (<why: the finding or measurement that files it>)",
+    "### T310 Approach (checklist part A)",
+    "### T311 (<why: the finding or measurement that files it>)",
+    "### T311 Approach (checklist part A)",
+    "### T312 (<why: the finding or measurement that files it>)",
+    "### T312 Approach (checklist part A)",
+    "### T313 (<why: the finding or measurement that files it>)",
+    "### T313 Approach (checklist part A)",
+    "### T314 (<why: the finding or measurement that files it>)",
+    "### T314 Approach (checklist part A)",
+    "### T317 (<why: the finding or measurement that files it>)",
+    "### T317 Approach (checklist part A)",
+    "### T318 (<why: the finding or measurement that files it>)",
+    "### T318 Approach (checklist part A)",
+    "### T319 (<why: the finding or measurement that files it>)",
+    "### T319 Approach (checklist part A)",
+    "### T320 (<why: the finding or measurement that files it>)",
+    "### T320 Approach (checklist part A)",
+    "### T321 (<why: the finding or measurement that files it>)",
+    "### T321 Approach (checklist part A)",
+    "### T326 (<why: the finding or measurement that files it>)",
+    "### T326 Approach (checklist part A)",
+    "### T327 (<why: the finding or measurement that files it>)",
+    "### T327 Approach (checklist part A)",
+    "### T328 (<why: the finding or measurement that files it>)",
+    "### T328 Approach (checklist part A)",
+    "### T329 (<why: the finding or measurement that files it>)",
+    "### T329 Approach (checklist part A)",
+    "### T330 (<why: the finding or measurement that files it>)",
+    "### T330 Approach (checklist part A)",
+    "### T331 (<why: the finding or measurement that files it>)",
+    "### T331 Approach (checklist part A)",
+    "### T333 (<why: the finding or measurement that files it>)",
+    "### T333 Approach (checklist part A)",
+    "### T335 (<why: the finding or measurement that files it>)",
+    "### T335 Approach (checklist part A)",
+    "### T337 (<why: the finding or measurement that files it>)",
+    "### T337 Approach (checklist part A)",
+    "### T338 (<why: the finding or measurement that files it>)",
+    "### T338 Approach (checklist part A)",
+    "### T341 (<why: the finding or measurement that files it>)",
+    "### T341 Approach (checklist part A)",
+    "### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T342 (<why: the finding or measurement that files it>)",
+    "### T342 Approach (checklist part A)",
+    "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T343 (<why: the finding or measurement that files it>)",
+    "### T343 Approach (checklist part A)",
+    "### T348 (<why: the finding or measurement that files it>)",
+    "### T348 Approach (checklist part A)",
+    "### T349 (<why: the finding or measurement that files it>)",
+    "### T349 Approach (checklist part A)",
+    "### T350 (<why: the finding or measurement that files it>)",
+    "### T350 Approach (checklist part A)",
+    "### T351 (<why: the finding or measurement that files it>)",
+    "### T351 Approach (checklist part A)",
+    "### T352 (<why: the finding or measurement that files it>)",
+    "### T352 Approach (checklist part A)",
+    "### T353 (<why: the finding or measurement that files it>)",
+    "### T353 Approach (checklist part A)",
+    "### T354 (<why: the finding or measurement that files it>)",
+    "### T354 Approach (checklist part A)",
+    "### T355 (<why: the finding or measurement that files it>)",
+    "### T355 Approach (checklist part A)",
+    "### T357 (<why: the finding or measurement that files it>)",
+    "### T357 Approach (checklist part A)",
+    "### T360 (<why: the finding or measurement that files it>)",
+    "### T360 Approach (checklist part A)",
+    "### T361 (<why: the finding or measurement that files it>)",
+    "### T361 Approach (checklist part A)",
+    "### T362 (<why: the finding or measurement that files it>)",
+    "### T362 Approach (checklist part A)",
+    "### T363 (<why: the finding or measurement that files it>)",
+    "### T363 Approach (checklist part A)",
+    "### T364 (<why: the finding or measurement that files it>)",
+    "### T364 Approach (checklist part A)",
+    "### T364 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T365 (<why: the finding or measurement that files it>)",
+    "### T365 Approach (checklist part A)",
+    "### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T367 (<why: the finding or measurement that files it>)",
+    "### T367 Approach (checklist part A)",
+    "### T368 (<why: the finding or measurement that files it>)",
+    "### T368 Approach (checklist part A)",
+    "### T369 (<why: the finding or measurement that files it>)",
+    "### T369 Approach (checklist part A)",
+    "### T371 (<why: the finding or measurement that files it>)",
+    "### T371 Approach (checklist part A)",
+    "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T373 (<why: the finding or measurement that files it>)",
+    "### T373 Approach (checklist part A)",
+    "### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T374 (<why: the finding or measurement that files it>)",
+    "### T374 Approach (checklist part A)",
+    "### T375 (<why: the finding or measurement that files it>)",
+    "### T375 Approach (checklist part A)",
+    "### T376 (<why: the finding or measurement that files it>)",
+    "### T376 Approach (checklist part A)",
+    "### T377 (<why: the finding or measurement that files it>)",
+    "### T377 Approach (checklist part A)",
+    "### T377 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T378 (<why: the finding or measurement that files it>)",
+    "### T378 Approach (checklist part A)",
+    "### T378 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T379 (<why: the finding or measurement that files it>)",
+    "### T379 Approach (checklist part A)",
+    "### T379 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T380 (<why: the finding or measurement that files it>)",
+    "### T380 Approach (checklist part A)",
+    "### T384 (<why: the finding or measurement that files it>)",
+    "### T384 Approach (checklist part A)",
+    "### T386 (<why: the finding or measurement that files it>)",
+    "### T386 Approach (checklist part A)",
+    "### T387 (<why: the finding or measurement that files it>)",
+    "### T387 Approach (checklist part A)",
+    "### T388 (<why: the finding or measurement that files it>)",
+    "### T388 Approach (checklist part A)",
+    "### T390 (<why: the finding or measurement that files it>)",
+    "### T390 Approach (checklist part A)",
+    "### T391 part B (2026-11-27T01:51Z)",
+    "### T392 (<why: the finding or measurement that files it>)",
+    "### T392 Approach (checklist part A)",
+    "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T393 (<why: the finding or measurement that files it>)",
+    "### T393 Approach (checklist part A)",
+    "### T394 part B (2026-11-27T01:51Z)",
+    "### T395 (<why: the finding or measurement that files it>)",
+    "### T395 Approach (checklist part A)",
+    "### T396 (<why: the finding or measurement that files it>)",
+    "### T396 Approach (checklist part A)",
+    "### T397 (<why: the finding or measurement that files it>)",
+    "### T397 Approach (checklist part A)",
+    "### T398 (<why: the finding or measurement that files it>)",
+    "### T398 Approach (checklist part A)",
+    "### T399 part B (2026-11-27T01:51Z)",
+    "### T400 (<why: the finding or measurement that files it>)",
+    "### T400 Approach (checklist part A)",
+    "### T401 (<why: the finding or measurement that files it>)",
+    "### T401 Approach (checklist part A)",
+    "### T403 (<why: the finding or measurement that files it>)",
+    "### T403 Approach (checklist part A)",
+    "### T404 (<why: the finding or measurement that files it>)",
+    "### T404 Approach (checklist part A)",
+    "(removed) ### T104 (<why: the finding or measurement that files it>)",
+    "(removed) ### T159 (<why: the finding or measurement that files it>)",
+    "(removed) ### T251 (<why: the finding or measurement that files it>)",
+    "(removed) ### T262 (<why: the finding or measurement that files it>)",
+    "(removed) ### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)",
+    "(removed) ### T299 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T301-scope-part1",
+     "summary": "T301's section is PART 1 of four (the measurement of why one target directory holds 20 to 31 hashes of a crate); no code changed, parts 2-4 (eviction, the scratch sweep's patterns, loose profraw files) left to later builders and the task left unticked.",
+     "class": "within",
+     "why": "The task line divides T301 into four parts and this section claims only the first; the task stays open, so nothing of what was asked is dropped, only ordered. Measuring before sweeping serves the GM's 2026-11-22 words on cleaning up after ourselves while reusing the same build cache."
+    },
+    {
+     "id": "T301-read-only",
+     "summary": "Nothing deleted; the session clone's cache only read; every build in the pool tree diagram-backlog-t271's own target.",
+     "class": "within",
+     "why": "A measurement that changes no cache is the conservative form of part 1 and narrows nothing the GM asked."
+    },
+    {
+     "id": "T301-verdict",
+     "summary": "The finding: no setting flips between the gate's cargo calls (unchanged re-runs all Fresh); the hashes are live build configurations, past profile values (451 T246's debug = 0) and dependency-feature siblings; the GM's question on a builder's repeated test runs is answered (a run that changes nothing compiles nothing, one changed crate 2 to 4 s; about 19 s is a first plain build in a tree that never built it, or the tests' own run time, m9-results 14.6 to 23.8 s).",
+     "class": "within",
+     "why": "This is the answer to the question the GM asked on 2026-11-26 (451 T315's line: 'more of the compilation was not able to be cached') and to T301's task line, each figure dated with its method."
+    },
+    {
+     "id": "T301-defer-T325",
+     "summary": "Found and left: a crate below a testkit crate is compiled once per feature combination the selected packages ask for (17 of 75 rustc runs after a touch of core), and rust/Cargo.toml's ONE FEATURE SET comment holds for outside crates only. Not fixed here: a choice between two forms that each need measuring, touching kept.rs, side.rs and cover.rs; filed as T325 [perf], lands before T278.",
+     "class": "within",
+     "why": "A deferral in exactly the form the accepted spec provides (FR-009, D15: why, the filed id, the order), to a [perf] task that FR-013 schedules ahead of other work, ordered before the variant sweep that would otherwise keep the sibling hashes. The measurement task's part 1 is not asked to carry a design change between two unmeasured forms; nothing is dropped. The comment's correction rides with T325, which changes the behavior it describes."
+    },
+    {
+     "id": "T301-warm-tree-not-filed",
+     "summary": "Found and left: a pool tree handed out warm compiles from nothing each configuration its earlier tasks never built (58 first builds, 246 s for all 28 gate manifests' plain test builds). Judged not a defect and not filed.",
+     "class": "within",
+     "why": "Nothing is built twice and the builds are kept; the cost is paid once per tree and crate. That is no wrong outcome under constitution XIV v2.36.0 (no crash, hang, refusal or wrong answer, no check passing bad work), and it is recorded as one reading of the test runs the GM asked about. Leaving a non-defect as it is stays within."
+    },
+    {
+     "id": "T301-not-perf",
+     "summary": "'Performance work? no: a measurement; what it found to make faster is T325's, a [perf] task.'",
+     "class": "narrowing",
+     "why": "The plan rules T301 out of performance work on the ground 'no: a measurement' - the one ground FR-013 and the GM remove: 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first. Because it's so closely related to performance that it should be counted as such even if the task itself doesn't improve performance.' (2026-11-20). Part 1 measures whether the gate's builds recompile needlessly and answers the GM's question of 2026-11-26 on why a builder's test runs could not reuse more compilation, and it files a compile-time cost: it is work that measures where the time goes. None of the three grounds holds: counting it is not impossible, the GM's words imply the opposite, and counting it defeats nothing (that part 1 has already run is no ground). Fix: the line says part 1 is performance work for ordering under FR-013's measurement clause; if parts 2 to 4 (eviction, the scratch sweep, the profraw files) are to stay unprioritized, it says so of those parts, citing the GM's words that put disk work later. Those words are not in request.md; the block cites only the task line's restatement. Cause worth fixing: the section template's 'Performance work?' prompt defines [perf] as 'makes ... faster' and leaves out FR-013's measurement clause.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "partB-T394-T391-T399-repair",
+     "summary": "Part B for the batch whose gate was red twice on unreached lines (sections.rs 55, builder_done.rs 327, then words.rs 143): one line's error made eager with ok_or in place of ok_or_else's closure, the same behavior, no test weakened; the batch gate run once more with nothing else carried in, under the round arbiter's continue ruling.",
+     "class": "within",
+     "why": "A coverage repair that keeps behavior and weakens no test, followed by the arbiter's ruled next step. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "partB-no-builder-coverage",
+     "summary": "Under the two tiers a builder runs no coverage, so a few coverage failures fixed at the batch gate are the accepted cost.",
+     "class": "within",
+     "why": "This is the GM's own two-tier direction of 2026-11-26 (request.md, 451 T308: full rigor deferred until the session clone goes through its gates)."
+    },
+    {
+     "id": "partB-flaky-rerun",
+     "summary": "After the ruling: a red on the load-sensitive hook-suite case alone (451 T139) is re-run as that suite and not counted a third red; a new unreached line is fixed the same way and asked again.",
+     "class": "within",
+     "why": "The suite must still pass on its re-run, so nothing lands on a red and no test is waived. The open fix of the load-sensitive case (the GM, 2026-11-26: 'I agree with prioritizing the test that fails under load being fixed') is untouched. It concerns the arbiter's red count, which no clause of the request sets."
+    },
+    {
+     "id": "removed-empty-templates",
+     "summary": "Removed: the T104, T159, T251 and T262 sections, each an unfilled template when last judged CLEAR.",
+     "class": "within",
+     "why": "Each was an unfilled template when last judged CLEAR (earlier.md), so removing it removes no decision. No archive line for T104, T159 or T251 appears in the blocks; the judgment rests on the earlier text alone."
+    },
+    {
+     "id": "removed-T299",
+     "summary": "Removed: T299's section and its Approach, judged CLEAR, finished, and moved to plan-done.md by FR-044's command (the archive line 'T336 to T299 moved to plan-done.md, 2026-11-26').",
+     "class": "within",
+     "why": "Its earlier text was a finished section judged CLEAR, and the archive line 'T336 to T299 moved to plan-done.md, 2026-11-26 (feature 375 FR-044)' records the move. FR-044: a removed section owes no review."
+    },
+    {
+     "id": "template-blocks",
+     "summary": "The other changed blocks (T264 through T404 and their perf checklists) are the unfilled section template: placeholders only.",
+     "class": "within",
+     "why": "A placeholder decides nothing; each is judged when its section is written and decided."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T264 (<why: the finding or measurement that files it>)",
+    "### T264 Approach (checklist part A)",
+    "### T266 (<why: the finding or measurement that files it>)",
+    "### T266 Approach (checklist part A)",
+    "### T273 (<why: the finding or measurement that files it>)",
+    "### T273 Approach (checklist part A)",
+    "### T275 (<why: the finding or measurement that files it>)",
+    "### T275 Approach (checklist part A)",
+    "### T276 (<why: the finding or measurement that files it>)",
+    "### T276 Approach (checklist part A)",
+    "### T277 (<why: the finding or measurement that files it>)",
+    "### T277 Approach (checklist part A)",
+    "### T278 (<why: the finding or measurement that files it>)",
+    "### T278 Approach (checklist part A)",
+    "### T279 (<why: the finding or measurement that files it>)",
+    "### T279 Approach (checklist part A)",
+    "### T280 (<why: the finding or measurement that files it>)",
+    "### T280 Approach (checklist part A)",
+    "### T283 (<why: the finding or measurement that files it>)",
+    "### T283 Approach (checklist part A)",
+    "### T286 (<why: the finding or measurement that files it>)",
+    "### T286 Approach (checklist part A)",
+    "### T287 (<why: the finding or measurement that files it>)",
+    "### T287 Approach (checklist part A)",
+    "### T288 (<why: the finding or measurement that files it>)",
+    "### T288 Approach (checklist part A)",
+    "### T290 (<why: the finding or measurement that files it>)",
+    "### T290 Approach (checklist part A)",
+    "### T291 (<why: the finding or measurement that files it>)",
+    "### T291 Approach (checklist part A)",
+    "### T294 (<why: the finding or measurement that files it>)",
+    "### T294 Approach (checklist part A)",
+    "### T296 (<why: the finding or measurement that files it>)",
+    "### T296 Approach (checklist part A)",
+    "### T297 (<why: the finding or measurement that files it>)",
+    "### T297 Approach (checklist part A)",
+    "### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "### T301 Approach (checklist part A)",
+    "### T302 (<why: the finding or measurement that files it>)",
+    "### T302 Approach (checklist part A)",
+    "### T306 (<why: the finding or measurement that files it>)",
+    "### T306 Approach (checklist part A)",
+    "### T307 (<why: the finding or measurement that files it>)",
+    "### T307 Approach (checklist part A)",
+    "### T310 (<why: the finding or measurement that files it>)",
+    "### T310 Approach (checklist part A)",
+    "### T311 (<why: the finding or measurement that files it>)",
+    "### T311 Approach (checklist part A)",
+    "### T312 (<why: the finding or measurement that files it>)",
+    "### T312 Approach (checklist part A)",
+    "### T313 (<why: the finding or measurement that files it>)",
+    "### T313 Approach (checklist part A)",
+    "### T314 (<why: the finding or measurement that files it>)",
+    "### T314 Approach (checklist part A)",
+    "### T317 (<why: the finding or measurement that files it>)",
+    "### T317 Approach (checklist part A)",
+    "### T318 (<why: the finding or measurement that files it>)",
+    "### T318 Approach (checklist part A)",
+    "### T319 (<why: the finding or measurement that files it>)",
+    "### T319 Approach (checklist part A)",
+    "### T320 (<why: the finding or measurement that files it>)",
+    "### T320 Approach (checklist part A)",
+    "### T321 (<why: the finding or measurement that files it>)",
+    "### T321 Approach (checklist part A)",
+    "### T326 (<why: the finding or measurement that files it>)",
+    "### T326 Approach (checklist part A)",
+    "### T327 (<why: the finding or measurement that files it>)",
+    "### T327 Approach (checklist part A)",
+    "### T328 (<why: the finding or measurement that files it>)",
+    "### T328 Approach (checklist part A)",
+    "### T329 (<why: the finding or measurement that files it>)",
+    "### T329 Approach (checklist part A)",
+    "### T330 (<why: the finding or measurement that files it>)",
+    "### T330 Approach (checklist part A)",
+    "### T331 (<why: the finding or measurement that files it>)",
+    "### T331 Approach (checklist part A)",
+    "### T333 (<why: the finding or measurement that files it>)",
+    "### T333 Approach (checklist part A)",
+    "### T335 (<why: the finding or measurement that files it>)",
+    "### T335 Approach (checklist part A)",
+    "### T337 (<why: the finding or measurement that files it>)",
+    "### T337 Approach (checklist part A)",
+    "### T338 (<why: the finding or measurement that files it>)",
+    "### T338 Approach (checklist part A)",
+    "### T341 (<why: the finding or measurement that files it>)",
+    "### T341 Approach (checklist part A)",
+    "### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T342 (<why: the finding or measurement that files it>)",
+    "### T342 Approach (checklist part A)",
+    "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T343 (<why: the finding or measurement that files it>)",
+    "### T343 Approach (checklist part A)",
+    "### T348 (<why: the finding or measurement that files it>)",
+    "### T348 Approach (checklist part A)",
+    "### T349 (<why: the finding or measurement that files it>)",
+    "### T349 Approach (checklist part A)",
+    "### T350 (<why: the finding or measurement that files it>)",
+    "### T350 Approach (checklist part A)",
+    "### T351 (<why: the finding or measurement that files it>)",
+    "### T351 Approach (checklist part A)",
+    "### T352 (<why: the finding or measurement that files it>)",
+    "### T352 Approach (checklist part A)",
+    "### T353 (<why: the finding or measurement that files it>)",
+    "### T353 Approach (checklist part A)",
+    "### T354 (<why: the finding or measurement that files it>)",
+    "### T354 Approach (checklist part A)",
+    "### T355 (<why: the finding or measurement that files it>)",
+    "### T355 Approach (checklist part A)",
+    "### T357 (<why: the finding or measurement that files it>)",
+    "### T357 Approach (checklist part A)",
+    "### T360 (<why: the finding or measurement that files it>)",
+    "### T360 Approach (checklist part A)",
+    "### T361 (<why: the finding or measurement that files it>)",
+    "### T361 Approach (checklist part A)",
+    "### T362 (<why: the finding or measurement that files it>)",
+    "### T362 Approach (checklist part A)",
+    "### T363 (<why: the finding or measurement that files it>)",
+    "### T363 Approach (checklist part A)",
+    "### T364 (<why: the finding or measurement that files it>)",
+    "### T364 Approach (checklist part A)",
+    "### T364 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T365 (<why: the finding or measurement that files it>)",
+    "### T365 Approach (checklist part A)",
+    "### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T367 (<why: the finding or measurement that files it>)",
+    "### T367 Approach (checklist part A)",
+    "### T368 (<why: the finding or measurement that files it>)",
+    "### T368 Approach (checklist part A)",
+    "### T369 (<why: the finding or measurement that files it>)",
+    "### T369 Approach (checklist part A)",
+    "### T371 (<why: the finding or measurement that files it>)",
+    "### T371 Approach (checklist part A)",
+    "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T373 (<why: the finding or measurement that files it>)",
+    "### T373 Approach (checklist part A)",
+    "### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T374 (<why: the finding or measurement that files it>)",
+    "### T374 Approach (checklist part A)",
+    "### T375 (<why: the finding or measurement that files it>)",
+    "### T375 Approach (checklist part A)",
+    "### T376 (<why: the finding or measurement that files it>)",
+    "### T376 Approach (checklist part A)",
+    "### T377 (<why: the finding or measurement that files it>)",
+    "### T377 Approach (checklist part A)",
+    "### T377 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T378 (<why: the finding or measurement that files it>)",
+    "### T378 Approach (checklist part A)",
+    "### T378 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T379 (<why: the finding or measurement that files it>)",
+    "### T379 Approach (checklist part A)",
+    "### T379 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T380 (<why: the finding or measurement that files it>)",
+    "### T380 Approach (checklist part A)",
+    "### T384 (<why: the finding or measurement that files it>)",
+    "### T384 Approach (checklist part A)",
+    "### T386 (<why: the finding or measurement that files it>)",
+    "### T386 Approach (checklist part A)",
+    "### T387 (<why: the finding or measurement that files it>)",
+    "### T387 Approach (checklist part A)",
+    "### T388 (<why: the finding or measurement that files it>)",
+    "### T388 Approach (checklist part A)",
+    "### T390 (<why: the finding or measurement that files it>)",
+    "### T390 Approach (checklist part A)",
+    "### T391 part B (2026-11-27T01:51Z)",
+    "### T392 (<why: the finding or measurement that files it>)",
+    "### T392 Approach (checklist part A)",
+    "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T393 (<why: the finding or measurement that files it>)",
+    "### T393 Approach (checklist part A)",
+    "### T394 part B (2026-11-27T01:51Z)",
+    "### T395 (<why: the finding or measurement that files it>)",
+    "### T395 Approach (checklist part A)",
+    "### T396 (<why: the finding or measurement that files it>)",
+    "### T396 Approach (checklist part A)",
+    "### T397 (<why: the finding or measurement that files it>)",
+    "### T397 Approach (checklist part A)",
+    "### T398 (<why: the finding or measurement that files it>)",
+    "### T398 Approach (checklist part A)",
+    "### T399 part B (2026-11-27T01:51Z)",
+    "### T400 (<why: the finding or measurement that files it>)",
+    "### T400 Approach (checklist part A)",
+    "### T401 (<why: the finding or measurement that files it>)",
+    "### T401 Approach (checklist part A)",
+    "### T403 (<why: the finding or measurement that files it>)",
+    "### T403 Approach (checklist part A)",
+    "### T404 (<why: the finding or measurement that files it>)",
+    "### T404 Approach (checklist part A)",
+    "### T410 (<why: the finding or measurement that files it>)",
+    "### T410 Approach (checklist part A)",
+    "(removed) ### T104 (<why: the finding or measurement that files it>)",
+    "(removed) ### T159 (<why: the finding or measurement that files it>)",
+    "(removed) ### T251 (<why: the finding or measurement that files it>)",
+    "(removed) ### T262 (<why: the finding or measurement that files it>)",
+    "(removed) ### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)",
+    "(removed) ### T299 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T301-part1-perf",
+     "summary": "T301's 'Performance work?' now answers yes for part 1: a measurement task, counted as performance work for ordering by the GM's words of 2026-11-20 (it makes nothing faster itself; T325 is the [perf] fix it found).",
+     "class": "within",
+     "why": "FR-013 and request.md line 46 ('this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'). Round 1's BLOCKED item T301-not-perf said 'no: a measurement', which contradicted this; the new line states it as the request does. Resolved."
+    },
+    {
+     "id": "T301-parts2-4-disk-order",
+     "summary": "T301 parts 2 to 4 (what to evict, the scratch sweep's patterns, the loose profraw files) are disk work, begun after the talk on parallelizing and ordered by time saved, never by disk freed.",
+     "class": "within",
+     "why": "request.md '2026-11-26: the disk work and the principle behind it', verbatim GM words: 'the guiding principle is still time saved is more important than disk usage ... we definitely don't want to clean things up if it is going to cost us time later' and 'fix all of this as part of our tasking ... before resuming our port. But after we talk about the most efficient way to parallelize.' Disk eviction makes nothing faster, so it is not FR-013 performance work and putting it after the parallelizing talk follows the GM's own order. Ordering it by time saved applies his stated principle rather than narrowing it. Nothing is dropped: the parts stay open and the task stays unticked."
+    },
+    {
+     "id": "T301-constraint-source",
+     "summary": "T301 Approach item 2's constraint ('disk work begins later and time saved outranks disk') is now backed by the GM's words recorded in request.md, not only the task line's restatement.",
+     "class": "within",
+     "why": "The words it cites are in request.md's 2026-11-26 section, quoted under a GM NOTES source marker."
+    },
+    {
+     "id": "T410-stub",
+     "summary": "T410's two blocks are the unfilled template stub of a newly filed task.",
+     "class": "within",
+     "why": "Placeholders only. They decide nothing yet and narrow nothing."
+    },
+    {
+     "id": "removed-empty-stubs-T104-T159-T251-T262",
+     "summary": "The unfilled template stubs of T104, T159, T251 and T262 were removed.",
+     "class": "within",
+     "why": "Their earlier text (CLEAR) was placeholders only, so removing them deletes no decision."
+    },
+    {
+     "id": "removed-T299-archived",
+     "summary": "T299 and its Approach block, judged CLEAR earlier, left plan.md. The plan carries 'plan-archive: T336 to T299 moved to plan-done.md, 2026-11-26 (feature 375 FR-044)'.",
+     "class": "within",
+     "why": "FR-044: finished sections move to plan-done.md, and a removed section owes no review. Its decisions were judged CLEAR before it moved."
+    },
+    {
+     "id": "unchanged-blocks",
+     "summary": "The other blocks are byte-identical to their round-1 text once each block's header comment is set aside (diff of blocks.md against earlier.md, 2026-11-26).",
+     "class": "within",
+     "why": "Round 1 found only T301-not-perf NOT LEGITIMATE. These blocks have not changed since that reading, and this round's diff shows no new decision in them."
     }
    ]
   }

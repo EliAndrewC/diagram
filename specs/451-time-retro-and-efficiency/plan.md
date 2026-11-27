@@ -3214,7 +3214,10 @@ engine speed, so no checklist.
 
 - A pool tree handed out WARM compiles from nothing each configuration its earlier tasks never built: 58 first builds, 246 s for all 28 gate manifests' plain test builds in `diagram-backlog-t271`, measured 2026-11-26 (`gate-call.sh`). Not a defect and not filed: nothing is built twice, the cost is paid once a tree and a crate, and the builds are kept, and it is recorded here because it is one reading of the test runs the GM asked about.
 
-**Performance work?** no: a measurement; what it found to make faster is T325's, a `[perf]` task.
+**Performance work?** yes for part 1: a measurement task, counted as performance work for ordering by the GM's words of
+2026-11-20 (it makes nothing faster itself; what it found to make faster is T325's, a `[perf]` task). Parts 2 to 4 are disk work,
+which by the GM's words of 2026-11-26 in `request.md` ("the disk work and the principle behind it") begins after the talk on
+parallelizing and is ordered by time saved, never by disk freed.
 
 
 ### T302 (<why: the finding or measurement that files it>)
@@ -5796,7 +5799,7 @@ and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (
 lines no test reached. Of this task: line 327 of `builder_done.rs` was its own.
 
 1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
-   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   at the first run (a fixer's tests cleared them; observed 2026-11-27, method: the landing's log), `land/carry/words.rs` line 143 at the second - the closure of
    `ok_or_else` on a guard its builder documented as one no fixture can reach.
 2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
    decision.
@@ -5804,7 +5807,7 @@ lines no test reached. Of this task: line 327 of `builder_done.rs` was its own.
 4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
    `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
 5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
-6. **The one-sentence test.** "Why is T394 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+6. **The one-sentence test.** "Why is T394 owed this?" - it is a task of the batch whose gate was red twice.
 7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
    else carried in before it (the arbiter's ruling).
 8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
@@ -5816,10 +5819,10 @@ lines no test reached. Of this task: line 327 of `builder_done.rs` was its own.
 
 Owed by red-gate@2026-11-27T01:50:26Z, ruled continue by the round arbiter (`arbiter.jsonl`): the batch gate of 451 T394, T391
 and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (2026-11-27, the landing's log), each time on
-lines no test reached. None of the three lines is this task's: it rode in the batch.
+lines no test reached. None of those lines is this task's: it rode in the batch.
 
 1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
-   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   at the first run (a fixer's tests cleared them; observed 2026-11-27, method: the landing's log), `land/carry/words.rs` line 143 at the second - the closure of
    `ok_or_else` on a guard its builder documented as one no fixture can reach.
 2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
    decision.
@@ -5827,7 +5830,7 @@ lines no test reached. None of the three lines is this task's: it rode in the ba
 4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
    `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
 5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
-6. **The one-sentence test.** "Why is T391 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+6. **The one-sentence test.** "Why is T391 owed this?" - it is a task of the batch whose gate was red twice.
 7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
    else carried in before it (the arbiter's ruling).
 8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
@@ -5842,7 +5845,7 @@ and T399 (with T300's carry part) was red twice in a row, at 01:42Z and 01:50Z (
 lines no test reached. Line 143 of `words.rs` came in with T300's second part, which this task was built beside.
 
 1. **What exactly is refusing?** The batch gate's coverage: `land/carry/sections.rs` line 55 and `task/builder_done.rs` line 327
-   at the first run (a fixer's two tests cleared them), `land/carry/words.rs` line 143 at the second - the closure of
+   at the first run (a fixer's tests cleared them; observed 2026-11-27, method: the landing's log), `land/carry/words.rs` line 143 at the second - the closure of
    `ok_or_else` on a guard its builder documented as one no fixture can reach.
 2. **A3 again.** The goal and the options stand as the section has them; the red is in tests and one error's form, not in a
    decision.
@@ -5850,10 +5853,37 @@ lines no test reached. Line 143 of `words.rs` came in with T300's second part, w
 4. **Moving something earlier for something later?** No. Under the two tiers a builder runs no coverage (the GM, 2026-11-26,
    `docs/process-decisions.md`, "Two tiers of checking": a few coverage failures fixed later are the accepted cost).
 5. **Tuning or changing?** Changing one line's form: the error said eagerly with `ok_or`, the same behavior, no test weakened.
-6. **The one-sentence test.** "Why is T399 owed this?" - it is one of the three tasks of the batch whose gate was red twice.
+6. **The one-sentence test.** "Why is T399 owed this?" - it is a task of the batch whose gate was red twice.
 7. **The next step is a measurement.** The batch gate run once more on the batch as it stands with the one-line repair, nothing
    else carried in before it (the arbiter's ruling).
 8. **Every route measured?** The repair is first-tier green in the clone (2026-11-27, `make builder-checks` on the land crate);
    coverage is the gate's to say.
 9. **After a ruling:** continue, recorded in `arbiter.jsonl`; a red on the load-sensitive hook-suite case alone (451 T139) is
    re-run as that suite, not counted a third red; a new unreached line is fixed the same way and asked again.
+
+### T410 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T410 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

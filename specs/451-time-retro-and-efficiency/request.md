@@ -402,3 +402,16 @@ did not hear them; the spelling is the line's):
 The rest of T394's line is the coordinating session's: the measurement his question led to (the pool trees' idle minutes,
 `dev/measurements/2026-11-27/tree-idle/results.md`), the command it proposes, `make builder-done`, and what the line asks beyond
 that command - `make land` carrying by commit, the Stop hook's refusal with 451 T313, and the re-measurement.
+
+## 2026-11-26: the disk work and the principle behind it (451 T301, T278)
+
+Recorded by the coordinating session from the GM's message of 2026-11-26 on the host session's disk findings; the same words
+are in `docs/process-decisions.md`, "Declined so far", THE PRINCIPLE.
+
+<!-- SOURCE: GM NOTES -->
+
+> W.r.t. the disk stuff: If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit, right? I mean, the guiding principle is still time saved is more important than disk usage. So we definitely don't want to clean things up if it is going to cost us time later.
+
+> we should make sure to fix all of this as part of our tasking that we are doing before resuming our port. But after we talk about the most efficient way to parallelize.
+
+<!-- END SOURCE -->
