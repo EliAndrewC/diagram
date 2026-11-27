@@ -63,3 +63,25 @@ The 20-run table beside it (load 22.9 to 24.7) agrees within 0.4 ms. As built (`
   filed, not built here (the brief's one job).
 
 Daily: about 10,400 PreToolUse and PostToolUse calls on 2026-11-26 (T373) x 4.1 ms = 43 s; the `env` hop 32 s more.
+
+## 451 T456: the `env` hop removed (`t456-launcher.py`, 40 runs, round-robin)
+
+`scripts/hooks/l7r-hook` now execs `bash "$h"` (bash by PATH) where it exec'd the wrapper by its `#!/usr/bin/env bash` shebang. Same
+scratch tree as above (rust/ and .cargo/ linked, a stub `l7r-guard.good`, `CLONE_MAIN` naming no mirror), the old and new launcher
+copies side by side; the walk is the `find` T439 built.
+
+| row | `t456-launcher.txt` (load 15.5, the change's code by sed) | `t456-launcher-as-built.txt` (load 15.7, the edited file) |
+|---|---|---|
+| `/usr/bin/env bash -c :` | 4.59 | 4.74 |
+| `bash -c :` | 1.70 | 1.69 |
+| `l7r-hook` as it was (the `env` hop) | 12.28 | 11.90 |
+| `l7r-hook` as changed (`exec bash "$h"`) | 9.23 | 8.96 |
+
+Wall medians in ms. The change pays 3.05 and 2.94 ms a call, T439's 3.1 ms estimate (A - E). At about 10,400 calls a day, about 31 s.
+
+The other `#!/usr/bin/env bash` entries, checked 2026-11-27 (grep of `.claude/settings.json`, `scripts/hooks/` and the guards'
+`Command` calls): no hook entry reaches any of them on every call. `scripts/hooks/lib/*.sh` are sourced (no shebang run), and only
+off the hot path; `agent-stall-hooks.sh` and `finished-run-hooks.sh` are run by hand. `scripts/gates/l7r-gate.sh` is reached from
+guards only on particular commands (record edits, check bundles, the gate's preflight, a prompt's clone sync), several of them
+already as `bash <path>`, each beside a full gate-binary run; and from the Makefile on each target, beside a `git rev-parse` fork and
+the target's own work of seconds. Neither is a per-hook-call cost: not changed.

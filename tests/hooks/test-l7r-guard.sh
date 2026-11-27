@@ -363,6 +363,11 @@ lr() { printf 'in' | CLAUDE_PROJECT_DIR="$L" "$@" sh -c "$LAUNCH PreToolUse"; }
 check "launcher: the mirror's dispatcher first" "$(lr env CLONE_MAIN="$L/mirror" 2>/dev/null)" "mirror PreToolUse|in"
 check "launcher: exit 2 passed through" "$(lr env CLONE_MAIN="$L/mirror" STUB_RC=2 >/dev/null 2>&1; echo $?)" 2
 check "launcher: stderr passed through" "$(lr env CLONE_MAIN="$L/mirror" 2>&1 >/dev/null)" "said on stderr"
+# ...the dispatcher run by bash, never by its shebang (451 T456: `#!/usr/bin/env bash` started uutils' env, about 3 ms of every hook
+# call, 12.28 against 9.23 ms median, 40 runs, load 15.5, 2026-11-27): a dispatcher whose shebang names no interpreter still answers
+sed -i '1s|.*|#!/nonexistent-t456/bash|' "$L/mirror/scripts/hooks/l7r-guard.sh"
+check "launcher: the dispatcher run by bash, not by its shebang (exec bash \"\$h\" in scripts/hooks/l7r-hook)" "$(lr env CLONE_MAIN="$L/mirror" 2>/dev/null)" "mirror PreToolUse|in"
+check "launcher: the Idle check run by bash, not by its shebang" "$(printf '' | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/mirror" sh -c "$LAUNCH Idle" 2>/dev/null)" "mirror --idle-check|"
 chmod -x "$L/mirror/scripts/hooks/l7r-guard.sh"
 check "launcher: a mirror copy not executable, the tree's own" "$(lr env CLONE_MAIN="$L/mirror" 2>/dev/null)" "tree PreToolUse|in"
 check "launcher: the mirror's setup first, by bash with --ensure" "$(printf '' | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/mirror" sh -c "$LAUNCH setup" 2>/dev/null)" "mirror-setup --ensure|"

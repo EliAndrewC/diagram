@@ -7330,31 +7330,32 @@ that batch; the red was not in its change.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T469 (<why: the finding or measurement that files it>)
+### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/land/src/land/stop/tests.rs`, `a_running_landing_is_sent_term`: the unbounded `child.wait()` on the `sleep 30` the test TERMs is now a poll of `child.try_wait()` every 25 ms for at most 5 s (200 polls, a GUESS cap: the TERM ends the sleep in milliseconds, 0.06 s for the whole test, measured 2026-11-27), then `child.kill()` and a `child.wait()` that reaps it, and the test asserts the sleep ended by signal 15 (`ExitStatusExt::signal`). A TERM that misses - one the test process was started ignoring, which `SIG_IGN` carries through exec (T463's lead read) - is now red in 5 s (the GUESS cap), where it was a silent green 30 s, measured 2026-11-27 (the red-first runs below). No other test or code changes. Red first, measured 2026-11-27 (the crate's built test binary `l7r_gate_land-35df8d33ecfe35d2` run `--exact land::stop::tests::a_running_landing_is_sent_term`, once each, load 13 to 29): the old test plain green at 0.058 s wall, under bash with TERM ignored (`trap '' TERM` and then `exec <binary> ...`, in one `bash -c`) green at 30.07 s, the new test plain green at 0.059 s, under the trap RED at 5.06 s (`left: None, right: Some(15)`), with no `sleep 30` left running, measured 2026-11-27 (`pgrep` after the run). Green, measured 2026-11-27: `make rust-test CRATE=rust/gate/crates/land ONLY="land::stop"` 3 of 3, then `make builder-checks CRATE="rust/gate/crates/land"`: 173 passed, lint and format clean. Every new line runs on the passing path (the poll closure runs at least once; the kill and reap run on every run), so no line is left for the batch gate's coverage.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the TERMed sleep waited on for at most 5 s, then killed, its signal asserted (`land/stop/tests.rs`), red first under an ignored TERM at 5.06 s against a green 30.07 s, measured 2026-11-27 | n/a: a test, no map drawn | n/a: tooling | none | n/a |
 
 ### T469 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A TERM that fails to land in the land crate's stop test shows as a red test within seconds, never as a green run that held the suite 30 s (T463 measured 30.02 s, 2026-11-27).
+2. **The constraints.** T469's line; T463's lead read (the one way the TERM misses, an inherited ignore); 451 FR-013 (performance work); the two tiers (first-tier checks only); the brief's coverage rule (no line only a failure reaches).
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting work on the gate's time as performance work. O: T463's lead read and this task's red-first timings, measured 2026-11-27.
+4. **Do they describe the world here?** Yes, measured 2026-11-27: the crate's own built test binary was run under the same `trap '' TERM` T463 used, before and after the change.
+5. **The order.** After T463, whose alive record is committed first (5e0e3812fa), so the next slow run is caught before this fix changes what it would show. T463 filed this to land before T435, which is ticked already: no other order is owed.
+6. **The exits.** Green: the test passes plain, is red in about 5 s under an ignored TERM (the GUESS cap), and the crate's first-tier checks are clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one test, one run each way.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Under an ignored TERM the test went from green at 30.07 s to red at 5.06 s, and plain it stays green at 0.06 s, measured 2026-11-27 (the timings above), and `make builder-checks CRATE="rust/gate/crates/land"` is clean.
+10. **Before moving a constant.** n/a: the 5 s cap (200 polls of 25 ms) is a new GUESS knob, its why beside it in the test.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map: tooling. The defect is a test that passes when its subject failed (a TERM not delivered), and the fix makes it fail.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a `[perf]` task (451 FR-013): a test that could hold a suite 30 s on a missed TERM is now bounded at 5 s and red, measured 2026-11-27 (the red-first runs), which makes the gate's test runs faster in that case. It is not engine speed, so the performance checklist does not apply.
 
 
 ### T470 (<why: the finding or measurement that files it>)
@@ -7493,31 +7494,32 @@ that batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T456 (<why: the finding or measurement that files it>)
+### T456 (found by 451 T439: the `env` hop of the wrapper's `#!/usr/bin/env bash` costs 3.1 ms of every hook call, 14.85 against 11.78 ms, 40 runs, load 22.9, measured 2026-11-27, `dev/measurements/2026-11-27/hook-floor/results.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `scripts/hooks/l7r-hook` (a guard file, edited under `make guard-edit`) now execs `bash "$h" "$@"` and `bash "$h" --idle-check` where it exec'd the wrapper by its shebang, which started `/usr/bin/env` (uutils' multicall binary) before bash. Bash is found by PATH, as the setup line beside it already runs its script: dash's PATH search is a few stats and no fork, and no fixed path is assumed - `/bin/bash` and `/usr/bin/bash` are one file here (`/bin` a link to `usr/bin`, observed 2026-11-27), but nothing guarantees a fixed path in another container. The mirror-or-tree choice still asks the exec bit (`[ -x "$h" ]`), so a mirror copy not executable is passed over as before, and stdin, the exit code and stderr pass through the exec unchanged. Its why is in the launcher's header. Measured 2026-11-27 (`dev/measurements/2026-11-27/hook-floor/t456-launcher.py`, T439's scratch-tree method, a stub `l7r-guard.good`, 40 runs round-robin): the chain 12.28 -> 9.23 ms median (load 15.5, `t456-launcher.txt`) and, with the edited file itself, 11.90 -> 8.96 ms (load 15.7, `t456-launcher-as-built.txt`): 3.05 and 2.94 ms a call, about 31 s a day at T373's 10,400 calls. The other `#!/usr/bin/env bash` entries were checked, observed 2026-11-27, method: grep of `.claude/settings.json`, `scripts/hooks/` and the guards' `Command` calls of `l7r-gate.sh`. No hook entry reaches one on every call. `scripts/hooks/lib/*.sh` are sourced, and only off the hot path. `agent-stall-hooks.sh` and `finished-run-hooks.sh` are run by hand. `scripts/gates/l7r-gate.sh` is run by guards only on particular commands, several already as `bash <path>`, each beside a full gate-binary run, and by the Makefile beside the target's own seconds of work. None is changed. Red first, measured 2026-11-27 (`tests/hooks/test-l7r-guard.sh`, two new launcher cases, the mirror's dispatcher stub given a shebang naming no interpreter): on the old launcher 117 passed, 2 failed (the PreToolUse and Idle cases answered nothing); on the new 119 passed, 0 failed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the launcher execs `bash` on the dispatcher (`scripts/hooks/l7r-hook`), red first 2 of 119 in `test-l7r-guard.sh`, 3.0 ms a hook call less, measured 2026-11-27 | n/a: tooling, no map drawn | n/a: tooling | none | n/a |
 
 ### T456 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A hook call starts dash, then bash, then the guard binary, with no `env` process between, and the launcher does everything it did before.
+2. **The constraints.** T456's line; T439's record (the hop's price, the method); the launcher's suite cases (mirror-or-tree choice, stdin, exit, stderr); the guard-file rule (`make guard-edit`); 451 FR-013 (performance work); the two tiers (first-tier checks and the changed guard's suite only).
+3. **Where each comes from.** G: the GM's words of 2026-11-20 counting work that makes the builders' loop faster as performance work. O: T439's record and this task's before-and-after timings and red-first suite run, measured 2026-11-27.
+4. **Do they describe the world here?** Yes, measured 2026-11-27: the old and new launcher copies were timed side by side, round-robin, against the real wrapper walking the real `rust/guard` sources, and the suite runs the launcher as the harness runs it (`sh -c`).
+5. **The order.** After T439, which built the wrapper's `find` and priced this hop. No other task waits on it.
+6. **The exits.** Green: the suite's new cases pass with the old ones, and the chain is about 3 ms faster, as measured 2026-11-27 (`t456-launcher.py`, 40 runs). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: two timed runs agree within 0.11 ms of the saving, measured 2026-11-27 (`t456-launcher.txt` and `t456-launcher-as-built.txt`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `tests/hooks/test-l7r-guard.sh` 119 passed, 0 failed (117 and 2 failed on the old launcher), and the chain is 2.94 to 3.05 ms faster a call, measured 2026-11-27 (the runs above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map: tooling, not a defect. It is a speed change only.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a `[perf]` task (451 FR-013): it removes about 3 ms from every hook call, about 31 s a day, measured 2026-11-27 (`t456-launcher.py`, 40 runs, and T373's 10,400 calls a day). It is not engine speed, so the performance checklist does not apply.
 
 ### T481 (<why: the finding or measurement that files it>)
 

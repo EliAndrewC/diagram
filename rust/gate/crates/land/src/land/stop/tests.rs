@@ -1,5 +1,6 @@
 //! A stopped landing stops its runs: the landings of a tree found, the TERM sent, and the handler's work in a child of the test.
 
+use std::os::unix::process::ExitStatusExt;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::Duration;
@@ -85,7 +86,16 @@ fn a_running_landing_is_sent_term() {
     let mut said = Vec::new();
     assert_eq!(stop(&root, &proc, &mut |l| said.push(l.to_owned())), Ok(0));
     assert_eq!(said, vec![format!("land-stop: stopped {}", child.id())]);
+    // The sleep ends by the TERM in milliseconds; the wait is bounded at 5 s (a GUESS cap) and the sleep then killed, so a TERM
+    // that missed (one the test was started ignoring: `SIG_IGN` passes through exec) is red in seconds, not green after the
+    // sleep's 30 s (451 T469).
+    let ended = (0..200).find_map(|_| {
+        std::thread::sleep(Duration::from_millis(25));
+        child.try_wait().unwrap()
+    });
+    let _ = child.kill();
     let _ = child.wait();
+    assert_eq!(ended.and_then(|s| s.signal()), Some(15));
     assert!(!kill_group(u32::MAX));
     hold(1);
     release(1);

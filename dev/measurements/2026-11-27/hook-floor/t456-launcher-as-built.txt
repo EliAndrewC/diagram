@@ -1,0 +1,7 @@
+load1 15.7 to 15.7 (22 cores), 40 runs each, round-robin
+| row | wall median | wall p90 | wall min | CPU median |
+|---|---|---|---|---|
+| /usr/bin/env bash -c : | 4.74 | 5.55 | 2.94 | 4.59 |
+| bash -c : | 1.69 | 2.04 | 1.19 | 1.47 |
+| l7r-hook as it was (exec "$h": env hop) | 11.90 | 13.58 | 7.91 | 11.84 |
+| l7r-hook as changed (exec bash "$h") | 8.96 | 9.86 | 6.03 | 8.89 |

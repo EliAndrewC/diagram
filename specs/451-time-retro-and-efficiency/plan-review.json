@@ -4111,14 +4111,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T456 (<why: the finding or measurement that files it>)": {
-   "sha256": "fd4deab002679b0583e18525fd199c6ca2d909bf6df78460da7a06ce294faae5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T456 Approach (checklist part A)": {
-   "sha256": "5c39a192ab9c2b64ac7dd208c463923e3fadd19e3e287533e24cb169cfee8f3f",
+   "sha256": "ae71f79ef6afe04d1c2f108c41fb7122cd62c70352a51e53a114e0f62df88b0f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4161,6 +4155,24 @@
   },
   "### T463 (<why: the finding or measurement that files it>)": {
    "sha256": "f6908a8df6cb5f468f1ba944129f431d74b3aeaf0e272083d045de67dd052be2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)": {
+   "sha256": "a3f6c88cfa34fbacd0315771e70edd9e1b1b5a2f207e64931491c7bad4ea4286",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T469 Approach (checklist part A)": {
+   "sha256": "716639aec9fe585a72397b913779ae6a94636d8be9d7880729238ec65d7b5fcc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T456 (found by 451 T439: the `env` hop of the wrapper's `#!/usr/bin/env bash` costs 3.1 ms of every hook call, 14.85 against 11.78 ms, 40 runs, load 22.9, measured 2026-11-27, `dev/measurements/2026-11-27/hook-floor/results.md`)": {
+   "sha256": "ae56b7a670370863ab9bbd8c79a7d13eb85facc4aa465906b4aedfe2852aaaee",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -39116,6 +39128,85 @@
      "summary": "Unfilled template sections removed: T384's old placeholder header (replaced by the filled T384 section above) and T395, T416 and T421 (both parts), which were ticked in cb852f0a27.",
      "class": "within",
      "why": "Each removed block was template text with no decision in it (earlier.md); removing it drops nothing the GM asked for. FR-044 says a removed section owes no review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T456 (found by 451 T439: the `env` hop of the wrapper's `#!/usr/bin/env bash` costs 3.1 ms of every hook call, 14.85 against 11.78 ms, 40 runs, load 22.9, measured 2026-11-27, `dev/measurements/2026-11-27/hook-floor/results.md`)",
+    "### T456 Approach (checklist part A)",
+    "### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)",
+    "### T469 Approach (checklist part A)",
+    "(removed) ### T456 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T469-bounded-wait",
+     "summary": "The stop test's unbounded child.wait() on the TERMed sleep becomes a 25 ms try_wait poll capped at 5 s (GUESS), then kill and reap, and the test asserts the sleep ended by signal 15.",
+     "class": "within",
+     "why": "Fixes a defect in the constitution XIV sense - a test that passes when its subject (TERM delivery) failed, and held the suite 30 s doing it; the GM's fix-as-we-go and his 2026-11-20 priority on performance work both reach it. Red first under an ignored TERM (5.06 s red against 30.07 s green), plain still green. The GM's 2026-11-26 words on T104 (fix the test that fails under load) bear on a new wall-clock bound in a test; this one waits for a signal the test itself sends, ended in about 0.06 s, measured 2026-11-27 at load 13 to 29, so the 5 s cap leaves about eighty times that margin and does not make a load-flaky case."
+    },
+    {
+     "id": "T469-scope-one-test",
+     "summary": "No other test or code changes; found and left: none.",
+     "class": "within",
+     "why": "The task is filed for this one test's silent green; nothing the request asks is withheld, and no defect is named and left."
+    },
+    {
+     "id": "T469-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013, not engine speed, so the performance checklist does not apply.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks or the gate faster as performance work (the GM 2026-11-20); the test is bounded at 5 s where it could hold a run 30 s. The tag only orders the work earlier; it narrows nothing asked."
+    },
+    {
+     "id": "T469-cap-knob",
+     "summary": "The 5 s cap (200 polls of 25 ms) is a new GUESS knob, its why beside it in the test.",
+     "class": "within",
+     "why": "A constant the spec does not settle, chosen inside the task; it bounds only how long a missed TERM takes to show red and narrows nothing asked."
+    },
+    {
+     "id": "T469-tiers-coverage",
+     "summary": "First-tier checks only (make builder-checks on the land crate); every new line runs on the passing path, so none is left for the batch gate's coverage.",
+     "class": "within",
+     "why": "The GM's two tiers (2026-11-26, T308) and his words that a builder runs no coverage (2026-11-26)."
+    },
+    {
+     "id": "T469-order",
+     "summary": "Lands after T463 (its alive record committed first); T435, which T463 named it to precede, is already ticked.",
+     "class": "within",
+     "why": "Ordering inside the feature's own task graph; no request clause is touched."
+    },
+    {
+     "id": "T456-bash-exec",
+     "summary": "The hook launcher scripts/hooks/l7r-hook execs `bash \"$h\" \"$@\"` (and `--idle-check`) instead of exec'ing the wrapper by its `#!/usr/bin/env bash` shebang, removing the env process; bash found by PATH, no fixed path assumed; edited under make guard-edit.",
+     "class": "within",
+     "why": "Performance work on the builders' loop, which the GM asked to come first (2026-11-20, FR-013): about 3 ms off every hook call, measured 2026-11-27 two ways. Behavior kept: the exec-bit mirror-or-tree choice, stdin, exit code and stderr."
+    },
+    {
+     "id": "T456-others-unchanged",
+     "summary": "The other `#!/usr/bin/env bash` entries (sourced lib/*.sh, hand-run stall/finished-run hook scripts, scripts/gates/l7r-gate.sh run on particular commands or beside seconds of work) are checked and left unchanged.",
+     "class": "within",
+     "why": "Each is off the every-call hot path, found by a stated search (settings.json, scripts/hooks/, the guards' Command calls of l7r-gate.sh), observed 2026-11-27. A path slower than it could be by milliseconds beside seconds of work is not a defect (wrong outcome), and the task is filed for the hook call's hop; nothing asked is withheld."
+    },
+    {
+     "id": "T456-red-first-cases",
+     "summary": "Two new launcher cases in tests/hooks/test-l7r-guard.sh, the mirror's dispatcher stub given a shebang naming no interpreter: red on the old launcher (117 passed, 2 failed), green on the new (119 of 119).",
+     "class": "within",
+     "why": "A test whose only effect is to pin the requested change (the launcher runs the dispatcher through bash, not its shebang); enforcement of the task, not added scope."
+    },
+    {
+     "id": "T456-tiers",
+     "summary": "First-tier checks and the changed guard's suite only.",
+     "class": "within",
+     "why": "The GM's two tiers of checking (2026-11-26, T308): full rigor at the session clone's landing, not in the builder."
+    },
+    {
+     "id": "T456-placeholder-removed",
+     "summary": "The template heading `### T456 (<why: the finding or measurement that files it>)` is removed, replaced by the filled-in T456 heading carrying its finding; the Approach template likewise filled in.",
+     "class": "within",
+     "why": "A placeholder giving way to the task's own text; no decision of substance is withdrawn."
     }
    ]
   }

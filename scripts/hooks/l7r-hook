@@ -23,6 +23,12 @@
 #
 # POSIX sh, not bash: it runs before every guard call, and as dash it adds about 0.4 ms a call where bash added about 3 ms (100 calls
 # into a stub, best of 3, 2026-11-23).
+#
+# THE DISPATCHER BY `bash`, NOT ITS SHEBANG (451 T456): `#!/usr/bin/env bash` started /usr/bin/env, uutils' multicall binary, about
+# 3 ms before bash on every hook call - the chain 12.28 against 9.23 ms median, 40 runs, load 15.5, 2026-11-27
+# (dev/measurements/2026-11-27/hook-floor/t456-launcher.txt). `bash` by PATH, as the setup line runs its script: dash's PATH search is
+# a few stats and no fork, and no fixed path is assumed (here /bin/bash and /usr/bin/bash are one file, but a container need not be).
+# The mirror-or-tree choice still asks the exec bit, so a copy not executable is passed over as before.
 d=${0%/*} m=${CLONE_MAIN:-/diagram}
 if [ "${1:-}" = setup ]; then
   s=$m/scripts/container/setup-dev-env.sh; [ -f "$s" ] || s=$d/../container/setup-dev-env.sh
@@ -30,5 +36,5 @@ if [ "${1:-}" = setup ]; then
 fi
 h=$m/scripts/hooks/l7r-guard.sh; [ -x "$h" ] || h=$d/l7r-guard.sh
 # Idle: the Stop's background idle check (451 T183), an asyncRewake entry - its exit 2 wakes an idle session
-[ "${1:-}" = Idle ] && exec "$h" --idle-check
-exec "$h" "$@"
+[ "${1:-}" = Idle ] && exec bash "$h" --idle-check
+exec bash "$h" "$@"
