@@ -6608,31 +6608,35 @@ that batch; the red was not in its change.
 <!-- plan-archive: T426 to T355 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T426 to T426 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
-### T431 (<why: the finding or measurement that files it>)
+### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the mechanism test reads a make word as a target only when it is a name, never a flag.
+  - **The gap.** `rust/guard/shared/src/builder_brief.rs` `mechanism` took the characters after each `make ` that are lowercase letters, digits or `-`: in `make -C <tree> task-unstart` (T369's line) and `make -C <tree> that cannot run` (T437's) that is `-` (the uppercase `C` ends it), which has a hyphen and is no Makefile target, so the brief was refused as `make -`, no target of the Makefile yet. The same held for `make -j4` and `make --no-print-directory`.
+  - **T431-D1, the target is the first word past the flags** (`builder_brief.rs` `first_target`): after each `make `, a word opening `-` is a flag and is skipped, and where it is one of the flags whose argument is the next word (GNU make's `-C`, `-f`, `-I`, `-o`, `-W` and their long forms, `FLAG_ARGS`) that argument is skipped too; the first word left is read as the target, so `make -C <tree> new-thing` is still refused as a new mechanism while `make -C <tree> task-unstart` is read as `task-unstart`. A flag with its argument attached (`-Crust`, `--directory=rust`) is one word. The gate's `builder_brief.rs` and the builders' queue (`shared/src/builder_queue.rs`, an unlisted task's KIND) call this one function, so both read the same. (Round 1 read no word past a flag, and the plan review blocked it: a new target behind `make -C <tree>`, the pool trees' own form, would have passed the sizing check.)
+  - **Red first, measured 2026-11-27 in this tree.** `shared/src/builder_brief.rs` `a_make_flag_is_no_new_target` (T369's and T437's lines with `task-start`, `task-unstart` and `task-withdraw` known, `make -j4`, `make --no-print-directory`, a bare `make -`, and the positive cases `make -C <tree> new-thing`, `make --directory rust -f x.mk -j4 task-start, then make -s 2-up` and `make new-thing`) on the old code: 2 passed, 1 failed of `builder_brief::tests` (`left: Some("`make -`, no target of the Makefile yet")` for T369's line); on round 1's code (no word read past a flag): 2 passed, 1 failed (`left: None` for `make -C <tree> new-thing`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a make flag is no target | `a_make_flag_is_no_new_target`, red on the old code | n/a: tooling | none | n/a |
 
 ### T431 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A task line that names `make -C <dir> <target>` or any make flag is briefed by its words' real targets, never refused as a new mechanism named `make -`.
+2. **The constraints.** T431's line; the brief (a make word is a target only when it is a name, red-first on both lines' shapes); `scripts/container/builder-brief.md` SIZING (a new mechanism is two builders); no guard message changes; 100% line coverage of new Rust.
+3. **Where each comes from.** O: T369's refused brief of 2026-11-27 and T437's line read against the old `mechanism`.
+4. **Do they describe the world here?** The unit test red on the old code with both lines as fixtures.
+5. **The order.** None; independent of T432.
+6. **The exits.** Green: the shared crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/land rust/gate/crates/task"` clean (tests 572, 173 and 143 green; lint and format clean), measured 2026-11-27 in this tree.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's brief for a one-job fix was refused and passed only by an escape (`SIZING_OK`), which teaches a session to escape the sizing guard on correct work.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a check refusing correct work; what it saves is one re-run of `make builder-brief` with `SIZING_OK` (seconds), not a faster loop.
 
 
 ### T430 (<why: the finding or measurement that files it>)
@@ -6753,32 +6757,39 @@ that batch; the red was not in its change.
 **Performance work?** no - a listing's walk.
 
 
-### T432 (<why: the finding or measurement that files it>)
+### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the ready ruling exempts the landed feature's hold alone; the first pass's mirror of the old exemption is dropped.
+  - **The gap.** `rust/guard/shared/src/speckit.rs` `holding_with` returned nothing, for whatever directory it was asked of, once every tick was in `L7R_LAND_READY`; so a ready landing whose delta also touched another feature (or whose `.specify/feature.json` named one) with a started task holding passed `scripts/sync-with-main.sh` push_cmd's in-progress rule. The first pass (`rust/gate/crates/land/src/land/parity.rs` `others_in_progress`) returned no stop under `self.ready` to match, pinned by `a_landing_ruled_ready_asks_no_other_feature_as_the_push_asks_none` (451 T413).
+  - **T432-D1, the landed feature named by `SPECIFY_FEATURE`** (`holding_with`): the exemption applies only where `SPECIFY_FEATURE` equals the asked directory's name. `make land` already exports `SPECIFY_FEATURE=<the feature's directory name>` beside `L7R_LAND_TICKS` and `L7R_LAND_READY` (`land.rs`, 443 T12's fix: the push's gated merge read the wrong feature), so no new variable or format: the knob-free route. A ruling with `SPECIFY_FEATURE` unset or naming another feature exempts nothing - failing closed, the hold standing.
+  - **T432-D2, the mirror dropped** (`others_in_progress`): its `self.ready` early return removed, so the first pass asks every other directory under a ready ruling as the push now does; the test renamed `a_landing_ruled_ready_still_asks_every_other_feature_as_the_push_does` and inverted (the other feature's stop named, its directory asked). `self.ready` still serves `ready.rs`'s `export_ready`.
+  - **The sync suite.** `tests/hooks/test-sync-with-main.sh`'s ready case now names its feature (`SPECIFY_FEATURE="140-x"`), and a new case, the same ruling under `SPECIFY_FEATURE="141-z"`, is refused (rc 1).
+  - **Red first, measured 2026-11-27 in this tree.** `shared/src/speckit/tests.rs` `this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_carries`, its new assertions (ready for `T7703` under `SPECIFY_FEATURE` `008-y` and unset: one hold each; under `007-x`: none) on the old code: 0 passed, 1 failed (`left: 0, right: 1`); the inverted `push_parity` test on the old code: 6 passed, 1 failed (`left: 0, right: 1`). With the fix, measured 2026-11-27 (the same runs): the speckit module's 28 tests and `push_parity` and `ready`'s 11 green (`make rust-test ONLY=`), and the sync suite's 159 checks green (`bash tests/hooks/test-sync-with-main.sh`, its new case `IT FIRES ... (451 T432) -> refused (rc=1)`); the suite's new case on the old code was not run.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the ready exemption scoped to the landed feature | the speckit test's `SPECIFY_FEATURE` assertions, red on the old code; the sync suite's `141-z` case | n/a: tooling | none | n/a |
+| the first pass's mirror dropped | `a_landing_ruled_ready_still_asks_every_other_feature_as_the_push_does`, red on the old code | n/a: tooling | none | n/a |
 
 ### T432 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing ruled ready beside its own feature's started task still refuses to push another feature's task in progress, at the push and in the first pass alike.
+2. **The constraints.** T432's line; 451 T101's ready rule and T254's hold (`speckit::touch`); feature 133's in-progress rule; the first pass refuses what the push refuses (451 T307 part 2, T413); no guard message changes; 100% line coverage of new Rust.
+3. **Where each comes from.** O: T413's reading of `holding_with` and `others_in_progress`.
+4. **Do they describe the world here?** The unit tests red on the old code, and the sync suite's push run.
+5. **The order.** None; independent of T431. Before T479 (the ticks' same scoping).
+6. **The exits.** Green: the shared and land crates' tests, `make builder-checks` and the sync suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/land rust/gate/crates/task"` clean (tests 572, 173 and 143 green; lint and format clean) and the sync suite's 159 checks green, measured 2026-11-27 in this tree.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Another feature's half-done task could reach main through a landing ruled ready for this one - the push's in-progress rule (feature 133) broken.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `L7R_LAND_TICKS` is no more scoped than `L7R_LAND_READY` was: `holding_with` skips a started task whose id the ticks name in every feature's directory, so a landing of 449's T5 un-holds 451's started T5 (observed 2026-11-27, method: reading `holding_with`, the one place the ticks are read for a hold). Not fixed here: past this brief's two jobs, and its own red-first case. Filed as T479; lands before T415.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no - a hold's gap.
 <!-- plan-archive: T427 to T417 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 ### T427, T428 Approach (checklist part A)
@@ -7188,6 +7199,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T434 to T341 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 
 <!-- plan-archive: T439 to T373 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T447 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7227,6 +7239,7 @@ that batch; the red was not in its change.
 <!-- plan-archive: T467 to T467 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T468 to T444 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T468 to T468 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T472 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7391,6 +7404,7 @@ that batch; the red was not in its change.
 
 <!-- plan-archive: T474 to T465 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T474 to T474 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+
 ### T478 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -7477,6 +7491,32 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T481 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T479 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T479 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

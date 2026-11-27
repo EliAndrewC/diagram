@@ -331,10 +331,18 @@ fn this_trees_started_task_holds_and_another_trees_only_by_the_edits_the_push_ca
     // 451 T101: a landing of another task is held by it, unless the landing ruled every task it ticks ready beside it
     assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
     crate::env::set("L7R_LAND_READY", "T7703");
+    // 451 T432: the ruling exempts the LANDED feature's hold alone (`SPECIFY_FEATURE`, which make land exports beside it): another
+    // feature's ready landing, or one naming no feature, is held by this one's started task
+    crate::env::set("SPECIFY_FEATURE", "008-y");
+    assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
+    crate::env::unset("SPECIFY_FEATURE");
+    assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
+    crate::env::set("SPECIFY_FEATURE", "007-x");
     assert!(holding_with(&d, "T7703").unwrap().is_empty());
     assert_eq!(holding_with(&d, "T7703 T7704").unwrap().len(), 1);
     assert_eq!(holding_with(&d, "").unwrap().len(), 1);
     crate::env::unset("L7R_LAND_READY");
+    crate::env::unset("SPECIFY_FEATURE");
     // a ticked task with an open box under it is still in progress; one with none, or no box, holds nothing
     for (task, want) in [("T7702", 1), ("T7703", 0), ("T7704", 0), ("T7799", 0)] {
         marks::remove(&at.join(".git"), "007-x", &["T7701".to_owned()]);

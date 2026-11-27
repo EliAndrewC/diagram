@@ -3577,14 +3577,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T431 (<why: the finding or measurement that files it>)": {
-   "sha256": "da79c49075c5bf3e569041d2c820e9b27c49a45c5d3643821eecb61db1bf81e5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T431 Approach (checklist part A)": {
-   "sha256": "7ac94dc4839e42568fb6c0f0583f02c8fa36da9b0e42ec46a8e2643b2cf02de7",
+   "sha256": "0ca7e1af78c1a2237e094fd8322ce451593467a909ac8cad4684849162bda86d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -3619,14 +3613,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T432 (<why: the finding or measurement that files it>)": {
-   "sha256": "9e8b7a7a0e59a473ab6e99e36f195e07eaf34499f8ba07beff8200b1cb4b67d4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T432 Approach (checklist part A)": {
-   "sha256": "452009424e802deff355f8553abf16979bdcac74a2295beccec8036d61321134",
+   "sha256": "1d4f0652c7b40de8b60747228f7e66d3125794c8d8ee17a7aba4a3270e6a8e4e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4155,6 +4143,18 @@
   },
   "### T418 (left by 451 T313's closing half: with `SPECIFY_FEATURE` unset in a pool tree, `make queue` and `make builder-next` ended on line 1 of `specs/269-research-backfill/queue.txt`, a page session's queue, and listed nothing - observed 2026-11-27)": {
    "sha256": "3c100548faac201b65394fbcb08bf744143ff068cf579b100c251024d87af9a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)": {
+   "sha256": "6adc73e6be82926c3c958f9b51f5fa21f39057c72a61eceed5a109c969329b0d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)": {
+   "sha256": "aa8a03df9438db3a1a41cf3db2fda5fae18dd816a77542a766f332818ad13759",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -38776,6 +38776,121 @@
      "summary": "The two template headings '### T412 (<why...>)' and '### T418 (<why...>)' removed, replaced by the filled sections under their real headings.",
      "class": "within",
      "why": "The removed text was the unfilled template only (no decision, no content); its replacement carries the full section, so nothing judged is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)",
+    "### T432 Approach (checklist part A)",
+    "(removed) ### T431 (<why: the finding or measurement that files it>)",
+    "(removed) ### T432 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T431-D1",
+     "summary": "mechanism() reads a make word as a target only when it does not open with '-'; a flag is never read past, so in `make -C <tree> <target>` the target behind -C is never read, and that miss (a new target written behind a flag) is added to the function's MISSES list",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix stops the refusal of correct work, as T431's line asks, but it does so by leaving the sizing check blind on `make -C <tree> <target>`. That is the form both of the block's own fixture lines (T369, T437) use, and the form this project's pool-tree commands take. So a brief whose line names a NEW target as `make -C <tree> new-thing` is now sized as one builder with nothing refusing. That is a check passing bad work, a defect by constitution XIV, on the sizing rule the GM asked the tooling to enforce (T334: the coordinating session broke builder-brief.md's sizing rules 'with nothing refusing'; 2026-11-19: 'make sure all of the enforcement is real enforcement and not just instructions'). None of the three grounds holds. Reading past a flag's argument is not impossible: only a short, documented set of make flags take one (-C, -f, -I, -o, -W and their long forms, with or without '='). The reason given ('would need make's flag grammar', 'the algorithmically easier route') is implementation cost, which is not a ground. The simpler-route rule picks between routes that both work, not a route that knowingly leaves a check passing bad work. The block also names the miss and then writes 'Found and left? none'. A known defect left unfixed goes in Found-and-left with its reason, a filed task and its order (FR-009, and the form T432's block uses for T479), not in a MISSES comment. Remedy: read past the argument of the flags that take one (at least -C/--directory), with a red-first case for `make -C <tree> new-thing` refused as a new mechanism; or else record the miss under Found and left as a deferral with a filed task and 'lands before ...'."
+    },
+    {
+     "id": "T431-shared",
+     "summary": "the gate's builder_brief.rs and the builders' queue (an unlisted task's KIND) both call the one mechanism function, so both read the fix the same way",
+     "class": "within",
+     "why": "One function serving two callers; no new behavior beyond the fix itself."
+    },
+    {
+     "id": "T432-D1",
+     "summary": "holding_with applies the L7R_LAND_READY exemption only where SPECIFY_FEATURE (already exported by make land) equals the asked directory's name; unset or another feature exempts nothing (fails closed)",
+     "class": "within",
+     "why": "It restores the push's in-progress rule (feature 133) for every feature but the one being landed, which is what T432's finding asks. It reuses an existing variable, and failing closed only tightens the hold."
+    },
+    {
+     "id": "T432-D2",
+     "summary": "the first pass's (parity.rs others_in_progress) self.ready early return is removed, and T413's pinned test is renamed and inverted so the first pass asks every other feature under a ready ruling, as the push now does",
+     "class": "within",
+     "why": "It keeps the standing rule that the first pass refuses what the push refuses (451 T307, T413). The test it inverts pinned the gap being fixed."
+    },
+    {
+     "id": "T432-sync-suite",
+     "summary": "the sync suite's ready case names its feature, and a new case under another feature's SPECIFY_FEATURE is refused",
+     "class": "within",
+     "why": "A test that enforces the fix; it adds no behavior."
+    },
+    {
+     "id": "T432-found-and-left",
+     "summary": "L7R_LAND_TICKS is equally unscoped (a landing of 449's T5 un-holds 451's started T5); not fixed here, filed as T479, lands before T415",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It defers a known defect, but in the form the feature requires (FR-009): its reason (a second job past the brief's one-job sizing, with its own red-first case), a filed task (T479) and its order (before T415, and T432's item 5 orders it after this). It stays inside feature 451's pre-port tasking, so it is fixed in this step, before the port resumes."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "the two removed blocks are the unfilled template headings of T431 and T432, replaced by the filled sections above",
+     "class": "within",
+     "why": "The removed text is template placeholders only; nothing decided is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)",
+    "### T432 Approach (checklist part A)",
+    "(removed) ### T431 (<why: the finding or measurement that files it>)",
+    "(removed) ### T432 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T431-D1",
+     "summary": "builder-brief's mechanism test reads the first word past make's flags as the target, skipping the argument of -C/-f/-I/-o/-W and their long forms; one shared function serves the gate's brief check and the builders' queue",
+     "class": "within",
+     "why": "Fixes a check that refused correct work (T369's `make -C <tree> task-unstart` refused as `make -`, red on the old code) and restores what round 1 dropped and was BLOCKED for: a new target written behind `make -C <tree>` is still refused, pinned by the positive case red on round 1's code. What the sizing rule (a new mechanism is two builders) is for is kept for the forms the block pins (-C, --directory, -f, -j, -s, attached arguments); FLAG_ARGS is a closed list, and a spaced argument to an unlisted flag in a task line is hypothetical, not a known defect."
+    },
+    {
+     "id": "T431-approach",
+     "summary": "checklist part A: goal, constraints (no guard message changes, red-first, 100% line coverage), exits, budget one landing, nothing found and left",
+     "class": "within",
+     "why": "Restates the task's goal and the project's standing constraints; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "T432-D1",
+     "summary": "the L7R_LAND_READY exemption in holding_with applies only to the directory SPECIFY_FEATURE names (exported by make land already); unset or another feature exempts nothing, failing closed",
+     "class": "within",
+     "why": "Fixes a hold that let another feature's started task reach main under a ready ruling (feature 133's in-progress rule). Scopes the exemption to the landed feature, which is what the ready rule was for; adds no knob or variable. These T432 blocks are byte-identical to the text last judged BLOCKED; that verdict was the bundle's, given for T431-D1 (the T431 block says the plan review blocked round 1's no-word-past-a-flag rule), and the bundle cites no ruling against T432, so the verdict changes with T431-D1's fix, not with any T432 change."
+    },
+    {
+     "id": "T432-D2",
+     "summary": "the first pass's others_in_progress drops its self.ready early return, so it asks every other feature as the push now does; its test inverted and renamed",
+     "class": "within",
+     "why": "Keeps the first pass refusing what the push refuses (451 T307 part 2, T413) after D1; removing a mirror of the defect, not new behavior."
+    },
+    {
+     "id": "T432-sync-suite",
+     "summary": "the sync suite's ready case names its feature, and a new case under another feature's SPECIFY_FEATURE is refused",
+     "class": "within",
+     "why": "Tests that pin the requested hold: the ready case scoped to its feature, and the other feature's case refused (rc 1) with the fix. The block says the new case was not run on the old code, so its red-first is not shown; the refusal is shown red-first at unit level (the speckit assertions and the inverted push_parity test, each red on the old code). Enforcement of the fix, not added scope."
+    },
+    {
+     "id": "T432-found-and-left-T479",
+     "summary": "L7R_LAND_TICKS is as unscoped as L7R_LAND_READY was (a landed tick's id un-holds a started task of the same id in every feature); left from T432, filed as T479, ordered after T432 and before T415",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a hold gap: a landed tick's id un-holds a same-id started task in another feature) left out of this task, so presumed wrong. Legitimate because the GM-approved improvements make fixing in the task a DEFAULT ('Briefs that default to fixing in the task', improvement 4, approved 2026-11-19), and the accepted spec's FR-009 implements that default with its exception: a deferred defect states why it is not fixed here, its filed task id and its order. All three are stated (past this brief's two jobs under builder-brief SIZING, with its own red-first case; T479; after T432 and 'lands before T415'), and T479 is filed in this same feature, so the defect is scheduled, not dropped. It does not gut T432's purpose: the ready ruling's cross-feature exemption, the gap T413 found, is closed by D1 regardless."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "the empty T431 and T432 template blocks removed",
+     "class": "within",
+     "why": "Unfilled templates replaced by the filled sections; nothing of what was asked is removed."
     }
    ]
   }

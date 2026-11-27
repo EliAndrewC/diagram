@@ -98,9 +98,47 @@ pub fn mechanism(line: &str, known: &BTreeSet<String>) -> Option<String> {
     let name = |c: char| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-';
     line.split("make ")
         .skip(1)
-        .map(|rest| rest.split(|c: char| !name(c)).next().unwrap_or(""))
+        .map(|rest| {
+            first_target(rest)
+                .split(|c: char| !name(c))
+                .next()
+                .unwrap_or("")
+        })
         .find(|t| t.contains('-') && !known.contains(*t))
         .map(|t| format!("`make {t}`, no target of the Makefile yet"))
+}
+
+/// The make flags whose argument is the next word (GNU make's manual, "Summary of Options": `-C dir`, `-f file`, `-I dir`, `-o file`,
+/// `-W file` and their long forms); a flag spelled with its argument attached (`-Crust`, `--directory=rust`) is one word.
+const FLAG_ARGS: [&str; 13] = [
+    "-C",
+    "-f",
+    "-I",
+    "-o",
+    "-W",
+    "--directory",
+    "--file",
+    "--makefile",
+    "--include-dir",
+    "--old-file",
+    "--assume-old",
+    "--what-if",
+    "--new-file",
+];
+
+/// The first word after `make ` that is no flag nor a flag's argument: `-C <tree> task-unstart` is `task-unstart`, never `-`
+/// (451 T431: T369's and T437's lines were refused as a new mechanism `make -`); '' where none is.
+fn first_target(rest: &str) -> &str {
+    let mut words = rest.split_whitespace();
+    while let Some(w) = words.next() {
+        if !w.starts_with('-') {
+            return w;
+        }
+        if FLAG_ARGS.contains(&w) {
+            words.next();
+        }
+    }
+    ""
 }
 
 /// The first marker `prompt` holds on a line of its own; none where it only mentions one, or the line is not a whole marker.
@@ -160,6 +198,25 @@ mod tests {
             ("- [ ] T1 make builder-tree hands out a cold tree; I want to make sure it does not, and make land frees it", None),
             ("- [ ] T1 a hook that stops a hand dispatch; make newtarget prints it; make ", None),
             ("- [ ] T1 the guard misreads a quoted path", None),
+        ] {
+            assert_eq!(mechanism(line, &known).as_deref(), what, "{line}");
+        }
+    }
+
+    /// 451 T431: a make FLAG is no target - T369's line (`make -C <tree> task-unstart`, read as `make -`) and T437's were refused as
+    /// a new mechanism and passed only by `SIZING_OK`, 2026-11-27.
+    #[test]
+    fn a_make_flag_is_no_new_target() {
+        let known = targets("task-start:\ntask-unstart:\ntask-withdraw:\n");
+        for (line, what) in [
+            ("- [ ] T369 a task started in a second tree; make task-start refuses a task another tree's mark names, with the make -C <tree> task-unstart to run there", None),
+            ("- [ ] T437 make task-unstart refuses it with a make -C <tree> that cannot run, make task-withdraw refuses the task as started", None),
+            ("- [ ] T1 make -j4 land and make --no-print-directory x; make - alone", None),
+            // ...and a new target behind a flag is still read: past a flag's argument (`-C <dir>`, `-f <file>`), past a bare flag
+            ("- [ ] T1 make -C <tree> new-thing prints it", Some("`make new-thing`, no target of the Makefile yet")),
+            ("- [ ] T1 make --directory rust -f x.mk -j4 task-start, then make -s 2-up", Some("`make 2-up`, no target of the Makefile yet")),
+            ("- [ ] T1 make -C", None),
+            ("- [ ] T1 make new-thing prints it", Some("`make new-thing`, no target of the Makefile yet")),
         ] {
             assert_eq!(mechanism(line, &known).as_deref(), what, "{line}");
         }

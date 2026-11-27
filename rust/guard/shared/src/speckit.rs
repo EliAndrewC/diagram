@@ -20,6 +20,7 @@
 //! T88 and T93, each CLEAR, at 18:32:27Z on 2026-11-21, the mark moved by hand to land them and back after. `make land` rules each of
 //! its tasks started, its plan section CLEAR and its delta's files its own (`rust/gate/crates/land/src/land/ready.rs`) and names
 //! those it ruled in `L7R_LAND_READY`; the push and the CI merge ask this hold again under that export, so it is asked here, once.
+//! The ruling is the landed feature's alone (`SPECIFY_FEATURE`, exported beside it): another feature's hold stands (451 T432).
 //!
 //! WHY HERE, IN THE GUARD (feature 449 T118): `set_down_hooks` asks whether a status line closes a feature and `feature_approval_hooks`
 //! reads the same status line and boxes at a past revision, and the guard cannot build on the gate's crates; the gate's CI merge
@@ -505,7 +506,8 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 
 /// The open boxes that hold the landing: each started task of this feature (a mark of any tree still there, [`marks::all`] but
 /// [`marks::gone`], 451 T437), open, not ticked by
-/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101) - this tree's own whatever the delta
+/// the landing (`L7R_LAND_TICKS`) nor ruled ready beside them (`L7R_LAND_READY`, 451 T101, where `SPECIFY_FEATURE` names this
+/// feature, 451 T432) - this tree's own whatever the delta
 /// carries (feature 405 D4), another tree's only where the push's delta carries its edits ([`touch`], 451 T254); every other open
 /// box holds nothing.
 ///
@@ -533,10 +535,13 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
     };
     let name = py_name(d);
     let ticked = split(ticks);
-    // ...the landing ruled every task it ticks ready beside the started ones (451 T101): its own rule, made in `l7r-gate land`
+    // ...the landing ruled every task it ticks ready beside the started ones (451 T101): its own rule, made in `l7r-gate land` - and
+    // for ITS OWN feature alone, the one `make land` names to the push in `SPECIFY_FEATURE`; another feature the delta carries keeps
+    // its hold, and a ruling naming no feature exempts none (451 T432)
     let ready = crate::env::var("L7R_LAND_READY");
     let ready = split(&ready);
-    if !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
+    let landed = crate::env::var("SPECIFY_FEATURE") == name;
+    if landed && !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
         return Ok(Vec::new());
     }
     let all = marks::all(&common);

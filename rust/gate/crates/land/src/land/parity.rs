@@ -47,15 +47,12 @@ impl Land {
     }
 
     /// The push's in-progress rule over every other spec directory the delta touches and the feature pointer: one refusal for each
-    /// held, none where the landing is ruled ready (`L7R_LAND_READY` makes the push's `--holding` answer nothing for any directory).
+    /// held - a landing ruled ready too, since `L7R_LAND_READY` exempts the landed feature's hold alone (451 T432).
     pub(super) fn others_in_progress(
         &self,
         d: &Path,
         tasks: &[String],
     ) -> Result<Vec<String>, String> {
-        if self.ready.get() {
-            return Ok(Vec::new());
-        }
         let own = rel_of(&self.root, d);
         let mut dirs: Vec<String> = self
             .delta_names()?

@@ -95,10 +95,10 @@ fn the_feature_pointer_naming_a_feature_in_progress_is_refused() {
     assert_eq!(first_pass(&fx, &["T1"]), Vec::<String>::new());
 }
 
-/// A landing ruled ready beside the mark's task (451 T101) is told so to the push in `L7R_LAND_READY`, under which the push's
-/// `--holding` answers nothing for any directory; the first pass asks no other feature then, refusing nothing the push lets through.
+/// A landing ruled ready beside the mark's task (451 T101) is told so to the push in `L7R_LAND_READY`, which exempts the landed
+/// feature's hold alone (451 T432): the first pass still asks every other feature, and refuses one that holds, as the push does.
 #[test]
-fn a_landing_ruled_ready_asks_no_other_feature_as_the_push_asks_none() {
+fn a_landing_ruled_ready_still_asks_every_other_feature_as_the_push_does() {
     let fx = fx("parity-ready");
     fx.in_delta("specs/450-y/tasks.md", "- [ ] T5 five\n");
     fx.answers
@@ -106,9 +106,11 @@ fn a_landing_ruled_ready_asks_no_other_feature_as_the_push_asks_none() {
         .borrow_mut()
         .insert("450-y".to_owned(), "T5 five\n".to_owned());
     fx.land.ready.set(true);
-    assert_eq!(first_pass(&fx, &["T1"]), Vec::<String>::new());
+    let stops = first_pass(&fx, &["T1"]);
+    assert_eq!(stops.len(), 1, "{stops:?}");
+    has(&stops[0], "specs/450-y has a task IN PROGRESS");
     let asked = fx.answers.asked.borrow().join("\n");
-    assert!(!asked.contains("450-y"), "{asked}");
+    assert!(asked.contains("450-y"), "{asked}");
 }
 
 /// THE CASE OF 2026-11-26/27 (a): a pass made while the gate ran that the landing's last write does not take (traced to no task it
