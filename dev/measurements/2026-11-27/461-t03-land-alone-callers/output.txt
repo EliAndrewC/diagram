@@ -1,0 +1,22 @@
+== alone_owed: where it is defined and asked
+rust/gate/crates/land/src/land/alone.rs:30:    pub(super) fn alone_owed(&self) -> Result<bool, String> {
+rust/gate/crates/land/src/land.rs:362:        if self.alone_owed()? {
+== land-alone.sh: the runner (the SCRIPT constant and its one use)
+20:pub(super) const SCRIPT: &str = "land-alone.sh";
+37:        let script = self.scripts.join(SCRIPT);
+== land-alone.sh named in an executable line of rust/ or scripts/ or the Makefile (comments, the script itself and tests left out)
+rust/gate/crates/land/src/land/alone.rs:20:pub(super) const SCRIPT: &str = "land-alone.sh";
+rust/gate/crates/land/Cargo.toml:33:reads = ["scripts/land-alone.sh", "scripts/gates/closing-checks.sh"]
+scripts/gates/review-tree.sh:109:lib=$(sed -n "/^read -r -d '' PYLIB <<'PY'\$/,/^PY\$/p" "$ROOT/scripts/land-alone.sh" | sed '1d;$d')
+scripts/gates/review-tree.sh:110:[ -n "$lib" ] || die "scripts/land-alone.sh holds no PYLIB to read the attribution from"
+== l7r-gate land: the Makefile targets that run it (LAND_RUN), and the other scripts that call it
+652:LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
+658:	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
+744:	@$(LAND_RUN) --carry "$(if $(FROM),$(abspath $(FROM)))" $(COMMIT)
+747:	@$(LAND_RUN) --stop
+752:	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
+scripts/sync-with-main.sh:265:  "$ROOT/scripts/gates/l7r-gate.sh" land --unfinished "$ROOT" >&2 || die "unfinished work in the clone (above) - finish it with the command its line gives, then push"
+== the landing dispatch: the arms of land::cli that never reach Land::land
+810:        Some("--unfinished") if args.len() <= 2 => {
+814:        Some("--carry") => return carry::cli(&args[1..], &l7r_gate_task::tick::repo_root(cwd)),
+817:    let done = if args == ["--stop"] {

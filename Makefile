@@ -652,11 +652,9 @@ step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REA
 LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
-land: export COVER_OK := $(COVER_OK)
-land:           ## [project] land one task or several and tick them: each task's done commit carried first (make builder-done's, 451 T397; make carry kept for a carry by hand or a stopped one), then every cheap refusal together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
+land:           ## [project] land one task or several and tick them: each task's done commit carried first (make builder-done's, 451 T397; make carry kept for a carry by hand or a stopped one), then every cheap refusal together, then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446; no coverage run beside them, gone with the Python tests, 449 FR-001b), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
 	$(DISK_FLOOR)
-	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$$COVER_OK",@:)
 	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
 	  if [ $$rc = 0 ]; then "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep landed "$(F)" "$$(git rev-parse --path-format=absolute --git-common-dir)/task-starts.jsonl" $(T) </dev/null; fi; \
 	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/state-sync.sh" push --detach || :; fi; \

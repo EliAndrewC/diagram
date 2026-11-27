@@ -669,62 +669,62 @@ engine speed, so the performance checklist does not apply.
    before starting another landing; 461 T01 and T05 not queued behind an unread red.
 
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-### T03 (<why: the finding or measurement that files it>)
+### T03 (D11: 451 T302 part 1, confirmed by reading before phase 4 retires land-alone)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: nothing changes; a grep over `rust/`, `scripts/` and the Makefile, kept as `dev/measurements/2026-11-27/461-t03-land-alone-callers/callers.sh`, its output `output.txt` beside it and read in `results.md` (read 2026-11-27 at f412c319b7, method: that script). `alone_owed` is asked once, in `Land::land`; `land-alone.sh` is run once, by `alone.rs`'s `SCRIPT`; `Land::land` is reached only by `make land` and `make land-batch` (the same command), the other arms of `land::cli` (`--carry`, `--stop`, `--unfinished`) returning before it; a builder lands nothing (`make builder-done` commits its tree, the session carries it). So only a session's own clone lands alone: T302 part 1 is closed, a pointer written on 451 T302's box, which stays open for parts 2 and 3 (part 4 is T30).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the read | n/a: nothing changed | n/a | n/a | n/a |
 
 ### T03 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record says, with its command, that land-alone runs only from a session's own clone, so T30 retires it knowing every caller.
+2. **The constraints.** D11; 451 T302 part 1; FR-008 (`land/writers.rs` stays, untouched here).
+3. **Where each comes from.** G: the GM's confirmation of 2026-11-26 that every session has its own clone, quoted on 451 T302's line; O: the grep, `output.txt`.
+4. **Do they describe the world here?** Yes: the grep was run over this tree at f412c319b7.
+5. **The order.** Phase 0, before T30 (which retires what the grep found).
+6. **The exits.** Green: the recorded grep re-run gives the same lines. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one grep, one read of `land::cli`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `bash dev/measurements/2026-11-27/461-t03-land-alone-callers/callers.sh | diff - dev/measurements/2026-11-27/461-t03-land-alone-callers/output.txt` is empty.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code changes; not a defect.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `scripts/gates/review-tree.sh` lines 109-110 read `land-alone.sh`'s `PYLIB` (its step 3, the attribution) and run its `split`; once T30 removes step 3, `make review-tree` dies "holds no PYLIB" - a review bundle that cannot be built. Not fixed here: it moves code T30 is about to retire, and where the split should live is that task's choice, not a read's. Filed as T36; lands before T30.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
+### T04 (plan, "Found and left": the land help and the gate line say a coverage run happens that does not)
 
-### T04 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the Makefile's `land` help said the first pass ran "the changed modules' coverage", and `long_runs.rs`'s gate line said "(the changed modules' coverage beside it)", though `long_runs.rs`'s own doc says that check went with the Python tests (449 FR-001b). Both restated: the help says no coverage runs beside the gate, the gate line names the gate alone. The help's `[COVER_OK="<reason>"]` went with it, and the `land` recipe's `COVER_OK` export and its escape log: nothing reads `COVER_OK` in the land crate (a grep over `rust/`, 2026-11-27), so an escape that escapes nothing was being recorded. `docs/make-targets.html` regenerated by `make docs`. Red first: `long_runs/tests.rs`'s `the_gates_the_stamp_names_run_and_the_cohort_beside_make_done` now pins the gate line whole and no "coverage" in the output; on the old code 1 failed, 8 passed (`make rust-test CRATE=rust/gate/crates/land ONLY="land::long_runs::tests"`, 2026-11-27), green after.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the words | n/a: words only, pinned by the test above | n/a | n/a | n/a |
 
 ### T04 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A reader of `make help` and of `make land`'s output is told only of checks that run.
+2. **The constraints.** XIV (a wrong statement is a defect fixed where found); `long_runs.rs`'s doc (449 FR-001b).
+3. **Where each comes from.** R: `long_runs.rs` lines 1-3; O: the grep of `COVER_OK` and of "modules' coverage" over `rust/`, `scripts/` and the Makefile, 2026-11-27.
+4. **Do they describe the world here?** Yes: no coverage step is in `long_runs.rs`, and `COVER_OK` is read by no Rust.
+5. **The order.** Phase 0; before nothing.
+6. **The exits.** Green: the test above green, `make builder-checks CRATE="rust/gate/crates/land"`, `make help` read back. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make help | grep 'land one task'` names no coverage; the land crate's tests green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of the help and the landing's output is no longer told a coverage run happens beside the gate.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `scripts/land-alone.sh` line 573 still forwards `COVER_OK` to the inner landing, and the Makefile's `FREE_TEXT` still names it; both are harmless (it is empty and read by nothing) and go with land-alone in T30. Not a defect: no visible effect, so not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
-
-<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
-<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 ### T07 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1487,6 +1487,33 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T34 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T36 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T36 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

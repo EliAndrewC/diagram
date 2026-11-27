@@ -216,6 +216,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T03 (D11: 451 T302 part 1, confirmed by reading before phase 4 retires land-alone)": {
+   "sha256": "985bc2776e1ce5913cf896a1c39f88d86a6fde9862f934eb8148457af7c3dbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "f34d891eeeae7111205974e2ba68088a2ca63917a861076820e664a9cc83c0e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T04 (plan, \"Found and left\": the land help and the gate line say a coverage run happens that does not)": {
+   "sha256": "1b900f292926fb560ffd8d53e247b7716da0403952f25d3b1cd8089df82c1ddf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "9359fb96dbaa2a9dfcd13cc0b82ab21baccfd18608b5d13f5599869b536f544b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1409,6 +1433,54 @@
      "summary": "Three checks outside the land crate (push table delta, record-owed via entry-gate.sh, claims gate) take their delta from merge-base with origin/main, so in phase 1 a hand-in may be refused for another task's record, claim or push row; not fixed in T06, filed as T34 to land before T10, with phase 1's acceptance left to a ruling.",
      "class": "within",
      "why": "A sequencing deferral of a recorded defect to a filed task, not a decision to accept it; no requirement is narrowed by this block. Should T34 instead rule that phase 1 accepts these false refusals, that acceptance is a narrowing of FR-002 (a refusal the builder cannot cure) and is owed its own MODE 1 check; and T34 should land before builders meet the mode live (T08 wires it), not only before T10."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T03 (D11: 451 T302 part 1, confirmed by reading before phase 4 retires land-alone)",
+    "### T03 Approach (checklist part A)",
+    "### T04 (plan, \"Found and left\": the land help and the gate line say a coverage run happens that does not)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-a",
+     "summary": "D11 / 451 T302 part 1 is settled by a recorded, re-runnable grep (callers.sh, output.txt) and a read of land::cli, with no code change; T302 part 1 closed by a pointer, parts 2-3 left open, part 4 is T30",
+     "class": "within",
+     "why": "A read that tells T30 every caller of land-alone before it is retired. It serves the request's lane (FR-001, FR-003), changes nothing and drops no check (FR-008). Its search space is stated (rust/, scripts/, the Makefile, by a kept script), and its Done is the script re-run diffed against its output."
+    },
+    {
+     "id": "T03-b",
+     "summary": "review-tree.sh lines 109-110 rely on land-alone.sh's PYLIB and split; not fixed here, filed as T36 to land before T30",
+     "class": "within",
+     "why": "Nothing is broken today: the bundle build only breaks once T30 removes land-alone's step 3. It is filed and ordered ahead of the change that would break it, so no known defect is carried past the step that causes it. Where the split should live is a design choice that belongs to the task retiring the code."
+    },
+    {
+     "id": "T04-a",
+     "summary": "The Makefile's land help and long_runs.rs's gate line are restated so they no longer claim a changed-modules coverage run that does not happen; docs/make-targets.html regenerated",
+     "class": "within",
+     "why": "A wrong statement shown to the reader of make help and make land is a defect, fixed where found (XIV). It matches what was asked: coverage went with the Python tests (449 FR-001b), and the spec strikes the sketch's coverage clause."
+    },
+    {
+     "id": "T04-b",
+     "summary": "COVER_OK removed from the land help, the land recipe's export and its escape log",
+     "class": "within",
+     "why": "The block's grep finds nothing in the land crate that reads COVER_OK, so it was an escape from nothing, logged as if it were one. Removing it drops no check from the gate or the push (FR-008) and adds no behavior."
+    },
+    {
+     "id": "T04-c",
+     "summary": "A red-first test in long_runs/tests.rs pins the whole gate line and checks that no 'coverage' appears in the output",
+     "class": "within",
+     "why": "Enforcement of T04-a: the test only fails if the false claim comes back."
+    },
+    {
+     "id": "T04-d",
+     "summary": "land-alone.sh line 573's COVER_OK forwarding and the Makefile FREE_TEXT entry are left for T30 and not filed",
+     "class": "within",
+     "why": "The variable is empty and nothing reads it, so it has no visible effect and is not a defect (XIV v2.36.0). It goes away with land-alone in T30. Leaving a harmless leftover needs no ruling."
     }
    ]
   }

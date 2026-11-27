@@ -131,7 +131,9 @@ impl Land {
         cohort: &mut Option<(Child, PathBuf)>,
     ) -> Result<i32, String> {
         for target in targets {
-            self.say(&format!("land: the green-gate stamp does not cover this content - make {target} (the changed modules' coverage beside it)"));
+            self.say(&format!(
+                "land: the green-gate stamp does not cover this content - make {target}"
+            ));
             if self.run_gate(target)? != 0 {
                 self.warn(&format!(
                     "land: make {target} is red - nothing landed; fix it and run make land again"

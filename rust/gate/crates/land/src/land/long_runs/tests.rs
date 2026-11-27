@@ -96,8 +96,12 @@ fn the_gates_the_stamp_names_run_and_the_cohort_beside_make_done() {
     assert_eq!(fx.land.long_runs(), Ok(1));
     let (out, err) = fx.said();
     assert!(out.contains("land: make cohort-landing JOBS=8 beside the gate (8000 MB free"));
-    assert!(out.contains("make done (the changed modules"));
-    assert!(out.contains("make hooks-test (the changed modules"));
+    // the gate line names the gate alone: no coverage runs beside it since feature 449 FR-001b (461 T04)
+    assert!(out.contains("land: the green-gate stamp does not cover this content - make done\n"));
+    assert!(
+        out.contains("land: the green-gate stamp does not cover this content - make hooks-test\n")
+    );
+    assert!(!out.contains("coverage"));
     assert!(out.contains("seed 7 passed the whole gate\na regression\n"));
     assert!(err.contains("the green-gate stamp still refuses"));
 }
