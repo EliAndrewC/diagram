@@ -44,7 +44,7 @@ local bare `origin` (the land crate's `carry/tests.rs` already builds such a wor
 **Project Type**: the project's own tooling (gate binary, Makefile targets).
 
 **Performance Goals**: the spec's Success measure, over a like window (FR-010) against the night: landed tasks per hour of
-builder work at least the night's, read beside task size (FR-007); the cross-blocking row no higher than 32.3 minutes over 130
+builder work at least the night's, read beside task size (FR-007); the cross-blocking row no higher than 32.3 minutes over 130 (measured 2026-11-27 (make task-time, spec-fidelity's re-run))
 tasks; total tokens per landed task no higher (FR-006).
 
 **Constraints**: no history rewritten (no `git rebase`, amend, squash or force push: the "rebase" of FR-002 is a new application
@@ -70,7 +70,7 @@ The lane's own costs are the FR-006 and FR-007 measurement (D12), taken before (
 - **VI**: PASS - every phase names its verification (each phase's "Verify" line below): the changed crates' tests red first, the
   guard suites for a guard, `make land`'s gate at each landing, the end-to-end scratch-clone test, and for phases 2 and 3 a real
   batch of this feature's own tasks through the lane, its lane log read.
-- **X**: PASS, with the file-scale plan of D15: new code owes 100% of its lines from its own tests; no function past 100 lines;
+- **X**: PASS, with the file-scale plan of D15: new code owes 100% (the project's CONVENTION) of its lines from its own tests; no function past 100 lines; (100% the project's CONVENTION; file lengths measured 2026-11-27 (wc -l))
   `land.rs` (873 lines), `land/tests.rs` (908) and the shared `builder_queue.rs` (915) gain no more than a dispatch arm, new code
   going to new files; `carry.rs` (661) gains the no-commit form only. Every knob is a named constant or variable with its label
   (`make tunables` does not walk the tooling crates, so each is recorded beside its rule, as 451 D14 did).
@@ -109,9 +109,9 @@ not count. The tree is the tool's: nobody's work lives there, and the lane bring
 
 | tree | cache for a gate | pool | cost |
 |---|---|---|---|
-| `<clone>-land`, adopted | its own target directory, 39 GB, built by past landings' gates (coverage builds included); its warmth against today's main unmeasured | adopted as is (a rename chills a cache, 0.1 s to 66 s, Makefile's adopt help, measured 2026-11-26) | keeps the 37 GB T302 part 4 would have dropped; that cache is needed by whatever tree gates |
-| b1 | 16 GB of test builds and lint only: builders run no coverage (two tiers), so a gate's coverage build starts cold there | already a pool tree | takes the fourth pool slot: a fourth builder needs the cap raised |
-| a new tree | cold: 14 to 30 minutes for a first full check (`docs/process-decisions.md`, "Two code builders at once") | made by the pool | a third cache on disk |
+| `<clone>-land`, adopted | its own target directory, 39 GB (measured 2026-11-27 (du)), built by past landings' gates (coverage builds included); its warmth against today's main unmeasured | adopted as is (a rename chills a cache, 0.1 s to 66 s, Makefile's adopt help, measured 2026-11-26) | keeps the 37 GB T302 part 4 would have dropped; that cache is needed by whatever tree gates (measured 2026-11-27 (du)) |
+| b1 | 16 GB of test builds and lint only: builders run no coverage (two tiers), so a gate's coverage build starts cold there | already a pool tree | takes the fourth pool slot: a fourth builder needs the cap raised (measured 2026-11-27 (du)) |
+| a new tree | cold: 14 to 30 minutes for a first full check (`docs/process-decisions.md`, "Two code builders at once") | made by the pool | a third cache on disk (measured 2026-11-26 (docs/process-decisions.md, two builders)) |
 
 The sizes and the tree's existence: `git worktree list` holds `/diagram/.clones/diagram-backlog-land`, and the target directories
 under `~/.cache/l7r-cargo-target/` are 39 GB (`-land`), 16 GB (`-b1`) and 104 GB (the clone's own) (observed 2026-11-27, method:
@@ -176,7 +176,7 @@ conflict turns, which were the coordinator's (FR-006 counts them where they land
 
 ### D4 - the first pass at hand-in: what a builder can answer is asked; what is the lane's is not
 
-**Decision.** `cheap_refusals` takes a mode. In the hand-in mode it reads the delta as the working tree against `origin/main`
+**Decision.** `cheap_refusals` takes a mode. In the hand-in mode it reads the delta as the working tree against `origin/main` (measured 2026-11-27 (reading the code))
 (`git diff --name-only origin/main`, not `origin/main...HEAD`), writes its records into the tree uncommitted, so step 5 commits
 them with the work, and asks:
 
@@ -195,14 +195,14 @@ refused there by `writer_refusal` and the hold for reasons no builder can cure.
 
 ### D5 - when the lane starts a batch, and what it holds (FR-004, 451 T415)
 
-**Decision.** The lane starts a batch as soon as it is idle and a hand-in waits: every waiting hand-in of the oldest hand-in's
+**Decision.** The lane starts a batch as soon as it is idle and a hand-in waits: every waiting hand-in of the oldest hand-in's (LANE_MAX a GUESS knob)
 feature, oldest first, up to `LANE_MAX` = 6, after `LANE_WAIT_S` = 0 s. One feature a batch, because `make land` takes one `F=`.
 A repair's hand-in is ordered by its own hand-in time. This replaces T415's printed `make land` line: the lane runs it.
 
 **Why.** The spec seeds the knob from trial 458's finding, and trial 458 has none yet (not read before 2026-11-28; its spec says
 the pipeline ran rolling, so the gate ran "when a few tasks stood staged"). So both are GUESS knobs, seeded: 6 is the two-tier
 threshold's ceiling of "about six tasks" (`docs/process-decisions.md`), and an immediate start is the trial's "stronger
-version" (a continuous gate whose batch is whatever arrived while the last ran), which a lane of its own makes free. Mergify's
+version" (a continuous gate whose batch is whatever arrived while the last ran), which a lane of its own makes free. Mergify's (Mergify's documented default, CONVENTION)
 default 30 s wait was priced: with a gate of minutes, hand-ins gather behind a running batch anyway. The night's reading - smaller
 batches landed on the first or second try after 10:00Z, the 63-task batch took 14 attempts - argues for the cap. Trial 458's
 verdict resets both; the lane log gives it the batch sizes it asks for.
@@ -286,7 +286,7 @@ replayed is not).
 
 **Decision.** `make lane-wait`, run by the coordinator with `run_in_background: true`, blocks until the lane writes a line owed
 to the coordinator past its read mark - a batch landed, a repair entry, a US5 stop, an arbiter owed, the runner dead - prints
-those lines and moves the mark; the session's next prompt carries the notification. A landed batch's line is one line: `lane: 461
+those lines and moves the mark; the session's next prompt carries the notification. A landed batch's line is one line: `lane: 461 (an example line, its figures a GUESS)
 batch 7 landed T12 T14 (2 runs, 11.4 min); T13 ejected -> repair r3 (rust/gate/crates/land test)`. It has no ceiling of its own,
 so it wakes the session only for what FR-005 lists. `make lane` prints the same status on demand.
 
@@ -299,8 +299,8 @@ killed early loses nothing.
 **Why.** FR-005: "once per landed batch with a short status, and otherwise only for US5's cases". Label: TAKE (R1, the platform's
 background command). Unknown, so measured in phase 2: how long a background command outlives the turn that started it; if the
 platform ends it at a time limit, the Stop rule and the prompt hook above catch it, and a ceiling (`LANE_WAIT_MAX`, GUESS) would
-be priced then as a wake FR-005 does not list, under XVI. Cost: each wake re-reads the coordinator's context (540k to 966k tokens
-a call on the night, the spec's Why), one per batch, the floor the spec sets. Monitor priced: a wake per output line, a watch at
+be priced then as a wake FR-005 does not list, under XVI. Cost: each wake re-reads the coordinator's context (540k to 966k tokens (measured 2026-11-27 (the transcript's usage fields))
+a call on the night, the spec's Why), one per batch, the floor the spec sets. Monitor priced: a wake per output line, a watch at (Claude Code's documented limits, CONVENTION)
 most 30 minutes.
 
 ### D10 - FR-001's gate-write guard and 451 T405's tree check, by construction plus a fixture
@@ -342,13 +342,13 @@ sources over both windows:
 
 | figure | source | night (R3) |
 |---|---|---|
-| tasks landed, builder hours, landed per builder hour | `make task-time` header; pool log's held spans | 130 tasks; tree hours from the busy shares 93/98/83% |
-| cross-blocking row (US1) | `make task-time` tasks' side | 32.3 min over 130 tasks |
-| landings' side blocking | `make task-time` | 569.1 of 772.5 min |
+| tasks landed, builder hours, landed per builder hour | `make task-time` header; pool log's held spans | 130 tasks; tree hours from the busy shares 93/98/83% (measured 2026-11-27 (tree-idle.py)) |
+| cross-blocking row (US1) | `make task-time` tasks' side | 32.3 min over 130 tasks (measured 2026-11-27 (make task-time)) |
+| landings' side blocking | `make task-time` | 569.1 of 772.5 min (measured 2026-11-27 (make task-time)) |
 | landings refused before a gate (US2) | lane log (after); update note (before) | 19 of 50 |
-| tokens per landed task, by kind and actor (FR-006) | every transcript in the window summed by actor (builders, repair builders, review agents, the coordinator), over tasks landed; the per-task T512 booking a cross-check only | coordinator 0.58M output / 616M cache read; booked to tasks 6,179k output / 1,147M cache read (04:30Z on) |
+| tokens per landed task, by kind and actor (FR-006) | every transcript in the window summed by actor (builders, repair builders, review agents, the coordinator), over tasks landed; the per-task T512 booking a cross-check only | coordinator 0.58M output / 616M cache read; booked to tasks 6,179k output / 1,147M cache read (04:30Z on) (measured 2026-11-27 (the transcripts)) |
 | task size beside each per-task figure (FR-007) | T512's test and non-test lines, median and total | from the kept table |
-| concurrency (FR-010) | trees held time-weighted from the pool log; load median from `make sampler-report` | three trees, 93/98/83% busy |
+| concurrency (FR-010) | trees held time-weighted from the pool log; load median from `make sampler-report` | three trees, 93/98/83% busy (measured 2026-11-27 (tree-idle.py)) |
 
 A window is LIKE when it holds eight hours or more of builder work and its time-weighted trees held is within 0.5 of the
 night's (GUESS knob); otherwise both concurrencies are printed beside every figure. **Why.** FR-006 counts a cost "where it
