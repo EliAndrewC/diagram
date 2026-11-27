@@ -4010,7 +4010,7 @@
    "declared": "spec-fidelity"
   },
   "### T454 Approach (checklist part A)": {
-   "sha256": "e5ec84a8819a2a0af4ab5e6c20d8b9f6ac79b780d402eb07233203cbb8de5d6a",
+   "sha256": "d035e3daf9ae382e2a6b05807c966bfa21c72245de601bcd96cfa6be98dcf785",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4047,6 +4047,12 @@
   },
   "### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))": {
    "sha256": "a41ede100356cda39ae2b0dc1a05c6518703ee2e870de8e4dd3ef917cfb2517f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)": {
+   "sha256": "e13ebfe1254bbd7e1b356e265f45bd40de134436ff8d04f3f17a23f425d439db",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -36215,6 +36221,46 @@
      "why": "Their earlier text held no decision, so removing them narrows nothing; T434's content now stands under its full heading."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)",
+    "### T454 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T454-D1",
+     "summary": "A test-only drop guard `Slow` lays the stand-in cargo's slow file inside each of the three thread::scope tests' closures and removes it on drop, so a failed assertion's unwind ends the stand-in before the scope joins the pre-warm run",
+     "class": "within",
+     "why": "It is the task line's fix shape and does the thing the task is for: a red pre-warm test no longer holds the rustc suite. The assertions, the stand-in and the never-cut build in flight (451 T336) are kept, so nothing the tests checked is dropped."
+    },
+    {
+     "id": "T454-D2",
+     "summary": "The two scoped runs' ceiling knobs(600_000) goes to knobs(60_000)",
+     "class": "within",
+     "why": "A test knob with no research claim, cut to bound how long a red run can hold the suite. It equals the 60 s bounds the tests already have (until_calls, the phase-line wait), and measured green runs are about 0.5 s, so it refuses no correct run that the existing bounds would pass. Nothing asked is narrowed."
+    },
+    {
+     "id": "T454-D3",
+     "summary": "The ceiling test keeps knobs(50) and the unscoped `again` run is left unchanged",
+     "class": "within",
+     "why": "These are outside the defect: knobs(50) is already short, and `again` asks the stand-in cargo nothing, so it cannot hold the suite on a SLOW build. Leaving them alone is not a narrowing, and no defect is left."
+    },
+    {
+     "id": "T454-D4",
+     "summary": "The task is tagged [perf] under 451 FR-013, and the engine performance checklist is ruled not to apply",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks faster as performance work, and a red run of the checks' rustc suite ending in seconds instead of about 70 s is exactly that. The engine checklist covers engine speed, which this change does not touch."
+    },
+    {
+     "id": "T454-D5",
+     "summary": "Found and left: none; no map changes",
+     "class": "within",
+     "why": "No defect is deferred. The grep census of \"slow\" and /slow over rust/gate/crates/rustc/src (its search space stated) finds no other test that lays the file."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -55174,6 +55220,44 @@
      "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3",
      "class": "within",
      "summary": "the round arbiter accepted T448's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T454": {
+   "section_sha256": "a5cf1f1a23309e2776501542c7192eea7b471101d05ab7731df3bc318f68f578",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T454-D1",
+     "summary": "A test-only drop guard `Slow` lays the stand-in cargo's slow file inside each of the three thread::scope tests' closures and removes it on drop, so a failed assertion's unwind ends the stand-in before the scope joins the pre-warm run",
+     "class": "within",
+     "why": "It is the task line's fix shape and does the thing the task is for: a red pre-warm test no longer holds the rustc suite. The assertions, the stand-in and the never-cut build in flight (451 T336) are kept, so nothing the tests checked is dropped."
+    },
+    {
+     "id": "T454-D2",
+     "summary": "The two scoped runs' ceiling knobs(600_000) goes to knobs(60_000)",
+     "class": "within",
+     "why": "A test knob with no research claim, cut to bound how long a red run can hold the suite. It equals the 60 s bounds the tests already have (until_calls, the phase-line wait), and measured green runs are about 0.5 s, so it refuses no correct run that the existing bounds would pass. Nothing asked is narrowed."
+    },
+    {
+     "id": "T454-D3",
+     "summary": "The ceiling test keeps knobs(50) and the unscoped `again` run is left unchanged",
+     "class": "within",
+     "why": "These are outside the defect: knobs(50) is already short, and `again` asks the stand-in cargo nothing, so it cannot hold the suite on a SLOW build. Leaving them alone is not a narrowing, and no defect is left."
+    },
+    {
+     "id": "T454-D4",
+     "summary": "The task is tagged [perf] under 451 FR-013, and the engine performance checklist is ruled not to apply",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks faster as performance work, and a red run of the checks' rustc suite ending in seconds instead of about 70 s is exactly that. The engine checklist covers engine speed, which this change does not touch."
+    },
+    {
+     "id": "T454-D5",
+     "summary": "Found and left: none; no map changes",
+     "class": "within",
+     "why": "No defect is deferred. The grep census of \"slow\" and /slow over rust/gate/crates/rustc/src (its search space stated) finds no other test that lays the file."
     }
    ],
    "verdict": "CLEAR"

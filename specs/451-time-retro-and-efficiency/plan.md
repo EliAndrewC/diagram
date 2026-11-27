@@ -7594,31 +7594,32 @@ batch; the red was not in its change.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T454 (<why: the finding or measurement that files it>)
+### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs`, a test-only guard `Slow` lays the stand-in cargo's `slow` file and removes it on drop. Each of the three `std::thread::scope` tests (observed 2026-11-27, method: reading `prewarm.rs`, every `thread::scope` in it) (`a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done`, `it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight`, `the_ceiling_passing_mid_build_ends_it_after_that_build`) lays it INSIDE the scope's closure and drops it where it used to remove the file. A failed assertion inside the scope unwinds the closure, which drops its locals (the guard among them) before `std::thread::scope` joins the pre-warm run, so the stand-in ends within one poll. The two scoped runs at `knobs(600_000)` go to `knobs(60_000)`; the ceiling test keeps its `knobs(50)`, and the unscoped `again` run is left alone, since it asks cargo nothing. The green tests' own durations, before the fix at load1 16.5 to 17.8, are 0.31 to 0.33 s, 0.48 to 0.50 s and 0.30 to 0.31 s, measured 2026-11-27 (each test run alone three times from the crate's test binary in `/diagram/.clones/diagram-backlog-b1`, `--exact`, a fresh `TMPDIR`, timed around the process, 22 cores). After it, at load1 13.5 to 14.4, they are 0.33 to 0.37 s, 0.50 to 0.51 s and 0.31 s, measured 2026-11-27 (the same method). So under the 60 s ceiling a green run keeps over 100 times its own time in hand, and that ceiling equals the tests' own 60 s bounds (`until_calls`, the wait for a phase line), which a loaded run already has to pass, measured 2026-11-27 (the timings above, and reading `prewarm.rs`). Red-first, `assert!(!spare(&world.slots))` in `it_starts_a_crate...` was forced to `assert!(spare(...))` (a temporary edit, reverted) and on the old code libtest finished in 69.89 s, wall 72.9 s, load1 17.1 before and 11.3 after, the failing test panicking at line 210, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`, its `finished in` and `time`). With the fix the same red finished in 6.07 s, wall 14.3 s, load1 8.3 before and 12.6 after, and that test alone took 0.41 s, measured 2026-11-27 (the same run, then the test alone from its binary). Green after the revert, 135 passed in 2.15 s with lint and format clean, measured 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/rustc"`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: a test-only change | - | - | - | - |
 
 ### T454 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A red assertion in a pre-warm scoped test fails the rustc suite in seconds instead of holding it 45 to 90 s, measured 2026-11-27 (T445's record, section 3, and this task's red-first run).
+2. **The constraints.** The tests keep checking what they checked: the same assertions, the same stand-in, and the build in flight never cut (451 T336). Coverage counts every new line: `Slow::lay` and `drop` run in each scoped test (observed 2026-11-27, method: reading the diff).
+3. **Where each comes from.** O: T445's record, section 3, 44.45 s for one `SLOW` build at load 25 to 31, measured 2026-11-27 (`/usr/bin/time` of the stand-in's script); O: this task's timings above. G: the task line's fix shape.
+4. **Do they describe the world here?** Yes. The red-first run reproduced the hold on this tree's old code, 69.89 s, and the same red ended in 6.07 s after the fix, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc`, libtest's `finished in`).
+5. **The order.** After T445 (the record), alone: one test file.
+6. **The exits.** Green: the red-first figures above, and the suite green at the first tier. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. After the fix, `grep` of `"slow"` and `/slow` over `rust/gate/crates/rustc/src` finds only `Slow::lay` and the `SLOW` script, so no other test lays the file.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The forced red took 69.89 s before and 6.07 s after (0.41 s for the test alone), and green is 135 of 135, measured 2026-11-27 (the runs above).
+10. **Before moving a constant.** The ceiling `knobs(600_000)` to `knobs(60_000)` in two test runs is a test knob with no research claim. It is over 100 times the green runs' 0.5 s and equal to the tests' own 60 s bounds, measured 2026-11-27 (the timings above).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** It fixes a wrong outcome: a red test held the suite (and every builder's check behind it) 45 to 90 s, measured 2026-11-27 (T445's record). No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** None.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, a `[perf]` task (451 FR-013): a red run of the checks' rustc suite ends in seconds, where before the fix it took 70 s, measured 2026-11-27 (the red-first run above). That is not engine speed, so the performance checklist does not apply.
 
 
 ### T455 (<why: the finding or measurement that files it>)

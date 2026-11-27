@@ -100,6 +100,26 @@ fn let_go(dir: &Path) -> bool {
 const SLOW: &str =
     "i=0\n[ \"$1\" = test ] && while [ -f \"$(dirname \"$0\")/slow\" ] && [ $i -lt 600 ]; do sleep 0.05; i=$((i+1)); done\nexit 0";
 
+/// `SLOW`'s `slow` file, laid beside it and removed when this drops - by the test where its build should end, or by the unwind of an
+/// assertion failed inside a `std::thread::scope`, which drops the scope's locals before the scope joins the pre-warm run. Laid
+/// inside the scope's closure, so a red test frees the stand-in within one poll: the old shape, `slow` removed by a line after the
+/// assertions, left the joined run waiting on each build's 600 polls (69.9 s for one red at load 17, 451 T454).
+struct Slow(PathBuf);
+
+impl Slow {
+    fn lay(world: &World) -> Slow {
+        let file = world.target.join("slow");
+        std::fs::write(&file, "").unwrap();
+        Slow(file)
+    }
+}
+
+impl Drop for Slow {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_file(&self.0);
+    }
+}
+
 #[test]
 fn the_moved_crates_test_builds_are_asked_as_a_real_run_asks_them_a_crate_before_its_dependents() {
     // only `b` moved: `a`, which builds from nothing of it, is left alone
@@ -156,15 +176,15 @@ fn still_building(root: &Path) {
 fn a_real_run_in_its_tree_ends_it_once_the_build_in_flight_is_done() {
     let (root, from) = moved_tree("a");
     let world = world_with(&root, SLOW);
-    std::fs::write(world.target.join("slow"), "").unwrap();
     let done = std::thread::scope(|s| {
-        let going = s.spawn(|| run(&world, &since(&from), &knobs(600_000)));
+        let slow = Slow::lay(&world);
+        let going = s.spawn(|| run(&world, &since(&from), &knobs(60_000)));
         // cargo is in the first crate's build when a run of the checks joins the tree's record: the build is not cut (a rustc
         // killed mid-write leaves a session no later build links from, feature 451 T336)
         until_calls(&world, 1);
         stage(&world.target, 4242, me().start);
         still_building(&root);
-        std::fs::remove_file(world.target.join("slow")).unwrap();
+        drop(slow);
         going.join().unwrap()
     });
     assert_eq!(done.code, 0);
@@ -192,9 +212,9 @@ fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
     let mut world = world_with(&root, SLOW);
     let slots = scratch("prewarm-slots");
     world.slots = Slots::at(slots.to_path_buf(), 2);
-    std::fs::write(world.target.join("slow"), "").unwrap();
     let done = std::thread::scope(|s| {
-        let going = s.spawn(|| run(&world, &since(&from), &knobs(600_000)));
+        let slow = Slow::lay(&world);
+        let going = s.spawn(|| run(&world, &since(&from), &knobs(60_000)));
         until_calls(&world, 1);
         // it holds one slot, signed as a pre-warm, with the other spare
         let signed = std::fs::read_to_string(slots.join("slot-0")).unwrap();
@@ -208,7 +228,7 @@ fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
         assert!(real.hold.is_some());
         still_building(&root);
         assert!(!spare(&world.slots));
-        std::fs::remove_file(world.target.join("slow")).unwrap();
+        drop(slow);
         let began = Instant::now();
         while codes(&root).is_empty() {
             assert!(began.elapsed().as_secs() < 60);
@@ -235,12 +255,12 @@ fn it_starts_a_crate_only_while_a_slot_is_spare_and_never_cuts_the_one_in_flight
 fn the_ceiling_passing_mid_build_ends_it_after_that_build() {
     let (root, from) = moved_tree("a");
     let world = world_with(&root, SLOW);
-    std::fs::write(world.target.join("slow"), "").unwrap();
     let done = std::thread::scope(|s| {
+        let slow = Slow::lay(&world);
         let going = s.spawn(|| run(&world, &since(&from), &knobs(50)));
         until_calls(&world, 1);
         still_building(&root);
-        std::fs::remove_file(world.target.join("slow")).unwrap();
+        drop(slow);
         going.join().unwrap()
     });
     let said = done.stdout;
