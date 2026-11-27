@@ -1,0 +1,12 @@
+BUILDER-BRIEF 451 T388 KIND=measurement JOBS=1 TREE=/diagram/.clones/diagram-backlog-t270
+Blocks: none
+Tree (the pool's, held for T388): /diagram/.clones/diagram-backlog-t270 - `cd` into it in every command, work ONLY there, make or remove no worktree. `export SPECIFY_FEATURE=451-time-retro-and-efficiency SPECIFY_FEATURE_DIRECTORY=specs/451-time-retro-and-efficiency`
+Read scripts/container/builder-brief.md first: the rules behind this block. Prefix scratch files `t388-`.
+STOP POINT (measurement): the record under dev/measurements/2026-11-27/agent-hook/ (results.md and the scripts that produced it), then the plan section, `make decide` and the plan review (`make plan-delta F=451`). No engine code; each fix you find goes to a filed task with its figures.
+CHECKS: none beyond `make quick` - you change no source. Load nothing: no load generators.
+FILE what you find and leave, from your tree: `make task-add F=451 TITLE="<title, paths, figures>"`; its id goes in your report's CANDIDATES.
+Report in the fixed format of scripts/container/builder-report-format.md, read at your stop point. Do NOT stage, commit, land or push; never rewrite history.
+
+SESSION_MODEL: finds where an Agent call's hooks spend their time, read by read, before any change
+
+THE TASK is a stand-in for the timing harness (451 T388's sandbox): read its line in specs/451-time-retro-and-efficiency/tasks.md, whole, and the record it names. Measure each guard on the call in the sandbox shape, 20 runs each, the load stated, and for the top two find the read or process that costs it. File each lever with its figures. Place the plan section directly after the task's other sections; its performance line says it is a measurement task. If your context passes 200k, stop with a handoff at the file the pool names.

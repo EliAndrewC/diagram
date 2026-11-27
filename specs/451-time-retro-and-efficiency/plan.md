@@ -5046,31 +5046,50 @@ that batch; the red was not in its change.
 **Performance work?** yes (a `[perf]` task, 451 FR-013): it makes the guards' hooks faster - a Bash call under a plan hold 191 to 81 ms of CPU, an Agent call's end 108 to 53, measured 2026-11-27. Not an engine-speed task: no checklist answers owed.
 
 
-### T388 (<why: the finding or measurement that files it>)
+### T388 (an Agent call's PreToolUse took 154 ms and its PostToolUse 135, its guards' causes not read, found by T373, measured 2026-11-26 (`t373-tools2.tsv`, 20 runs))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement; no source changed. What was asked (the task line): which read or process each Agent-hook guard spends its time on, before any change. The record is `dev/measurements/2026-11-27/agent-hook/results.md`, its scripts and tables beside it; every figure below is the record's, measured 2026-11-27 from 06:33 to 06:52 local at load 4.0 to 12.6 on 22 cores with other builders running, each the median / 90th centile ms of one hook call over 20 counted runs after a warm-up, the arms interleaved (`t388-time.py`).
+  - **The method.** T373's throwaway world built afresh under the scratchpad from the mirror at `8963f871c4` and the real clone at `23ca09d5d7`, its state copied in, the mirror's kept guard and gate binaries copied, the gate launcher aimed at the copy (`L7R_GATE_TARGET`) and barred from building (`L7R_GATE_CARGO=/bin/false`), measured 2026-11-27 (`t388-build.sh`). The checks state, the check-passes log and the prompt store were put back before every run, so all runs exited 0 and none was refused, measured 2026-11-27 (`t388-guards.tsv`, its exit-code column). The leak check found nothing of the sandbox's in the real state, measured 2026-11-27 (`t388-leak-check.txt`). Three cases from the day's 296 dispatches: a builder's brief, a plan review and a record check, measured 2026-11-27 (`t388-mix.py` over copies of the 2026-11-26 event logs, `t388-mix.txt`).
+  - **Fidelity.** A builder's dispatch came back at 152.8 / 169.4 ms PreToolUse and 122.3 / 359.7 PostToolUse against T373's 153.8 and 134.9, measured 2026-11-27 (`t388-guards.tsv`). A plan review takes 261.2 and a record check 343.8 ms PreToolUse, measured 2026-11-27 (`t388-guards.tsv`, `t388-causes.tsv`).
+  - **The top two.** `pair-hooks` spends 92 ms on every Agent call, 50 of it in `l7r-gate reviews checkpoint due` reading the whole 50 MB event log for its first line while the step-back switch is off, and 17.5 more in the gate launcher's walk, measured 2026-11-27 (`t388-causes.tsv`, the `+shortlog` and `+fresh` arms; the shim's opens, `t388-probe-gp-pre.txt`). `checks-hooks` spends 95 ms on every PostToolUse, 91 of it the 3.0 MB checks state's load and save, which is T387's lever, and `check-bundle-hooks` spends 30 to 120 ms on the same state, measured 2026-11-27 (`t388-causes.tsv`, the `+small` and `+none` arms). At the pruned size (0.64 MB) the three are 18, 8 and 19 ms: what T387 leaves, measured 2026-11-27 (`t388-causes.tsv`).
+  - **Found beside them.** A record check runs a work-tree `git diff --numstat` for the cascade tripwire before it knows the trip can fire, 40.6 ms on a fresh index and 78.6 in the real clone, measured 2026-11-27 (`t388-git.txt`, 20 runs, read-only). A plan review's `review-round-hooks` parses the 4.7 MB `plan-review.json` for one count, 40 ms, measured 2026-11-27 (the shim, `t388-probes.txt`). A fresh clone's racily-clean index made the first work-tree diff 212 ms, a sandbox artifact taken out before the record-check figure was used, measured 2026-11-27 (`t388-git.txt`).
+  - **The day is an ESTIMATE**: about 103 s of Agent hook time over 296 dispatches, measured 2026-11-27 (results.md section 3, the day's mix times the medians).
+  - **The levers.**
+
+    | lever | what it saves, by the record | its task | label |
+    |---|---|---|---|
+    | A. `checkpoint due` asks the switch first; `first_event` reads to its first event | 50 ms an Agent call, 15 s a day | T491 | measured 2026-11-27 (results.md section 4, `t388-causes.tsv`) |
+    | B. the cascade counts changed lines only where it can trip | 40 to 79 ms a record check, 5 s a day | T492 | measured 2026-11-27 (results.md section 4, `t388-git.txt`) |
+    | C. review-round reads only `block_reviews`, or keeps the count | about 35 of 40 ms a plan review, 4 s a day | T493 | measured 2026-11-27 (results.md section 4, `t388-probes.txt`) |
+    | D. guards run the gate launcher by `bash`, its walk priced | 2.5 to 17.5 ms a call, 8 s a day | T494 | measured 2026-11-27 (results.md section 4, `t388-causes.tsv`) |
+    | E. the checks state's load and save | about 49 s a day | T387, not filed again | measured 2026-11-27 (results.md section 4, `t388-causes.tsv`) |
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its scripts and tables in `dev/measurements/2026-11-27/agent-hook/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T388 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The session knows where an Agent call's hook time goes, guard by guard and read by read, and which levers on it are worth building, before any is built.
+2. **The constraints.** No source changed; nothing written to the real event logs, checks state, claim map, guard log or build targets (the sandbox and its leak check); T387's state work measured only to say what it leaves; every lever priced is filed (the brief, 451 T289); at most six things measured (three guards' causes over three cases).
+3. **Where each comes from.** O: T373's figure (`t373-tools2.tsv`) and the record `dev/measurements/2026-11-27/agent-hook/results.md`. G: the GM's words of 2026-11-20 in request.md, which count a measurement as performance work.
+4. **Do they describe the world here?** Yes: the builder's-brief case came back at 152.8 ms against T373's 153.8, measured 2026-11-27 (`t388-guards.tsv`, 20 interleaved runs).
+5. **The order.** After T373, which filed it; beside T387, whose share it prices; before T491 to T494, which it filed.
+6. **The exits.** Green: the time split by guard, each top guard's cost read to its line of code and taken away by an arm, every lever priced and filed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One artifact set aside, kept in the record: the fresh sandbox clone's racily-clean index made the record check's work-tree diff 212 ms against 40.6 refreshed and 78.6 in the real clone, measured 2026-11-27 (`t388-git.txt`), and its rows stay in `t388-guards.tsv`, marked.
+8. **The budget.** One landing, of the record and this section.
+9. **Done, measured.** The top two named and each split by an arm (pair-hooks 91.8 against 41.6 without the log read; checks-hooks 95.1 against 4.1 without the state), four levers filed and the fifth left to T387, measured 2026-11-27 (results.md sections 2 and 4, `t388-causes.tsv`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here: a measurement builder changes no source. No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Every Agent call spends 50 ms reading a 50 MB log to answer "not due" for a step-back that is switched off, about 15 s a day, measured 2026-11-27 (`t388-causes.tsv`). Not fixed here: a measurement changes no source. Filed as T491; lands before T302.
+- A record check's dispatch runs a 40 to 79 ms work-tree diff the cascade trip may not need, about 5 s a day, measured 2026-11-27 (`t388-git.txt`). Not fixed here: a measurement changes no source. Filed as T492; lands before T302.
+- A plan review's dispatch parses the 4.7 MB `plan-review.json` for one count, 40 ms, about 4 s a day and growing, measured 2026-11-27 (`t388-probes.txt`). Not fixed here: a measurement changes no source. Filed as T493; lands before T302.
+- A guard's gate call pays the launcher's 17.5 ms walk and, from two guards, a 2.5 ms `/usr/bin/env` start, about 8 s a day, measured 2026-11-27 (`t388-causes.tsv`). Not fixed here: a measurement changes no source. Filed as T494; lands before T302.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 
@@ -7059,6 +7078,114 @@ that batch; the red was not in its change.
 |---|---|---|---|---|
 
 ### T490 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T491 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T491 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T492 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T492 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T493 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T493 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T494 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T494 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

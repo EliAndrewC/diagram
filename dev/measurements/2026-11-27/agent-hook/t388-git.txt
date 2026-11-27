@@ -1,0 +1,15 @@
+/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t388/w/diagram/.clones/diagram-backlog  base 67b5fdc4c2, 0 commits ahead, 0 lines changed, load 7.47
+    212.1 /   222.8 ms  diff --numstat <base> (work tree, today)
+      5.9 /     6.2 ms  diff --numstat <base> HEAD (trees only)
+    207.1 /   211.7 ms  diff --quiet (work tree against index)
+      2.6 /     3.7 ms  rev-parse --show-toplevel (a process start)
+/diagram/.clones/diagram-backlog  base 70a5c021ee, 1 commits ahead, 752 lines changed, load 7.03
+     78.6 /    86.5 ms  diff --numstat <base> (work tree, today)
+     92.2 /    99.0 ms  diff --numstat <base> HEAD (trees only)
+     18.4 /    21.5 ms  diff --quiet (work tree against index)
+      2.7 /     3.4 ms  rev-parse --show-toplevel (a process start)
+/tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpad/t388/w/diagram/.clones/diagram-backlog  base 67b5fdc4c2, 0 commits ahead, 0 lines changed, load 6.51
+     40.6 /    43.3 ms  diff --numstat <base> (work tree, today)
+      5.3 /     5.5 ms  diff --numstat <base> HEAD (trees only)
+     37.1 /    39.5 ms  diff --quiet (work tree against index)
+      2.9 /     3.2 ms  rev-parse --show-toplevel (a process start)

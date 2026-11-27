@@ -1,0 +1,14 @@
+PreToolUse 296 PostToolUse 288 {'builder': 109, 'session': 187}
+general-purpose	100	100
+spec-fidelity	97	93
+message-check	19	19
+record-format	18	17
+quote-check	16	15
+source-reader	12	11
+source-applicability	10	10
+round-arbiter	8	8
+impl-drift	7	6
+escalation-check	5	5
+translation-check	2	2
+research-pass	1	1
+spec-fidelity-verify	1	1

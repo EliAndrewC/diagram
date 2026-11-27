@@ -1,0 +1,31 @@
+gp.PreToolUse --only pair-hooks	20	91.8	114.0	73.7	157.6	91.3	0x20	9.16-11.83	
+gp.PreToolUse --only check-bundle-hooks	20	34.7	44.7	26.7	59.9	34.4	0x20	9.16-11.83	
+gp.PreToolUse --only pair-hooks+fresh	20	74.3	117.3	65.1	338.6	73.9	0x20	9.16-11.83	
+gp.PreToolUse --only check-bundle-hooks+fresh	20	35.5	44.9	27.2	117.8	35.0	0x20	9.16-11.83	
+gp.PreToolUse --only pair-hooks+small	20	91.7	215.7	76.8	420.7	91.5	0x20	9.16-11.83	
+gp.PreToolUse --only check-bundle-hooks+small	20	8.1	21.5	5.7	35.3	7.7	0x20	9.16-11.83	
+gp.PreToolUse --only pair-hooks+none	20	101.0	166.6	80.0	593.1	100.8	0x20	9.16-11.83	
+gp.PreToolUse --only check-bundle-hooks+none	20	4.6	7.4	3.4	26.0	4.2	0x20	9.16-11.83	
+gp.PreToolUse --only pair-hooks+shortlog	20	41.6	83.2	36.2	106.4	41.4	0x20	9.16-11.83	
+sf.PreToolUse --only check-bundle-hooks	20	126.2	349.5	92.5	886.4	100.5	0x20	8.79-10.50	
+sf.PreToolUse --only review-round-hooks	20	82.1	87.6	65.1	93.9	81.7	0x20	8.79-10.50	
+sf.PreToolUse --only check-bundle-hooks+small	20	19.0	40.8	15.0	87.9	17.2	0x20	8.79-10.50	
+sf.PreToolUse --only review-round-hooks+small	20	82.5	87.4	74.2	94.0	81.6	0x20	8.79-10.50	
+sf.PreToolUse --only check-bundle-hooks+none	20	6.5	7.7	5.0	8.3	6.1	0x20	8.79-10.50	
+sf.PreToolUse --only review-round-hooks+none	20	82.9	90.8	73.8	122.0	81.3	0x20	8.79-10.50	
+sf.PreToolUse --only review-round-hooks+fresh	20	65.0	72.3	60.1	94.2	64.6	0x20	8.79-10.50	
+rf.PreToolUse --only check-bundle-hooks	20	435.6	982.8	396.1	1526.8	855.8	0x20	8.51-10.51	
+rf.PreToolUse --only check-bundle-hooks+small	20	341.2	409.0	311.0	712.9	744.5	0x20	8.51-10.51	
+rf.PreToolUse --only check-bundle-hooks+none	20	303.6	352.3	285.8	747.9	702.0	0x20	8.51-10.51	
+rf.PreToolUse --only check-bundle-hooks+fresh	20	471.0	887.1	374.1	2409.7	818.7	0x20	8.51-10.51	
+gp.PostToolUse --only checks-hooks	20	95.1	226.8	85.6	1179.1	93.9	0x20	9.27-10.46	
+gp.PostToolUse --only checks-hooks+small	20	17.8	158.8	12.6	1070.9	15.2	0x20	9.27-10.46	
+gp.PostToolUse --only checks-hooks+none	20	4.1	7.4	3.3	11.2	3.6	0x20	9.27-10.46	
+gp.PreToolUse hook	20	160.7	510.7	136.0	679.2	155.5	0x20	8.52-12.61	
+gp.PreToolUse hook+fresh	20	135.9	386.1	120.4	467.0	131.7	0x20	8.52-12.61	
+gp.PostToolUse hook	20	160.5	460.5	103.4	545.3	115.3	0x20	8.52-12.61	
+gp.PostToolUse hook+small	20	42.3	188.3	32.6	1664.1	35.8	0x20	8.52-12.61	
+# after git update-index --refresh in the sandbox clone (t388-git.txt): the racily-clean index of a fresh clone made its work-tree diff 212 ms
+rf.PreToolUse hook	20	343.8	350.1	335.1	366.8	749.3	0x20	4.51-5.50	
+rf.PreToolUse --only check-bundle-hooks	20	231.9	240.5	224.1	248.2	639.4	0x20	4.51-5.50	
+rf.PreToolUse --only check-bundle-hooks+none	20	116.3	118.9	110.9	120.2	523.3	0x20	4.51-5.50	

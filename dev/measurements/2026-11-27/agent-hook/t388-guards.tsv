@@ -1,0 +1,51 @@
+gp.PreToolUse hook	20	152.8	169.4	135.0	193.2	152.6	0x20	6.58-8.82	
+gp.PreToolUse binary	20	135.0	155.3	119.2	164.1	133.7	0x20	6.58-8.82	
+gp.PreToolUse --version	20	2.2	3.0	1.5	3.2	1.9	0x20	6.58-8.82	
+gp.PreToolUse --only agent-model-hooks	20	3.9	4.5	2.5	10.3	3.6	0x20	6.58-8.82	
+gp.PreToolUse --only agent-prefix-hooks	20	6.3	7.0	3.7	8.4	6.0	0x20	6.58-8.82	
+gp.PreToolUse --only builder-brief-hooks	20	7.2	8.3	4.7	9.0	6.9	0x20	6.58-8.82	
+gp.PreToolUse --only check-bundle-hooks	20	33.9	42.9	27.8	94.1	33.4	0x20	6.58-8.82	
+gp.PreToolUse --only context-cap-hooks	20	2.4	3.2	1.8	10.6	2.1	0x20	6.58-8.82	
+gp.PreToolUse --only escalation-hooks	20	2.6	4.1	1.7	7.1	2.3	0x20	6.58-8.82	
+gp.PreToolUse --only event-log-hooks	20	14.3	17.9	10.3	32.6	13.9	0x20	6.58-8.82	
+gp.PreToolUse --only pair-hooks	20	92.0	104.1	75.1	263.6	91.8	0x20	6.58-8.82	
+gp.PreToolUse --only research-switch-hooks	20	2.6	8.1	2.1	10.8	2.3	0x20	6.58-8.82	
+gp.PreToolUse --only review-round-hooks	20	2.6	3.3	1.9	5.4	2.3	0x20	6.58-8.82	
+gp.PostToolUse hook	20	122.3	359.7	99.9	492.1	117.4	0x20	6.58-8.82	
+gp.PostToolUse binary	20	110.5	562.7	89.5	1008.3	100.8	0x20	6.58-8.82	
+gp.PostToolUse --only checks-hooks	20	108.6	561.3	80.2	1341.5	101.7	0x20	6.58-8.82	
+gp.PostToolUse --only event-log-hooks	20	13.2	15.3	10.9	28.5	12.9	0x20	6.58-8.82	
+sf.PreToolUse hook	20	261.2	481.9	251.6	668.3	261.3	0x20	5.29-9.53	
+sf.PreToolUse binary	20	255.5	440.2	234.5	537.4	255.0	0x20	5.29-9.53	
+sf.PreToolUse --version	20	2.5	3.2	1.8	9.8	2.2	0x20	5.29-9.53	
+sf.PreToolUse --only agent-model-hooks	20	2.9	14.7	2.3	17.3	2.6	0x20	5.29-9.53	
+sf.PreToolUse --only agent-prefix-hooks	20	6.1	8.0	4.4	21.5	5.8	0x20	5.29-9.53	
+sf.PreToolUse --only builder-brief-hooks	20	2.9	3.7	2.0	5.0	2.6	0x20	5.29-9.53	
+sf.PreToolUse --only check-bundle-hooks	20	102.9	252.2	83.4	721.4	98.4	0x20	5.29-9.53	
+sf.PreToolUse --only context-cap-hooks	20	2.8	3.3	2.0	11.1	2.6	0x20	5.29-9.53	
+sf.PreToolUse --only escalation-hooks	20	2.6	3.3	2.0	6.1	2.3	0x20	5.29-9.53	
+sf.PreToolUse --only event-log-hooks	20	12.6	17.2	9.9	34.1	12.3	0x20	5.29-9.53	
+sf.PreToolUse --only pair-hooks	20	91.9	114.0	77.8	233.5	91.7	0x20	5.29-9.53	
+sf.PreToolUse --only research-switch-hooks	20	2.6	3.3	2.1	13.2	2.3	0x20	5.29-9.53	
+sf.PreToolUse --only review-round-hooks	20	76.6	147.5	70.0	202.7	76.3	0x20	5.29-9.53	
+sf.PostToolUse hook	20	121.5	271.1	102.6	299.7	116.0	0x20	5.29-9.53	
+sf.PostToolUse binary	20	109.7	151.7	92.3	302.6	107.1	0x20	5.29-9.53	
+sf.PostToolUse --only checks-hooks	20	101.9	236.2	84.6	927.0	98.4	0x20	5.29-9.53	
+sf.PostToolUse --only event-log-hooks	20	13.8	18.6	9.5	63.6	13.5	0x20	5.29-9.53	
+rf.PreToolUse hook	20	534.5	770.6	480.1	1414.5	947.7	0x20	3.97-10.21	
+rf.PreToolUse binary	20	523.8	618.9	494.3	1088.1	937.7	0x20	3.97-10.21	
+rf.PreToolUse --version	20	2.4	2.8	1.5	3.4	2.1	0x20	3.97-10.21	
+rf.PreToolUse --only agent-model-hooks	20	3.0	3.4	2.2	3.7	2.6	0x20	3.97-10.21	
+rf.PreToolUse --only agent-prefix-hooks	20	6.1	7.5	4.5	14.6	6.0	0x20	3.97-10.21	
+rf.PreToolUse --only builder-brief-hooks	20	2.3	3.2	2.0	4.2	2.1	0x20	3.97-10.21	
+rf.PreToolUse --only check-bundle-hooks	20	405.5	503.6	381.8	562.4	832.7	0x20	3.97-10.21	
+rf.PreToolUse --only context-cap-hooks	20	2.5	3.1	1.8	3.4	2.2	0x20	3.97-10.21	
+rf.PreToolUse --only escalation-hooks	20	2.3	2.9	2.0	3.3	2.1	0x20	3.97-10.21	
+rf.PreToolUse --only event-log-hooks	20	12.8	14.4	9.5	17.1	12.4	0x20	3.97-10.21	
+rf.PreToolUse --only pair-hooks	20	91.5	96.7	79.2	107.3	91.2	0x20	3.97-10.21	
+rf.PreToolUse --only research-switch-hooks	20	2.5	3.2	2.1	3.3	2.3	0x20	3.97-10.21	
+rf.PreToolUse --only review-round-hooks	20	2.6	3.1	2.0	3.5	2.4	0x20	3.97-10.21	
+rf.PostToolUse hook	20	110.7	191.0	101.4	2693.5	107.7	0x20	3.97-10.21	
+rf.PostToolUse binary	20	104.4	174.9	90.5	595.4	100.9	0x20	3.97-10.21	
+rf.PostToolUse --only checks-hooks	20	99.5	589.8	83.2	880.3	92.0	0x20	3.97-10.21	
+rf.PostToolUse --only event-log-hooks	20	14.1	16.1	10.1	37.0	13.8	0x20	3.97-10.21	

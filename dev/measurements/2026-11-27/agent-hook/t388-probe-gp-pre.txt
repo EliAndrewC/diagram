@@ -1,0 +1,40 @@
+exit 0 stdout  stderr 
+     3.3 ms  pid 1324692 ppid 1324691  find $S/w/diagram/rust/guard $S/w/diagram/rust/C  [reads=137 writes=0 spawns=0]
+     0.0 ms  pid 1324691 ppid 1324690  ?  [reads=1 writes=1 spawns=2]
+    13.3 ms  pid 1324697 ppid 1324696  find $S/w/diagram/rust/gate $S/w/diagram/rust/gu  [reads=589 writes=0 spawns=0]
+     0.0 ms  pid 1324696 ppid 1324693  ?  [reads=2 writes=1 spawns=2]
+     0.6 ms  pid 1324698 ppid 1324693  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --show-toplevel  [reads=3 writes=1 spawns=0]
+     0.4 ms  pid 1324699 ppid 1324693  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --path-format=absolute --git-common-dir  [reads=3 writes=1 spawns=0]
+     3.2 ms  pid 1324700 ppid 1324693  git -C $S/w/diagram/.clones/diagram-backlog log -1 --format=%H -- specs/451-time-retro-and-efficiency  [reads=11 writes=1 spawns=0]
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checkpoint-admitted
+    65.7 ms  pid 1324693 ppid 1324690  $S/gate/tool/l7r-gate reviews checkpoint due --root /tmp/claude-1000/-diagram/c6fd72d1-ab6c-4736-b723-0697a1f5ca51/scratchpa  [reads=14 writes=1 spawns=3]
+   MKDIR $S/w/diagram/.clones/diagram-backlog/.git/l7r-events
+   MKDIR $S/w/diagram/.clones/diagram-backlog/.git/l7r-events-dispatches
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/l7r-events-dispatches/t388-sess-0001.jsonl
+   MKDIR $S/w/diagram/.clones/diagram-backlog/.git/l7r-events
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/l7r-events/451-time-retro-and-efficiency.jsonl
+   MKDIR $S/gl
+   OPENW $S/gl/20261127T113739379870-1324690.json.tmp
+   RENAME $S/gl/20261127T113739379870-1324690.json
+     0.6 ms  pid 1324701 ppid 1324690  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --path-format=absolute --git-common-dir  [reads=3 writes=1 spawns=0]
+   MKDIR $S/w/diagram/.clones/diagram-backlog/.git/l7r-agent-prompts
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/l7r-agent-prompts/7982f0197f546cd3.jsonl
+   MKDIR $S/w/diagram/.clones/diagram-backlog/.git
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.lock
+     0.1 ms  pid 1324702 ppid 1324690  flock -x 0  [reads=0 writes=0 spawns=0]
+   134.6 ms  pid 1324690 ppid 1324685  $S/target/l7r-guard.good PreToolUse  [reads=14 writes=14 spawns=3]
+spawn calls 21 ; reads by directory (files over 100 KB by name):
+       32 src
+       25 tests
+       24 ..
+        9 record
+        9 .git/config
+        8 bundle
+        7 $S/w/diagram/.clones/diagram-backlog/.git
+        6 checks
+        6 index
+        6 measure
+        5 arbiter
+        4 marks
+        4 suite_tools
+        4 guards

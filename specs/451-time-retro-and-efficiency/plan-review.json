@@ -3115,14 +3115,8 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T388 (<why: the finding or measurement that files it>)": {
-   "sha256": "2575b943ac372edfaa1835455f79ce44bd7bde6489fd1ebead1b4fcb29886fe2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T388 Approach (checklist part A)": {
-   "sha256": "c32a8dc46edc5bf2d083a0afddba897e84a37c9f7b0b234ae5992611f2ba3695",
+   "sha256": "e952e9d4902410f2943529fec9f123ce756069588ea6590ef46b237d4f7ae13d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -4293,6 +4287,12 @@
   },
   "### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)": {
    "sha256": "cc6c7b78b7efbf7e63e43b6d7f0e9fa7822e0830d4b4ccb48a91462297dfac3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T388 (an Agent call's PreToolUse took 154 ms and its PostToolUse 135, its guards' causes not read, found by T373, measured 2026-11-26 (`t373-tools2.tsv`, 20 runs))": {
+   "sha256": "0fdfea27cca0786127807921a1b13f7b4252308ce840b008ec9c493e9a35472f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
@@ -40471,6 +40471,66 @@
      "summary": "Two unfilled template stubs are removed: the T387 placeholder, replaced by the filled block, and a stray T475 placeholder.",
      "class": "within",
      "why": "Placeholders decide nothing. Their removal narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T388 (an Agent call's PreToolUse took 154 ms and its PostToolUse 135, its guards' causes not read, found by T373, measured 2026-11-26 (`t373-tools2.tsv`, 20 runs))",
+    "### T388 Approach (checklist part A)",
+    "(removed) ### T388 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T388-measure-only",
+     "summary": "T388 is a measurement: no source changed, its record and scripts in dev/measurements/2026-11-27/agent-hook/",
+     "class": "within",
+     "why": "The task asks where an Agent call's hook time goes before any change; the GM's 2026-11-20 words count a measurement task as performance work, and 'we want everything measured so we know where our time goes' (2026-11-22). Measuring without changing source is what was asked."
+    },
+    {
+     "id": "T388-sandbox",
+     "summary": "Measured in a throwaway copy of T373's world (state restored before every run, launcher barred from building, leak check of the real state)",
+     "class": "within",
+     "why": "Method only; it keeps the measurement from writing to the real logs and state and narrows nothing asked."
+    },
+    {
+     "id": "T388-scope-cases",
+     "summary": "Three dispatch cases (builder brief, plan review, record check) from the day's 296; time split by guard, the top guards' costs read to their line and isolated by arms, the rest noted",
+     "class": "within",
+     "why": "The split covers every guard on the three kinds of dispatch the day actually ran, and the causes read (pair-hooks, checks-hooks, check-bundle-hooks, review-round-hooks, the cascade diff, the launcher walk) are the ones that carry the time; choosing representative cases is method, not dropping anything the request or task line asks for."
+    },
+    {
+     "id": "T388-levers-filed",
+     "summary": "Levers A-D filed as T491-T494, each ordered 'lands before T302'; lever E (checks state load and save) left to the already-open T387, measured only to say what it leaves",
+     "class": "within",
+     "why": "A measurement builder changes no source by its own task; every priced lever is filed rather than dropped, so nothing found is lost. The four are speed opportunities, not wrong outcomes (constitution XIV v2.36.0), so deferring them to filed performance tasks leaves no defect unfixed. Leaving E to T387 avoids filing the same work twice."
+    },
+    {
+     "id": "T388-artifact",
+     "summary": "The fresh clone's racily-clean index (212 ms diff) set aside as a sandbox artifact, its rows kept and marked",
+     "class": "within",
+     "why": "Measurement hygiene, disclosed and kept in the record; the record-check figure uses the refreshed and real-clone values (40.6 and 78.6 ms)."
+    },
+    {
+     "id": "T388-perf",
+     "summary": "Marked performance work (yes), a measurement that makes nothing faster itself",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-20 ruling: a measurement task counts as performance work for scheduling."
+    },
+    {
+     "id": "removed-T388-stub",
+     "summary": "The unfilled template stub of T388 removed, its content now in the filled T388 block",
+     "class": "within",
+     "why": "The stub held only placeholders; the filled block replaces it and nothing asked is lost."
+    },
+    {
+     "id": "removed-T475-stub",
+     "summary": "The unfilled template stub of T475 removed",
+     "class": "within",
+     "why": "The stub held only template placeholders and no decision; its removal drops no content and narrows nothing."
     }
    ]
   }

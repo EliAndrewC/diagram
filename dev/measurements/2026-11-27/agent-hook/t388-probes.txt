@@ -1,0 +1,67 @@
+##### rf PreToolUse check-bundle
+exit 0 stdout  stderr 
+     0.6 ms  pid 1370595 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --show-toplevel  [reads=3 writes=1 spawns=0]
+    17.4 ms  pid 1370598 ppid 1370597  find $S/w/diagram/rust/gate $S/w/diagram/rust/gu  [reads=589 writes=0 spawns=0]
+     0.0 ms  pid 1370597 ppid 1370596  ?  [reads=2 writes=1 spawns=2]
+     0.6 ms  pid 1370599 ppid 1370596  git -C . rev-parse --show-toplevel  [reads=3 writes=1 spawns=0]
+    10.2 ms  pid 1370596 ppid 1370585  $S/gate/tool/l7r-gate plan decided $S/w/diagram/  [reads=4 writes=0 spawns=1]
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.lock
+     0.1 ms  pid 1370600 ppid 1370585  flock -x 0  [reads=0 writes=0 spawns=0]
+     0.5 ms  pid 1370602 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog rev-parse origin/main  [reads=4 writes=1 spawns=0]
+     0.5 ms  pid 1370603 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --git-common-dir  [reads=3 writes=1 spawns=0]
+    13.8 ms  pid 1370604 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog diff --name-only 632b2c82586b055f3c2c92a49639c8c6871d8212 67b5fdc4c27414598ef7d7  [reads=8 writes=1 spawns=0]
+     0.6 ms  pid 1370605 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog rev-parse origin/main  [reads=4 writes=1 spawns=0]
+     2.2 ms  pid 1370606 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog merge-base HEAD origin/main  [reads=10 writes=1 spawns=0]
+     2.5 ms  pid 1370607 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog show -s --format=%ct 67b5fdc4c27414598ef7d7f0d3375e60b6ef90fa  [reads=9 writes=1 spawns=0]
+     2.0 ms  pid 1370608 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog merge-base HEAD origin/main  [reads=10 writes=1 spawns=0]
+   221.2 ms  pid 1370609 ppid 1370585  git -C $S/w/diagram/.clones/diagram-backlog -c diff.autoRefreshIndex=false diff --numstat 67b5fdc4c27414598ef7d7f0d3375e60b6  [reads=275 writes=1 spawns=0]
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.1370585.0.tmp
+   RENAME $S/w/diagram/.clones/diagram-backlog/.git/checks-open.json
+   OPENW $S/gl/20261127T114401623391-1370585.json.tmp
+   RENAME $S/gl/20261127T114401623391-1370585.json
+   470.5 ms  pid 1370585 ppid 1370578  $S/target/l7r-guard.good --only check-bundle-hooks PreToolUse  [reads=42 writes=10 spawns=11]
+spawn calls 17 ; reads by directory (files over 100 KB by name):
+       25 .git/config
+       24 $S/w/diagram/.clones/diagram-backlog/.specify
+       11 $S/w/diagram/.clones/diagram-backlog/.git
+        8 $S/w/diagram/.clones/diagram-backlog/research/questions
+        7 .git/packed-refs
+        7 .git/info
+##### sf PreToolUse check-bundle
+exit 0 stdout  stderr 
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.lock
+     0.1 ms  pid 1370725 ppid 1370724  flock -x 0  [reads=0 writes=0 spawns=0]
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.1370724.0.tmp
+   RENAME $S/w/diagram/.clones/diagram-backlog/.git/checks-open.json
+   101.2 ms  pid 1370724 ppid 1370692  $S/target/l7r-guard.good --only check-bundle-hooks PreToolUse  [reads=4 writes=7 spawns=1]
+spawn calls 1 ; reads by directory (files over 100 KB by name):
+        1 $S/w/diagram/.clones/diagram-backlog/.git/checks-open.json
+        1 $S/w/diagram/.clones/diagram-backlog/.specify
+        1 /proc/self
+        1 /sys/fs/cgroup
+##### sf PreToolUse review-round
+exit 0 stdout  stderr 
+    19.2 ms  pid 1370763 ppid 1370762  find $S/w/diagram/rust/gate $S/w/diagram/rust/gu  [reads=589 writes=0 spawns=0]
+     0.0 ms  pid 1370762 ppid 1370760  ?  [reads=2 writes=1 spawns=2]
+     0.6 ms  pid 1370771 ppid 1370760  git -C . rev-parse --show-toplevel  [reads=3 writes=1 spawns=0]
+     0.5 ms  pid 1370772 ppid 1370760  git -C $S/w/diagram/.clones/diagram-backlog rev-parse --path-format=absolute --git-common-dir --show-toplevel  [reads=3 writes=1 spawns=0]
+     6.9 ms  pid 1370760 ppid 1370759  $S/gate/tool/l7r-gate plan door active-task $S/w  [reads=7 writes=0 spawns=2]
+   OPENW $S/gl/20261127T114402017685-1370759.json.tmp
+   RENAME $S/gl/20261127T114402017685-1370759.json
+    82.0 ms  pid 1370759 ppid 1370747  $S/target/l7r-guard.good --only review-round-hooks PreToolUse  [reads=4 writes=3 spawns=1]
+spawn calls 8 ; reads by directory (files over 100 KB by name):
+        4 owed
+        4 cli
+        4 .git/config
+        3 store
+        3 sources
+##### gp PostToolUse checks
+exit 0 stdout  stderr 
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.lock
+     0.1 ms  pid 1370825 ppid 1370824  flock -x 0  [reads=0 writes=0 spawns=0]
+   OPENW $S/w/diagram/.clones/diagram-backlog/.git/checks-open.1370824.0.tmp
+   RENAME $S/w/diagram/.clones/diagram-backlog/.git/checks-open.json
+   100.5 ms  pid 1370824 ppid 1370796  $S/target/l7r-guard.good --only checks-hooks PostToolUse  [reads=2 writes=7 spawns=1]
+spawn calls 1 ; reads by directory (files over 100 KB by name):
+        1 $S/w/diagram/.clones/diagram-backlog/.git/checks-open.json
+        1 $S/w/diagram/.clones/diagram-backlog/.specify

@@ -1,0 +1,12 @@
+0	/diagram/.clones/diagram-backlog/.git/l7r-events/451-time-retro-and-efficiency.jsonl
+0	/diagram/.clones/diagram-backlog/.git/l7r-events/_unassigned.jsonl
+0	/diagram/.clones/diagram-backlog/.git/checks-open.json
+0	/diagram/.clones/diagram-backlog/.git/check-passes.jsonl
+0	prompt-store files naming a t388 run
+0	claim-map entries t388-*
+0	guard-log entries naming t388
+2026-11-27 06:40:27.251758557 -0500 /home/agent/.cache/l7r-cargo-target/diagram/l7r-guard.good
+2026-11-27 06:40:53.038863831 -0500 /home/agent/.cache/l7r-cargo-target/diagram/tool/l7r-gate
+# read 2026-11-27 after every run: every count above is 0. The real binaries' times (06:40:27, 06:40:53) are the mirror's own rebuild on
+# its fast-forward to fabc9c464e at 06:40:04 (git -C /diagram reflog), not this run's: no probe of the run spawned cargo (the shim's
+# SPAWN lines name only find, git, flock, bash and the copied gate binary), and no probe opened a file under ~/.cache/l7r-cargo-target.
