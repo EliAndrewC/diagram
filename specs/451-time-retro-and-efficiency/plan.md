@@ -4171,31 +4171,62 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T346 (<why: the finding or measurement that files it>)
+### T346, T382 (bundle) (a carry booked to the task that took the tree in its last second, and a builder's lines outside every span in no span: on 2026-11-26 the carry from diagram-backlog-t271 that ended 19:40:54Z read as T308's where T301 held the tree, and 60 agents' 4,149 own lines in the logs since 2026-11-21 were in no span, measured 2026-11-26 (Python passes over the pool log and every log's start, stop and by lines))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the carry's holder is read at its run's start, and an agent's own lines outside every span of it open a span of their own.
+  - **T346, the cause.** `tiers::carries` (`rust/gate/crates/measure/src/measure/task_time/tiers.rs`) took the pool log's last take of the carry's tree at or before the run's END. The run of 2026-11-26 was one command, `make carry`, `make builder-tree-release` and `make builder-tree` together, from 19:40:49.7Z to 19:40:54.5Z, and the pool log holds T301's release and T308's take at 19:40:54Z, so the last take before the end was T308's, measured 2026-11-26 (the run's two lines in the 451 log and `.git/builder-pool.log`'s lines for the tree).
+  - **T346, the rule.** The holder is the last take at or before the run's START: what the carry brought into the clone is what the tree held when the command began, whatever the same command or the next handout did to the tree after. A tree nobody held when the run began is no task's carry, as before for a tree with no take at all. The carry's time in the report is still its run's end, which `batches` compares with the landing's.
+  - **T346, the live view.** `make task-progress` reads the same function (`progress.rs`, `landings`), so its staged list and each block's "carried into the clone" line follow; its `retask` already read a `Phase` line's holder at the phase's start.
+  - **T382, the cause.** `columns::flight` (`rust/gate/crates/measure/src/measure/where_time/columns/flight.rs`) opened a span only at a `SubagentStart` line, so a builder's own lines after a stop with no start line logged were in no span: the builder-minutes column and "Working at once" left that time out while its turns and runs were booked from the lines.
+  - **T382, the population.** Read from the 451 log alone the task line's figures stand: 64 agents, 1,981 own lines. Read as the commands read them - an agent's start and stop lines and its own lines from every feature's log - 60 of the 3,050 agents with own lines since 2026-11-21 had such lines, 4,149 of 143,674 own lines, in 242 spans of 557.5 min under the rule below: 45.4 min on 2026-11-21, 277.9 on 11-22, 232.2 on 11-23 and 2.0 on 11-24, none since, measured 2026-11-26 (a Python pass over every log's start, stop and by lines, the rule's spans summed by day). All 60 are `general-purpose` agents with a start line earlier, every one of the 242 spans ends at a stop line, and no two own lines inside one are 4 min apart, so no span runs across a time the builder stood stopped, measured 2026-11-26 (the same pass, each span's end and its longest gap between own lines listed).
+  - **T382, the rule.** An own line of an agent outside every span of it opens a span, from that line to the agent's next stop, else to its last own line before its next start or the window's end - `span_end` itself, so the span ends as a started one does. A line alone, with no later line or stop of the agent, holds no time and opens none. An agent with no start line takes its kind from its first stop that names one (so a review agent whose start is in no log read is not counted a builder), else `?`. Each such span is in flight for a wait as a started one is (`Flight::book`). This is T345's reading from the other side: a builder's stop to its next own line is the builder stopped, and its last own line to a later start is too.
+  - **T382, why the span starts at the first own line, not at the stop.** The stop to the next line is the time T345 books as `builders: stopped, waiting to be resumed`; a span from the stop would count it as work twice over.
+  - **Two tests pinned the old reading and are restated.** `a_resumed_builder_is_booked_in_every_span_and_stopped_between_them`: the fixture's third run, 03:00 to 03:30 with no start line, is now a span - the builder's minutes 109 s where they were 79, the session's wait from 02:40 the builder stopped to 03:00 and its reply to 03:30, measured 2026-11-26 (the test's asserted figures, old and restated). `the_columns_book_make_runs_compile_and_until` (`make where-time`): a `Stop` written before `inflight` books the wait's last 7 min to the agent whose lines ran through it, where no run held them, measured 2026-11-26 (the test's asserted row, old and restated).
+  - **The re-measurement, read-only**, on the clone's real logs, the old build's binary kept as a copy and both run back to back: `l7r-gate measure task-time --root /diagram/.clones/diagram-backlog --since 2026-11-26T17:00:00Z --until 2026-11-27T01:00:00Z`, measured 2026-11-26 (the two reports, `t346-before.md` and `t346-after.md` in the session's scratchpad; no `SINCE=last`, the GM's marker untouched). The window was still open when both ran (00:36Z and 00:37Z of its last hour), so a row that moved between them by the log's growth is not counted a change here: `plan review: agents` 132.4 to 134.5 min, the reviews then running, as it had grown from 129.7 between two runs of the OLD binary eight minutes apart, measured 2026-11-26 (the row in the old binary's two reports and the new one's).
+  - **The pinned window, the builder-minutes column.** 742.5 min before and 742.5 after, 31 builders over the 23 landed tasks both times, no row changed, measured 2026-11-26 (the fourth column of each report's "The landed tasks" table, summed). No agent of this window has an own line outside its spans: the last such line in any log is of 2026-11-24, measured 2026-11-26 (the Python pass above, its spans by day). The one span the rule opened in this run lies outside the window, at the first line the report reads back to (2026-11-24T17:00:06Z, 1.1 min, an agent whose start is before that line), measured 2026-11-26 (a build that printed each span the rule opened, the print removed after).
+  - **The pinned window, the carries booked to each task.** 27 carries by main sessions ended in the window, each booked to one holder both times; one changed, the task line's own: the carry from diagram-backlog-t271, 19:40:49Z to 19:40:54Z, T308's before and T301's after, so T308's count falls from 1 to 0 and T301's rises from 0 to 1 and the other 23 holders' counts stand, measured 2026-11-26 (a Python pass over the logs' `make carry` runs, their commands' `FROM=` in the session's transcript and the pool log, the holder read at each run's end and at its start). Neither task landed in the window, so no row of the report's landed table moved. The live view shows it (`l7r-gate measure task-progress --root /diagram/.clones/diagram-backlog --at 2026-11-26T19:45:00Z`, old binary and new): the staged list's line `451 T308: carried 19:40:54, 4.1 min ago` reads `451 T301: carried 19:40:54, 4.1 min ago` after, and T308's block no longer holds a `carried into the clone 19:40:54, 4.1 min ago` line, with no other line of the view changed, measured 2026-11-26 (the two outputs' diff).
+  - **A settled window where the rule's spans are**, since the pinned one holds none: `--since 2026-11-22T00:00:00Z --until 2026-11-23T00:00:00Z`, the same two binaries, measured 2026-11-26 (`t346-w2-before.md` and `t346-w2-after.md` in the session's scratchpad). The 96 landed tasks' builder minutes sum to 2743.6 where they summed to 2482.0, 95 builders both times, 24 rows changed, measured 2026-11-26 (the fourth column of each report's "The landed tasks" table, summed). The eight that moved most:
+
+    | task | builders | builder minutes before | after | blocking before | after |
+    |---|---|---|---|---|---|
+    | 449-rust-codebase T197 | 2 | 17.8 | 131.5 | 141.8 | 141.8 |
+    | 451-time-retro-and-efficiency T110 | 2 | 71.8 | 105.4 | 104.5 | 104.5 |
+    | 449-rust-codebase T261 | 5 | 98.3 | 113.0 | 247.0 | 247.0 |
+    | 449-rust-codebase T263 | 1 | 13.6 | 28.1 | 31.8 | 31.8 |
+    | 449-rust-codebase T273 | 1 | 7.6 | 19.0 | 21.2 | 21.2 |
+    | 451-time-retro-and-efficiency T89 | 2 | 89.5 | 99.7 | 103.0 | 103.0 |
+    | 449-rust-codebase T247 | 3 | 51.8 | 61.2 | 91.1 | 101.9 |
+    | 449-rust-codebase T235 | 1 | 19.9 | 28.2 | 23.0 | 23.0 |
+
+    The window's minutes stand at 8737.4 (a builder's turns and runs were always booked from its lines); its blocking rose from 3539.9 to 3550.8, the sessions' waits that fell on a builder inside a span it now has; "Working at once" reads none 129.5, one 162.1, two 204.0, three or more 944.4 where it read 129.9, 173.3, 264.3 and 872.5, measured 2026-11-26 (the two reports' opening lines and "The window, every category" tables).
+  - **What the open tasks still distort in these figures.** T332 and T344 (a pool tree's Phase lines carrying an old task): each task's compile, test and hook-suite phase minutes and blocking. T393 (a bundle's carry is no task's): the "its own table ends at" cell of a task landed from a bundle, and the task its carry's run is keyed to.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a carry's holder read at its run's start | `a_carry_is_the_task_s_that_held_the_tree_when_it_began`, red on the old code | n/a: tooling | none | n/a |
+| an agent's own lines outside every span a span | `own_lines_outside_every_span_are_a_span`, red on the old code | n/a: tooling | none | n/a |
+| the booking and `make where-time` read the new span | `a_resumed_builder_is_booked_in_every_span_and_stopped_between_them` and `the_columns_book_make_runs_compile_and_until`, restated | n/a: tooling | none | n/a |
 
-### T346 Approach (checklist part A)
+### T346, T382 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make task-time` and `make task-progress` book a carry to the task whose work it carried, and a builder's minutes hold every stretch its own lines show it working, with or without a start line.
+2. **The constraints.** The task lines of T346 and T382; T324 and T345's reading of a resumed builder (`plan-done.md`, "T324, T345 (bundle)"): a stop to the next own line is the builder stopped; `span_end`'s rule for a span no stop ends (451 T243).
+3. **Where each comes from.** O: the task lines' measurements of 2026-11-26. G: the GM's words of 2026-11-20 on measurement work, in `request.md`, which count this as performance work.
+4. **Do they describe the world here?** Yes: the old build's live view at 19:45Z lists T308 as carried 19:40:54, and the old build's report of 2026-11-22 reads 2482.0 builder minutes where the lines give 2743.6, measured 2026-11-26 (the reports named above).
+5. **The order.** T346 then T382, one section; T332, T344 and T393 stay open and separate.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/measure"` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-26 (`make rust-test CRATE=rust/gate/crates/measure`, each run's result line). T346's test on the old `carries`: 268 passed, 1 failed; with the rule, 269 passed. T382's test on the old `flight`: 269 passed, 1 failed; with the rule and the two pinned tests not yet restated, 268 passed, 2 failed; after, 270 passed, 0 failed, lint and format clean (`make builder-checks`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: the reports the GM reads to decide how the work is run named the wrong task for a carry (T308 for T301's, 2026-11-26) and left a builder's working time out of its minutes (557.5 min over 2026-11-21 to 11-24), measured 2026-11-26 (the passes named above). No map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- A bundle's carry is no task's in `make task-time`: the pool log's detail for a bundle is `451 T324,T345`, `tiers::batches` splits it on whitespace alone, and the landed table reads "its landing's start (no carry found)" for T324, T345, T370 and T372 in the pinned window, measured 2026-11-26 (the after report's landed table and a grep of `.git/builder-pool.log`). Not fixed here: which task a bundle's carry run books its minutes to is a rule to choose, a third job past this bundle's two. Filed as T393; lands before T380.
+
+**Performance work?** yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself
 
 
 ### T348 (<why: the finding or measurement that files it>)
@@ -5276,14 +5307,14 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T382 (<why: the finding or measurement that files it>)
+### T393 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T382 Approach (checklist part A)
+### T393 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

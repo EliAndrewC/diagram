@@ -2346,6 +2346,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T346, T382 (bundle) (a carry booked to the task that took the tree in its last second, and a builder's lines outside every span in no span: on 2026-11-26 the carry from diagram-backlog-t271 that ended 19:40:54Z read as T308's where T301 held the tree, and 60 agents' 4,149 own lines in the logs since 2026-11-21 were in no span, measured 2026-11-26 (Python passes over the pool log and every log's start, stop and by lines))": {
+   "sha256": "6b51e2b3710b926df889e4302a440bb0a6a86cf2936b7d8cb675ae2dc4962fbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T346, T382 Approach (checklist part A)": {
+   "sha256": "f59a59c2cfc6d27dc7e868959c2e4cb5adbb2eaee2df346bf02fae6d8e8dd4a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -29813,6 +29825,83 @@
      "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T346, T382 (bundle) (a carry booked to the task that took the tree in its last second, and a builder's lines outside every span in no span: on 2026-11-26 the carry from diagram-backlog-t271 that ended 19:40:54Z read as T308's where T301 held the tree, and 60 agents' 4,149 own lines in the logs since 2026-11-21 were in no span, measured 2026-11-26 (Python passes over the pool log and every log's start, stop and by lines))",
+    "### T346, T382 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -47158,6 +47247,156 @@
      "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
      "class": "within",
      "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T346": {
+   "section_sha256": "61db892283fd715515ff73bd8d59e50dc8680d1b4e2c7501d05a961b06f6e3c3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T382": {
+   "section_sha256": "61db892283fd715515ff73bd8d59e50dc8680d1b4e2c7501d05a961b06f6e3c3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
     }
    ],
    "verdict": "CLEAR"

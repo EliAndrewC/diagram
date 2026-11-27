@@ -7,7 +7,10 @@
 //!
 //! A CARRY's task is not on its line (the mark names whatever the session last started: on 2026-11-26 T309's and T289's carries were
 //! both logged under T305). It is read from the command's `FROM=<tree>` and the builder pool's log (`builder-pool.log` in the clone's
-//! git directory, `make builder-tree`'s record): the task holding that tree when the carry ran.
+//! git directory, `make builder-tree`'s record): the task holding that tree when the carry's run BEGAN. Read at the run's end it was
+//! the next task's wherever a landing's release and the next handout retook the tree in the run's last second: on 2026-11-26 the carry
+//! from diagram-backlog-t271 that ended 19:40:54Z was booked to T308, which took the tree at 19:40:54Z, where T301 had held it until
+//! then (451 T346).
 
 use std::collections::HashMap;
 use std::sync::LazyLock;
@@ -65,7 +68,7 @@ pub fn takes(bases: &[std::path::PathBuf]) -> Vec<Take> {
 /// A carry found: its run's id, when it ended, and the pool's detail of what it carried (`451 T309`).
 pub type Carry = (String, f64, String);
 
-/// Each main session's `make carry` whose tree the pool's log names a holder for.
+/// Each main session's `make carry` whose tree the pool's log names a holder for, the holder when the run began (the module's doc).
 #[must_use]
 #[expect(clippy::implicit_hasher, reason = "the map `read_subagents` makes")]
 pub fn carries(runs: &Runs, commands: &HashMap<String, String>, takes: &[Take]) -> Vec<Carry> {
@@ -81,7 +84,7 @@ pub fn carries(runs: &Runs, commands: &HashMap<String, String>, takes: &[Take]) 
         let held = tree.and_then(|tree| {
             takes
                 .iter()
-                .rfind(|(at, name, _)| *name == tree && *at <= r.t1)
+                .rfind(|(at, name, _)| *name == tree && *at <= r.t0)
         });
         if let Some((_, _, detail)) = held {
             out.push((r.id.clone(), r.t1, detail.clone()));

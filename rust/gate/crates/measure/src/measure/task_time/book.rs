@@ -66,7 +66,7 @@ pub struct Ledger {
     /// span, each page-session phase): the overlap the minutes hide.
     pub at_once: [f64; 4],
     /// (feature, task) -> its builders' seconds in the window and how many they were: each builder's spans from its start and stop
-    /// lines - a resumed one's every span (451 T324), the time it was stopped between them left out, a floor where its lines run on after a stop with no start line (451 T382) - never from its report (451
+    /// lines - a resumed one's every span (451 T324), the time it was stopped between them left out, its lines that run on after a stop with no start line a span too (451 T382) - never from its report (451
     /// T298: three reports said 30, 75 and 45 min for 9.5, 17.8 and 17.0).
     pub builders: HashMap<Key, (f64, usize)>,
 }

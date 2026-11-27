@@ -41,7 +41,7 @@ struct Flier {
 pub struct Flight {
     fliers: Vec<Flier>,
     by_id: HashMap<String, Vec<usize>>,
-    /// The feature's agents, each once, in the order of their first start: what was spent beside the critical path (T10, `spent`).
+    /// The feature's agents, each once, in the order of their first span: what was spent beside the critical path (T10, `spent`).
     pub agents: Vec<Agent>,
 }
 
@@ -50,7 +50,7 @@ pub struct Flight {
 pub struct Agent {
     /// Its id.
     pub aid: String,
-    /// Its kind, from the first start that names one, else `?`.
+    /// Its kind, from the first start that names one, else the first stop that does (an agent no start line was logged for), else `?`.
     pub kind: String,
     /// The task its lines name - the first stop's `task` (the agent's meta file, its launch's brief: D6), else the first start's - or "".
     /// A start written before 451 T53's `dispatches.rs` landed (19de0f1d0c, 2026-11-21T04:04:23Z) carried the clone's mark, not the
@@ -61,8 +61,12 @@ pub struct Agent {
     /// right for those lines.
     pub task: String,
     /// Each span, a start to the first stop after it; a start no stop follows ends at the agent's last own call before its next start,
-    /// else (no call: still running) at the window's end (451 T243); cut to the window and merged by `spent::clip` where the command
-    /// reads the agents' minutes.
+    /// else (no call: still running) at the window's end (451 T243). Its own lines outside every such span - after a stop with no start
+    /// line logged, or with no start at all - are a span too, from the first of them to its next stop, else to its last own line before
+    /// its next start (451 T382: 60 of the 3,050 agents with own lines in the logs since 2026-11-21 had such lines, 4,149 of them in
+    /// 242 spans of 557.5 min, measured 2026-11-26 by a Python pass over every log's start, stop and by lines; all 60 were builders
+    /// with a start line earlier and every span ended at a stop, so the builder-minutes column and "Working at once" left that time
+    /// out). Cut to the window and merged by `spent::clip` where the command reads the agents' minutes.
     pub spans: Vec<(f64, f64)>,
     /// Its last stop's `tok` (D6: a stop is cumulative), with that stop's `adv` (451 T69), if any stop carried one.
     pub tok: Option<super::spent::Tok>,
@@ -79,7 +83,7 @@ const MONITOR: usize = AGENT + 2;
 /// of the main session's since 2026-11-20T04:33Z, 75 starts and 61 stops sat in 449's log, and 9 of the 115 agents a `Stop` named in
 /// flight had their start only there, measured 2026-11-21 (`/tmp/t09/scripts/agents.py` over both logs). A resumed agent starts again
 /// under its id (31 did), so each start opens a span to the first stop after it, else to its last own call (`Agent::spans`), else to
-/// `end`; a line two logs hold is read once. An
+/// `end`, and its own lines outside every such span open one as well (451 T382, `Agent::spans`); a line two logs hold is read once. An
 /// agent is this feature's only where a line of `stream` (the feature's own log) names it - its launch's `aid` or its own calls' `by`:
 /// read from every log, the 449 agents the session ran over two hours of 2026-11-20 (08:32-09:35Z, 10:42-11:46Z, between 451's turns)
 /// were booked to 451's waits, observed 2026-11-21, method: `/tmp/t09/scripts/idle.py` and `held.py` over both logs.
@@ -123,13 +127,15 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
     // aid -> its kind, from the first start that names one: a resumed agent's start may name none; its task, a stop's before a start's
     // (`Agent::task`); its last stop's tokens
     let (mut kinds, mut tasks) = (HashMap::new(), HashMap::new());
+    let mut stop_kinds: HashMap<String, String> = HashMap::new();
     let mut toks: HashMap<String, super::spent::Tok> = HashMap::new();
     for start in [false, true] {
         for (_, e) in &lines {
             let (aid, kind, task) = (or_s(e, "aid"), or_s(e, "agent"), or_s(e, "task"));
             if is(e, "ev", "SubagentStart") == start {
-                if start && !kind.is_empty() {
-                    kinds.entry(aid.clone()).or_insert(kind);
+                if !kind.is_empty() {
+                    let by = if start { &mut kinds } else { &mut stop_kinds };
+                    by.entry(aid.clone()).or_insert(kind);
                 }
                 if !task.is_empty() {
                     tasks.entry(aid.clone()).or_insert(task);
@@ -145,13 +151,9 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
     }
     let own = own_calls(stream)?;
     let mut at: HashMap<String, usize> = HashMap::new();
-    for (i, (t0, e)) in lines.iter().enumerate() {
-        if !is(e, "ev", "SubagentStart") {
-            continue;
-        }
-        let aid = or_s(e, "aid");
-        let kind = kinds.get(&aid).map_or("?", String::as_str);
-        let t1 = span_end(&lines[i + 1..], &aid, (*t0, end), own.get(&aid));
+    for (t0, t1, aid, sid) in opens(&lines, &own, end) {
+        let kind = kinds.get(&aid).or_else(|| stop_kinds.get(&aid));
+        let kind = kind.map_or("?", String::as_str);
         let i = *at.entry(aid.clone()).or_insert_with(|| {
             f.agents.push(Agent {
                 aid: aid.clone(),
@@ -162,11 +164,11 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
             });
             f.agents.len() - 1
         });
-        f.agents[i].spans.push((*t0, t1));
-        f.by_id.entry(aid.clone()).or_default().push(f.fliers.len());
+        f.agents[i].spans.push((t0, t1));
+        f.by_id.entry(aid).or_default().push(f.fliers.len());
         f.fliers.push(Flier {
-            sid: or_s(e, "sid"),
-            t0: *t0,
+            sid,
+            t0,
             t1,
             rank: AGENT,
             bucket: super::super::bucket(&format!("waiting: {kind}")).to_owned(),
@@ -177,19 +179,65 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
     Ok(f)
 }
 
-/// aid -> the times of its own calls (`by`), for a span no stop ends ([`span_end`]).
-fn own_calls(stream: &[Event]) -> Result<HashMap<String, Vec<f64>>, Raised> {
-    let mut own: HashMap<String, Vec<f64>> = HashMap::new();
+/// One span: (its start, its end, the agent, the session).
+type Open = (f64, f64, String, String);
+
+/// aid -> its session and its own calls' times ([`own_calls`]).
+type Own = HashMap<String, (String, Vec<f64>)>;
+
+/// Every span of every agent of `lines` (the start and stop lines, in time order) and `own`, in time order: one from each start
+/// line, then (451 T382) one from each own line of an agent outside every span of it (`Agent::spans`).
+fn opens(lines: &[(f64, &Event)], own: &Own, end: f64) -> Vec<Open> {
+    let mut opens: Vec<Open> = Vec::new();
+    let mut held: HashMap<String, Vec<(f64, f64)>> = HashMap::new();
+    for (i, (t0, e)) in lines.iter().enumerate() {
+        if is(e, "ev", "SubagentStart") {
+            let aid = or_s(e, "aid");
+            let calls = own.get(&aid).map(|o| &o.1);
+            let t1 = span_end(&lines[i + 1..], &aid, (*t0, end), calls);
+            held.entry(aid.clone()).or_default().push((*t0, t1));
+            opens.push((*t0, t1, aid, or_s(e, "sid")));
+        }
+    }
+    for (aid, (sid, calls)) in own {
+        let spans = held.entry(aid.clone()).or_default();
+        for &t in calls {
+            if spans.iter().any(|s| s.0 <= t && t <= s.1) {
+                continue;
+            }
+            let after = &lines[lines.partition_point(|(x, _)| *x < t)..];
+            let t1 = span_end(after, aid, (t, end), Some(calls));
+            // one line alone holds no time: no span
+            if t1 > t {
+                spans.push((t, t1));
+                opens.push((t, t1, aid.clone(), sid.clone()));
+            }
+        }
+    }
+    opens.sort_by(|a, b| a.0.total_cmp(&b.0).then_with(|| a.2.cmp(&b.2)));
+    opens
+}
+
+/// aid -> the session of its first own call (`by`) and the times of them all, in time order: where a span no stop ends does
+/// ([`span_end`]), and the lines outside every span that open one of their own.
+fn own_calls(stream: &[Event]) -> Result<Own, Raised> {
+    let mut own = Own::new();
     for e in stream {
         let by = or_s(e, "by");
         if !by.is_empty() {
-            own.entry(by).or_default().push(t_of(e)?);
+            let o = own
+                .entry(by)
+                .or_insert_with(|| (or_s(e, "sid"), Vec::new()));
+            o.1.push(t_of(e)?);
         }
+    }
+    for o in own.values_mut() {
+        o.1.sort_by(f64::total_cmp);
     }
     Ok(own)
 }
 
-/// The end of agent `aid`'s span begun at `t0`, `after` its lines after the start: its next line if a stop; a start with no stop (an
+/// The end of agent `aid`'s span begun at `t0`, `after` the lines after its start (or from its own line `t0` on, where that opens it): its next line if a stop; a start with no stop (an
 /// agent cut off, its stop in no log read) ends at its last own call before its next start or `end`, with none at `end` (still
 /// running). Before this every unstopped span ran to the window's end: on 2026-11-25 eight agents, three started before a 24-hour
 /// window, held `make task-time`'s "Working at once" at three or more for all 1,440 min (451 T243).

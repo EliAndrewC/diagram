@@ -1,5 +1,5 @@
 //! A resumed agent's day (feature 451 T324, T345): a builder that stops with its background test still running, is resumed, stops
-//! again and runs on with no start line; a plan review resumed for a second round. Each second's booking is worked by hand in the
+//! again and runs on with no start line, a span of its own from its first line there (451 T382); a plan review resumed for a second round. Each second's booking is worked by hand in the
 //! comments, the blocking summing to the session's clock.
 
 use std::collections::HashMap;
@@ -63,10 +63,10 @@ fn builder_day() -> (Vec<Event>, Vec<Event>) {
     (stream, aside)
 }
 
-/// T324 and T345 together: both of the builder's spans are the session's wait on it, and the time between them is the builder
-/// STOPPED - waiting on its own test while that ran (blocking as the test, 01:00 to 02:00), then on being resumed with nothing of
-/// its own in flight (02:00 to 02:10) - never a model turn of its own, with a start line after the stop (01:00 to 02:10) or with
-/// none (02:40 to 03:00).
+/// T324, T345 and T382 together: each of the builder's three spans is the session's wait on it - the third opened by its own line
+/// at 03:00, no start line logged - and the time between them is the builder STOPPED - waiting on its own test while that ran
+/// (blocking as the test, 01:00 to 02:00), then on being resumed with nothing of its own in flight (02:00 to 02:10, and 02:40 to
+/// 03:00 where no start line follows the stop) - never a model turn of its own.
 #[test]
 fn a_resumed_builder_is_booked_in_every_span_and_stopped_between_them() {
     let (stream, aside) = builder_day();
@@ -88,16 +88,16 @@ fn a_resumed_builder_is_booked_in_every_span_and_stopped_between_them() {
         ),
         // the test's 90 s: its launch's 1 s in the builder's first span, and the 60 s the stopped builder waited on it
         ("tests", (90.0, 61.0, 1.0)),
-        // 00:31 to 00:41 in the first span; 03:00 to 03:01 is past the builder's last span, its minutes alone
-        ("builders: reading code", (11.0, 10.0, 0.0)),
-        // 00:41 to 01:00 and 02:21 to 02:40, each to a stop; 03:01 to 03:30 its minutes alone
-        ("builders: writing its reply", (67.0, 38.0, 0.0)),
+        // 00:31 to 00:41 in the first span; 03:00 to 03:01 in the third, the one its own line opens
+        ("builders: reading code", (11.0, 11.0, 0.0)),
+        // 00:41 to 01:00, 02:21 to 02:40 and 03:01 to 03:30, each to a stop
+        ("builders: writing its reply", (67.0, 67.0, 0.0)),
         // the second span: 02:10 to 02:21
         ("builders: writing code", (11.0, 11.0, 0.0)),
-        // 02:00 to 02:10: stopped with nothing of its own in flight; a wait has no minutes
-        (STOPPED, (0.0, 10.0, 0.0)),
-        // 02:40 to 04:00: past the builder's last span
-        (NOTHING_ENDED, (0.0, 80.0, 0.0)),
+        // 02:00 to 02:10 and 02:40 to 03:00: stopped with nothing of its own in flight; a wait has no minutes
+        (STOPPED, (0.0, 30.0, 0.0)),
+        // 03:30 to 04:00: past the builder's last span
+        (NOTHING_ENDED, (0.0, 30.0, 0.0)),
     ]
     .into_iter()
     .map(|(k, v)| (k.to_owned(), v))
@@ -105,9 +105,9 @@ fn a_resumed_builder_is_booked_in_every_span_and_stopped_between_them() {
     assert_eq!(got, want);
     let clock: f64 = got.values().map(|v| v.1).sum();
     assert!((clock - 250.0).abs() < 1e-6);
-    // the builder's minutes are both spans, 49 s and 30 s, and it is one builder
+    // the builder's minutes are its three spans, 49 s, 30 s and 30 s, and it is one builder
     let key = ("451-x".to_owned(), "T1".to_owned());
-    assert_eq!(l.builders[&key], (79.0, 1));
+    assert_eq!(l.builders[&key], (109.0, 1));
 }
 
 /// T324 alone: a plan review the session waits on returns at 01:00 and is resumed for a second round, 01:30 to 02:00. The wait is cut

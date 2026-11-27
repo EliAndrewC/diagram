@@ -238,7 +238,7 @@ fn world_with(name: &str, more: &[Value]) -> (l7r_shared::tempdir::TempDir, Stri
         t
     });
     std::fs::write(git.join("l7r-events/451-x.jsonl"), text).unwrap();
-    // the pool's log: the tree was T1's when the carry ran; a later holder, a release and a line that is no record change nothing
+    // the pool's log: the tree was T1's when the carry began; a later holder, a release and a line that is no record change nothing
     std::fs::write(
         git.join("builder-pool.log"),
         format!(
@@ -498,5 +498,57 @@ fn since_last_reads_the_last_report_s_end_and_writes_this_one_s() {
         held.stderr.starts_with("task-time: the marker ") && held.stderr.ends_with(tip),
         "{}",
         held.stderr
+    );
+}
+
+/// A carry is its holder's at the run's START (451 T346): a landing's release and the next handout retake the tree in the carry's
+/// last second (2026-11-26: the carry from diagram-backlog-t271 that ended 19:40:54Z, T301's, read as T308's), and a tree nobody
+/// held before the run began is no task's carry.
+#[test]
+fn a_carry_is_the_task_s_that_held_the_tree_when_it_began() {
+    use super::super::where_time::columns::{Run, Runs, Split};
+    let d = crate::checks::scratch("task-time-carry-holder");
+    let git = d.join("root/.git");
+    std::fs::create_dir_all(&git).unwrap();
+    std::fs::write(
+        git.join("builder-pool.log"),
+        format!(
+            "{}\n{}\n{}\n{}\n",
+            json!({"utc": at("00:05"), "event": "take", "tree": "/x/pool-t1", "detail": "451 T1"}),
+            json!({"utc": at("01:50"), "event": "release", "tree": "/x/pool-t1", "detail": "451 T1"}),
+            json!({"utc": at("01:50"), "event": "take", "tree": "/x/pool-t1", "detail": "451 T8"}),
+            json!({"utc": at("01:45"), "event": "take", "tree": "/x/pool-t2", "detail": "451 T5"}),
+        ),
+    )
+    .unwrap();
+    let takes = super::tiers::takes(&[d.join("root")]);
+    let run = |id: &str| Run {
+        id: id.to_owned(),
+        t0: ts(&at("01:40")).unwrap(),
+        t1: ts(&at("01:50")).unwrap(),
+        sid: "s".to_owned(),
+        by: String::new(),
+        bg_id: String::new(),
+        makes: vec!["carry".to_owned()],
+        bucket: "other",
+        task: "T9".to_owned(),
+        bg: false,
+        open: false,
+        split: Split::default(),
+    };
+    let runs = Runs {
+        runs: vec![run("cy"), run("c2")],
+        ..Runs::default()
+    };
+    let commands = [("cy", "/x/pool-t1"), ("c2", "/x/pool-t2")]
+        .map(|(id, tree)| (id.to_owned(), format!("make carry FROM={tree}")))
+        .into();
+    assert_eq!(
+        super::tiers::carries(&runs, &commands, &takes),
+        [(
+            "cy".to_owned(),
+            ts(&at("01:50")).unwrap(),
+            "451 T1".to_owned()
+        )]
     );
 }

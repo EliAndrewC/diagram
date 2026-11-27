@@ -200,3 +200,81 @@ fn an_unstopped_agent_ends_at_its_last_own_call() {
         ]
     );
 }
+
+/// An agent's own lines outside every span of it are a span too (451 T382): after a stop with no start line logged, before any
+/// start, or with no start or stop at all - from the first such line to its next stop, else to its last line before its next start.
+/// Before this they were in no span: 60 agents' 4,149 own lines in the logs since 2026-11-21, 557.5 min, measured 2026-11-26 (a
+/// Python pass over every log's start, stop and by lines).
+#[test]
+fn own_lines_outside_every_span_are_a_span() {
+    let at = |m: u32| format!("2026-11-01T08:{m:02}:00Z");
+    let t = |m: u32| ts(&at(m)).unwrap();
+    let mark = |m: u32, line: &str, aid: &str, kind: &str| {
+        ev(&json!({"t": at(m), "ev": line, "sid": "s", "aid": aid, "agent": kind, "task": "T1"}))
+    };
+    let call = |m: u32, aid: &str| {
+        ev(&json!({"t": at(m), "ev": "PreToolUse", "sid": "s", "by": aid, "tool": "Read"}))
+    };
+    let lines = [
+        // resumed with no start line: its lines run on after its stop to its next stop, then to its last line before a start
+        mark(0, "SubagentStart", "a1", "general-purpose"),
+        call(5, "a1"),
+        mark(10, "SubagentStop", "a1", ""),
+        // a line in its stop's own second is inside the span that stop ended
+        call(10, "a1"),
+        call(15, "a1"),
+        call(18, "a1"),
+        mark(22, "SubagentStop", "a1", ""),
+        call(30, "a1"),
+        call(33, "a1"),
+        mark(40, "SubagentStart", "a1", ""),
+        call(42, "a1"),
+        // no start and no stop in any log read
+        call(12, "a2"),
+        call(14, "a2"),
+        // no start: its kind and task are its stop's
+        call(3, "a3"),
+        call(6, "a3"),
+        mark(8, "SubagentStop", "a3", "spec-fidelity"),
+        // one line alone after a stop holds no time: no span
+        mark(1, "SubagentStart", "a4", "general-purpose"),
+        mark(2, "SubagentStop", "a4", ""),
+        call(44, "a4"),
+    ];
+    let agents: Vec<Event> = lines
+        .iter()
+        .filter(|e| !is(e, "ev", "PreToolUse"))
+        .cloned()
+        .collect();
+    let f = flight(&Runs::default(), &agents, &lines, t(50)).unwrap();
+    let got: Vec<_> = f
+        .agents
+        .iter()
+        .map(|a| (&*a.aid, &*a.kind, &*a.task, &*a.spans))
+        .collect();
+    let a1 = [
+        (t(0), t(10)),
+        (t(15), t(22)),
+        (t(30), t(33)),
+        (t(40), t(42)),
+    ];
+    assert_eq!(
+        got,
+        [
+            ("a1", "general-purpose", "T1", &a1[..]),
+            ("a4", "general-purpose", "T1", &[(t(1), t(2))][..]),
+            ("a3", "spec-fidelity", "T1", &[(t(3), t(8))][..]),
+            ("a2", "?", "", &[(t(12), t(14))][..]),
+        ]
+    );
+    // a wait whose `Stop` names the agent in flight is booked to it inside such a span as inside a started one
+    let stop = ev(&json!({"inflight": [{"id": "a1", "type": "subagent"}]}));
+    assert_eq!(
+        f.book("s", Some(&stop), t(12), t(24)),
+        vec![
+            (UNBOOKED.to_owned(), "", 180.0),
+            ("other subagent".to_owned(), "agent", 420.0),
+            (UNBOOKED.to_owned(), "", 120.0),
+        ]
+    );
+}
