@@ -4146,6 +4146,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T458 (found by T443, its Found and left: the reversal index's rebuild, a new, refiled or rotated log's first Edit, was 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 under load1 23 to 25 (`t443-cold.tsv`): the build parsed every line holding `\"Edit\"`)": {
+   "sha256": "9d1d7afa3a2064c0ab92975066a57c02be5b2517be5b36b4591c8de6edd670d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T458 Approach (checklist part A)": {
+   "sha256": "5a6a5ff40c7422024fad307d720d6881317da8b35c98a92b50ba68946d6246bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -37178,6 +37190,71 @@
      "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T458 (found by T443, its Found and left: the reversal index's rebuild, a new, refiled or rotated log's first Edit, was 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 under load1 23 to 25 (`t443-cold.tsv`): the build parsed every line holding `\"Edit\"`)",
+    "### T458 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T458 Approach: the second literal screen",
+     "summary": "indexed parses a line only if it also holds the text \"PreToolUse\" (memmem before UTF-8 decode), on top of T383's \"Edit\" screen",
+     "class": "within",
+     "why": "Performance work on a hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps the rows the full parse keeps on every line any writer produces. The differential shows 0 of 1,937 lists differing cold, warm and grown, and it goes red on a wrong screen."
+    },
+    {
+     "id": "T458 Approach: indexed returns whether it parsed",
+     "summary": "a bool return so a test can count the build's parses",
+     "class": "within",
+     "why": "Its only use is to let a test prove the screen does what the task claims, so it enforces the task. No behavior changes."
+    },
+    {
+     "id": "T458 Approach: oracle and differential left unscreened",
+     "summary": "the test-only full parse and the differential keep parsing every line",
+     "class": "within",
+     "why": "This keeps the proof from being circular. It changes no behavior, and no guard message changes."
+    },
+    {
+     "id": "DECISION: the literal is the quoted value, not the field",
+     "summary": "screen on \"PreToolUse\", not \"ev\":\"PreToolUse\"",
+     "class": "within",
+     "why": "A rendering choice. The quoted value alone keeps every line the field spelling keeps, plus any line with whitespace around the colon, so it drops nothing more. It is pinned by a test that goes red on the field-spelling mutant."
+    },
+    {
+     "id": "DECISION: why the screen cannot meet another spelling",
+     "summary": "every writer serializes with serde_json compact or copies bytes, and serde_json never escapes a letter",
+     "class": "within",
+     "why": "This is a factual premise, labeled as an observation with its method (each writer's code read). It decides nothing beyond the screen. It is the ground for the limitation below and is weighed there."
+    },
+    {
+     "id": "DECISION: ACCEPTED LIMITATION, an ev spelled with a \\u escape",
+     "summary": "a line whose ev is written with a JSON \\u escape is kept by the full parse but dropped by the screen, so a reversal on it would be missed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the general behavior ('keeps exactly the rows the full parse keeps') does not cover, so it is ruled as an exception and presumed wrong. The reversal tripwire is feature 375's requirement, and nothing in this request asks for it. Judged against the purpose anyway, the exception removes no protection. The tripwire watches Edits that the hooks log, and the block reads every writer it names as serde_json compact output or a byte-for-byte copy. serde_json escapes only a quote, a backslash or a control character, so 'PreToolUse' (printable ASCII) has one spelling from any writer that escapes no more than JSON requires, not only the three listed. The survey found the literal in all 9,176 of 9,176 kept lines across 485,165 lines of the 34 real logs, and the differential found 0 of 1,937 lists differing. So the excepted case is a line no writer produces. Leaving it is no wrong outcome on any real log, and by constitution XIV's definition of a defect it does not leave a defect. It is one case, so there is no bundling. The writer census is the block's observation, not mine (the bundle excludes the repository), and it says how each writer was read, not what search found the set. The ruling rests on the serializer argument and the survey, not on the list being complete. 'EDIT has carried the same limit since T383' and the go-ahead were not weighed either way."
+    },
+    {
+     "id": "T458 Approach: the task line's 101.6 ms not compared",
+     "summary": "before and after are measured as interleaved arms at load1 about 7, not against the task line's figure at load1 23 to 25",
+     "class": "within",
+     "why": "A measurement choice. Both arms ran under the same load, the comparison is fair, and it is stated openly."
+    },
+    {
+     "id": "T458 Approach: order, after T443 and before T302",
+     "summary": "the screen lands on T443's index",
+     "class": "within",
+     "why": "It depends on T443's index, and as performance work it goes ahead of non-performance work (FR-013)."
+    },
+    {
+     "id": "Performance work? yes",
+     "summary": "T458 is classed as performance work for scheduling",
+     "class": "within",
+     "why": "It speeds up a hook on the builders' loop, which is FR-013's meaning of performance work."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -56596,6 +56673,69 @@
      "summary": "T462 is filed as performance work ([perf], 451 FR-013), because a held plan-delta dispatch is builders waiting.",
      "class": "within",
      "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T458": {
+   "section_sha256": "f04e57850d3baab00a02d0697a2f46791256c8916f72fc7c5186f4337f6d7800",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T458 Approach: the second literal screen",
+     "summary": "indexed parses a line only if it also holds the text \"PreToolUse\" (memmem before UTF-8 decode), on top of T383's \"Edit\" screen",
+     "class": "within",
+     "why": "Performance work on a hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps the rows the full parse keeps on every line any writer produces. The differential shows 0 of 1,937 lists differing cold, warm and grown, and it goes red on a wrong screen."
+    },
+    {
+     "id": "T458 Approach: indexed returns whether it parsed",
+     "summary": "a bool return so a test can count the build's parses",
+     "class": "within",
+     "why": "Its only use is to let a test prove the screen does what the task claims, so it enforces the task. No behavior changes."
+    },
+    {
+     "id": "T458 Approach: oracle and differential left unscreened",
+     "summary": "the test-only full parse and the differential keep parsing every line",
+     "class": "within",
+     "why": "This keeps the proof from being circular. It changes no behavior, and no guard message changes."
+    },
+    {
+     "id": "DECISION: the literal is the quoted value, not the field",
+     "summary": "screen on \"PreToolUse\", not \"ev\":\"PreToolUse\"",
+     "class": "within",
+     "why": "A rendering choice. The quoted value alone keeps every line the field spelling keeps, plus any line with whitespace around the colon, so it drops nothing more. It is pinned by a test that goes red on the field-spelling mutant."
+    },
+    {
+     "id": "DECISION: why the screen cannot meet another spelling",
+     "summary": "every writer serializes with serde_json compact or copies bytes, and serde_json never escapes a letter",
+     "class": "within",
+     "why": "This is a factual premise, labeled as an observation with its method (each writer's code read). It decides nothing beyond the screen. It is the ground for the limitation below and is weighed there."
+    },
+    {
+     "id": "DECISION: ACCEPTED LIMITATION, an ev spelled with a \\u escape",
+     "summary": "a line whose ev is written with a JSON \\u escape is kept by the full parse but dropped by the screen, so a reversal on it would be missed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the general behavior ('keeps exactly the rows the full parse keeps') does not cover, so it is ruled as an exception and presumed wrong. The reversal tripwire is feature 375's requirement, and nothing in this request asks for it. Judged against the purpose anyway, the exception removes no protection. The tripwire watches Edits that the hooks log, and the block reads every writer it names as serde_json compact output or a byte-for-byte copy. serde_json escapes only a quote, a backslash or a control character, so 'PreToolUse' (printable ASCII) has one spelling from any writer that escapes no more than JSON requires, not only the three listed. The survey found the literal in all 9,176 of 9,176 kept lines across 485,165 lines of the 34 real logs, and the differential found 0 of 1,937 lists differing. So the excepted case is a line no writer produces. Leaving it is no wrong outcome on any real log, and by constitution XIV's definition of a defect it does not leave a defect. It is one case, so there is no bundling. The writer census is the block's observation, not mine (the bundle excludes the repository), and it says how each writer was read, not what search found the set. The ruling rests on the serializer argument and the survey, not on the list being complete. 'EDIT has carried the same limit since T383' and the go-ahead were not weighed either way."
+    },
+    {
+     "id": "T458 Approach: the task line's 101.6 ms not compared",
+     "summary": "before and after are measured as interleaved arms at load1 about 7, not against the task line's figure at load1 23 to 25",
+     "class": "within",
+     "why": "A measurement choice. Both arms ran under the same load, the comparison is fair, and it is stated openly."
+    },
+    {
+     "id": "T458 Approach: order, after T443 and before T302",
+     "summary": "the screen lands on T443's index",
+     "class": "within",
+     "why": "It depends on T443's index, and as performance work it goes ahead of non-performance work (FR-013)."
+    },
+    {
+     "id": "Performance work? yes",
+     "summary": "T458 is classed as performance work for scheduling",
+     "class": "within",
+     "why": "It speeds up a hook on the builders' loop, which is FR-013's meaning of performance work."
     }
    ],
    "verdict": "CLEAR"

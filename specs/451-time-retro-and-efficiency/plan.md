@@ -7794,31 +7794,46 @@ T462-D1 - **A process-fault on a WRITTEN section still records its verdict** (th
 
 **Performance work?** yes (a `[perf]` task, 451 FR-013: a held plan-delta dispatch is every builder's waiting - this unblocks the builders' loop).
 
-### T458 (<why: the finding or measurement that files it>)
+### T458 (found by T443, its Found and left: the reversal index's rebuild, a new, refiled or rotated log's first Edit, was 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 under load1 23 to 25 (`t443-cold.tsv`): the build parsed every line holding `"Edit"`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a SECOND LITERAL SCREEN before the build's parse. `indexed` (`rust/guard/shared/src/guards/event_log_hooks/reversal/index.rs`) now parses a line only if its bytes also hold `PRE`, the text `"PreToolUse"`, searched with `memchr`'s `memmem` before the UTF-8 decode; the scan still hands over only lines holding `"Edit"` (T383's screen). `indexed` returns whether it parsed, so a test counts the build's parses. The test-only oracle (`needle`, `candidate`, `Kept`, `replaced`) and the differential's full parse are unchanged and unscreened, so the proof is not circular. No guard message changed.
+  - **DECISION, the literal is the quoted value, not the field** (rendering): `"PreToolUse"`, not `"ev":"PreToolUse"`. Both drop the same lines of the real logs (all 9,176 kept lines spell it `"ev":"PreToolUse"`, observed 2026-11-27, method: `dev/measurements/2026-11-27/edit-hook/t458-spell.py` over the 34 copies), and the field's spelling adds a risk about whitespace round the colon that the value alone does not carry. Pinned by `the_build_parses_only_a_line_holding_both_the_tool_and_the_event_as_text` (a line `"ev" : "PreToolUse"` is kept), red on a mutant screening `"ev":"PreToolUse"` (82 passed, 1 failed: 5 parsed against 6), measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks"`).
+  - **DECISION, why the screen cannot meet another spelling** (rendering): `PreToolUse` is printable ASCII with no quote and no backslash, the standard `reversal.rs`' `needle` and `EDIT` already rest on, so a writer that escapes no more than JSON asks spells it one way. Every writer of a log is one of those, observed 2026-11-27, method: each writer's code read - `event_log_hooks.rs`' `write_line` serializes a row with serde_json's compact `Value::to_string` (the gate's `append_row*` reach it); `make events-refile` (`rust/gate/crates/measure/src/measure/event_log/refile.rs`) re-serializes a moved line with the same `Value::Object(e).to_string()` and keeps every other line's raw text; `scripts/state-sync.sh`'s `merge_in` copies lines byte for byte (`awk` printing `$0`, or `cp`). serde_json escapes only a quote, a backslash and a control character, never a letter.
+  - **DECISION, an ACCEPTED LIMITATION: an `ev` spelled with a `\u` escape** (rendering; chosen by the builder, within the GM's go-ahead of 2026-11-27 for T443's line of work). What it costs: a line whose `ev` a writer wrote as, say, `"PreToolUse"` is kept by the full parse and dropped by the screen, so a reversal on it would be missed. Why it is accepted: no writer makes one (the decision above), none of the 485,165 lines of the real logs holds one (all 9,176 kept lines hold the literal), observed 2026-11-27, method: `t458-spell.py` over the 34 copies, and `EDIT` carries the same limit since T383. Said in `PRE`'s doc comment.
+  - **The proof on the real logs**, measured 2026-11-27 (T443's differential unchanged but for its output and work directory, `dev/measurements/2026-11-27/edit-hook/t458-differential.rs`, appended to `index/tests.rs`, run once, then removed and the file checked equal by `cmp`; over T443's read-only copies of the 34 logs, their sha256 equal to `t443-copies.sha`): 485,165 lines, 9,176 PreToolUse Edit lines over 1,937 paths, 0 of 1,937 lists differing COLD, WARM and GROWN (`t458-differential.tsv`). It goes red on a wrong screen (`"PostToolUse"`): 1,937, 1,937 and 5,811 differing (`t458-differential-red.tsv`).
+  - **What it saves, priced** on the timed sandbox log (161,029 lines, 42.3 MB), measured 2026-11-27: 12,242 lines (4.08 MB) hold `"Edit"`, 7,152 (2.37 MB) also `"PreToolUse"`, so 5,090 lines and 1.71 MB (42% of the parsed bytes) are no longer parsed.
+  - **Before and after**, measured 2026-11-27 (`t458-cold.py`: T443's `t443-cold.py` with two binaries as interleaved arms, each round the index deleted, a cold call and the next warm call, 20 counted rounds after a warm-up, T373's sandbox, `event-log-hooks` alone; the before binary built from this tree's HEAD `40b9f44a06`, the after from HEAD plus this change; median / 90th centile in ms; every call exited 0 with no output):
+
+    | `event-log-hooks`, PreToolUse Edit of a doc | load1 7.5 (`t458-cold.tsv`): before | after | load1 6.8 to 7.1 (`t458-cold-rerun.tsv`): before | after |
+    |---|---|---|---|---|
+    | cold (the index rebuilt) | 59.5 / 68.8 | 48.5 / 59.2 | 54.2 / 62.3 | 46.6 / 55.5 |
+    | warm (the next call) | 10.6 / 13.1 | 10.5 / 13.3 | 10.3 / 11.4 | 9.9 / 11.0 |
+
+    The rebuild is 7.6 to 11.0 ms (14% to 18%) faster at the median, and the warm call, which never parses a covered line, is unchanged, measured 2026-11-27 (the two runs above). The task line's 101.6 ms was at load1 23 to 25 and is not compared, measured 2026-11-27 (`t443-cold.tsv`). No real state was touched (`t458-leak-check.txt`: the copies' sha256 unchanged, the real logs only grew, no `reversal/` directory under either real events directory before or after, the differential's work directory removed, the sandbox clone clean).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the second screen (`PRE`) | `the_build_parses_only_a_line_holding_both_the_tool_and_the_event_as_text`, red on the old build rule (a mutant screening nothing more than `"Edit"`: 82 passed, 1 failed, 16 parsed against 6), and on the field-spelling mutant (5 against 6), measured 2026-11-27 (`make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks"`) | n/a: tooling | none | n/a |
+| the answer unchanged | the differential, 0 of 1,937 cold, warm and grown; red on a `"PostToolUse"` screen, measured 2026-11-27 (`t458-differential.tsv`, `t458-differential-red.tsv`) | n/a: tooling | none | n/a |
 
 ### T458 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A new, refiled or rotated log's first Edit does not wait on a JSON parse of lines that cannot be kept: the index's build parses only lines holding both `"Edit"` and `"PreToolUse"`, and keeps exactly the rows the full parse keeps.
+2. **The constraints.** The reversal tripwire must not miss a put-back (feature 375's round arbiter; T383's screen and T443's index); the oracle stays the unscreened full parse; no guard message changes; constitution XIII, the one spelling the screen cannot see said, pinned in the doc comment and accepted.
+3. **Where each comes from.** O: T443's cold figure and Found and left; O: this task's spelling survey, differential and interleaved timing. G: the GM's go-ahead of 2026-11-27 for the reversal index's work.
+4. **Do they describe the world here?** Yes: the before arm's cold call (54.2 to 59.5 ms at load1 7) and warm call (10.3 to 10.6) stand to T443's 101.6 and 20.5 at load1 23 to 25 as the load does, measured 2026-11-27 (`t458-cold.py`).
+5. **The order.** After T443 (the index); before T302.
+6. **The exits.** Green: `make builder-checks CRATE="rust/guard/shared"` and `tests/hooks/test-event-log-hooks.sh` in the builder's tree, the full gate at the landing. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST, measured 2026-11-27: the new test 82 passed, 1 failed on the old build rule (16 parsed against 6), 83 passed after (`make rust-test CRATE=rust/guard/shared ONLY="guards::event_log_hooks"`); `make builder-checks CRATE="rust/guard/shared"` green (564 passed); `tests/hooks/test-event-log-hooks.sh` 25 passed, 0 failed. The differential 0 of 1,937 differing; the rebuild 59.5 to 48.5 and 54.2 to 46.6 ms at the median, measured 2026-11-27 (`t458-cold.py`, the Approach's runs).
+10. **Before moving a constant.** n/a: `PRE` is a new literal, not a knob; `WINDOW`, `STALE` and `CHUNK` are unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of outcome: no map, verdict or message changes; the speed is the change.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the builders' loop and the session's own, the first Edit's hook on each new, refiled or rotated log. Before and after: `event-log-hooks` on a cold index 59.5 / 68.8 to 48.5 / 59.2 ms and 54.2 / 62.3 to 46.6 / 55.5 ms at load1 6.8 to 7.5, the warm call unchanged (median / 90th centile, 20 interleaved rounds each), measured 2026-11-27 (`t458-cold.py` in T373's sandbox). Once a log, so a few tens of milliseconds a day. Not an engine-speed task: docs/performance-checklist.md's engine questions do not apply.
 
 
 ### T459 (<why: the finding or measurement that files it>)

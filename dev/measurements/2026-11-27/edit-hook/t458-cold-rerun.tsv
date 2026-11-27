@@ -1,0 +1,5 @@
+arm	state	n	median_ms	p90_ms	min_ms	max_ms	(rc, output bytes)	load1
+before	cold	20	54.2	62.3	48.7	62.9	[(0, 0)]	6.81-7.14
+before	warm	20	10.3	11.4	7.3	11.6	[(0, 0)]	6.81-7.14
+after	cold	20	46.6	55.5	40.2	58.0	[(0, 0)]	6.81-7.14
+after	warm	20	9.9	11.0	7.1	11.5	[(0, 0)]	6.81-7.14

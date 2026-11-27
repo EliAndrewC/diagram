@@ -1,0 +1,13 @@
+451 T458 leak check, run last, 2026-11-27T08:20:46Z
+== the 34 copies the differential read are unchanged since T443 copied them (sha256 of each, sorted, against t443-copies.sha):
+  34 of 34 equal
+== the real logs only grew since this task's snapshot of their sizes (t458-leak-pre.txt, 08:09:57Z): each size now at least its size then:
+  40 real logs, 0 shrank
+== a reversal index under a real events directory:
+  /diagram/.git/l7r-events: no reversal/ (none before either)
+  /diagram/.clones/diagram-backlog/.git/l7r-events: no reversal/ (none before either)
+== real event-log lines naming the sandbox's index or a t458 scratch path since the snapshot:
+  (this session's own commands, named) /diagram/.clones/diagram-backlog/.git/l7r-events/451-time-retro-and-efficiency.jsonl
+== the differential's work dir removed:
+  removed
+== the sandbox clone's status (empty = clean):

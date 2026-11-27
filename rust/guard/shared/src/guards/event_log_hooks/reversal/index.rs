@@ -37,6 +37,15 @@ use serde_json::Value;
 
 use super::{scan, EDIT};
 
+/// The event a kept line names, as its JSON holds it (451 T458): the build's second screen, after [`EDIT`]. A SUPERSET of the parse's
+/// lines on the argument [`EDIT`] rests on: `PreToolUse` is printable ASCII with no quote and no backslash, so a writer that escapes no
+/// more than JSON asks spells it one way, whatever it puts round the colon. Every writer of a log does: `write_line` and refile's moved
+/// lines serialize through serde's compact `to_string`, which escapes only a quote, a backslash and a control character, and refile's
+/// kept lines and `state-sync.sh`'s merge copy lines byte for byte (observed 2026-11-27, method: `write_line`, `refile.rs` and
+/// `merge_in` read; all 9,176 `PreToolUse` Edit lines of the 34 real logs spell it `"ev":"PreToolUse"`). WHAT IT CANNOT SEE (a
+/// deliberate limit, as [`EDIT`]'s): a line whose `ev` a writer spelled with a `\u` escape, kept by the parse, dropped here.
+const PRE: &str = "\"PreToolUse\"";
+
 /// The index's first word and version: a file without them is no index of this form, and is rebuilt.
 const MAGIC: &str = "l7r-reversal-index 1";
 
@@ -94,15 +103,20 @@ fn row(rows: &mut Vec<u8>, path: &Value, old: &Value) {
 
 /// A log line's row where the full read would keep it for its path: valid UTF-8, a `PreToolUse` Edit with a `path` key (a line with
 /// none matches no path, a null one included), its `old` Null where it has none - [`super::Kept::line`]'s test, for every path at once.
-fn indexed(line: &[u8], rows: &mut Vec<u8>) {
+/// Whether the line was parsed, for the tests that count the build's parses. The scan hands over only lines holding [`EDIT`]; a line
+/// is parsed only if it also holds [`PRE`] (451 T458), so a `PostToolUse` Edit line is dropped as text, not parsed.
+fn indexed(line: &[u8], rows: &mut Vec<u8>) -> bool {
+    if memchr::memmem::find(line, PRE.as_bytes()).is_none() {
+        return false;
+    }
     let Ok(l) = std::str::from_utf8(line) else {
-        return;
+        return false;
     };
     if !l.contains(EDIT) {
-        return;
+        return false;
     }
     let Ok(e) = serde_json::from_str::<Value>(l.trim()) else {
-        return;
+        return true;
     };
     if e.get("ev") == Some(&Value::from("PreToolUse"))
         && e.get("tool") == Some(&Value::from("Edit"))
@@ -111,6 +125,7 @@ fn indexed(line: &[u8], rows: &mut Vec<u8>) {
             row(rows, p, e.get("old").unwrap_or(&Value::Null));
         }
     }
+    true
 }
 
 /// The `old` of each row of `rows` whose path is `path`, in order: a string path compared as its one serialized spelling, any other

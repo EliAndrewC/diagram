@@ -348,8 +348,10 @@ fn the_rows_round_trip_and_a_row_with_no_tab_is_passed_over() {
     let mut none = Vec::new();
     for l in [
         &b"\xff\"Edit\""[..],
+        &b"\xff\"Edit\" \"PreToolUse\""[..],
         br#"{"ev":"PreToolUse","tool":"Bash","path":"/a"}"#,
         br#"not json "Edit""#,
+        br#"not json "Edit" "PreToolUse""#,
         br#"{"ev":"PostToolUse","tool":"Edit","path":"/a"}"#,
         br#"{"ev":"PreToolUse","tool":"Edit"}"#,
     ] {
@@ -375,4 +377,36 @@ fn an_unreadable_index_file_is_answered_by_the_full_scan() {
     // root reads it whatever its mode; anyone else rebuilds it by rename, which the mode does not stop
     assert_eq!(ask(&log, &p), parse_all(&text, &p));
     assert!(std::fs::read(&idx).is_ok());
+}
+
+#[test]
+fn the_build_parses_only_a_line_holding_both_the_tool_and_the_event_as_text() {
+    // 451 T458: a PostToolUse Edit line and another tool's line holding "Edit" are dropped as text; a PreToolUse Edit line is kept
+    // whatever the writer puts round the colon, as the full parse keeps it
+    let p = json!("/c/docs/usage.md");
+    let mut text = String::new();
+    for i in 0..5 {
+        text.push_str(&row("PreToolUse", "Edit", &p, &format!("o{i}")));
+        text.push('\n');
+        text.push_str(&row("PostToolUse", "Edit", &p, &format!("post{i}")));
+        text.push('\n');
+        text.push_str(&row("PostToolUse", "Bash", &json!("Edit"), "b"));
+        text.push('\n');
+    }
+    text.push_str(
+        r#"{"ev" : "PreToolUse", "tool" : "Edit", "path" : "/c/docs/usage.md", "old" : "spaced"}"#,
+    );
+    text.push('\n');
+    let mut rows = Vec::new();
+    let parsed = text
+        .lines()
+        .filter(|l| super::indexed(l.as_bytes(), &mut rows))
+        .count();
+    assert_eq!(parsed, 6);
+    let mut got = Vec::new();
+    matching(&rows, &p, &mut got);
+    assert_eq!(got, parse_all(&text, &p));
+    assert_eq!(got.last(), Some(&json!("spaced")));
+    let (_d, log) = world("screen", &text);
+    assert_eq!(ask(&log, &p), parse_all(&text, &p));
 }
