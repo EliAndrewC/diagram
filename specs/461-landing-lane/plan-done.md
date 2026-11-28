@@ -1314,3 +1314,1346 @@ phase 5, not by this task.
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-28 -->
+### T10 (phase 1's measurement on real work, US2 and SC-002: the hand-in in use since T43 landed)
+
+- **Approach**: A measurement script, `dev/measurements/2026-11-27/461-t10-phase1/phase1.py`, reuses T02's `night-figures.py`
+  for the landings, the pool replay and the load, so the after figures count as the night's did. Its record is that
+  directory's `results.md`; nothing in the engine or the tooling changed.
+  - **Windows.** 19:57:00Z (T08 and T43 landed, 19:56:47Z) to 23:03:20Z (before this task's take), 3.11 h, and 21:06:47Z (T44
+    landed) to 23:03:20Z beside it (observed 2026-11-27, method: the event log's `make land` end rows and the pool log).
+  - **Hand-ins.** 27 pool `done` rows, all `"handed_in": true`, all run by a builder and none by the coordinator, on 22 tasks or
+    bundles; 21:06Z on, 22 on 18 (observed 2026-11-27, method: `phase1.py figures` over the kept extracts,
+    `output-1957-2303.txt` and `output-2106-2303.txt`, each done row joined to the builder-done call that wrote it).
+  - **Refused at hand-in.** Of 34 builder calls, 7 handed nothing in, on 7 of 23 tasks. 4 were conflicts and 3 first-pass
+    refusals: a ledger row, a feature-close report, and a plan review owed. Each named its fixing command or its paths. 3 of 4
+    conflicts were resolved by the builder that met them, the fourth by a fresh closing half from a handoff, and none by the
+    coordinator. No hand-in ran a coverage step (observed 2026-11-27, method: the same outputs; the outcomes and reasons from
+    the calls' own tool results in the subagent transcripts, found by call id, a second source the logs cannot give).
+  - **What the logs cannot show.** The event log's foreground tool rows carry no exit code, and the pool log writes nothing on
+    a refused or conflicted hand-in. So the logs show that a call handed nothing in, never why, and never a conflict resolved.
+  - **Landings refused before a gate.** 0 of 7 attempts (5 landed, 2 gates red) over 19:57Z on, and 0 of 4 over 21:06Z on,
+    against the night's 17 of 39. Trees held were 2.94 and 3.02 against 3.19, and the median load 9.4 and 10.3 against 14.1
+    on 22 cores (observed 2026-11-27, method: `night-figures.py`'s `landings()` and replay through `phase1.py`, the night's
+    from T02's record). The window is not LIKE the night, 3.11 h long with its load below 10.6, and seven attempts agree with
+    US2's "well under" without establishing it: at an 11% rate, none in seven comes 44% of the time (observed 2026-11-27,
+    method: 0.89^7, the likeness rule of `night-figures.py`).
+  - **The one real hand-in.** This task's own, a measurement's under T44's rule. Its outcome is in the builder's report, since
+    the record it commits cannot hold it.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: a measurement, no engine or tooling code | - | - | - | - |
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** Phase 1's after figures (hand-ins, refusals at hand-in and their causes, conflicts a builder
+   resolved, landings refused before a gate) recorded with their concurrency, re-derivable from kept extracts.
+2. **The constraints.** US2 and SC-002; FR-010 (every figure beside its concurrency); T02's counting rule for landings.
+3. **Where each comes from.** R: the spec's US2, SC-002 and FR-010; T02's record. O: this task's runs.
+4. **Do they describe the world here?** Measured on the pool log, the event log, the sampler and the transcripts over the
+   windows above (observed 2026-11-27, method: `phase1.py`; live and kept runs agree but for the transcript outcomes).
+5. **The order.** After T08, T43 and T44 landed; before T31, which reads the like window.
+6. **The exits.** Green: the record written and its counts re-derived from its outputs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the logs' gaps are named, and the transcripts fill them as a labeled second source.
+8. **The budget.** One landing.
+9. **Done, measured.** `results.md` with the outputs it cites, the figures re-derived by the commands it lists.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: a measurement, no fix.
+
+**Found and left?**
+- The likeness test's trees held counts the lane's own worktree, adopted `lane` at 21:08:09Z and never released, as a held
+  builder tree: 3.55 against 2.94 over 19:57Z on, and the sampler's `held` lists `lane` in 215 of 1,065 samples (observed
+  2026-11-27, method: `phase1.py` with and without the lane tree, and each sample's `held` against the replay). T31's like
+  window would read about one tree high. Not fixed here: a measurement changes no tooling. Filed as T59; lands before T31.
+- A build half's hand-in is refused for the feature-close ask, which only its closing half can answer: 451 T537's build half at
+  22:06:03Z (observed 2026-11-27, method: that call's tool result). T44 puts off a build half's plan asks by its kind, but not
+  this one. Not fixed here: a measurement changes no tooling. Filed as T60; lands before T31.
+
+**Performance work?** yes - a measurement of where the landings' and the hand-ins' time and refusals go (451 FR-013: a
+measurement task counts).
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T14 (D5, D6 step 1, D8, D14: phase 2's batch, the runner's step and resume that T12 left as stand-ins; lands after T12 and T13)
+
+- **Approach**: `rust/gate/crates/lane/src/batch.rs` (new, with `batch/tests.rs`) forms the batch; `runner/run.rs` (new, with
+  `run/tests.rs`) runs it as the step and resume T12's `work_cli` calls; `runner.rs`'s spawn strips the caller's environment and
+  runs the lane tree's own wrapper (T12's "For T14"). Built in two halves (2026-11-27); the build half's handoff is
+  `<clone git dir>/l7r-handoffs/T14-build.md`. `dev/audits/lane-batch-cap.md` covers `LANE_MAX`; the lane crate's row in
+  `rust/gate/CLAUDE.md` names the modules.
+- **Decision 1 - D5's formation, literally.** `form(&World, LANE_MAX)` takes the `waiting` hand-ins in hand-in order, starts at
+  the oldest, and takes the run of its feature straight after it, cut at the first hand-in of another feature, at one D14 holds,
+  or at `LANE_MAX` changes. D14's open-batch half: a hand-in is held while an open batch carries another hand-in of its feature
+  sharing one of its tasks; where the OLDEST waiting hand-in is held, no batch forms (none jumps ahead of it). `next_id` is
+  `<feature>-<n>`, n one past the feature's highest `batch` line. A batch reads its changes' full shas once, on its `batch` line, so
+  a later hand-in moves no batch. Label: the literal order (D5); the cut at a held hand-in the easier route (D5's own label).
+- **Decision 2 - `LANE_MAX` = 6.** GUESS knob, beside its constant and in `dev/audits/lane-batch-cap.md` (seed: the two-tier
+  threshold's "about six tasks", `docs/process-decisions.md`; trial 458's verdict resets it). `LANE_WAIT_S` = 0 has no constant: the
+  step forms as soon as no batch is open. Label: GUESS.
+- **Decision 3 - the run's four steps** (`run_batch`): (1) the lane's tree brought to `origin/main` by T13's `builder_tree::cli(["lane"])`,
+  and the changes `origin/main` already holds dropped (a resume after the push lands with no run); (2) each remaining change carried
+  by `make carry COMMIT=<sha>` in the lane's tree, oldest first, one `carry` line - the lane carries the batch's OWN shas, since
+  `make land`'s `carry_done` reads the done refs live; (3) `make land F=<feature> T="<tasks>" NOTE="<subjects; ...> - landed by the
+  lane, batch <b>"` there, its stdout and stderr the attempt's own file `l7r-lane/attempts/<b>-<n>.log`, n continuing from the
+  batch's `run` lines (D6 step 1, never overwritten), one `run` line and a `push` line where it pushed; (4) each done ref deleted
+  only where it still names the batch's sha (`update-ref -d <ref> <sha>`: a later hand-in keeps its ref; the linked tree's carry
+  keeps the refs, 451 T404), then the `landed` line and ONE `owed` line, `lane: batch <b> landed - <feature> <tasks> (<k>
+  change(s), <r> run(s), <m> minutes)`, which T20 prints. A carry that stops, or a landing that ends red or refused, writes its line
+  (a red one also ONE `owed` line naming the attempt file) and returns an error: the runner stops with `error: ...` and the batch
+  stays OPEN, so nothing re-runs each poll and the next `make lane-start` resumes it as attempt n+1. A make that cannot start counts
+  as exit -1 on the same path. Label: the easier route (D6 step 1's green path; T15, phase 3 and T19 replace the red, the carry's
+  and the push's branches).
+- **Decision 4 - a non-zero exit is read against `origin/main`.** GNU make ends 2 for any failed recipe, so the landing's own exit 3
+  (pushed, other sessions' edits merged) reaches the runner as 2, never 3 (observed 2026-11-27, a scratch Makefile under GNU Make
+  4.4.1: a recipe's `exit 3` printed `Error 3` and make ended 2). On any exit but 0 the runner fetches `origin main` in the
+  lane's tree and asks `held_by(tree, "refs/remotes/origin/main", <the batch's shas>)`: every change there is a push (a `push` line
+  with the observed code), and the batch goes on to step 4; otherwise it is the red branch. The push's own code is not separable from
+  make land's today (T19's). Label: the easier route (main's content is the truth, as Recovery already asks it).
+- **Decision 5 - the stripped environment.** `run::STRIPPED`, removed from both the runner's spawn (`spawn_command`) and each
+  `make` the run starts: T12's five (`MSG`, `GUARD`, `T`, `F`, `L7R_GATE_TREE`) and make's own `MAKEFLAGS`, `MAKEOVERRIDES`,
+  `MFLAGS`, `MAKELEVEL`, because a runner a hand-in started inherits `make builder-done T= F= MSG=`'s environment and a variable on
+  that make's command line reaches a grandchild make through `MAKEFLAGS`. Observed 2026-11-27, method: a scratch Makefile under GNU
+  Make 4.4.1 (`make -f outer.mk T=T14 F=461`, its recipe running `sh -c "$(MAKE) -f inner.mk show"`): the grandchild printed
+  `T=[T14] F=[461]`, and `env -u MAKEFLAGS -u MAKEOVERRIDES -u MFLAGS -u MAKELEVEL` left its child an empty `MAKEFLAGS`. Label:
+  convention (GNU make's own variable passing, observed).
+- **Decision 6 - the lane tree's own wrapper.** `runner_exe(common, fallback)` returns the registry's lane tree's
+  `scripts/gates/l7r-gate.sh` when the lane's tree and that file exist, else `fallback` (`current_exe()`: phase 1, a scratch
+  repository); both `lane start` and `on_hand_in` use it. The wrapper `exec`s `<target>/tool/l7r-gate lane --work <common>`, so the
+  stall watchdog's `runs_lane` still matches. Label: the easier route (T12's "For T14"). Its rebuild may outlast `START_WAIT_S`:
+  filed as T51 (Found and left).
+- **Decision 7 - `NOTE=` on make's command line.** The Makefile's `land: export LAND_NOTE = $(NOTE)` overwrites an inherited
+  `LAND_NOTE`, so the run passes `NOTE=` as a make argument; it reaches the binary as `LAND_NOTE`, as contracts/lane-cli.md names
+  it. `SPECIFY_FEATURE`, `SPECIFY_FEATURE_DIRECTORY` and `L7R_LANE_BATCH` go in the environment. Label: convention (the Makefile's
+  own route for the variable).
+- **Decision 8 - `L7R_LAND_ALONE=1` and `SYNC_BACKUP=off`, as `land-alone.sh` sets them** for its own landing in this same `-land`
+  worktree (its line 572). Their non-test readers (found by grep, 2026-11-27): `land/alone.rs`'s `INNER` (the tree is not sent to
+  land alone again - it is the landing); `core/build.rs`'s `LANDING` (a claims answer from a mixed build owed again, right for a
+  clean lane tree); `sync-with-main.sh` line 564 (no backup push from a worktree that is no clone). Both kept. Label: convention
+  (`land-alone.sh`'s own settings for the same tree).
+- **The flake the build half saw.** `runner::tests::a_second_start_is_a_no_op_naming_the_first_s_pid_and_stop_now_ends_it` failed
+  once in the build half's first `make builder-checks` (its last `stop NOW` found a runner). Measured 2026-11-27, `make rust-test
+  CRATE=rust/gate/crates/lane ONLY="runner"` ten times in a row at load 16-27 on 22 cores: 2 red of 10 - that test once (its last
+  `stop NOW` reading `stopped at once` for the runner killed before) and `the_work_command_holds_the_lock_..._leaves_quietly` once
+  (`held` true after `work_cli` returned). The cause: a `flock` lock belongs to the open file description, so a close frees it only
+  once every copy is closed, and the test binary's other threads fork `git`, `make` and `sh` all the while, each child holding a
+  copy of every descriptor until its `exec` - so the probe's own lock (`held` takes it for an instant where it is free) and the ended
+  runner's lock outlived their close. Fixed in `runner.rs`: `free` (the probe) and `release` (the runner's end) let the lock go by
+  `flock -u` before the close, which frees it whatever copies exist; `held`'s doc no longer says it is let go as the file closes. The
+  wrong outcome fixed: `make lane-stop` or `make lane-start` reading a runner that has ended (a stop naming a dead pid, a start
+  saying `already runs`) where the caller is a threaded process. Red first in
+  `runner::tests::a_probe_and_an_ended_runner_leave_no_lock_behind_a_copy_of_their_descriptor`, which keeps a `try_clone` of the
+  descriptor alive across the probe and across the release: on the old code 0 passed, 1 failed (at the probe's assertion); with only
+  the probe fixed, 0 passed, 1 failed (at the release's); after both, 1 of 1, and `ONLY="runner"` 23 of 23. After the fix,
+  the same `ONLY="runner"` run thirty times in a row at load 22-52 on 22 cores: 30 green of 30 (0 red, against 2 of 10 before).
+  Label: convention (`flock(1)`'s `-u`; the lock's ownership by the open file description is `flock(2)`'s).
+- **Two things the build half changed beside its own modules.** T12's test
+  `the_work_command_sees_a_real_hand_in_and_resumes_an_open_batch_of_the_log` now expects, with no lane's tree in the pool, the
+  resume to fail: the runner exits 1 with `stop why "error: lane: batch 461-1: builder-tree lane: ..."` and the batch stays open
+  (T12's stand-in resume had succeeded). `log::names` became `pub(crate)` for `batch.rs`.
+- **Phase 1's base.** A phase-1 hand-in's base is the clone's HEAD, so carried onto `origin/main` it may conflict; by design until
+  T22, since in phase 1 the runner starts only by `make lane-start` (T12's Decision 6), and a conflict ends the step on the carry's
+  seam above.
+- Red first (2026-11-27, the build half): `batch::tests` against stubs, 0 passed, 3 failed; after, 3 of 3. `runner::run::tests`
+  against stubs, 0 passed, 6 failed; after, 6 of 6; the exit-3-as-2 test under the old `code == 0 || code == 3` rule, 6 passed, 1
+  failed; after, 7 of 7. `runner::tests::the_runner_runs_the_lane_tree_s_own_wrapper_...` with `runner_exe` returning the fallback
+  and no stripping, 0 passed, 1 failed; after, 1 of 1. The lane crate 36 of 36, the land crate 219 of 219. Not run red: nothing
+  against a real lane tree or a real `make land` (the end-to-end test's `make land` is a stand-in recipe in the scratch clone's
+  Makefile that ticks and pushes); T23 is the real batch.
+
+### T14 Approach (checklist part A)
+
+1. **The goal, in the world.** A runner that, with no batch open, forms D5's batch from the waiting hand-ins, lands it in the
+   lane's own tree with one gate run, each attempt's output kept, the landed done refs deleted and one status line owed; a killed
+   or red batch left open and resumed as the next attempt.
+2. **The constraints.** D5 (the formation and `LANE_MAX`), D6 step 1 (the attempt files), D8 (a JSON line a transition, the done
+   refs deleted after the push), D14 (shas read once; a later hand-in waits), FR-003 ("in order"), US3, data-model.md ("Recovery"),
+   contracts/lane-cli.md (`LAND_NOTE`, `L7R_LANE_BATCH`), T12's "For T14".
+3. **Where each comes from.** R: plan.md D5, D6, D8, D14; data-model.md; contracts/lane-cli.md; T12's plan section; the Makefile's
+   `land` recipe; `land-alone.sh` line 572. O: the red-first counts above; GNU make's documented `MAKEFLAGS` and exit 2.
+4. **Do they describe the world here?** Yes for the scratch world: the end-to-end test builds a clone, a bare `origin` and two pool
+   trees, hands in two changes, and sees one batch, one push, both ticked, both done refs deleted, one `owed` line. Not yet for the
+   real clone's lane tree: T23 measures that.
+5. **The order.** After T12 (the runner) and T13 (the lane's tree); before T15 (the red's attribution), T19 (the push), T20 (the
+   wake-up), T22 (the base flipped) and T23 (the real batch); T52 before T22.
+6. **The exits.** Green: the lane crate's tests, the end-to-end batch among them, and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Two: the exit-3-as-2 reading (Decision 4), found by reading make's exit rule after the first green, fixed
+   red-first; and the lock's flake, 2 red in 10, traced to a descriptor copy and fixed red-first (above).
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27; the runner's tests' flake, 2 red of 10 before the lock fix, and the runs
+   after it, above.
+10. **Before moving a constant.** n/a: `LANE_MAX` is new, labeled GUESS and audited.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** One defect fixed: a probe or an ended runner leaving the lock held behind a copy of its descriptor, so a
+   threaded caller read a runner that had ended (the flake above: 2 red runs in 10). The rest is new code.
+
+**Found and left?**
+
+- In the lane's tree `make land`'s `carry_done` reads the done refs live, so a task whose ref a later hand-in moved after the
+  batch's `batch` line is carried again at the new sha on top: a hand-in lands inside a batch that never named it, against D14.
+  Not fixed here: `make land`'s carry is the land crate's, and the stand-in `make land` of the end-to-end test carries nothing, so
+  the fix needs its own red test there. Filed as T52; lands before T22.
+- The runner's start waits `START_WAIT_S` for the lock while the lane tree's wrapper may first rebuild that tree's `l7r-gate`, so a
+  start can report `holds no lock` while the runner comes up after the build. Not fixed here: the rebuild is unmeasured. Filed as
+  T51; lands before T22.
+- `make lane` shows an earlier hand-in of a task in an OPEN batch as `superseded`, not `in batch <b>`, once a later hand-in of the
+  task exists (`log::state`, T11's order), though the batch's `batch` line names and lands the earlier sha (D14): the lane's view
+  misstates what a batch carries (D8's states). Not fixed here: `log::state` is T11's reading and the batch's formation does not
+  depend on it. Filed as T53; lands before T20.
+
+**Performance work?** no
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T15 (phase 2's red path: a red batch attributed from the gate's own record, its changes ejected as repair entries, the rest run again)
+
+- **Approach**: `rust/gate/crates/lane/src/attribute.rs` (new, pure) reads a red attempt's units - its span's red `test`, `lint`, `cover-build`, `cover-run` and `build` Phase lines in the lane's tree, ONE UNIT A LINE over every crate it names; `HOOK TESTS FAILED:` lines and the first pass's `Every refusal:` rows of the attempt file - and maps each to the change whose delta touches it (D6 step 2). `repairs.rs` (new) is the one writer of `l7r-lane/repairs.jsonl`. `runner/run.rs`'s `run_batch` loops: a red attempt writes its `run` line's `red`, an `attribute` line, each entry BEFORE its `eject` lines, one `owed` line an entry, and runs the rest again on the tree brought to `origin/main` anew (D6 "By phase", D7). `wake::dead` (T20) narrowed: only the runner's own `"stopped": true` line tells a death. Measured 2026-11-27: the two readings the handoff left open, by reading the code and a test of each (below); every `Phase` line of the clone's `l7r-events/*.jsonl` counted by step and crate count (a Python count): 947 of 2,723 `cover-build` lines named 2 to 28 crates, every other step's line one.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **Several candidates in phase 2 are UNPLACED** - any red unit naming no change or more than one, or no unit read at all, ejects the batch as one entry (`why` `unplaced`). Label: the algorithmically easier route; D6 halves over candidates, phase 3's (T24 replaces `attribute()`).
+2. **A crate is its directory; its dependents are not counted** (`dir/` matched with the slash). A change to `core` that reddens `lane`'s tests is unplaced; phase 3's halving places it. Label: D6's literal "a crate by its directory".
+3. **A Phase line is one unit over all the crates it names**: the unit names every change under ANY of the line's crates, each of them read, however many - only its printed form is cut (`<dir> <dir> <dir> (+<k> more) <step>`, the first 3 shown, `NAMED` a GUESS knob of the owed line's length, no rule's). Label: deliberate deviation from the build half's unit a crate, a defect fixed here: a red `cover-build` is one compile of a family, so read a crate at a time it placed and ejected an innocent change under another crate of the family as `red`. Pinned by `attribute::tests::a_red_line_naming_several_crates_is_one_unit_over_all_of_them`.
+4. **A suite maps** to a delta path whose file name is the guard file, `tests/hooks/test-<stem>.*`, and for a `*-hooks` stem `rust/guard/src/guards/<snake>*` and `rust/guard/shared/src/guards/<snake>*`. Label: D6's map; the shared crate the easier reading of "its guard's sources".
+5. **A first-pass row maps** by a delta path its text contains, or by its leading task list (`T13, T14: ...`). Label: D6 "a row by its file"; the task head the first pass's own form.
+6. **A non-zero exit not on `origin/main` is a red, except two that eject nothing.** Exit -1 (`make` could not start, or was killed): no failing change to name, and ejecting on no evidence would eject innocent ones. And a FIRST-PASS REFUSAL WITH A ROW NAMING NO CHANGE of the batch - a hold, a lock, an owed round of no task of it (`attribute::refusal`, `Refusal::Unnamed`): it blocks the whole batch and would refuse every repair too. Each stops the runner with the batch open, its `owed` line carrying `"stopped": true` (`lane: batch <b>: make land's first pass refused at attempt <n>, a row naming no change of the batch (<those rows>) - the runner stopped, the batch open, nothing ejected: <attempt>`), and the next `make lane-start` resumes it, as T14 did. Where such a row stands beside a row naming a change, the stop holds too: nothing lands while the hold stands, and the named change is ejected on the resume once it clears. A refusal whose every row names a change of the batch ejects what the rows name and runs the rest again: a row naming one change places it (`red`, Decision 5); a row naming several - `T13, T14: ...`, two hand-ins - ejects every change the rows name as ONE entry (`unplaced`, the rows its units), not the whole batch. Label: the GM's "ejects the failing change. The rest of the batch lands" read literally - a row naming a change names the failing one, a row naming none names no failing change; fixed on the plan review's rounds 1 (the build half ejected the whole batch for a refusal naming nothing, NOT LEGITIMATE) and 2 (round 1's stop also took a row naming two changes, NOT LEGITIMATE). Pinned red first by `runner::run::tests::a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ejects_its_change` and `a_first_pass_row_naming_two_changes_ejects_both_and_the_rest_lands` (two changes of three ejected as one entry, the third lands; a named row beside a lock stops).
+7. **A kill between filing an entry and its `eject` lines resumes as a new attempt.** The resume runs what the log has not ejected (`runner::remaining`); an entry of the same batch and the same set is filed once (`repairs::file` returns its id). Label: the algorithmically easier route (no repair of a half-written ejection). What it costs: the entry's `ejected` may list a change the resume then lands, or re-ejects under a second entry. So AN ENTRY IS A CHANGE'S REPAIR ONLY WHERE AN `eject` LINE NAMES IT - data-model.md, "A repair entry", states it for T16's queue (`log::repairs_open`, and the repair's changes the `eject` lines' `change`s). Priced: finishing the interrupted ejection at resume (the entry's unejected changes ejected before the next attempt) - a second writer of `eject` lines for a window of two appends; not taken. Pinned by `runner::run::tests::a_kill_between_a_repair_entry_and_its_eject_lines_resumes_what_the_log_has_not_ejected`. Chosen by the closing half, 2026-11-27, as the brief named it.
+8. **T20's Decision 6 revisited: only the runner's own `"stopped": true` line tells a death** (`wake::STOPPED`), not any `owed` line of the open batch. WHY: T20 wrote the rule for T14's red stand-in, which owed one line and stopped; since T15 an ejection owes its line and the runner goes on, so a runner killed in the next attempt left an open batch no line said - the coordinator never woken. Red first: `wake::tests::an_ejection_s_line_tells_no_death_so_a_runner_killed_after_it_is_said` failed on T20's rule (the wait returned the sentinel line, no death line). T20's own test kept, its line now the real exit -1 form. A stopped carry writes no `owed` line, so the wait's death line says it, once.
+9. **The attribution's record is found where the gate's writer files it** (the handoff's check 1): a check's `Phase` line carries no task and no feature (`rustc/phase.rs`, `append_row_with(root, None, ...)`), so `event_log_hooks/filed.rs`'s chain reaches the pool's holder - `builder_pool::read` drops the lane's tree - and then `feature_of`: `L7R_FEATURE_DIRECTORY` (stripped by the runner), then the runner's `SPECIFY_FEATURE`, which `make land` exports again as the same spec (`land.rs`). Pinned by `runner::run::tests::a_check_s_phase_line_in_the_lane_s_tree_is_filed_where_the_attribution_reads_it` (the real writer, a stale `feature.json` naming another feature). No lane-tree `Phase` line exists yet to observe - none in the clone's logs, observed 2026-11-27, method: the same Python count of every log's `Phase` lines by `clone` (the lane has run no real batch); T23's real batch measures it.
+10. **One `owed` line a repair entry**, naming the entry, its units and the attempt file. Label: the algorithmically easier route, FR-005's wake for a red batch - each entry is a dispatch the coordinator owes (D7: a fresh builder by `make builder-next`); the `owed` lines of one attempt are written together, so one `make lane-wait` returns them as one wake.
+11. **The suite and row readers read the attempt file** (the handoff's check 2): `long_runs.rs`'s `run_gate` and `loud` spawn `make done` and `make hooks-test` with inherited stdout and stderr, `make done` prints `HOOK TESTS FAILED:` in its foreground loop (the static phases' log is printed after), `LAND_RUN` has no pipe, and the runner points `make land`'s stdout and stderr at the attempt file. The `--src hooks` Phase lines stay the fallback, not built.
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** A red batch in the lane costs the coordinator one line a repair: the change the gate's record names leaves the batch as a repair entry for a fresh builder, the rest lands without a human.
+2. **The constraints.** FR-005 (one wake an event), D6 step 2 and "By phase", D7 (repairs by fresh builders), D14 (an ejected change's ref kept), data-model.md's repair entry and log lines.
+3. **Where each comes from.** R: plan.md D6, D7, D14; data-model.md. O: the crate counts above, the code read for checks 1 and 2.
+4. **Do they describe the world here?** The crate count and the two readings, each pinned by a test; the real lane tree's lines are T23's.
+5. **The order.** After T14, T20, T53 (merged `log::state`: `in batch` before `superseded`, a `landed` line listing a change as ejected reads ejected, both tested in `log::tests`); before T16 (reads the entries by Decision 7's rule), T18, T19.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane crate's tests all green, 69 of 69, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/lane`); the red-first counts in the report.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Three wrong outcomes fixed: an innocent change ejected by a family `cover-build` red (Decision 3); a whole batch ejected for a first-pass refusal no change caused (Decision 6); a runner killed after an ejection never said to the coordinator (Decision 8). And one test reached again: `step` over an open batch returns `Ok(false)` and writes nothing, now with a hand-in waiting (red with the guard removed).
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T16 (phase 2's repairs taken by fresh builders: a change the lane ejects is the next dispatch, briefed with the gate's output)
+
+- **Approach**: `rust/guard/shared/src/builder_queue/repairs.rs` (new) reads the lane's three files by name - `l7r-lane/repairs.jsonl`, `l7r-lane/lane.jsonl` and the pool's log - since the guard cannot reach the lane crate (the lane builds on `l7r_shared`): `open` (an entry an `eject` line names, unanswered, not superseded), `offer` (READY, or passed over with why) and the knob `first` (`LANE_REPAIR_FIRST`). `builder_queue.rs` gains its `mod` line and one call in `idle`, so the pool-idle Stop block names the repair's command. The task crate: `builder_queue.rs`'s `repairs_said` is said first by `make builder-next`, `make queue` and `dispatch` (`make builder-done`'s step 1); `builder_brief.rs` takes `REPAIR=<id>` (the Makefile passes it), refuses one no open entry has or one not this brief's, logs it on the `brief` line and prints one block line naming the ejected commit and the attempt file; `builder_done.rs` copies it to the done line as `repair_of`. The handout and the supersede are T09's, reused: D14 keeps the ejected done ref, so `build_on` applies it onto the handout uncommitted and the repair's done moves the ref. This also closes 451 T308 (the two-tier split): the first tier the builder's (T06-T08), the full gate the lane's (T14), its "repaired by whoever is cheapest" replaced here by a fresh builder on a repair entry, its builder coverage by none.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A repair is offered before every queue entry, a performance entry's included** (`LANE_REPAIR_FIRST` = 1, the plan's GUESS knob; `0` offers it only where no queue entry is picked). Label: D7's literal "read these entries before `queue.txt`'s" - a performance entry is a `queue.txt` entry. The open performance tasks NO line names stay first in `make builder-done`'s step 1 and the Stop block, since they are a line to write, not a dispatch. `make builder-next` says the repairs before them. Pinned by `builder_queue::tests::an_open_repair_entry_is_named_before_the_queue_s_next_entry` and `repairs::tests::a_free_tree_is_idle_over_an_open_repair_before_a_ready_queue_entry`, both ways of the knob.
+2. **Open is read from the lane's lines, never the entry alone**: an entry is offered only once an `eject` line carries its id, its changes those lines' `change`s, its tasks their done lines' tasks (the entry's `tasks` where no done line names one). Label: data-model.md, "A repair entry", as T15's Decision 7 states it. Pinned by `repairs::tests::an_entry_is_open_once_ejected_its_changes_and_tasks_the_eject_lines` (r4 never ejected; r2's second sha landed on a resume).
+3. **Closed by its answer or by a later hand-in of its task**: a `done` line naming it in `repair_of` (any done line: the builder briefed for it has ended), or a hand-in of its feature sharing a task, later than its last `eject` line (`superseded`). Label: data-model.md's "the earlier one's repair entry then read as closed (`superseded`)"; the done line's `repair_of` the data model's field. Pinned by `a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task` (an earlier hand-in, a done not handed in, another feature's task: none close it).
+4. **Passed over, with a line: in flight, and a kind no brief takes.** A pool tree held for one of its tasks would be handed back to its holder, and a repair is a fresh builder's; `integrate` (T19) is no kind `make builder-brief` takes, so no command that refuses is offered. Label: the algorithmically easier route; T19 makes `integrate` briefable or keeps the line. Pinned by `in_flight_and_a_kind_no_brief_takes_are_passed_over`.
+5. **`REPAIR=` passes the brief's mechanism refusal**: the task's line was briefed and built once, so the repair is one fix whatever its line names. And it is refused, before any tree is taken, where no open entry has the id (answered, superseded, never ejected) or where the entry's feature, tasks or kind are not the brief's - naming the command as filed. Label: the algorithmically easier route (US4: one fresh builder a repair).
+6. **The handout's base is the clone's HEAD until T22**: the pool's take applies the ejected commit onto the handout's base, which is the clone's HEAD today; T22 moves the base to `origin/main` (D13). Label: D3's base by phase, read as T22's line says.
+7. **The knob is read by the commands and handed in**: `run_with` and `dispatch_with` take it, so the task crate's tests run both ways (the shared crate's environment map is not compiled into the task crate's tests).
+8. **A fresh builder, never one kept past its report** (451 T308): the queue never offers a repair in flight, and both the command's line and the brief's `REPAIR` line say FRESH. Label: the reviewer's rule, D7's table. Red first: the shared crate's `repairs` tests, 1 of 5 failed on the old `idle` (it offered the queue's T3 over the repair); the task crate's loop test, 0 of 1 passed with `builder_done.rs` at HEAD (no `repair_of` on the done line); the queue test does not compile against the old `builder_queue.rs` (no `run_with`, `dispatch_with`).
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** An ejected change costs the coordinator one dispatch: `make builder-next` (and the Stop block, and `make builder-done`'s next line) names the repair's `make builder-brief ... REPAIR=`, whose block names the gate's output and the change, the tree holds the change uncommitted, and the repair's hand-in closes the entry.
+2. **The constraints.** US4 ("The repair goes to a FRESH builder given the gate's output; no builder is kept past its report"), D7, D14, data-model.md's repair entry, 451 T308's two tiers.
+3. **Where each comes from.** R: plan.md D7, D14; data-model.md; T15's Decision 7. O: the tests named above.
+4. **Do they describe the world here?** No real repair entry exists yet (the lane has run no real batch, observed 2026-11-27: no `l7r-lane/repairs.jsonl` in the clone); the fixtures write the lane's own line shapes, `runner/run.rs`'s `eject` line and `repairs.rs`'s entry.
+5. **The order.** After T15 (the writer) and T09 (the handout that builds on a done commit); before T22.
+6. **The exits.** Green: the shared and task crates' tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"` clean, 2026-11-27; the red-first counts in Decision 8.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fixed: a new route. An ejected change had no reader - the lane filed entries no command offered, so a repair waited on the coordinator remembering it.
+
+**Found and left?**
+- `make lane`'s status (`rust/gate/crates/lane/src/log.rs`, `repairs_open`) lists a repair superseded by a later hand-in as open, where the queue closes it (Decision 3): the status says a repair is owed that no command offers. Not fixed here: the lane crate is T15's and T18's, its reader one change away. Filed as T65; lands before T23.
+
+**Performance work?** no
+
+
+<!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T18 (D6 step 4, D7's table: the lane's own red-gate tripwire, keyed by task, with the arbiter and its repair entry; T17's stand-down leaves the lane's runs to it)
+
+- **Approach**: `rust/gate/crates/lane/src/tripwire.rs` (new, pure) reads a task's PINS - the `eject` lines of `lane.jsonl` with `why` `red`, `inferred` or `unplaced`, any batch, whose change is a hand-in of that feature's task (the pool log's `done` lines) - ONE A BATCH. `runner/run.rs`'s `eject` reads every group's trips before writing any line of the ejection: a group with no task pinned in another batch is filed as T15 filed it; a group with one is held, and once the others are filed `trip` writes each held change's `eject` line (`repair` null, `arbiter` the trigger, `attempt`), runs `make arbiter-ask SUBJECT=lane-<task> WHY=... FILES="<the pin before's attempt> <this attempt>"` in the lane's tree under `SPECIFY_FEATURE=<spec>` (its output kept as `<attempt>.arbiter.log`), writes the batch's `stop` line (`why` `arbiter`, `trigger`, `spec`, `tasks`, `held`, `attempts`) and stops the runner through `stopped()` - the coordinator's ONE owed line, naming the trigger and the bundle (the `MANIFEST.md` the ask printed), or, the ask refused, the command to run by hand. `step` first runs `file_ruled`: each such hold whose ruling the clone's `specs/<spec>/arbiter.jsonl` records is filed as ONE repair entry (`why` `arbiter`, `units` `<ruling>: <what>`, `attempt` the trigger), an `eject` line naming it a held change, and one owed line. `log::state` reads a held change `ejected -> the round arbiter <trigger>`, so it forms no batch while it waits. Red first, 2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::tripwire"` on the old run.rs: 0 passed, 2 failed (the second pin's step returned `Ok`, a second repair filed). Green: the crate 80 of 80; `make builder-checks CRATE="rust/gate/crates/lane"` clean.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **Pins are counted by batch and keyed by (feature, task).** A task ejected twice in one batch - a kill between an entry and its `eject` lines, 461 T15 Decision 7 - is one pin; `T01` of 451 never pins `T01` of 461; a bundle's change pins each of its tasks; a change no hand-in names pins nothing. Label: D6's "each batch ejects a task at most once" and "keyed by TASK", the feature the easier and stricter reading. Pinned by `tripwire::tests::a_task_s_pins_are_its_pinning_ejections_one_a_batch_keyed_by_feature_and_task`.
+2. **The held change's `eject` line is the hold.** A `stop` line of the batch closes it, so its other changes read `waiting` and land in the next batch; the held one's own `eject` line (no repair, the trigger it waits on) keeps it off every batch until the ruling's repair. Label: the easier route; the `stop` line's changes are `held`, not `changes`, so `log::mentions` never reads them as the last line naming the change. Pinned by the end-to-end test (a step with no ruling forms nothing; an innocent hand-in lands meanwhile).
+3. **The ruling is read in the clone's `specs/<spec>/arbiter.jsonl`**, where `make arbiter-ruled` run in the clone writes it, uncommitted until the coordinator's push; not the lane's tree, which each batch resets to `origin/main`. Label: the easier route.
+4. **The runner stops at the trip, and its next start files the ruling's repair** (`make lane-start`, which the owed line names, or a hand-in's own start). Label: the task's "the lane stops" read literally; no runner waits on a ruling the coordinator dispatches.
+5. **A third pin asks under `lane-<task>-<n>`**, n the pin: `arbiter-ask` refuses a ruled trigger (one ruling a trigger, binding), so the second ruling needs a trigger of its own, and the first ruling, read under its own trigger, files nothing for the new hold. A bundle's tasks are joined `lane-<task>-<task>`. Label: the plan is silent; the easier route. Pinned by `runner::run::tests::tripwire::the_held_task_waits_on_its_ruling_whose_repair_is_filed_once_and_a_third_pin_asks_anew`.
+6. **The ruling's `eject` line carries `of_batch`, not `batch`.** The batch ended at its `stop`; `log::state_of`, `tree/state.rs`'s `batch_open` and `builder_tree.rs`'s open check would read a later `eject` of it as the batch reopened. Label: the easier route over three readers' edits; data-model.md's `eject` row says it.
+7. **An ask the arbiter refuses still stops the batch and holds the change**, its line naming `make arbiter-ask SUBJECT= FILES=` to run by hand; the hold waits on the same trigger. Label: the easier route (no retry). Pinned by `an_ask_the_arbiter_refuses_still_stops_the_batch_and_its_line_names_the_ask_to_run_by_hand`.
+8. **The WHY avoids the pool-route words** (`route`, `regress`), which `arbiter bundle --check-ask` would refuse without a pool result (`sections::pool_unstated`), read 2026-11-27. Label: convention.
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** A task the lane ejects red a second time - its repair red again, or one task ejected from two batches - stops the lane with no second repair and one line for the coordinator: dispatch the round arbiter on the bundle the lane asked for; once ruled, the lane files the ruling's work as one repair a fresh builder takes.
+2. **The constraints.** D6 step 4 (the pin rule, the second pin, `make arbiter-ask SUBJECT=lane-<task>` with the two attempt files, one owed line), D7's table (the arbiter's row: the repair `why` `arbiter` filed once `make arbiter-ruled` records the ruling), FR-005, FR-008, data-model.md's batch and repair entry.
+3. **Where each comes from.** R: plan.md D6, D7; tasks.md T18's line; data-model.md. O: `arbiter.rs`'s `ask_cli` and `home.rs` (the ask's feature, its "already ruled" refusal), `sections.rs`'s `pool_unstated`, and the three readers of a batch's `stop` line, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the owed triggers live in the git common directory the lane's tree shares (`arbiter-owed.json`), and the ruling in the clone's feature directory where the coordinator's round arbiter records it.
+5. **The order.** After T15 (the red path, the repairs writer, `stopped()`) and T17 (the stand-down); before T22 (T17's plan review) and T24 (the halving's `inferred` pins).
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane crate 80 of 80, 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`); the red-first counts above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new behavior. One test defect fixed on the way: the T15 tests' stand-in Phase line had no newline, so a second red attempt's line was glued to the first and neither parsed - the new tests write it with its newline (`red()`); the old tests write it once and are unchanged.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T19 (phase 2's failed push: a green batch whose push fails runs again once on the new `origin/main`, and a second failure is one `integrate` repair entry)
+
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs`. `land()` now returns an `Attempt` - `Pushed`, `PushFailed` or `Red` - and tells a failed push by the landing's own line `land: the push failed (exit ` (`PUSH_FAILED`, `land.rs`'s warning, which reaches the attempt file as its stderr) in the attempt's output, with the set not on `origin/main` once fetched; such an attempt runs no attribution, writes its `run` line (`red` empty) and a `push` line with `"failed": true` (data-model.md's `push` row amended). `run_batch` counts the batch's failed pushes, a resumed batch's earlier ones from its `push` lines: the first runs the same set again on the tree brought to the new `origin/main` (`bring`, which fetches); the second calls `integrate()`, which files ONE repair entry (`kind` `integrate`, `why` `push`, `tasks` every change's, `ejected` every sha, `units` the push line, `attempt` the second attempt file) before its `eject` lines (`why` `push`), and the batch ends with its `landed` line and ONE `owed` line, the entry's, never `stopped`. To keep `land` and `run_batch` under clippy's `too_many_lines` cap (102 and 117 lines measured 2026-11-27, `make builder-checks`'s lint), `note_of`, `attempt_file` and `ended` (the landed line's wording, unchanged) moved out. Measured 2026-11-27: red first, the three new tests of `runner::run::tests` failed on the old code - each push failure was read as a red the record could not place and the whole set ejected as an `unplaced` `fix` entry (which PINS its tasks, data-model.md) - and 19 of 19 of the module pass after (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`); `make builder-checks CRATE="rust/gate/crates/lane"` clean.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A failed push is told by the landing's own line in the attempt's output** (`land: the push failed (exit `), not by the `push` Phase line of the event log. Label: the algorithmically easier route, the reading T15's Decision 11 already takes for the suites and the first pass's rows (the runner points the landing's stdout and stderr at the attempt file); the `push` Phase line's code also covers a tick commit that failed (`land.rs`, "the tick's commit failed"), which is no push. A landing whose push failed without that line (the land crate's wording changed) reads as an unplaced red, as before T19.
+2. **"Once" is once a batch**, counted over the batch's `push` lines with `"failed": true`, so a runner killed after the first failure files the entry at the resumed batch's next failure rather than retrying again. Label: the literal reading of the plan's "runs the batch again once; a second failure files"; pinned by `a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_next_failure`.
+3. **One `owed` line for the integrate case, written after the `landed` line**: the entry's line stands in for the batch's end line, so the coordinator is woken once, after the batch is closed. Label: the task line's "one `integrate` entry and one owed line" read literally (FR-005, one wake an event); T15's red path keeps its line an entry plus the end line.
+4. **`units` holds the push's own line**, the attempt file its full output. Label: GUESS, a reading aid for the fresh builder; data-model.md names only `attempt` for a `push` entry.
+
+### T19 Approach (checklist part A)
+
+1. **The goal, in the world.** A green batch that cannot push - main moved under it, as a DIRECT push from the coordinator can make it - lands on the second try without anyone, and where it still cannot, the coordinator gets one line and dispatches a fresh builder; it never pushes, carries or resolves it.
+2. **The constraints.** plan.md Risks, "Two writers of main"; D7's table (the `integrate` entry for a fresh builder); data-model.md's repair entry (`push`: `tasks` every change of the set, `attempt` the push's output) and its states (a push failed twice is not `stopped`); FR-005.
+3. **Where each comes from.** R: plan.md D7, Risks; data-model.md. O: the red-first counts above; `land.rs`'s push-failed warning read.
+4. **Do they describe the world here?** The stand-in landing of the end-to-end tests fails its push as `land.rs` says it, and the once case pushes another writer's commit to `origin/main` meanwhile, so only a tree brought to the new main pushes (its stand-in push is not forced). A real failed push in the lane is T23's to observe.
+5. **The order.** After T15 (the repairs writer, `eject` lines, the owed-line rule); beside T18 (the tripwire, another tree), this task's edits kept to the push path.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `runner::run::tests` 19 of 19, the crate's builder checks clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a green batch whose push failed was ejected whole as an `unplaced` `fix` repair, pinning its tasks toward the round arbiter's second-pin stop for no red, and was never retried on the new main.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T20 (D9, FR-005: phase 2's coordinator wake-up, the lines T14's runner owes printed once; lands after T14)
+
+- **Approach**: `rust/guard/shared/src/lane_wake.rs` (new, with `lane_wake/tests.rs`) is the read mark; `rust/gate/crates/lane/src/wake.rs`
+  (new, with `wake/tests.rs`) is `l7r-gate lane wait`, the verb `["wait"]` in `lane.rs` and the Makefile's `lane-wait` (its help
+  line names the knobs; `docs/make-targets.html` regenerated); the prompt hook `clone_sync_hooks.rs` `prompt()` prints the unread
+  lines. `log.rs`'s `DIR`/`FILE` now point at `lane_wake`'s; `runner::knob` became `pub(crate)`. `dev/audits/lane-wake.md` covers
+  `WAIT_POLL_S`, `DEAD_GRACE_S` and `LOCK_S`; the lane crate's row in `rust/gate/CLAUDE.md` names `wake.rs`. Built in two halves
+  (2026-11-27); the build half's handoff is `<clone git dir>/l7r-handoffs/T20-build.md`.
+- **Decision 1 - one mark reader, in `l7r_shared::lane_wake`.** `take_unread(common)` returns the `line` of every `owed` event past
+  `l7r-lane/read-mark` (a byte offset into `lane.jsonl`) and moves the mark past the last COMPLETE line (a torn tail is read again
+  once whole), under `read-mark.lock` by flock, let go by `flock -u` before the close (T14's reason: a forked child holds a copy of
+  the descriptor), the mark written by a rename; a mark past the log's end or no number reads from 0; with no log nothing is taken
+  and nothing created; a lock not got within `LOCK_S` takes nothing (the holder is showing the lines). `unread(common)` is a
+  lock-free length-against-mark test, so a poll with nothing new spawns no flock. Both `make lane-wait` and the prompt hook call it,
+  so one rule says what is unread. Why here: the guard depends only on `l7r_shared` (the checks' `guard_deps`), and a hook shelling
+  out to the gate binary would pay a launcher start each prompt. Label: the easier route.
+- **Decision 2 - whichever reader comes first moves the mark, the hook included.** A hook that printed without moving it would have
+  each re-armed wait print at once what the prompt already showed: a wake FR-005 does not list. The read, the take and the move are
+  serialized by the mark's lock, so a line is shown once, by the prompt or by the wait, never both. Label: the easier route of D9's
+  "prints any unread lane lines, so a wake-up command killed early loses nothing".
+- **Decision 3 - the runner-dead line is written by the wait.** A killed runner writes nothing, and a runner stopped on an error
+  (T14's stopped carry or refused landing) writes `stop` but owes nothing, so a wait reading only `owed` lines would block for ever
+  over a stranded batch. Rule (`wake::dead`): no runner holds the lane's lock, the log's LAST batch is open, and no `owed` line with
+  `why: "runner"` since the last `start` line (said once a death); held `LANE_DEAD_GRACE_S` continuously (reset whenever the runner
+  is seen or nothing is stranded), so a runner a hand-in is starting is not called dead. The wait then appends ONE `owed` line
+  `{"batch", "why": "runner", "line"}` naming the batch, its changes, the runner's last stop (or `killed`) and `make lane-start`,
+  and loops, so it prints that line through the mark like any other. Quiet with no open batch: an `idle` end, `make lane-stop` after
+  a landing, and phase 1's waiting hand-ins with no runner (landed by hand). Label: the easier route (a stranded batch is the one
+  case in which no other line will come).
+- **Decision 4 - the prompt hook prints before `solo::alone`'s return.** `prompt()` extends its lines with
+  `take_unread(<clone>/.git)` after the feature.json notice and before the only-session return, because a coordinator whose
+  builders are subagents IS the only session, and the return would otherwise drop the lane's lines for exactly the session they
+  are owed to. This changes the hook's rendering: an unread lane line now appears among its prompt lines. Label: the easier route.
+- **Decision 5 - the wiring and the knobs.** The verb takes no flags, its knobs from the environment, because the stall watchdog's
+  `waits_on_lane` (T12) matches exactly `<dir>/l7r-gate lane wait` (confirmed live below). `wait_cli` exits 0 with each line
+  printed, 2 on a knob that is no number, 1 on a dead line it cannot write. `WAIT_POLL_S` 5 s (the runner's own `POLL_S`),
+  `DEAD_GRACE_S` 30 s (past `START_WAIT_S` and a short rebuild, T51), `LOCK_S` 5 s: all GUESS, each beside its constant and in
+  `dev/audits/lane-wake.md`. No ceiling (D9's `LANE_WAIT_MAX`: none). Label: GUESS for the numbers; convention (the watchdog's
+  argv) for the flagless verb.
+- **Decision 6 - one red run wakes once: the runner's own line for the batch tells the death.** With T14's red stand-in a red run
+  writes its ONE `owed` line (`... - the runner stopped, the batch open; ...: <attempt file>`), THEN the runner stops with `error:`
+  and leaves the batch open. Under Decision 3 alone the coordinator's re-armed wait would see no runner over that open batch and,
+  `DEAD_GRACE_S` after the re-arm, write and print a runner-dead line for the same batch: a second wake for one red, one FR-005 does
+  not list (540k-966k tokens a wake, measured 2026-11-27 (the transcript's usage fields), as D9 records). So `wake::dead` counts any
+  `owed` line naming the open batch since the last `start` - a `why: "runner"` line or the runner's own - as having told it. Nothing
+  is lost: that red line already says the runner stopped; a runner started again (a new `start`) and killed is a new death, said.
+  The rule can go with T15, whose red path no longer stops the runner. Label: the easier route. The build half's handoff had
+  accepted the double wake until T15; the plan review (round 3, 2026-11-27) ruled that NOT LEGITIMATE under FR-005, so it is fixed
+  here.
+- **Not here.** T47 (the watchdog's long-run exemption of `make lane-wait`, `pass.rs`) and T21 (the Stop rule that keeps the wait
+  armed) are their own tasks. T21's "the lane holds a waiting hand-in or an open batch" reading is not exposed by this task: the
+  guard cannot reach the lane crate, so T21 needs its own reading in `l7r_shared` (as `lane_wake` is).
+- Red first (2026-11-27, the build half): `l7r_shared` `lane_wake::tests` against stubs (`unread` false, `take_unread` empty), 1
+  passed, 4 failed; after, 5 of 5. The lane crate's `wake::tests` against a stub `wait` returning no lines, 0 passed, 6 failed;
+  after, 6 of 6 (a seventh, the command sleeping on the real clock until a thread writes the line, added after for `wait_cli`'s real
+  sleep, written green). Decision 6 (2026-11-27, the closing half): `wake::tests::a_red_run_s_own_line_tells_the_death_so_one_red_wakes_once`
+  under the old `dead`, 6 passed, 1 failed; after, 7 of 7. The guard's `clone_sync_hooks::tests::an_unread_lane_line_is_printed_once_and_marked` without the hook's
+  line, 0 passed, 1 failed (left "", right the line); after, 1 of 1, the module 33 of 33. `tests/hooks/test-clone-sync-hooks.sh`
+  68 ok with its two new cases (an unread line printed on the prompt, then not again); not run red (the Rust test is the red one).
+  Live (2026-11-27, a scratch repository whose Makefile calls this tree's `scripts/gates/l7r-gate.sh lane wait`):
+  `/proc/<pid>/cmdline` read `.../tool/l7r-gate|lane|wait|`, an appended owed line ended it printing `lane: live line`, exit 0,
+  `read-mark` 42 = the log's 42 bytes, observed 2026-11-27, method: that live run. Nothing run against the real clone's lane (it has no `l7r-lane/`).
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** A coordinator that runs `make lane-wait` in the background is woken once for each line the lane owes
+   it - a landed batch's status, a repair, an arbiter owed, a stranded batch's dead runner - and never twice for one line, whether
+   the wait or its next prompt shows it first; a wait killed early loses nothing.
+2. **The constraints.** D9 (one background command, the mark, no ceiling, the prompt hook's unread lines), FR-005 ("once per landed
+   batch with a short status, and otherwise only for US5's cases"), D8 (the log a JSON line a transition), T12's `waits_on_lane`
+   argv, T14's owed line and its red stand-in, data-model.md ("The log line").
+3. **Where each comes from.** G: FR-005's words. R: plan.md D8, D9; data-model.md; T12's and T14's plan sections; the build half's
+   handoff. O: the red-first counts and the live run above.
+4. **Do they describe the world here?** Yes for a scratch repository: the live run's real `l7r-gate lane wait` was matched by its
+   argv and ended by an appended line, the mark at the log's end. Not yet for the real clone's lane, which has no `l7r-lane/`:
+   T23 runs the real batch.
+5. **The order.** After T14 (the owed lines) and T53; with T47 (the watchdog exemption); before T15 (which may drop Decision 6's red-line rule), T21 (the Stop rule), T22 (the base
+   flipped, with T56) and T23.
+6. **The exits.** Green: the changed crates' tests and `make builder-checks` clean, the clone-sync suite green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the runner dead has no writer (Decision 3), found by reading T14's stop path; and the double wake it
+   left over a red, fixed red-first (Decision 6).
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27; the first tier green again at the closing half.
+10. **Before moving a constant.** n/a: `WAIT_POLL_S`, `DEAD_GRACE_S` and `LOCK_S` are new, labeled GUESS and audited.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** New code; one wrong outcome of the build half fixed in it: a red run woke the coordinator twice (Decision 6).
+
+**Found and left?**
+
+- A WAITING hand-in that no runner serves (from phase 2's base, a runner start that failed past `START_WAIT_S`, T51's rebuild) is
+  not called dead by `wake::dead`, which reads only an open batch, so the coordinator's wait - which T21's Stop rule keeps armed -
+  blocks with nothing ever coming. Not fixed here: in phase 1 such hand-ins are landed by hand and must stay quiet, and the base
+  flips in T22. Filed as T56; lands before T23 (with T22).
+
+**Performance work?** no
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T21 (D9, FR-005: the Stop rule that keeps the coordinator's `make lane-wait` armed; lands after T20)
+
+- **Approach**: `rust/guard/src/guards/pool_idle_hooks.rs` gains a second rule beside the free-tree rule (`judge_lane`,
+  `lane_refusal`, `Lane`), the lane's state read in `l7r_shared::lane_wake::holds` (`rust/guard/shared/src/lane_wake.rs`, its
+  tests in `lane_wake/holds_tests.rs`), because the guard cannot reach the lane crate (T20's "Not here"). Tests:
+  `pool_idle_hooks/tests.rs` (three new) and `tests/hooks/test-pool-idle-hooks.sh` (ten new cases).
+- **Decision 1 - what the lane holds, read in `l7r_shared`, parallel to the lane crate's `log.rs`.** `holds(common)` says, in a few
+  words, the lane's first open batch (a batch whose last state-moving line - `MOVES`, `state_of`'s events - is neither `landed` nor
+  `stop`, its lines routed as `batches` routes them, so a batch resumed after a `stop` is open again), else its first waiting
+  hand-in; none where the lane has no log. The waiting reading follows `log::state` with no batch open (in-batch cannot hold):
+  the pool log's `handed_in` done lines, a commit's first, still the lane's (a done ref or a lane line names it), not landed by a
+  `landed` line, not ejected (the last line naming it an `eject`, or a `landed` line listing it ejected), not superseded. "Landed"
+  by `origin/main` (`held_by`) is not asked: a git walk a Stop hook would pay each turn; cost, a hand-in landed on `origin/main` by
+  hand while its done ref still stands reads as waiting, which `make carry` (the ref deleted at its end) does not leave. Label: the
+  easier route; the duplication is filed as T63 (one reading, `log.rs`'s pure readers moved to `l7r_shared` and re-exported).
+- **Decision 2 - a waiting hand-in counts only while the runner lives.** A deliberate deviation from D9's literal "a waiting
+  hand-in", for phase 1: until T22 flips `HAND_IN_BASE` no hand-in starts the runner (T12 Decision 6), the coordinator lands each by
+  hand, and a wait over it could never wake (`wake::dead` is quiet there on purpose, T20 Decision 3) - so the rule would refuse
+  every stop after a hand-in and arm a wait with nothing coming. The runner's lock (`lane.lock`, `RUNNER_LOCK`) is probed as
+  `runner::held` probes it (`flock -n`, let go by `flock -u`). No second reading of the knob is made. From T22's base a waiting
+  hand-in no runner serves (T56's case) holds no stop: Not fixed here: the base and its one reading are T22's. Filed as T64; lands
+  with T22 and T56.
+- **Decision 3 - "a `make lane-wait` of this clone runs": its `make` or the wait itself, any process of the clone.** A `/proc`
+  process whose argv is `l7r-gate lane wait` (T12's `waits_on_lane`) or a `make` whose one target is `lane-wait` past its flags,
+  a valued flag's value and `VAR=` words (`pass::lane_wait_make`, shared with T47), its working directory in the clone. The make
+  counts from its start, while `l7r-gate.sh` may still build the binary (T54: 2 to 112 s, measured 2026-11-27 (T54's scratch-clone rebuilds)), so a stop in that gap is not refused.
+  Any process of the clone, not only the session's own (as T12's `lane_works` asks): the plan's Scale is one session a clone,
+  several sessions feature 459's, and a Stop hook has no registry pid to walk from. On the reviewer's note that T20's Decisions 2
+  and 4 assume one session: not found in `plan-review.json` or the ledger; the same assumption is taken here, as D9's "of this
+  clone" words it. `/proc` is `POOL_IDLE_PROC` in a suite. Label: the easier route.
+- **Decision 4 - one block, and an escape of its own.** Where both rules hold, the free tree's block and the lane's are said in ONE
+  Stop block (each refused stop is a wake, 540k-966k tokens, D9). `POOL_IDLE_OK` waives the tree rule only: a turn that keeps a
+  tree free for the GM still owes its wait; the lane rule's escape is a line starting `LANE_WAIT_OK: <reason>`, checked first and
+  recorded (rule `LANE_WAIT_OK`; a bare one `LANE_WAIT_OK-no-reason`; a held stop `lane-unwatched`). The block names the exact
+  command, `make -C <clone> lane-wait`, with `run_in_background: true`. NEW GUARD MESSAGES: the lane block and the bare-escape block
+  (the session runs their check). The escape parser is shared by both rules (`reason`). Label: convention (`POOL_IDLE_OK`'s form).
+- Red first (2026-11-27): `l7r_shared` `lane_wake::holds_tests` against a stub `holds` returning none, 0 passed, 2 failed; after,
+  `lane_wake` 7 of 7. The guard's `pool_idle_hooks::tests` against stub `judge_lane`/`lane_refusal` (quiet, none), 6 passed, 3
+  failed; after, 9 of 9. `tests/hooks/test-pool-idle-hooks.sh` with `judge_lane` returning quiet at its top (the rule deleted), 37
+  passed, 5 failed; restored, 42 of 42. `make builder-checks CRATE="rust/guard rust/guard/shared"`: 636 and 617 tests, lint and
+  format clean, observed 2026-11-27, method: that run's log.
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** A coordinator cannot end its turn while the lane holds work whose line will come and nothing would
+   wake it; told the one command, it starts `make lane-wait` in the background and is woken once by the line. Phase 1's hand-ins,
+   landed by hand, hold nothing.
+2. **The constraints.** D9 (the Stop rule, its message the exact command with `run_in_background: true`, its suite case and quiet
+   case, XVIII), FR-005 (no wake it does not list), D8 (the states computed from the logs), T12 Decision 6 (no runner before T22's
+   base), T20's mark and Decision 3, the plan's Scale (one session a clone).
+3. **Where each comes from.** G: FR-005's words. R: plan.md D8, D9; data-model.md; T12's and T20's sections. O: the red-first
+   counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with done refs and the pool and lane logs, a fake
+   `/proc`. Not on the real clone's lane, which has no `l7r-lane/`: T23 runs the real batch.
+5. **The order.** After T20 (the wait it arms); with T47; before T22 (with T64 and T56) and T23.
+6. **The exits.** Green: the changed crates' tests, `make builder-checks`, the pool-idle suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the literal rule refuses every stop in phase 1 (Decision 2), found by reading T12 Decision 6 and
+   `wake::dead`.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: no constant moved; `RUNNER_LOCK` mirrors `runner::LOCK`.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** New rule: without it a coordinator ends its turn over an open batch with no wait armed and is woken by
+   nothing until the GM prompts it.
+
+**Found and left?**
+
+- The lane's states read twice, in `log.rs` and `lane_wake` (Decision 1): a later change to either drifts the Stop rule.
+  Not fixed here: the lane crate is outside this task's crates. Filed as T63; lands before T26.
+- From T22's base a waiting hand-in no runner serves holds no stop (Decision 2). Not fixed here: the base's one reading is T22's.
+  Filed as T64; lands before T23 (with T22 and T56).
+
+**Performance work?** no
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T32, T33 (bundle) (`make rust-test CRATE="<several>"` failed on one joined manifest path, found running T05's four-crate Verify line; `make task-time`'s cross-blocking row of a closed window grew after it ended, found reading phase 5's before and after)
+
+- **Approach (T32)**: `rust/gate/crates/rustc/src/rustc.rs`'s `parse` splits each `--crate` value on white space, so `make rust-test CRATE="a b"` (whose recipe passes `--crate "$(CRATE)"`, one value) is each crate, as `make builder-checks`' `foreach` already passes them; a value naming no crate (`CRATE=" "`) is refused with the usage, where an empty list would have run every crate. Fixed at the parser, not the Makefile: it covers every caller that passes one joined value (`rust-test`, `test-times`), and a red test can live there. `ONLY=` across several crates was checked in `only.rs`: its words go to every crate's binaries, and a crate the filter misses is that crate's failure, as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions, T32** (each labeled):
+
+1. **Split at the parser, not the recipe**: one fix for every `--crate` caller, tested in the crate. Label: the algorithmically easier route (the task line offers "split ... or refuse"; split is what `builder-checks` already does). A crate directory with a space in its name cannot be named; none exists under `rust/`, and cargo's package paths in this tree have none.
+2. **A blank value refused**: `--crate " "` returns no parse (the usage), never "no crate named, so every crate". Label: the safe reading of an empty list.
+3. **Red first**: `rustc::tests::the_arguments_are_parsed_and_each_failure_says_its_fix`, with `--crate " rust/a  rust/b " --crate rust/c` expected to be three crates and `--crate " "` refused, failed on the old code, 0 of 1 run (left `[" rust/a  rust/b ", "rust/c"]`), measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY=the_arguments_are_parsed` in pool tree t270). The literal call of T05's line, `make rust-test CRATE="rust/gate/crates/land rust/gate/crates/task rust/gate/crates/tree rust/guard"`, exited 2 before ("manifest path `.../land rust/gate/crates/task rust/gate/crates/tree rust/guard/Cargo.toml` does not exist") and exits 0 after, "test clean on 4 crate(s)" (land 223, task 163, tree 64 passed, guard's kept green), measured 2026-11-28 (that call run in pool tree t270 before and after the fix, its `rust-checks:` lines).
+
+- **Approach (T33)**: `rust/gate/crates/measure/src/measure/task_time/cross.rs`'s `gaps` gives each tree's last hold, where it was released, an open free span (to infinity), which `measure`'s cuts already clip at the window's end (`hi`: `UNTIL=`, else the last event read - the "or now"); a span before a later handout still ends at that handout. So a tree freed in the window counts to the window's end whether or not its next handout has been logged yet, and a closed window's figure no longer moves as later handouts reach `builder-pool.log`. The module doc and `said`'s paragraph restated (the old "a tree never handed out again is not counted" and "a tree handed out later is taken to have had work waiting" go; the upper bound now says a free tree is taken to have had work waiting).
+
+**Decisions, T33** (each labeled):
+
+4. **Counted to the window's end, not dropped**: of the task line's two rules (count an open span to the window's end, or not at all), the first, so a tree freed during a landing and not yet retaken counts during that landing. Label: the brief's reading ("a free span must end at the window's end (or now)"). Its cost: a tree freed and never handed out again (a retired or spare tree) now counts during every landing, bounded by the places left open (`L7R_BUILDERS` less the trees held); the record cannot tell a spare tree from one with work waiting, which was already the source's stated upper bound.
+5. **A fixture figure moves, deliberately**: `cross_tests.rs`' tree `pc`, free from 03:00 with no handout after, now counts 03:00 to 04:00 of the landing, so the free-tree source moves 2.0 to 3.0 min and the row 2.5 to 3.5 min, measured 2026-11-28 (the fixture's report under the fix, matching a count by hand: two trees free 03:00-04:00 with two places open, the refusal's seconds beside them once). Its doc and both assertions say why.
+6. **Red first**: `cross::tests::a_free_span_open_at_the_windows_end_counts_to_it_whatever_follows` (tree a freed at 30 inside a landing 20-80 of the window 0-100, read with and without a handout at 150 after the window) failed on the old code, 0 min read before the handout was logged against 50 after, 0 of 1 run, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/measure ONLY=a_free_span_open_at_the_windows_end`). After: 311 of 311 of the measure crate's tests pass, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/measure`).
+7. **The night's window re-read**: `make task-time SINCE=2026-11-27T02:00:00Z UNTIL=2026-11-27T14:29:00Z` with the fix gives 53.7 min (164.5 tasks' side blocking), measured 2026-11-28 about 00:40Z (that run's report, its cross-blocking line and its tasks' side working row), equal to the old code's 17:55Z read: every tree freed in that window (t271, t270 and b1 included, b1 taken again 23:54Z) has been handed out since, so the old rule had caught up and the new one gives the same figure without waiting. T31 reads this figure.
+
+### T32, T33 Approach (checklist part A)
+
+1. **The goal, in the world.** T32: `make rust-test CRATE="<several>"` runs each crate named, as `make builder-checks CRATE=` does, so a Verify line naming several crates is one call. T33: a closed window's cross-blocking row reads the same whenever it is run, so phase 5's before and after (T31) compare like with like.
+2. **The constraints.** T32: the task line; `only.rs`'s rule that a filter names its crate; the Makefile's `rust-test` recipe unchanged (a guard file; its `##` help still says `CRATE=<dir>`, the parser now taking several). T33: the free-tree and refused-handout sources of 451 T510 and their once-a-second rule, the task line's "one rule for both windows".
+3. **Where each comes from.** O: the red runs (Decisions 3 and 6), the task line's two reads (32.3 then 53.7 min, observed 2026-11-27, method: both runs' headers, as the task line says) and the re-read (Decision 7). R: the task lines; `cross.rs`'s module doc.
+4. **Do they describe the world here?** Yes: the four-crate call was run in this pool tree before and after; the night's window re-read on today's pool log.
+5. **The order.** T32 before T05's Verify line is run again; T33 before T31. Independent of each other.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/measure"` clean (rustc 161, measure 311 passed; lint and format clean, 2026-11-28) and the four-crate call clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The four-crate call exits 0, "test clean on 4 crate(s)"; T33's red test green and the night's window at 53.7 min, measured 2026-11-28 (Decision 7's run).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T32: a builder following a several-crate Verify line got exit 2 and no test run; now the crates run. T33: a reader comparing two windows saw a difference made by when each was run (21.4 min of the night's 53.7, observed 2026-11-27, method: the task line's two reads), and now the figure is fixed when the window closes.
+
+**Found and left?** None.
+
+**Performance work?** Yes for T33, as a measurement of where time goes (451 FR-013): it corrects a figure of the task time breakdown; no engine speed, so no performance checklist. T32: no.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T46 (T13's found-and-left: the builder-tree help lines said nothing of the lane)
+
+- **Approach**: three `##` help lines of the root Makefile (through `make guard-edit FILE=Makefile`, a guard file) restated to
+  what the code does now, read 2026-11-27 in `rust/gate/crates/task/src/builder_tree.rs` and T13's, T49's and T50's sections:
+  `builder-tree-adopt` - the lane's tree (`L7R_LANE_TREE`, else `<clone>-land`) joins as the lane's, held by the reserved holder
+  `lane`, no handout takes it, the cap does not count it, a `T=` or a second lane refused; the runner's `l7r-gate builder-tree
+  lane` (no make target) brings it to `origin/main` at each batch's start and makes it again at its path, its cache kept, when it
+  is gone from disk (T13, T50); `builder-tree-drop` - takes the lane's tree too, refused while the lane's runner lives (`make
+  lane-stop` first) or a batch of its log is open (`make lane-start` runs it to its landing or its stop) (T49); `builder-trees` -
+  lists the lane's tree, held by `lane`, apart from the cap (T13, the list header's `, and the lane's tree`). `make docs`
+  regenerated `docs/make-targets.html` (224 targets, 0 undocumented). No code changed. Red first: none applies - no test pins
+  these help lines' words (grep of `tests/` and `rust/` for the three target names, 2026-11-27: only the builder-pool guard's
+  REMOVE message and the crate's own stdout, both unchanged).
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of `make help` or `docs/make-targets.html` adopting `<clone>-land` is told it becomes the
+   lane's tree, how the lane brings it to `origin/main` and re-makes it, and how it is dropped.
+2. **The constraints.** T13 (the lane holder, the cap, the reserved word, `builder-tree lane`), T49 (the lane's drop), T50 (the
+   re-make), T12's hold on the Makefile (landed before this).
+3. **Where each comes from.** R: tasks.md T46's line, T13's, T49's and T50's plan sections; O: `builder_tree.rs`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: each clause matches a message the crate's lane tests pin (`builder_tree/tests/lane.rs`).
+5. **The order.** After T12, T13, T49 and T50; before T22.
+6. **The exits.** Green: `make docs` writes the page with 0 undocumented. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the three targets found by one grep of the Makefile.
+8. **The budget.** One landing.
+9. **Done, measured.** `make help` and `docs/make-targets.html` carry the lane's adoption, `builder-tree lane`, the re-make and the
+   lane's drop.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of the help lines is told the lane's rules; nothing else changes.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T49 (T45's found-and-left: the drop of the lane's tree was a dead end)
+
+- **Approach**: `drop_tree` (`rust/gate/crates/task/src/builder_tree.rs`) takes the lane's tree itself: a tree held by
+  `builder_pool::LANE` is asked `lane_busy` in place of the held refusal - refused while the lane's runner lives
+  (`l7r-lane/lane.lock` held, probed by `flock -n` as the lane's `runner::held`; the refusal names `make lane-stop`) or while a
+  batch of `l7r-lane/lane.jsonl` is open (the refusal names the batch and `make lane-start`, which runs it to its landing or its
+  stop); otherwise removed as any free tree is - REASON owed, the worktree, its cache and its registry line gone, a `drop` line
+  logged - and adoptable again. THE LOG'S READING mirrors the lane's own grouping, not T17's one-batch question (`lane/src/log.rs`,
+  `batches` and `state_of`, read 2026-11-27): a batch's lines are those naming it after its `batch` line (a later `batch` line of
+  the same id a new batch), `landed` or `stop` naming it ends it, `carry`/`eject`/`run`/`attribute`/`push` reopen it, and a line
+  naming no batch - the runner's own `stop` (`runner.rs`, `{pid, why}`), whose batch is resumed at the next start - or a torn line
+  changes nothing. Read here, as `tree`'s `state::lane_run` reads it (461 T17), because the lane crate builds on `task`; a third
+  reader of the log beside the lane and T17 (kept private here rather than making `tree`'s helpers public, which asks a different
+  question - one named batch - and would put a second crate in this task). Every builder tree's rules are as they were: the
+  not-free branch and its message unchanged. No guard-rendered message changed: the builder-pool guard's REMOVE message (T45)
+  already names `make builder-tree-drop TREE=<path>`, which now works for the lane's tree.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_tree::tests::lane"` on the old code): 3 passed,
+  1 failed - `the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open` answered `is held by lane - make
+  builder-tree-release T=lane first`. Green: `builder_tree::tests` 13 of 13; `make builder-checks CRATE="rust/gate/crates/task"`
+  clean, the crate 157 of 157. The test covers the REASON, the lock held (refused) and present but free (passes), a batch open
+  beside a runner's batch-less `stop`, a batch-keyed `stop` and a torn line (refused, the tree and registry kept), a batch landed,
+  reopened by a `run` and landed again (drops, tree and cache gone, the registry's `lane` line gone), and a re-adoption then a
+  drop of the tree gone from disk.
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** A session retiring `<clone>-land` runs `make builder-tree-drop TREE=<it> REASON=` once the lane is
+   idle, and is told what to stop first while it is not, with no `BUILDER_TREE_OK` escape.
+2. **The constraints.** D1 (the lane's tree and its holder), T13 (`lane` reserved: no release frees it), T45 (the REMOVE message
+   names the drop), T17 (the log and lock read without depending on the lane crate), the brief: refused while the runner lives or a
+   batch is open, every builder tree's rules kept.
+3. **Where each comes from.** R: tasks.md T49's line, T45's found-and-left item; O: `drop_tree`'s held check, the lane's
+   `log::batches`/`state_of` and `runner::held`/`stop`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the red test shows the old drop refused the lane's tree with the release T13 refuses.
+5. **The order.** After T13, T17 and T45; before T22.
+6. **The exits.** Green: the lane test and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one caller of the held refusal (`drop_tree`), read.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane drop test green; in use, `make builder-tree-drop TREE=/diagram/.clones/diagram-backlog-land
+   REASON=...` with no runner and no open batch removes it.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session retiring the lane's tree is no longer left only the guard's escape; nothing else a reader sees
+    changes.
+
+**Found and left?**
+- The lane's tree gone from disk mid-batch is still a dead end: `builder-tree lane`'s gone-from-disk refusal names the drop, which
+  is refused while the runner lives (it made the call) and, after `make lane-stop`, while its batch stays open (resumed at the next
+  start, which calls `lane` again). Not fixed here: the task's words refuse the drop while a batch is open, and the route a gone
+  tree needs is a decision of its own. Filed as T50; lands before T22.
+
+**Performance work?** no
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T50 (T49's found-and-left: the lane's tree gone from disk mid-batch was a dead end)
+
+- **Approach**: the task line's first route, a re-made worktree at the registry's path. `lane_start`
+  (`rust/gate/crates/task/src/builder_tree.rs`), finding the registry's lane tree gone from disk, runs `git worktree prune` (a
+  hand `rm -rf` leaves git's record of the path, and the add would refuse it) and `git worktree add -q --detach <path> <the
+  clone's HEAD>` from the clone, logs a `remake` line, says `was gone from disk: made again there, its build cache kept` on
+  stderr, and falls through to the fetch, reset, clean and detach at `origin/main` as before. WHY THIS ROUTE, not the drop: the
+  drop's route was the loop itself - refused while the runner lives (the runner made the call) and, after `make lane-stop`, while
+  the batch stays open (resumed at the next start, which calls `lane` again); a `stop` of the open batch written from here, the
+  brief's example, would put a second writer of `l7r-lane/lane.jsonl` in the `task` crate beside the lane's own (T14 is building
+  the batch run there) and still leave drop-then-adopt, whose adoption needs a worktree at the path that only a hand `git worktree
+  add` (refused, 451 T285) would make. The re-make loses nothing: `lane` already throws away whatever the tree held (step 4's
+  `reset --hard`, `clean -fdq`, detach), a resumed batch carries onto it from `origin/main` as every batch does, and the build
+  cache lives beside the tree by its name (`builder_pool::cache`, `<cache root>/<tree name>`, read 2026-11-27), so D1's reason for
+  never making the lane's tree - a new tree starts cold - does not hold for one made again at the same path: its cache is warm
+  where it survived. T13's "refused, never made" stands for a lane tree never adopted; only the gone-from-disk case changes.
+  Where git cannot make it there (something stands at the path), the refusal names that and the `git worktree add` that says what,
+  and no longer the drop: the next batch start makes it once the path is clear. No lane-crate edit; the drop (T49) is unchanged.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_tree::tests::lane"` on the old code): 4 passed,
+  1 failed - `a_lane_tree_gone_from_disk_is_made_again_at_its_path_and_its_cache_kept` answered `is gone from disk - make
+  builder-tree-drop ...`, code 2. Green: the same run 5 of 5; `make builder-checks CRATE="rust/gate/crates/task"` clean, the crate 158 of 158. The test: a
+  batch open, the tree removed with no prune, `lane` re-makes it at `origin/main` with the cache's `debug/` kept, the registry's
+  lane line kept and a `remake` line logged; then a file at the path, refused naming what is in the way and not the drop. The old
+  gone-from-disk assertion of T13's adoption test moved into it.
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane whose tree vanished mid-batch carries on at its next batch start, warm where the cache
+   survived, with no hand step and no escape.
+2. **The constraints.** D1 (the lane's tree, its cache kept, step 4's rule), T13 (`lane` at a batch's start), T49 (the drop refused
+   while the runner lives or a batch is open), 451 T285 (no hand `git worktree add`), the brief: lane-crate edits narrow (none made).
+3. **Where each comes from.** R: tasks.md T50's line, T49's found-and-left item; O: `lane_start`, `drop_tree`, `make_cold` and
+   `builder_pool::cache`, read 2026-11-27.
+4. **Do they describe the world here?** Yes: the red test shows the old `lane` refused a gone tree with the drop T49 refuses.
+5. **The order.** After T13 and T49; before T22.
+6. **The exits.** Green: the lane tests and `make builder-checks` above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one gone-from-disk branch for the lane's tree (`lane_start`), read; the builders' own (`take`'s note
+   naming the drop) is a free tree's, which the drop takes, and is left as it is.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane test green; in use, a `rm -rf` of `<clone>-land` mid-batch is followed by a `remake` line in the
+   pool's log at the next batch start and the batch's landing.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session whose lane tree vanished is no longer sent round the drop's refusals; nothing else a reader sees
+    changes.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T51 (T14's start through the lane tree's launcher could say "holds no lock" of a runner still building; filed at T14's build half)
+
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`: `start` runs `prebuild(exe)` before the spawn - where `exe` is the launcher
+  (file name `l7r-gate.sh`, `LAUNCHER`, which `runner_exe` returns for the lane's tree), it is run once in the foreground as
+  `L7R_GATE_PRINT_FRESH=1 <exe>`, with the spawn's environment (`run::STRIPPED` removed) and without `L7R_GATE_STALE_OK` or
+  `L7R_GATE_NO_BUILD` (either would make it build nothing), and waited for whole; a non-zero exit returns code 1 with cargo's stderr
+  and spawns nothing; any other `exe` (the caller's binary, `runner_exe`'s fallback) builds nothing. The spawned launcher then finds
+  the binary fresh and `exec`s at once, so `START_WAIT_S` (unchanged, a GUESS knob) covers the spawn to the lock alone - its doc comment and
+  `dev/audits/lane-runner.md` say so. `start`'s signature and both callers (`lane.rs`, `on_hand_in`) are unchanged; the tests are a
+  module of their own (`runner/start_tests.rs`), away from T14's closing half's edits of `runner/tests.rs`.
+- **Measured** (method for each figure below: a `git clone --shared` of the lane tree at its commit efc35ccc4f in the scratchpad, a
+  copy of the lane tree's `tool/` build cache as `L7R_GATE_TARGET`, `/usr/bin/time` over `L7R_GATE_PRINT_FRESH=1
+  scripts/gates/l7r-gate.sh`, under a load average of 27 to 46 on 22 cores, measured 2026-11-27 (uptime)):
+  - at its own commit with every source's time new, as a tree made again by T50 is, a whole-workspace rebuild of 101.75 s, measured 2026-11-27 (the scratch timing), not the same-commit cost.
+  - Again at once, 0.05 s, measured 2026-11-27 (the scratch timing): fresh, no build.
+  - efc35cc to e343e50, a day's move of 401 files under `rust/`, 112.08 s, measured 2026-11-27 (the scratch timing).
+  - Across single landed commits, 15.02 s to 6174b208b5 (12 files), measured 2026-11-27 (the scratch timing).
+  - 2.25 s to 950b1ccd56 (10 files) and 2.24 s to e343e5021e (2 files), measured 2026-11-27 (the scratch timing).
+  - A touched file with no change 1.09 s, measured 2026-11-27 (the scratch timing).
+  - A comment added to the core crate 4.92 s, measured 2026-11-27 (the scratch timing).
+  - So every move past the smallest outlasts `START_WAIT_S`.
+- **Decision 1 - prebuild, not a wait on the spawned child.** The brief offered both. Waiting while the detached child lives would
+  need a new ceiling knob and would hide a failed build: the child's standard streams are `/dev/null` (T12's measured reason), so
+  the start could say only "it exited 1". The prebuild's stderr reaches the caller with the command that rebuilds it alone, and
+  the wait is the build's own end. Its cost: a source moved between the prebuild and the spawn (a reset in that instant) reopens
+  the `START_WAIT_S` window, which only the runner resets, and it resets after it holds the lock. Label: the algorithmically easier route,
+  the record silent (tooling, no research question).
+- **Decision 2 - the start's callers wait out the build in the foreground.** `make lane-start` and, from T22's base, a hand-in's
+  `on_hand_in` now block for the rebuild (up to the 112 s measured 2026-11-27, the scratch timing) where before they returned at `START_WAIT_S` with a false failure; for
+  `make builder-done` that sits near a builder's 2-minute tool timeout. Dormant until T22 (Decision 6 of T12). Not fixed here: a
+  background start or a prebuild at the lane tree's reset is a design choice for the hand-in path, outside the start path this
+  brief scopes. Filed as T54; lands before T22.
+- Red first, measured 2026-11-27 (make rust-test): `runner::start_tests` against the old `start`, 0 passed, 2 failed - the stale launcher's start returned
+  "lane: started `.../gates/l7r-gate.sh lane --work ...`, but it holds no lock after 0.3 s" (the bug's own words; measured 2026-11-27 (make rust-test), a 0.6 s fake
+  build against a 0.3 s wait), and the failing build's start returned 0 (the runner came up regardless). After, measured 2026-11-27 (make rust-test): 2 of 2, the lane
+  crate 38 of 38, and `make builder-checks CRATE="rust/gate/crates/lane"` clean (test, lint, format).
+
+### T51 Approach (checklist part A)
+
+1. **The goal, in the world.** `make lane-start` (and a hand-in's start) says "started" of a runner that comes up after the lane
+   tree's rebuild, and says why when that build fails, never "holds no lock" of a healthy runner.
+2. **The constraints.** T12's start (the lock the truth, the runner detached with `/dev/null` streams, `START_WAIT_S`), T14's
+   runner program (the lane tree's `scripts/gates/l7r-gate.sh`, `run::STRIPPED`), the launcher's `L7R_GATE_PRINT_FRESH`, the
+   crate's own-tests coverage (rust/gate/CLAUDE.md), the brief's scope (the start path in runner.rs).
+3. **Where each comes from.** R: plan.md T12 and T14, tasks.md T51, `scripts/gates/l7r-gate.sh`. O: the rebuild timings above
+   (2026-11-27).
+4. **Do they describe the world here?** Yes: the timings ran the lane tree's own commit and build cache through the real launcher;
+   the tests drive `start` through `setsid` with a launcher stand-in that builds and takes the lock as the runner does.
+5. **The order.** After T14's build half (the launcher as the runner's program); before T22 (the base flipped, which makes every
+   hand-in start the runner); beside T14's closing half, whose edits are in `runner/tests.rs` and `run.rs`.
+6. **The exits.** Green: the tests above and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one branch before the spawn.
+8. **The budget.** One landing.
+9. **Done, measured.** `runner::start_tests` 2 of 2 after 0 of 2 on the old code, the lane crate 38 of 38, measured 2026-11-27 (make rust-test).
+10. **Before moving a constant.** n/a: `START_WAIT_S` keeps its value (a GUESS), its doc saying what it now covers.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a lane start that reported a false failure (and a hand-in's start line saying so) now
+    reports the runner it started, or the build's error.
+
+**Found and left?**
+
+- A hand-in's start (`on_hand_in`) now waits in `make builder-done`'s foreground for the lane tree's rebuild, up to the 112 s
+  measured 2026-11-27 (the scratch timing), near a builder's 2-minute tool timeout (Decision 2). Not fixed here: the hand-in path's design (a background start, or
+  a prebuild at the lane tree's reset) is outside this start-path fix and dormant until T22. Filed as T54; lands before T22.
+
+**Performance work?** no
+<!-- plan-archive: archived 2026-11-28 -->
+### T52 (T14's build half, its decision 1: `make land`'s carry of the done refs read live carried a later hand-in into a lane batch)
+
+- **Approach**: `carry_done` (`rust/gate/crates/land/src/land/carry_done.rs`) still reads the done refs live
+  (`builder_done::to_carry`), but under `L7R_LANE_BATCH` (read through the landing's `Rooted`, so a test's own environment) it keeps
+  only the commits whose sha starts with a change the batch's `batch` line in `l7r-lane/lane.jsonl` (the git common directory)
+  names - the lane writes full shas, a short one matches too - and says the rest on one line, `land: lane batch <b>: left <n> done
+  commit(s) its batch line does not name, for a later batch (461 T52, D14): <shas>`, their refs kept for the lane's next batch. The
+  line is the LAST `batch` line naming the batch (a later `batch` line of the same id a new batch, as T49's reading and the lane's
+  `log::batches` take it); a torn line is skipped, as the lane skips it. A `landed` line of the batch after it ends it: a by-hand
+  `make land` with a done batch's id exported carries as before, never leaving its tasks' commits uncarried (round 2, the
+  advisor's probe of "a landing outside the lane is unchanged"); a `stop` naming the batch ends nothing, since the lane resumes it
+  - so T17's `"landed" | "stop"` rule is not copied, which would reopen the unbounded window on a resumed batch. Read in the land crate, not through the lane crate (which
+  builds on `task`), as `tree`'s `state::batch_open` (461 T17) reads it - a fourth small reader of the log, kept private rather than
+  making T17's helper public, which answers another question (open or not) and would put a second crate in this task. Of the
+  brief's two fixes ("carries nothing" or "only the batch line's shas") the second: it holds D14 whether or not the lane carried
+  first, and leaves `make land`'s carry the one that verifies a batch's commit is in HEAD. A batch no line names, or one a `landed` line
+  ended (the variable exported by hand, no log), is no lane batch and carries as before; a landing outside the lane is unchanged (the variable unset,
+  `batch_named` None before any read).
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/land ONLY="land::carry_done::tests"` on the old code): 5 passed,
+  1 failed - `a_lane_batch_carries_only_the_commits_its_batch_line_names` carried both T1's named commit and T2's unnamed one
+  (`notes/later.txt` in HEAD). Green: `land::carry_done::tests` 6 of 6; `make builder-checks CRATE="rust/gate/crates/land"` clean, the crate 221 of 221. The tests cover a short named sha carried beside an
+  unnamed one left (its ref kept, the line said), a log holding another batch's line and a torn line, a batch whose every waiting
+  commit is named (nothing said), and a batch no line names (both carried, nothing said). Round 2 (2026-11-27, the same
+  command with the `landed` arm made a no-op): 5 passed, 1 failed - `a_batch_no_line_names_carries_as_before`'s landed batch
+  carried only the named commit; after, 6 of 6, the batch line followed by a `stop` of it still filtering.
+
+### T52 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane batch's landing lands exactly the hand-ins its `batch` line named; a task's later hand-in
+   waits for the next batch with its done ref, whatever window a resumed batch spans.
+2. **The constraints.** D14 (a batch takes its changes' shas when it forms; a later hand-in changes no open batch), D5 (the
+   batch's changes), data-model.md's batch and log line, T17's rule (the log read in the land crate without the lane crate), the
+   brief: a landing outside the lane unchanged; the land crate only (T14's closing half works in the lane crate).
+3. **Where each comes from.** R: tasks.md T52's line, data-model.md ("A batch takes its changes' shas when it forms"), T14's
+   build-half handoff decision 1; O: `carry_done` and `to_carry` read 2026-11-27, the red test.
+4. **Do they describe the world here?** Yes: the red test shows the old landing carrying an unnamed done commit under the
+   variable.
+5. **The order.** After T14's build half; before T22 (as the task's line says).
+6. **The exits.** Green: the carry_done tests and `make builder-checks CRATE="rust/gate/crates/land"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `carry_done` is `to_carry`'s one caller in the land crate; the lane's `runner/run.rs` sets
+   `L7R_LANE_BATCH` and writes the `batch` line before `make land`, read 2026-11-27.
+8. **The budget.** One landing.
+9. **Done, measured.** The red test green; in use, the lane's first real batch (T23) with a later hand-in of a batched task left
+   waiting, its `left` line in the attempt file.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A later hand-in landed under a batch that never named it, against D14: its gate run and NOTE are the
+    batch's, and the lane's ref deletion keeps its ref, so the lane would carry it again as an empty pick in the next batch.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T53 (found by 461 T14's build half: `make lane` misstates an open batch's change as superseded)
+
+- **Approach**: `rust/gate/crates/lane/src/log.rs`, `log::state`: `in batch <b>` - an open batch's `batch` line names the sha and
+  no `eject` is the last log line naming it - is asked right after `landed` and before `superseded`; `superseded`, `ejected` and
+  `waiting` follow in their old order. The batch's commit is the one the lane lands (T52 carries only what the batch line names,
+  D14), so the batch's own change reads `in batch`, and the later hand-in of its task stays `waiting` (data-model.md's prose: "That
+  later hand-in is `waiting` until the batch ends"). An ejected change of an open batch, or a stopped batch's, is not in the batch,
+  so with a later hand-in it reads `superseded` as before (the data model's "superseding it if the batch ejected it"). Moving
+  `in batch` ahead of `superseded` departs from data-model.md's numbered list, which its own paragraph on a batch contradicts: a
+  deliberate deviation, labeled in the module doc. Callers: `make lane`'s listing (`lane.rs`, which now shows the batch's change)
+  and `batch::form`'s `waiting` filter (unchanged: an in-batch or superseded hand-in was never batched).
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY="log::tests"` on the old code): 7 passed, 1 failed -
+  `an_open_batch_s_change_is_in_batch_though_a_later_hand_in_of_its_task_exists`, `Superseded` against `InBatch("461-4")`. Green:
+  `make builder-checks CRATE="rust/gate/crates/lane"` clean, the crate 50 of 50; the test also pins the later hand-in `waiting`,
+  and the earlier `superseded` once its batch ejects it or stops.
+- **Test only, the coordinator's addition**: the session's pre-gate coverage named `runner.rs`'s `on_lane(common)` (its
+  `.map(|h| h.commit)`, line 504) reached by no test; a new module `runner/on_lane_tests.rs` writes a pool log `handed_in` line
+  and a done ref in a scratch git common directory and asserts `on_lane` returns that commit, and not a hand-in no ref or lane
+  line names (2026-11-27, `make rust-test CRATE=rust/gate/crates/lane ONLY=runner::on_lane_tests`: 1 of 1). Not red first: no
+  code changed, a coverage gap.
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** `make lane` shows the change an open batch is landing as `in batch <b>`, and a later hand-in of
+   its task as `waiting`, so the coordinator reads what the batch carries.
+2. **The constraints.** D8 (states computed), D14 (a batch takes its shas when it forms; a later hand-in moves no open batch),
+   data-model.md ("A hand-in"'s order, "A batch"'s paragraph on the later hand-in), T11's order, T52's carry; the brief: log.rs
+   and its tests only (T15 edits runner/run.rs elsewhere).
+3. **Where each comes from.** R: tasks.md T53's line, data-model.md, plan sections T11 and T52; O: the red test.
+4. **Do they describe the world here?** Yes: the red test reproduces the misstatement on the old code; `log::state`'s callers
+   read 2026-11-27 (`lane.rs`, `batch.rs`), none relying on a batch's change reading `superseded`.
+5. **The order.** After T11, T14's build half and T52; before T20.
+6. **The exits.** Green: the log tests and `make builder-checks CRATE="rust/gate/crates/lane"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `log::state` and its callers in `lane.rs` and `batch.rs`, read 2026-11-27 (`grep -n log::state`).
+8. **The budget.** One landing.
+9. **Done, measured.** The red test green; in use, `make lane` over the first lane batch with a later hand-in of a batched task.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The coordinator reading `make lane` sees the batch's change as superseded and no change `in batch`,
+    against what the batch lands (D8's states misstated).
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T54 (T51's Decision 2: a hand-in's runner start waits in `make builder-done`'s foreground for the lane tree's rebuild; filed at T51)
+
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs`: `run_batch`, right after `builder-tree lane` brings the lane's tree to
+  `origin/main` and before the changes to carry are read, runs T51's `prebuild` on the tree's own `scripts/gates/l7r-gate.sh` where
+  that file exists (the run tests' worlds have none), its result ignored. The hand-in path (`on_hand_in`, `start`) is unchanged.
+- **When a start can find the lane tree stale** (read from the code, 2026-11-27): the launcher's staleness is `find -newer` over the
+  sources (`scripts/gates/l7r-gate.sh`'s `stale`). Two writers move the lane tree's sources. The runner's `run_batch` resets it, then
+  carries (`make carry`, whose launcher builds) and lands (`make land`, whose `LAND_RUN` builds again after the carries).
+  `scripts/land-alone.sh`'s reset step resets the same tree (`<clone>-land`), and its landing step runs `make land` there, which builds. So after
+  either writer the binary is fresh, and the 2.2-112 s T51 measured (measured 2026-11-27, T51's scratch timing) reaches a start only
+  where a reset was followed by no `make`:
+  1. a batch whose every change `origin/main` already holds (`todo` empty: a resumed batch whose push went out, the Recovery case),
+     T50's re-made tree included - the whole move since the last build, up to the 112 s of a day's move and 102 s for a re-made tree, measured
+     2026-11-27 (T51's scratch timing). CLOSED HERE.
+  2. a runner killed between the reset and the build - the rest of that build. Accepted (below).
+  3. a stopped carry - the carried files' rebuild, up to the 15.02 s T51 measured for a 12-file commit (measured 2026-11-27, T51's scratch timing), but where the conflict is in
+     a file the gate builds from, a failed build and no runner at all (Found and left, T55).
+- **Decision 1 - the build at the reset (route B), not a background start (route A).** Priced 2026-11-27, by reading:
+  - Route A, the prebuild inside a detached child of the hand-in. It needs a new detached path in `start` and its tests. Its
+    failure must reach the coordinator as an `owed` line (data-model.md's event; T20's `make lane-wait` prints only `owed` lines).
+    The hand-in would lose its `started (pid N)` line, and T51 Decision 1's reason (a build failure the caller sees) would come back
+    as a deferred line. It covers cases 1-3's waits, but not case 3's failure.
+  - Route B: a call after the reset, in the lane crate. In the common batch (a carry follows) it adds no build: it makes, earlier, the
+    build `make carry`'s launcher would make, and the carry's moved files are rebuilt by `make land` as before. It closes case 1,
+    the only unbounded case on a live runner. Cases 2 and 3 are left.
+  - Chosen: B, the cheaper. It is sound for the hand-in's wait: the residual waits are bounded by one carry's files or one killed
+    build. No log line is written, so nothing is added to data-model.md's events.
+  - Label: the algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - a failed build at the reset stops no batch.** Where a carry follows, `make carry`'s own launcher fails on the same
+  build and the carry's error (the `carry` line, the runner's `error:`) says so, as before. Where none follows, the next start's
+  prebuild (T51) says why to its caller. Making it an error here would add a third route to the same report.
+- **Accepted limitation (case 2)**: a runner killed between the reset and its build leaves the next start the rest of that build in
+  the foreground, up to the 112 s above under the same load (measured 2026-11-27, T51's scratch timing). Its cost: one hand-in's wait, near the 2-minute tool timeout, after a
+  `make lane-stop NOW=1` or a crash in that instant. Alternatives priced: route A covers it at the cost above. Chosen by: this
+  builder, under T54's brief, which asks for the cheaper sound route.
+- Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`): the new test
+  `a_reset_with_nothing_to_carry_leaves_the_lane_tree_s_launcher_built_so_the_next_start_builds_nothing` against the old
+  `run_batch`, 7 passed, 1 failed (`left: None`, `right: Some("built <origin sha>")`: no build after the reset). After, measured
+  2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`): the lane crate 40 of 40, lint and format clean. The test commits
+  a stand-in launcher (it builds where the tree's HEAD moved since its last build, its marks in the git common directory, out of
+  the reset's `clean`) and moves `origin/main` past a landed batch. It then resumes a batch `origin/main` already holds: one build
+  at the new HEAD, and T51's `prebuild` after it builds nothing. Then, with the build failing, a further batch still lands.
+
+### T54 Approach (checklist part A)
+
+1. **The goal, in the world.** A hand-in's runner start from T22's base finds the lane tree's `l7r-gate` built, so `make
+   builder-done` does not wait out a rebuild near a builder's tool timeout.
+2. **The constraints.** T51's start (its prebuild and its error words), T12's start and lock, T14's batch run (`run_batch`, steps
+   1-4), T50's re-made tree, data-model.md's events (none added), the crate's own-tests coverage (rust/gate/CLAUDE.md).
+3. **Where each comes from.** R: plan.md T51, T12, T14; tasks.md T54; `scripts/gates/l7r-gate.sh` (`stale`), `scripts/land-alone.sh`
+   (its reset and landing steps). O: T51's rebuild timings (2026-11-27).
+4. **Do they describe the world here?** The staleness cases are read from the code above. The timings are T51's, on the lane
+   tree's own commit and build cache. The test drives `step` and `resume` against a real bare `origin` and the pool's lane tree.
+5. **The order.** After T51 and T14; before T22, which makes every hand-in start the runner.
+6. **The exits.** Green: the new test, and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one call after the reset.
+8. **The budget.** One landing.
+9. **Done, measured.** The new test red then green, the lane crate 40 of 40, measured 2026-11-27 (make rust-test, make builder-checks).
+10. **Before moving a constant.** n/a: `START_WAIT_S` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. A hand-in after a batch that carried nothing now starts its runner at once, where it waited
+    out the whole move since the last build.
+
+**Found and left?**
+
+- A stopped carry leaves its cherry-pick in progress in the lane's tree (`rust/gate/crates/land/src/land/carry.rs`: "the stop leaves
+  the pick in progress"). Where the conflict is in a file the gate builds from, the next start's prebuild (T51) fails on the
+  conflict markers and starts no runner. Only the runner's resume resets that tree, so from T22's base every hand-in says "could
+  not be built" and the open batch is never resumed. Found by reading, not run. Not fixed here: it is the start's handling of an
+  open batch's tree, outside the build-at-reset this brief prices, and route B does not reach it. Filed as T55; lands before T22.
+
+**Performance work?** no - it removes a foreground wait that does not yet happen (dormant until T22's base), and it times nothing.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T55 (T54's Found and left: a stopped carry's conflict in the lane's tree fails every later start's build, and only the runner's resume resets that tree; filed at T54)
+
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`: `start`, after its lock check (no runner lives) and before T51's `prebuild`,
+  asks `stopped_carry`: the registry's lane tree has `CHERRY_PICK_HEAD` (`git -C <tree> rev-parse -q --verify`, which a linked
+  tree answers for itself) AND the lane's log's last batch is open with its last `carry` line's code not 0. Where both hold,
+  `reset_stopped` makes the resume's own call, `builder-tree lane` (`l7r_gate_task::builder_tree::cli`, as `run_batch` calls it),
+  which fetches and brings the tree to `origin/main` (`reset --hard`, `clean -fdq`, `checkout --detach`), and says so in a stdout line
+  before the start's own. A reset that fails is the reply's stderr and the start goes on, so the build's own words follow it. The
+  rest of `start` moves unchanged into `start_built`. `start`'s signature and its callers (`lane.rs`, `on_hand_in`) are unchanged;
+  `run.rs` is not touched (T15's).
+- **Decision 1 - the reset first, not the prebuild skipped.** Read 2026-11-27 in `scripts/gates/l7r-gate.sh`: the launcher builds
+  where stale in both modes (the `elif stale` branch runs whether or not `L7R_GATE_PRINT_FRESH` is set), and it never falls back to
+  the binary it has. So a skipped prebuild only moves the failed build into the detached child, whose streams are `/dev/null`, and the
+  start says "holds no lock". Spawning with `L7R_GATE_STALE_OK` instead would leave that variable in the runner's environment, and
+  through it in every `make carry` and `make land` the runner runs. `run::STRIPPED` (run.rs, T15's file) does not remove it. The
+  reset is what the resume does at once anyway (`run_batch`'s first step), so it removes nothing the runner needs. Label: the
+  algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - both halves of the condition.** `state_of` reads any `carry` line as gating, so the code is asked of the line. The
+  log half matters because `scripts/land-alone.sh` shares the lane's tree: a pick in progress there with no stopped carry open is
+  not the lane's to discard, and is left alone (pinned by a test).
+- **After the reset** the runner starts, resumes the batch and carries again. A conflict with `origin/main` still there stops the
+  carry again, and the runner stops with the batch open as before. That repeat is T25's (phase 3: a carry conflict becomes a repair
+  entry), not a deadlock: each start makes one more attempt and says why it stopped.
+- Red first, measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::start_tests"`), the three new tests
+  against the old `start`: 3 passed, 2 failed. The stopped carry's start returned the deadlock's own words, "lane: the runner's
+  program could not be built (exit 1), so no runner started ... error: this file contains an unclosed delimiter". The failing reset
+  said nothing of the reset. The test world is a real one: a bare `origin`, a clone, and the lane's tree in the pool's registry with
+  a hand-in's `rust/x.rs` cherry-picked onto a moved `origin/main` and stopped in conflict. The lane's log holds `batch`, `carry` (code
+  2) and the runner's `stop`. A stand-in launcher fails on conflict markers under `rust/` in both modes, as cargo would. After,
+  measured 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`): the lane crate 43 of 43 (40 before), lint and format
+  clean.
+
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** After a batch's carry stops in a file the gate builds from, the next `make lane-start` (or, from
+   T22's base, a hand-in's start) starts a runner that resumes the open batch, where every start had failed to build.
+2. **The constraints.** T51's start (its lock check first, its prebuild and its words), T54's build at the reset, T14's batch run and
+   Recovery (the resume brings the tree to `origin/main`), T13's `builder-tree lane`, `land`'s carry ("the stop leaves the pick in
+   progress"), `land-alone.sh`'s shared use of the tree, the crate's own-tests coverage (rust/gate/CLAUDE.md), the brief's scope (the
+   start path in runner.rs; T15 edits run.rs).
+3. **Where each comes from.** R: plan.md T51, T54, T14, T13; tasks.md T55; `scripts/gates/l7r-gate.sh` (`stale`, both modes),
+   `rust/gate/crates/land/src/land/carry.rs`, `rust/gate/crates/task/src/builder_tree.rs` (`lane_start`). O: the red and green runs
+   above (2026-11-27).
+4. **Do they describe the world here?** Yes: the tests drive `start` through `runner_exe` and `setsid` against a real conflicted
+   cherry-pick in a registered lane tree, a bare origin, and the real `builder-tree lane`.
+5. **The order.** After T51 and T54; before T22, which makes every hand-in start the runner; beside T15 (run.rs, untouched here).
+6. **The exits.** Green: the three new tests and the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one check and one call before the build.
+8. **The budget.** One landing.
+9. **Done, measured.** `runner::start_tests`: 3 of 5 on the old code, 5 of 5 after; the lane crate 43 of 43, measured 2026-11-27 (make rust-test, make builder-checks).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. A start after a stopped carry now resets the lane's tree and starts the runner, where it
+    failed on the conflict markers and no batch was ever resumed.
+
+**Found and left?** none - the resumed batch stopping again on the same conflict is T25's planned work (phase 3), not a defect left here.
+
+**Performance work?** no
+<!-- plan-archive: archived 2026-11-28 -->
+### T58 (T51's stale-launcher start test red 2 of 30 under load, "holds no lock after 0.3 s", measured 2026-11-27 (T15's build half, 3x10 at once), filed there)
+
+- **Approach**: the defect is the TEST's own bound, not the runner's start; `rust/gate/crates/lane/src/runner/start_tests.rs` alone
+  changes, `runner.rs` not at all. The tests' starts take `WAIT_S` (3.0 s, a GUESS knob of the test module with its measured why) in
+  place of 0.3 s and the stopped-carry tests' 2.0 s (each a GUESS of T51's and T55's), and the fake launcher's build is 3.5 s, so the build still outlasts the start's
+  wait, as the lane tree's rebuild outlasts `START_WAIT_S`, and in its runner mode it sleeps 0.5 s before the lock, a loaded
+  machine's slow spawn pinned. A lock seen ends the wait at once, so the longer bound costs a green run nothing; the build costs
+  the one test 3.5 s, measured 2026-11-27 (make rust-test).
+- **Measured** (method for each figure: the lane test binary run whole-crate, ten at once, under `uptime`'s load on 22 cores, the
+  start's wait timed by a scratch `eprintln!` in `start_built`, removed after, 2026-11-27):
+  - Before, 0 red of 30 at load 15-47, then 2 red of 60 at load 31-86, measured 2026-11-27 (the lane binary 6x10): this test 1 ("holds no lock after 0.3 s", 0.623 s with no lock) and one other, below.
+  - Spawn to lock over the 419 starts that came up: median 0.066 s, 99th percentile 0.471 s, longest 0.749 s, measured 2026-11-27 (the timed wait), and at `START_WAIT_S` (5.0 s) not one of 300 real starts failed, measured 2026-11-27 (the timed wait).
+  - The runner's own take against the probe (a scratch test: `work_cli` run 20 times beside a thread calling `held()` every 20 ms, the binary 3x10 at once, load 17-35): 0 quiet leaves of 600 takes, measured 2026-11-27 (the scratch race test, removed after), so `TAKE_S` (1.0 s) is not lost to `free()`'s brief lock.
+- **Decision 1 - fix the test, not the start; no wait read against the child's state.** The task line offered the child's state.
+  The measurements above show no production start failing: `START_WAIT_S` holds 6.7 times the longest spawn to lock at load 86,
+  and the runner's take never lost to the probe. A wait on the child would add a ceiling knob and was priced and declined by T51
+  (Decision 1) for hiding a failed build; with no wrong outcome in the start (constitution XIV) the test's bound is the defect.
+  Label: the algorithmically easier route, the record silent (tooling, no research question).
+- Red first, measured 2026-11-27 (make rust-test): the fake's spawn slowed 0.5 s against the old 0.3 s bound, 10 of 10 red, "holds
+  no lock after 0.3 s". After, measured 2026-11-27 (make rust-test): `runner::start_tests` 5 of 5; the start without its prebuild
+  still red ("holds no lock after 3 s", measured 2026-11-27 (make rust-test)), so the test still tells T51's fix, and the lane binary 6x10 at once at load 19-61, 0 red of 60, measured 2026-11-27 (the lane binary 6x10).
+
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** The lane crate's start tests are green at load, and stay red against a start that skips its build.
+2. **The constraints.** T51's start (the prebuild, `START_WAIT_S`), T14's lock probe (`free`, `TAKE_S`), the brief's scope
+   (runner.rs's start path and start_tests.rs; T15's closing half edits `runner/run.rs`), the crate's own-tests coverage.
+3. **Where each comes from.** R: tasks.md T58, plan.md T51 and T14. O: the load runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the runs used the crate's own test binary, whole, ten at once on the shared machine
+   at the loads named.
+5. **The order.** After T51 and T55 (their tests); before T23.
+6. **The exits.** Green: the 6x10 run at load clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one constant and the fake's timings.
+8. **The budget.** One landing.
+9. **Done, measured.** 10 of 10 red before, 0 of 60 red after at load, measured 2026-11-27 (the lane binary 6x10).
+10. **Before moving a constant.** `START_WAIT_S` unmoved; the tests' 0.3 s and 2.0 s were no claim's, now `WAIT_S` (a GUESS with its measured margin).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a red batch gate's false red from this test is gone; the start itself behaves as before.
+
+**Found and left?**
+
+- A start or a stop can name a dead runner's pid: `holder` reads the lock file while it is held, and a new runner holds the lock before `work_cli`'s `set_len(0)` and pid write, so the file still names the last killed runner; `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 (pid 884049, the killed runner, against 887300), and a stop would signal that dead pid's group. Not fixed here: the race is in `work_cli` and `holder` and its test in `runner/tests.rs`, outside this brief's start path, and T15's closing half edits beside it. Filed as T62; lands before T23.
+
+**Performance work?** no
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T59 (phase 1: the likeness test counts the lane's tree as a builder's; found by T10's measurement)
+
+- **Approach**: in pool tree `diagram-backlog-t271`, bundled with T60.
+  - **Measured** (observed 2026-11-27, method: `night-figures.py`'s `concurrency` and `load_figures` over 19:57:00Z-23:03:20Z, the pool
+    log from T10's kept extract and the live samples, a probe script in the scratchpad): trees held 3.55, the sampler's held mean 3.18 over
+    1,065 samples, on the old script - the pool log's `adopt` of `/diagram/.clones/diagram-backlog-land` with detail `lane` (21:08:09Z, never
+    released) replayed as a hold, and `len(held)` counting `lane`.
+  - **The script** (`dev/measurements/2026-11-27/461-t01-night-tokens/night-figures.py`): `LANE = 'lane'`, the guard's
+    `shared::builder_pool::LANE`; `held_spans` treats an `adopt` of `lane` as no hold and as the end of one (a tree adopted for the lane
+    is no builder's from then), unless `lane=True` asks for it; `concurrency` passes that through; `sample_rows` counts `held` without
+    `lane`. `phase1.py` (T10's) drops its own `-land` suffix filter and asks `concurrency(..., lane=True)` for its "with it" figure, so
+    T10's outputs re-derive. After: trees held 2.94, the sampler's mean 2.98 (same method); T10's two kept figures runs, `phase1.py figures`
+    over 19:57Z and 21:06:47Z with `--kept`, byte for byte their recorded outputs; T02's night, `figures` 04:30Z-14:29Z with `--kept`, its
+    output and `ref-0430-1429.json` unchanged (no lane then); `like` over 19:57Z-23:03:20Z reads trees held 2.94 (observed 2026-11-27,
+    method: those commands, diffed against the recorded files).
+  - **The sampler** (`rust/gate/crates/measure/src/measure/sampler.rs`'s `sample`): already reads `shared::builder_pool::read`, which
+    leaves the lane out since T13 (landed 20:52Z). The 215 samples naming `lane` (21:08:12Z to 21:43:55Z) came from pid 3387947, started
+    09:44:04Z, before T13, which ran until its `L7R_SAMPLE_MAX_H` ended at 21:44:05Z; the sampler started 21:52:53Z lists no `lane`
+    (observed 2026-11-27, method: `sampler.log` and each sample's `held` in `mem-samples.jsonl`). So no code change: the sampler test's
+    fixture now holds a lane tree, and `a_sample_reads_the_cgroup_and_proc_and_leaves_out_what_its_file_does_not_give` pins `held`
+    without it. Not red first: the code it pins was right from T13; the red is the script's, above.
+  - **Decision: the lane told by its holder, not its path.** `lane` is the registry's reserved word (T13) and the pool log's adopt detail;
+    the `-land` suffix is a naming habit. Label: the algorithmically easier route, one word shared with the guard.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: a measurement script and a test fixture | - | - | - | - |
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** The likeness test's trees held, and its sampler cross-check, count builders' trees only, so T31's like window
+   is judged against the night's 3.19 on the same footing.
+2. **The constraints.** Plan D12 (the likeness test), FR-010 (every figure beside its concurrency), T13 (the lane's reserved holder), T10's
+   record kept re-derivable.
+3. **Where each comes from.** R: plan D12, T13's section; O: the runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the live pool log, the live samples and T10's kept extracts.
+5. **The order.** After T10; before T31, which reads the like window.
+6. **The exits.** Green: 2.94 and 2.98 from the script, T10's outputs re-derived. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The sampler's half was a stale process, not code: named above and filed.
+8. **The budget.** One landing.
+9. **Done, measured.** The probe's figures 2.94 and 2.98; `make builder-checks CRATE="rust/gate/crates/measure"` green (observed 2026-11-27,
+   method: those commands).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T31's like window would read about 0.6 tree high against the night's 3.19, its band 0.5 (GUESS, plan D12),
+   enough to pass or fail a window wrongly (observed 2026-11-27, method: the probe above): fixed here.
+
+**Found and left?**
+- The memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H` (12 h), so a change to what it reads reaches its
+  samples only at its next start: 215 samples listed `lane` after T13 had left it out (observed 2026-11-27, method: `sampler.log` against
+  T13's landing). Not fixed here: a restart-on-rebuild is a mechanism of its own, past this fix's size. Filed as T61; lands before T31.
+
+**Performance work?** yes - a measurement script of where the builders' concurrency goes (451 FR-013: a measurement task counts).
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T60 (phase 1: a build half's hand-in refused for the feature-close ask; found by T10's measurement)
+
+- **Approach**: in pool tree `diagram-backlog-t271`, bundled with T59.
+  - **What refused, measured** (observed 2026-11-27, method: T10's record, `dev/measurements/2026-11-27/461-t10-phase1/output-1957-2303.txt`,
+    the call's own tool result): 451 T537's build half at 22:06:03Z, "this tick would close the feature, and: 451 has no report.md ... review
+    passes with no ledger row" - the closing check `tick::checks`' `close_owed` joins to the last task's refusal where the tasks asked are the
+    feature's last open boxes (451 T307 part 2). Its closing half answered both and handed in on the same tree at 22:44:14Z.
+  - **The change** (`rust/gate/crates/task/src/tick/refusal.rs`, `Section`; `tick.rs`, `checks`; `land/hand_in.rs`, `section_of`): T44's
+    `Later` splits in two - `Closing`, a build half's hand-in, puts off the section's two asks and the close (`close_owed` not asked);
+    `Later`, a measurement's, puts off the section's two asks alone, its close still asked. A fix's or a closing half's hand-in
+    (`Owed`), `make tick`, `l7r-gate tick --land-check` and the landing (`Pass::Landing`, always `Owed`) ask everything. The first
+    pass's own ledger-row row (`land/cheap.rs`, a pass with no row) is not the close's and stands at every kind.
+  - **Decision: the close put off for a build half alone, not for a measurement.** The close's reasons (a report, the close's ledger
+    rows, the implementation check) are the closing half's work, and a closing half always follows a build half; nothing follows a
+    measurement, so its builder answers its feature's close at hand-in, as before (the plan review's round 1, BLOCKED on the
+    measurement limb, SC-002: a hand-in submitted once it is ready to land). This narrows the task line's "a build half and a
+    measurement" to the half the reason covers. Label: the algorithmically easier route that cannot loosen the landing.
+  - **The docs**: `refusal.rs`'s `Section` doc, `checks`' doc, `hand_in.rs`'s step 6 and `section_of`, and `scripts/container/builder-brief.md`'s
+    THE BUILDER HANDS IN ITSELF (the close put off with the two asks, the landing asking all three).
+  - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=rust/gate/crates/task ONLY="tick::tests"` and `CRATE=rust/gate/crates/land
+    ONLY="land::hand_in::tests"` with the new assertions on the old code): task 13 passed, 1 failed
+    (`the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded`, its new `Section::Later` assertion); land 27 passed, 1
+    failed (`a_build_half_of_the_feature_s_last_task_hands_in_with_its_close_still_to_come`, at the hand-in: the landing's half of it, the
+    close still asked of `Pass::Landing`, passed on the old code, as it must, and so do the fix's and the measurement's hand-ins still
+    refused, added after round 1). After: `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"`: task 160 passed,
+    land 223, lint and format clean (`rust/gate/crates/measure` 307 for T59).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the hand-in's close put off | n/a - no map | n/a | none | n/a |
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** A build half hands its own work in when its task is the feature's last open box; the closing half, a
+   measurement's own hand-in and the landing still owe the close.
+2. **The constraints.** US2 (a refusal a builder can answer is answered by the builder that has the context), T44's mode and its rule that the
+   landing asks everything, FR-002 (no coverage at hand-in).
+3. **Where each comes from.** R: US2 (spec.md), T44's section; O: T10's record (2026-11-27).
+4. **Do they describe the world here?** Yes: the refusal is the real call's, and the tests run the real first pass through the hand-in.
+5. **The order.** After T44 and T10; before T31.
+6. **The exits.** Green: the task and land crates' tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/task rust/gate/crates/land"` green (observed 2026-11-27, method:
+   that command, its log's tail).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A build half of a feature's last task refused at hand-in for work only its closing half does, 38 minutes and a second
+   builder's run (451 T537, observed 2026-11-27, method: T10's record): fixed here.
+
+**Found and left?** none.
+
+**Performance work?** yes - it makes the builders' loop faster (451 FR-013): a build half of a feature's last task hands in without
+waiting on its closing half.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T61 (the memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H`; found by T59)
+
+- **Approach**: in pool tree `diagram-backlog-t271`. The sampler (`rust/gate/crates/measure/src/measure/sampler.rs`) re-runs itself
+  when a build replaces its binary.
+  - **Measured** (observed 2026-11-27, method: `sampler.log` and `mem-samples.jsonl` of the clone `diagram-backlog`, T59's section):
+    pid 3387947 started 09:44:04Z, before T13 landed (20:52Z), and listed `lane` as held in 215 samples, 21:08:12Z to 21:43:55Z,
+    until its hours ended at 21:44:05Z. The sampler running now, pid 3445329 (started 21:52:53Z), already runs a replaced binary:
+    its `/proc/<pid>/exe` reads `.../tool/l7r-gate (deleted)` (observed 2026-11-27, method: `ls -la` of that link) - cargo writes a
+    new file at the path, so the running inode is unlinked, not overwritten.
+  - **D1. Re-exec, not a binary id a sample. Label: design decision.** Before each sample `rebuilt` compares the device and inode
+    of `<proc>/self/exe` (the kernel's link, followed to the running file even once unlinked) with the path the sampler was
+    started from (`Env::exe`, `current_exe` at its start); where they differ it `exec`s the path as `measure sampler run --common
+    <dir> --first <its first start>`. Why not an id in each sample for the readers to drop stale ones: that leaves a hole in the
+    window (21:08:12Z to 21:43:55Z above, inside T31's like window, observed 2026-11-27, method: that sampler's log) and puts a filter in every reader (`sampler-report`,
+    `night-figures.py`, `slot-coincide.py`). Two `stat`s a sample, no stored state, and no race where the binary is replaced twice
+    around a re-run: the cheap stand-in for the brief's "content id".
+  - **D2. The re-run is the same process. Label: design decision.** `exec` keeps the pid and its start time, so the pid file is
+    left as it is and still names the sampler - no concurrent `start` sees none and starts a second; the hours count from
+    `--first`, so a sampler re-run at every landing still ends at its `L7R_SAMPLE_MAX_H`; `sampler.log` says `pid N runs its
+    rebuilt binary` with its interval and its first start, pinned by the test below.
+  - **D3. A re-run that fails samples on. Label: design decision.** The check can fire while cargo is still writing (the path
+    missing, or `ETXTBSY`): a path not there is no rebuild, and an `exec` that returns is ignored - the sample is taken in the old
+    code and the re-run asked again at the next sample; no log line a failed try. Ending there would stop sampling silently until
+    the next handout, worse than the defect.
+  - **The claim, exactly**: a sample reads with the BUILT binary at the sampler's path within one interval - not with the source:
+    `scripts/gates/l7r-gate.sh` builds only at its next call after a landing. Recorded in the module note and
+    `dev/audits/memory-sampler.md` ("A rebuilt binary is run again").
+  - **Red first** (observed 2026-11-27, method: the new `Env` fields `exe`, `first`, `exec` landed inert, then the tests, `make
+    rust-test CRATE=rust/gate/crates/measure ONLY="measure::sampler"`, its `test result` line): 11 passed, 3 failed -
+    `a_rebuilt_binary_is_run_again_from_its_first_start_and_a_run_that_fails_samples_on` (no re-run asked),
+    `a_run_again_says_so_and_counts_its_hours_from_the_first_start` (359 samples where 2), and
+    `the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed` (`--first` dropped: ended by the pid file, not its
+    hours). The door test's first version hung on the old code (a live loop of twelve hours) and was given a thread that takes the
+    pid file away after a second, so the old code ends red at its next sample.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a rebuilt binary is re-run with the first start; a path not there is no rebuild; a failed re-run samples on | pinned by `a_rebuilt_binary_is_run_again_from_its_first_start_and_a_run_that_fails_samples_on` (measure) | n/a: tooling | none | n/a |
+| a re-run logs itself and counts its hours from the first start, its pid file kept | pinned by `a_run_again_says_so_and_counts_its_hours_from_the_first_start` | n/a: tooling | none | n/a |
+| the door reads `--first`; the real `exec` returns its error | pinned by `the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed` | n/a: tooling | none | n/a |
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** A change to what the sampler reads reaches its samples within one interval of the binary's
+   rebuild, so no window (T31's like window first) is read from code a landing replaced.
+2. **The constraints.** T61's line in tasks.md; 451 T274's D3 (the pid file names the sampler), D13 (`L7R_SAMPLE_MAX_H` bounds a
+   run), D5 (detached, no inherited descriptor); T59's section, which filed it.
+3. **Where each comes from.** R: T59's and 451 T274's sections; O: the measurements above (2026-11-27).
+4. **Do they describe the world here?** Yes: the live sampler's own log and its `exe` link, read 2026-11-27.
+5. **The order.** After T59; before T31, which reads the like window.
+6. **The exits.** Green: the three new tests and the crate's suite green in `make builder-checks CRATE="rust/gate/crates/measure"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The red above turned green: `make builder-checks CRATE="rust/gate/crates/measure"` test, lint and format
+   clean, the crate's 310 tests passed (observed 2026-11-27, method: its output; a first run's lint caught a binding named too
+   like another, renamed). Live, after landing: the clone's sampler stopped and started once (it runs pre-fix code and
+   cannot re-run itself), then its `sampler.log` shows `runs its rebuilt binary` after the next landing's build.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a map defect: T31's like window, and any `make sampler-report` window after a landing, would read
+   samples computed by code the landing replaced - 215 samples listing `lane` on 2026-11-27: fixed here.
+
+**Found and left?** none.
+
+**Performance work?** yes - the sampler measures where the builders' memory goes (451 FR-013: a measurement tool counts); not an
+engine-speed task, so `docs/performance-checklist.md` does not apply.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T62 (T58's found-and-left: a lane start or stop could name a dead runner's pid, `runner::tests::a_runner_deaf_to_term_...` red 1 of 60 at load 31-86, measured 2026-11-27 (T58's lane binary 6x10))
+
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`'s `holder()` names the pid read from the lock file only where that process holds the lock itself (`holds`: one of `/proc/<pid>/fd` is the lock file by device and inode, and its `/proc/<pid>/fdinfo/<fd>` lists a `FLOCK` lock - the kernel lists a lock only on the open file holding it, observed 2026-11-27 (a shell holding `flock` on fd 9 beside a second open of the same file: the lock line on the first alone)); `stop` in the window, the lock held and no holder named, signals nothing and says so. Its tests in `runner/tests.rs`. With it, three lines the session's pre-gate coverage named (2026-11-27 about 23:40Z), tests only: `work_cli`'s real `sleep` (a new test, the idle a minute and a stop request ending it, since with the 0.05 s idle a slow first step outlasts the idle and the loop never sleeps), `wake/tests.rs`'s `n == 50` guard (one line, `assert!(n < 50)`, so the guard no right answer reaches runs no unrun line and a regression is still a red, not a hang on the fake clock), and `rustc/run.rs` line 205 - covered in `tested`'s instance of the generic `leak_checked`, but its instances for `side::run_built` and `cover::run_job` were never called with an entry inside `l7r-tmp/` (the lcov's `FNDA:0` on both, observed 2026-11-27 (the cover run's `lcov-rustc.info`)), so `tests/side.rs`'s and the cover world's leaks gain one there.
+- **Decision 1 - the reader proves the pid, the writer's order unchanged.** The task offered writing the pid before the lock is seen held: a runner cannot write before it wins the lock without overwriting a live runner's pid when it loses, and the cited red went through the tests' shell stand-ins (`flock` then `echo $$`), which a `work_cli` reorder would not reach. So `holder()` refuses a pid not holding the lock - a dead pid, a zombie (descriptors closed) or a reused pid all hold none - rather than "a live child of" anything (the runner is in a session of its own, nobody's child). No retry knob: in the window `holder()` is `None`, which a start already polls through (`start_built`'s wait) and a stop already said before (the empty file after `set_len(0)`); a stop now says the lock is held and asks again. Label: the algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - Linux `/proc` read for the proof.** The lane runs only in the Linux container; the stall watchdog already reads `/proc` for the runner. Label: convention (the watchdog's own reading).
+- Red first, measured 2026-11-27 (make rust-test): `runner::tests::a_pid_is_named_only_where_its_process_holds_the_lock_itself` - the lock held in process, the file naming a dead pid (a reaped child's), then a live pid holding no lock, then this process's own - 0 passed, 1 failed on the old code (`holder` returned the dead pid); after, `runner` and `wake` 48 of 48. The lane test binary whole, 6x10 at once at load 10-53 on 22 cores: 0 red of 60, measured 2026-11-27 (the lane binary 6x10).
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** A lane start or stop names, and a `NOW=1` stop signals, only the process that holds the runner's lock - never a killed runner's pid or whatever reused it.
+2. **The constraints.** T12 Decision 1 (the lock is the truth, the pid secondary) and Decision 9 (`TAKE_S`); T58's start bound; the crate's own-tests coverage; the brief's three named lines.
+3. **Where each comes from.** R: tasks.md T62, plan.md T12, T14, T58. O: T58's 6x10 red; the fdinfo observation and the lcov above (2026-11-27).
+4. **Do they describe the world here?** Yes: the red test forces the window in the crate's own test binary on this machine; the fdinfo lock line was observed on this kernel.
+5. **The order.** After T58; before T22 and T23.
+6. **The exits.** Green: the red test green, the lane binary 6x10 at load clean, and the cover run over `lane` and `rustc` naming no line. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one reader and its proof.
+8. **The budget.** One landing.
+9. **Done, measured.** 0 passed, 1 failed before; green after; 0 red of 60 at load 10-53, measured 2026-11-27 (the lane binary 6x10).
+10. **Before moving a constant.** n/a: no constant moved or added.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a stop in the start's window says the lock is held and signals nothing, where it signalled the last runner's pid's group.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T59 to T10 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T60 to T10 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T61 to T59 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T65 (`make lane`'s status lists the repairs the queue's reader keeps open: found by T16)
+
+- **Approach**: `rust/gate/crates/lane/src/log.rs`'s `repairs_open` becomes `repairs_open(common: &Path) -> Vec<String>`, the ids of `l7r_shared::builder_queue::repairs::open(common)` (T16's reader) - REUSED DIRECTLY: the lane crate already depends on `l7r_shared` (its `Cargo.toml`), so no route through `task` and no third copy of the rule. `lane.rs`'s `status` computes it from the clone's common directory and hands it to `report` as a third argument (`log::World` gains no field: `runner/run.rs` builds one, and T18 edits that file). The old in-memory reader (an `eject` line's id, answered by a hand-in's `repair_of`) is gone. Docs restated: `log.rs`'s and `lane.rs`'s, `rust/gate/CLAUDE.md`'s lane row, and the one line of `builder_queue/repairs.rs`'s module doc that said the lane read rule 2 alone. `runner/run.rs` untouched; one line of `runner/run/tests.rs` (its `repairs_open` call, now `&w.common`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **One rule, the queue's**: the status lists exactly the entries `make builder-next` may offer (open: filed, ejected, unanswered, not superseded), before the offer's in-flight and kind filters - those say who may take a repair, not whether it is owed. Label: data-model.md, "A repair entry" (`superseded` read as closed), as T16's Decision 3 states it.
+2. **The status now needs the entry, not the `eject` line alone**: an `eject` line naming an id no `repairs.jsonl` line holds is listed by no one. Label: the algorithmically easier route, and the writer's own order - the runner files the entry before its `eject` lines (`repairs.rs`'s module doc), so the case arises in no real log; the status test's fixture now files its entry through `repairs::file`.
+3. **Red first**: `lane::tests::status_closes_a_repair_a_later_hand_in_of_its_task_superseded_as_the_queue_does` (entries and `eject` lines written by the lane's own `repairs::file` and `log::append`; r1 handed in again after its ejection, r2 only before it, r3 answered by `repair_of`) failed on the old code, 1 of 6 `lane::tests` (the status said `repairs open: r1, r2, r3`; expected `r2`), 2026-11-27. After: 75 of 75 of the lane crate's tests pass.
+
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** `make lane`'s `repairs open` line names the repairs the queue still offers, so the coordinator is never told a repair is owed that no command hands out.
+2. **The constraints.** data-model.md's repair entry; T16's Decision 3; plan D7; the brief's keep-out of `runner/run.rs` (T18).
+3. **Where each comes from.** R: data-model.md, T16's section. O: the red test above.
+4. **Do they describe the world here?** No real repair entry exists yet (the lane has run no real batch); the fixtures write the lane's own line shapes through its writers.
+5. **The order.** After T15 and T16; before T23.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks CRATE="rust/gate/crates/lane rust/guard/shared"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/lane rust/guard/shared"` clean, 2026-11-27 (lane: 75 passed).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The status said a superseded repair was open, which no command offered: the coordinator would chase a repair the queue had closed.
+
+**Found and left?** none.
+
+**Performance work?** no
+
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T67 (T18's arbiter repair entry briefed as a red one: its `attempt` is the trigger, which the brief and the offer named as the gate's output)
+
+- **Approach**: `rust/guard/shared/src/builder_queue/repairs.rs`'s `open` reads, for an entry of `why` `arbiter`, its ruling's row - the last row of the clone's `specs/<spec>/arbiter.jsonl` holding the entry's trigger (its `attempt`), as `checks::arbiter::rulings_of` reads it last-wins, named `specs/<spec>/arbiter.jsonl line <n>` - and the attempt files of the batch's `stop` line (`why` `arbiter`, that batch and trigger; T18's `trip` writes them space-joined), kept on `Repair` as `ruling`, `attempts` and `clone`. The new `Repair::read` is the one phrase both print sites use: `the gate's output <attempt>` for any other entry, unchanged, and for an arbiter's `the ruling of <trigger> and the red attempts, in <clone>: specs/<spec>/arbiter.jsonl line <n>, <attempt> <attempt>`. `rust/gate/crates/task`'s `builder_brief.rs` (`Read first: <read>`) and `builder_queue.rs`'s offer line (`make builder-next`, `make queue`, `make builder-done`'s step 1) print it. All read in `l7r_shared`; the lane crate and `lane_wake.rs` untouched. Red first, 2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_done::tests::an_arbiter_repair_is_briefed_with_its_ruling_s_row_and_the_two_red_attempts builder_done::tests::a_repair_entry_is_dispatched_first"` on the old code: 1 passed, 1 failed (the offer read `CRATE="continue: fix the" ... the gate's output ask:lane-T01`). Green: those modules 36 of 36 and the shared `builder_queue::repairs` tests; `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The ruling is named as a row, not copied.** The brief names `specs/<spec>/arbiter.jsonl line <n>` under the clone (the entry's `units` already carry `<ruling>: <what>`, and the row holds more than a line of a block can); the line is the last row holding the trigger, as `rulings_of` reads it, and the file alone where no row holds it. Label: the algorithmically easier route. Pinned by `repairs::tests::an_arbiter_s_repair_reads_its_ruling_s_row_and_the_stop_line_s_attempts`.
+2. **Named from the clone, the second attempt by its file name in the first's directory.** The ruling is uncommitted in the clone (T18 Decision 3), so no pool tree has it at a relative path; three whole paths put the brief's block at 2,039 characters in the T16 test's form of a real tree, over the prefix guard's 2,000 (measured 2026-11-27, the new task-crate test); the clone named once and the attempts' shared directory once bring it under. A path outside the clone, or an attempt in another directory, is named whole. Label: convention (the prefix guard's cap). Pinned by both new tests.
+3. **An arbiter's repair names no crate.** Its units are the ruling's words, so `crates()` read `continue: fix the test` as the red unit `<dirs> test` and offered `CRATE="continue: fix the"`; `crates()` now reads no unit of a `why` `arbiter` entry. Label: a found defect, fixed here (the item below). Pinned by both new tests.
+4. **The stop line is found by batch AND trigger.** The runner writes `stop` lines of its own (`pid`, `why` `idle`), and a third pin asks under `lane-<task>-<n>` (T18 Decision 5); a batch no such line names reads no attempts. Label: the stricter reading. Pinned by the shared test's other stop lines and its r2.
+
+### T67 Approach (checklist part A)
+
+1. **The goal, in the world.** The fresh builder `make builder-brief ... REPAIR=` briefs for an arbiter's repair is pointed at the ruling it must carry out and the two red gates that tripped it, and `make builder-next` names the same, never a trigger as a file.
+2. **The constraints.** T67's line; T16 (US4: a fresh builder given what it needs whole; the block under 2,000 characters); T18 (Decisions 3 and 5, the `stop` line's fields); the brief's rule that the guard and the task crate read the lane's files from `l7r_shared`.
+3. **Where each comes from.** R: tasks.md T67, plan.md T16 and T18. O: `runner/run.rs`'s `trip` and `file_ruled`, `checks::arbiter::rulings_of`, read 2026-11-27; the red and cap figures above.
+4. **Do they describe the world here?** No real arbiter repair exists yet; the fixtures write T18's own line shapes (`trip`'s `stop` line, `file_ruled`'s entry and `of_batch` eject line).
+5. **The order.** After T16 and T18 (their code in this tree's base); before T23.
+6. **The exits.** Green: the changed modules' tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The new tests green with the block under 2,000 characters; `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"` clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The coordinator's `make builder-next` and the repair builder's brief named `ask:lane-<task>` as "the gate's output" - a file that does not exist - with a CRATE of the ruling's words; now they name the ruling's row and the attempt files.
+
+**Found and left?**
+- `crates()` read an arbiter repair's ruling words as a red unit when they end in a step's word (`continue: fix the test` -> `CRATE="continue: fix the"`), so the offered command named a crate that does not exist. Fixed here (Decision 3).
+
+**Performance work?** no
+
