@@ -1,0 +1,32 @@
+462-1: 02:07:31-02:54:44Z wall 47.2 min; 3 change(s); runs 1 (21.7 min); pushes by the lane 0; stops {'carry NOT VERIFIED': 2}; resumes 2; end (0, 3, 1, 22.2) (landed, ejected, runs, minutes)
+    red: rust/guard cover-run
+    eject: ('7835ba0c82', 'unplaced', 'r1')
+    eject: ('fc22076f64', 'unplaced', 'r1')
+    eject: ('1136054db4', 'unplaced', 'r1')
+461-1: 02:54:44-03:02:34Z wall 7.8 min; 1 change(s); runs 0 (0.0 min); pushes by the lane 0; stops {'carry conflict': 2}; resumes 2; end (1, 0, 0, 0.0) (landed, ejected, runs, minutes)
+462-2: 03:02:34-03:15:01Z wall 12.4 min; 1 change(s); runs 4 (2.0 min); pushes by the lane 0; stops {'first-pass row naming no change': 3}; resumes 3; end (0, 1, 4, 0.4) (landed, ejected, runs, minutes)
+    red: first-pass T278: tick: refused -
+    red: first-pass T278: tick: refused -
+    red: first-pass T278: tick: refused -
+    red: first-pass T278: T278 is already ticked
+    eject: ('0075e5fa37', 'red', 'r2')
+461-2: 03:15:01-03:57:19Z wall 42.3 min; 1 change(s); runs 2 (4.3 min); pushes by the lane 0; stops {'first-pass row naming no change': 2, 'lane-stop by hand': 3}; resumes 5; end (1, 0, 2, 0.0) (landed, ejected, runs, minutes)
+    red: first-pass T63: tick: refused - tick: refused - 461-landing-lane's pla
+    red: first-pass T63: tick: refused - tick: refused - 461-landing-lane's pla
+462-3: 03:57:19-04:17:14Z wall 19.9 min; 6 change(s); runs 1 (18.4 min); pushes by the lane 0; stops {}; resumes 0; end (0, 6, 1, 19.9) (landed, ejected, runs, minutes)
+    red: (none placed)
+    eject: ('45147a8685', 'unplaced', 'r3')
+    eject: ('1505e57eeb', 'unplaced', 'r3')
+    eject: ('9ecf85cbf1', 'unplaced', 'r3')
+    eject: ('68085a1b64', 'unplaced', 'r3')
+    eject: ('847958ea08', 'unplaced', 'r3')
+    eject: ('e797bbe419', 'unplaced', 'r3')
+462-4: 04:17:20-05:49:04Z wall 91.7 min; 1 change(s); runs 5 (12.9 min); pushes by the lane 0; stops {'first-pass row naming no change': 5, 'carry conflict': 5}; resumes 10; end (0, 1, 5, 0.1) (landed, ejected, runs, minutes)
+    red: first-pass T321: tick: refused -
+    red: first-pass T321: tick: refused -
+    red: first-pass T321: tick: refused -
+    red: first-pass T321: tick: refused -
+    red: first-pass T321: tick: refused -
+    eject: ('06520f6b3f', 'conflict', 'r4')
+461-3: 05:49:04-06:17:36Z wall 28.5 min; 2 change(s); runs 1 (28.5 min); pushes by the lane 1; stops {}; resumes 0; end (2, 0, 1, 28.5) (landed, ejected, runs, minutes)
+462-5: 06:17:41-06:17:42Z wall 0.0 min; 1 change(s); runs 0 (0.0 min); pushes by the lane 0; stops {}; resumes 0; end None (landed, ejected, runs, minutes)

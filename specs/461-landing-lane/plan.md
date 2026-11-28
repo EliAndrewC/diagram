@@ -722,32 +722,36 @@ engine speed, so the performance checklist does not apply.
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T10 to T43 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T11 to T22 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T23 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)
+
+- **Approach**: nothing changes. Read-only scripts under `dev/measurements/2026-11-28/461-t23-lane-first-batches/` read the lane's log (its snapshot `lane.jsonl`), every `make land` Phase line, the sampler, the main session's transcript and origin/main's ticks; their outputs are beside them and are read in `results.md`. Concurrency (FR-010): W0 20:00Z-02:02Z trees held 3.46, load1 median 14.4; W1 02:02Z-05:49Z 2.87, 19.2; W2 05:49Z-06:20Z 3.46, 31.6, on 22 cores, measured 2026-11-28 (t23-conc.py). None is a like window, W2 being 31 minutes long, measured 2026-11-28 (t23-conc.py). (1) Of 8 batches only 461-3 (T81, T93/T86) landed by the lane, in 1 green run of 28.5 min with its own push, measured 2026-11-28 (t23-batches.py). 462-1 and 462-3 ejected every change `unplaced` (r1, r3); 462-2 and 462-4 ejected T278 and T321 after each had landed by hand (r2, r4); 461-1 and 461-2 were landed by hand and read back, measured 2026-11-28 (t23-batches.py). The coordinator landed 8 times by hand, 21 tasks, each for a lane defect since fixed, and the runner needed 22 starts, 21 of them resumes, measured 2026-11-28 (ticks.out and t23-batches.py). (2) In W2 1 batch of 2 changes and 3 tasks landed without a hand, its hand-ins waiting 73.6 and 39.3 min to the push, measured 2026-11-28 (lane.jsonl and make lane); 462-5 took one change of a queue alternating features (D5). (3) The coordinator's model calls on landing per landed task were W0 2.1 (102 of 408 calls, 48 tasks by hand), W1 8.6 (146 of 330, 17 by hand) and W2 3.0 (9 of 23, 3 by the lane: 6 wakes and r3's re-hand-ins by hand), measured 2026-11-28 (t23-coord.py). (4) Still the lane's to do by itself: T96, T95, T77/T79 (in the lane), T78, then phase 4. D1: b1 ran no gate; the lane tree's first gate took 15.9 min and compiled 302 cover-build crates against 11 to 42 for every later gate in either tree, measured 2026-11-28 (t23-gates.py); the later lane gates took 13.2 and 23.1 min at load 30 against the clone's 4.1 to 15.1 min at load 6 to 23, measured 2026-11-28 (t23-gates.py); D1 stands, the cache warm after one gate. D9: 32 waits all completed on a lane line, the longest 27.4 min and 27.1 past its turn, measured 2026-11-28 (t23-wait.py): no limit found, so `LANE_WAIT_MAX` is not priced. D11: gates built in the clone until 05:48:13Z and its target directory holds the `l7r-gate` that `make lane-wait` runs, measured 2026-11-28 (t23-gates.py and ps), so it is kept and T29 reopens it. The task line's verify, `make task-time` showing the lane tree's Phase lines, fails: T100.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the read | n/a: nothing changed | n/a | n/a | n/a |
 
 ### T23 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The record says, with figures and the concurrency they were taken under, what the lane did with its first real batches, what it cost the coordinator, and D1, D9 and D11's answers, so phase 3's follow-ups and T31 start from measured figures.
+2. **The constraints.** US3, US4, SC-002, SC-003; FR-005 (one wake a landed batch); FR-010 (each figure with its concurrency); D1, D5, D9, D11; the brief's four things.
+3. **Where each comes from.** O: the lane's `lane.jsonl` and `repairs.jsonl`, the event log's Phase lines, the sampler, the session's transcript, the tick commits (each script's output beside it). G: the plan's phase 2 measurement line.
+4. **Do they describe the world here?** Yes, they are this clone's own logs over the window. The figures are re-derived by re-running the scripts over the snapshot (`batches.out`) or over the live files up to the window's end (the others).
+5. **The order.** After T22 put phase 2 live and T24/T25 put phase 3 on main; before T31 (the like-window measurement) and phase 4 (T29, which D11 hands to).
+6. **The exits.** Green: the record's figures re-derived from its outputs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one read of each source.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `python3 -I dev/measurements/2026-11-28/461-t23-lane-first-batches/t23-batches.py dev/measurements/2026-11-28/461-t23-lane-first-batches/lane.jsonl | diff - dev/measurements/2026-11-28/461-t23-lane-first-batches/batches.out` is empty, and each table of `results.md` matches its output file.
+10. **Before moving a constant.** n/a: `LANE_WAIT_MAX` stays unpriced (D9, no limit found up to 27.4 min, measured 2026-11-28 (t23-wait.py)), and `LANE_MAX` and D5's one-feature rule are unmoved (T101 prices the latter).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code changes; not a defect.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The lane's `landed` line reports the minutes since the last resume (462-4: 0.1 against 12.9 run minutes, measured 2026-11-28 (t23-batches.py)), so FR-005's status line under-reports a resumed batch's time. Not fixed here: a measurement changes no source. Filed as T99; lands before T31.
+- `make task-time` books none of a lane batch's gate (no line names the lane's tree; 461-3's 28.5-minute run shows as 20.9 working minutes, and the Unbooked line holds 3878 phases tied to no run), so the landings' side reads short. Not fixed here: a measurement changes no source. Filed as T100; lands before T31.
+- One feature a batch (D5) splits an interleaved queue into batches of one (462-5), a throughput lever with no wrong outcome. Not fixed here: a lever to price, not a defect. Filed as T101; lands before T31.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: a measurement of where the landing's time goes (451 FR-013: the landings, measured), no engine-speed change.
 
 ### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)
 
@@ -1582,6 +1586,86 @@ The task line's second refusal, "`make land` refuses an unclean tree, naming eac
 |---|---|---|---|---|
 
 ### T98 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T99 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T100 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T100 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T101 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T101 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

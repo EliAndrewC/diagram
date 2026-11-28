@@ -1080,6 +1080,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)": {
+   "sha256": "8d9af15f3a2c553402745f5f2d243789ed8a402612334894333109fbfa91944e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "5acc6dd2e2b6807867d2e199a18099305c8aaf311b7b695da401b53c0263d2ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7131,6 +7143,66 @@
      "why": "Neither the request nor the spec asks for these notices to be changed. They are made stale by this phase, and the fix is filed to land inside the same phase, before T30, and is not carried past the step. A session following one is refused with the correct route named."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)",
+    "### T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T23-approach",
+     "summary": "A read-only measurement: scripts under dev/measurements/2026-11-28/461-t23-lane-first-batches/ read the lane log snapshot, Phase lines, sampler, transcript and ticks; no source changes.",
+     "class": "within",
+     "why": "The plan's phase 2 measurement on real work; it carries FR-010 (each figure with its concurrency: W0/W1/W2 trees held and load stated, and none claimed as a like window) and the spec's own D1/D9/D11 'measured in phase 2' items. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T23-D1",
+     "summary": "D1 stands: the lane tree's first gate was cold (15.9 min, 302 cover-build crates), later gates warm; the adopted -land tree stays the lane's tree.",
+     "class": "within",
+     "why": "D1 named exactly this measurement ('the lane's first gate minutes in phase 2') as what could move it; the reading does not move it, so the accepted decision is unchanged."
+    },
+    {
+     "id": "T23-D9",
+     "summary": "LANE_WAIT_MAX is not priced: 32 waits all completed on a lane line, the longest 27.4 min, so no platform limit was found.",
+     "class": "within",
+     "why": "D9 prices a ceiling only if the platform ends the background command at a time limit, as a wake FR-005 does not list; with no limit found, adding none keeps FR-005's 'otherwise only for US5's cases' intact."
+    },
+    {
+     "id": "T23-D11",
+     "summary": "The clone's own target directory is kept (gates built there until 05:48:13Z and it holds the l7r-gate binary make lane-wait runs); T29 (phase 4) reopens it.",
+     "class": "within",
+     "why": "D11 drops the clone's target directory 'only once phase 2's measurement shows no gate builds in it'; the measurement shows gates did build there, so keeping it is D11's own rule applied, not an exception."
+    },
+    {
+     "id": "T23-T99",
+     "summary": "The lane's 'landed' line reports minutes since the last resume, so FR-005's status line under-reports a resumed batch's time; left unfixed in T23 and filed as T99, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a status line answering wrongly), so leaving it needs a ruling. It is legitimate: T23 is a measurement and by its approach changes no source, so the fix cannot be done in this task without turning a read into a code change. And leaving it in this task does not defeat what the request asks: the status line still wakes the coordinator once a batch (FR-005's actual requirement, and the GM's token-cost purpose), T23's own figures come from lane.jsonl rather than from that line, and the fix is scheduled before T31, the like-window measurement whose figures would rely on it. The defect is filed with an order, not carried silently."
+    },
+    {
+     "id": "T23-T100",
+     "summary": "make task-time books none of a lane batch's gate (461-3's 28.5-min run reads as 20.9 working minutes), so T23's task-line verify fails; the task closes on its own re-derivation check (step 9) and the fix is filed as T100, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool that answers short is a defect, and the task's verify line is not met, so this needs a ruling. The verify is the plan's, not the GM's or the spec's. What it stands for, landing time being measured correctly for FR-006/FR-010/SC-005's before-and-after comparison, is needed at T31's like window, and T100 is ordered before T31. T23's own figures (batches, gate minutes, waits, coordinator calls) come from lane.jsonl, the Phase lines and the transcript through its own scripts, not from task-time, so none of the figures it records is corrupted by the defect. The fix is a source change that this read-only task cannot make. The purpose survives."
+    },
+    {
+     "id": "T23-T101",
+     "summary": "D5's one-feature-a-batch rule splits an interleaved queue into batches of one (462-5); recorded as a throughput lever to price as T101, not changed; LANE_MAX unmoved.",
+     "class": "within",
+     "why": "Not a defect: no wrong outcome, D5's accepted rule working as written. Leaving the accepted decision as it is narrows nothing, and pricing it later is the spec's own GUESS-knob route."
+    },
+    {
+     "id": "T23-perf",
+     "summary": "The task is classed as performance work under 451 FR-013 (a measurement of where landing time goes).",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8451,6 +8523,64 @@
      "summary": "order after T24 and T76, before 461 T23; exits: green on the lane crate's tests and coverage, or red recorded and set down with any cannot-be-done claim ruled through make arbiter-ask",
      "class": "within",
      "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T23": {
+   "section_sha256": "d410625fb057a61b4e1003a2110fa80b91e3a9969c17878b415accacca44da1e",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T23-approach",
+     "summary": "A read-only measurement: scripts under dev/measurements/2026-11-28/461-t23-lane-first-batches/ read the lane log snapshot, Phase lines, sampler, transcript and ticks; no source changes.",
+     "class": "within",
+     "why": "The plan's phase 2 measurement on real work; it carries FR-010 (each figure with its concurrency: W0/W1/W2 trees held and load stated, and none claimed as a like window) and the spec's own D1/D9/D11 'measured in phase 2' items. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T23-D1",
+     "summary": "D1 stands: the lane tree's first gate was cold (15.9 min, 302 cover-build crates), later gates warm; the adopted -land tree stays the lane's tree.",
+     "class": "within",
+     "why": "D1 named exactly this measurement ('the lane's first gate minutes in phase 2') as what could move it; the reading does not move it, so the accepted decision is unchanged."
+    },
+    {
+     "id": "T23-D9",
+     "summary": "LANE_WAIT_MAX is not priced: 32 waits all completed on a lane line, the longest 27.4 min, so no platform limit was found.",
+     "class": "within",
+     "why": "D9 prices a ceiling only if the platform ends the background command at a time limit, as a wake FR-005 does not list; with no limit found, adding none keeps FR-005's 'otherwise only for US5's cases' intact."
+    },
+    {
+     "id": "T23-D11",
+     "summary": "The clone's own target directory is kept (gates built there until 05:48:13Z and it holds the l7r-gate binary make lane-wait runs); T29 (phase 4) reopens it.",
+     "class": "within",
+     "why": "D11 drops the clone's target directory 'only once phase 2's measurement shows no gate builds in it'; the measurement shows gates did build there, so keeping it is D11's own rule applied, not an exception."
+    },
+    {
+     "id": "T23-T99",
+     "summary": "The lane's 'landed' line reports minutes since the last resume, so FR-005's status line under-reports a resumed batch's time; left unfixed in T23 and filed as T99, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a status line answering wrongly), so leaving it needs a ruling. It is legitimate: T23 is a measurement and by its approach changes no source, so the fix cannot be done in this task without turning a read into a code change. And leaving it in this task does not defeat what the request asks: the status line still wakes the coordinator once a batch (FR-005's actual requirement, and the GM's token-cost purpose), T23's own figures come from lane.jsonl rather than from that line, and the fix is scheduled before T31, the like-window measurement whose figures would rely on it. The defect is filed with an order, not carried silently."
+    },
+    {
+     "id": "T23-T100",
+     "summary": "make task-time books none of a lane batch's gate (461-3's 28.5-min run reads as 20.9 working minutes), so T23's task-line verify fails; the task closes on its own re-derivation check (step 9) and the fix is filed as T100, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool that answers short is a defect, and the task's verify line is not met, so this needs a ruling. The verify is the plan's, not the GM's or the spec's. What it stands for, landing time being measured correctly for FR-006/FR-010/SC-005's before-and-after comparison, is needed at T31's like window, and T100 is ordered before T31. T23's own figures (batches, gate minutes, waits, coordinator calls) come from lane.jsonl, the Phase lines and the transcript through its own scripts, not from task-time, so none of the figures it records is corrupted by the defect. The fix is a source change that this read-only task cannot make. The purpose survives."
+    },
+    {
+     "id": "T23-T101",
+     "summary": "D5's one-feature-a-batch rule splits an interleaved queue into batches of one (462-5); recorded as a throughput lever to price as T101, not changed; LANE_MAX unmoved.",
+     "class": "within",
+     "why": "Not a defect: no wrong outcome, D5's accepted rule working as written. Leaving the accepted decision as it is narrows nothing, and pricing it later is the spec's own GUESS-knob route."
+    },
+    {
+     "id": "T23-perf",
+     "summary": "The task is classed as performance work under 451 FR-013 (a measurement of where landing time goes).",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
     }
    ],
    "verdict": "CLEAR"
