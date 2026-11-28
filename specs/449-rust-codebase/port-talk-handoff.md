@@ -1,3 +1,28 @@
+# While the GM slept, 2026-11-28 (the session's summary, kept current - read this first)
+
+Written by the coordinating session about 05:00Z 2026-11-28; the GM went to bed saying "proceed with getting the orchestration
+[feature done] ... we can pick this up in the morning when the orchestrator feature is done". Next in the morning: the process
+reviewer talk (his messages six to nineteen in `port-talk-gm-goal.md`, plus tonight's lane defects, the builder-priority drift
+that filed US6, and the builder count still a GUESS).
+
+**Feature 461 (the orchestrator)**: phases 1 and 2 built and LIVE - builders hand in onto `origin/main`, the lane (its runner in
+`diagram-backlog-land`, its log `.git/l7r-lane/lane.jsonl`, `make lane` for its state) batches, gates, pushes and wakes the
+session through `make lane-wait`. Its first real batches on 2026-11-28 found defects, each filed and most fixed: the carry's
+verified end (T73), the lane tree's start (T72), archive markers in a filled stub (T74), a measurement's section (T75), a
+refusal row spread over lines (T76), a superseded change in an open batch (T77), a ticked change read as red (T79), a coverage
+red placed by crate not file (filed), a ruling under the wrong feature (T84). Phase 3: halving T24, carry conflict T25, knobs
+T26 - handed in, on the lane. Phase 4: T27, T28 handed in; T29 (the one route) and T30 (land-alone retired) after phase 3 runs.
+Phase 5: T31, T35. US6 (the GM's scheduler priorities, spec FAITHFUL at round 2): T81 (building), T82, T83.
+
+**Builders**: `L7R_BUILDERS` default an interim 4 (a GUESS, resources only: four fit memory 59% vs 31%; throughput unmeasured);
+461 T35 measures 3/4/5 through the lane. Every free tree goes to 461 until T81/T82 enforce the GM's priorities in the tools.
+
+**462**: repairs r1 (T550, T301, T549) and r3 (T543, T545/T555, T146/T206, T107/T173, T120, T544) are the lane's whole-batch
+ejections (by crate, before halving landed); r2 (T278) is empty - T278 landed by hand (T79 closes such entries). They get
+fresh builders once 461 cannot fill a tree.
+
+**For the GM in the morning (through escalation-check first)**: 462 T551, whether a running session's scratchpad is ever swept.
+
 # Overnight summary, 2026-11-27 (feature 451's worktree and builder tooling)
 
 Written by the coordinating session about 08:30Z and brought up to date about 10:40Z.
