@@ -35,6 +35,8 @@ fn clone(c: &Config, name: &str, h: u64) {
 fn world() -> (TempDir, Config) {
     let base = TempDir::new("guard-sweep-evict");
     let mut c = Config::from_env(&|_| None, 4242);
+    // the count these cases are written for, whatever the default (an interim 4 since 2026-11-28)
+    c.builders = 3;
     c.cargo = base.join("cargo");
     c.clones = base.join("clones");
     c.mirror = base.join("diagram");
