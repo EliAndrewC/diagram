@@ -2693,3 +2693,341 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 **Performance work?** no
 
 <!-- plan-archive: T32 to T05 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T11 (D2, D8, D15: phase 2's first task, the lane crate and its log, which T12-T22 build on)
+
+- **Approach**: a new crate `rust/gate/crates/lane/` (`l7r_gate_lane`, on `core`, `task` and the guard's `shared`; `land` joins
+  with the runner, T12, which runs `make land`): `lane.rs` the command line of `contracts/lane-cli.md`, of which T11 builds
+  `status` (`make lane`, `l7r-gate lane status`), read only - no fetch, nothing created, an empty lane exit 0; `start`, `wait`,
+  `stop` and `--work` are refused with the usage until T12 and the wake-up build them. `log.rs`: one JSON line a transition in
+  `l7r-lane/lane.jsonl` of the git common directory, only data-model.md's ten events, each line one `write_all` with its newline,
+  a torn or foreign line skipped on reading; and the COMPUTED states. A HAND-IN is a pool-log `done` line with `"handed_in": true`,
+  one a commit (a bundle's tasks share one; the live log's `451 T528,T529` is one), enumerated from the pool log rather than the
+  refs, because the refs alone cannot show `landed` (the lane deletes the ref after its push) or `superseded` (one ref a task),
+  and kept while still the lane's: a done ref names its commit, or a lane-log line does. Its state is the first of data-model.md's
+  order that holds; `landed` is `task`'s carried rule asked of `origin/main` - `builder_done::held_by(clone, rev, commits)`, a new
+  public door over the same author's-time-and-subject reading `uncarried` asks of HEAD (one rule, `keys_since`, shared), so the
+  rule is not written twice - or a `landed` line listing it, which still holds once the object is pruned. A BATCH's state comes
+  from its own lines through one function, `state_of`, so T12 and T14 can move the mapping in one place. The binary's dispatch
+  (`src/lib.rs`, a `here()` helper shared with `land`, `claim` and `make-docs` to keep `cli` under clippy's `too_many_lines` lint), the
+  Makefile's `lane` target, `docs/make-targets.html` regenerated, and the crate's row in `rust/gate/CLAUDE.md`.
+- **The data model's silences, each read the easier way** (labeled in `log.rs`'s doc beside the mapping): (1) `forming` has no
+  event before the `batch` line (D5's cut takes no time at `LANE_WAIT_S` = 0), so a batch in the log is `carrying` from its
+  `batch` line - a deliberate deviation from data-model.md's list, T14 adding the event if it adds a wait; (2) `stopped` is a
+  `stop` line naming the batch (the arbiter owed, D6 step 4), and a killed runner writes no line, so its batch is resumed as
+  Recovery says, not stopped; (3) the hand-in scratch refs mark a hand-in not yet made and add no state; (4) every batch line
+  carries `batch` (data-model.md's `run` example does); (5) a commit is named whole or by a prefix of seven or more (a run's `set`
+  holds short shas). "Repairs open" are the `eject` lines' `repair` ids no hand-in's `repair_of` answers; `repairs.jsonl`'s reader
+  is D7's writer's task, not this one.
+- Red first (2026-11-27, `make rust-test CRATE=rust/gate ONLY=tests::the_lane_is_a_subcommand` on the old dispatch): 0 passed, 1
+  failed - `l7r-gate: no subcommand lane`, exit 2 against 0. Green: the lane crate 11 of 11, task 151 of 151 (the new
+  `held_by_asks_the_carried_rule_of_any_rev`), the binary 10 of 10, `checks`' `guard_deps` 8 of 8; `make builder-checks
+  CRATE="rust/gate/crates/lane rust/gate/crates/task rust/gate"` clean. Live (2026-11-27, `make lane` in this tree over the
+  clone's real pool log): `0 hand-in(s) on the lane` - every phase-1 hand-in's ref was deleted by its carry, so none is listed as
+  waiting - and no `l7r-lane/` created.
+
+### T22 (D3's base by phase, D13, D8: phase 2's base switched on - the coordinator's commits out first, the base `origin/main`; lands after T14, T16, T18)
+
+- **Approach**: three changes, one knob.
+  - **THE ONE READING, for T56 and T64 to match** (T12's "For T22"): `l7r_shared::builder_pool::hand_in_base(value: Option<&str>)
+    -> Result<Base, String>` (`rust/guard/shared/src/builder_pool.rs`, beside the pool's registry; the constant `HAND_IN_BASE`,
+    the enum `Base { Clone, Origin }`). Unset, empty or `origin` is `Base::Origin` - THE DEFAULT is now phase 2's; `clone` is
+    `Base::Clone`; any other word an `Err` naming both. The caller hands it its own environment's value, once a process: the land
+    crate's public reading is `l7r_gate_land::land::hand_in_base()` (`hand_in.rs`'s `base()`, `std::env::var`), which the hand-in
+    (`run` now takes the `Result`) and the binary's `land_or_hand_in` (`rust/gate/src/lib.rs`) both ask, so a hand-in with the
+    knob unset lands on `origin/main` AND starts the runner; `on_hand_in` (`lane/src/runner.rs`) now takes `origin: bool` in place
+    of the raw `Option<&str>`. The task crate's `Env::live()` (`builder_tree.rs`) reads it into `Env.origin` (a refused value read
+    as origin, the stricter). T56 (the lane crate) and T64 (`l7r_shared::lane_wake`, the guard's: no gate crate is reachable from
+    there) read the same function, `hand_in_base(crate::env::opt(HAND_IN_BASE).as_deref())` in the guard's form, and treat
+    `Ok(Base::Origin)` as phase 2. Label: deliberate deviation from the task line's "the land crate's" reading - the function lives
+    in `l7r_shared`, the land crate's public reading a call of it - because T64's Stop rule is in the guard, which can depend on no
+    gate crate (`check guard-deps`), and the task crate, which D13 and D8 need, sits below land. An override in one command's
+    environment reaches no hook: each process reads its own.
+  - **D13** (`builder_tree.rs`, `unpushed`, asked in `take`'s `settled` after the "already holds it" answer and before the done-commit wait, moved there
+    out of `take` for clippy's 100-line limit):
+    where `env.origin`, `git rev-list --count origin/main..HEAD` in the clone; any count refuses the handout (exit 2, no tree
+    held) naming `<clone>/scripts/sync-with-main.sh done`; an `origin/main` the clone cannot read refuses naming `git -C <clone>
+    fetch origin`. No fetch: the prompt hook's `sync-in` fetches each turn, and a handout's fetch would be a network round a
+    handout. Label: the easier route, the record silent.
+  - **D8** (`builder_done.rs`, `listed`, behind `make builder-trees`): from phase 2's base "carried" is asked of `origin/main`
+    (`uncarried_by`, `uncarried`'s rule of any revision), listed as waiting on the lane with `make lane` named and no `make carry`.
+    Kept on the clone's HEAD, by reading: `to_carry` (the landing carries what ITS tree lacks - the lane's tree in phase 2), and the
+    hand-in's and handout's waits and `kept_in`'s ref deletion, which ask what the clone holds; D13 keeps HEAD at `origin/main`
+    from now on. Label: the easier route (the task line names `make builder-trees` only).
+  - Words: `hand_in.rs`'s module doc and refusal, `dev/audits/hand-in-base.md`, the Makefile's `builder-done`, `builder-tree` and
+    `builder-trees` help (`make docs` regenerated `docs/make-targets.html`), `rust/gate/CLAUDE.md`'s lane row, `builder_done.rs`'s
+    WHAT IS CARRIED and `builder_tree.rs`'s take. The hand-in tests that are phase 1's now pass `clone` (23 calls and two direct
+    `run`s, `CLONE`, observed 2026-11-27, method: the edit's replace count and the compiler's two errors); the pool's test `env()` keeps `origin: false` (their worlds' clones are ahead of `origin/main`).
+  - Red first (observed 2026-11-27, method: `make rust-test` with `ONLY=` over the new tests on each mutated line, then restored):
+    the task crate's two new tests with `unpushed` returning none and `listed` asking HEAD, 0 passed, 2 failed
+    (`from_phase_two_s_base_a_handout_waits_until_the_clone_s_own_commits_are_pushed`,
+    `from_phase_two_s_base_builder_trees_lists_what_waits_on_the_lane`); with the shared reader's unset put back to `clone`, the
+    land crate's `land::hand_in::tests` 28 passed, 1 failed (`an_unset_knob_is_phase_two_s_base_origin_main`) and the lane's
+    `a_hand_in_starts_the_runner_only_from_phase_two_s_base_and_only_when_it_succeeded` 0 passed, 1 failed (an unset knob started
+    no runner). Green: the counts in item 9.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| phase 2's base: the knob's one reading, D13, D8 | n/a - no map | n/a | none | n/a |
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** With nothing set, a builder's `make builder-done` applies onto `origin/main` and starts the lane's
+   runner; a handout waits while the coordinator's own commits are unpushed, naming the push; `make builder-trees` lists what
+   waits on the lane.
+2. **The constraints.** D3 ("The base by phase"), D13, D8, D2 (every hand-in starts the runner), T12 Decision 6 and "For T22",
+   T21 Decision 2 (no second reading of the knob), `check guard-deps`, the crates' own-tests coverage (rust/gate/CLAUDE.md).
+3. **Where each comes from.** R: plan.md D3, D8, D13, the phases; tasks.md T22; T12's and T21's sections. O: the red and green runs
+   (2026-11-27).
+4. **Do they describe the world here?** On fixtures: the task crate's clone with a bare origin one commit behind, the land crate's
+   origin clone, the lane's real start. Not on the real clone, which flips when this lands.
+5. **The order.** After T14, T16, T18 (and T51, T54, T55, carried); with T56 and T64, which read the reader above; before T23.
+6. **The exits.** Green: the new tests and the changed crates whole, `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the task line's reading in the land crate cannot serve the guard (T64) or the task crate (D13, D8);
+   moved one crate down, said above.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/land rust/gate/crates/lane
+   rust/gate/crates/task rust/gate"` green, 66 s (observed 2026-11-27, method: that run's log): tests, lint and format clean; the
+   shared crate 623 passed, land 224, lane 83, task 164 (162 before, +2), the binary 10, 0 failed.
+10. **Before moving a constant.** The knob's default moves `clone` to `origin`: D3's own phase 2 setting, its audit entry restated.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. Before: an unset knob handed in on the clone's HEAD and started no runner, and a handout
+    over the coordinator's unpushed commits would build on work its hand-in's base lacks.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+### T47 (D9, FR-005: the watchdog's long-run warning passes over the coordinator's own `make lane-wait`; lands with T20, before T22)
+
+- **Approach**: `rust/guard/src/guards/stall_watchdog_hooks/pass.rs`: `long_run` takes `waits` and drops a `make lane-wait` from its
+  candidates where it holds; `long_run_line` asks T12's `lane_works(p, clone, pid)` for it; `LongRun` keeps the make's argv (from
+  its `cmdline`'s NUL-split words); `lane_wait_make(argv)` is the matcher, shared with T21's Stop rule. Tests in `pass/tests.rs`.
+- **Decision 1 - exempt the one make, not the check.** Only a `make` whose one target is `lane-wait` (past its flags, a valued
+  flag's value - `-C <clone>`, T21's command - and `VAR=` words) is passed over, and only while `lane_works` holds: the clone's
+  runner live and the wait the session's own. A long `make static` beside the wait is still told (skipping the whole check while a
+  wait runs would hide it for as long as a wait is armed, which in phase 2 is nearly always), and with the runner gone the wait is
+  a long make like any other: then nothing will end it but a dead-runner line or the GM, and `LONG_RUN`'s 30 minutes (CONVENTION, a knob) is a fair moment to say so.
+  Why: the wait runs as long as a batch by design (D9), and each warning past `LONG_RUN` (1800 s, CONVENTION, a knob) types a nudge into the session -
+  a wake FR-005 does not list (540k-966k tokens a wake, measured 2026-11-27 (the transcript's usage fields), D9). Label: the easier route (T12's predicate reused).
+- Red first (2026-11-27): `pass::tests::a_long_make_lane_wait_is_not_told_while_the_session_s_lane_works` on the old `long_run`,
+  0 passed, 1 failed (the wait warned); after, the module's 23 of 23 with it and
+  `a_make_lane_wait_is_its_one_target_past_flags_and_assignments`. `tests/hooks/test-stall-watchdog-hooks.sh` 29 of 29, unchanged
+  (the Rust test is the red one). No guard message changed.
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** `make lane` tells the coordinator, from any tree of the clone, what waits on the lane, the open
+   batch and its state, the last landed batch and the repairs open, from records a crash cannot leave stale; the later phase-2
+   tasks write the log this reads.
+2. **The constraints.** D2 (the crate and its commands), D8 (states computed, never typed, a JSON line for each transition), D15 (where
+   the code lives), data-model.md (the events, the hand-in's and the batch's states and their order), contracts/lane-cli.md
+   (`make lane` prints, exit 0), rust/gate/CLAUDE.md (a crate's wiring, its testkit dev-dependencies, every line covered by its own tests).
+3. **Where each comes from.** R: plan.md D2, D8, D15; data-model.md; contracts/lane-cli.md. O: the live pool log's `done` lines
+   (`"handed_in": true`, `detail` `<feature> <tasks>`, a bundle one commit), read 2026-11-27.
+4. **Do they describe the world here?** Yes: the done refs are `refs/l7r/done/<feature key>-<task>` and the pool log is
+   `builder-pool.log` in the common directory (read from `builder_done.rs` and the live log, 2026-11-27); the live `make lane`
+   lists none of the carried phase-1 hand-ins.
+5. **The order.** After T08 (the hand-in writes `"handed_in": true`); before T12-T22, which build on this crate.
+6. **The exits.** Green: the lane crate's tests over each state of data-model.md and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one pass over the data model's states, the gaps above labeled.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, `make lane` run live with no hand-in misread.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a: new code, no defect fixed.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: T12 to T11 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
+<!-- plan-archive: T14 to T13 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T15 to T15 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T16 to T16 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T18 to T17 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T20 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T21 to T20 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+### T47 Approach (checklist part A)
+
+1. **The goal, in the world.** The coordinator's backgrounded `make lane-wait` over a long batch types no watchdog nudge into its
+   pane, while any other make that runs too long is still told.
+2. **The constraints.** D9 (the wait, no ceiling), FR-005, T12's `lane_works` (narrowed at its plan review to the session's own
+   wait and a live runner), the long-run warning's purpose (the GM 2026-11-09).
+3. **Where each comes from.** G: FR-005's words, the GM's long-run words. R: plan.md D9; T12's and T20's sections. O: the red-first
+   counts.
+4. **Do they describe the world here?** On a fake `/proc`; the live argv of `make lane-wait` (`make lane-wait`, its child
+   `l7r-gate lane wait`) read from the Makefile's recipe and T20's live run.
+5. **The order.** With T20 and T21; before T22.
+6. **The exits.** Green: the module's tests, `make builder-checks`, the stall-watchdog suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: `LONG_RUN` is unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect fixed before it is live: a long batch's wait would have been told as a stuck make, a wake FR-005
+   does not list and a nudge that invites killing the wait.
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: T49 to T45 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T50 to T49 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T51 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T52 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T53 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T54 to T51 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T55 to T54 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T56 (D9, FR-005: from phase 2's base a waiting hand-in no runner serves is said once by `make lane-wait`; found at T20's closing half)
+
+- **Approach**: `rust/gate/crates/lane/src/wake.rs` gains `unserved` (which waiting hand-ins the wait owes a line for), `unserved_line`
+  (its words) and `waiting_on` (the hand-ins waiting, read as `make lane`'s `status` reads them); `Wait` gains the seam `waiting`,
+  `Some` only from phase 2's base, which `wait_cli` reads as `l7r_shared::lane_wake::origin_base(HAND_IN_BASE)` (T64's one reading).
+  The module doc says the phase-2 case. Tests: `wake/tests.rs`, three new. `dev/audits/hand-in-base.md`'s cost line names the new
+  readers. `runner.rs` and `runner/run.rs` untouched (T18's).
+- **Decision 1 - the base is read where T22 will read it, through one function.** T22 (handed in, not in this base) adds
+  `l7r_shared::builder_pool::hand_in_base(Option<&str>) -> Result<Base, String>`: unset, empty or `origin` is phase 2, `clone`
+  phase 1, any other word refused. This task's one function, `l7r_shared::lane_wake::origin_base(Option<&str>) -> bool`
+  (`rust/guard/shared/src/lane_wake.rs`), takes the same value with that meaning (a refused word is not phase 2: its hand-in starts
+  nothing), so the session points it at `matches!(hand_in_base(knob), Ok(Base::Origin))` when the three are carried together. In
+  code, not a make default: the Stop hook and `make lane-wait` never see a `HAND_IN_BASE=` given on `make builder-done`'s command
+  line. T56, T64 and T22 land in one landing, so the phase-2 reading never runs before T22's base. Label: convention (T22's
+  meaning, the session's instruction of 2026-11-27).
+- **Decision 2 - said once a hand-in, not once a death.** A start that fails past `START_WAIT_S` writes no `start` line (the runner
+  writes it, `runner::work`), so T20's key - a `why: "runner"` line since the last `start` - would leave a second hand-in whose start
+  failed too silent for ever. So the line lists the hand-ins' commits under `unserved` (a key `log::mentions` does not read, so the
+  line moves no hand-in's state and keeps none on the lane), and a hand-in is told where a `why: "runner"` line since the last
+  `start` lists it. A runner started since and gone again over it says it again: a new death. Label: the easier route.
+- **Decision 3 - quiet while a batch is open, and over a `make lane-stop`.** An open batch with no runner is `dead`'s line, so
+  `unserved` says nothing then (one stop, one wake). A hand-in handed in before a `make lane-stop` (or `NOW=1`) that is the runner's
+  last stop since its start is quiet: the coordinator stopped the runner over it on purpose, a wake FR-005 does not list; one
+  handed in after the stop started a runner of its own, and that start's failure is said. An `idle` end over a waiting hand-in is
+  said: nothing else will come. Label: the easier route.
+- **Decision 4 - the cheap reading first.** The wait polls every `WAIT_POLL_S` (5 s, a GUESS knob, T20) with no ceiling, and reads hand-ins only with
+  no runner and from phase 2's base. `waiting_on` reads the pool's log first (no hand-in: no git), then the done refs and the lane's
+  log, computes each state with `origin/main` not yet asked, and asks `held_by(origin/main)` only of those still waiting (a hand-in
+  it holds has landed): at most one `git for-each-ref` and one `git log` a poll. Label: the easier route.
+- Red first (2026-11-27): the lane crate's `wake::tests` against stubs (`unserved` and `waiting_on` empty, `unserved_line` blank),
+  8 passed, 3 failed (`a_waiting_hand_in_no_runner_serves_is_said_once_from_phase_2_s_base`,
+  `an_open_batch_or_a_make_lane_stop_over_the_hand_in_says_no_unserved_line`,
+  `the_command_from_phase_2_s_base_says_a_real_hand_in_no_runner_serves`); after, 11 of 11. The first stub run HUNG (a wait that
+  says nothing loops on the fake clock); the tests were rewritten to fail instead (a sleep past 50 asserts, a thread writes a late
+  line), observed 2026-11-27, method: that run, killed after 24 minutes. `make builder-checks CRATE="rust/gate/crates/lane
+  rust/guard/shared"`: 77 and 619 tests, lint and format clean, observed 2026-11-27, method: that run's log.
+
+### T56 Approach (checklist part A)
+
+1. **The goal, in the world.** From phase 2's base, a coordinator whose wait the Stop rule keeps armed over a hand-in no runner
+   serves is woken once, told the runner is not running and `make lane-start`; phase 1's hand-ins wake no one.
+2. **The constraints.** D9 (the runner dead, a US5 case), FR-005 (no wake it does not list), T20 Decisions 3 and 6 (said once, one
+   stop one wake), T12 Decision 6 (a hand-in starts the runner from phase 2's base), T21 Decision 2 and T64 (the Stop rule).
+3. **Where each comes from.** G: FR-005's words. R: plan.md D9; T12, T20, T21 sections; data-model.md ("The log line"). O: the
+   red-first counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with a done ref and the pool's line, a real `wait_cli`
+   with `HAND_IN_BASE` set both ways. Not on the real clone's lane: T23 runs the real batch.
+5. **The order.** Lands with T22 and T64, in one landing; before T23.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: a failed start writes no `start` line, so T20's death key would hide a second failure (Decision 2).
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: no constant moved; `DEAD_GRACE_S` and `WAIT_POLL_S` serve the new case as they stand.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Without it, from phase 2's base, a coordinator waits for ever over a hand-in whose runner start failed,
+   woken by nothing until the GM prompts it.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+
+<!-- plan-archive: T58 to T15 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T62 to T58 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T64 (D9: from phase 2's base the Stop rule counts a waiting hand-in no runner serves; filed by T21's Decision 2)
+
+- **Approach**: `rust/guard/shared/src/lane_wake.rs`: `origin_base` (the phase-2 base, T56 Decision 1), `holds` reading
+  `HAND_IN_BASE` through `crate::env::opt` and asking `holds_at(common, origin)`, which skips the runner's lock and the empty-log
+  return from phase 2's base; the block comment restated. Tests: `lane_wake/holds_tests.rs`, two new, the phase-1 test now naming
+  `HAND_IN_BASE=clone`. The guard crate (`pool_idle_hooks.rs`) and its message are unchanged: `holds`' words are the same.
+- **Decision 1 - from phase 2's base a waiting hand-in holds the stop whether the runner lives or not.** T21 Decision 2's phase-1
+  deviation ends at T22's base: there every hand-in starts the runner, so one no runner serves is a start that failed, and the
+  wait this rule arms is the one T56 makes say it. A lane with no log holds too from phase 2's base: a start that failed may have
+  left none. Label: D9's literal "a waiting hand-in", restored from phase 2's base, as T21 Decision 2 ruled it LEGITIMATE only with
+  T64 landing no later than T22.
+- **Decision 2 - no git where nothing was ever handed in.** From phase 2's base every coordinator Stop with no open batch reads the
+  hand-ins; `holds_at` returns before `git for-each-ref` where the pool's log has no `handed_in` line. Label: the easier route.
+- **Decision 3 - unset is phase 2, as T22 reads it.** So a test names the base both ways (`crate::env::set`), and the phase-1 test
+  of T21 names `clone`. In the guard's own suites nothing changes: no case of `pool_idle_hooks/tests.rs` or
+  `tests/hooks/test-pool-idle-hooks.sh` writes a hand-in (their lane cases are open batches). Label: the session's instruction.
+- Red first (2026-11-27): `l7r_shared` `lane_wake::holds_tests` against a stub `holds_at` ignoring the base, 3 passed, 1 failed
+  (`from_phase_2_s_base_a_waiting_hand_in_holds_with_no_runner_and_no_lane_log`); after, `lane_wake` 9 of 9. `make builder-checks`
+  as T56's.
+
+### T64 Approach (checklist part A)
+
+1. **The goal, in the world.** From phase 2's base a coordinator cannot end its turn over a waiting hand-in with no `make
+   lane-wait` running, whether a runner serves it or not; phase 1 unchanged until T22 lands.
+2. **The constraints.** D9 (the Stop rule), T21 Decisions 1-2, T56 Decision 1 (the one reading of the base), FR-005.
+3. **Where each comes from.** G: FR-005's words. R: plan.md D9; T21's section; the session's account of T22's `hand_in_base`. O:
+   the red-first counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with a done ref and the pool's line, no lane log, then an
+   idled-out runner's lines.
+5. **The order.** Lands with T22 and T56, in one landing; before T23.
+6. **The exits.** Green: the shared crate's tests, `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Without it, from phase 2's base, a hand-in whose runner start failed holds no stop, and nothing arms the
+   wait that says the death.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T65 to T16 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T18 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T69 to T65 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T70 (`make plan-delta`'s `blocks.md` wrote a heading's double quotes escaped in its key comment, so T32,T33's reviewer, copying the key into `make plan-verdict BLOCKS=1`, was refused once: found by that review, 2026-11-28)
+
+- **Approach**: `rust/gate/crates/plan/src/plan/bundle.rs`'s `build` writes each block's key comment in `blocks.md`, and each earlier block's in `earlier.md`, as plan.md holds the heading - `<!-- block "<heading>" sha256 <hex> -->` - where it was `ascii_json`'s JSON string (a `"` written `\"`, a non-ASCII letter `é`). The MANIFEST's `Record it` line keeps `ascii_json`: its key sits inside a JSON literal, where the escape is right. The comment has one other reader, the plan hold (`rust/guard/shared/src/checks/planhold.rs`, `BLOCK_KEY`), which read a quoted JSON string and unescaped it (`unescape_key`, a Python `unicode_escape` port that garbled a non-ASCII key): it now reads the key to the comment's fixed tail, ` sha256 <64 hex> -->` at the line's end, and takes it as written, `unescape_key` deleted - so a heading's `"` no longer ends the key and a non-ASCII heading is held under its own name. Red first: `plan::bundle::tests::a_block_s_key_comment_is_the_heading_as_plan_md_holds_it` failed on the old code, 1 of 31 `plan::bundle::tests` (the comment's key read `` ### T32 (`make rust-test CRATE=\"<several>\"` failed, café) ``), 2026-11-28; after, 31 of 31, and `checks::planhold`'s 13 of 13 with its fixture in the new form (a quote, a backslash and `é` held as written; a comment with no digest no key).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The comment carries the heading raw, the hold reads it to the digest's tail**: no reader of the comment unescapes, so the key a reviewer copies is the key plan-verdict matches. Label: the task's line ("the comment should carry the heading as plan.md holds it"); a heading is one line, so `(.*)` to the line's fixed end is unambiguous.
+2. **`earlier.md`'s comment takes the same form**: a reviewer may copy a key from either file. Label: design decision.
+3. **A bundle built before this lands, with an escaped quoted key, takes no hold on that block** for the rest of its review (half an hour at most, `HOLD_MAX_S`): the hold fails open, refusing nothing. Label: accepted limitation, the session's (the builder's) choice; the alternative, a reader of both forms, priced at a second pattern and its tests for a window of minutes.
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer copies a block's key from `blocks.md` into the JSON `make plan-verdict BLOCKS=1` reads and is recorded at the first try, whatever the heading holds.
+2. **The constraints.** T70's line in tasks.md; the plan hold's (feature 385 T85) reading of the same comment.
+3. **Where each comes from.** O: T32,T33's blocks bundle (`/tmp/l7r-check/plan-461-landing-lane-blocks-T32-53dc889f/blocks.md`, its first comment's `CRATE=\"<several>\"`); the red test above.
+4. **Do they describe the world here?** Yes: `grep -rn '<!-- block'` over `rust`, `scripts` and `.claude` (2026-11-28) found the writer, its tests and the hold's reader alone.
+5. **The order.** After T32,T33's review; before T31.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan rust/guard/shared"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red test passes, `checks::planhold` passes, and `make builder-checks CRATE="rust/gate/crates/plan rust/guard/shared"` is clean, measured 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reviewer's first record was refused (`plan.md has no block ...`) for a key copied as the bundle wrote it; the hold dropped a heading holding a quote or a non-ASCII letter.
+
+**Found and left?**
+- The brief's second job, a template placeholder quote (one opening with a left angle bracket) read as a citation by `rust/gate/crates/plan/src/plan/bundle/cited/forms.rs`'s `carried` and given a NOT FOUND line, observed 2026-11-27 by 461 T69. Not fixed here: the file is T69's, in its done commit 62e6b8e616 not yet carried into the clone, so this tree has none and building it here would hand T69's code in under T70. Filed as T71; lands before T31.
+
+**Performance work?** no
+
