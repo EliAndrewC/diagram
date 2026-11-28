@@ -222,6 +222,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T206 (the coverage build's link failed on stale `l7r_shared` incremental units, `rust-lld: undefined hidden symbol`, and no retry reached it: observed 2026-11-23, `make crate-checks` on `rust/guard/shared`, healed only by deleting the `l7r_shared-*` directories under the family's `cover-guard/target/debug/incremental` by hand)": {
+   "sha256": "840b91aa9dcf1975ab368be4d923acedd1efccbc5318c169f30d6c1115c67ae1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T206 Approach (checklist part A)": {
+   "sha256": "0a43163e3eee9c60049bbadab515135b253728f476977abd38642ae8c420fe4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T146 (the guard launcher's tool-profile build and `make rust-test`'s dev-profile test builds failed their links on stale incremental units, `rust-lld: undefined hidden symbol` - l7r_shared's units under l7r-rust twice on 2026-11-22, l7r_gate_archive's lib test on 2026-11-19 - with no heal reaching either; filed from 451 beside T142's launcher heal)": {
+   "sha256": "ac6e49b16c9f55459e5961af5d83128b780881220700224bcbc84b96705ffa86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T146 Approach (checklist part A)": {
+   "sha256": "471e6f342d698338892874335806842a97f95687b5d666280095ddf871ee05f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1153,6 +1177,92 @@
      "why": "These are sequencing and exit mechanics, and none of them narrows what the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T206 (the coverage build's link failed on stale `l7r_shared` incremental units, `rust-lld: undefined hidden symbol`, and no retry reached it: observed 2026-11-23, `make crate-checks` on `rust/guard/shared`, healed only by deleting the `l7r_shared-*` directories under the family's `cover-guard/target/debug/incremental` by hand)",
+    "### T206 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T206-scope",
+     "summary": "T206 (a 451 task moved here) is worked in 462: the coverage build's link failure on stale incremental units is healed",
+     "class": "within",
+     "why": "FR-002 moves every other open 451 task here with its plan section; the fix is a wrong outcome (a coverage step red on right code until directories were removed by hand), so fixing it is inside what was asked."
+    },
+    {
+     "id": "stale.rs healed_under",
+     "summary": "healed becomes a wrapper over healed_under(target dir given), so the coverage family's own target directory can be healed; rule, wording and LOCK_S unchanged; SIGN shared with cover.rs",
+     "class": "within",
+     "why": "A design choice for reaching the one existing heal from the cover build; it narrows nothing the request or spec asks."
+    },
+    {
+     "id": "cover.rs build heal",
+     "summary": "on undefined hidden symbol the group build heals over its CARGO_TARGET_DIR and rebuilds once with the same call, under the held slot and inside the cover-build span, saying so on stderr",
+     "class": "within",
+     "why": "Implements the task's own goal (heal once, as the test build does, and say so); no case excepted."
+    },
+    {
+     "id": "once a family",
+     "summary": "if the healed build fails too, the crate-by-crate builds that follow do not heal",
+     "class": "within",
+     "why": "Mirrors the test build's single heal (the brief: the one heal of stale.rs) and prevents a heal loop; the failure still surfaces red, so no defect is left unaddressed and nothing the GM asked is carved out."
+    },
+    {
+     "id": "not run live",
+     "summary": "the heal is pinned on a stub cargo (red first measured 2026-11-27) and not run on a really broken coverage cache",
+     "class": "within",
+     "why": "Verification depth on a tooling fix, matching how 451 T336/T362 treated the test build; it does not leave a known defect or narrow the requested behavior."
+    },
+    {
+     "id": "perf classification",
+     "summary": "T206 counted as performance work under 451 FR-013 (keeps the checks from stopping); performance checklist n/a",
+     "class": "within",
+     "why": "A scheduling classification under FR-013's own terms (work on the checks/gate); it narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T146 (the guard launcher's tool-profile build and `make rust-test`'s dev-profile test builds failed their links on stale incremental units, `rust-lld: undefined hidden symbol` - l7r_shared's units under l7r-rust twice on 2026-11-22, l7r_gate_archive's lib test on 2026-11-19 - with no heal reaching either; filed from 451 beside T142's launcher heal)",
+    "### T146 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T146-no-new-code",
+     "summary": "T146 is closed by work already landed: make rust-test's test builds are healed by stale.rs (451 T336), the guard launcher's build by l7r-guard.sh (451 T449); the section records which heal covers which build",
+     "class": "within",
+     "why": "The task's goal, that no rust-test test build and no guard launcher build stays red on a stale incremental unit, is fully met by the two landed heals. Each is pinned by a named test and was checked red-first on 2026-11-27 (dated, with a method). Nothing the task asked for is dropped. FR-002 moves the task here as it is, and closing it on existing work narrows nothing."
+    },
+    {
+     "id": "T146-two-heals",
+     "summary": "Two heals stay, stale::healed_under in Rust and the shell heal in each launcher, rather than one healing code; the section says why one cannot",
+     "class": "within",
+     "why": "The task's brief allows this outright ('one healing code, reached from each - or say why one cannot'), and the reason given is structural. A healer inside the binary the launcher builds cannot run when that binary fails to link, and the guard must not wait on the gate's tool (check guard-deps). Neither the GM's request nor 462's spec asks for the heals to be unified. Both builds heal, so no wrong outcome is left, and under constitution XIV (GM 2026-11-19) a difference from a task line's own wording is not a defect."
+    },
+    {
+     "id": "T146-subcommand-not-taken",
+     "summary": "A guard-binary subcommand run on the last good binary was priced and neither taken nor filed",
+     "class": "within",
+     "why": "The subcommand would only move a rule each launcher already holds, and every build the task names already heals. Leaving out work that would fix no wrong outcome is within what was asked. The GM's 2026-11-19 ruling is explicit: do not 'fix' things that already work."
+    },
+    {
+     "id": "T146-record",
+     "summary": "stale.rs's header is updated to name the one Rust heal, the builds that reach it and why the launchers heal separately (it said the guard launcher and the coverage build 'do not yet')",
+     "class": "within",
+     "why": "This replaces a stale statement with the current state. It is a record of what the task delivered, not new behavior."
+    },
+    {
+     "id": "T146-perf-order",
+     "summary": "Counted as performance work under 451 FR-013 (it keeps the checks and the builders' loop from stopping on a stale link) and landed in one landing with T206",
+     "class": "within",
+     "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1430,6 +1540,88 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T206": {
+   "section_sha256": "18d2db7777525fc63f3aea76898aa19ea353cd0264120d59731df8178d38fb97",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T206-scope",
+     "summary": "T206 (a 451 task moved here) is worked in 462: the coverage build's link failure on stale incremental units is healed",
+     "class": "within",
+     "why": "FR-002 moves every other open 451 task here with its plan section; the fix is a wrong outcome (a coverage step red on right code until directories were removed by hand), so fixing it is inside what was asked."
+    },
+    {
+     "id": "stale.rs healed_under",
+     "summary": "healed becomes a wrapper over healed_under(target dir given), so the coverage family's own target directory can be healed; rule, wording and LOCK_S unchanged; SIGN shared with cover.rs",
+     "class": "within",
+     "why": "A design choice for reaching the one existing heal from the cover build; it narrows nothing the request or spec asks."
+    },
+    {
+     "id": "cover.rs build heal",
+     "summary": "on undefined hidden symbol the group build heals over its CARGO_TARGET_DIR and rebuilds once with the same call, under the held slot and inside the cover-build span, saying so on stderr",
+     "class": "within",
+     "why": "Implements the task's own goal (heal once, as the test build does, and say so); no case excepted."
+    },
+    {
+     "id": "once a family",
+     "summary": "if the healed build fails too, the crate-by-crate builds that follow do not heal",
+     "class": "within",
+     "why": "Mirrors the test build's single heal (the brief: the one heal of stale.rs) and prevents a heal loop; the failure still surfaces red, so no defect is left unaddressed and nothing the GM asked is carved out."
+    },
+    {
+     "id": "not run live",
+     "summary": "the heal is pinned on a stub cargo (red first measured 2026-11-27) and not run on a really broken coverage cache",
+     "class": "within",
+     "why": "Verification depth on a tooling fix, matching how 451 T336/T362 treated the test build; it does not leave a known defect or narrow the requested behavior."
+    },
+    {
+     "id": "perf classification",
+     "summary": "T206 counted as performance work under 451 FR-013 (keeps the checks from stopping); performance checklist n/a",
+     "class": "within",
+     "why": "A scheduling classification under FR-013's own terms (work on the checks/gate); it narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T146": {
+   "section_sha256": "935b34c337a2c9706903bfdd8369e7aa98bbb2ecd0bf2579e1ea8031c0b9157c",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T146-no-new-code",
+     "summary": "T146 is closed by work already landed: make rust-test's test builds are healed by stale.rs (451 T336), the guard launcher's build by l7r-guard.sh (451 T449); the section records which heal covers which build",
+     "class": "within",
+     "why": "The task's goal, that no rust-test test build and no guard launcher build stays red on a stale incremental unit, is fully met by the two landed heals. Each is pinned by a named test and was checked red-first on 2026-11-27 (dated, with a method). Nothing the task asked for is dropped. FR-002 moves the task here as it is, and closing it on existing work narrows nothing."
+    },
+    {
+     "id": "T146-two-heals",
+     "summary": "Two heals stay, stale::healed_under in Rust and the shell heal in each launcher, rather than one healing code; the section says why one cannot",
+     "class": "within",
+     "why": "The task's brief allows this outright ('one healing code, reached from each - or say why one cannot'), and the reason given is structural. A healer inside the binary the launcher builds cannot run when that binary fails to link, and the guard must not wait on the gate's tool (check guard-deps). Neither the GM's request nor 462's spec asks for the heals to be unified. Both builds heal, so no wrong outcome is left, and under constitution XIV (GM 2026-11-19) a difference from a task line's own wording is not a defect."
+    },
+    {
+     "id": "T146-subcommand-not-taken",
+     "summary": "A guard-binary subcommand run on the last good binary was priced and neither taken nor filed",
+     "class": "within",
+     "why": "The subcommand would only move a rule each launcher already holds, and every build the task names already heals. Leaving out work that would fix no wrong outcome is within what was asked. The GM's 2026-11-19 ruling is explicit: do not 'fix' things that already work."
+    },
+    {
+     "id": "T146-record",
+     "summary": "stale.rs's header is updated to name the one Rust heal, the builds that reach it and why the launchers heal separately (it said the guard launcher and the coverage build 'do not yet')",
+     "class": "within",
+     "why": "This replaces a stale statement with the current state. It is a record of what the task delivered, not new behavior."
+    },
+    {
+     "id": "T146-perf-order",
+     "summary": "Counted as performance work under 451 FR-013 (it keeps the checks and the builders' loop from stopping on a stale link) and landed in one landing with T206",
+     "class": "within",
+     "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use super::{crates, family, lcov_missed, leak_checked, own, re, run_in, tail, Ran, World};
+use super::{crates, family, lcov_missed, leak_checked, own, re, run_in, stale, tail, Ran, World};
 
 /// The flags `show-env` adds to RUSTFLAGS for coverage, every crate built with them. Only the last run's profiles are cleared and only
 /// the tests' binary is built: `llvm-cov clean` rebuilt the crate from scratch on every run (the GM 2026-11-07: "Are we recompiling
@@ -144,10 +144,16 @@ type Built = Result<PathBuf, Ran>;
 /// `make static`'s 54.0 s (2026-11-11), on a machine of 22 cores. The family's owed crates are built in one cargo call, which compiles
 /// them side by side, and its JSON names each crate's test binary, so no crate's run builds again (T108: those builds were 6.0 s of a
 /// core edit's run after T105). A failed build of several is asked again a crate at a time, so the failure is the crate's that has it.
+///
+/// A LINK ON A MIXED INCREMENTAL SESSION is healed once a family (feature 462 T206; observed 2026-11-23, `make crate-checks` on
+/// `rust/guard/shared` red at its cover step on `rust-lld: undefined hidden symbol` until the `l7r_shared-*` directories under the
+/// family's `target/debug/incremental/` were removed by hand): the test build's heal (`stale.rs`), over the family's build directory,
+/// under the build's slot, inside its `cover-build` line's span. `heal` is false for the crate-by-crate builds after a group's heal
+/// was tried, so a heal that did not link is never tried again a crate at a time.
 fn build(
     world: &World,
     env: &BTreeMap<String, String>,
-    group: &[&PathBuf],
+    (group, heal): (&[&PathBuf], bool),
     said: &mut String,
 ) -> Vec<(PathBuf, Built)> {
     let began = Instant::now();
@@ -168,7 +174,18 @@ fn build(
     let mut env = env.clone();
     let slot = super::slot::around(world, &args, &mut env);
     let at = std::time::SystemTime::now();
-    let built = run_in(Some(&world.root), &world.cargo, &args, &env);
+    let mut ask = || run_in(Some(&world.root), &world.cargo, &args, &env);
+    let mut built = ask();
+    let heal = heal && built.code != 0 && built.stderr.contains(stale::SIGN);
+    if heal {
+        let target = PathBuf::from(env.get("CARGO_TARGET_DIR").cloned().unwrap_or_default());
+        let manifests: Vec<&Path> = group.iter().map(|m| m.as_path()).collect();
+        built = stale::healed_under(world, &target, &manifests, built, stale::LOCK_S, &mut ask);
+        // said on the gate's stderr where it linked, as the test build's heal is (`stale::built`): a green build's words are kept nowhere
+        if built.code == 0 {
+            eprint!("{}", built.stderr);
+        }
+    }
     drop(slot);
     let count = super::phase::compiled(&built.stdout).filter(|_| built.code == 0);
     super::phase::wrote_compiled(world, "cover-build", group, (at, built.code), count);
@@ -176,7 +193,7 @@ fn build(
     if built.code != 0 && group.len() > 1 {
         return group
             .iter()
-            .flat_map(|m| build(world, &env, &[m], said))
+            .flat_map(|m| build(world, &env, (&[m], !heal), said))
             .collect();
     }
     let binaries = test_binaries(&built.stdout);
@@ -288,7 +305,7 @@ pub(super) fn uncovered_each(
     for (work, group) in families {
         let _ = std::fs::create_dir_all(&work);
         let env = cover_env(world, group[0], &work);
-        for (manifest, built) in build(world, &env, &group, &mut said) {
+        for (manifest, built) in build(world, &env, (&group, true), &mut said) {
             jobs.push(match built {
                 Ok(exe) => Ok(Job {
                     manifest,

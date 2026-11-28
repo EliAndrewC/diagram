@@ -926,32 +926,37 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T146 (<why: the finding or measurement that files it>)
+### T146 (the guard launcher's tool-profile build and `make rust-test`'s dev-profile test builds failed their links on stale incremental units, `rust-lld: undefined hidden symbol` - l7r_shared's units under l7r-rust twice on 2026-11-22, l7r_gate_archive's lib test on 2026-11-19 - with no heal reaching either; filed from 451 beside T142's launcher heal)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: no new code: both halves were built after this task was filed, and this section records what heals each and why the two are not one code.
+  - **`make rust-test`'s test builds: healed by `stale.rs` (451 T336, landed 2026-11-26).** Every test build `rust-test` asks reaches `stale::built`: the binary key's build (`kept.rs`'s `binary_key`, `--message-format=json`, its link error in its JSON) leaves `verdict.built` false when it fails, so `answer`'s loop asks `stepped`, whose `--no-run` build is `stale::built` with `phase::JSON` (`json-render-diagnostics`: rustc's diagnostics rendered on stderr, where `healed` reads them), for `test` and `test-counters` alike; observed 2026-11-27, method: read `rustc.rs` `answer` and `stepped`, `kept.rs` `binary_key` and its caller, `phase.rs` `JSON`. Cost: a mixed session's first red build is asked once more before the heal (the binary key's, then `stepped`'s), one failing link of seconds.
+  - **The guard launcher's build: healed by `scripts/hooks/l7r-guard.sh` itself (451 T449, landed 2026-11-27).** On a link failure it drops tool/deps, tool/.fingerprint and tool/incremental of `l7r_guard` and `l7r_shared` - every path crate the guard builds on (`rust/guard/Cargo.toml` names `l7r_shared` alone) - under cargo's lock, rebuilds once inside its ceiling, and says so; once a source change (`guard.healed`). Its drop is wider than `stale.rs`'s (the rlibs too) on T449's own measurement: a bad rlib with a fresh fingerprint, healed only once deps and fingerprints were set aside.
+  - **Why not one healing code** (the brief: "one healing code, reached from each - or say why one cannot"). The heal in Rust is `stale::healed_under`, reached from both builds the gate's tool runs (this task and T206). The launchers cannot reach it: `l7r-guard.sh` and `l7r-gate.sh` (451 T142) each build the binary that would hold it, in the tool profile whose `l7r_shared` is what fails to link, so the healer would be broken by what it heals; and the guard's hooks must not wait on the gate's tool, which the launcher would have to build first (`check guard-deps` keeps the two apart). A guard-binary subcommand on the last good binary was priced: a new command and a guard edit, a builder of its own, for a rule each launcher already holds - not taken, not filed: no wrong outcome is left (constitution XIV).
+  - **The record**: `stale.rs`'s header (it said the guard's launcher and the coverage build "do not yet"; now it names the one heal, the builds reaching it and why the launchers heal apart).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a red test build of `make rust-test` on `undefined hidden symbol` drops the named crates' sessions and fingerprints and builds once more | pinned by `a_link_on_a_mixed_session_drops_the_named_crates_sessions_and_builds_once_more` (451 T336) | n/a: tooling | none | n/a |
+| the guard launcher's link failure drops the state of `l7r_guard` and `l7r_shared`, rebuilds once, and is stamped failed only when the rebuild fails too | pinned by `tests/hooks/test-l7r-guard.sh` case 6f (451 T449) | n/a: tooling | none | n/a |
 
 ### T146 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No test build of `make rust-test` and no build of the guard by its launcher stays red on a stale incremental unit its code did not cause: each heals once and says so.
+2. **The constraints.** T146's line in tasks.md; the brief: one healing code reached from each, or why one cannot; red first on a stub cargo; the first tier only.
+3. **Where each comes from.** O: the failures of 2026-11-19 and 2026-11-22 the line names; T336's measurement (`dev/measurements/2026-11-26/prewarm-link/`) and T449's (its comment in `l7r-guard.sh`).
+4. **Do they describe the world here?** Yes: both heals are in this tree's HEAD and their tests pass (item 9).
+5. **The order.** After 451 T336 and T449, which built it; beside T206, which reaches the same heal from the coverage build.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc"` and `tests/hooks/test-l7r-guard.sh`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing (with T206).
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (method: `stale::built`'s heal replaced by the first build's answer, `make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::stale"`): 1 passed, 2 failed - one build asked against two, and exit 101 against 0; restored, 3 passed. The guard launcher: `bash tests/hooks/test-l7r-guard.sh` 119 passed, 0 failed, measured 2026-11-27 (its case 6f the forced link failure on a stub cargo: two builds, the two crates' state dropped and the rest kept, a second failure stamped failed after no third build).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map. The wrong outcome: a build red on right code until directories were removed by hand; fixed by 451 T336 and T449, none left.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: it keeps the checks and the builders' loop from stopping on a stale link (451 FR-013); not an engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 
 ### T148 (<why: the finding or measurement that files it>)
@@ -1177,32 +1182,36 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 
 
 
-### T206 (<why: the finding or measurement that files it>)
+### T206 (the coverage build's link failed on stale `l7r_shared` incremental units, `rust-lld: undefined hidden symbol`, and no retry reached it: observed 2026-11-23, `make crate-checks` on `rust/guard/shared`, healed only by deleting the `l7r_shared-*` directories under the family's `cover-guard/target/debug/incremental` by hand)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the coverage build reaches the test build's heal (`stale.rs`, 451 T336), one code.
+  - **`stale.rs`**: `healed` becomes a wrapper over `healed_under(world, target, manifests, ...)`, which reads the linker's units under the target directory it is given (the coverage build's is its family's own, `cover_dir/target`, not the tree's) and writes its `link-heal` `Phase` line over every crate the build was asked for. `SIGN` is shared with `cover.rs`. The rule, the wording and `LOCK_S` are unchanged.
+  - **`cover.rs`'s `build`**: where the family's group build fails with `undefined hidden symbol`, `healed_under` is asked over the build's `CARGO_TARGET_DIR`, its second build the same cargo call with the same arguments and environment, under the build slot already held and inside the `cover-build` line's span (that line carries the healed build's code and count); a heal that linked is said on stderr, as `stale::built` says it. ONCE A FAMILY: where the healed build fails too, the crate-by-crate builds that follow are told not to heal, so cargo writing the crate's sessions anew in them cannot start a heal a crate (pinned: item 9).
+  - **The record**: the `rustc` row of `rust/gate/CLAUDE.md`, the headers of `stale.rs` and `cover.rs`'s `build`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a coverage group build red on `undefined hidden symbol` drops the named sessions and fingerprints in the family's directory and builds once more, a `link-heal` line written | pinned by `a_coverage_build_s_link_on_a_mixed_session_is_healed_once` | n/a: tooling | none | n/a |
+| a healed coverage build that fails again heals nothing more in its crate-by-crate builds | pinned by the same test (its builds and `link-heal` lines counted, item 9) | n/a: tooling | none | n/a |
 
 ### T206 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** `make crate-checks` and the gate's coverage step never stay red on a stale incremental unit: the coverage build heals once, as the test build does, and says so.
+2. **The constraints.** T206's line in tasks.md; the brief: the one heal of `stale.rs`, reached from the cover build; red first on a stub cargo; the first tier only.
+3. **Where each comes from.** O: the failure of 2026-11-23 the line names; T336's measurement of the heal's scope (`dev/measurements/2026-11-26/prewarm-link/`).
+4. **Do they describe the world here?** Yes: the coverage build's directory is `cover-<family>/target` under the tree's target (`cover_dir`), the one the 2026-11-23 failure named, and its diagnostics are rendered on stderr (`json-render-diagnostics`), where `healed_under` reads them.
+5. **The order.** After 451 T336; beside T146.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing (with T146).
+9. **Done, measured.** RED FIRST, measured 2026-11-27 (method: the new test on HEAD's `cover.rs`, `make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::cover"`): 2 passed, 1 failed - 4 builds asked (the group and three crates, no heal) against 2; with the heal, 3 passed; with the once-a-family guard removed, 1 failed, 8 builds against 5. NOT run live: the heal on a really broken coverage cache (as 451 T362 for the test build).
+10. **Before moving a constant.** n/a: `LOCK_S` reused as it stands.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect of a map. The wrong outcome fixed: a coverage step red on right code until directories were removed by hand.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: it keeps the checks from stopping on a stale link (451 FR-013); not an engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 
 ### T208 (<why: the finding or measurement that files it>)

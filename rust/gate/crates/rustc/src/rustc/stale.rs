@@ -13,9 +13,14 @@
 //! day and was not measured, so the narrower drop is not taken) and each named build's fingerprint (so an rlib built from the mix
 //! is rebuilt too, as the launcher's retry does), under cargo's own lock of the build directory, and asks the build ONCE more,
 //! never again: the crate compiles from nothing (`rust/guard` 22 to 44 s against an 11 s incremental build). It writes a `Phase`
-//! line, step `link-heal` (`phase.rs`), spanning the drop and the second build, inside the `build` line's span. The launcher
-//! does the same for the tools' own build (`scripts/gates/l7r-gate.sh`, feature 451 T142); the guard's launcher (451 T146) and
-//! the coverage build (451 T206) do not yet.
+//! line, step `link-heal` (`phase.rs`), spanning the drop and the second build, inside the `build` line's span.
+//!
+//! ONE HEAL, REACHED FROM EACH BUILD THIS TOOL RUNS (feature 462 T146, T206): the test build (`built`, from `stepped`, which a red
+//! binary key's build falls through to) and the coverage build (`cover.rs`, its family's build directory named, `healed_under`,
+//! tried once a family: the crate-by-crate builds after a failed heal heal nothing again). The two launchers heal their own builds
+//! in shell, the tools' (`scripts/gates/l7r-gate.sh`, feature 451 T142) and the guard's (`scripts/hooks/l7r-guard.sh`, 451 T449),
+//! and cannot reach this code: each builds the binary that would hold it, in the tool profile whose `l7r_shared` is what fails to
+//! link, and the guard's hooks never wait on the gate's tool.
 
 use std::collections::BTreeSet;
 use std::fmt::Write as _;
@@ -25,7 +30,7 @@ use std::time::SystemTime;
 use super::{cargo, phase, Ran, Told, World};
 
 /// The linker's words for it.
-const SIGN: &str = "undefined hidden symbol";
+pub(super) const SIGN: &str = "undefined hidden symbol";
 /// The `Phase` step of a heal: the drop and the one build after it.
 pub(super) const STEP: &str = "link-heal";
 /// The seconds it waits for cargo's lock of a build directory (GUESS, a knob): past the longest single crate's build measured,
@@ -44,19 +49,15 @@ struct Named {
 }
 
 /// A unit is `<crate>-<hash>.<unit>.rcgu.o`, met as a path under `<profile>/deps/` or as a member of an rlib whose path came just
-/// before it.
-fn named(world: &World, stderr: &str) -> Named {
-    let target = world
-        .target_override
-        .as_ref()
-        .map_or_else(|| world.target.clone(), PathBuf::from);
+/// before it; only a profile under `target` is read.
+fn named(target: &Path, stderr: &str) -> Named {
     let mut found = Named::default();
     let mut profile: Option<PathBuf> = None;
     for word in stderr.split(|c: char| c.is_whitespace() || matches!(c, ':' | '(' | ')' | '"')) {
         let path = Path::new(word);
         let deps = path.parent().filter(|d| d.ends_with("deps"));
         if let Some(dir) = deps.and_then(Path::parent) {
-            profile = dir.starts_with(&target).then(|| dir.to_path_buf());
+            profile = dir.starts_with(target).then(|| dir.to_path_buf());
         }
         let build = path
             .file_name()
@@ -121,12 +122,29 @@ pub(super) fn healed(
     lock_s: f64,
     again: &mut dyn FnMut() -> Ran,
 ) -> Ran {
+    let target = world
+        .target_override
+        .as_ref()
+        .map_or_else(|| world.target.clone(), PathBuf::from);
+    healed_under(world, &target, &[manifest], built, lock_s, again)
+}
+
+/// `healed` for a build with a target directory of its own (`target`: the coverage build's family directory, feature 462 T206), its
+/// `link-heal` line over every crate the build was asked for (`manifests`).
+pub(super) fn healed_under(
+    world: &World,
+    target: &Path,
+    manifests: &[&Path],
+    built: Ran,
+    lock_s: f64,
+    again: &mut dyn FnMut() -> Ran,
+) -> Ran {
     if built.code == 0 || !built.stderr.contains(SIGN) {
         return built;
     }
     let began = SystemTime::now();
     let mut note = "l7r-gate rust: the link failed on a mixed incremental session (rust-lld: undefined hidden symbol) - a build of this crate was killed while rustc compiled it (feature 451 T336)".to_owned();
-    let found = named(world, &built.stderr);
+    let found = named(target, &built.stderr);
     let held: Vec<_> = found
         .profiles
         .iter()
@@ -144,7 +162,7 @@ pub(super) fn healed(
     }
     drop(held);
     let second = again();
-    phase::wrote(world, STEP, &[manifest], began, second.code);
+    phase::wrote(world, STEP, manifests, began, second.code);
     let shown: Vec<String> = found
         .sessions
         .iter()
