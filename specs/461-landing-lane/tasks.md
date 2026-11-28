@@ -141,3 +141,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [x] T66 x Withdrawn 2026-11-27: filed by mistake: a probe of task-add's output, a duplicate of nothing
       research: rendering
+- [ ] T67 Phase 2: a repair entry of why arbiter (T18) briefed with its ruling - rust/guard/shared/src/builder_queue/repairs.rs reads every entry's attempt as the gate's output file, and make builder-brief REPAIR= names it so; T18's arbiter entry's attempt is the trigger (ask:lane-<task>) and its units the ruling, so the brief should name the ruling row in the clone's specs/<spec>/arbiter.jsonl and the two attempt files of the stop line (its attempts), not a file path that does not exist
+      research: rendering
