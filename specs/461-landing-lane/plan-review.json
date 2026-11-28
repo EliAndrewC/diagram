@@ -888,6 +888,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T74 (the carry stopped on plan.md where a landing's archive markers stood on the tail of a hand-in's stub: met by hand at 461 T69, T22, T56/T64 and T71, 2026-11-28, and it stopped the lane's batch 461-1 at T71's carry, e26824a7a8)": {
+   "sha256": "9bfc8ef79d7733bb04bfb2e2cb54b66e8f4f34a08463186341e81524b6a75e3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T74 Approach (checklist part A)": {
+   "sha256": "92fd1c3834ec44097f67ab6f6623e4d7a83c24c31287cabb53b26553262fefe4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5476,6 +5488,68 @@
      "why": "Those patterns, read from FILE_ENTRY and TASK_DECISION, cannot match a '<' placeholder ([a-z] first; digits), so there is nothing there to fix and leaving them is no narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T74 (the carry stopped on plan.md where a landing's archive markers stood on the tail of a hand-in's stub: met by hand at 461 T69, T22, T56/T64 and T71, 2026-11-28, and it stopped the lane's batch 461-1 at T71's carry, e26824a7a8)",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T74 D1",
+     "summary": "Archive markers are judged apart from a section's words (the clone's tail kept) rather than looking archived sections up by marker range / plan-done.md as the task line sketched.",
+     "class": "within",
+     "why": "The request's outcome is a lane that carries a batch with no coordinator turn between hand-ins and push (sketch item 1, FR-003, SC-001). The route changes, not the reach: the measured stop on the T71 case was the marker on the builder's stub's tail, which the lookup would leave red, while the archived sections the builder left alone were already dropped. The task line is the session's own sketch, not the GM's words or the spec; choosing a route that reaches the goal narrows nothing asked."
+    },
+    {
+     "id": "T74 D2",
+     "summary": "The clone's archive markers win; a builder's own change to a marker is dropped for the clone's.",
+     "class": "within",
+     "why": "Markers are written only by a landing (FR-044's archive step), which runs on the clone's side; a builder's edit to one is not work the request or spec asks to have carried. No check is dropped (FR-008) and no stop is added, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T74 D3",
+     "summary": "Markers standing among a section's words, where the builder's words are taken, still stop the carry (as an archived section the builder changed still stops, as before).",
+     "class": "within",
+     "why": "This keeps a pre-existing stop, not a new carve-out from the task's goal (a stub's tail marker carries with no stop, Approach item 1), and the old rule stopped there too, so nothing is taken back. No rule says which of the builder's lines such a marker follows: that is the rare judgment case the GM's approved sketch item 3 leaves for a coordinator / fresh agent (FR-005, US5). The case was counted as only in 374's plan, which no carry touches (dated, method stated). FR-008 keeps existing checks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T74 (the carry stopped on plan.md where a landing's archive markers stood on the tail of a hand-in's stub: met by hand at 461 T69, T22, T56/T64 and T71, 2026-11-28, and it stopped the lane's batch 461-1 at T71's carry, e26824a7a8)",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "Archive markers are judged apart from a section's words (words merged, the clone's tail of blank lines and markers kept), rather than archived sections looked up through a marker's range, plan-done.md and the archive's parts as the task line sketched.",
+     "class": "within",
+     "why": "A choice of mechanism serving the lane's purpose in the request (sketch item 1, FR-003, SC-001: a batch carried and pushed with no coordinator turn between). Neither request.md (the whole request) nor any requirement asks for a lookup, so departing from that sketch narrows nothing asked; measured on the T71 case, the lookup would leave the very stop red, so the chosen rule reaches the goal the lookup could not."
+    },
+    {
+     "id": "2",
+     "summary": "The clone's markers win; a builder's own change to a marker is dropped for the clone's.",
+     "class": "within",
+     "why": "Merge mechanics. Only a landing writes the markers (FR-044's archive step), on the clone's side, so the clone's copy is the authoritative one; no check is dropped (FR-008) and nothing the GM asked is narrowed."
+    },
+    {
+     "id": "3",
+     "summary": "Markers standing among a section's words stop where the builder's words are taken.",
+     "class": "within",
+     "why": "A stop for a merge no rule can decide (which of the builder's lines a marker follows). The block's dated census (an awk scan of every specs/*/plan.md, 2026-11-28) finds that shape only in 374's plan, which no carry touches, so no lane batch reaches it and no defect is left; a case that did arise would be the rare judgment case the request's sketch (item 3) and FR-005/US5 route to a wake, and FR-008 keeps every check."
+    },
+    {
+     "id": "4",
+     "summary": "A section the clone archived and the builder changed still stops, and one the builder left alone is dropped, both as before; a section the builder removed now hands the clone's markers in it to the text before it.",
+     "class": "within",
+     "why": "The two arms kept as before are the existing section rule (451 T300, T419), each stop kept; a builder editing a finished, archived section is a real conflict and a judgment case, as the request provides. Handing a removed section's markers on is new and keeps the landing's archive record (FR-044's generated line) without dropping anything."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6397,6 +6471,38 @@
      "summary": "Counted as performance work under 451 FR-013 as a measurement tool.",
      "class": "within",
      "why": "FR-013 counts work that measures where the builders' time goes; the sampler measures the builders' memory, which bears on how many builders the pool runs. A scheduling classification, not a change to what is built; it narrows nothing the GM asked. Noted: FR-013's words are 'where the time goes', so the classification rests on the sampler serving builder throughput."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T74": {
+   "section_sha256": "6f3a4a224049832dec32242ea19dee1969b57e750d3a0e738b59cbc1dd7d2237",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "Archive markers are judged apart from a section's words (words merged, the clone's tail of blank lines and markers kept), rather than archived sections looked up through a marker's range, plan-done.md and the archive's parts as the task line sketched.",
+     "class": "within",
+     "why": "A choice of mechanism serving the lane's purpose in the request (sketch item 1, FR-003, SC-001: a batch carried and pushed with no coordinator turn between). Neither request.md (the whole request) nor any requirement asks for a lookup, so departing from that sketch narrows nothing asked; measured on the T71 case, the lookup would leave the very stop red, so the chosen rule reaches the goal the lookup could not."
+    },
+    {
+     "id": "2",
+     "summary": "The clone's markers win; a builder's own change to a marker is dropped for the clone's.",
+     "class": "within",
+     "why": "Merge mechanics. Only a landing writes the markers (FR-044's archive step), on the clone's side, so the clone's copy is the authoritative one; no check is dropped (FR-008) and nothing the GM asked is narrowed."
+    },
+    {
+     "id": "3",
+     "summary": "Markers standing among a section's words stop where the builder's words are taken.",
+     "class": "within",
+     "why": "A stop for a merge no rule can decide (which of the builder's lines a marker follows). The block's dated census (an awk scan of every specs/*/plan.md, 2026-11-28) finds that shape only in 374's plan, which no carry touches, so no lane batch reaches it and no defect is left; a case that did arise would be the rare judgment case the request's sketch (item 3) and FR-005/US5 route to a wake, and FR-008 keeps every check."
+    },
+    {
+     "id": "4",
+     "summary": "A section the clone archived and the builder changed still stops, and one the builder left alone is dropped, both as before; a section the builder removed now hands the clone's markers in it to the text before it.",
+     "class": "within",
+     "why": "The two arms kept as before are the existing section rule (451 T300, T419), each stop kept; a builder editing a finished, archived section is a real conflict and a judgment case, as the request provides. Handing a removed section's markers on is new and keeps the landing's archive record (FR-044's generated line) without dropping anything."
     }
    ],
    "verdict": "CLEAR"

@@ -17,7 +17,8 @@
 //!   first's, was dropped), and a bare open box is given back the lines a side holds under it ([`boxes`], 451 T300).
 //! - `specs/*/plan.md`, by SECTION from its three whole sides ([`sections`], 451 T300), each keyed by its whole heading line (451
 //!   T419): the builder's filled stub taken, the stub it removed dropped, the clone's sections kept, the builder's new ones placed
-//!   after its task's last, then each task's sections put together in their order; one section both sides changed stops.
+//!   after its task's last, then each task's sections put together in their order; one section both sides changed stops; a
+//!   landing's `<!-- plan-archive: ... -->` markers are the clone's, set aside when the words are judged (461 T74).
 //! - `specs/*/request.md`, where every conflicting hunk is one both sides only added to and each side's addition opens with a
 //!   `## ` heading - a dated section of the GM's words, one written in each tree: ours, a blank line, then theirs' sections ours
 //!   lacks; one heading over different words on the two sides stops (451 T300).

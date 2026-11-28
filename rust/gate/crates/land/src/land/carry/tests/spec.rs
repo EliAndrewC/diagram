@@ -539,3 +539,107 @@ fn keep_both_takes_whole_request_sections_both_sides_added() {
         Ok("top\n## one\n\nend\n".to_owned())
     );
 }
+
+/// An archive marker the landing writes where it moved sections out (feature 375 FR-044).
+fn moved(range: &str) -> String {
+    format!(
+        "<!-- plan-archive: {range} moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->\n"
+    )
+}
+
+#[test]
+fn a_filled_stub_whose_section_the_landing_wrote_an_archive_marker_into_is_taken_with_the_clones_markers(
+) {
+    // RED FIRST (461 T74, 2026-11-28), the T71 case: e26824a7a8 against its parent and 1f176fa5ea, where the landing archived
+    // T64 and T70 (their markers on T63's tail) and T72 (its marker on the tail of T71's Approach stub, the builder's to fill).
+    // Before the rule this stopped, "both sides changed the section `### T71 Approach (checklist part A)`"
+    let tail = |ranges: &[&str]| ranges.iter().map(|r| moved(r)).collect::<String>();
+    let t63 = "### T63 (done)\n\n1. kept\n\n";
+    let t64 = format!(
+        "### T64 Approach (checklist part A)\n\n1. done\n\n{}\n",
+        tail(&["T65 to T16", "T69 to T65"])
+    );
+    let t70 =
+        "### T70 (finished)\n\nfinished\n\n### T70 Approach (checklist part A)\n\n1. finished\n\n";
+    let stub = "### T71 (<why>)\n\n- **Approach**: <what>.\n\n### T71 Approach (checklist part A)\n\n1. <goal>\n";
+    let filled = "### T71 (the reason)\n\n- **Approach**: what.\n\n### T71 Approach (checklist part A)\n\n1. goal\n";
+    let base = format!("# Plan\n\n{t63}{t64}{t70}{stub}");
+    let ours = format!(
+        "# Plan\n\n{t63}{}{stub}\n\n{}",
+        tail(&["T64 to T21", "T70 to T33"]),
+        tail(&["T72 to T72"])
+    );
+    let theirs = format!("# Plan\n\n{t63}{t64}{t70}{filled}");
+    assert_eq!(
+        sections::merged(&base, &ours, &theirs).unwrap(),
+        // the filled stub's heading is new, so it is placed with its blank line before it
+        format!(
+            "# Plan\n\n{t63}{}\n{filled}\n\n{}",
+            tail(&["T64 to T21", "T70 to T33"]),
+            tail(&["T72 to T72"])
+        )
+    );
+}
+
+#[test]
+fn a_sections_archive_markers_are_the_clones_and_its_words_are_merged_apart_from_them() {
+    let ok = |base: &str, ours: &str, theirs: &str| sections::merged(base, ours, theirs).unwrap();
+    let stop =
+        |base: &str, ours: &str, theirs: &str| sections::merged(base, ours, theirs).unwrap_err();
+    let m = |r: &str| moved(r);
+    let (a, b) = (m("T2 to T2"), m("T3 to T4"));
+    // the mirror: the builder filled T1, its tail still the base's marker; the clone's T1 holds another: the clone's is kept
+    let base = format!("# Plan\n\n### T1 (a)\n\nstub\n\n{a}\n### T5 (e)\n\ne\n");
+    let ours = base.replace(&a, &b);
+    let theirs = base.replace("stub", "filled");
+    assert_eq!(ok(&base, &ours, &theirs), ours.replace("stub", "filled"));
+    // the builder took the base's marker out and the clone's holds none: the builder's text as it is
+    let ours = base.replace(&a, "");
+    let theirs = ours.replace("stub", "filled");
+    assert_eq!(ok(&base, &ours, &theirs), theirs);
+    // the builder changed only a marker: the clone's text
+    let ours = base.replace("e\n", "more\n");
+    assert_eq!(ok(&base, &ours, &base.replace(&a, &b)), ours);
+    // the clone archived T5, its marker on T1's tail, and the builder changed T5's words: that still stops
+    let ours = format!("# Plan\n\n### T1 (a)\n\nstub\n\n{a}{}", m("T5 to T5"));
+    assert_eq!(
+        stop(&base, &ours, &base.replace("\ne\n", "\nfilled\n")),
+        "the builder changed the section `### T5 (e)`, which the clone removed"
+    );
+    // the clone's markers among a section's words, where the builder's words are taken: no rule places them
+    let ours = base.replace(&a, &format!("{b}words\n"));
+    let base = base.replace(&a, "words\n");
+    assert_eq!(
+        stop(&base, &ours, &base.replace("stub", "filled")),
+        "the clone's archive markers stand among the words of the section `### T1 (a)`"
+    );
+    // the builder removed a section the clone wrote a marker into: the marker goes to the text before it, the opening for
+    // the first
+    let base = "# Plan\n\n### T1 (a)\n\none\n\n### T2 (b)\n\ntwo\n";
+    let ours = format!("{base}{a}");
+    assert_eq!(
+        ok(base, &ours, "# Plan\n\n### T1 (a)\n\none\n\n"),
+        format!("# Plan\n\n### T1 (a)\n\none\n\n{a}")
+    );
+    let ours = base.replace("one\n", &format!("one\n{a}"));
+    assert_eq!(
+        ok(base, &ours, "# Plan\n\n### T2 (b)\n\ntwo\n"),
+        format!("# Plan\n\n{a}\n### T2 (b)\n\ntwo\n")
+    );
+    // the opening: the builder's words, the clone's marker after them
+    let base = "# Plan\n\n### T1 (a)\n\none\n";
+    assert_eq!(
+        ok(
+            base,
+            &base.replace("# Plan\n\n", &format!("# Plan\n\n{a}")),
+            &base.replace("# Plan", "# Ours")
+        ),
+        base.replace("# Plan\n\n", &format!("# Ours\n\n{a}"))
+    );
+    // a section each side added, the same words but for the clone's marker: the clone's
+    let ours = format!("{base}\n### T2 (b)\n\ntwo\n{a}");
+    assert_eq!(
+        ok(base, &ours, &format!("{base}\n### T2 (b)\n\ntwo\n")),
+        ours
+    );
+}

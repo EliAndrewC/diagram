@@ -21,6 +21,17 @@
 //! merge left it. It STOPS, saying which, where both sides changed one section differently, where each side added the same heading
 //! differently, where both replaced one section with different headings (a stub filled on both sides), where one side removed a
 //! section the other changed, where both changed the opening, or where a side holds one heading twice.
+//!
+//! ARCHIVE MARKERS ARE THE CLONE'S (461 T74): a landing's archive step moves finished sections to plan-done.md and writes a
+//! `<!-- plan-archive: ... -->` line where they stood, on the TAIL of the section before them - often a hand-in's stub. Each
+//! text is judged by its words, its markers aside; a section whose words only the builder changed takes the builder's words
+//! and the clone's tail (its blank lines and markers); a section the builder removed hands the clone's markers in it to the
+//! text before it. A section the clone archived and the builder left alone is dropped by the rule above, and one the builder
+//! changed still stops. It stops where the clone's markers stand among a section's words, where the builder's are taken.
+//! WHY: on 2026-11-28 the carry stopped five times on "both sides changed" a stub the builder filled and a landing had put a
+//! marker on (461 T69, T22, T56/T64, T71), and stopped the lane's batch 461-1 at T71 (e26824a7a8); the session resolved each by
+//! hand, keeping the clone's markers and the builder's filled stub. Merged by this rule, that case differs from the session's
+//! hand resolution (d28a49d733) by two blank lines.
 
 /// The digits of the task a plan heading `### T<n> ...` names: a bundle's first.
 fn section_id(line: &str) -> Option<&str> {
@@ -104,6 +115,78 @@ fn same(a: &str, b: &str) -> bool {
     a.trim() == b.trim()
 }
 
+/// A landing's archive marker, `<!-- plan-archive: T<a> to T<b> moved to plan-done.md ... -->` (feature 375 FR-044): the line it
+/// writes where it moved finished sections out, which stands on the tail of the section before them.
+fn marker(line: &str) -> bool {
+    line.trim_start().starts_with("<!-- plan-archive:")
+}
+
+/// A text's lines but its archive markers.
+fn unmarked(text: &str) -> String {
+    text.split_inclusive('\n').filter(|l| !marker(l)).collect()
+}
+
+/// Do two texts say the same, their archive markers and the blank space around them aside?
+fn same_words(a: &str, b: &str) -> bool {
+    same(&unmarked(a), &unmarked(b))
+}
+
+/// The clone's TAIL of a section: its blank lines and archive markers after its last line of words - or the heading of a
+/// section whose markers stand among its words, which no rule places in another side's text.
+fn tail<'a>(text: &'a str, head: &str) -> Result<&'a str, String> {
+    let mut end = 0;
+    let mut amid = false;
+    let mut at = 0;
+    for line in text.split_inclusive('\n') {
+        at += line.len();
+        if marker(line) {
+            amid = true;
+        } else if !line.trim().is_empty() {
+            if amid {
+                return Err(format!(
+                    "the clone's archive markers stand among the words of the section {}",
+                    named(head)
+                ));
+            }
+            amid = false;
+            end = at;
+        }
+    }
+    Ok(&text[end..])
+}
+
+/// The builder's words of a section the clone changed only by its archive markers: the builder's text, its own markers out,
+/// then the clone's tail - or the builder's text as it is where neither side holds a marker.
+fn joined(theirs: &str, ours: &str, head: &str) -> Result<String, String> {
+    let kept = tail(ours, head)?;
+    if !theirs
+        .split_inclusive('\n')
+        .chain(kept.split_inclusive('\n'))
+        .any(marker)
+    {
+        return Ok(theirs.to_owned());
+    }
+    let words = unmarked(theirs);
+    Ok(format!("{}\n{kept}", words.trim_end()))
+}
+
+/// Of a text both sides hold, beside the base's: the clone's, the builder's, or the builder's words with the clone's markers
+/// ([`joined`]) - or none, where both changed its words.
+fn chosen(was: &str, ours: &str, theirs: &str, head: &str) -> Result<Option<String>, String> {
+    Ok(Some(if same(theirs, was) || same_words(theirs, ours) {
+        ours.to_owned()
+    } else if same(ours, was) {
+        theirs.to_owned()
+    } else if same_words(theirs, was) {
+        // the builder changed its markers alone: the clone's are the landing's
+        ours.to_owned()
+    } else if same_words(ours, was) {
+        joined(theirs, ours, head)?
+    } else {
+        return Ok(None);
+    }))
+}
+
 /// `text` appended to `out`, a blank line between them.
 fn append(out: &mut String, text: &str) {
     if !out.is_empty() && !out.ends_with("\n\n") {
@@ -171,11 +254,8 @@ pub(super) fn merged(base: &str, ours: &str, theirs: &str) -> Result<String, Str
     let of = |sections: &[Section], head: &str| {
         sections.iter().find(|s| s.0 == head).map(|s| s.1.clone())
     };
-    let opening = if same(&their_opening, &base_opening) || same(&their_opening, &our_opening) {
-        our_opening
-    } else if same(&our_opening, &base_opening) {
-        their_opening
-    } else {
+    let Some(mut opening) = chosen(&base_opening, &our_opening, &their_opening, "the opening")?
+    else {
         return Err("both sides changed the text before the first task's section".to_owned());
     };
     if let Some(why) = replaced_twice(&base, &ours, &theirs) {
@@ -185,20 +265,30 @@ pub(super) fn merged(base: &str, ours: &str, theirs: &str) -> Result<String, Str
     for (head, text) in &ours {
         let name = named(head);
         let kept = match (of(&base, head), of(&theirs, head)) {
-            // only the clone has it, or the builder left it as it was
+            // only the clone has it
             (None, None) => Some(text.clone()),
-            (Some(was), Some(their)) if same(&their, &was) => Some(text.clone()),
-            // the builder removed it
-            (Some(was), None) if same(text, &was) => None,
+            // the builder removed it, where the clone changed no more than its markers: those go to the text before it
+            (Some(was), None) if same_words(text, &was) => {
+                let markers: String = text.split_inclusive('\n').filter(|l| marker(l)).collect();
+                if !markers.is_empty() {
+                    // a text before a section ends at its line end
+                    out.last_mut()
+                        .map_or(&mut opening, |s| &mut s.1)
+                        .push_str(&markers);
+                }
+                None
+            }
             (Some(_), None) => {
                 return Err(format!(
                     "the builder removed the section {name}, which the clone changed"
                 ))
             }
-            // the builder changed it, or both sides wrote the same
-            (Some(was), Some(their)) if same(text, &was) || same(text, &their) => Some(their),
-            (None, Some(their)) if same(text, &their) => Some(text.clone()),
-            (Some(_), Some(_)) => return Err(format!("both sides changed the section {name}")),
+            // the builder left it, changed it, or both sides wrote the same (the clone's archive markers kept)
+            (Some(was), Some(their)) => match chosen(&was, text, &their, head)? {
+                Some(t) => Some(t),
+                None => return Err(format!("both sides changed the section {name}")),
+            },
+            (None, Some(their)) if same_words(text, &their) => Some(text.clone()),
             (None, Some(_)) => {
                 return Err(format!("both sides wrote the section {name}, differently"))
             }
@@ -219,8 +309,8 @@ pub(super) fn merged(base: &str, ours: &str, theirs: &str) -> Result<String, Str
                     .map_or(out.len(), |i| i + 1);
                 out.insert(at, (head.clone(), text.clone()));
             }
-            // the clone removed it and the builder left it alone
-            Some(was) if same(text, &was) => {}
+            // the clone removed it (archived it, as a landing does) and the builder left its words alone
+            Some(was) if same_words(text, &was) => {}
             Some(_) => {
                 return Err(format!(
                     "the builder changed the section {}, which the clone removed",

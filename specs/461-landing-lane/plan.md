@@ -1206,33 +1206,39 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T64 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T70 to T33 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T71 to T69 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T74 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T74 (the carry stopped on plan.md where a landing's archive markers stood on the tail of a hand-in's stub: met by hand at 461 T69, T22, T56/T64 and T71, 2026-11-28, and it stopped the lane's batch 461-1 at T71's carry, e26824a7a8)
+
+- **Approach**: in `rust/gate/crates/land/src/land/carry/sections.rs`, a landing's archive markers (`<!-- plan-archive: ... -->`, feature 375 FR-044) are the clone's, set aside when a section's words are judged: `chosen` judges a text both sides hold (each section's and the opening) by its words, so a section whose words only the builder changed takes the builder's words and the clone's TAIL (its blank lines and markers after its last line of words, `tail`/`joined`); a section the builder removed hands the clone's markers in it to the text before it; a section the clone archived and the builder left alone is dropped, and one the builder changed still stops, as before. Measured 2026-11-28 on the T71 case itself (base `e26824a7a8^`, the builder's side `e26824a7a8`, the clone's side `1f176fa5ea`, which is `d28a49d733^`'s plan.md byte for byte): the old rule stopped with `both sides changed the section ### T71 Approach (checklist part A)` - not on an archived section, but on T71's Approach stub, on whose tail the landing had written `T72 to T72`'s marker; the sections the clone archived (T64, T70) the builder had left alone, which the old rule already dropped. With the rule the merge differs from the session's hand resolution (`d28a49d733`) by two blank lines (`diff`: one before the filled stub's new heading, placed by the existing rule, one at the file's end). Red first: `land::carry::tests::spec::a_filled_stub_whose_section_the_landing_wrote_an_archive_marker_into_is_taken_with_the_clones_markers` (a three-sided fixture reduced from the T71 case) failed on the old code with that stop, 1 of 14 `carry::tests::spec`, 2026-11-28; after, `a_sections_archive_markers_are_the_clones_and_its_words_are_merged_apart_from_them` added (the mirror, a builder's own marker change, an archived section the builder changed still stopping, markers among words stopping, a removed section's markers handed on, the opening) and `make builder-checks CRATE="rust/gate/crates/land"` clean, 229 of 229 (test, lint, format).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The markers are judged apart from the words, not the archived sections looked up**: the task line's sketch names a lookup (a marker's range, plan-done.md, the archive's parts), but measured on the T71 case the stop was the marker on the tail of the builder's stub, and the archived sections the builder left alone were already dropped by the existing "the clone removed it" arm; a lookup would leave that case red. The ranges are not intervals either (`T12 to T11`, `T56 to T20`: first and last heading in the plan's order). Label: the algorithmically easier route, measured above (goal over directions).
+2. **The clone's markers win**: only a landing writes them, and a landing runs on the clone's side; a builder's own marker change is dropped for the clone's. Label: read from the archive step (`make plan-archive`, feature 375 FR-044).
+3. **Markers among a section's words stop where the builder's words are taken**: older plans (374's) hold markers between `## Batch` headings inside a section, where no rule says which of the builder's lines they follow. Label: a stop, the record silent; counted 2026-11-28 over every `specs/*/plan.md` by an awk scan for a marker followed by words before the next `### T` heading: only 374's plan, which no carry touches.
 
 ### T74 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A lane batch carries a hand-in whose stub a landing put an archive marker on, with no stop and no hand resolution.
+2. **The constraints.** T74's line in tasks.md; 451 T300 and T419's section rule (`sections.rs`'s module comment), every one of its stops kept.
+3. **Where each comes from.** O: the T71 case's three sides, the red test and the diff against the hand resolution above.
+4. **Do they describe the world here?** Yes: the fixture is reduced from the case that stopped batch 461-1, and the real three sides merge to within two blank lines of the session's resolution.
+5. **The order.** After T71; before T23, which it blocks.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/land"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red test passes, the T71 case merges, and `make builder-checks CRATE="rust/gate/crates/land"` is clean, 229 of 229, 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A lane batch stopped on every hand-in whose stub a landing had written a marker into, and the session resolved it by hand (five times on 2026-11-28).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
+**Performance work?** no
 ### T75 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
