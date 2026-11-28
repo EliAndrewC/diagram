@@ -948,6 +948,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T75 (the lane's batch 462-2 stopped at 462 T278's tick: a measurement hands in with its stub section, which the landing refuses)": {
+   "sha256": "e6f0310290a02ca84e101149c517f184f3c900c5647899cf52ca34f8597fc762",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "daa36c596dc40d5d1b27d38f6b26f76c434a6fbcd743fd35a110e345fef3706c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T27 (phase 4: the gate-write guard over two trees, the clone free while the lane's tree gates - plan D10, FR-001)": {
+   "sha256": "9a166a90a3afaf12b9b9097026e759051a3ac8d545684402f0ca43d9c23c907c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "d11eae5076ccdda8ce9ed451e2dc78976df9ac31ee420193e139c359708b37ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5939,6 +5963,74 @@
      "why": "The defect is not carried past the step: it is filed in the same feature and ordered to land before T23, the lane running every landing. Fixing it inside T90 would conflict with T76's carry. No requested work is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T75 (the lane's batch 462-2 stopped at 462 T278's tick: a measurement hands in with its stub section, which the landing refuses)",
+    "### T75 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T75-D1",
+     "summary": "A measurement writes its plan section and has it reviewed (make decide, plan review) before it hands in; the hand-in asks the section of a measurement as it does of a fix (section_of returns Owed, not Later), the record still asked beside it.",
+     "class": "within",
+     "why": "Item 2 of the sketch the GM called very sensible: builders submit only once their change is ready to land, and refusals are fixed by the builder that has the context. FR-002: the hand-in runs the landing's cheap first pass. The landing already refuses a measurement's stub section, so asking it at hand-in is that pass, moved to the builder with the context. It adds an ask and drops none (FR-008), so it narrows nothing."
+    },
+    {
+     "id": "T75-D2",
+     "summary": "Rejected alternative: the tick taking the measurement record in place of a section.",
+     "class": "within",
+     "why": "Rejecting it keeps the plan gate's and the Approach block's asks on every task. Taking it would have waived a check every other task owes, against FR-008. Choosing not to waive a check is not a narrowing."
+    },
+    {
+     "id": "T75-D3",
+     "summary": "Section::Later, set by nothing once D1 lands, is removed and the doc comments in refusal.rs, tick.rs and land/cheap.rs are restated.",
+     "class": "within",
+     "why": "Dead code removed as a consequence of D1. No behavior changes beyond D1's."
+    },
+    {
+     "id": "T75-D4",
+     "summary": "The builder brief's measurement STOP POINT and HAND IN lines, and builder-brief.md's THE FOUR KINDS and hand-in paragraphs, tell a measurement to write and have reviewed its section before handing in, within the 2,000-character cap, pinned by the block test.",
+     "class": "within",
+     "why": "This is the instruction side of D1, so that the builder with the context answers the ask (US2). The test only fails when the requested behavior's text is missing or over its cap, which makes it enforcement, not scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T27 (phase 4: the gate-write guard over two trees, the clone free while the lane's tree gates - plan D10, FR-001)",
+    "### T27 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T27-fixture",
+     "summary": "Pin the gate-write guard over two trees: the clone and the lane's sibling worktree (git worktree add --detach) with a fake gate copying run_gate's argv and cwd; let through a commit, an Edit and a make task-add in the clone, hold the same aimed into the lane's tree; unit test plus section 5 of the hooks suite.",
+     "class": "within",
+     "why": "This is the fixture D10 names word for word (a commit, an Edit and a make task-add in the clone let through, the same aimed into the lane tree held), and it serves FR-001 (the guard holds only writes to the tree being gated)."
+    },
+    {
+     "id": "T27-task-add-held",
+     "summary": "Add task-add to MAKE_WRITE in gate_write_hooks.rs, held only where the walk places it in a gated tree; measured red-first: a task-add aimed into the lane's tree was let through and writes tasks.md/plan.md, which the tree check refuses (exit 1).",
+     "class": "within",
+     "why": "D10's fixture requires a task-add aimed into the lane tree to be held, and the measurement shows it was not: fixing it carries out FR-001 and D10 rather than adding scope. It does not reach past them: in the clone and wherever no gate runs it still passes (451 T79), so the spec's 'holds only' bound is kept."
+    },
+    {
+     "id": "T27-found-and-left",
+     "summary": "Other make targets that write a tracked file (task-withdraw, queue-add, gm-reviewed) are still let through when aimed into a gated tree; not fixed in T27; filed as T80, which lands before T29, each target's writes to be measured against the tree check first (make append is let through on purpose, 405 T41).",
+     "class": "within",
+     "why": "This is ordering inside the feature, and nothing the spec asks for is dropped: T80 is filed in 461 and lands before the next phase task. That these targets void a gate is only inferred from reading MAKE_WRITE, not measured, and make append shows a target that writes specs/ is not automatically a defect. Measuring first is the project's rule, so the deferral does not leave a known defect behind."
+    },
+    {
+     "id": "T27-order-exits",
+     "summary": "After T26; lands with T75 in one hand-in; green = unit test, suite and make builder-checks; red = recorded and set down, an impossibility claim goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exit criteria only. They settle nothing the request or the spec leaves open in a way that narrows it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6987,6 +7079,70 @@
      "summary": "no attribute line inside a halving: each set's run line names its red units, the halving's ejections are their own repair entries",
      "class": "within",
      "why": "log shape only; data-model's attribute row is the first red's."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T75": {
+   "section_sha256": "6c260859926ff814892681944a3d48bd7969621a3bcd996354ade44dfd16d168",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T75-D1",
+     "summary": "A measurement writes its plan section and has it reviewed (make decide, plan review) before it hands in; the hand-in asks the section of a measurement as it does of a fix (section_of returns Owed, not Later), the record still asked beside it.",
+     "class": "within",
+     "why": "Item 2 of the sketch the GM called very sensible: builders submit only once their change is ready to land, and refusals are fixed by the builder that has the context. FR-002: the hand-in runs the landing's cheap first pass. The landing already refuses a measurement's stub section, so asking it at hand-in is that pass, moved to the builder with the context. It adds an ask and drops none (FR-008), so it narrows nothing."
+    },
+    {
+     "id": "T75-D2",
+     "summary": "Rejected alternative: the tick taking the measurement record in place of a section.",
+     "class": "within",
+     "why": "Rejecting it keeps the plan gate's and the Approach block's asks on every task. Taking it would have waived a check every other task owes, against FR-008. Choosing not to waive a check is not a narrowing."
+    },
+    {
+     "id": "T75-D3",
+     "summary": "Section::Later, set by nothing once D1 lands, is removed and the doc comments in refusal.rs, tick.rs and land/cheap.rs are restated.",
+     "class": "within",
+     "why": "Dead code removed as a consequence of D1. No behavior changes beyond D1's."
+    },
+    {
+     "id": "T75-D4",
+     "summary": "The builder brief's measurement STOP POINT and HAND IN lines, and builder-brief.md's THE FOUR KINDS and hand-in paragraphs, tell a measurement to write and have reviewed its section before handing in, within the 2,000-character cap, pinned by the block test.",
+     "class": "within",
+     "why": "This is the instruction side of D1, so that the builder with the context answers the ask (US2). The test only fails when the requested behavior's text is missing or over its cap, which makes it enforcement, not scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T27": {
+   "section_sha256": "e34796f515507ed216f09bd754d2805589f21353ff7d4d2ebf2529fbdc0e09b1",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T27-fixture",
+     "summary": "Pin the gate-write guard over two trees: the clone and the lane's sibling worktree (git worktree add --detach) with a fake gate copying run_gate's argv and cwd; let through a commit, an Edit and a make task-add in the clone, hold the same aimed into the lane's tree; unit test plus section 5 of the hooks suite.",
+     "class": "within",
+     "why": "This is the fixture D10 names word for word (a commit, an Edit and a make task-add in the clone let through, the same aimed into the lane tree held), and it serves FR-001 (the guard holds only writes to the tree being gated)."
+    },
+    {
+     "id": "T27-task-add-held",
+     "summary": "Add task-add to MAKE_WRITE in gate_write_hooks.rs, held only where the walk places it in a gated tree; measured red-first: a task-add aimed into the lane's tree was let through and writes tasks.md/plan.md, which the tree check refuses (exit 1).",
+     "class": "within",
+     "why": "D10's fixture requires a task-add aimed into the lane tree to be held, and the measurement shows it was not: fixing it carries out FR-001 and D10 rather than adding scope. It does not reach past them: in the clone and wherever no gate runs it still passes (451 T79), so the spec's 'holds only' bound is kept."
+    },
+    {
+     "id": "T27-found-and-left",
+     "summary": "Other make targets that write a tracked file (task-withdraw, queue-add, gm-reviewed) are still let through when aimed into a gated tree; not fixed in T27; filed as T80, which lands before T29, each target's writes to be measured against the tree check first (make append is let through on purpose, 405 T41).",
+     "class": "within",
+     "why": "This is ordering inside the feature, and nothing the spec asks for is dropped: T80 is filed in 461 and lands before the next phase task. That these targets void a gate is only inferred from reading MAKE_WRITE, not measured, and make append shows a target that writes specs/ is not automatically a defect. Measuring first is the project's rule, so the deferral does not leave a known defect behind."
+    },
+    {
+     "id": "T27-order-exits",
+     "summary": "After T26; lands with T75 in one hand-in; green = unit test, suite and make builder-checks; red = recorded and set down, an impossibility claim goes through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exit criteria only. They settle nothing the request or the spec leaves open in a way that narrows it."
     }
    ],
    "verdict": "CLEAR"

@@ -160,7 +160,7 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
         assert!(r.stdout.ends_with(end), "{}", r.stdout);
         let after = match a[2] {
             "build-half" => "the handoff written",
-            "measurement" => "the record written",
+            "measurement" => "the record written and review CLEAR",
             _ => "review CLEAR",
         };
         let line = format!(
@@ -242,11 +242,12 @@ fn each_kind_s_block_opens_with_its_marker_and_stays_short() {
     assert!(closing.stdout.contains("CHECKS, the first tier only: `make builder-checks CRATE=\"rust/guard\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run.\n"), "{}", closing.stdout);
     let was = ["real coverage", "(tests, lint, format, coverage)"];
     assert!(!was.iter().any(|w| closing.stdout.contains(w)));
-    // a measurement changes no source and is told of no test
+    // a measurement changes no source and is told of no test; its section reviewed before it hands in, as the tick asks (461 T75)
     let measured = ask(&["T01", "9001", "measurement", "2", "6"]);
     assert_eq!(parse(&measured.stdout), Some(marker("measurement", 2)));
-    assert!(measured.stdout.contains("STOP POINT (measurement, 6 things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.\nCHECKS: none - you change no source.\nHAND IN last, the record written, your one commit: `make builder-done T=T01 F=9001 MSG="), "{}", measured.stdout);
-    assert!(!measured.stdout.contains("as if coverage ran"));
+    assert!(measured.stdout.contains("STOP POINT (measurement, 6 things): change NO source file. Write the record (commands, figures, units) under dev/measurements/ and file each lever you price; then the plan section (the record's figures its Approach), `make decide` and the plan review (`make plan-delta F=9001`).\nCHECKS: none - you change no source.\nHAND IN last, the record written and review CLEAR, your one commit: `make builder-done T=T01 F=9001 MSG="), "{}", measured.stdout);
+    let gone = ["no plan section", "claims-triage", "as if coverage ran"];
+    assert!(!gone.iter().any(|w| measured.stdout.contains(w)));
 }
 
 #[test]

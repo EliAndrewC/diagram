@@ -329,6 +329,69 @@ fn a_write_sent_into_a_gated_tree_from_another_is_held() {
     assert_eq!(from_pool("Bash", &cp), Vec::new());
 }
 
+/// `GUARD_EDIT_OK`: 461 T27 (plan D10, FR-001) - the fixture over the clone and the lane's tree, a worktree of the clone beside it,
+/// whose gate the lane starts as `make --no-print-directory done NO_CUTOFF=1` standing in it (`land/long_runs.rs`'s `run_gate`). A
+/// commit, an Edit and a `make task-add` in the clone are let through while the lane's gate runs; the same aimed into the lane's tree
+/// are held. WHY the task-add: it writes the feature's `tasks.md` and `plan.md`, which the gate's tree check sees (measured
+/// 2026-11-27: `preflight --tree-check --would-write` exit 1 for both), yet no make but a tick, an accept or a record-checked was held.
+#[test]
+fn the_clone_writes_while_the_lane_trees_gate_runs() {
+    let w = world("lane");
+    let base = w.top.parent().unwrap();
+    let (clone, lane) = (base.join("clone"), base.join("clone-land"));
+    let (c, l) = (clone.display().to_string(), lane.display().to_string());
+    let git = |args: &[&str]| assert!(ask(Path::new("/"), "git", args, "").ok(), "{args:?}");
+    git(&["init", "-q", &c]);
+    std::fs::write(clone.join("a.md"), "a\n").unwrap();
+    git(&["-C", &c, "add", "-A"]);
+    git(&[
+        "-C",
+        &c,
+        "-c",
+        "user.email=t@t",
+        "-c",
+        "user.name=t",
+        "commit",
+        "-qm",
+        "base",
+    ]);
+    git(&["-C", &c, "worktree", "add", "-q", "--detach", &l]);
+    w.make(
+        70,
+        "/usr/bin/make",
+        "--no-print-directory done NO_CUTOFF=1",
+        &lane,
+    );
+    let edit = |file: &Path| json!({"file_path": file, "old_string": "a", "new_string": "b"});
+    let from = |here: &Path, cmd: &str| w.run_from(here, "Bash", &json!({"command": cmd}));
+    for cmd in [
+        "git add -A && git commit -qm x".to_owned(),
+        format!("git -C {c} commit -qm x"),
+        "make task-add F=461 TITLE=x".to_owned(),
+        format!("cd {c} && make task-add F=461 TITLE=x"),
+    ] {
+        assert_eq!(from(&clone, &cmd), Vec::new(), "{cmd}");
+    }
+    assert_eq!(
+        w.run_from(&clone, "Edit", &edit(&clone.join("a.md"))),
+        Vec::new()
+    );
+    for cmd in [
+        format!("git -C {l} commit -qm x"),
+        format!("cd {l} && git add -A"),
+        format!("make -C {l} task-add F=461 TITLE=x"),
+        format!("cd {l} && make task-add F=461 TITLE=x"),
+    ] {
+        let held = refused(&from(&clone, &cmd), "while this tree's `make done` runs");
+        assert!(held, "{cmd}");
+    }
+    let into = w.run_from(&clone, "Edit", &edit(&lane.join("a.md")));
+    assert!(refused(&into, "an Edit of a.md"));
+    // in the lane's tree itself, a task-add is held as a tick is
+    let own = from(&lane, "make task-add F=461 TITLE=x");
+    assert!(refused(&own, "make task-add (it writes a tracked record)"));
+}
+
 #[test]
 fn what_the_gate_does_not_see_passes() {
     let w = world("unseen");

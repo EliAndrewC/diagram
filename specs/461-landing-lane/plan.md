@@ -874,31 +874,49 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** no
 
 
-### T27 (<why: the finding or measurement that files it>)
+### T27 (phase 4: the gate-write guard over two trees, the clone free while the lane's tree gates - plan D10, FR-001)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the fixture D10 names, over the clone and the lane's tree built as the lane has it - a worktree of the clone beside
+  it (`git worktree add --detach`, its `.git` a file), its gate `make --no-print-directory done NO_CUTOFF=1` standing in it, as
+  `rust/gate/crates/land/src/land/long_runs.rs`'s `run_gate` spawns it from the landing the lane runs there - in
+  `rust/guard/src/guards/gate_write_hooks/tests.rs` (`the_clone_writes_while_the_lane_trees_gate_runs`) and section 5 of
+  `tests/hooks/test-gate-write-hooks.sh`. Let through from the clone: a commit (`git add -A && git commit`, `git -C <clone>
+  commit`), an Edit of a clone file, a `make task-add` (bare and after a `cd` into the clone). Held: a commit or an add aimed into
+  the lane's tree (`git -C <lane> commit`, `cd <lane> && git add -A`), an Edit of a lane file, and a `make task-add` aimed there
+  (`make -C <lane>`, `cd <lane> &&`), and one in the lane's tree itself. The commits and Edits are pins (they passed on the old
+  code); the task-add aimed into the lane's tree was LET THROUGH - the guard held no make but `record-checked`, `tick` and `accept`,
+  yet `task-add` writes the feature's `tasks.md` and `plan.md`, which the gate's tree check sees (measured 2026-11-27 in this tree:
+  `l7r-gate.sh preflight --tree-check <snap> --would-write specs/461-landing-lane/tasks.md`, and `plan.md`, exit 1 for both, a
+  `dev/measurements/` path exit 0), so it would void the lane's gate. Fixed: `task-add` joins `MAKE_WRITE` in
+  `rust/guard/src/guards/gate_write_hooks.rs`, held as the others only where the walk places it in a gated tree. Red-first,
+  measured 2026-11-27 (`make rust-test ONLY=` and the suite, on the old code): the unit test failed at `make -C <lane> task-add` (0
+  passed, 1 failed), the suite 45 passed, 2 failed (the aimed task-add and its message). After, measured 2026-11-27 (the same runs):
+  the module's 21 tests pass, the suite 47 passed, 0 failed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the two-tree fixture | the unit test and the suite's section 5 | n/a: no map | none | n/a |
+| task-add held | `MAKE_WRITE` with `task-add`, pinned by both | n/a | none | n/a |
 
 ### T27 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** While the lane's tree gates, the coordinator writes, commits and files tasks in the clone unrefused, and nothing it aims into the lane's tree voids that gate.
+2. **The constraints.** FR-001 ("the gate-write guard holds only writes to the tree being gated"), D10 (the fixture), 451 T307 part 1, T406, T430 (a write held by the tree it lands in), 451 T79 (no false refusal of `make task-add` where no gate runs).
+3. **Where each comes from.** G: FR-001 as the spec words it; R: plan D10; O: the tree-check measurement above and the red runs.
+4. **Do they describe the world here?** Yes: the lane's tree is the clone's sibling worktree (`git worktree list`: `<clone>-land`), and `run_gate`'s argv and cwd are what the fixture's fake gate copies; `gated()` finds it by the `make --no-print-directory done` in its command line.
+5. **The order.** After T26 (its task line); lands with T75 in one hand-in.
+6. **The exits.** Green: the unit test, the suite and `make builder-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `bash tests/hooks/test-gate-write-hooks.sh` with no failure and `make rust-test CRATE=rust/guard` green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What breaks today: a `make task-add` aimed into the lane's tree while its gate runs writes `tasks.md` and `plan.md` there and voids the gate (a full rerun); after it is held with the gate-write refusal. In the clone, and anywhere no gate runs, it still passes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Other make targets that write a tracked file of their tree (`task-withdraw`, `queue-add`, `gm-reviewed`) are let through aimed into a gated tree, as `task-add` was; observed 2026-11-27, method: reading `MAKE_WRITE` against the Makefile's targets that write `specs/`. Not fixed here: each needs its writes measured against the tree check first (`make append` is let through on purpose, 405 T41), and no session aims them into the lane's tree today. Filed as T80; lands before T29.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T28 (<why: the finding or measurement that files it>)
@@ -1221,31 +1239,48 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** no
 
 <!-- plan-archive: T63 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T75 (<why: the finding or measurement that files it>)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+### T75 (the lane's batch 462-2 stopped at 462 T278's tick: a measurement hands in with its stub section, which the landing refuses)
+
+- **Approach**: a measurement writes its plan section and has it reviewed before it hands in, and its hand-in asks the section as a
+  fix's does - one rule for every kind's landing. Chosen over the tick taking the record in place of a section, which would need the
+  landing to learn a task's kind after its tree is released, waive the plan gate's and the Approach block's asks every other task
+  owes, and tick a task whose decisions no review read. `rust/gate/crates/task/src/builder_brief.rs`: the measurement's STOP POINT
+  orders the record, the levers filed, then the plan section (the record's figures its Approach), `make decide` and the plan review;
+  its HAND IN line waits on "the record written and review CLEAR". `rust/gate/crates/land/src/land/hand_in.rs`: `section_of` returns
+  `Owed` for a measurement (it was `Later`, the asks put off), the record still asked beside it, its refusal restated ("beside its
+  plan section"); `Section::Later` in `rust/gate/crates/task/src/tick/refusal.rs` is set by nothing after that and is removed, its
+  doc comments and the ones in `tick.rs` and `land/cheap.rs` restated; `scripts/container/builder-brief.md`'s THE FOUR KINDS and
+  hand-in paragraphs say so, with the why. What a section costs: over the review ledger's 2,017 plan-review (MODE 4) rows a pass's
+  median is 123 s and its 90th percentile 266 s, spent in the reviewer's context, measured 2026-11-27 (a grep of
+  `dev/review-ledger.md`'s MODE 4 rows and their time column, sorted); 461 T10's measurement builder took one round, 72 s, CLEAR,
+  measured 2026-11-27 (its row in `dev/review-ledger.md`). Red-first, measured 2026-11-27 (`make rust-test ONLY=` on the old code):
+  the brief's block test 0 passed 1 failed (`rust/gate/crates/task`), the hand-in's two tests 0 passed 2 failed
+  (`rust/gate/crates/land`: a measurement's stub section was not refused at hand-in).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the brief's text | `each_kind_s_block_opens_with_its_marker_and_stays_short` pins the new STOP POINT and HAND IN lines and the 2,000-character cap | n/a: no map | none | n/a |
+| the hand-in | `a_fix_a_closing_half_a_measurement_and_an_unbriefed_tree_still_owe_the_section_at_hand_in`, `a_measurement_hands_in_its_record_beside_its_section` | n/a | none | n/a |
 
 ### T75 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A measurement's hand-in reaches the lane with a section its tick passes, so no batch stops at a measurement's tick and no closing half is sent to write one.
+2. **The constraints.** FR-002 (the hand-in runs the landing's first pass), US2 ("A refusal a builder can answer is answered by the builder that has the context"), 461 T44 (the record asked of a measurement), the brief's 2,000-character cap.
+3. **Where each comes from.** G: US2's words; R: `scripts/container/builder-brief.md` ("the landing asks all three whatever the kind"); O: 462 T278's stop (tasks.md T75's line), the ledger's figures above.
+4. **Do they describe the world here?** Yes: the stop was observed on the lane's batch 462-2, and the red tests show a measurement's stub section passing the hand-in on the old code.
+5. **The order.** Lands with T27 (one hand-in); a measurement briefed after it is told to write its section.
+6. **The exits.** Green: the tests named above pass and `make builder-checks` over task, land and guard is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `grep Section::Later` over `rust/` found the hand-in's one setter and the tick's tests.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green; the measurement block's length stays under 2,000 characters in its test.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What breaks today: the lane's batch stops at a measurement's tick (462 T278, 2026-11-28) and a closing half is spent on its section; after it the stub is refused at the hand-in, where the measurement's builder answers it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T76 (batch 462-2's first pass, refused on one task's refusal over five lines, read as five rows, four naming no change: the runner stopped three times with the batch open, observed 2026-11-28, method: the attempt file and lane.jsonl read)
@@ -1566,6 +1601,32 @@ T24's) fixed here, since the reader alone could not tell a row from its lines.
 |---|---|---|---|---|
 
 ### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T80 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T80 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

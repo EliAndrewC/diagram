@@ -130,9 +130,12 @@ fn masked(body: &[u8]) -> Vec<u8> {
     out
 }
 
+// GUARD_EDIT_OK: 461 T27 - a make task-add aimed into the lane's gated tree is held
 /// The make targets that write a tracked record, read by the one make detector (feature 451 D1 - its own pattern took any word after
-/// `make`, so `make land NOTE=tick` read as a tick).
-const MAKE_WRITE: [&str; 3] = ["record-checked", "tick", "accept"];
+/// `make`, so `make land NOTE=tick` read as a tick). 461 T27: `task-add` writes the feature's `tasks.md` and
+/// `plan.md`, which the gate sees (measured 2026-11-27, `preflight --tree-check --would-write`: exit 1 for both), so one aimed into the
+/// lane's tree while its gate ran passed and voided it; held, as the others, only where the walk places it in a gated tree.
+const MAKE_WRITE: [&str; 4] = ["record-checked", "tick", "accept", "task-add"];
 
 /// What one decision reads: the processes, and the tree the hook's own process stands in.
 pub(crate) struct Ctx {

@@ -57,7 +57,7 @@ pub enum Pass {
     HandIn {
         /// The commit the work was applied onto.
         base: String,
-        /// Whether the tasks' plan sections are owed here: `Later` for a build half's or a measurement's (461 T44).
+        /// Whether the tasks' plan sections are owed here: `Closing` for a build half's (461 T44, T75).
         section: Section,
     },
 }

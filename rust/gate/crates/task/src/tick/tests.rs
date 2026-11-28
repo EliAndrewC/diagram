@@ -163,7 +163,7 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
     let said = first(&["T02"]).remove(0).refusal;
     let why = "tick: refused - this tick would close the feature, and:\n  9001-x has no report.md";
     assert!(said.contains(why), "{said}");
-    // ...but not at a build half's hand-in (461 T60): the close is its closing half's to answer; a measurement's still asks it
+    // ...but not at a build half's hand-in (461 T60): the close is its closing half's to answer
     let at = |section| {
         checks(&root, &d, "n", &words(&["T02"]), false, &env, section)
             .unwrap()
@@ -171,7 +171,6 @@ fn the_last_tick_closes_only_past_the_closing_check_and_the_archive_is_recorded(
             .refusal
     };
     assert_eq!(at(Section::Closing), "");
-    assert!(at(Section::Later).contains(why));
     assert_eq!(first(&["T09"])[0].refusal, "");
     std::fs::write(d.join("tasks.md"), "- [ ] T01 a\n- [ ] T02 b\n").unwrap();
     assert_eq!(first(&["T02"])[0].refusal, "");
@@ -598,8 +597,9 @@ fn a_task_built_inside_an_archived_host_closes_and_an_unreadable_plan_raises() {
     assert_ne!(raised.code, 0);
 }
 
-/// 461 T44: a stub section's two asks - the plan gate's of the task and its Approach block's - are put off at `Section::Later` (a
-/// measurement's hand-in) and `Section::Closing` (a build half's), every other ask standing; `Section::Owed`, and the tick itself, still ask both.
+/// 461 T44: a stub section's two asks - the plan gate's of the task and its Approach block's - are put off at `Section::Closing` (a
+/// build half's hand-in, since 461 T75 the one kind that puts them off), every other ask standing; `Section::Owed`, and the tick
+/// itself, still ask both.
 #[test]
 fn a_section_owed_later_puts_off_only_the_plan_gate_and_the_approach_ask() {
     let dir = repo("section-later");
@@ -627,21 +627,19 @@ fn a_section_owed_later_puts_off_only_the_plan_gate_and_the_approach_ask() {
     let unreviewed = owed.contains("plan decisions have no current CLEAR review");
     let approach = owed.contains("T05's Approach block leaves part A item(s) 13 unanswered");
     assert!(unreviewed && approach, "{owed}");
-    for section in [Section::Later, Section::Closing] {
-        let later = asked(section);
-        assert_eq!((later.tick.as_str(), later.refusal.as_str()), ("", ""));
-    }
+    let later = asked(Section::Closing);
+    assert_eq!((later.tick.as_str(), later.refusal.as_str()), ("", ""));
     // the tick owes it whatever: its ask is Owed
     let mut a = ask(&root, &d, "T05", "n");
     a.escaped = None;
     assert!(tick(&a, false, true)
         .stderr
         .contains("plan decisions have no current CLEAR review"));
-    // ...and another ask still stands at Later: the task's line already ticked
+    // ...and another ask still stands at Closing: the task's line already ticked
     put(
         &root,
         "specs/9001-x/tasks.md",
         "- [x] T05 a build half\n- [ ] T06 left open\n",
     );
-    assert!(asked(Section::Later).tick.contains("already ticked"));
+    assert!(asked(Section::Closing).tick.contains("already ticked"));
 }

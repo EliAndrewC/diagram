@@ -103,3 +103,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T93 T76/T26's done commit (refs/l7r/done/461-T76, 1a729b9a7a) predates T63: its new test in rust/gate/crates/lane/src/batch/tests.rs (an_open_batch_s_end_lands_...) builds World with no all field, which HEAD's l7r_shared::lane_log::World requires since T63, so the lane crate's tests fail to compile once it is carried and the batch gate goes red - add all: &all to that literal at its carry, research: rendering
       research: rendering
+- [ ] T80 gate-write: a make target that writes a tracked spec file aimed into a gated tree is let through - task-withdraw, queue-add, gm-reviewed beside task-add (held since 461 T27); rust/guard/src/guards/gate_write_hooks.rs MAKE_WRITE; measure each one's writes against preflight --tree-check first (make append is unseen on purpose, 405 T41); observed 2026-11-27 by reading MAKE_WRITE against the Makefile
+      research: rendering

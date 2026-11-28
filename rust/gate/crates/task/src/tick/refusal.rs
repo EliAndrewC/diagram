@@ -45,22 +45,20 @@ pub struct Ask<'a> {
     pub section: Section,
 }
 
-/// WHETHER A TASK'S PLAN SECTION IS OWED WHERE IT IS ASKED (461 T44). A build half's section is its closing half's to write, and a
-/// measurement writes none (its record under `dev/measurements/` stands in), so at their hand-in the plan gate's ask of the task
-/// (`tick_gate_in`: its stub's blocks have no CLEAR review) and its Approach block's ask (`approach_refusal`: part A unanswered) are
-/// put off - both refused T44's own stub, observed 2026-11-27, method: `l7r-gate tick --land-check 461 <note> T44`. Every other
-/// ask stands, and a tick or a landing always owes the section: only the hand-in sets [`Section::Later`] or [`Section::Closing`], from
-/// the kind its tree's brief logged. At a build half's ([`Section::Closing`]) the feature-close check `tick::checks` asks where the
-/// tasks are the last open boxes is put off with them (461 T60): its `report.md` and the close's ledger rows are its closing half's
-/// work - 451 T537's build half was refused so at 22:06:03Z on 2026-11-27, its closing half handing in on the same tree 38 minutes
-/// later. A measurement has no closing half to answer it, so its hand-in still asks the close.
+/// WHETHER A TASK'S PLAN SECTION IS OWED WHERE IT IS ASKED (461 T44). A build half's section is its closing half's to write, so at
+/// its hand-in the plan gate's ask of the task (`tick_gate_in`: its stub's blocks have no CLEAR review) and its Approach block's ask
+/// (`approach_refusal`: part A unanswered) are put off - both refused T44's own stub, observed 2026-11-27, method: `l7r-gate tick
+/// --land-check 461 <note> T44`. Every other ask stands, and a tick or a landing always owes the section: only the hand-in sets
+/// [`Section::Closing`], from the kind its tree's brief logged. The feature-close check `tick::checks` asks where the tasks are the
+/// last open boxes is put off with them (461 T60): its `report.md` and the close's ledger rows are its closing half's work - 451
+/// T537's build half was refused so at 22:06:03Z on 2026-11-27, its closing half handing in on the same tree 38 minutes later. A
+/// measurement's hand-in owes its section as a fix's does since 461 T75 (its `Later`, the asks put off while the landing's tick still
+/// asked them, stopped 462 T278's batch at that tick on 2026-11-28), so no kind but the build half puts anything off.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum Section {
-    /// The section is owed: a tick, a landing, a fix's or a closing half's hand-in.
+    /// The section is owed: a tick, a landing, a fix's, a closing half's or a measurement's hand-in.
     #[default]
     Owed,
-    /// Never owed, a measurement's record standing in: a measurement's hand-in, the feature's close still asked.
-    Later,
     /// Owed later by the closing half, with the feature's close: a build half's hand-in.
     Closing,
 }

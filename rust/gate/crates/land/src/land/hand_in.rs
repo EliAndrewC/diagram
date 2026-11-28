@@ -37,9 +37,9 @@
 //!    wired in at [`FirstPass`] by 461 T08 ([`first_pass`]): a landing rooted at the tree, asked with the tree detached at the base,
 //!    HEAD the base, the work applied, the commit's subject its note - asked, a refusal printing every reason with its fixing command
 //!    and committing nothing - the next run resumes at step 5. The tree's builder's kind, from its brief's line of the pool's log
-//!    (`Found::kind`, 461 T44), says what the plan section owes: a build half's and a measurement's asks of it are put off
-//!    ([`section_of`]), a build half's feature-close check with them (461 T60), a measurement's record under `dev/measurements/`
-//!    asked in their place;
+//!    (`Found::kind`, 461 T44), says what the plan section owes: a build half's asks of it are put off ([`section_of`]), its
+//!    feature-close check with them (461 T60); a measurement owes its section as a fix does, and its record under
+//!    `dev/measurements/` beside it (461 T75);
 //! 7. EVERYTHING staged again (`git add -A`: the verified end reads the working tree, not the index, T05; and the records a clear
 //!    first pass writes into the tree go into the commit with the work, D4) and committed with the scratch
 //!    commit's message (`git commit -C`), its parent the base; a base already holding every change hands nothing in, said with the
@@ -85,21 +85,23 @@ pub(super) struct Asked<'a> {
 /// Where the record a measurement hands in stands (`builder_brief.rs`'s measurement STOP POINT).
 const RECORDS: &str = "dev/measurements/";
 
-/// WHAT A BUILDER'S KIND OWES OF ITS PLAN SECTION AT HAND-IN (461 T44): a build half's section is its closing half's to write, and a
-/// measurement writes none, so both hand in with the section's asks put off ([`Section::Later`]), a build half's feature-close check
-/// with them, its closing half's to answer ([`Section::Closing`], 461 T60); a fix, a closing half and a tree no brief names owe it, as
-/// a landing does. The kind is read from the pool's log, written by `make builder-brief`, never named by
-/// the builder.
+/// WHAT A BUILDER'S KIND OWES OF ITS PLAN SECTION AT HAND-IN (461 T44): a build half's section is its closing half's to write, so
+/// it hands in with the section's asks and the feature-close check put off, its closing half's to answer ([`Section::Closing`], 461
+/// T60); every other kind owes it, as a landing does. A MEASUREMENT OWES IT TOO (461 T75): it was put off here while the landing's
+/// tick still asked it, so 462 T278's batch stopped at the tick on its stub (2026-11-28) and a closing half was sent to write it;
+/// the measurement now writes it and has it reviewed before it hands in, and a stub is refused here, where its builder answers it.
+/// The kind is read from the pool's log, written by `make builder-brief`, never named by the builder.
 pub(super) fn section_of(kind: &str) -> Section {
-    match kind {
-        "build-half" => Section::Closing,
-        "measurement" => Section::Later,
-        _ => Section::Owed,
+    if kind == "build-half" {
+        Section::Closing
+    } else {
+        Section::Owed
     }
 }
 
-/// A MEASUREMENT'S RECORD STANDS IN FOR ITS SECTION (461 T44, a decision: the algorithmically easier stand-in, a file present, its
-/// content the reviewers'): a measurement's hand-in whose work, staged against `base`, holds nothing under [`RECORDS`] is refused.
+/// A MEASUREMENT HANDS IN ITS RECORD (461 T44, a decision: the algorithmically easier ask, a file present, its content the
+/// reviewers'; since 461 T75 beside its plan section, no longer in its place): a measurement's hand-in whose work, staged against
+/// `base`, holds nothing under [`RECORDS`] is refused.
 fn record_refusal(asked: &Asked) -> Option<String> {
     if asked.kind != "measurement" {
         return None;
@@ -118,7 +120,7 @@ fn record_refusal(asked: &Asked) -> Option<String> {
     if staged.lines().any(|p| p.starts_with(RECORDS)) {
         return None;
     }
-    Some(format!("a measurement hands in its record, which stands in for its plan section, and the work holds nothing under {RECORDS} - write the record (its commands, figures and units) at {RECORDS}<date>/<topic>/results.md in {}, then run make builder-done again", asked.tree.display()))
+    Some(format!("a measurement hands in its record beside its plan section, and the work holds nothing under {RECORDS} - write the record (its commands, figures and units) at {RECORDS}<date>/<topic>/results.md in {}, then run make builder-done again", asked.tree.display()))
 }
 
 /// The first pass's seam (D3 step 4): each reason it refuses the applied tree, with its fixing command.

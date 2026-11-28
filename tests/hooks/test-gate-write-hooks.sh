@@ -116,6 +116,27 @@ rm -rf "$S"
 
 # (section 4, a write while `make cache-audit` ran, left with that target - deleted by feature 449 T218 - and its guard, T223)
 
+echo "--- 5. the clone free while the lane's tree gates (461 T27, plan D10, FR-001) ---"
+# GUARD_EDIT_OK: 461 T27 - the lane's tree a worktree of the clone beside it, its gate `make --no-print-directory done NO_CUTOFF=1`
+# standing in it, as the lane's landing runs it; a `make task-add` writes the feature's tasks.md and plan.md, which its gate sees
+C=$(mktemp -d); L="$C-land"
+git -C "$C" init -q; printf 'a\n' > "$C/a.md"; printf 'done:\n\t@sleep %s\n' "$NAP" > "$C/Makefile"
+git -C "$C" add -A; git -C "$C" -c user.email=t@t -c user.name=t commit -qm base
+git -C "$C" worktree add -q --detach "$L"
+( cd "$L" && setsid nohup make --no-print-directory done NO_CUTOFF=1 </dev/null >/dev/null 2>&1 & )
+for _ in $(seq 1 50); do ( cd "$L" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make done ) && break; sleep 0.1; done
+bash_of() { printf '{"tool_name":"Bash","tool_input":{"command":"%s"}}' "$1"; }
+edit_of() { printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/a.md","old_string":"a","new_string":"b"}}' "$1"; }
+check "a commit in the clone: let through" 0 "$(run "$C" "$(bash_of 'git add -A && git commit -qm x')")"
+check "an Edit in the clone: let through" 0 "$(run "$C" "$(edit_of "$C")")"
+check "a make task-add in the clone: let through" 0 "$(run "$C" "$(bash_of 'make task-add F=461 TITLE=x')")"
+check "a commit aimed into the lane's tree: refused" 2 "$(run "$C" "$(bash_of "git -C $L commit -qm x")")"
+check "an Edit aimed into the lane's tree: refused" 2 "$(run "$C" "$(edit_of "$L")")"
+check "a make task-add aimed into the lane's tree: refused" 2 "$(run "$C" "$(bash_of "make -C $L task-add F=461 TITLE=x")")"
+check "...naming it" yes "$(grep -q 'make task-add (it writes a tracked record)' "$R/err" && echo yes || echo no)"
+pkill -f "sleep $NAP" 2>/dev/null
+git -C "$C" worktree remove --force "$L"; rm -rf "$C" "$L"
+
 echo "-----"
 printf 'test-gate-write-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 rm -rf "$R" "$OTHER" "$LOGROOT"

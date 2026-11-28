@@ -34,7 +34,8 @@ Past the 300k cap a builder has a WRAP-UP BAND to 340k (451 T417) in which it ma
 the handoff file its brief names (451 T352), never new code - so a brief names its handoff file by its full path.
 
 THE FOUR KINDS: `fix` - red-first, then its own plan section and review; `measurement` - changes no source, writes the record,
-files the levers it priced, and its report is the next builder's brief; `build-half` - builds and tests a new mechanism and ends at
+files the levers it priced, then its own plan section (the record's figures its Approach) and review, and its report is the next
+builder's brief; `build-half` - builds and tests a new mechanism and ends at
 a handoff file (`<the clone's git dir>/l7r-handoffs/<task>-build.md`) by about 200k; `closing-half` - reads that handoff first, then
 the owed tests, the plan section and the review. Every kind that changes source stops at the FIRST TIER's checks (TWO TIERS, below):
 the closing half too, whose block told it to run `make crate-checks` for real coverage until 451 T308 brought it into line.
@@ -92,15 +93,20 @@ builders' context cap stays at 300k, builders stay, and briefs are sized"; audit
   command printed. WHY: since T08 the session ran it after the report, so a conflict or a refusal reached the coordinator, who had to
   re-read what the builder already knew (found by T08's builder). Past the context cap the wrap-up band lets `make builder-done`
   through (`context_cap_hooks/band.rs`'s `MAKE`) but no edit: a conflict there goes to the handoff. A `build-half` builder hands
-  in once its handoff is written and a `measurement` builder once its record is (461 T44): neither writes a plan section, so their
-  hand-in puts off the two asks a stub section fails - the plan gate's of the task and its Approach block's - reading the kind from
-  the brief's line of the pool's log, never from the builder; a measurement's hand-in is refused while its work holds nothing under
-  `dev/measurements/`, the record standing in for the section. A build half's feature-close check (`report.md`, the close's
-  ledger rows) is put off with them, its closing half's to answer (461 T60: 451 T537's build half refused so at 22:06Z on
-  2026-11-27); a measurement has no closing half, so its hand-in still asks it. Every other ask stands, and the landing asks all
-  three whatever the kind.
+  in once its handoff is written (461 T44): it writes no plan section, so its hand-in puts off the two asks a stub section fails -
+  the plan gate's of the task and its Approach block's - reading the kind from the brief's line of the pool's log, never from the
+  builder; its feature-close check (`report.md`, the close's ledger rows) is put off with them, its closing half's to answer (461
+  T60: 451 T537's build half refused so at 22:06Z on 2026-11-27). A `measurement` builder hands in once its record is written AND
+  its plan section's review is CLEAR (461 T75): its hand-in asks the section as a fix's does, and is refused while its work holds
+  nothing under `dev/measurements/`. Every other ask stands, and the landing asks all three whatever the kind.
   WHY: the tick check's approach refusal refused a stub's Approach block, so from T08 to T44 neither kind could hand in, whoever ran
-  it. The block's CHECKS line names the coverage-repair exception in a fix's block alone (a repair is briefed as a fix): with the
+  it. WHY a measurement writes its section (461 T75, chosen over the tick taking the record in its place, which would need the
+  landing to learn a task's kind after its tree is released and to waive two asks every other task owes): T44 put a measurement's
+  section asks off at hand-in while the landing's tick still asked them, so the lane's batch 462-2 stopped at 462 T278's tick
+  (2026-11-28, its stub's Approach and its unreviewed blocks) and a closing half was sent to write the section. The cost to the
+  builder is one section and one plan review: over the review ledger's 2,017 plan-review rows (read 2026-11-27) a pass's median is
+  123 s and its 90th percentile 266 s, in the reviewer's context, not the builder's; 461 T10's measurement builder took one round,
+  72 s, CLEAR. The block's CHECKS line names the coverage-repair exception in a fix's block alone (a repair is briefed as a fix): with the
   hand-in line, a build half's block with every option given ran past the 2,000-character cap (2,256 in the test, 2026-11-27).
 - AT A BUILDER'S END, your steps in this order (451 T394): where the builder has not handed in (a builder stopped short), `make builder-done T=<task(s)> F=<feature> MSG="<the commit's subject>" [GUARD="<guard-edit reason>"]`,
   as above; THEN THE NEXT DISPATCH (`make builder-brief` for the queue's next task no tree holds, the one `make builder-done` printed,

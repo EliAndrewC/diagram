@@ -216,8 +216,10 @@ fn block(
     };
     let first_tier = format!("CHECKS, the first tier only: `make builder-checks CRATE=\"{crates}\"` and a changed guard's own suite - not closing-checks, static, hooks-test or a coverage run{repair}.");
     let (stop, checks) = match a.kind {
+        // 461 T75: the tick at the landing asks every task's section, a measurement's too (462 T278's batch stopped there on its stub,
+        // 2026-11-28), so the measurement writes it and has it reviewed, as 461 T10's builder did - one rule for every kind's landing
         "measurement" => (
-            format!("STOP POINT (measurement, {} things): change NO source file. Write the record (commands, figures, units) under dev/measurements/, file each lever you price, and report; no plan section.", a.measures),
+            format!("STOP POINT (measurement, {} things): change NO source file. Write the record (commands, figures, units) under dev/measurements/ and file each lever you price; then the plan section (the record's figures its Approach), `make decide` and the plan review (`make plan-delta F={key}`).", a.measures),
             "CHECKS: none - you change no source.".to_owned(),
         ),
         "build-half" => (
@@ -259,11 +261,12 @@ fn block(
     }
     // 461 T43 (US2: "A refusal a builder can answer is answered by the builder that has the context"): every builder hands in itself,
     // last, so a conflict or a first-pass refusal reaches the builder that holds the context - a fix and a closing half once their
-    // review is CLEAR, a build half once its handoff is written and a measurement once its record is, their sections' asks put off at
-    // their hand-in (461 T44: `land/hand_in.rs`'s `section_of`, the kind read from this brief's line of the pool's log)
+    // review is CLEAR, a build half once its handoff is written (its section's asks put off at its hand-in, 461 T44: `land/hand_in.rs`'s
+    // `section_of`, the kind read from this brief's line of the pool's log) and a measurement once its record is written and its
+    // section's review CLEAR (461 T75)
     let after = match a.kind {
         "build-half" => "the handoff written",
-        "measurement" => "the record written",
+        "measurement" => "the record written and review CLEAR",
         _ => "review CLEAR",
     };
     let _ = writeln!(out, "HAND IN last, {after}, your one commit: `make builder-done T={} F={key} MSG=\"<subject>\"` [GUARD=\"<why>\"]. A conflict: resolve, `git add`, rerun; a refusal: answer, rerun, or report a claims one verbatim.", a.task);

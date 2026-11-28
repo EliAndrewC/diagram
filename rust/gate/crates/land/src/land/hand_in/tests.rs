@@ -783,9 +783,11 @@ fn a_build_half_of_the_feature_s_last_task_hands_in_with_its_close_still_to_come
 /// The feature-close ask's refusal.
 const CLOSE: &str = "this tick would close the feature, and:\n  449-x has no report.md";
 
+/// 461 T75: a measurement owes its section at hand-in as a fix does - its tick at the landing asks it (462 T278's batch stopped
+/// there on 2026-11-28, its section a stub), so the hand-in asks it where the builder that holds the context answers it.
 #[test]
-fn a_fix_a_closing_half_and_an_unbriefed_tree_still_owe_the_section_at_hand_in() {
-    for kind in ["fix", "closing-half", ""] {
+fn a_fix_a_closing_half_a_measurement_and_an_unbriefed_tree_still_owe_the_section_at_hand_in() {
+    for kind in ["fix", "closing-half", "measurement", ""] {
         let (fx, tree) = briefed_as(&format!("hand-in-owed-{}", kind.len()), kind);
         let said = handed_in(&fx, &tree);
         refused_by_the_first_pass(&fx, &said, UNREVIEWED);
@@ -813,17 +815,20 @@ fn a_build_half_s_tree_still_owes_its_section_at_the_landing() {
 }
 
 #[test]
-fn a_measurement_hands_in_its_record_in_place_of_its_section() {
+fn a_measurement_hands_in_its_record_beside_its_section() {
     let (fx, tree) = briefed_as("hand-in-measurement", "measurement");
     let said = handed_in(&fx, &tree);
-    refused_by_the_first_pass(&fx, &said, "a measurement hands in its record, which stands in for its plan section, and the work holds nothing under dev/measurements/");
-    assert!(!said.stderr.contains(UNREVIEWED), "{}", said.stderr);
+    let none = "a measurement hands in its record beside its plan section, and the work holds nothing under dev/measurements/";
+    refused_by_the_first_pass(&fx, &said, none);
     put(
         &tree,
         "dev/measurements/2026-11-27/x/results.md",
         "| a | 1 s |\n",
     );
-    landed(&handed_in(&fx, &tree));
+    // the record written, the stub section is still refused
+    let said = handed_in(&fx, &tree);
+    refused_by_the_first_pass(&fx, &said, UNREVIEWED);
+    assert!(!said.stderr.contains(none), "{}", said.stderr);
 }
 
 #[test]
