@@ -949,43 +949,7 @@ engine speed, so the performance checklist does not apply.
 <!-- plan-archive: T86 to T86 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T75 to T90 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 
-### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)
-
-- **Approach**: `rust/gate/crates/lane/src/attribute.rs`'s `attribute` gives a third verdict, `Verdict::Candidates` - every red unit names a change and some unit several: the changes any unit names, in order; a unit naming none (or no unit read) stays `Unplaced`. `halve.rs` gains `Halving::narrowed(candidates, riders, n, retry)` (`new` is `narrowed` with no riders, its rules unchanged): the halving runs over the candidates alone, and each `Next::Run` it answers carries the riders too, in hand-in order, until a run is recorded green, which lands them. `runner/run.rs`'s `Run::red` alone changed: on `Candidates` its `attribute` line says `how` `candidates` and names those changes, and it starts `Halving::narrowed`; everything else of the step and of `run_batch`'s landed check is untouched (461 T77/T79's ground). Red first, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::halving::a_red_naming_two_of_five"` on the old code): 0 passed, 1 failed - a red under `lib/two`, which T02 and T04 of five touch, T04 bad, ran `["T01 T02 T03 T04 T05", "T01 T02", "T03", "T04", "T05"]` (four runs after the first) and ejected T04 `red`; after, `["T01 T02 T03 T04 T05", "T01 T02 T03 T05"]` (one run after the first) and T04 ejected `inferred`. Green: `make builder-checks CRATE="rust/gate/crates/lane"` 109 of 109 and clean; `scripts/gates/l7r-gate.sh rust cover --crate rust/gate/crates/lane` clean, no line named, 2026-11-28. Every test of T24's halving passes unchanged (halve/tests.rs with its every-subset test of n = 1 to 6, the end-to-end n = 4 and n = 6 rows, the tripwire's halving test, and the first-pass row naming two changes, which now takes 4 runs where it took 5, T03 riding, measured 2026-11-28 (`make builder-checks`, the lane crate)). Three attribute assertions flip on purpose, `Unplaced` to `Candidates([0, 1])`: a several-crate `cover-build` unit over two changes, two changes under one crate, a file two changes touch.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| n/a: gate tooling, no map drawn | - | - | none | - |
-
-**Decisions** (each labeled):
-
-1. **The pin rule beside riders: a red of a set holding riders is its candidates' alone.** A lone candidate run red beside riders is ejected `red` and pinned (`tripwire.rs`'s doc), though the run was not its own; a rider never gets an `eject` line from the halving, so it is never pinned by one. Label: D6 step 2's "the halving runs over those candidates only" read literally - the riders are presumed innocent of the red, since no unit named them, as the one-candidate path already trusts the record. Pinned by `runner::run::tests::halving::a_lone_candidate_red_beside_riders_is_ejected_red_and_no_rider_is_pinned` (T02 bad: 3 runs, T02 `red`, one repair, no `stop`, measured 2026-11-28 (`make rust-test`, the end-to-end test)) and `halve::tests::a_lone_candidate_red_beside_its_riders_is_ejected_red_and_they_ride_on`.
-2. **The riders ride with every set the halving runs until one is green**, not only the first half's first run: a red run lands nothing, so they are still unlanded and ride the next. Label: D6's "the others riding with the first half" read as the riders landing with the first green half; WHY: a rider kept off the later runs would wait for the halving's end and cost a run of its own. Pinned by `halve::tests::a_narrowed_halving_ejects_exactly_its_bad_candidates_and_lands_each_rider_once` (every candidate set of n = 1 to 6, every non-empty set of bad candidates: exactly those ejected, each rider in exactly one green run where any ran).
-3. **A rider red after all is an accepted cost.** Each candidate run beside it is ejected, and once the halving is done the riders left run again as the rest and are read afresh, so the loop ends and the rider is found. What it costs: those candidates' ejection and their repairs (an innocent ejection); the alternative priced, a candidate's lone red re-run without riders before its ejection, costs a run on every true red. Label: the easier route, D6 step 2 literal; who chose: this task, the plan silent. Pinned by `runner::run::tests::halving::a_red_rider_costs_its_candidates_their_ejection_and_is_read_afresh_after` (T01 a rider red under `lib/two`: T02 and T04 ejected, then T01, T03 and T05 landed).
-4. **A unit naming one change beside a unit naming several joins the candidates** rather than being ejected first. Label: the algorithmically easier route (one red read one way); the halving finds that change in its turn. Pinned in `attribute::tests::a_red_no_unit_or_no_single_change_places_is_unplaced` (`Candidates([0, 1, 2])`).
-5. **The `attribute` line's `how` gains `candidates`** (`data-model.md`'s row); no reader of `how` exists beside its two writers (searched 2026-11-28, `grep '"how"'` over `rust/`). Label: the easier route.
-
-This supersedes T24 Decision 6 and the narrowing half of its Decision 7 (each stays as written in T24's section, its history).
-
-### T78 Approach (checklist part A)
-
-1. **The goal, in the world.** A red batch whose gate names a unit several of its changes touch lands the changes no unit named on its next run, and halves only over the named ones.
-2. **The constraints.** D6 step 2 ("Several: the halving runs over those candidates only, the others riding with the first half"), D6 steps 3 and 4 (the halving, the pin rule), US4's bound, FR-004; T24's halving tests kept passing; T18's tripwire.
-3. **Where each comes from.** R: plan.md D6 steps 2 to 4; tasks.md T78's line; data-model.md's `attribute` row. O: the red-first counts above.
-4. **Do they describe the world here?** Yes: the stand-in landing's red is a Phase line naming `lib/two`, which only T02's and T04's deltas touch, so the record names two of five exactly as a real crate unit would (`attribute::touches`), measured 2026-11-28 (`make rust-test`, the end-to-end tests).
-5. **The order.** After T24 and T86 (on main at this base); before T27.
-6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean, coverage clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The red-first test passes (one run after the first where there were four); the crate 109 of 109, coverage clean, 2026-11-28.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** A slower outcome, not a wrong one: the changes no unit named waited through a halving over every change (up to a run or so more each) before landing; now they land on the next run.
-
-**Found and left?** none
-
-**Performance work?** no: D6 step 2's rule built as written (not filed as a `[perf]` task), though its effect is fewer runs (the red-first case: 1 run after the first red against 4, measured 2026-11-28 (`make rust-test`, red first)).
-
+<!-- plan-archive: T78 to T78 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 ### T80 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
