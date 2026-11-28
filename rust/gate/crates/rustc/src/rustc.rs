@@ -694,7 +694,13 @@ fn parse(args: &[String]) -> Option<(&str, Vec<String>, bool)> {
     while let Some(word) = rest.next() {
         match word.as_str() {
             "--check" => flag = true,
-            "--crate" => named.push(rest.next()?.clone()),
+            // one value may name several crates, as `make rust-test CRATE="a b"` passes it (461 T32), and must name one
+            "--crate" => {
+                let each: Vec<String> =
+                    rest.next()?.split_whitespace().map(str::to_owned).collect();
+                (!each.is_empty()).then_some(())?;
+                named.extend(each);
+            }
             // a filtered run is a `test` run's alone (`only.rs`, feature 451 T435): the rest keep results a part would stand in for
             only::FLAG if cmd == "test" => {
                 only::words(rest.next()?)?;

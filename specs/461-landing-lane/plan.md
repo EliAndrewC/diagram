@@ -1564,59 +1564,6 @@ measurement task counts).
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T32 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T32 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T33 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T33 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
 ### T35 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -2714,6 +2661,75 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 |---|---|---|---|---|
 
 ### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T32, T33 (bundle) (`make rust-test CRATE="<several>"` failed on one joined manifest path, found running T05's four-crate Verify line; `make task-time`'s cross-blocking row of a closed window grew after it ended, found reading phase 5's before and after)
+
+- **Approach (T32)**: `rust/gate/crates/rustc/src/rustc.rs`'s `parse` splits each `--crate` value on white space, so `make rust-test CRATE="a b"` (whose recipe passes `--crate "$(CRATE)"`, one value) is each crate, as `make builder-checks`' `foreach` already passes them; a value naming no crate (`CRATE=" "`) is refused with the usage, where an empty list would have run every crate. Fixed at the parser, not the Makefile: it covers every caller that passes one joined value (`rust-test`, `test-times`), and a red test can live there. `ONLY=` across several crates was checked in `only.rs`: its words go to every crate's binaries, and a crate the filter misses is that crate's failure, as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions, T32** (each labeled):
+
+1. **Split at the parser, not the recipe**: one fix for every `--crate` caller, tested in the crate. Label: the algorithmically easier route (the task line offers "split ... or refuse"; split is what `builder-checks` already does). A crate directory with a space in its name cannot be named; none exists under `rust/`, and cargo's package paths in this tree have none.
+2. **A blank value refused**: `--crate " "` returns no parse (the usage), never "no crate named, so every crate". Label: the safe reading of an empty list.
+3. **Red first**: `rustc::tests::the_arguments_are_parsed_and_each_failure_says_its_fix`, with `--crate " rust/a  rust/b " --crate rust/c` expected to be three crates and `--crate " "` refused, failed on the old code, 0 of 1 run (left `[" rust/a  rust/b ", "rust/c"]`), measured 2026-11-27 (`make rust-test CRATE=rust/gate/crates/rustc ONLY=the_arguments_are_parsed` in pool tree t270). The literal call of T05's line, `make rust-test CRATE="rust/gate/crates/land rust/gate/crates/task rust/gate/crates/tree rust/guard"`, exited 2 before ("manifest path `.../land rust/gate/crates/task rust/gate/crates/tree rust/guard/Cargo.toml` does not exist") and exits 0 after, "test clean on 4 crate(s)" (land 223, task 163, tree 64 passed, guard's kept green), measured 2026-11-28 (that call run in pool tree t270 before and after the fix, its `rust-checks:` lines).
+
+- **Approach (T33)**: `rust/gate/crates/measure/src/measure/task_time/cross.rs`'s `gaps` gives each tree's last hold, where it was released, an open free span (to infinity), which `measure`'s cuts already clip at the window's end (`hi`: `UNTIL=`, else the last event read - the "or now"); a span before a later handout still ends at that handout. So a tree freed in the window counts to the window's end whether or not its next handout has been logged yet, and a closed window's figure no longer moves as later handouts reach `builder-pool.log`. The module doc and `said`'s paragraph restated (the old "a tree never handed out again is not counted" and "a tree handed out later is taken to have had work waiting" go; the upper bound now says a free tree is taken to have had work waiting).
+
+**Decisions, T33** (each labeled):
+
+4. **Counted to the window's end, not dropped**: of the task line's two rules (count an open span to the window's end, or not at all), the first, so a tree freed during a landing and not yet retaken counts during that landing. Label: the brief's reading ("a free span must end at the window's end (or now)"). Its cost: a tree freed and never handed out again (a retired or spare tree) now counts during every landing, bounded by the places left open (`L7R_BUILDERS` less the trees held); the record cannot tell a spare tree from one with work waiting, which was already the source's stated upper bound.
+5. **A fixture figure moves, deliberately**: `cross_tests.rs`' tree `pc`, free from 03:00 with no handout after, now counts 03:00 to 04:00 of the landing, so the free-tree source moves 2.0 to 3.0 min and the row 2.5 to 3.5 min, measured 2026-11-28 (the fixture's report under the fix, matching a count by hand: two trees free 03:00-04:00 with two places open, the refusal's seconds beside them once). Its doc and both assertions say why.
+6. **Red first**: `cross::tests::a_free_span_open_at_the_windows_end_counts_to_it_whatever_follows` (tree a freed at 30 inside a landing 20-80 of the window 0-100, read with and without a handout at 150 after the window) failed on the old code, 0 min read before the handout was logged against 50 after, 0 of 1 run, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/measure ONLY=a_free_span_open_at_the_windows_end`). After: 311 of 311 of the measure crate's tests pass, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/measure`).
+7. **The night's window re-read**: `make task-time SINCE=2026-11-27T02:00:00Z UNTIL=2026-11-27T14:29:00Z` with the fix gives 53.7 min (164.5 tasks' side blocking), measured 2026-11-28 about 00:40Z (that run's report, its cross-blocking line and its tasks' side working row), equal to the old code's 17:55Z read: every tree freed in that window (t271, t270 and b1 included, b1 taken again 23:54Z) has been handed out since, so the old rule had caught up and the new one gives the same figure without waiting. T31 reads this figure.
+
+### T32, T33 Approach (checklist part A)
+
+1. **The goal, in the world.** T32: `make rust-test CRATE="<several>"` runs each crate named, as `make builder-checks CRATE=` does, so a Verify line naming several crates is one call. T33: a closed window's cross-blocking row reads the same whenever it is run, so phase 5's before and after (T31) compare like with like.
+2. **The constraints.** T32: the task line; `only.rs`'s rule that a filter names its crate; the Makefile's `rust-test` recipe unchanged (a guard file; its `##` help still says `CRATE=<dir>`, the parser now taking several). T33: the free-tree and refused-handout sources of 451 T510 and their once-a-second rule, the task line's "one rule for both windows".
+3. **Where each comes from.** O: the red runs (Decisions 3 and 6), the task line's two reads (32.3 then 53.7 min, observed 2026-11-27, method: both runs' headers, as the task line says) and the re-read (Decision 7). R: the task lines; `cross.rs`'s module doc.
+4. **Do they describe the world here?** Yes: the four-crate call was run in this pool tree before and after; the night's window re-read on today's pool log.
+5. **The order.** T32 before T05's Verify line is run again; T33 before T31. Independent of each other.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/rustc rust/gate/crates/measure"` clean (rustc 161, measure 311 passed; lint and format clean, 2026-11-28) and the four-crate call clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The four-crate call exits 0, "test clean on 4 crate(s)"; T33's red test green and the night's window at 53.7 min, measured 2026-11-28 (Decision 7's run).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** T32: a builder following a several-crate Verify line got exit 2 and no test run; now the crates run. T33: a reader comparing two windows saw a difference made by when each was run (21.4 min of the night's 53.7, observed 2026-11-27, method: the task line's two reads), and now the figure is fixed when the window closes.
+
+**Found and left?** None.
+
+**Performance work?** Yes for T33, as a measurement of where time goes (451 FR-013): it corrects a figure of the task time breakdown; no engine speed, so no performance checklist. T32: no.
+
+
+### T70 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T70 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

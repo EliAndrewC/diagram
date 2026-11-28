@@ -10,8 +10,10 @@
 //! THE SOURCES, each read from a record:
 //! - A FREE POOL TREE NOT HANDED OUT WHILE A LANDING RAN (the pool's log, `builder-pool.log`, every clone's, [`super::held::holds`];
 //!   the landings' spans, each attempt's `land` `end` line, `t0` to `t1`): each second of a landing's span, the trees standing free
-//!   between a holder's release and a LATER handout of the same tree, at most the open builder places (`L7R_BUILDERS`, default 3,
-//!   less the trees held then). A tree never handed out again is not counted: nothing is known to have waited for it.
+//!   from a holder's release to the tree's next handout or, with none logged, the window's end, at most the open builder places
+//!   (`L7R_BUILDERS`, default 3, less the trees held then). A span with no later handout counts to the window's end (461 T33): ended
+//!   at the next handout alone, a closed window's figure grew as later handouts reached the log (2026-11-27T02:00Z to 14:29Z read
+//!   32.3 min at 14:40Z and 53.7 at 17:55Z), so a tree freed and never retaken counts too, held under the places left open.
 //! - A HANDOUT REFUSED WHILE ITS TASK'S DONE COMMIT WAS NOT CARRIED (451 T398: `make builder-tree` refuses it and writes nothing to the
 //!   pool's log): a main session's `make builder-tree` or `make builder-brief` that failed (its `PostToolUseFailure` line), its
 //!   task (the command's `T=`) with a `done` row in the pool's log before it and no carry of it since, from the refusal to the task's
@@ -23,7 +25,7 @@
 //! Counted once a second, the larger of the two there (a refused closing half and the tree it would take are one wait).
 //!
 //! NOT IN THE RECORDS, said on the report's line: whether the queue held a READY entry while a tree stood free (its states are computed
-//! when asked and never logged, so the first source is an upper bound: a tree handed out later is taken to have had work waiting); a
+//! when asked and never logged, so the first source is an upper bound: a free tree is taken to have had work waiting); a
 //! refusal's reason (only the transcript's tool result says it); a builder's resume held by a gate (no record ties a message's
 //! delivery to a landing); and a builder's wait on a build slot a gate held, booked on the tasks' side already as `waiting on a build
 //! slot`, so not counted again.
@@ -166,7 +168,8 @@ pub fn refusals(r: &Records, hi: f64) -> Vec<(f64, f64)> {
     out
 }
 
-/// Each tree's free spans that end in a later handout of it: `(from, to)`.
+/// Each tree's free spans, `(from, to)`: from a release to the tree's next handout, or open (`to` infinite, clipped at the window's
+/// end by [`measure`]) where none follows (461 T33).
 fn gaps(holds: &[Hold]) -> Vec<(f64, f64)> {
     let mut out = Vec::new();
     let mut trees: Vec<&str> = holds.iter().map(|h| h.tree.as_str()).collect();
@@ -175,9 +178,10 @@ fn gaps(holds: &[Hold]) -> Vec<(f64, f64)> {
     for tree in trees {
         let mut mine: Vec<&Hold> = holds.iter().filter(|h| h.tree == tree).collect();
         mine.sort_by(|a, b| a.from.total_cmp(&b.from));
-        for w in mine.windows(2) {
-            if w[0].until < w[1].from {
-                out.push((w[0].until, w[1].from));
+        for (i, h) in mine.iter().enumerate() {
+            let next = mine.get(i + 1).map_or(f64::INFINITY, |n| n.from);
+            if h.until.is_finite() && h.until < next {
+                out.push((h.until, next));
             }
         }
     }
@@ -248,13 +252,13 @@ pub fn said(c: &Cross) -> String {
     let m = super::m;
     format!(
         "A task waited on a landing (cross-blocking): {} min, in the tasks' side's blocking. Counted once a second, the larger of its \
-         two sources there: a free pool tree not handed out while a landing ran: {} min (a tree free from a release to a later \
-         handout of it, during a landing's span - its `land` end line's start to its end - while fewer than {} trees were held, \
+         two sources there: a free pool tree not handed out while a landing ran: {} min (a tree free from a release to its next \
+         handout or the window's end, during a landing's span - its `land` end line's start to its end - while fewer than {} trees were held, \
          `L7R_BUILDERS`; the pool's log `builder-pool.log` and the event log); a handout refused while its task's done commit was not \
          carried: {} min ({} refused) (a main session's failed `make builder-tree` or `make builder-brief` whose task has a `done` \
          row in the pool's log and no carry since, to its next handout or carry). Not in the records: whether the queue held a READY \
-         entry while a tree stood free (its states are never logged, so the first source is an upper bound: a tree handed out later is \
-         taken to have had work waiting); a refusal's reason (only the transcript's tool result says it); a builder's resume held by a \
+         entry while a tree stood free (its states are never logged, so the first source is an upper bound: a free tree is taken to \
+         have had work waiting); a refusal's reason (only the transcript's tool result says it); a builder's resume held by a \
          gate; and a builder's wait on a build slot a gate held, booked on the tasks' side already as `waiting on a build slot`, so \
          not counted again (451 T510).\n",
         m(c.both),

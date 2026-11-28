@@ -4,7 +4,8 @@
 //! The fixture: a builder for T2 in tree `pb` runs from 00:11 to 05:00 beside a landing of T1 (02:00 to 04:00, its gate 02:10 to
 //! 03:50) the session waits on. Tree `pa` was freed at 01:00 by T1's build half and handed to T1's closing half only at 04:30, after
 //! the landing; the session's handout for it at 02:30 was refused (T1's done commit not yet carried). Tree `pc` stood free from
-//! 00:30 to 01:30 with no landing running, and from 03:00 on with no handout after it. The session waits on the GM 05:10 to 05:20.
+//! 00:30 to 01:30 with no landing running, and from 03:00 on with no handout after it - counted to the window's end, so 03:00 to
+//! 04:00 of the landing (461 T33). The session waits on the GM 05:10 to 05:20.
 
 use std::fmt::Write as _;
 
@@ -224,8 +225,9 @@ fn the_window_s_table_is_in_two_parts_each_its_own_denominator() {
             &format!("{landings}\n\n| category | minutes | % of the landings' | blocking | % of the landings' |"),
             "| the tasks' side, working (all but waiting on the GM) | ",
             "| the landings' side, working | ",
-            // the cross-blocking row: 02:00 to 04:30, a tree free while a landing ran and the refused handout, counted once a second
-            "| a task waited on a landing (cross-blocking) | - | | 2.5 | ",
+            // the cross-blocking row: 02:00 to 04:30, a tree free while a landing ran and the refused handout, counted once a second -
+            // two trees, pa and pc, 03:00 to 04:00 (461 T33)
+            "| a task waited on a landing (cross-blocking) | - | | 3.5 | ",
             // the GM's row as before: of the whole
             "| the GM | 0.0 | 0.0% | 0.2 | ",
         ],
@@ -249,9 +251,10 @@ fn a_task_s_wait_on_a_landing_names_each_source() {
     has(
         &out,
         &[
-            "A task waited on a landing (cross-blocking): 2.5 min, in the tasks' side's blocking.",
-            // pa free 01:00 to 04:30, the landing 02:00 to 04:00; pc's free spans (no landing, no handout after) not counted
-            "a free pool tree not handed out while a landing ran: 2.0 min",
+            "A task waited on a landing (cross-blocking): 3.5 min, in the tasks' side's blocking.",
+            // pa free 01:00 to 04:30, the landing 02:00 to 04:00: 2.0; pc free from 03:00 with no handout after, counted to the
+            // window's end (461 T33): 03:00 to 04:00 of the landing, 1.0; its 00:30 to 01:30 span had no landing
+            "a free pool tree not handed out while a landing ran: 3.0 min",
             // the refused handout at 02:30, to T1's next handout at 04:30
             "a handout refused while its task's done commit was not carried: 2.0 min (1 refused)",
             "Not in the records:",

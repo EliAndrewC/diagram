@@ -768,6 +768,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T32, T33 (bundle) (`make rust-test CRATE=\"<several>\"` failed on one joined manifest path, found running T05's four-crate Verify line; `make task-time`'s cross-blocking row of a closed window grew after it ended, found reading phase 5's before and after)": {
+   "sha256": "7bd4dbc4d4982a7254717dab47459687be1ba61a9fe433e861490e7cf667141e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T32, T33 Approach (checklist part A)": {
+   "sha256": "c3787ecab7c7fdf447873c3137f8dfa9e8870186b31d36255a44dc35ea57be67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4999,6 +5011,82 @@
      "summary": "Other citation forms T65's bundle missed ('T16's Decision 3', data-model.md's repair entry) are not fixed in T68 but filed as T69, which lands before T31.",
      "class": "within",
      "why": "The known defect is filed and ordered to land before the next piece of work (T31), so fix-as-we-go is honored rather than excepted: no known defect is carried past the step. A different reader (other forms, other spec files) is a separate mechanism; splitting tasks narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T32, T33 (bundle) (`make rust-test CRATE=\"<several>\"` failed on one joined manifest path, found running T05's four-crate Verify line; `make task-time`'s cross-blocking row of a closed window grew after it ended, found reading phase 5's before and after)",
+    "### T32, T33 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T32-1",
+     "summary": "Split each --crate value on white space at rustc.rs's parser, not in the Makefile recipe",
+     "class": "within",
+     "why": "Implements the task line's offered 'split' route; one fix for every caller passing a joined value. A crate path with a space cannot be named, and none exists, so nothing is left broken."
+    },
+    {
+     "id": "T32-2",
+     "summary": "A blank --crate value is refused with the usage rather than read as 'every crate'",
+     "class": "within",
+     "why": "Safe handling of an empty list, inside the fix. It adds no new behavior beyond the parse."
+    },
+    {
+     "id": "T32-3",
+     "summary": "Red test first, plus T05's literal four-crate call run before (exit 2) and after (exit 0)",
+     "class": "within",
+     "why": "Verification that the fix does what the task asks. Dated figures with command and tree."
+    },
+    {
+     "id": "T32-ONLY",
+     "summary": "ONLY= across several crates passes the filter to every crate, and a crate the filter misses fails as before",
+     "class": "within",
+     "why": "Existing behavior checked and kept, with no change to what was asked."
+    },
+    {
+     "id": "T32-help",
+     "summary": "The Makefile rust-test recipe and its CRATE=<dir> help are left unchanged (a guard file)",
+     "class": "within",
+     "why": "An under-describing help string is a difference, not a wrong outcome (XIV v2.36.0). It needs no ruling."
+    },
+    {
+     "id": "T33-4",
+     "summary": "An open free span at a tree's last release counts to the window's end, not dropped",
+     "class": "within",
+     "why": "Picks one of the task line's two offered rules. It makes a closed window's figure stable, which serves the GM's like-with-like concern (FR-010, SC-005). Its stated cost is that a spare tree is over-counted, bounded by open places, under the source's existing upper-bound reading. That cost only ever raises the figure, and the same rule applies to both windows, so it cannot make an after-window look better. Not a narrowing."
+    },
+    {
+     "id": "T33-5",
+     "summary": "cross_tests.rs fixture figure moves 2.0->3.0 / 2.5->3.5 min, deliberately",
+     "class": "within",
+     "why": "The expected consequence of the fix, with the doc and assertions saying why. A changed output where everything works is not a regression."
+    },
+    {
+     "id": "T33-6",
+     "summary": "Red test first; measure crate 311/311 after",
+     "class": "within",
+     "why": "Verification of the requested fix."
+    },
+    {
+     "id": "T33-7",
+     "summary": "The night's window (02:00Z-14:29Z) re-read with the fix at 53.7 min, equal to the old code's 17:55Z read",
+     "class": "within",
+     "why": "A baseline re-read on the fixed code's own dated run. One aside: the 'old rule had caught up' account sits oddly with b1 retaken at 23:54Z, after the 17:55Z read. The figure itself rests on the fixed code's run, so this is not a fidelity finding."
+    },
+    {
+     "id": "T33-perf",
+     "summary": "T33 classed as performance work (a measurement of where time goes, 451 FR-013) with no performance checklist; T32 not",
+     "class": "within",
+     "why": "Matches FR-013's explicit inclusion of measurement work in the ordering."
+    },
+    {
+     "id": "T32-T33-order",
+     "summary": "Both in one landing; T32 before T05's Verify re-run, T33 before T31; independent",
+     "class": "within",
+     "why": "Sequencing inside the feature's own tasks."
     }
    ]
   }

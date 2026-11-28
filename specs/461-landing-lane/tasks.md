@@ -147,3 +147,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T69 The plan review bundle's spec-cited.md carries nothing for a citation in a form that is no FR/SC/D id: a task section's numbered decision ('T16's Decision 3', 461 T16 writes its decisions '1. **...**') and a named entry of another spec file ('data-model.md's repair entry', 'data-model.md, "A repair entry"'); 461 T65's reviewer found its bundle missing both (observed 2026-11-27, /tmp/l7r-check/plan-461-landing-lane-blocks-T65-88fbf292/spec-cited.md; rust/gate/crates/plan/src/plan/bundle.rs, cited_text; T68 fixed that bundle's third, D7, a heading-form decision unread)
       research: rendering
+- [ ] T70 make plan-delta's bundle blocks.md writes a block heading's double quotes escaped (\") in its key comment, so a reviewer copying the key into make plan-verdict BLOCKS=1 is refused once - T32,T33's review's first record refused so (observed 2026-11-28, method: the spec-fidelity reply for 461 T32,T33); the comment should carry the heading as plan.md holds it (rust/gate/crates/plan, the blocks bundle writer)
+      research: rendering

@@ -407,6 +407,15 @@ fn the_arguments_are_parsed_and_each_failure_says_its_fix() {
     assert_eq!(parse(&args(&["nothing"])), None);
     assert_eq!(parse(&args(&["lint", "--crate"])), None);
     assert_eq!(parse(&args(&["lint", "--what"])), None);
+    // one `--crate` naming several, as `make rust-test CRATE="a b"` passes it, is each of them (461 T32); one naming none is refused
+    let several = args(&["test", "--crate", " rust/a  rust/b ", "--crate", "rust/c"]);
+    let each = vec![
+        "rust/a".to_owned(),
+        "rust/b".to_owned(),
+        "rust/c".to_owned(),
+    ];
+    assert_eq!(parse(&several), Some(("test", each, false)));
+    assert_eq!(parse(&args(&["test", "--crate", " "])), None);
     let (root, ..) = two_crates();
     // a counting build is run only where the crate has counters (T97)
     std::fs::write(

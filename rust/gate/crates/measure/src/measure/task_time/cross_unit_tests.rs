@@ -72,6 +72,22 @@ fn a_free_tree_counts_only_while_a_place_is_open() {
     assert!((both.both - 50.0).abs() < 1e-9, "{both:?}");
 }
 
+/// A tree freed in the window and handed out only after it counts the same before that handout is logged as after (461 T33: the
+/// night's figure grew from 32.3 to 53.7 min as later handouts reached the pool's log): its free span ends at the window's end.
+#[test]
+fn a_free_span_open_at_the_windows_end_counts_to_it_whatever_follows() {
+    let before = [hold("a", 0.0, 30.0), hold("b", 0.0, f64::INFINITY)];
+    let after = [
+        before[0].clone(),
+        before[1].clone(),
+        hold("a", 150.0, f64::INFINITY),
+    ];
+    let at = |holds: &[Hold]| measure(holds, &[landing(20.0, 80.0)], &[], (0.0, 100.0), 3).idle;
+    let (read_then, read_later) = (at(&before), at(&after));
+    let both = (read_then - 50.0).abs() < 1e-9 && (read_later - 50.0).abs() < 1e-9;
+    assert!(both, "{read_then} {read_later}");
+}
+
 fn run(id: &str, by: &str, make: &str) -> Run {
     Run {
         id: id.to_owned(),
