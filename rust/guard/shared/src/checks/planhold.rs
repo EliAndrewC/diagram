@@ -139,15 +139,16 @@ fn dead(h: &Value, now: f64) -> bool {
     (text(h, "state") == "pending" && now - t_of(h) > PENDING_S) || now - t_of(h) > HOLD_MAX_S
 }
 
-/// What a write is judged against: each held block, or a held task's section joined as `task_sections` reads it - the places it
-/// stands put together, which for a task whose own headings stand apart stands nowhere in the plan (451 T80 changed the write-back
-/// alone; the refusal reading each place is T120).
-fn held(root: &Path, h: &Value) -> Vec<String> {
-    let places = held_places(root, h);
-    if text(h, "task").is_empty() || places.len() < 2 {
-        return places;
-    }
-    vec![places.concat()]
+/// What a write is judged against: the hold's plan as `root` holds it, and each place its text stands there (each held block, or
+/// each place a held task's section stands), or None where it holds none. WHY each place (451 T120, found by T80 on 2026-11-21):
+/// the section joined as `task_sections` reads it stands nowhere in the plan for a task whose own headings stand apart, so a Write
+/// of the plan unchanged was refused, an Edit running into a place past the first went unseen, and a live foreground shell write on
+/// text every section shares was refused for such a section alone (red on HEAD: `a_split_section_is_judged_in_each_place`).
+fn held(root: &Path, h: &Value) -> Option<(String, Vec<(usize, usize)>)> {
+    let plan = root.join("specs").join(text(h, "feature")).join("plan.md");
+    let body = std::fs::read_to_string(plan).ok()?;
+    let spans = places(&body, h);
+    (!spans.is_empty()).then_some((body, spans))
 }
 
 /// A hold whose review was launched and has not died (`hm_planhold.live`).
@@ -220,8 +221,8 @@ fn places(body: &str, h: &Value) -> Vec<(usize, usize)> {
         .collect()
 }
 
-/// What the write-back keeps of a hold: one text a place it stands (451 T80; [`held`], the section joined, is what a write is judged
-/// against, and stands nowhere in the plan for a task whose own headings stand apart).
+/// What the write-back keeps of a hold: one text a place it stands (451 T80; a write is judged against the same places, [`held`],
+/// 451 T120).
 fn held_places(root: &Path, h: &Value) -> Vec<String> {
     let plan = root.join("specs").join(text(h, "feature")).join("plan.md");
     let Ok(body) = std::fs::read_to_string(plan) else {
@@ -436,34 +437,26 @@ pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
     String::new()
 }
 
-/// Whether held text `texts` would change under an Edit of the plan with `old`: the edit's text overlaps held text, both ends
-/// exclusive (451 T77: `a <= start + t.len()` read an edit of the next section's heading as inside the held one, and an edit starting
-/// before the section and ending inside it went unseen), or `old` stands in held text (a `replace_all`).
-fn edit_hits(plan: &Path, texts: &[String], old: &str) -> bool {
-    let current = std::fs::read_to_string(plan).unwrap_or_default();
-    let at = if old.is_empty() {
-        None
-    } else {
-        current.find(old)
-    };
-    texts.iter().any(|t| {
-        current
-            .find(t.as_str())
-            .is_some_and(|start| at.is_some_and(|a| a < start + t.len() && start < a + old.len()))
-    }) || texts.iter().any(|t| !old.is_empty() && t.contains(old))
+/// Whether the held places `spans` of `body` would change under an Edit of the plan with `old`: the edit's text overlaps a place,
+/// both ends exclusive (451 T77: `a <= start + t.len()` read an edit of the next section's heading as inside the held one, and an edit
+/// starting before the section and ending inside it went unseen), or `old` stands in a held place (a `replace_all`).
+fn edit_hits(body: &str, spans: &[(usize, usize)], old: &str) -> bool {
+    if old.is_empty() {
+        return false;
+    }
+    let at = body.find(old);
+    spans.iter().any(|&(start, end)| {
+        at.is_some_and(|a| a < end && start < a + old.len()) || body[start..end].contains(old)
+    })
 }
 
-/// The plan with each held text cut out, a NUL in its place so the text on either side never joins into a match; or None where a
-/// held text does not stand in the plan whole (a task's own headings apart, joined by `task_sections`), so nothing is read as outside.
-fn outside(plan: &Path, texts: &[String]) -> Option<String> {
-    let mut body = std::fs::read_to_string(plan).ok()?;
-    for t in texts {
-        if !body.contains(t.as_str()) {
-            return None;
-        }
-        body = body.replacen(t.as_str(), "\0", 1);
+/// The plan with each held place cut out, a NUL in its place so the text on either side never joins into a match.
+fn outside(body: &str, spans: &[(usize, usize)]) -> String {
+    let mut rest = body.to_owned();
+    for &(a, b) in spans.iter().rev() {
+        rest.replace_range(a..b, "\0");
     }
-    Some(body)
+    rest
 }
 
 /// Whether a shell command writes the plan through held text: a held heading, a held line of 16 or more characters, or a quoted
@@ -515,10 +508,10 @@ pub fn refusal(state: &Value, root: Option<&Path>, tool: &str, ti: &Value, now: 
         // tree's plan voids no verdict, and one of the held plan by its absolute path does (451 T123)
         let tree = taken_in(&h).unwrap_or_else(|| root.to_path_buf());
         let plan = tree.join("specs").join(text(&h, "feature")).join("plan.md");
-        let texts = held(&tree, &h);
-        if texts.is_empty() || dead(&h, now) {
+        let Some((body, spans)) = held(&tree, &h).filter(|_| !dead(&h, now)) else {
             continue;
-        }
+        };
+        let texts: Vec<String> = spans.iter().map(|&(a, b)| body[a..b].to_owned()).collect();
         let hit = if matches!(tool, "Edit" | "Write" | "MultiEdit")
             && resolved(Path::new(text(ti, "file_path"))) == resolved(&plan)
         {
@@ -526,7 +519,7 @@ pub fn refusal(state: &Value, root: Option<&Path>, tool: &str, ti: &Value, now: 
                 let content = text(ti, "content");
                 texts.iter().any(|t| !content.contains(t.as_str()))
             } else {
-                edit_hits(&plan, &texts, text(ti, "old_string"))
+                edit_hits(&body, &spans, text(ti, "old_string"))
             }
         } else if tool == "Bash" && reaches(&h, root) {
             // a shell write from another tree the hold judges not, as no write-back runs there either: by a relative path it writes
@@ -542,9 +535,8 @@ pub fn refusal(state: &Value, root: Option<&Path>, tool: &str, ti: &Value, now: 
             // the background at its timeout gets its one PostToolUse at the move (measured 2026-11-21), so what it writes after
             // the move is written back by nothing, nor what a writer it detaches writes after the shell returns: accepted (451 T78's
             // plan section, priced there), the cost a verdict `make plan-verdict` refuses as changed while reviewed, the review run again
-            let rest = (live(&h, now) && !crate::wait::background(ti))
-                .then(|| outside(&plan, &texts))
-                .flatten();
+            let rest =
+                (live(&h, now) && !crate::wait::background(ti)).then(|| outside(&body, &spans));
             bash_hits(
                 text(ti, "command"),
                 text(&h, "feature"),
