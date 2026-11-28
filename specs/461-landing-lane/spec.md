@@ -115,10 +115,13 @@ you don't need to remember to do the correct thing in the future"). His three ex
 - performance fixes and process bugfixes first, whatever feature they are attached to - a rule across every feature's queued
   tasks, not within one feature's.
 
-**Acceptance**: with a policy stating those forms, every place that names the next builder's work (`make builder-next`,
-`make builder-done`'s next dispatch, the pool-idle Stop guard and `make task-start`) names the work the policy ranks first, and a
-brief or a Stop that departs from it is refused with the policy's own pick, its escape recorded with a reason. The case this
-story was filed on - 462 disk tasks handed builders while 461's phase 3 tasks stood ready, 2026-11-28 - is the red-first case.
+**Acceptance**: with a policy stating those forms, every place that hands out or names a builder's next work names the work the
+policy ranks first: `make builder-next`, `make builder-done`'s next dispatch, `make queue`'s pick, `make builder-brief`, the
+pool-idle Stop guard, the set-down Stop hook's "start the next" (`set_down_hooks.rs`, `next_performance_in`) and `make task-start`
+(single and bundle) - the list from `grep -rln 'builder_queue::\|queue::offer\|repairs::offer\|next_performance' --include=*.rs
+rust`, tests aside (17 files, 2026-11-28), each file that hands out or names work named in the plan. A brief or a Stop that
+departs from it is refused with the policy's own pick. The case this story was filed on - 462 disk tasks handed builders while
+461's phase 3 tasks stood ready, 2026-11-28 - is the red-first case.
 
 ## Requirements
 
@@ -148,12 +151,24 @@ story was filed on - 462 disk tasks handed builders while 461's phase 3 tasks st
   and the machine's load. Every before-and-after figure is stated with the concurrency it was measured under, and where the two
   windows' concurrency differs both are stated beside the figure, so a window of one builder is never compared bare with one of
   four (the GM's seventh process-reviewer message, 2026-11-27, in `specs/449-rust-codebase/port-talk-gm-goal.md`).
-- **FR-011** The builders' scheduling policy (US6) is one record the GM's words set, read in one place by every handout path; it
-  expresses at least the three forms of US6 - a feature given every builder it can use, a feature held to a floor of builders and
-  filling only uncontended ones, and classes of task (performance, process bugfix) ranked first across features. A task's class is
-  a tag on its line beside `[perf]` (e.g. `[process]`). The rules it replaces - performance first across features (451 FR-013), a
-  queue's own order (462 T549's `#! order=queue`) and repairs first (`LANE_REPAIR_FIRST`, 461 T16) - become forms of the one
-  policy, none of them a second rule beside it. A departure from the policy is refused with the policy's pick, escape recorded.
+- **FR-011** The builders' scheduling policy (US6) is one record the GM's words set, read in one place by every handout path US6
+  lists; it expresses at least the three forms of US6 - a feature given every builder it can use, a feature held to a floor of
+  builders and filling only uncontended ones, and classes of task ranked first across every feature's queued tasks.
+  - **The classes.** PERFORMANCE keeps the membership 451 FR-013 settled (`PERF=1` at filing, a `[perf]` line, a measurement
+    counted as performance work). A PROCESS BUGFIX is a fix of a wrong outcome in the process tooling - a defect, as constitution
+    XIV defines one - never new process work: a task building a mechanism is not in the class, so a feature of process work (461
+    itself) gets no class rank by its subject. Its line carries `[bugfix]` beside `[perf]`, given at filing (`make task-add
+    BUGFIX=1`) or added to its line; a task is in the class only by that tag.
+  - **The rules it replaces**, each made a form of the one policy and none left as a second rule beside it: performance first
+    (451 FR-013, `shared::builder_queue` `next` and `perf_of`, and `set_down_hooks`' `next_performance`); the performance tasks no
+    queue line names, named first (451 T313); the caller's own queue preferred (`make builder-next` and `make builder-done`'s
+    `dispatch_with`, `queue::offer` with the caller's feature key); the queues read in name order where no caller names one (the
+    pool-idle Stop guard's `offer` over the sorted `queues()`); a queue's own order (462 T549's `#! order=queue`, as built); and
+    repairs first (`LANE_REPAIR_FIRST`, 461 T16), which no words of the GM's set - a repair ranks by its own task's class and
+    feature, below the classes.
+  - **A departure** is refused with the policy's pick. Its escape names its ground: the pick cannot be worked yet for a reason the
+    tool cannot see (it waits on another task's landing, a tree its files hold, the GM's word), stated with the reason. A change
+    the GM directs changes the record, never an escape.
 
 ## Taken over from feature 451
 
@@ -204,8 +219,8 @@ The acceptance of each user story, gathered by requirement (the measures themsel
 - **SC-006** (FR-009): the plan's reuse decision is recorded for each part of the lane (research.md R1) before that part is built.
 - **SC-007** (FR-011): replaying the pool's log of 2026-11-28 under a policy giving 461 every builder it can use, every handout
   path names a ready 461 task wherever one stood ready, and a performance or process-bugfix task of any feature ahead of both;
-  over the first like window after US6 lands, no free tree goes to a task the policy ranks below a ready one, but by a recorded
-  escape.
+  over the first like window after US6 lands, no free tree goes to a task the policy ranks below a ready one but by a recorded
+  escape, and the escapes are counted with their grounds beside the figure.
 
 ## Review history
 

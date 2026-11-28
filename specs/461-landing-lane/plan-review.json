@@ -841,12 +841,6 @@
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
   },
-  "### T63 (<why: the finding or measurement that files it>)": {
-   "sha256": "309d4f35a32638efcff9a0ebabb035007508decf8a88d710a05cf22488c47e9f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-28",
-   "declared": "spec-fidelity"
-  },
   "### T63 Approach (checklist part A)": {
    "sha256": "40ebcb26cf9a7b3a7c65abd5cd23ca84ebd1083720e47571daa42e86521df45a",
    "verdict": "CLEAR",
@@ -5594,6 +5588,21 @@
      "summary": "The runner lock probe (lane_wake::RUNNER_LOCK/runner_lives beside runner::LOCK/held) stays duplicated",
      "class": "within",
      "why": "T63's subject is the lane's computed states (D8). The lock probe is not a state reading, and the plan records no wrong outcome from the two probes of one file. A difference with no wrong outcome is not a defect (constitution XIV), so leaving it narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "(removed) ### T63 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T63-stub-removal",
+     "summary": "Delete T63's unfilled template stub (placeholder heading, placeholder Approach, empty table); T63's filled section stands under its own heading.",
+     "class": "within",
+     "why": "The stub held only template placeholders and an empty table - no decision, requirement or measurement. T63's filled section ('### T63 (461 T21's found-and-left ...)') and its '### T63 Approach (checklist part A)' are in plan.md (make plan-section F=461 T=T63, lines 1179 and 1225) and both are recorded CLEAR, spec-fidelity, 2026-11-28, in plan-review.json; neither is in this bundle, so neither changed since. Removing a duplicate empty heading drops nothing the GM asked for."
     }
    ]
   }
