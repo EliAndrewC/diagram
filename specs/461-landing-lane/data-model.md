@@ -80,7 +80,8 @@ AN ENTRY IS A CHANGE'S REPAIR ONLY WHERE AN `eject` LINE NAMES IT (461 T15): the
 lines, and a runner killed between them resumes what the log has not ejected as a new attempt, which may land a change the entry
 lists - so the queue hands out an entry only once a lane `eject` line carries its id (`log::repairs_open`), and the repair's changes
 are those `eject` lines' `change`s, never the entry's `ejected` alone. A unit of `units` is `<crate dir> <step>`, or for a Phase line
-naming several crates (a `cover-build` of a family) one unit over all of them, `<dir> <dir> <dir> (+<k> more) <step>`.
+naming several crates (a `cover-build` of a family) one unit over all of them, `<dir> <dir> <dir> (+<k> more) <step>`. A file the cover step lists with lines no test reaches
+is `<file> cover-run` (461 T86).
 
 ## The log line (`l7r-lane/lane.jsonl`, one JSON line a transition)
 

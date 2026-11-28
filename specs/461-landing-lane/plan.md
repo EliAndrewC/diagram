@@ -1317,32 +1317,31 @@ engine speed, so the performance checklist does not apply.
 
 
 <!-- plan-archive: T84 to T22 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T86 (<why: the finding or measurement that files it>)
+### T86 (batch 462-3's coverage red ejected its whole batch unplaced, where the gate's output named files one change alone touched)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/attribute.rs`'s `reds` reads, from the attempt's output, each cover-step line `<path> - lines no test reaches: <lines>` (written by `rustc.rs`'s `cover_ran`) as one unit a file, `<file> cover-run`, the path taken from the lane tree's root (its raw or canonical form; a path outside it kept whole), and `touches` names every change whose delta holds that exact path; `attribute`'s verdict is unchanged (one change a unit, else unplaced and halved, 461 T24). What was found, measured 2026-11-28 from the clone's `.git/l7r-lane/lane.jsonl` and `l7r-events/*.jsonl`: the task line's reading ("attribute.rs read the cover-run lines by crate") is not what happened - batch 462-3's `run` line is `"red":[]` and its `attribute` line `"how":"none"`, because both crates' `cover-run` Phase lines in the attempt's span (`rust/gate/crates/plan` 04:14:36Z, `rust/guard/shared` 04:14:44Z) are `code` 0: a coverage gap is the cover step's verdict printed to the output, not a red Phase line, so the record held no unit at all and the six changes were ejected `unplaced` as repair r3. The four files (`rust/gate/crates/plan/src/plan/split.rs`, `split/tests.rs`, `rust/guard/shared/src/speckit/archive/report.rs`, `report/tests.rs`) are touched by 1505e57eeb (462 T545/T555) alone of the six, observed 2026-11-28, method: `git show --name-only` on each sha of the `batch` line; two changes touch `rust/gate/crates/plan` and two `rust/guard/shared`, so a crate-level reading would still have been unplaced. Red-first, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="attribute::tests"`): the test `a_line_no_test_reaches_names_the_change_that_touches_its_file` (in `attribute/tests.rs`, the log's four lines verbatim under `/diagram/.clones/diagram-backlog-land`, the two `code` 0 Phase lines, the six changes' files) read 0 units of 4 on the old code (7 of 8 attribute tests passing, it failing); on the new, 4 units, all placed on change 1. Its other cases: a file two changes touch, or none, stays unplaced for the halving; a file unit beside a red `lint` line places each on its own change; a path outside the tree names only that whole path. The unit form is written in the module doc, `data-model.md`'s `units` paragraph and `rust/gate/CLAUDE.md`'s lane row.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
 ### T86 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A batch whose gate goes red only on lines no test reaches ejects the one change whose delta holds those files and lands the rest, instead of ejecting the batch.
+2. **The constraints.** 461 plan D6 step 2 (a red placed by the gate's own record), data-model.md's `units` form, T24's halving for what the record cannot place.
+3. **Where each comes from.** O: `l7r-lane/lane.jsonl`'s 462-3 lines and the event log's `cover-run` Phase lines, 2026-11-28; O: `l7r-lane/attempts/462-3-1.log` lines 174-181; R: `rustc.rs`'s `cover_ran`, the line's writer.
+4. **Do they describe the world here?** Yes: the test is built from that attempt's own lines and changes, and read 0 units before the fix, 4 placed after, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="attribute::tests"` on the old code and the new).
+5. **The order.** After T24 and T76 (on main, read at this base); before 461 T23.
+6. **The exits.** Green: the lane crate's tests and coverage green with the new test. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first test passes: batch 462-3's output places its four units on 1505e57eeb alone.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: five innocent changes were ejected and needed repairs for one change's coverage gap.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no: a defect of the lane's attribution (innocent changes ejected), not a speed task.
 
 ### T90 (a build half's hand-in formed a batch and stopped the lane: 462 T321's build half 06520f6b3f formed batch 462-4 alone, its tick refused the plan section its closing half writes, the refusal named no change, and the runner stopped with every later batch behind it, 2026-11-28, `.git/l7r-lane/attempts/462-4-1.log` to `-3.log`)
 
@@ -1380,31 +1379,31 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T93 (<why: the finding or measurement that files it>)
+### T93 (T76's done commit predated T63's `all` field on World, so its carried test did not compile)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one line, already on main as 33dde3d59d ("461 T93: T76's open-batch test builds World with T63's `all` field (the carry's join)"), made by the session at the bootstrap landing of 2026-11-28: `rust/gate/crates/lane/src/batch/tests.rs`'s open-batch test builds `l7r_shared::lane_log::World` with `all: &all`, the field HEAD's `World` requires since T63; T76/T26's done commit (refs/l7r/done/461-T76, 1a729b9a7a) was written before T63 and built the literal without it, so the lane crate's tests failed to compile once it was carried. Checked 2026-11-28: 33dde3d59d is an ancestor of this tree's HEAD (`git merge-base --is-ancestor`), its stat one insertion in that file, and the literal holds `all: &all` at line 150. No decision beyond the join; this section records it so the box ticks.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
 ### T93 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The lane crate's tests compile and pass with T76's test carried beside T63's World.
+2. **The constraints.** T63's `World` (its required `all` field); T76's test unchanged otherwise.
+3. **Where each comes from.** O: the compile failure at the carry, 2026-11-28; O: 33dde3d59d.
+4. **Do they describe the world here?** Yes: the commit is on main and in this tree's history.
+5. **The order.** After T63 and T76; landed at the bootstrap landing of 2026-11-28.
+6. **The exits.** Green: the lane crate's tests compile and pass at HEAD. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing (already made).
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/lane"` green at this tree's HEAD, which holds 33dde3d59d.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: the batch gate red on a compile failure.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 ### T78 (<why: the finding or measurement that files it>)
 

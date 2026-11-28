@@ -1044,6 +1044,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T93 (T76's done commit predated T63's `all` field on World, so its carried test did not compile)": {
+   "sha256": "0243c91d8b1b77bbc192b9767c44c5389ccfff77e0e3342e60db9a70d50a34f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T93 Approach (checklist part A)": {
+   "sha256": "53a358d86cd77189b190765af066c905f70c32d37cd2d5bc4e4fccfb0086fa1d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T86 (batch 462-3's coverage red ejected its whole batch unplaced, where the gate's output named files one change alone touched)": {
+   "sha256": "d8d3bd43b7761e26ea83c8c807602dc0aa0d19e129f48102a2e77b3fd795c068",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T86 Approach (checklist part A)": {
+   "sha256": "2728cf3cc3a440e643c0d23f7a5b83a728708c27f8f0bc476496a9e00d3fe640",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6975,6 +6999,68 @@
      "why": "T81 neither creates nor reads that offer - repairs::first and the handout paths are unchanged in this task - so the outcome predates T81 and is another feature's repair; it is filed and ordered before T82, the task that rewires the handouts onto ranked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T93 (T76's done commit predated T63's `all` field on World, so its carried test did not compile)",
+    "### T93 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T93-approach",
+     "summary": "Repair the carried T76/T26 open-batch test in rust/gate/crates/lane/src/batch/tests.rs by adding the `all: &all` field T63 made required on l7r_shared::lane_log::World (one inserted line, 33dde3d59d), leaving the test otherwise unchanged.",
+     "class": "within",
+     "why": "A carried done commit that no longer compiles against HEAD is a defect (a wrong outcome: the batch gate red on a compile failure). Joining the test to the current struct keeps the test and its checks (FR-008: nothing of the existing checks is dropped) and serves the lane's landing of carried hand-ins (FR-003). It neither weakens the test nor changes World; no request clause is narrowed."
+    },
+    {
+     "id": "T93-done",
+     "summary": "Done is `make builder-checks CRATE=rust/gate/crates/lane` green at a HEAD holding 33dde3d59d; red exit is recorded and set down, an impossibility claim going through `make arbiter-ask`.",
+     "class": "within",
+     "why": "Measures exactly the outcome the fix is for (the crate's tests compile and pass); adds no new verification scope and drops none."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T86 (batch 462-3's coverage red ejected its whole batch unplaced, where the gate's output named files one change alone touched)",
+    "### T86 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T86-1",
+     "summary": "attribute.rs's reds reads each cover-step line '<path> - lines no test reaches: <lines>' from the attempt's output as one unit per file ('<file> cover-run'), and touches maps it to every change whose delta holds that exact path",
+     "class": "within",
+     "why": "FR-004 and the sketch's item 1 ask that a red batch be attributed first by the gate's own report and bisected only where that names none. A coverage gap is reported in the gate's output, not as a red Phase line (measured 2026-11-28: both cover-run Phase lines are code 0), so before this the record placed nothing and five innocent changes were ejected. Reading the file named in that output is attribution from the gate's own report, the same way D6 step 2 places a first-pass row by its file. It widens what can be placed and so ejects fewer innocent changes. It narrows nothing."
+    },
+    {
+     "id": "T86-2",
+     "summary": "the path is taken relative to the lane tree's root, raw or canonical; a path outside the tree is kept whole and names only a change touching that whole path",
+     "class": "within",
+     "why": "Mechanics of matching a printed path against a delta. A path that matches nothing stays unplaced and goes to the halving, so nothing is lost."
+    },
+    {
+     "id": "T86-3",
+     "summary": "attribute's verdict is unchanged (one change per unit places it; a file two changes touch, or none, stays unplaced for T24's halving); a file unit beside a red lint unit places each on its own change",
+     "class": "within",
+     "why": "Keeps D6 step 2 and step 3 as T24 built them. A unit this block cannot place goes to the bisection, as FR-004 requires. No behavior beyond the new unit kind changes."
+    },
+    {
+     "id": "T86-4",
+     "summary": "the red-first test is built from batch 462-3's own log lines and changes; the unit form is written into the module doc, data-model.md's units paragraph and rust/gate/CLAUDE.md's lane row",
+     "class": "within",
+     "why": "The test only fails when the requested attribution is absent: it read 0 units of 4 on the old code and 4 placed on the new (measured 2026-11-28, make rust-test CRATE=rust/gate/crates/lane ONLY=attribute::tests). That is enforcement of FR-004, and the doc updates record its form."
+    },
+    {
+     "id": "T86-5",
+     "summary": "order after T24 and T76, before 461 T23; exits: green on the lane crate's tests and coverage, or red recorded and set down with any cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8237,6 +8323,64 @@
      "summary": "462 T549's ejected order=queue repair (r1) still offered as READY; filed as T91, lands before T82",
      "class": "within",
      "why": "T81 neither creates nor reads that offer - repairs::first and the handout paths are unchanged in this task - so the outcome predates T81 and is another feature's repair; it is filed and ordered before T82, the task that rewires the handouts onto ranked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T93": {
+   "section_sha256": "a823ccb1b583f996d51b7d2d459c51dd9f8aed12704c74e5ab8e46afc0c3fba8",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T93-approach",
+     "summary": "Repair the carried T76/T26 open-batch test in rust/gate/crates/lane/src/batch/tests.rs by adding the `all: &all` field T63 made required on l7r_shared::lane_log::World (one inserted line, 33dde3d59d), leaving the test otherwise unchanged.",
+     "class": "within",
+     "why": "A carried done commit that no longer compiles against HEAD is a defect (a wrong outcome: the batch gate red on a compile failure). Joining the test to the current struct keeps the test and its checks (FR-008: nothing of the existing checks is dropped) and serves the lane's landing of carried hand-ins (FR-003). It neither weakens the test nor changes World; no request clause is narrowed."
+    },
+    {
+     "id": "T93-done",
+     "summary": "Done is `make builder-checks CRATE=rust/gate/crates/lane` green at a HEAD holding 33dde3d59d; red exit is recorded and set down, an impossibility claim going through `make arbiter-ask`.",
+     "class": "within",
+     "why": "Measures exactly the outcome the fix is for (the crate's tests compile and pass); adds no new verification scope and drops none."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T86": {
+   "section_sha256": "c1a383fd88423bdc1a933801bfd4aaad60d78154daacbe3d1bbbe885d2a45fae",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T86-1",
+     "summary": "attribute.rs's reds reads each cover-step line '<path> - lines no test reaches: <lines>' from the attempt's output as one unit per file ('<file> cover-run'), and touches maps it to every change whose delta holds that exact path",
+     "class": "within",
+     "why": "FR-004 and the sketch's item 1 ask that a red batch be attributed first by the gate's own report and bisected only where that names none. A coverage gap is reported in the gate's output, not as a red Phase line (measured 2026-11-28: both cover-run Phase lines are code 0), so before this the record placed nothing and five innocent changes were ejected. Reading the file named in that output is attribution from the gate's own report, the same way D6 step 2 places a first-pass row by its file. It widens what can be placed and so ejects fewer innocent changes. It narrows nothing."
+    },
+    {
+     "id": "T86-2",
+     "summary": "the path is taken relative to the lane tree's root, raw or canonical; a path outside the tree is kept whole and names only a change touching that whole path",
+     "class": "within",
+     "why": "Mechanics of matching a printed path against a delta. A path that matches nothing stays unplaced and goes to the halving, so nothing is lost."
+    },
+    {
+     "id": "T86-3",
+     "summary": "attribute's verdict is unchanged (one change per unit places it; a file two changes touch, or none, stays unplaced for T24's halving); a file unit beside a red lint unit places each on its own change",
+     "class": "within",
+     "why": "Keeps D6 step 2 and step 3 as T24 built them. A unit this block cannot place goes to the bisection, as FR-004 requires. No behavior beyond the new unit kind changes."
+    },
+    {
+     "id": "T86-4",
+     "summary": "the red-first test is built from batch 462-3's own log lines and changes; the unit form is written into the module doc, data-model.md's units paragraph and rust/gate/CLAUDE.md's lane row",
+     "class": "within",
+     "why": "The test only fails when the requested attribution is absent: it read 0 units of 4 on the old code and 4 placed on the new (measured 2026-11-28, make rust-test CRATE=rust/gate/crates/lane ONLY=attribute::tests). That is enforcement of FR-004, and the doc updates record its form."
+    },
+    {
+     "id": "T86-5",
+     "summary": "order after T24 and T76, before 461 T23; exits: green on the lane crate's tests and coverage, or red recorded and set down with any cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
     }
    ],
    "verdict": "CLEAR"

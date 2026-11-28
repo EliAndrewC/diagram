@@ -11,6 +11,11 @@
 //!   another crate of the family was placed and ejected beside the culprit. Of the clone's 2,723 `cover-build` lines, 947 named 2 to 28
 //!   crates; every `test`, `lint`, `build` and `cover-run` line named one (observed 2026-11-27, method: every `Phase` line of the
 //!   clone's `l7r-events/*.jsonl` counted by step and crate count);
+//! - a file with lines no test reaches, named in the attempt's output by the cover step's `<path> - lines no test reaches: <lines>`
+//!   line, one unit a file, `<file> cover-run` (461 T86: batch 462-3's coverage red was in four files only 462 T545/T555's change
+//!   touched, yet both crates' `cover-run` Phase lines were `code` 0, so the record held no unit and the batch of six was ejected
+//!   unplaced, `l7r-lane/attempts/462-3-1.log`, 2026-11-28); the path is read from the tree's root, a path outside it kept whole;
+//!   a failed cover run names its crate on a red Phase line, never a file, so the two do not meet over one crate;
 //! - a red hook suite, named in the attempt's output by `make hooks-test`'s `HOOK TESTS FAILED: <job>` line, the job its guard's file
 //!   name (`agent-model-hooks.sh`) or a shard of it (`agent-model-hooks.sh.3`; `tests/hooks/hookrun.sh`'s id); D6's spelling
 //!   `test-<name>-hooks.sh` read too; one unit `hooks <guard file>`;
@@ -22,7 +27,8 @@
 //!
 //! WHICH CHANGE A UNIT NAMES (D6 step 2): a crate's (each crate's of a several-crate unit) every change whose delta has a path under its directory (`dir/`, the slash kept,
 //! so `rust/gate` is no prefix of `rust/gate2`; a crate's dependents are NOT counted - a change to `core` that reddens `lane`'s tests is
-//! unplaced, the literal reading of "a crate by its directory", which the halving then places); a suite's, by its own file - the
+//! unplaced, the literal reading of "a crate by its directory", which the halving then places); a file's, every change whose delta
+//! holds that path; a suite's, by its own file - the
 //! guard's script of that name anywhere, `tests/hooks/test-<stem>.sh` and its shards - and its guard's sources
 //! (`rust/guard/src/guards/<snake>*` and the shared crate's `rust/guard/shared/src/guards/<snake>*`, the stem's dashes as
 //! underscores); a row's, by a path of the delta the row's text names, or by the tasks the row opens with (`T13, T14: ...`, the first
@@ -44,6 +50,10 @@ use serde_json::Value;
 pub const STEPS: [&str; 5] = ["test", "lint", "cover-build", "cover-run", "build"];
 /// `make hooks-test`'s line for a red suite (the Makefile's `hooks-test` recipe).
 const SUITE: &str = "HOOK TESTS FAILED: ";
+/// The cover step's line for a file with lines no test reaches (`rustc.rs`'s `cover_ran`): `<path> - lines no test reaches: <lines>`.
+const UNREACHED: &str = " - lines no test reaches: ";
+/// A file unit's step, as data-model.md's `<dir> <step>` form writes it.
+const COVER_RUN: &str = "cover-run";
 /// `make land`'s first pass, refused before anything ran: its rows follow, [`ROW_INDENT`] in, and a row's own further lines deeper
 /// still (`land.rs`'s `rows`, 461 T76).
 const ROWS: &str = "Every refusal:";
@@ -66,6 +76,8 @@ pub struct Red {
 enum Kind {
     /// The crates' directories one Phase line names, from the tree's root.
     Crates(Vec<String>),
+    /// A file the cover step names, from the tree's root (461 T86).
+    File(String),
     /// A guard's file name.
     Suite(String),
     /// A first-pass row, whole.
@@ -110,6 +122,7 @@ fn canon(p: &Path) -> std::path::PathBuf {
 /// `tree`, and its red suites and first-pass rows in `output`; each unit once, in the order read.
 #[must_use]
 pub fn reds(events: &[Value], span: (&str, &str), tree: &Path, output: &str) -> Vec<Red> {
+    let roots = [tree.to_path_buf(), canon(tree)];
     let tree = canon(tree);
     let mut out: Vec<Red> = Vec::new();
     let mut add = |r: Red| {
@@ -165,6 +178,13 @@ pub fn reds(events: &[Value], span: (&str, &str), tree: &Path, output: &str) -> 
         kind: Kind::Row(text),
     };
     for line in text.lines() {
+        if let Some((path, _)) = line.split_once(UNREACHED) {
+            let file = under(path.trim(), &roots);
+            add(Red {
+                unit: format!("{file} {COVER_RUN}"),
+                kind: Kind::File(file),
+            });
+        }
         if let Some(job) = line.split_once(SUITE).map(|(_, j)| j) {
             let guard = suite_of(job.split_whitespace().next().unwrap_or_default());
             add(Red {
@@ -201,6 +221,14 @@ pub fn reds(events: &[Value], span: (&str, &str), tree: &Path, output: &str) -> 
     out
 }
 
+/// `path` from the tree's root where one of `roots` holds it, else whole.
+fn under(path: &str, roots: &[std::path::PathBuf]) -> String {
+    roots
+        .iter()
+        .find_map(|r| Path::new(path).strip_prefix(r).ok())
+        .map_or_else(|| path.to_owned(), |p| p.to_string_lossy().into_owned())
+}
+
 /// A suite job's guard file: a shard's `.<k>` and D6's `test-` spelling taken off.
 fn suite_of(job: &str) -> String {
     let job = job.strip_prefix("test-").unwrap_or(job);
@@ -219,6 +247,7 @@ fn touches(red: &Red, change: &Change) -> bool {
             let dir = format!("{d}/");
             change.files.iter().any(|f| f.starts_with(&dir))
         }),
+        Kind::File(file) => change.files.iter().any(|f| f == file),
         Kind::Suite(guard) => {
             let stem = guard.strip_suffix(".sh").unwrap_or(guard);
             let test = format!("tests/hooks/test-{stem}.");

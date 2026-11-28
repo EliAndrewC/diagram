@@ -320,3 +320,108 @@ fn a_row_s_continuation_lines_are_that_row_so_a_task_s_refusal_over_several_line
     assert_eq!(r.len(), 5);
     assert!(matches!(refusal(&r, &batch), Refusal::Unnamed(rows) if rows.len() == 4));
 }
+
+/// Batch 462-3's coverage red (461 T86; `l7r-lane/attempts/462-3-1.log`, 2026-11-28): the gate's lines no test reaches, verbatim,
+/// under the lane's tree. Both crates' `cover-run` Phase lines were `code` 0, so the record held no red unit and the batch of six
+/// was ejected unplaced; each file is touched by 462 T545/T555's change alone.
+const LANE: &str = "/diagram/.clones/diagram-backlog-land";
+const T545: &str = "rust-checks: cover FAILED on rust/gate/crates/plan
+/diagram/.clones/diagram-backlog-land/rust/gate/crates/plan/src/plan/split.rs - lines no test reaches: 88, 208
+/diagram/.clones/diagram-backlog-land/rust/gate/crates/plan/src/plan/split/tests.rs - lines no test reaches: 70, 99, 130, 196
+
+rust-checks: cover FAILED on rust/guard/shared
+\u{1b}[1m/diagram/.clones/diagram-backlog-land/rust/guard/shared/src/speckit/archive/report.rs - lines no test reaches: 127\u{1b}[0m
+/diagram/.clones/diagram-backlog-land/rust/guard/shared/src/speckit/archive/report/tests.rs - lines no test reaches: 62
+";
+
+fn batch_462_3() -> [Change; 6] {
+    [
+        change(
+            &[
+                "rust/gate/crates/plan/src/plan.rs",
+                "rust/gate/crates/plan/src/plan/history.rs",
+            ],
+            &["T543"],
+        ),
+        change(
+            &[
+                "rust/gate/crates/plan/src/plan.rs",
+                "rust/gate/crates/plan/src/plan/split.rs",
+                "rust/gate/crates/plan/src/plan/split/tests.rs",
+                "rust/guard/shared/src/speckit/archive/report.rs",
+                "rust/guard/shared/src/speckit/archive/report/tests.rs",
+            ],
+            &["T545", "T555"],
+        ),
+        change(
+            &["rust/gate/crates/rustc/src/rustc/cover.rs"],
+            &["T146", "T206"],
+        ),
+        change(
+            &["rust/gate/crates/bundle/src/record/bundle/depiction.rs"],
+            &["T107", "T173"],
+        ),
+        change(&["rust/guard/shared/src/checks/planhold.rs"], &["T120"]),
+        change(
+            &["rust/gate/crates/measure/src/measure/task_time.rs"],
+            &["T544"],
+        ),
+    ]
+}
+
+#[test]
+fn a_line_no_test_reaches_names_the_change_that_touches_its_file() {
+    let (start, end) = ("2026-11-28T03:01:00.000Z", "2026-11-28T03:02:00.000Z");
+    let events = [
+        phase("cover-run", 0, start, end, LANE, &["rust/gate/crates/plan"]),
+        phase("cover-run", 0, start, end, LANE, &["rust/guard/shared"]),
+    ];
+    let read = reds(&events, SPAN, Path::new(LANE), T545);
+    let shown: Vec<&str> = read.iter().map(|u| u.unit.as_str()).collect();
+    let files = [
+        "rust/gate/crates/plan/src/plan/split.rs cover-run",
+        "rust/gate/crates/plan/src/plan/split/tests.rs cover-run",
+        "rust/guard/shared/src/speckit/archive/report.rs cover-run",
+        "rust/guard/shared/src/speckit/archive/report/tests.rs cover-run",
+    ];
+    assert_eq!(shown, files);
+    assert_eq!(
+        attribute(&read, &batch_462_3()),
+        Verdict::Placed(vec![(1, files.iter().map(|f| (*f).to_owned()).collect())])
+    );
+    // a file no change touches, or one two changes touch, is unplaced: the halving's (461 T24)
+    let mut two = batch_462_3();
+    two[0]
+        .files
+        .push("rust/gate/crates/plan/src/plan/split.rs".to_owned());
+    assert_eq!(attribute(&read, &two), Verdict::Unplaced);
+    let none = &batch_462_3()[2..];
+    assert_eq!(attribute(&read, none), Verdict::Unplaced);
+    // beside another red unit, each is placed on its own change
+    let lint = [phase(
+        "lint",
+        1,
+        start,
+        end,
+        LANE,
+        &["rust/gate/crates/rustc"],
+    )];
+    let mut both = reds(&lint, SPAN, Path::new(LANE), T545);
+    assert_eq!(both.len(), 5);
+    let verdict = attribute(&both, &batch_462_3());
+    assert!(
+        matches!(&verdict, Verdict::Placed(p) if p.iter().map(|(i, _)| *i).collect::<Vec<_>>() == [1, 2])
+    );
+    // a path outside the tree is kept whole, and names a change only by that whole path
+    both = reds(
+        &[],
+        SPAN,
+        Path::new("/lane"),
+        "/elsewhere/x.rs - lines no test reaches: 3\n",
+    );
+    assert_eq!(both[0].unit, "/elsewhere/x.rs cover-run");
+    assert_eq!(
+        attribute(&both, &[change(&["x.rs"], &["T01"])]),
+        Verdict::Unplaced
+    );
+}
