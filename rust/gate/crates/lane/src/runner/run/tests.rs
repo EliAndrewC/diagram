@@ -23,7 +23,8 @@ const PHASE: &str = r#"{"ev":"Phase","src":"rust","step":"test","t0":"@T@","t1":
 
 /// A task's `phase-<task>` file in the common directory: its line written to the feature's event log as the checks write theirs,
 /// stamped now and in the tree the landing runs in, and the landing red; a `kill` file: `make` itself killed, so no exit code; a
-/// `refuse` file: the first pass's refusal, its text printed and the landing red (with `refuse-once`, at the first attempt alone).
+/// `refuse` file: the first pass's refusal, its text printed and the landing red (with `refuse-once`, at the first attempt alone); a
+/// `refuse-<task>` file: that refusal wherever the set holds the task.
 const RED_LINES: &str = concat!(
     "\t",
     r#"@c=$$(git rev-parse --path-format=absolute --git-common-dir); fail=; for t in $(T); do if [ -f "$$c/phase-$$t" ]; then mkdir -p "$$c/l7r-events"; now=$$(date -u +%Y-%m-%dT%H:%M:%S.%N | cut -c1-23)Z; sed "s|@TREE@|$$(pwd)|; s|@T@|$$now|g" "$$c/phase-$$t" >> "$$c/l7r-events/$$SPECIFY_FEATURE.jsonl"; fail=1; fi; done; [ -z "$$fail" ]"#,
@@ -31,6 +32,8 @@ const RED_LINES: &str = concat!(
     r#"@if [ -f "$$(git rev-parse --git-common-dir)/kill" ]; then kill -9 $$PPID; fi"#,
     "\n\t",
     r#"@c=$$(git rev-parse --git-common-dir); if [ -f "$$c/refuse" ]; then cat "$$c/refuse"; if [ -f "$$c/refuse-once" ]; then rm "$$c/refuse" "$$c/refuse-once"; fi; exit 1; fi"#,
+    "\n\t",
+    r#"@c=$$(git rev-parse --git-common-dir); for t in $(T); do if [ -f "$$c/refuse-$$t" ]; then cat "$$c/refuse-$$t"; exit 1; fi; done"#,
     "\n"
 );
 
@@ -89,7 +92,7 @@ fn world(tag: &str) -> World {
     put(
         &clone,
         "specs/461-x/tasks.md",
-        "- [ ] T01 one\n- [ ] T02 two\n- [ ] T03 three\n",
+        "- [ ] T01 one\n- [ ] T02 two\n- [ ] T03 three\n- [ ] T04 four\n- [ ] T05 five\n- [ ] T06 six\n- [ ] T07 seven\n",
     );
     git(&clone, &["add", "-A"]);
     git(&clone, &["commit", "-qm", "the world"]);
@@ -313,9 +316,11 @@ fn a_red_the_record_places_ejects_its_change_as_a_repair_entry_and_the_other_lan
     assert_eq!(step(&l), Ok(false));
 }
 
+/// A red the record cannot place is halved (461 T24, D6 step 3), not ejected whole as phase 2 did: here every landing is red, so each
+/// change is ejected `red` after its own one-change red run, one repair entry each, and forms no batch again.
 #[test]
-fn a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_forms_no_batch_again(
-) {
+fn a_red_the_record_cannot_place_is_halved_and_each_change_red_alone_is_ejected_after_its_own_run()
+{
     let w = world("lane-run-unplaced");
     let one = w.hand_in("461", "T01", "a.txt", "a\n");
     let two = w.hand_in("461", "T02", "b.txt", "b\n");
@@ -329,7 +334,12 @@ fn a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_
             "carry",
             "run",
             "attribute",
+            "carry",
+            "run",
             "eject",
+            "owed",
+            "carry",
+            "run",
             "eject",
             "owed",
             "landed",
@@ -337,31 +347,34 @@ fn a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_
         ]
     );
     let lines = w.lane();
-    let attempt = lines[2]["attempt"].as_str().unwrap().to_owned();
     assert_eq!(lines[2]["red"], json!([]));
     assert_eq!(lines[3]["candidates"], json!([one, two]));
     assert_eq!(lines[3]["how"], "none");
-    for (line, sha) in [(&lines[4], &one), (&lines[5], &two)] {
+    assert_eq!(lines[5]["set"], json!([&one[..10]]));
+    assert_eq!(lines[9]["set"], json!([&two[..10]]));
+    for (line, sha, r) in [(&lines[6], &one, "r1"), (&lines[10], &two, "r2")] {
         assert_eq!(line["change"], json!(sha));
-        assert_eq!(line["repair"], "r1");
-        assert_eq!(line["why"], "unplaced");
+        assert_eq!(line["repair"], r);
+        assert_eq!(line["why"], "red");
     }
+    let attempt = lines[5]["attempt"].as_str().unwrap().to_owned();
+    assert!(attempt.ends_with("461-1-2.log"));
     assert_eq!(
-        lines[6]["line"],
-        format!("lane: batch 461-1 red at attempt 1 - 461 T01 T02 ejected as repair r1 (unplaced: the record names none) - make builder-next hands it to a fresh builder: {attempt}")
+        lines[7]["line"],
+        format!("lane: batch 461-1 red at attempt 2 - 461 T01 ejected as repair r1 (red: the record names none) - make builder-next hands it to a fresh builder: {attempt}")
     );
-    assert_eq!(lines[7]["landed"], json!([]));
-    assert_eq!(lines[7]["ejected"], json!([one, two]));
+    assert_eq!(lines[12]["landed"], json!([]));
+    assert_eq!(lines[12]["ejected"], json!([one, two]));
     assert_eq!(
-        lines[8]["line"],
-        "lane: batch 461-1 ended - nothing landed, 2 ejected (1 run(s), 0 minutes)"
+        lines[13]["line"],
+        "lane: batch 461-1 ended - nothing landed, 2 ejected (3 run(s), 0 minutes)"
     );
     let entries = repairs::read(&w.common);
-    assert_eq!(entries.len(), 1);
-    assert_eq!(entries[0]["ejected"], json!([one, two]));
-    assert_eq!(entries[0]["tasks"], json!(["T01", "T02"]));
-    assert_eq!(entries[0]["why"], "unplaced");
-    assert_eq!(entries[0]["units"], json!([]));
+    assert_eq!(entries.len(), 2);
+    assert_eq!(entries[0]["ejected"], json!([one]));
+    assert_eq!(entries[1]["tasks"], json!(["T02"]));
+    assert_eq!(entries[1]["why"], "red");
+    assert_eq!(entries[1]["units"], json!([]));
     assert_eq!(w.refs(), "refs/l7r/done/461-T01\nrefs/l7r/done/461-T02");
     // no batch is formed again from the same hand-ins, red or not
     std::fs::remove_file(w.common.join("red")).unwrap();
@@ -528,30 +541,32 @@ fn a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ej
 
 /// 461 T15's plan review, round 2: a first-pass row naming two changes of the batch ejects those two as one entry and the rest runs
 /// again; a row naming one beside a row naming none stops the batch, nothing ejected.
+/// A first-pass row naming two changes is halved as a red the record cannot place (461 T24's plan review): each named change refused
+/// wherever it runs is ejected `red` after its own one-change run, and the innocent one lands - not ejected beside them as T15 did.
 #[test]
-fn a_first_pass_row_naming_two_changes_ejects_both_and_the_rest_lands() {
+fn a_first_pass_row_naming_two_changes_is_halved_each_ejected_alone_and_the_rest_lands() {
     let refusal = "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  @ROW@\n";
     let w = world("lane-run-refused-two");
     let one = w.hand_in("461", "T01", "a.txt", "a\n");
     let two = w.hand_in("461", "T02", "b.txt", "b\n");
     let three = w.hand_in("461", "T03", "c.txt", "c\n");
     let row = refusal.replace("@ROW@", "T01, T02: owe their claims round");
-    std::fs::write(w.common.join("refuse"), &row).unwrap();
-    // the refusal is the first attempt's alone: the stand-in's own rule drops it once a run reads it
-    std::fs::write(w.common.join("refuse-once"), "").unwrap();
+    for t in ["T01", "T02"] {
+        std::fs::write(w.common.join(format!("refuse-{t}")), &row).unwrap();
+    }
     let l = lane_of(&w);
     assert_eq!(step(&l), Ok(true));
     let lines = w.lane();
-    let ejected: Vec<&Value> = lines
+    let ejected: Vec<(&Value, &Value)> = lines
         .iter()
         .filter(|x| x["event"] == "eject")
-        .map(|x| &x["change"])
+        .map(|x| (&x["change"], &x["why"]))
         .collect();
-    assert_eq!(ejected, [&json!(one), &json!(two)]);
-    let entries = repairs::read(&w.common);
-    assert_eq!(entries.len(), 1);
-    assert_eq!(entries[0]["ejected"], json!([one, two]));
-    assert_eq!(entries[0]["why"], "unplaced");
+    assert_eq!(
+        ejected,
+        [(&json!(one), &json!("red")), (&json!(two), &json!("red"))]
+    );
+    assert_eq!(repairs::read(&w.common).len(), 2);
     let end = lines.iter().rev().find(|x| x["event"] == "landed").unwrap();
     assert_eq!(end["landed"], json!([three]));
 
@@ -883,4 +898,5 @@ fn a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_n
         .ends_with("461-1-2.log"));
 }
 
+mod halving;
 mod tripwire;

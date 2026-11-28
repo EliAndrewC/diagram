@@ -19,17 +19,18 @@
 //!
 //! WHICH CHANGE A UNIT NAMES (D6 step 2): a crate's (each crate's of a several-crate unit) every change whose delta has a path under its directory (`dir/`, the slash kept,
 //! so `rust/gate` is no prefix of `rust/gate2`; a crate's dependents are NOT counted - a change to `core` that reddens `lane`'s tests is
-//! unplaced, the literal reading of "a crate by its directory", which phase 3's halving then places); a suite's, by its own file - the
+//! unplaced, the literal reading of "a crate by its directory", which the halving then places); a suite's, by its own file - the
 //! guard's script of that name anywhere, `tests/hooks/test-<stem>.sh` and its shards - and its guard's sources
 //! (`rust/guard/src/guards/<snake>*` and the shared crate's `rust/guard/shared/src/guards/<snake>*`, the stem's dashes as
 //! underscores); a row's, by a path of the delta the row's text names, or by the tasks the row opens with (`T13, T14: ...`, the first
 //! pass's own form for a task's refusal).
 //!
-//! THE VERDICT IN PHASE 2 ([`attribute`]): every red unit names exactly one change - those changes are placed, each with its units,
-//! and ejected (`why` `red`); anything else - no unit read (a red the record does not hold), a unit no change touches, or a unit
-//! several changes touch - is UNPLACED, and the whole batch is ejected as one repair entry (`why` `unplaced`). Several candidates are
-//! read as unplaced where D6 would halve over them: the halving is phase 3's (T24, which replaces this one function); label: the
-//! algorithmically easier route, the plan silent on several candidates before phase 3.
+//! THE VERDICT ([`attribute`]): every red unit names exactly one change - those changes are placed, each with its units, and ejected
+//! (`why` `red`); anything else - no unit read (a red the record does not hold), a unit no change touches, or a unit several changes
+//! touch - is UNPLACED, and since 461 T24 the runner halves over every change that ran (`crate::halve`). Several candidates are read
+//! as unplaced, so the halving runs over the whole set where D6 step 2 would run it over the candidates alone, the others riding:
+//! label: the algorithmically easier route (a lone candidate run red beside riders is no one-change run, so the pin rule would need a
+//! reading of its own), correct and at most a run or so slower; the narrowing is filed as 461 T78.
 
 use std::fmt::Write as _;
 use std::path::Path;
@@ -260,7 +261,7 @@ pub fn refusal(reds: &[Red], changes: &[Change]) -> Refusal {
     )
 }
 
-/// The phase-2 verdict on `reds` over `changes` (the module's doc).
+/// The verdict on `reds` over `changes` (the module's doc).
 #[must_use]
 pub fn attribute(reds: &[Red], changes: &[Change]) -> Verdict {
     let mut placed: Vec<(usize, Vec<String>)> = Vec::new();

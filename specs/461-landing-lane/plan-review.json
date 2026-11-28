@@ -900,6 +900,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)": {
+   "sha256": "169e70f6b4c33a3e1844ac65313ba4615f762305ace12c16d5350c8acf1ad031",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "6bd9d51a7380991a3b79fcd34be1c815f3f0257b4182a38aa0547ada875f2111",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5605,6 +5617,203 @@
      "why": "The stub held only template placeholders and an empty table - no decision, requirement or measurement. T63's filled section ('### T63 (461 T21's found-and-left ...)') and its '### T63 Approach (checklist part A)' are in plan.md (make plan-section F=461 T=T63, lines 1179 and 1225) and both are recorded CLEAR, spec-fidelity, 2026-11-28, in plan-review.json; neither is in this bundle, so neither changed since. Removing a duplicate empty heading drops nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "The first half of a set is its first len/2 changes",
+     "class": "within",
+     "why": "D6's table, literal: n = 6 with C bad runs [A B C] first, and [A], [B] in turn."
+    },
+    {
+     "id": "2",
+     "summary": "A second half whose first half ran green inside a red parent is red without a run and is halved in turn; after a red first half the second half is untested and runs",
+     "class": "within",
+     "why": "D6 step 3 ('the one left is ejected without a run of its own') and its table (n = 4, B bad: [A B] red, [A] green, B ejected unrun). Sound: the first half is on main, so the second half on that main is the red parent."
+    },
+    {
+     "id": "3",
+     "summary": "Untested sets standing together at the front run as one set",
+     "class": "within",
+     "why": "D6 step 2's 'it is ejected and the rest runs again', and the table's n = 4 C-bad row ([C] red, C ejected, [D] green). Needed to hold US4's bound, which halve::tests checks for every single bad change of n = 1 to 8."
+    },
+    {
+     "id": "4",
+     "summary": "The inferred single is ejected only after everything else has landed or been ejected, why inferred; when there are two bad changes, both singles are ejected inferred in hand-in order",
+     "class": "within",
+     "why": "D6 step 3 and step 4's 'left last after a halving (inferred)'. The two-singles case is outside the spec's one-bad-change table. Both inferences are sound, and both changes still go to repair."
+    },
+    {
+     "id": "5",
+     "summary": "A one-change batch whose red the record cannot place is ejected red with no further run",
+     "class": "within",
+     "why": "D6 step 4: ejected after its own one-change red run is 'red'. The batch's first run was that run, and it is pinned once, as the spec's rule pins it."
+    },
+    {
+     "id": "6",
+     "summary": "The halving runs over every change that ran, not over D6 step 2's candidates only; the narrowing to candidates is filed as T78, to land before T27",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not on the 'easier route' ground, which would not stand. The spec cannot be built literally as written: D6 step 4's pin rule has no case for a lone candidate run red beside riders, because that is not a one-change run and not 'left last'. Building step 2 literally means writing a pin rule the spec does not have, without review. The outcome the GM asked for ('bisects and ejects the failing change. The rest of the batch lands') is fully met, and so is US4's ceil(log2 n) + 1 bound, which is over n. No wrong outcome is left, only a run or so more. The deferral is filed with an order (T78 before T27). Legitimate only on that dependency: T78 must carry it."
+    },
+    {
+     "id": "7a",
+     "summary": "A first-pass refusal whose rows name SEVERAL changes is left as T15 Decision 6 had it: those changes are ejected as ONE unplaced entry, with no halving, and the rest run again",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D6 step 2 names a red first-pass row as a red unit and sends 'Several' candidates to the halving, and D6's By-phase says phase 3 brings the halving. The GM's words are 'bisects and ejects the failing change. The rest of the batch lands'. Ejecting every named change unhalved ejects innocents. That is the wrong outcome this block's own item 12 names as the defect T24 fixes ('good changes waited on repairs they did not need'). None of the three grounds holds. It is not impossible: Decision 6's halving over every change needs no rider pin rule and would serve here, and a halved set's run includes the first pass. The GM's words do not imply it, and the literal rule does not defeat the purpose. 'The ruled behavior kept' is on the does-not-count list: T15's ruling was for phase 2, before any halving existed. The bundle holds no text of T15 Decision 6 and rulings.md is empty, so no reason specific to first-pass refusals is on the record. The fix: send a first-pass refusal naming several changes into the halving (over every change, as Decision 6 does, the candidates-only narrowing joining T78), or state what is impossible about halving it. The case is also absent from 'Found and left?'."
+    },
+    {
+     "id": "7b",
+     "summary": "A first-pass refusal whose rows name ONE change ejects that change and runs the rest",
+     "class": "within",
+     "why": "D6 step 2's one-candidate path, literal."
+    },
+    {
+     "id": "7c",
+     "summary": "(unlabeled) A first-pass refusal whose rows name NO change of the batch: the Approach starts the halving only on 'Verdict::Unplaced, no first-pass refusal row', so this case is excluded from the halving and its route is not stated",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D6 step 2: 'None (a red the record does not place ...): the halving runs over the batch.' A refusal row that maps to no batch change places nothing. As written, the block's condition keeps it out of the halving and names no other route, so it falls to phase 2's whole-batch ejection or to nothing, and the block does not say which. No ground is given. The fix: state that a refusal whose rows name no batch change is halved over the batch, as Unplaced is."
+    },
+    {
+     "id": "8",
+     "summary": "LANE_RETRY (0) is handed into the halving, and tested at 1 and at 0",
+     "class": "within",
+     "why": "D6 step 5: no retry, a GUESS knob. The default stays 0, and a flake costs one halving step and an innocent's inferred ejection, the cost D6 step 5 accepts."
+    },
+    {
+     "id": "9",
+     "summary": "A halving's green set whose push fails runs again once; a second failure is an integrate entry over that set (T19); changes not yet run stay waiting for the next batch, with no pin",
+     "class": "within",
+     "why": "D6 step 3 pushes each green half at once, and the spec leaves the push-failure route to T19. A push failure is not a red, so pinning nothing is consistent with D6 step 4. The waiting changes are neither ejected nor pushed ungated (FR-008); they land in a later batch."
+    },
+    {
+     "id": "10",
+     "summary": "A runner killed mid-halving resumes what is left as one attempt, so the halving starts again from that red",
+     "class": "within",
+     "why": "Crash recovery the spec leaves open. The outcome is correct at the cost of runs, and the halving's red runs pin nobody (D6 step 4), so the restart adds no pin."
+    },
+    {
+     "id": "11",
+     "summary": "No attribute line inside a halving: each set's run line names its red units, and the ejections are their own repair entries",
+     "class": "within",
+     "why": "Data-model detail. The attribute row is the first red's, and nothing the GM or the spec asked for is lost."
+    },
+    {
+     "id": "12",
+     "summary": "(unlabeled) A red inside the halving is recorded and not read again by attribution; the halving continues",
+     "class": "within",
+     "why": "D6 step 3: 'A red half is halved again.'"
+    }
+   ],
+   "tasks": [
+    "T24"
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "a pure halve.rs answers the next set; run_batch keeps one loop over carry/land/push; an unplaced first red writes its attribute line (how none) and starts the halving; ejection code moved to runner/run/eject.rs because run.rs reached 1,001 lines",
+     "class": "within",
+     "why": "structure only; the behavior is D6 step 2's 'None' case followed by step 3's halving, which is FR-004's 'else bisect' and the GM's 'it bisects and ejects the failing change. The rest of the batch lands'."
+    },
+    {
+     "id": "1",
+     "summary": "the first half is the first len/2 of a set",
+     "class": "within",
+     "why": "D6's table read literally ([A B C] runs [A] then [B]); a bisection's split point is not something the request or spec fixes."
+    },
+    {
+     "id": "2",
+     "summary": "a second half whose first half ran green inside a red parent is red without a run; one whose first half ran red is untested and runs",
+     "class": "within",
+     "why": "D6's table literally (n=4 bad B: B ejected after [A] green with no run of its own); the inference is sound because the parent's red ran on the same main the green half landed on."
+    },
+    {
+     "id": "3",
+     "summary": "untested sets standing together at the front run as one set",
+     "class": "within",
+     "why": "D6 step 2's 'the rest runs again'; it is what keeps US4's ceil(log2 n)+1 bound, held by the pure test over every single bad change of n=1 to 8."
+    },
+    {
+     "id": "4",
+     "summary": "an inferred single is ejected only once everything else has landed or been ejected; two inferred singles are each ejected inferred, in hand-in order, at the end",
+     "class": "within",
+     "why": "D6 step 3's 'the one left'; with two bad changes each single's inference rests on its own red parent whose green sibling landed, so each is pinned by its own run and no innocent change is ejected. FR-004 ejects the failing change(s); nothing asked is narrowed."
+    },
+    {
+     "id": "5",
+     "summary": "a one-change batch red the record cannot place is ejected red with no further run",
+     "class": "within",
+     "why": "its first run was its own one-change run; data-model's pin rule; bisection of one has nothing left to split."
+    },
+    {
+     "id": "6",
+     "summary": "the halving runs over every change that ran, not over D6 step 2's several candidates only; the candidate narrowing is filed as T78, to land before T27",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows how far US4/FR-004's 'first by the gate's own report' (as D6 quotes it) is used when a red unit names several changes. Ground: applying D6 step 2 literally now would run a candidate beside riders, a run D6 step 4's pin rule does not cover (it is no one-change run), so the tripwire's pins - what keeps repeated reds on the same work from escaping the lane - would be undefined; literal application would defeat that rule's purpose. Against the request's purpose nothing is lost: the halving over every change still ejects only the bad change and lands the rest, within US4's bound for the batch's n (the pure test over every single bad change of n=1 to 8), so no wrong outcome is left. The block states T78 carries the narrowing and lands before T27; neither is in the bundle, so that ordering is the block's statement, not verified here."
+    },
+    {
+     "id": "7a",
+     "summary": "a first-pass row naming several changes is unplaced and halved over every change that ran; T15 Decision 6's single unplaced entry over the named changes is retired; the narrowing to the named changes joins T78",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The same departure as Decision 6 and legitimate on the same ground (the candidate path needs a rider pin rule D6 step 4 lacks). Retiring the whole-group entry moves toward the request: a named change refused wherever it runs is ejected red after its own one-change run and the innocent ones land, as the pinned test shows."
+    },
+    {
+     "id": "7b",
+     "summary": "a first-pass row naming one change of the batch is placed: that change is ejected red",
+     "class": "within",
+     "why": "D6 step 2's one-candidate path, literally."
+    },
+    {
+     "id": "7c",
+     "summary": "a first-pass row naming no change of the batch (a hold, a lock, an owed round of no task of it) stops the runner with the batch open, nothing ejected, resumed by the next lane-start once the hold clears - rather than D6 step 2's 'None: the halving runs over the batch'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real except-when against D6 step 2's None case, ruled on the block's stated reason (the T15 ruling it cites is not in the bundle). Purpose-level: such a refusal is no change's red, every half meets the same refusal, so halving would eject every change of the batch one by one - the opposite of 'ejects the failing change. The rest of the batch lands'. Applying the rule literally would defeat the request's purpose. It also cannot be routed around: FR-008 keeps the same checks, so while the hold stands no set can land by any route. Nothing is dropped: the batch stays open and resumes when the hold clears, and nothing pushes ungated."
+    },
+    {
+     "id": "8",
+     "summary": "LANE_RETRY (0) is handed into the halving; tested at 0 and 1",
+     "class": "within",
+     "why": "D6 step 5's GUESS knob, unchanged in value."
+    },
+    {
+     "id": "9",
+     "summary": "a halving green set whose push fails runs again once; a second failure is the batch's integrate entry over that set (T19), and changes not yet run stay waiting for the next batch",
+     "class": "within",
+     "why": "the existing push-failure path (T19) applied inside the halving; the unrun changes are neither ejected nor dropped, they land with the next batch; nothing pushes ungated (FR-008)."
+    },
+    {
+     "id": "10",
+     "summary": "a runner killed mid-halving resumes what is left as one attempt and the halving starts again from that red",
+     "class": "within",
+     "why": "crash recovery; every change still either lands gated or is ejected by the same rules, so FR-004 and FR-008 hold."
+    },
+    {
+     "id": "11",
+     "summary": "no attribute line inside a halving: each set's run line names its red units, the halving's ejections are their own repair entries",
+     "class": "within",
+     "why": "log shape only; data-model's attribute row is the first red's."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6558,6 +6767,101 @@
      "summary": "A section the clone archived and the builder changed still stops, and one the builder left alone is dropped, both as before; a section the builder removed now hands the clone's markers in it to the text before it.",
      "class": "within",
      "why": "The two arms kept as before are the existing section rule (451 T300, T419), each stop kept; a builder editing a finished, archived section is a real conflict and a judgment case, as the request provides. Handing a removed section's markers on is new and keeps the landing's archive record (FR-044's generated line) without dropping anything."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T24": {
+   "section_sha256": "8867d0e52f784ea3ef6a6d62b8bbb4593c32b16a58acc4581e4a430d52dce06b",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "a pure halve.rs answers the next set; run_batch keeps one loop over carry/land/push; an unplaced first red writes its attribute line (how none) and starts the halving; ejection code moved to runner/run/eject.rs because run.rs reached 1,001 lines",
+     "class": "within",
+     "why": "structure only; the behavior is D6 step 2's 'None' case followed by step 3's halving, which is FR-004's 'else bisect' and the GM's 'it bisects and ejects the failing change. The rest of the batch lands'."
+    },
+    {
+     "id": "1",
+     "summary": "the first half is the first len/2 of a set",
+     "class": "within",
+     "why": "D6's table read literally ([A B C] runs [A] then [B]); a bisection's split point is not something the request or spec fixes."
+    },
+    {
+     "id": "2",
+     "summary": "a second half whose first half ran green inside a red parent is red without a run; one whose first half ran red is untested and runs",
+     "class": "within",
+     "why": "D6's table literally (n=4 bad B: B ejected after [A] green with no run of its own); the inference is sound because the parent's red ran on the same main the green half landed on."
+    },
+    {
+     "id": "3",
+     "summary": "untested sets standing together at the front run as one set",
+     "class": "within",
+     "why": "D6 step 2's 'the rest runs again'; it is what keeps US4's ceil(log2 n)+1 bound, held by the pure test over every single bad change of n=1 to 8."
+    },
+    {
+     "id": "4",
+     "summary": "an inferred single is ejected only once everything else has landed or been ejected; two inferred singles are each ejected inferred, in hand-in order, at the end",
+     "class": "within",
+     "why": "D6 step 3's 'the one left'; with two bad changes each single's inference rests on its own red parent whose green sibling landed, so each is pinned by its own run and no innocent change is ejected. FR-004 ejects the failing change(s); nothing asked is narrowed."
+    },
+    {
+     "id": "5",
+     "summary": "a one-change batch red the record cannot place is ejected red with no further run",
+     "class": "within",
+     "why": "its first run was its own one-change run; data-model's pin rule; bisection of one has nothing left to split."
+    },
+    {
+     "id": "6",
+     "summary": "the halving runs over every change that ran, not over D6 step 2's several candidates only; the candidate narrowing is filed as T78, to land before T27",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows how far US4/FR-004's 'first by the gate's own report' (as D6 quotes it) is used when a red unit names several changes. Ground: applying D6 step 2 literally now would run a candidate beside riders, a run D6 step 4's pin rule does not cover (it is no one-change run), so the tripwire's pins - what keeps repeated reds on the same work from escaping the lane - would be undefined; literal application would defeat that rule's purpose. Against the request's purpose nothing is lost: the halving over every change still ejects only the bad change and lands the rest, within US4's bound for the batch's n (the pure test over every single bad change of n=1 to 8), so no wrong outcome is left. The block states T78 carries the narrowing and lands before T27; neither is in the bundle, so that ordering is the block's statement, not verified here."
+    },
+    {
+     "id": "7a",
+     "summary": "a first-pass row naming several changes is unplaced and halved over every change that ran; T15 Decision 6's single unplaced entry over the named changes is retired; the narrowing to the named changes joins T78",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The same departure as Decision 6 and legitimate on the same ground (the candidate path needs a rider pin rule D6 step 4 lacks). Retiring the whole-group entry moves toward the request: a named change refused wherever it runs is ejected red after its own one-change run and the innocent ones land, as the pinned test shows."
+    },
+    {
+     "id": "7b",
+     "summary": "a first-pass row naming one change of the batch is placed: that change is ejected red",
+     "class": "within",
+     "why": "D6 step 2's one-candidate path, literally."
+    },
+    {
+     "id": "7c",
+     "summary": "a first-pass row naming no change of the batch (a hold, a lock, an owed round of no task of it) stops the runner with the batch open, nothing ejected, resumed by the next lane-start once the hold clears - rather than D6 step 2's 'None: the halving runs over the batch'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real except-when against D6 step 2's None case, ruled on the block's stated reason (the T15 ruling it cites is not in the bundle). Purpose-level: such a refusal is no change's red, every half meets the same refusal, so halving would eject every change of the batch one by one - the opposite of 'ejects the failing change. The rest of the batch lands'. Applying the rule literally would defeat the request's purpose. It also cannot be routed around: FR-008 keeps the same checks, so while the hold stands no set can land by any route. Nothing is dropped: the batch stays open and resumes when the hold clears, and nothing pushes ungated."
+    },
+    {
+     "id": "8",
+     "summary": "LANE_RETRY (0) is handed into the halving; tested at 0 and 1",
+     "class": "within",
+     "why": "D6 step 5's GUESS knob, unchanged in value."
+    },
+    {
+     "id": "9",
+     "summary": "a halving green set whose push fails runs again once; a second failure is the batch's integrate entry over that set (T19), and changes not yet run stay waiting for the next batch",
+     "class": "within",
+     "why": "the existing push-failure path (T19) applied inside the halving; the unrun changes are neither ejected nor dropped, they land with the next batch; nothing pushes ungated (FR-008)."
+    },
+    {
+     "id": "10",
+     "summary": "a runner killed mid-halving resumes what is left as one attempt and the halving starts again from that red",
+     "class": "within",
+     "why": "crash recovery; every change still either lands gated or is ejected by the same rules, so FR-004 and FR-008 hold."
+    },
+    {
+     "id": "11",
+     "summary": "no attribute line inside a halving: each set's run line names its red units, the halving's ejections are their own repair entries",
+     "class": "within",
+     "why": "log shape only; data-model's attribute row is the first red's."
     }
    ],
    "verdict": "CLEAR"

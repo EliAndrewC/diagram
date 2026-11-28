@@ -749,32 +749,47 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T24 (<why: the finding or measurement that files it>)
+### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/halve.rs` (new, pure, over the changes' indices) answers which set a red batch runs next and what each result means; `runner/run.rs`'s `run_batch` keeps ONE loop - a `Run` (the changes left, those landed, the halving under way) whose `next_set` asks the halving (its ejections made on the way, through `file_groups`, the tripwire's check included) or else takes every change left, each set then carried, gated and pushed by the existing `carry`, `land`, `Pushed` and `PushFailed` arms. A first red the record cannot place (`Verdict::Unplaced`: no unit read, a unit naming no change, or a unit - a Phase line or a first-pass row - naming several) writes its `attribute` line (`how` `none`, every change that ran) and starts the halving; a red inside the halving is recorded, not read again. The ejection code (`integrate`, `eject`, `file_groups`, `trip`) moved to `runner/run/eject.rs`: `run.rs` reached 1,001 lines, measured 2026-11-27 (`wc -l`, the file-scale bar's check). Measured 2026-11-27: red first, `make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::halving runner::run::tests::a_red_the_record_cannot_place"` on the old code: 0 passed, 4 failed (each batch ejected whole as `unplaced` after one run: `["T01 T02 T03 T04"]`); after, the crate 99 of 99 and `make builder-checks CRATE="rust/gate/crates/lane"` clean. The runs counted by the end-to-end tests (after the batch's first red run, against ceil(log2 n) + 1): n = 4, bad B: 3 ([A B] red, [A], [C D]; B `inferred`); bad D: 2; bad C: 3 (C `red`, [D]); n = 6, bad C: 4 ([A B C] red, [A], [B], [D E F]; C `inferred`); bad F: 3 - D6's table row by row. The pure test drives every single bad change of n = 1 to 8 within the bound.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The first half is the first `len / 2`** of a set (`[A B C]` runs `[A]`, then `[B]`). Label: D6's table, literal (its 4-run row for n = 6, bad C).
+2. **A second half whose first half ran green inside a red parent is red without a run** and is halved in turn; one whose first half ran red is untested and runs. Label: D6's table, literal.
+3. **The rest runs as one**: untested sets standing together at the front run as one set (after a `red` ejection, the ejected change's untested sibling and the untested other half). Label: D6 step 2's "it is ejected and the rest runs again"; WHY: without it n = 4 with A bad took 4 runs and n = 6 with B bad took 5, past US4's bound, observed 2026-11-27, method: the rules traced by hand without the merge (the bound held since by `halve::tests::every_single_bad_change_of_n_1_to_8_is_found_within_the_bound`).
+4. **The inferred single is ejected only once everything else has landed or been ejected** (`why` `inferred`, its repair's `attempt` the red run its inference rests on, so the tripwire's ask names that file). Two such singles (two bad changes; the plan says "the one left") are each ejected `inferred`, in hand-in order, at the end. Label: D6's "the one left after every other change landed green"; the two-singles case the easier route.
+5. **A one-change batch red the record cannot place is ejected `red` with no further run**: its first run was its own. Label: data-model.md's pin rule ("ejected after its own one-change red run is `red`").
+6. **The halving runs over every change that ran, not D6 step 2's candidates alone** (a red unit naming several changes is still `Unplaced`). Label: the algorithmically easier route, correct and at most a run or so slower; a lone candidate run red beside riders is no one-change run, so the narrowing needs a rider pin rule first. Not fixed here: the narrowing is a new rule needing its own pin reading. Filed as T78; lands before T27.
+7. **A first-pass refusal is read as any red unit** (round 1's objection 7a and 7c). A row naming several changes (`T13, T14: ...`) is `Unplaced` and HALVED over every change that ran, as Decision 6 halves - each halved set's run takes the first pass again, so a named change refused wherever it runs is ejected `red` after its own one-change run and the innocent ones land; T15 Decision 6's one `unplaced` entry over the named changes (a phase-2 ruling, made before any halving) is retired, and the narrowing to the named changes joins T78. A row naming ONE change is placed (`red`), D6's one-candidate path. A row naming NO change of the batch (a hold, a lock, an owed round of no task of it) still stops the runner with the batch open, nothing ejected, as T15's plan review round 1 ruled: it is no change's fault, and a halving would meet the same refusal in every half and eject every change one by one, the innocent ejection that ruling refused; the next `make lane-start` resumes the batch once the hold clears. Label: D6 step 2 read literally for the first two, the T15 ruling kept for the third with its reason. Pinned by `runner::run::tests::a_first_pass_row_naming_two_changes_is_halved_each_ejected_alone_and_the_rest_lands` (T01 and T02 each refused wherever it runs: both ejected `red`, two entries, T03 landed, measured 2026-11-27 (`make builder-checks`, the crate 99 of 99)) and, unchanged, `a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ejects_its_change`.
+8. **`LANE_RETRY` = 0 is handed into the halving** (`Halving::new(.., retry)`): a red set runs again that many times before it is read red; tested at 1 (a flake then lands whole) and at 0 (the flake costs an innocent change's `inferred` ejection, the cost D6 step 5 accepts). Label: GUESS knob, D6 step 5.
+9. **A halving's green set whose push fails** runs again once (the halving asks the same set again, its result not recorded); a second failure is the batch's `integrate` entry over that set, as T19 ruled, and the changes the halving had not yet run stay unlanded and unejected - `waiting` for the next batch (`log::state`). Label: the easier route.
+10. **A runner killed mid-halving resumes what is left as one attempt** (`runner::remaining`), so the halving starts again from that red. Label: the easier route; no halving state is kept in the log.
+11. **No `attribute` line inside a halving**: each set's own `run` line names its red units; the halving's ejections are their own repair entries, `units` the red run's units. Label: the easier route; data-model.md's `attribute` row ("a red is read") is the first red's.
 
 ### T24 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A batch whose red the gate's record cannot place lands its good changes and ejects only the bad one, within ceil(log2 n) + 1 further runs, instead of ejecting the whole batch as 462-1 did.
+2. **The constraints.** D6 steps 3 to 5 and its table; US4; FR-004; FR-008 (nothing pushes ungated: every landed set was gated as it lands); T18's pin rules (a red half of two or more pins nobody); T19's push-failure path.
+3. **Where each comes from.** R: plan.md D6, data-model.md, tasks.md T24's line. O: the red-first counts and the run counts above.
+4. **Do they describe the world here?** The stand-in landing of the end-to-end tests is red exactly when its set holds the bad task, by a Phase line naming a crate no change touches (the record cannot place it), measured 2026-11-27 (`make rust-test`, the halving's end-to-end tests); a real batch's halving is the lane's use once it lands.
+5. **The order.** After T18 and T23; before T25, T26 and T29.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The lane crate 99 of 99, 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`); the red-first counts above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a red the record cannot place ejected every change of the batch (462-1's three), so good changes waited on repairs they did not need. The test `a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_forms_no_batch_again` pinned that phase-2 outcome and is rewritten as `a_red_the_record_cannot_place_is_halved_and_each_change_red_alone_is_ejected_after_its_own_run`.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- D6 step 2's narrowing to the candidates (Decisions 6 and 7): the halving runs over the whole set, at most a run or so more where a unit (a Phase line or a first-pass row) names several changes. Not fixed here: a new rule, its rider pin reading unwritten. Filed as T78; lands before T27.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T25 (<why: the finding or measurement that files it>)
 
@@ -1428,6 +1443,32 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 |---|---|---|---|---|
 
 ### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T78 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T78 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

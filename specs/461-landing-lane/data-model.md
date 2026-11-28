@@ -48,8 +48,9 @@ Its state, the first that holds:
 A batch takes its changes' shas when it forms (the `batch` line), so a later hand-in that moves a task's done ref changes no open
 batch. That later hand-in is `waiting` until the batch ends: carried on top if the batch landed the earlier commit (its earlier half
 already on main, the carry's empty hunks skipped), or superseding it if the batch ejected it, the earlier one's repair entry then
-read as closed (`superseded`). Phase 2 has no halving: a red the record cannot place ejects every change of the batch into ONE
-repair entry (`plan.md` D6, "By phase").
+read as closed (`superseded`). Phase 2 had no halving: a red the record cannot place ejected every change of the batch into ONE
+repair entry (`plan.md` D6, "By phase"); since 461 T24 it is halved (D6 step 3), each set its own `run` line, a green one its `push`
+line, and a change ejected `red` after its own one-change red run or `inferred` when left last.
 
 Its states: `forming` -> `carrying` -> `gating <n>` -> (`halving` -> `gating <n+1>` ...) -> `pushing` -> `landed`, or `stopped`
 (a US5 case: the arbiter owed - a task's second pinned red, `plan.md` D6 step 4 - or the runner killed). A green batch whose push

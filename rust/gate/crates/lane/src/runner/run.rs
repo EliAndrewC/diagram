@@ -26,11 +26,17 @@
 //! would file the attempt's lines where the attribution never reads them.
 //!
 //! A RED ATTEMPT (461 T15, D6 step 2 and "By phase", D7): its output and the gate's Phase lines of its span in the lane's tree are
-//! read by [`crate::attribute`]; the `run` line names the red units, an `attribute` line the candidates, and phase 2's ejection
-//! follows - each change the record places a repair entry of its own (`why` `red`), else the whole of what ran as ONE entry (`why`
-//! `unplaced`) - written to `l7r-lane/repairs.jsonl` ([`crate::repairs`]) before the change's `eject` line, one `owed` line an entry.
+//! read by [`crate::attribute`]; the `run` line names the red units, an `attribute` line the candidates, and the ejection follows -
+//! each change the record places a repair entry of its own (`why` `red`) - written to `l7r-lane/repairs.jsonl` ([`crate::repairs`]) before the change's `eject` line, one `owed` line an entry.
 //! The rest runs again as the next attempt on the tree brought to `origin/main` anew; a batch that ejects everything ends with a
 //! `landed` line that lands nothing. An ejected change's done ref is kept: its repair's hand-in supersedes it (D7, D14).
+//!
+//! A RED THE RECORD CANNOT PLACE IS HALVED (461 T24, D6 step 3; [`crate::halve`]), in place of phase 2's whole-batch ejection: its
+//! `attribute` line (`how` `none`) names every change that ran, and each set the halving names runs as an attempt of its own, its own
+//! `run` line; a green one pushes at once (its `push` line), a red one is halved again with no `attribute` line, and a change is
+//! ejected `red` after its own one-change red run or `inferred` when left last, each its own repair entry naming the attempt its red
+//! rests on. A runner killed mid-halving resumes what is left as one attempt (the easier route: the halving starts again from its
+//! red). A halving's set whose push fails twice is the batch's `integrate` entry (T19), its changes not yet run left `waiting`.
 //!
 //! A GREEN ATTEMPT WHOSE PUSH FAILED (461 T19; plan, Risks, "Two writers of main", D7's table): told by the landing's own line
 //! ([`PUSH_FAILED`]) in the attempt's output with the set not on `origin/main` once fetched; no attribution runs, and the `run` line
@@ -41,7 +47,7 @@
 //!
 //! THE SEAMS LEFT: a carry that stops ends the step with an error after its line, and a `make` that cannot start (exit -1, no
 //! change's fault) or a first pass that refused with a row naming no change of the batch (461 T15's plan review) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
-//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25), the halving that replaces the whole-batch ejection T24's.
+//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25).
 //!
 //! THE TRIPWIRE BY TASK (461 T18, `crate::tripwire`): an ejection that pins a task a second time files no repair - the change held by
 //! its `eject` line, the arbiter asked, the batch's `stop` line, the runner stopped ([`trip`]) - and each step first files the repair
@@ -57,8 +63,8 @@ use l7r_shared::guards::event_log_hooks::{log_path_in, now_stamp};
 use serde_json::{json, Value};
 
 use crate::attribute::{self, Change, Refusal, Verdict};
+use crate::halve::{self, Halving, Next};
 use crate::log::{self, Batch, HandIn, World};
-use crate::tripwire::{self, Trip};
 use crate::{batch, repairs};
 
 /// What `make` in the lane's tree never inherits from the runner's caller (the module's doc).
@@ -285,18 +291,23 @@ fn bring(l: &Lane, id: &str) -> Result<PathBuf, String> {
     Ok(tree)
 }
 
-/// The batch `id` of `changes` (one feature's) run on the lane's tree (the module's doc, steps 1-4): attempts until one pushes, each
-/// red attempt ejecting the changes its record places - or, unplaced, every change left - and the rest run again on the tree brought
-/// to `origin/main` anew. Every red attempt ejects one change at least, so the loop ends.
+/// The batch `id` of `changes` (one feature's) run on the lane's tree (the module's doc, steps 1-4): attempts until every change is
+/// landed or ejected - a red attempt the record places ejecting its changes and the rest run again on the tree brought to
+/// `origin/main` anew; one it cannot place halved ([`crate::halve`], 461 T24), each set its halving names run as an attempt of its
+/// own, a green one pushed at once. Every red ejects a change or narrows a halving, so the loop ends.
 fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
     let began = (l.now)();
-    let mut left: Vec<HandIn> = changes.to_vec();
-    let mut landed: Vec<String> = Vec::new();
+    let mut b = Run {
+        left: changes.to_vec(),
+        landed: Vec::new(),
+        halving: None,
+        tree: PathBuf::new(),
+    };
     let earlier = log::batches(&log::read(l.common))
         .into_iter()
         .rev()
-        .find(|b| b.id == id)
-        .map_or(Vec::new(), |b| b.lines);
+        .find(|x| x.id == id)
+        .map_or(Vec::new(), |x| x.lines);
     let mut runs = earlier.iter().filter(|x| x["event"] == "run").count();
     // a resumed batch's failed pushes count (461 T19): the batch runs again ONCE after a failed push, whichever runner ran it
     let mut push_failures = earlier
@@ -305,51 +316,129 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
         .count();
     // the batch's one `owed` line where an `integrate` repair ended it, in place of the landed line's
     let mut said: Option<String> = None;
-    loop {
+    while let Some(set) = b.next_set(l, id)? {
         let tree = bring(l, id)?;
-        let shas: Vec<String> = left.iter().map(|h| h.commit.clone()).collect();
+        b.tree.clone_from(&tree);
+        let shas: Vec<String> = set.iter().map(|h| h.commit.clone()).collect();
         let on_main = held_by(&tree, "HEAD", &shas);
-        landed.extend(shas.iter().filter(|s| on_main.contains(*s)).cloned());
-        let todo: Vec<&HandIn> = left
+        b.landed
+            .extend(shas.iter().filter(|s| on_main.contains(*s)).cloned());
+        b.left.retain(|h| !on_main.contains(&h.commit));
+        let todo: Vec<&HandIn> = set
             .iter()
             .filter(|h| !on_main.contains(&h.commit))
             .collect();
         let Some(first) = todo.first() else {
-            break;
+            continue;
         };
         carry(l, id, &tree, &todo)?;
         runs += 1;
         match land(l, id, &tree, &first.feature, &todo, runs, began)? {
-            Attempt::Pushed => {
-                landed.extend(todo.iter().map(|h| h.commit.clone()));
-                break;
-            }
+            Attempt::Pushed => b.pushed(&todo, runs),
             // THE PUSH FAILED AFTER A GREEN GATE (461 T19; plan, Risks, "Two writers of main"): the first time, the same set runs again
-            // on the tree brought to the new `origin/main`; the second, the set is one `integrate` repair and the batch ends
+            // on the tree brought to the new `origin/main` (a halving asks the same set again, its result not recorded); the second,
+            // the set is one `integrate` repair and the batch ends, a halving's changes not yet run left `waiting` for the next batch
             Attempt::PushFailed {
                 line,
                 attempt,
                 spec,
             } => {
                 push_failures += 1;
-                if push_failures < 2 {
-                    left = todo.into_iter().cloned().collect();
-                    continue;
+                if push_failures >= 2 {
+                    said = Some(integrate(l, id, &todo, &line, &attempt, &spec)?);
+                    break;
                 }
-                said = Some(integrate(l, id, &todo, &line, &attempt, &spec)?);
-                break;
             }
-            Attempt::Red(out) => {
-                let ejected = eject(l, id, &tree, &todo, &out)?;
-                let rest: Vec<HandIn> = todo
-                    .into_iter()
-                    .filter(|h| !ejected.contains(&h.commit))
-                    .cloned()
-                    .collect();
-                left = rest;
-            }
+            Attempt::Red(out) => b.red(l, id, &tree, &todo, out)?,
         }
     }
+    ended_batch(l, id, changes, &b.landed, said, runs, began)
+}
+
+/// A batch's run in progress: the changes neither landed nor ejected, those landed, and the halving under way.
+struct Run {
+    left: Vec<HandIn>,
+    landed: Vec<String>,
+    /// The halving, its changes (the indices it names) and each red attempt it read, by its number.
+    halving: Option<(Halving, Vec<HandIn>, Vec<Redden>)>,
+    /// The lane's tree as the last attempt left it, where a halving's ejection asks the round arbiter (461 T18).
+    tree: PathBuf,
+}
+
+impl Run {
+    /// The next set to run: the halving's (its ejections made on the way), else every change left; none once all are landed or
+    /// ejected.
+    fn next_set(&mut self, l: &Lane, id: &str) -> Result<Option<Vec<HandIn>>, String> {
+        while let Some((h, pool, reds)) = self.halving.as_mut() {
+            match h.advance() {
+                Next::Run(ix) => return Ok(Some(ix.iter().map(|&i| pool[i].clone()).collect())),
+                Next::Eject { change, why, at } => {
+                    let h = &pool[change];
+                    let red = reds.iter().find(|r| r.n == at).unwrap_or(&reds[0]);
+                    let group: Group = (vec![h], red.units.clone(), why.as_str());
+                    let out = file_groups(l, id, &self.tree, red, &[group])?;
+                    self.left.retain(|x| !out.contains(&x.commit));
+                }
+                Next::Done => self.halving = None,
+            }
+        }
+        Ok((!self.left.is_empty()).then(|| self.left.clone()))
+    }
+
+    /// A pushed set: landed, and a halving told it was green.
+    fn pushed(&mut self, todo: &[&HandIn], n: usize) {
+        self.landed.extend(todo.iter().map(|h| h.commit.clone()));
+        self.left
+            .retain(|h| !todo.iter().any(|t| t.commit == h.commit));
+        if let Some((h, _, _)) = self.halving.as_mut() {
+            h.record(true, n);
+        }
+    }
+
+    /// A red set: a halving told it (461 T24: a red half is halved again, its record not read again); else the record read -
+    /// placed changes ejected and the rest run again, a refusal's named changes ejected as one entry (461 T15), and a red it
+    /// cannot place halved over every change that ran.
+    fn red(
+        &mut self,
+        l: &Lane,
+        id: &str,
+        tree: &Path,
+        todo: &[&HandIn],
+        out: Redden,
+    ) -> Result<(), String> {
+        if let Some((h, _, reds)) = self.halving.as_mut() {
+            h.record(false, out.n);
+            reds.push(out);
+            return Ok(());
+        }
+        let Verdict::Placed(placed) = &out.verdict else {
+            let candidates: Vec<&str> = todo.iter().map(|h| h.commit.as_str()).collect();
+            l.append(
+                "attribute",
+                &json!({"batch": id, "candidates": candidates, "how": "none"}),
+            )?;
+            let pool: Vec<HandIn> = todo.iter().map(|&h| h.clone()).collect();
+            let halving = Halving::new((0..pool.len()).collect(), out.n, halve::LANE_RETRY);
+            self.halving = Some((halving, pool, vec![out]));
+            return Ok(());
+        };
+        let ejected = eject(l, id, tree, todo, &out, placed)?;
+        self.left.retain(|h| !ejected.contains(&h.commit));
+        Ok(())
+    }
+}
+
+/// The batch's end: each landed change's done ref deleted, the `landed` line and its one `owed` line (`said`, an `integrate`
+/// repair's, else the landed line's).
+fn ended_batch(
+    l: &Lane,
+    id: &str,
+    changes: &[HandIn],
+    landed: &[String],
+    said: Option<String>,
+    runs: usize,
+    began: f64,
+) -> Result<(), String> {
     for (name, sha) in done_refs(l.common) {
         if landed.contains(&sha) {
             let _ = git(l.common, &["update-ref", "-d", &name, &sha]);
@@ -470,8 +559,6 @@ struct Redden {
     attempt: String,
     units: Vec<String>,
     verdict: Verdict,
-    /// The changes an unplaced verdict ejects, by their indices: every change, or those a first-pass refusal names.
-    unplaced: Vec<usize>,
 }
 
 /// The landing's `NOTE=`: the subjects of `shas` in `tree`, and the batch `id`.
@@ -598,8 +685,9 @@ fn land(
         );
     };
     // A FIRST-PASS REFUSAL NAMING NO CHANGE EJECTS NOTHING (461 T15's plan review, round 1): a hold, a lock or an owed round is no
-    // change's fault and refuses their repairs again, so the runner stops with the batch open, as at exit -1; a refusal whose every
-    // row names one change of the batch ejects those changes as any placed red does
+    // change's fault and refuses their repairs again - and every half a halving ran, so halving it would eject every change one by
+    // one (461 T24) - so the runner stops with the batch open, as at exit -1; a refusal whose every row names one change of the batch
+    // ejects those changes as any placed red does, and one whose rows name several is halved as any red the record cannot place
     if let Refusal::Unnamed(rows) = &refused {
         return stopped(
             l,
@@ -607,18 +695,12 @@ fn land(
             format!("lane: batch {id}: make land's first pass refused at attempt {n}, a row naming no change of the batch ({}) - the runner stopped, the batch open, nothing ejected: {at}", rows.join("; ")),
         );
     }
-    // a refusal naming several changes ejects those it names as one entry, the rest run again (round 2); every change else
-    let unplaced = match refused {
-        Refusal::Named(named) => named,
-        Refusal::None | Refusal::Unnamed(_) => (0..todo.len()).collect(),
-    };
     Ok(Attempt::Red(Redden {
         n,
         spec,
         attempt: at,
         units,
         verdict,
-        unplaced,
     }))
 }
 
@@ -654,239 +736,10 @@ fn change_of(tree: &Path, h: &HandIn) -> Change {
     }
 }
 
-/// A GREEN SET WHOSE PUSH FAILED TWICE (461 T19, D7's table): every change of `todo` filed as ONE repair entry of kind `integrate`,
-/// `why` `push` - `tasks` every change's, `units` the landing's push line, `attempt` the second attempt's file, the push's output -
-/// before its `eject` lines (`repairs`' doc); the batch's one `owed` line, returned for the `landed` line to be followed by. Never
-/// `stopped`: the fresh builder's hand-in supersedes the set (D7), and the lane goes on with the next batch.
-fn integrate(
-    l: &Lane,
-    id: &str,
-    todo: &[&HandIn],
-    push: &str,
-    attempt: &str,
-    spec: &str,
-) -> Result<String, String> {
-    let tasks: Vec<String> = todo.iter().flat_map(|h| h.tasks.clone()).collect();
-    let entry = repairs::Entry {
-        feature: spec.to_owned(),
-        tasks: tasks.clone(),
-        kind: "integrate".to_owned(),
-        ejected: todo.iter().map(|h| h.commit.clone()).collect(),
-        batch: id.to_owned(),
-        why: "push".to_owned(),
-        units: vec![push.to_owned()],
-        attempt: attempt.to_owned(),
-    };
-    let r = repairs::file(l.common, &l7r_gate_core::record::repo::utc_now(), &entry)?;
-    for h in todo {
-        l.append(
-            "eject",
-            &json!({"batch": id, "change": h.commit, "repair": r, "why": "push"}),
-        )?;
-    }
-    let feature = todo.first().map_or("", |h| h.feature.as_str());
-    Ok(format!(
-        "lane: batch {id} green but its push failed twice - {feature} {} filed as repair {r} (integrate, push: {push}) - make builder-next hands it to a fresh builder: {attempt}",
-        tasks.join(" ")
-    ))
-}
-
-/// PHASE 2'S EJECTION (D6 "By phase", D7): the `attribute` line, then each placed change as a repair entry of its own (`why` `red`,
-/// its units), or, unplaced, every change of `todo` as ONE entry (`why` `unplaced`, every unit read) - each entry filed before its
-/// `eject` lines (`repairs`' doc), then one `owed` line an entry, naming it and the attempt file. The ejected commits, returned. A
-/// group a task of which this ejection pins a SECOND time (461 T18, `crate::tripwire`) files no repair: once every other group is
-/// filed, [`trip`] holds it for the round arbiter and stops the runner.
-fn eject(
-    l: &Lane,
-    id: &str,
-    tree: &Path,
-    todo: &[&HandIn],
-    red: &Redden,
-) -> Result<Vec<String>, String> {
-    let groups: Vec<Group> = match &red.verdict {
-        Verdict::Unplaced => vec![(
-            red.unplaced.iter().map(|&i| todo[i]).collect(),
-            red.units.clone(),
-            "unplaced",
-        )],
-        Verdict::Placed(placed) => placed
-            .iter()
-            .map(|(i, units)| (vec![todo[*i]], units.clone(), "red"))
-            .collect(),
-    };
-    let how = if red.verdict == Verdict::Unplaced {
-        "none"
-    } else {
-        "record"
-    };
-    let candidates: Vec<&str> = groups
-        .iter()
-        .flat_map(|(hs, _, _)| hs.iter().map(|h| h.commit.as_str()))
-        .collect();
-    l.append(
-        "attribute",
-        &json!({"batch": id, "candidates": candidates, "how": how}),
-    )?;
-    // each group's trips, read before any line of this ejection is written (the pins are other batches')
-    let (history, entries, hand_ins) = (
-        log::read(l.common),
-        repairs::read(l.common),
-        all_hand_ins(l.common),
-    );
-    let trips: Vec<Vec<Trip>> = groups
-        .iter()
-        .map(|(hs, _, _)| {
-            hs.iter()
-                .flat_map(|h| {
-                    tripwire::trips(&history, &entries, &hand_ins, &h.feature, &h.tasks, id)
-                })
-                .collect()
-        })
-        .collect();
-    let mut held: Vec<(&Group, &[Trip])> = Vec::new();
-    for (group, trip) in groups.iter().zip(&trips) {
-        if !trip.is_empty() {
-            held.push((group, trip));
-            continue;
-        }
-        let (hs, units, why) = group;
-        let tasks: Vec<String> = hs.iter().flat_map(|h| h.tasks.clone()).collect();
-        let entry = repairs::Entry {
-            feature: red.spec.clone(),
-            tasks: tasks.clone(),
-            kind: "fix".to_owned(),
-            ejected: hs.iter().map(|h| h.commit.clone()).collect(),
-            batch: id.to_owned(),
-            why: (*why).to_owned(),
-            units: units.clone(),
-            attempt: red.attempt.clone(),
-        };
-        let r = repairs::file(l.common, &l7r_gate_core::record::repo::utc_now(), &entry)?;
-        for h in hs {
-            l.append(
-                "eject",
-                &json!({"batch": id, "change": h.commit, "repair": r, "why": why}),
-            )?;
-        }
-        let feature = hs.first().map_or("", |h| h.feature.as_str());
-        let line = format!(
-            "lane: batch {id} red at attempt {} - {feature} {} ejected as repair {r} ({}) - make builder-next hands it to a fresh builder: {}",
-            red.n,
-            tasks.join(" "),
-            said(group),
-            red.attempt
-        );
-        l.append("owed", &json!({"batch": id, "line": line}))?;
-    }
-    if held.is_empty() {
-        return Ok(candidates.into_iter().map(str::to_owned).collect());
-    }
-    trip(l, id, tree, red, &held)
-}
-
-/// An ejection's group: its changes, its units and its `why`.
-type Group<'a> = (Vec<&'a HandIn>, Vec<String>, &'static str);
-
-/// A group's `<why>: <units>`, or that the record names none.
-fn said(group: &Group) -> String {
-    let (_, units, why) = group;
-    let named = if units.is_empty() {
-        "the record names none".to_owned()
-    } else {
-        units.join(", ")
-    };
-    format!("{why}: {named}")
-}
-
-/// A command's exit, stdout and stderr; one that could not start is exit -1, its error the stderr.
-fn outcome(o: std::io::Result<std::process::Output>) -> (i32, String, String) {
-    match o {
-        Ok(o) => (
-            o.status.code().unwrap_or(-1),
-            String::from_utf8_lossy(&o.stdout).into_owned(),
-            String::from_utf8_lossy(&o.stderr).into_owned(),
-        ),
-        Err(e) => (-1, String::new(), e.to_string()),
-    }
-}
-
-/// THE TRIPWIRE FIRED (461 T18, D6 step 4; `crate::tripwire`'s doc): each held change's `eject` line with no repair and the trigger
-/// it waits on, `make arbiter-ask` in the lane's tree with the two attempt files (its output beside the attempt's, `.arbiter.log`),
-/// the batch's `stop` line, and the runner stopped through [`stopped`] - its one `owed` line.
-fn trip(
-    l: &Lane,
-    id: &str,
-    tree: &Path,
-    red: &Redden,
-    held: &[(&Group, &[Trip])],
-) -> Result<Vec<String>, String> {
-    let trips: Vec<Trip> = held.iter().flat_map(|(_, t)| t.iter().cloned()).collect();
-    let subject = tripwire::subject(&trips);
-    let trigger = format!("ask:{subject}");
-    let changes: Vec<&HandIn> = held.iter().flat_map(|(g, _)| g.0.iter().copied()).collect();
-    for ((hs, _, why), _) in held {
-        for h in hs {
-            l.append(
-                "eject",
-                &json!({"batch": id, "change": h.commit, "repair": null, "why": why, "arbiter": trigger, "attempt": red.attempt}),
-            )?;
-        }
-    }
-    let files = tripwire::files(&trips, &red.attempt).join(" ");
-    let tasks: Vec<String> = changes.iter().flat_map(|h| h.tasks.clone()).collect();
-    let feature = changes.first().map_or("", |h| h.feature.as_str());
-    let reds: Vec<String> = held.iter().map(|(g, _)| said(g)).collect();
-    let mut before: Vec<&str> = trips.iter().map(|t| t.before.batch.as_str()).collect();
-    before.dedup();
-    let pin = trips.iter().map(|t| t.n).max().unwrap_or(2);
-    let why = format!(
-        "{feature} {} was ejected red by the landing lane again (pin {pin}): batch {}, then batch {id} at attempt {} ({}). The lane filed no second repair. Rule: continue (the work its repair then does), accept, or a process fault.",
-        tasks.join(" "),
-        before.join(", "),
-        red.n,
-        reds.join("; ")
-    );
-    let spec_dir = format!("specs/{}", red.spec);
-    let env = [
-        ("SPECIFY_FEATURE", red.spec.as_str()),
-        ("SPECIFY_FEATURE_DIRECTORY", spec_dir.as_str()),
-    ];
-    let words = [
-        "--no-print-directory".to_owned(),
-        "arbiter-ask".to_owned(),
-        format!("SUBJECT={subject}"),
-        format!("WHY={why}"),
-        format!("FILES={files}"),
-    ];
-    let words: Vec<&str> = words.iter().map(String::as_str).collect();
-    let (code, out, err) = outcome(in_tree(tree, &words, &env).output());
-    let kept = format!("{}.arbiter.log", red.attempt);
-    let _ = std::fs::write(&kept, format!("{out}{err}"));
-    let shas: Vec<&str> = changes.iter().map(|h| h.commit.as_str()).collect();
-    l.append(
-        "stop",
-        &json!({"batch": id, "why": "arbiter", "trigger": trigger, "spec": red.spec, "tasks": tasks, "held": shas, "attempts": files}),
-    )?;
-    let asked = match (code, tripwire::manifest(&out)) {
-        (0, Some(m)) => format!("dispatch round-arbiter on {m}"),
-        (0, None) => format!("dispatch round-arbiter on the bundle its output names ({kept})"),
-        _ => format!(
-            "make arbiter-ask SUBJECT={subject} FILES=\"{files}\" failed (exit {code}: {}), its output {kept}: ask it by hand, then dispatch round-arbiter on its bundle",
-            err.lines().next().unwrap_or_default().trim()
-        ),
-    };
-    stopped(
-        l,
-        id,
-        format!(
-            "lane: batch {id} stopped at attempt {} - {feature} {} red again ({}; pinned before in batch {}), no repair filed: the round arbiter is owed {trigger} - {asked}; once make arbiter-ruled records its ruling, make lane-start files its repair (why arbiter)",
-            red.n,
-            tasks.join(" "),
-            reds.join("; "),
-            before.join(", ")
-        ),
-    )
-}
+mod eject;
+#[cfg(test)]
+use eject::outcome;
+use eject::{eject, file_groups, integrate, Group};
 
 #[cfg(test)]
 mod tests;
