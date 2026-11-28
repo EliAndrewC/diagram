@@ -53,8 +53,6 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 ### Phase 3 - the whole red path (US4, US5, FR-004; D5, D6 steps 3 and 5, D7, D14)
 
-- [ ] T25 Phase 3: a carry conflict becomes a repair entry - where the lane's carry of a hand-in onto `origin/main` stops (main moved after the hand-in), the change is ejected as a repair entry (`why` `conflict`, `units` the conflicting files; it pins nothing) and the rest of the batch runs, in `rust/gate/crates/lane/src/` (D7; US5). Verify: red first in the end-to-end test - a hand-in conflicting with a newer main becomes one `conflict` entry and the other change lands; `make rust-test CRATE=rust/gate/crates/lane`. Lands after T15 and T23.
-      research: rendering
 ### Phase 4 - the one route (FR-001, FR-008; D10, D11)
 
 - [ ] T29 Phase 4: the one route - `make land` refused outside the lane's tree, naming `make lane-start`, escape `LAND_HERE_OK="<reason>"` recorded (for the lane's own failure); and `make land` refuses an unclean tree, naming each file, in `rust/gate/crates/land/src/land.rs`'s dispatch arm and a new module beside it (D11; 451 T302 part 4; FR-008). Verify: red first in the land crate's tests - a landing refused in the clone with its command, the escape recorded, an unclean tree refused naming its files, each check deleted and its test seen red (XVIII); `make rust-test CRATE=rust/gate/crates/land`. Lands after T26 (after the lane has carried a like window's landings, phase 3 in use); lands before T30.
