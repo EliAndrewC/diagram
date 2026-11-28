@@ -876,6 +876,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T71 (the cited-forms reader wrote a NOT FOUND line for a template's placeholder quote, `data-model.md, \"<words>\"`: found by 461 T69, 2026-11-27)": {
+   "sha256": "a0ed9376388ba3247302803001470c3a300734161fcbfa62cf36a09524698a6b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T71 Approach (checklist part A)": {
+   "sha256": "8f0b8f52b077aa46fdc9531fa5b219a02a5330ed921ef286a7963a52061e295d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5440,6 +5452,28 @@
      "summary": "the same reading in both forms: the working tree in the no-commit apply (carry/apply.rs hand-in onto origin/main) as missing()'s blob reading already does",
      "class": "within",
      "why": "Applies the fix uniformly to both paths missing() ends, following missing()'s existing convention; leaving one form broken would leave the defect in a live copy. Inside what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T71 (the cited-forms reader wrote a NOT FOUND line for a template's placeholder quote, `data-model.md, \"<words>\"`: found by 461 T69, 2026-11-27)",
+    "### T71 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T71-1",
+     "summary": "A file-entry quote opening with '<' is a placeholder, not a citation: carried() skips it, writing no entry and no NOT FOUND line",
+     "class": "within",
+     "why": "Fixes a defect found by this feature's own T69 (a check answering wrongly: a NOT FOUND alarm for a citation no one made), which fix-as-we-go expects. It narrows nothing asked: the recorded count over every plan, plan-done and template finds one such quote, the placeholder itself, so no real citation is dropped, and the gate's checks (FR-008) are unchanged."
+    },
+    {
+     "id": "T71-2",
+     "summary": "Only the quoted file-entry form gets the skip; '<word> entry' and task-decision forms are left as they are",
+     "class": "within",
+     "why": "Those patterns, read from FILE_ENTRY and TASK_DECISION, cannot match a '<' placeholder ([a-z] first; digits), so there is nothing there to fix and leaving them is no narrowing."
     }
    ]
   }

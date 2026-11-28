@@ -1205,31 +1205,36 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 <!-- plan-archive: T64 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T70 to T33 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T71 (<why: the finding or measurement that files it>)
+### T71 (the cited-forms reader wrote a NOT FOUND line for a template's placeholder quote, `data-model.md, "<words>"`: found by 461 T69, 2026-11-27)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in `rust/gate/crates/plan/src/plan/bundle/cited/forms.rs`'s `carried`, a file entry's quote opening with `<` is skipped beside `request.md`'s, so it writes no entry and no NOT FOUND line; its test `plan::bundle::cited::tests::a_placeholder_quote_is_no_citation` in `bundle/cited/tests.rs` (a block naming `data-model.md, "<words>"` and `data-model.md, "Recovery"`: the second carried, nothing of the first). Counted 2026-11-27 over every `specs/*/plan.md`, `plan-done.md` and `.specify/templates/*.md` (`grep -ohE '[a-z][a-z-]*\.md, "<[^"]*"'`): one such quote of a file entry, `data-model.md, "<words>"`, T69's own section in 461's plan-done.md, where it names the form. Red first: the new test failed on the old code, 1 of 4 `plan::bundle::cited::tests` (spec-cited.md held `- **data-model.md, "<words>"**: NOT FOUND - specs/461-x/data-model.md holds no heading or paragraph with those words`), 2026-11-27; after, 4 of 4, and `make builder-checks CRATE="rust/gate/crates/plan"` clean (test, lint, format).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A quote opening with `<` is a placeholder, not a citation**: the templates and the sections that name a form write it `"<words>"`, and no heading or paragraph of a spec file opens with `<`. Label: the algorithmically easier route (T71's line names the rule); a quote whose words open with `<` is none measured above but the placeholder.
+2. **Only the quoted form**: `<word> entry` takes `[a-z]` first and so cannot be a placeholder, and a task decision's numbers are digits. Label: read from `FILE_ENTRY` and `TASK_DECISION`'s patterns.
 
 ### T71 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan reviewer reads in `spec-cited.md` no NOT FOUND line for a template's placeholder quote.
+2. **The constraints.** T71's line in tasks.md; T69's section (the forms, `carried`, the NOT FOUND lines).
+3. **Where each comes from.** O: T69's finding; the count and the red test above.
+4. **Do they describe the world here?** Yes: the one placeholder quote in the plans is T69's own section, measured above.
+5. **The order.** After T69; before T31.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `plan::bundle::cited::tests` 4 of 4 pass and `make builder-checks CRATE="rust/gate/crates/plan"` is clean (test, lint, format), 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A plan reviewer of a section naming the form read a NOT FOUND line for a citation no one made, a false alarm beside the real ones.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 <!-- plan-archive: T72 to T72 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->

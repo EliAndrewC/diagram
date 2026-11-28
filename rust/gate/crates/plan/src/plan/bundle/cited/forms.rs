@@ -46,7 +46,8 @@ pub(super) fn carried(spec_dir: &Path, own_no: &str, bodies: &[&str]) -> Vec<Str
             }
         }
         for c in FILE_ENTRY.captures_iter(body).map_while(Result::ok) {
-            if &c[1] == "request.md" {
+            // a template's placeholder, `"<words>"`, names no entry (461 T71)
+            if &c[1] == "request.md" || c.get(2).is_some_and(|m| m.as_str().starts_with('<')) {
                 continue;
             }
             let (words, entry) = (c.get(2).map(|m| m.as_str()), c.get(3).map(|m| m.as_str()));

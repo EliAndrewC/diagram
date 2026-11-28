@@ -173,3 +173,29 @@ fn a_task_s_run_keeps_its_clause_and_an_unnumbered_task_is_this_feature_s() {
     let m = build(&dir, &out, "T61", &under(&[(key, approach)]), &[], "h").unwrap();
     assert!(!read(m.parent().unwrap(), "spec-cited.md").contains("PLAN ONE"));
 }
+
+/// A template's placeholder quote, `data-model.md, "<words>"`, names no entry and writes no NOT FOUND line; a real quote beside it is
+/// still read (461 T71: 461 T69's bundle wrote a NOT FOUND line for `"<words>"`).
+#[test]
+fn a_placeholder_quote_is_no_citation() {
+    let root = repo();
+    let dir = root.join("specs/461-x");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join("plan.md"), "# Plan\n").unwrap();
+    std::fs::write(dir.join("spec.md"), "- **FR-001**: Ours.\n").unwrap();
+    std::fs::write(dir.join("request.md"), "> words\n").unwrap();
+    std::fs::write(
+        dir.join("data-model.md"),
+        "# Data\n\n## Recovery\n\nRECOVER.\n",
+    )
+    .unwrap();
+    let out = scratch("out");
+    let body = "The forms: `data-model.md, \"<words>\"` and data-model.md, \"Recovery\".\n";
+    let m = build(&dir, &out, "T71", &under(&[("T71", body)]), &[], "h").unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(
+        cited.contains("<!-- data-model.md, \"Recovery\" -->\n## Recovery\n\nRECOVER.\n"),
+        "{cited}"
+    );
+    assert!(!cited.contains("<words>"), "{cited}");
+}
