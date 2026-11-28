@@ -51,3 +51,20 @@ there is not met.
 <!-- SOURCE: GM NOTES -->
 > Okay, good stuff, thanks. And I think you can go ahead and get started on the orchestrator feature now, because I think that's something that we are going to want to do kind of just regardless, and also orthogonal to the process reviewer, which we can also talk about separately after I look more at these figures. Thank you.
 <!-- END SOURCE -->
+
+2026-11-28, scheduler priorities as first-class support (after the session gave 462's disk work builders that 461's phase 3 could have used):
+
+<!-- SOURCE: GM NOTES -->
+> This is probably somethigng that needs first class support in the orchestrator.  Like I probably want to be able to indicate priorities like:
+> -> "this feature gets all builders it needs, other things get only what is left over"
+> -> "this feature always gets 1 builder so that it is able to move forward, but other features get the rest of the builders if they need them, and this feature only fills the available builders if there is no contention"
+> -> "performance fixes and process-based bugfixes get priority over everything else regardless of what feature they are attached to"
+>
+> That kind of thing.  Basically, our scheduler probably needs some tool-based enforcement of these kinds of prioritizations so that you don't need to remember to do the correct thing in the future.
+<!-- END SOURCE -->
+
+On where it goes, after the session proposed 461:
+
+<!-- SOURCE: GM NOTES -->
+> yeahm, I agree this should be part of the existing orchestration feature.
+<!-- END SOURCE -->

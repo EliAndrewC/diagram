@@ -103,6 +103,23 @@ in at most ceil(log2 n) + 1 further runs for a batch of n changes with one bad c
 A conflict the carry's merge rules cannot resolve, or a red the lane cannot attribute or bisect, goes to a fresh agent dispatched
 for that batch with the conflict or the gate's output - never a standing integrator, never the coordinator's context.
 
+### US6 - the GM's priorities decide who gets a builder, enforced by the tools (P1)
+
+The GM states how builders are shared, and the tools hand them out that way, so the coordinator need not remember it (the GM,
+2026-11-28, in `request.md`: "our scheduler probably needs some tool-based enforcement of these kinds of prioritizations so that
+you don't need to remember to do the correct thing in the future"). His three examples are the forms it must express:
+
+- a feature that gets every builder it can use, others getting only what is left over;
+- a feature that always gets one builder so it moves forward, other features getting the rest when they need them, and it filling
+  the free builders only where nothing else contends;
+- performance fixes and process bugfixes first, whatever feature they are attached to - a rule across every feature's queued
+  tasks, not within one feature's.
+
+**Acceptance**: with a policy stating those forms, every place that names the next builder's work (`make builder-next`,
+`make builder-done`'s next dispatch, the pool-idle Stop guard and `make task-start`) names the work the policy ranks first, and a
+brief or a Stop that departs from it is refused with the policy's own pick, its escape recorded with a reason. The case this
+story was filed on - 462 disk tasks handed builders while 461's phase 3 tasks stood ready, 2026-11-28 - is the red-first case.
+
 ## Requirements
 
 - **FR-001** The coordinator's tree is never the tree a gate checks; the gate-write guard holds only writes to the tree being gated
@@ -131,6 +148,12 @@ for that batch with the conflict or the gate's output - never a standing integra
   and the machine's load. Every before-and-after figure is stated with the concurrency it was measured under, and where the two
   windows' concurrency differs both are stated beside the figure, so a window of one builder is never compared bare with one of
   four (the GM's seventh process-reviewer message, 2026-11-27, in `specs/449-rust-codebase/port-talk-gm-goal.md`).
+- **FR-011** The builders' scheduling policy (US6) is one record the GM's words set, read in one place by every handout path; it
+  expresses at least the three forms of US6 - a feature given every builder it can use, a feature held to a floor of builders and
+  filling only uncontended ones, and classes of task (performance, process bugfix) ranked first across features. A task's class is
+  a tag on its line beside `[perf]` (e.g. `[process]`). The rules it replaces - performance first across features (451 FR-013), a
+  queue's own order (462 T549's `#! order=queue`) and repairs first (`LANE_REPAIR_FIRST`, 461 T16) - become forms of the one
+  policy, none of them a second rule beside it. A departure from the policy is refused with the policy's pick, escape recorded.
 
 ## Taken over from feature 451
 
