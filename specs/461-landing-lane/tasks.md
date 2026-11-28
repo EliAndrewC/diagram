@@ -49,14 +49,10 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
 
 ### Phase 2 - the lane (US3, FR-003, FR-005; D1, D2, D5, D6 steps 1, 2 and 4, D7, D8, D9, D13, D14)
 
-- [ ] T23 Phase 2's measurement on real work: a real batch of this feature's own tasks handed in and landed through the lane, its `lane.jsonl` and `make lane` read; measured and recorded under `dev/measurements/`: the lane tree's first gate minutes against b1's (D1), how long a background `make lane-wait` outlives the turn that started it (D9; `LANE_WAIT_MAX` priced only if a time limit is found), whether any gate still builds in the clone's own target directory and, if none, that directory dropped (D11; plan, "What retires"). Verify: the recorded figures re-derived from their command outputs; `make task-time SINCE=<the batch's start>` shows the landing's Phase lines under the lane's tree. Lands after T14-T22.
-      research: rendering
 ### Phase 3 - the whole red path (US4, US5, FR-004; D5, D6 steps 3 and 5, D7, D14)
 
 ### Phase 4 - the one route (FR-001, FR-008; D10, D11)
 
-- [ ] T29 Phase 4: the one route - `make land` refused outside the lane's tree, naming `make lane-start`, escape `LAND_HERE_OK="<reason>"` recorded (for the lane's own failure); and `make land` refuses an unclean tree, naming each file, in `rust/gate/crates/land/src/land.rs`'s dispatch arm and a new module beside it (D11; 451 T302 part 4; FR-008). Verify: red first in the land crate's tests - a landing refused in the clone with its command, the escape recorded, an unclean tree refused naming its files, each check deleted and its test seen red (XVIII); `make rust-test CRATE=rust/gate/crates/land`. Lands after T26 (after the lane has carried a like window's landings, phase 3 in use); lands before T30.
-      research: rendering
 - [ ] T30 Phase 4: land-alone retired - `rust/gate/crates/land/src/land/alone.rs` and `land-alone.sh` steps 1 to 6 (among them step 2, the task's own sections committed apart, and step 3, the attribution of uncommitted files by the event log) removed; step 7 moved to `scripts/take-tip.sh` and run by `scripts/sync-with-main.sh`'s `sync-in` where `git pull` would stop on a dirty sectioned file; `land/writers.rs` STAYS; the `-land` worktree NOT removed (it is the lane's tree, D1); the lane's next batch green (D11; plan, "What retires"). Verify: the land crate's tests; `make hooks-test`; `sync-in` taking a tip over a dirty sectioned file in a scratch clone; the lane's next batch green. Lands after T29. Closes 451 T302 part 4 (T302's box stays open in 451 for parts 2 and 3) and 451 T525 (its removal of the `-land` worktree replaced by D1: the worktree stays as the lane's, its cache the lane's warm cache): a pointer here on each box.
       research: rendering
 ### Phase 5 - the after-measurement (FR-006, FR-007, FR-010; D12, D13)
