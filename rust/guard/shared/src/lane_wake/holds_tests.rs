@@ -108,6 +108,13 @@ fn a_waiting_hand_in_is_held_only_while_the_runner_lives() {
     std::fs::write(common.join("builder-pool.log"), log).unwrap();
     git(t.path(), &["update-ref", "refs/l7r/done/461-T12", &shas[1]]);
     let want = format!("hand-in 461 T12,T14 ({}) waiting", &shas[1][..10]);
+    assert_eq!(holds(&common), Some(want.clone()));
+    // the earlier one still on the lane by a stopped batch's line: superseded by the later hand-in of its task, not held
+    let batch = json!({"event": "batch", "batch": "461-2", "changes": [shas[0]]});
+    lane(
+        &common,
+        &[batch, json!({"event": "stop", "batch": "461-2"})],
+    );
     assert_eq!(holds(&common), Some(want));
     git(t.path(), &["update-ref", "-d", "refs/l7r/done/461-T12"]);
     assert_eq!(holds(&common), None);

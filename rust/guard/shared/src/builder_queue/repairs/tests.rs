@@ -75,6 +75,11 @@ fn an_entry_is_open_once_ejected_its_changes_and_tasks_the_eject_lines() {
     );
     assert_eq!(r1.attempt, "/c/.git/l7r-lane/attempts/461-7-2.log");
     assert_eq!(r1.name(), "461 T13 (repair r1)");
+    // a red repair's builder reads the gate's output first
+    assert_eq!(
+        r1.read(),
+        "the gate's output /c/.git/l7r-lane/attempts/461-7-2.log"
+    );
     // a crate a unit's dirs, the family's `(+k more)` cut, a suite naming none
     assert_eq!(
         r1.crates(),
