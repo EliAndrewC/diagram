@@ -1,6 +1,6 @@
 # L7R Diagram - the settlement and building map generator
 
-<!-- container-mounts: ..:/host-l7r-repo -->
+<!-- container-mounts: ..:/host-l7r-repo .cargo-cache:/home/agent/.cache/l7r-cargo-target -->
 
 This repository is the diagram project of the GM's L5R worldbuilding: building plans (Mode A) and settlement maps
 (Mode B), deliberately one package (why one, and what would change it: `docs/package-boundary.md`). It was a Claude
