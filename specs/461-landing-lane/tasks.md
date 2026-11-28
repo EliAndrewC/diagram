@@ -89,3 +89,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T94 461 T81's reader names an unlisted task that cannot start: policy::unlisted_of skips no task whose line waits ((waits: ...), after T<n> open, another's 'lands before' it - set_down_hooks' private waits) nor one a GM-question ruling holds (holds::held, holds::named) or parks (parked::held_task), where next_performance_in skips all four; once T82 wires the handout paths onto policy::ranked an all or floor feature's pick could be a task that must wait - share waits/holds with the reader (rust/guard/shared/src/builder_queue/policy.rs, rust/guard/shared/src/guards/set_down_hooks.rs); lands before T82
       research: rendering
+- [ ] T104 US6 (FR-011) part 2b: the set-down Stop hook's start-the-next (shared::guards::set_down_hooks next_performance_in) and make task-start single and bundle (rust/gate/crates/task task_start.rs, task_start/bundle.rs) ask l7r_shared::builder_queue::policy::ranked and keep no rule of their own, the clone resolved from common (T82's build half's handoff, NOT DONE items 3-4); lands after T82
+      research: rendering
