@@ -116,6 +116,54 @@ fn a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task() {
     assert_eq!(ids(&open(&common)), ["r3"]);
 }
 
+/// 461 T67: an arbiter's repair (T18's `file_ruled`: `attempt` the trigger, `units` the ruling's words) reads the ruling's row in
+/// the clone's `specs/<spec>/arbiter.jsonl` - the last holding its trigger - and the batch `stop` line's attempts, and names no crate.
+#[test]
+fn an_arbiter_s_repair_reads_its_ruling_s_row_and_the_stop_line_s_attempts() {
+    let dir = TempDir::new("builder-queue-repairs-arbiter");
+    let common = dir.join("c/.git");
+    let entry = |id: &str, batch: &str| {
+        format!("{{\"repair\": \"{id}\", \"feature\": \"461-landing-lane\", \"tasks\": [\"T13\"], \"kind\": \"fix\", \"batch\": \"{batch}\", \"why\": \"arbiter\", \"units\": [\"continue: fix the test\"], \"attempt\": \"ask:lane-T13\"}}\n")
+    };
+    put(
+        &common.join("l7r-lane/repairs.jsonl"),
+        &(entry("r1", "461-3") + &entry("r2", "461-4")),
+    );
+    let lane = concat!(
+        r#"{"event": "stop", "pid": 7, "why": "idle"}"#,
+        "\n",
+        r#"{"event": "stop", "batch": "461-3", "why": "arbiter", "trigger": "ask:lane-T13-3", "attempts": "/x.log"}"#,
+        "\n",
+        r#"{"event": "stop", "batch": "461-3", "why": "arbiter", "trigger": "ask:lane-T13", "attempts": "/a/461-1-2.log /b/461-3-1.log"}"#,
+        "\n",
+        r#"{"event": "eject", "of_batch": "461-3", "change": "aaa", "repair": "r1", "why": "arbiter"}"#,
+        "\n",
+        r#"{"event": "eject", "of_batch": "461-4", "change": "bbb", "repair": "r2", "why": "arbiter"}"#,
+        "\n",
+    );
+    put(&common.join("l7r-lane/lane.jsonl"), lane);
+    let rulings = dir.join("c/specs/461-landing-lane/arbiter.jsonl");
+    let rows = "{\"trigger\": \"ask:lane-T13\", \"ruling\": \"accept\"}\n{\"trigger\": \"ask:other\"}\n{\"trigger\": \"ask:lane-T13\", \"ruling\": \"continue\"}\n";
+    put(&rulings, rows);
+    let all = open(&common);
+    let (r1, r2) = (&all[0], &all[1]);
+    // paths outside the clone, and an attempt in another directory than the first's, named whole
+    let clone = dir.join("c");
+    assert_eq!(r1.read(), format!("the ruling of ask:lane-T13 and the red attempts, in {}: specs/461-landing-lane/arbiter.jsonl line 3, /a/461-1-2.log /b/461-3-1.log", clone.display()));
+    assert!(r1.crates().is_empty());
+    assert_eq!(
+        r1.command(),
+        "make builder-brief T=T13 F=461 KIND=fix REPAIR=r1"
+    );
+    // a batch no stop line names reads no attempts; a file no row of which holds the trigger is named alone
+    assert!(r2.attempts.is_empty());
+    put(&rulings, "{\"trigger\": \"ask:other\"}\n");
+    assert_eq!(
+        open(&common)[0].ruling,
+        "specs/461-landing-lane/arbiter.jsonl"
+    );
+}
+
 #[test]
 fn in_flight_and_a_kind_no_brief_takes_are_passed_over() {
     let (dir, common) = world("offer");

@@ -869,7 +869,7 @@ fn a_repair_entry_is_dispatched_first_briefed_with_the_gate_s_output_and_answere
     // the repair's brief: the gate's output and the change named, the ejected commit applied in the tree uncommitted
     let r = brief(&["T01", "9001", "fix", "", "", "rust/x", "", "", "", "r1"]);
     assert_eq!(r.code, 0, "{}", r.stderr);
-    let line = format!("REPAIR r1 (batch 9001-1, red): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read the gate's output first: /c/.git/l7r-lane/attempts/9001-1-1.log\n", &sha[..10]);
+    let line = format!("REPAIR r1 (batch 9001-1, red): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read first: the gate's output /c/.git/l7r-lane/attempts/9001-1-1.log\n", &sha[..10]);
     assert!(r.stdout.contains(&line), "{}", r.stdout);
     assert!(
         r.stderr
@@ -903,4 +903,48 @@ fn a_repair_entry_is_dispatched_first_briefed_with_the_gate_s_output_and_answere
     assert_ne!(git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]), sha);
     assert!(l7r_shared::builder_queue::repairs::open(&root.join(".git")).is_empty());
     assert!(!fixed.stdout.contains("REPAIR=r1"), "{}", fixed.stdout);
+}
+
+/// 461 T67 (T18's `file_ruled`): a repair entry of why `arbiter` carries the trigger as its `attempt`, which is no file - its
+/// brief and its offer name the ruling's row in the clone's `specs/<spec>/arbiter.jsonl` and the batch `stop` line's two attempt
+/// files instead.
+#[test]
+fn an_arbiter_repair_is_briefed_with_its_ruling_s_row_and_the_two_red_attempts() {
+    let (dir, root, mut e, b1) = held("done-arbiter", "T01");
+    e.apply = applier(&dir, "exec git cherry-pick -n \"$5\"");
+    put(&b1, "scripts/n.py", "n = 1\n");
+    assert_eq!(done(&root, &e, "T01", "9001 T01: the change", "").code, 0);
+    let sha = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    let lane = root.join(".git/l7r-lane");
+    let (a1, a2) = (
+        lane.join("attempts/9001-1-2.log"),
+        lane.join("attempts/9001-3-1.log"),
+    );
+    put(&lane, "repairs.jsonl", &format!("{{\"utc\": \"2026-11-26T12:00:00Z\", \"repair\": \"r1\", \"feature\": \"9001-x\", \"tasks\": [\"T01\"], \"kind\": \"fix\", \"ejected\": [\"{sha}\"], \"batch\": \"9001-3\", \"why\": \"arbiter\", \"units\": [\"continue: fix the test\"], \"attempt\": \"ask:lane-T01\"}}\n"));
+    put(&lane, "lane.jsonl", &format!("{{\"utc\": \"2026-11-26T11:00:00Z\", \"event\": \"stop\", \"batch\": \"9001-3\", \"why\": \"arbiter\", \"trigger\": \"ask:lane-T01\", \"spec\": \"9001-x\", \"tasks\": [\"T01\"], \"held\": [\"{sha}\"], \"attempts\": \"{} {}\"}}\n{{\"utc\": \"2026-11-26T12:00:01Z\", \"event\": \"eject\", \"of_batch\": \"9001-3\", \"change\": \"{sha}\", \"repair\": \"r1\", \"why\": \"arbiter\"}}\n", a1.display(), a2.display()));
+    put(&root, "specs/9001-x/arbiter.jsonl", "{\"trigger\": \"ask:other\", \"ruling\": \"accept\"}\n{\"trigger\": \"ask:lane-T01\", \"ruling\": \"continue\", \"what\": \"fix the test\"}\n");
+    // named from the clone, the second attempt by its file name in the first's directory
+    let ruled = format!("the ruling of ask:lane-T01 and the red attempts, in {}: specs/9001-x/arbiter.jsonl line 2, .git/l7r-lane/attempts/9001-1-2.log 9001-3-1.log", root.display());
+    let next = crate::builder_queue::run("builder-next", &words(&["9001"]), &root, "", 3).stdout;
+    // a ruling's unit names no crate, though its last word is a step's (`test`)
+    let offered = format!("make builder-brief T=T01 F=9001 KIND=fix REPAIR=r1   (9001 T01 (repair r1): the lane ejected {} from batch 9001-3 (arbiter); {ruled} - a FRESH builder", &sha[..10]);
+    assert!(next.contains(&offered), "{next}");
+    let r = crate::builder_brief::run(
+        &words(&["T01", "9001", "fix", "", "", "", "", "", "", "r1"]),
+        &root,
+        &e,
+        "",
+    );
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    let said = format!("REPAIR r1 (batch 9001-3, arbiter): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read first: {ruled}\n", &sha[..10]);
+    let out = &r.stdout;
+    assert!(out.contains(&said), "{out}");
+    assert!(!r.stdout.contains("output first: ask:"), "{}", r.stdout);
+    // still under the prefix guard's 2,000 characters with the ruling's and the attempts' paths (read as a real tree's)
+    let n = r
+        .stdout
+        .replace(&*dir.to_string_lossy(), "/diagram/.clones")
+        .chars()
+        .count();
+    assert!(n < 2000, "{n}");
 }

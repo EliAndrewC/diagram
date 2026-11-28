@@ -2690,29 +2690,38 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 
 
-### T67 (<why: the finding or measurement that files it>)
+### T67 (T18's arbiter repair entry briefed as a red one: its `attempt` is the trigger, which the brief and the offer named as the gate's output)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/shared/src/builder_queue/repairs.rs`'s `open` reads, for an entry of `why` `arbiter`, its ruling's row - the last row of the clone's `specs/<spec>/arbiter.jsonl` holding the entry's trigger (its `attempt`), as `checks::arbiter::rulings_of` reads it last-wins, named `specs/<spec>/arbiter.jsonl line <n>` - and the attempt files of the batch's `stop` line (`why` `arbiter`, that batch and trigger; T18's `trip` writes them space-joined), kept on `Repair` as `ruling`, `attempts` and `clone`. The new `Repair::read` is the one phrase both print sites use: `the gate's output <attempt>` for any other entry, unchanged, and for an arbiter's `the ruling of <trigger> and the red attempts, in <clone>: specs/<spec>/arbiter.jsonl line <n>, <attempt> <attempt>`. `rust/gate/crates/task`'s `builder_brief.rs` (`Read first: <read>`) and `builder_queue.rs`'s offer line (`make builder-next`, `make queue`, `make builder-done`'s step 1) print it. All read in `l7r_shared`; the lane crate and `lane_wake.rs` untouched. Red first, 2026-11-27, `make rust-test CRATE=rust/gate/crates/task ONLY="builder_done::tests::an_arbiter_repair_is_briefed_with_its_ruling_s_row_and_the_two_red_attempts builder_done::tests::a_repair_entry_is_dispatched_first"` on the old code: 1 passed, 1 failed (the offer read `CRATE="continue: fix the" ... the gate's output ask:lane-T01`). Green: those modules 36 of 36 and the shared `builder_queue::repairs` tests; `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The ruling is named as a row, not copied.** The brief names `specs/<spec>/arbiter.jsonl line <n>` under the clone (the entry's `units` already carry `<ruling>: <what>`, and the row holds more than a line of a block can); the line is the last row holding the trigger, as `rulings_of` reads it, and the file alone where no row holds it. Label: the algorithmically easier route. Pinned by `repairs::tests::an_arbiter_s_repair_reads_its_ruling_s_row_and_the_stop_line_s_attempts`.
+2. **Named from the clone, the second attempt by its file name in the first's directory.** The ruling is uncommitted in the clone (T18 Decision 3), so no pool tree has it at a relative path; three whole paths put the brief's block at 2,039 characters in the T16 test's form of a real tree, over the prefix guard's 2,000 (measured 2026-11-27, the new task-crate test); the clone named once and the attempts' shared directory once bring it under. A path outside the clone, or an attempt in another directory, is named whole. Label: convention (the prefix guard's cap). Pinned by both new tests.
+3. **An arbiter's repair names no crate.** Its units are the ruling's words, so `crates()` read `continue: fix the test` as the red unit `<dirs> test` and offered `CRATE="continue: fix the"`; `crates()` now reads no unit of a `why` `arbiter` entry. Label: a found defect, fixed here (the item below). Pinned by both new tests.
+4. **The stop line is found by batch AND trigger.** The runner writes `stop` lines of its own (`pid`, `why` `idle`), and a third pin asks under `lane-<task>-<n>` (T18 Decision 5); a batch no such line names reads no attempts. Label: the stricter reading. Pinned by the shared test's other stop lines and its r2.
 
 ### T67 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The fresh builder `make builder-brief ... REPAIR=` briefs for an arbiter's repair is pointed at the ruling it must carry out and the two red gates that tripped it, and `make builder-next` names the same, never a trigger as a file.
+2. **The constraints.** T67's line; T16 (US4: a fresh builder given what it needs whole; the block under 2,000 characters); T18 (Decisions 3 and 5, the `stop` line's fields); the brief's rule that the guard and the task crate read the lane's files from `l7r_shared`.
+3. **Where each comes from.** R: tasks.md T67, plan.md T16 and T18. O: `runner/run.rs`'s `trip` and `file_ruled`, `checks::arbiter::rulings_of`, read 2026-11-27; the red and cap figures above.
+4. **Do they describe the world here?** No real arbiter repair exists yet; the fixtures write T18's own line shapes (`trip`'s `stop` line, `file_ruled`'s entry and `of_batch` eject line).
+5. **The order.** After T16 and T18 (their code in this tree's base); before T23.
+6. **The exits.** Green: the changed modules' tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The new tests green with the block under 2,000 characters; `make builder-checks CRATE="rust/guard/shared rust/gate/crates/task rust/guard"` clean, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The coordinator's `make builder-next` and the repair builder's brief named `ask:lane-<task>` as "the gate's output" - a file that does not exist - with a CRATE of the ruling's words; now they name the ruling's row and the attempt files.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `crates()` read an arbiter repair's ruling words as a red unit when they end in a step's word (`continue: fix the test` -> `CRATE="continue: fix the"`), so the offered command named a crate that does not exist. Fixed here (Decision 3).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 

@@ -744,6 +744,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T67 (T18's arbiter repair entry briefed as a red one: its `attempt` is the trigger, which the brief and the offer named as the gate's output)": {
+   "sha256": "1bc6c5d58f0d32b42725a9747ddac3b36c091867dd337e16798d2e5512564c25",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T67 Approach (checklist part A)": {
+   "sha256": "4599876684d91e85909d9ba1013f7b4955af86308b18b5dc163812b1de2d8f28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4800,6 +4812,46 @@
      "summary": "goal, constraints, exits and done measure: lane crate tests and make builder-checks for the lane and shared crates",
      "class": "within",
      "why": "States the same goal as the block and decides nothing the spec leaves open; its figures carry a date and method."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T67 (T18's arbiter repair entry briefed as a red one: its `attempt` is the trigger, which the brief and the offer named as the gate's output)",
+    "### T67 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T67 Decision 1",
+     "summary": "An arbiter repair's brief names the ruling as its row (specs/<spec>/arbiter.jsonl line <n>, last row holding the trigger, as rulings_of reads it) rather than copying it; the file alone where no row holds it.",
+     "class": "within",
+     "why": "Serves FR-004/SC-003 and US4: the ejected change returns as a repair for a fresh builder given what it needs. Pointing at the ruling's row instead of a nonexistent 'gate's output' file is how the repair is carried out; nothing asked is dropped."
+    },
+    {
+     "id": "T67 Decision 2",
+     "summary": "The clone is named once and the second attempt by file name in the first's shared directory, to keep the brief's block under the prefix guard's 2,000-character cap (three whole paths measured at 2,039, 2026-11-27); paths outside the clone or in other directories named whole.",
+     "class": "within",
+     "why": "A presentation choice that keeps the existing guard satisfied (FR-008: no check dropped). The builder still receives the ruling and both attempts in full by path; nothing of the request narrows."
+    },
+    {
+     "id": "T67 Decision 3",
+     "summary": "crates() reads no unit of a why=arbiter entry, so an arbiter repair's offer names no CRATE (it had offered CRATE=\"continue: fix the\").",
+     "class": "within",
+     "why": "A defect fix (a wrong outcome: the offered command named a crate that does not exist). Removing a bogus CRATE does not narrow what a repair builder is given; FR-004's repair still dispatches with the ruling and attempts named."
+    },
+    {
+     "id": "T67 Decision 4",
+     "summary": "The stop line supplying the attempts is matched on batch AND trigger (why=arbiter); a batch with no such line reads no attempts.",
+     "class": "within",
+     "why": "Stricter matching so idle/pid stop lines and other pins are not misread as this repair's attempts; it makes FR-004's repair point at the right red attempts and does not narrow scope."
+    },
+    {
+     "id": "T67 Approach scope",
+     "summary": "All reads live in l7r_shared; the lane crate and lane_wake.rs untouched; fixtures use T18's own line shapes since no real arbiter repair exists yet.",
+     "class": "within",
+     "why": "Implementation placement and test fixtures inside FR-004's repair path; no requested behavior is excluded, and no known defect is left (the one found is fixed as Decision 3)."
     }
    ]
   }

@@ -3,7 +3,9 @@
 //! `repairs.rs` its one writer, T15), and here it becomes the next dispatch - `make builder-next`, `make queue`, `make builder-done`'s
 //! next-dispatch line and the pool-idle Stop guard name an open entry BEFORE any `queue.txt` entry (`LANE_REPAIR_FIRST` = 1, a GUESS
 //! knob: `0` offers a repair only where no queue entry is READY), with the command whose brief a FRESH builder needs: `make
-//! builder-brief ... REPAIR=<id>`, which names the gate's output (the attempt file) and the change to repair. The guard cannot reach
+//! builder-brief ... REPAIR=<id>`, which names the gate's output (the attempt file) and the change to repair - for an arbiter's
+//! repair (`why` `arbiter`, T18), whose `attempt` is its trigger, the ruling's row and the two red attempts ([`Repair::read`], 461
+//! T67). The guard cannot reach
 //! the lane crate (the lane builds on `l7r_shared`, so the other way is a cycle): the three files are read here, by their names.
 //!
 //! OPEN, the first that holds decides (each the entry's id `r<n>`):
@@ -51,10 +53,16 @@ pub struct Repair {
     pub batch: String,
     pub why: String,
     pub units: Vec<String>,
-    /// The attempt file: the gate's output.
+    /// The attempt file, the gate's output - but for `why` `arbiter` (T18's `file_ruled`), the trigger its ruling answers.
     pub attempt: String,
     /// The ejected done commits, full shas, as the `eject` lines name them.
     pub changes: Vec<String>,
+    /// For `why` `arbiter` (461 T67): its ruling's row, `specs/<spec>/arbiter.jsonl line <n>` under `clone` (the file alone where
+    /// no row holds the trigger), and the batch `stop` line's two attempt files; empty for any other.
+    pub ruling: String,
+    pub attempts: Vec<String>,
+    /// The clone, where the ruling is recorded uncommitted (a pool tree has no copy of it).
+    pub clone: String,
 }
 
 impl Repair {
@@ -68,7 +76,13 @@ impl Repair {
     #[must_use]
     pub fn crates(&self) -> Vec<String> {
         let mut out: Vec<String> = Vec::new();
-        for u in &self.units {
+        // an arbiter's units are its ruling's words (`continue: fix the test`), never red units, whatever their last word
+        let units = if self.why == "arbiter" {
+            &[][..]
+        } else {
+            &self.units[..]
+        };
+        for u in units {
             let words: Vec<&str> = u.split_whitespace().collect();
             // an empty unit and a unit whose last word is no step (a suite, a row) name no crate alike
             let Some((_, dirs)) = words.split_last().filter(|(s, _)| STEPS.contains(s)) else {
@@ -81,6 +95,40 @@ impl Repair {
             }
         }
         out
+    }
+
+    /// What its fresh builder reads first, as the brief and the offer name it: the gate's output, or for an arbiter's repair the
+    /// ruling's row and the two red attempts (its `attempt` is the trigger, no file).
+    #[must_use]
+    pub fn read(&self) -> String {
+        if self.why != "arbiter" {
+            return format!("the gate's output {}", self.attempt);
+        }
+        // the paths under the clone named from it, and an attempt in the first's directory by its file name: the brief's block
+        // stays under the prefix guard's 2,000 characters (2,039 with three whole paths, 2026-11-27)
+        let root = format!("{}/", self.clone);
+        let dir = |p: &str| Path::new(p).parent().map(Path::to_path_buf);
+        let first = self
+            .attempts
+            .first()
+            .map(String::as_str)
+            .unwrap_or_default();
+        let named: Vec<&str> = self
+            .attempts
+            .iter()
+            .enumerate()
+            .map(|(i, a)| match Path::new(a).file_name() {
+                Some(f) if i > 0 && dir(a) == dir(first) => f.to_str().unwrap_or(a),
+                _ => a.strip_prefix(&root).unwrap_or(a),
+            })
+            .collect();
+        format!(
+            "the ruling of {} and the red attempts, in {}: {}, {}",
+            self.attempt,
+            self.clone,
+            self.ruling,
+            named.join(" ")
+        )
     }
 
     /// The command that briefs its fresh builder.
@@ -133,6 +181,39 @@ fn strings(v: &Value) -> Vec<String> {
 fn done_of(l: &Value) -> Option<(&str, Vec<String>)> {
     let (feature, tasks) = l["detail"].as_str()?.split_once(' ')?;
     Some((feature, tasks.split(',').map(str::to_owned).collect()))
+}
+
+/// An arbiter's repair's reading (461 T67): its ruling's row in the clone's `specs/<feature>/arbiter.jsonl` - the last row holding
+/// `trigger`, as `checks::arbiter::rulings_of` reads it, named by its line (the file alone where none holds it) - and the attempt
+/// files of the batch's `stop` line for that trigger (T18's `trip` writes them space-joined), set on `r`.
+fn ruled(r: &mut Repair, common: &Path, lane: &[Value], feature: &str) {
+    let clone = common.parent().unwrap_or(common);
+    let file = format!("specs/{feature}/arbiter.jsonl");
+    let text = std::fs::read_to_string(clone.join(&file)).unwrap_or_default();
+    let trigger = Some(r.attempt.as_str());
+    let row = crate::checks::reply::py_lines(&text).iter().rposition(|l| {
+        serde_json::from_str::<Value>(l).is_ok_and(|v| {
+            v.get("trigger")
+                .map(crate::checks::arbiter::py_text)
+                .as_deref()
+                == trigger
+        })
+    });
+    r.ruling = row.map_or(file.clone(), |i| format!("{file} line {}", i + 1));
+    r.clone = clone.display().to_string();
+    r.attempts = lane
+        .iter()
+        .find(|l| {
+            l["event"] == "stop"
+                && l["why"] == "arbiter"
+                && l["batch"] == r.batch.as_str()
+                && l["trigger"] == r.attempt.as_str()
+        })
+        .and_then(|l| l["attempts"].as_str())
+        .unwrap_or_default()
+        .split_whitespace()
+        .map(str::to_owned)
+        .collect();
 }
 
 /// The open repair entries under the git common directory `common`, every one: ejected, unanswered and not superseded (the
@@ -190,7 +271,7 @@ pub fn open(common: &Path) -> Vec<Repair> {
             continue;
         }
         let text = |k: &str| e[k].as_str().unwrap_or_default().to_owned();
-        out.push(Repair {
+        let mut r = Repair {
             id: id.to_owned(),
             tasks,
             kind: e["kind"].as_str().unwrap_or("fix").to_owned(),
@@ -200,7 +281,12 @@ pub fn open(common: &Path) -> Vec<Repair> {
             attempt: text("attempt"),
             changes,
             key,
-        });
+            ..Repair::default()
+        };
+        if r.why == "arbiter" {
+            ruled(&mut r, common, &lane, feature);
+        }
+        out.push(r);
     }
     out
 }

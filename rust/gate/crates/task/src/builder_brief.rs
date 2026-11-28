@@ -251,7 +251,7 @@ fn block(
     // 461 T16 (D7, 451 T308): a repair's builder is FRESH and given what it needs whole - the gate's output and the change
     if let Some(r) = fixing {
         let shas: Vec<&str> = r.changes.iter().map(|c| c.get(..10).unwrap_or(c)).collect();
-        let _ = writeln!(out, "REPAIR {} (batch {}, {}): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read the gate's output first: {}", r.id, r.batch, r.why, shas.join(" "), r.attempt);
+        let _ = writeln!(out, "REPAIR {} (batch {}, {}): the lane ejected {}, applied in your tree uncommitted - fix it on top. Read first: {}", r.id, r.batch, r.why, shas.join(" "), r.read());
     }
     let _ = writeln!(out, "{stop}\n{checks}");
     if a.kind != "measurement" {

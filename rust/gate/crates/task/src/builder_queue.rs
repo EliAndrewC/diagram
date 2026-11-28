@@ -206,13 +206,13 @@ fn repairs_said(p: &Pool, pad: &str) -> (Option<String>, String) {
     }
     let first = o.ready.first().map(|r| {
         format!(
-            "{}   ({}: the lane ejected {} from batch {} ({}); the gate's output {} - a FRESH builder, never one kept past its report)",
+            "{}   ({}: the lane ejected {} from batch {} ({}); {} - a FRESH builder, never one kept past its report)",
             r.command(),
             r.name(),
             r.changes.iter().map(|c| c.get(..10).unwrap_or(c)).collect::<Vec<_>>().join(" "),
             r.batch,
             r.why,
-            r.attempt
+            r.read()
         )
     });
     (first, rest)
