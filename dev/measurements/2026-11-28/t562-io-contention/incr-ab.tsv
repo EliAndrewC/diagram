@@ -1,0 +1,8 @@
+setting	phase	seconds	exit	load	write_GB	syscw	cancelled_GB	target_GB	target_files	incr_GB	incr_files
+default	prime	60.5	0	6.75	0.36	29293	0.04	0.32	1848	0.22	1616
+default	cold	17.2	0	13.19	0.07	6769	0.00	0.32	1848	0.22	1616
+default	warm-edit	10.1	0	11.26	0.05	5994	0.05	0.32	1848	0.22	1616
+incr0	prime	64.8	0	10.71	0.16	5918	0.06	0.10	232	0.00	0
+incr0	cold	43.4	0	18.17	0.01	737	0.01	0.10	232	0.00	0
+incr0	warm-edit	28.9	0	23.03	0.01	711	0.01	0.10	232	0.00	0
+done

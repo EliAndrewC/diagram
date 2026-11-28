@@ -39,3 +39,15 @@
 <!-- SOURCE: GM NOTES -->
 > And if it is reasonably cheap for us to divest ourselves of our weird historical legacy of clones named for session titles, then that might be worth doing in favor of more industry standard naming conventions. What do you think? My instinct is that this doesn't matter all that much, but that it might matter just enough to be worth doing, but I'm curious to hear your take on it.
 <!-- END SOURCE -->
+
+2026-11-28, on the IO contention (the words behind T562's measure, relayed to its builder by the session):
+
+<!-- SOURCE: GM NOTES -->
+> if looking into it speeds up your overnight work then it might be helpful
+<!-- END SOURCE -->
+
+2026-11-28, on a tmpfs for cargo's much-written files (relayed to T562's builder by the session):
+
+<!-- SOURCE: GM NOTES -->
+> The host Claude code session suggested a config change to basically create a tempfs directory which is only used for the rust/cargo temporary files that get written a lot. I haven't checked whether that would eat up so much memory that the cure would be worse than the disease; certainly our /tmp directory cannot be tempfs as it has been measured to be over 10G at various points in the past, but maybe there are a ton of tiny files being written which could be configured to use tempfs and which would take up relatively little memory but massively reduce journal writes?
+<!-- END SOURCE -->
