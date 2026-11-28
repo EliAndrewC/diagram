@@ -193,9 +193,6 @@ fn a_placeholder_quote_is_no_citation() {
     let body = "The forms: `data-model.md, \"<words>\"` and data-model.md, \"Recovery\".\n";
     let m = build(&dir, &out, "T71", &under(&[("T71", body)]), &[], "h").unwrap();
     let cited = read(m.parent().unwrap(), "spec-cited.md");
-    assert!(
-        cited.contains("<!-- data-model.md, \"Recovery\" -->\n## Recovery\n\nRECOVER.\n"),
-        "{cited}"
-    );
-    assert!(!cited.contains("<words>"), "{cited}");
+    assert!(cited.contains("<!-- data-model.md, \"Recovery\" -->\n## Recovery\n\nRECOVER.\n"));
+    assert!(!cited.contains("<words>"));
 }
